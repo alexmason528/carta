@@ -13,19 +13,50 @@ import { fromJS } from 'immutable';
 
 import {
   CHANGE_USERNAME,
+  TOGGLE_CATEGORY,
 } from './constants';
 
 // The initial state of the App
 const initialState = fromJS({
   username: '',
+  properties: [
+    {
+      category: 'love',
+      value: 0
+    },
+    {
+      category: 'drink',
+      value: 0
+    },
+    {
+      category: 'painting',
+      value: 0
+    },
+    {
+      category: 'history',
+      value: 0
+    },
+    {
+      category: 'outdoor',
+      value: 0
+    }
+  ]
 });
 
 function homeReducer(state = initialState, action) {
   switch (action.type) {
     case CHANGE_USERNAME:
-      // Delete prefixed '@' from the github username
       return state
         .set('username', action.name.replace(/@/gi, ''));
+    case TOGGLE_CATEGORY:
+      let abc = state.map(property => 
+        (property.category == action.category)
+          ? {...property, value: !property.value}
+          : property
+      )
+
+      console.log(abc);
+      return abc;
     default:
       return state;
   }

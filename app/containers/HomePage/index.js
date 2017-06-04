@@ -14,14 +14,15 @@ import { makeSelectRepos, makeSelectLoading, makeSelectError } from 'containers/
 import H2 from 'components/H2';
 import ReposList from 'components/ReposList';
 import { loadRepos } from '../App/actions';
-import { changeUsername } from './actions';
-import { makeSelectUsername } from './selectors';
+import { changeUsername, toggleCategory } from './actions';
+import { makeSelectUsername, makeSelectProperties} from './selectors';
 
 import ReactMapboxGl, { Layer, Feature, Marker, ZoomControl } from "react-mapbox-gl";
 import { mapAccessToken } from './constants';
 
 import { SearchBlock, MapBlock, ScoreBoardBlock } from './Block';
 import Button from './Button';
+import Input from './Input';
 
 export class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   /**
@@ -63,11 +64,11 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
         />
         <div>
           <SearchBlock>
-            <Button>Love</Button>
-            <Button>Drink</Button>
-            <Button>Painting</Button>
-            <Button>History</Button>
-            <Button>Outdoor</Button>
+            {
+              this.props.properties.map((property, index) => 
+                <Button key={index} onClick={() => this.props.onToggleCategory(property.get('category'))}>{property.get('category')}</Button>
+              )
+            }
           </SearchBlock>
           <MapBlock>
             <ReactMapboxGl
@@ -129,11 +130,13 @@ HomePage.propTypes = {
   onSubmitForm: React.PropTypes.func,
   username: React.PropTypes.string,
   onChangeUsername: React.PropTypes.func,
+  onToggleCategory: React.PropTypes.func
 };
 
 export function mapDispatchToProps(dispatch) {
   return {
     onChangeUsername: (evt) => dispatch(changeUsername(evt.target.value)),
+    onToggleCategory: (category) => dispatch(toggleCategory(category)),
     onSubmitForm: (evt) => {
       if (evt !== undefined && evt.preventDefault) evt.preventDefault();
       dispatch(loadRepos());
@@ -146,6 +149,7 @@ const mapStateToProps = createStructuredSelector({
   username: makeSelectUsername(),
   loading: makeSelectLoading(),
   error: makeSelectError(),
+  properties: makeSelectProperties()
 });
 
 // Wrap the component to inject dispatch and state into it

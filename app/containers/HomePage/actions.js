@@ -17,6 +17,7 @@
 
 import {
   CHANGE_USERNAME,
+  TOGGLE_CATEGORY
 } from './constants';
 
 /**
@@ -31,4 +32,11 @@ export function changeUsername(name) {
     type: CHANGE_USERNAME,
     name,
   };
+}
+
+export function toggleCategory(category) {
+  return {
+    type: TOGGLE_CATEGORY,
+    category
+  }
 }
