@@ -31,5 +31,5 @@ const ScoreBoardBlock = styled.div`
 export {
   MapBlock,
   SearchBlock,
-  ScoreBoardBlock
+  ScoreBoardBlock,
 };
