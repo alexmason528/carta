@@ -1,6 +1,5 @@
 import React, { PropTypes, Children } from 'react';
-import styled from 'styled-components';
-import { css } from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const buttonStyles = css`
   text-decoration: none;
@@ -28,10 +27,9 @@ const StyledButton = styled.button`${buttonStyles}`;
 
 function Button(props) {
   // Render an anchor tag
-  let button;
-  
-  button = (
-    <StyledButton onClick={props.onClick} className={ (props.active == 1) ? 'active' : '' }>
+
+  const button = (
+    <StyledButton onClick={props.onClick} className={(props.active === 1) ? 'active' : ''}>
       {Children.toArray(props.children)}
     </StyledButton>
   );
@@ -43,7 +41,7 @@ function Button(props) {
 Button.propTypes = {
   onClick: PropTypes.func,
   children: PropTypes.node.isRequired,
-  active: PropTypes.number
+  active: PropTypes.number,
 };
 
 export default Button;

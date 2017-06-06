@@ -8,12 +8,12 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import ReactMapboxGl, { Marker, ZoomControl } from 'react-mapbox-gl';
 
-import { loadRepos } from '../App/actions';
 import { toggleCategory, fetchRecommendations } from './actions';
 import { makeSelectProperties, makeSelectRecommendations } from './selectors';
 
-import ReactMapboxGl, { Marker, ZoomControl } from "react-mapbox-gl";
+
 import { MAP_ACCESS_TOKEN } from './constants';
 
 import { SearchBlock, MapBlock, ScoreBoardBlock } from './Block';
@@ -29,7 +29,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 
     this.containerStyle = {
       width: '100%',
-      height: '100%'
+      height: '100%',
     };
 
     this.zoom = [2];
@@ -40,7 +40,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 
   render() {
     const icons = ['blue', 'red', 'green', 'orange', 'yellow'];
-    
+
     return (
       <div>
         <Helmet
@@ -52,13 +52,13 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
         <div>
           <SearchBlock>
             {
-              this.props.properties.map((property, index) => 
-                <Button 
+              this.props.properties.map((property, index) =>
+                <Button
                   active={property.get('value')}
-                  key={index} 
+                  key={index}
                   onClick={() => {
                     this.props.onToggleCategory(property.get('category'));
-                    this.props.fetchRecommendations()
+                    this.props.fetchRecommendations();
                   }}
                 >
                   {property.get('category')}
@@ -71,16 +71,18 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
               style={this.mapStyle}
               accessToken={MAP_ACCESS_TOKEN}
               containerStyle={this.containerStyle}
-              zoom={this.zoom}>
+              zoom={this.zoom}
+            >
               <ZoomControl position="bottomRight" />
               {
                 this.props.recommendations.get('details').map((recommendation, index) =>
                   <Marker
                     key={index}
                     coordinates={recommendation.get('coordinates').toArray()}
-                    anchor="bottom">
-                    <img src={`https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${icons[index]}.png`} />
-                  </Marker>    
+                    anchor="bottom"
+                  >
+                    <img src={`https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${icons[index]}.png`} role="presentation" />
+                  </Marker>
                 )
               }
             </ReactMapboxGl>
@@ -101,19 +103,20 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 HomePage.propTypes = {
   onToggleCategory: React.PropTypes.func,
   properties: React.PropTypes.object,
-  recommendations: React.PropTypes.object
+  recommendations: React.PropTypes.object,
+  fetchRecommendations: React.PropTypes.func,
 };
 
 export function mapDispatchToProps(dispatch) {
   return {
     onToggleCategory: (category) => dispatch(toggleCategory(category)),
-    fetchRecommendations: () => dispatch(fetchRecommendations())
+    fetchRecommendations: () => dispatch(fetchRecommendations()),
   };
 }
 
 const mapStateToProps = createStructuredSelector({
   properties: makeSelectProperties(),
-  recommendations: makeSelectRecommendations()
+  recommendations: makeSelectRecommendations(),
 });
 
 // Wrap the component to inject dispatch and state into it

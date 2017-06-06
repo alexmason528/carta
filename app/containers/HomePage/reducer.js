@@ -15,7 +15,7 @@ import {
   TOGGLE_CATEGORY,
   FETCH_RECOMMENDATIONS,
   FETCH_RECOMMENDATIONS_SUCCESS,
-  FETCH_RECOMMENDATIONS_FAIL
+  FETCH_RECOMMENDATIONS_FAIL,
 } from './constants';
 
 // The initial state of the App
@@ -24,43 +24,43 @@ const initialState = fromJS({
   properties: [
     {
       category: 'love',
-      value: 0
+      value: 0,
     },
     {
       category: 'drink',
-      value: 0
+      value: 0,
     },
     {
       category: 'painting',
-      value: 0
+      value: 0,
     },
     {
       category: 'history',
-      value: 0
+      value: 0,
     },
     {
       category: 'outdoor',
-      value: 0
-    }
+      value: 0,
+    },
   ],
   recommendations: {
     fetching: false,
     error: null,
-    details:[]
-  }
+    details: [],
+  },
 });
 
 function homeReducer(state = initialState, action) {
-  let properties, recommendations, nextState;
+  let properties;
+  let recommendations;
+  let nextState;
   switch (action.type) {
     case TOGGLE_CATEGORY:
-      properties = state.get('properties').map(property => {
-        if (property.get('category') == action.category) {
-          let updated_property = property.set('value', (property.get('value')==1 ? 0 : 1));
-          return updated_property;
-        } else {
-          return property;
+      properties = state.get('properties').map((property) => {
+        if (property.get('category') === action.category) {
+          return property.set('value', (property.get('value') === 1 ? 0 : 1));
         }
+        return property;
       });
       nextState = state.set('properties', properties);
       return nextState;
@@ -69,8 +69,8 @@ function homeReducer(state = initialState, action) {
       recommendations = {
         fetching: true,
         error: null,
-        details: []
-      }
+        details: [],
+      };
 
       nextState = state.setIn(['recommendations'], fromJS(recommendations));
       return nextState;
@@ -79,19 +79,18 @@ function homeReducer(state = initialState, action) {
       recommendations = {
         fetching: false,
         error: null,
-        details: action.payload
-      }
+        details: action.payload,
+      };
 
       nextState = state.setIn(['recommendations'], fromJS(recommendations));
-      
       return nextState;
 
     case FETCH_RECOMMENDATIONS_FAIL:
       recommendations = {
         fetching: false,
         error: true,
-        details: []
-      }
+        details: [],
+      };
 
       nextState = state.setIn(['recommendations'], fromJS(recommendations));
       return nextState;

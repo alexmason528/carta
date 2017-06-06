@@ -19,7 +19,7 @@ import {
   TOGGLE_CATEGORY,
   FETCH_RECOMMENDATIONS,
   FETCH_RECOMMENDATIONS_SUCCESS,
-  FETCH_RECOMMENDATIONS_FAIL
+  FETCH_RECOMMENDATIONS_FAIL,
 } from './constants';
 
 /**
@@ -33,26 +33,26 @@ import {
 export function toggleCategory(category) {
   return {
     type: TOGGLE_CATEGORY,
-    category
-  }
+    category,
+  };
 }
 
 export function fetchRecommendations() {
   return {
-    type: FETCH_RECOMMENDATIONS
-  }
+    type: FETCH_RECOMMENDATIONS,
+  };
 }
 
 export function fetchRecommendationsSuccess(payload) {
   return {
     type: FETCH_RECOMMENDATIONS_SUCCESS,
-    payload
-  }
+    payload,
+  };
 }
 
 export function fetchRecommendationsError(payload) {
   return {
     type: FETCH_RECOMMENDATIONS_FAIL,
-    payload
-  }
+    payload,
+  };
 }
