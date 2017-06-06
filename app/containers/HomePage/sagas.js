@@ -4,44 +4,47 @@
 
 import { take, call, put, select, cancel, takeLatest } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { LOAD_REPOS } from 'containers/App/constants';
-import { reposLoaded, repoLoadingError } from 'containers/App/actions';
 
 import request from 'utils/request';
-import { makeSelectUsername } from 'containers/HomePage/selectors';
+import { makeSelectProperties } from 'containers/HomePage/selectors';
 
-/**
- * Github repos request/response handler
- */
-export function* getRepos() {
-  // Select username from store
-  const username = yield select(makeSelectUsername());
-  const requestURL = `https://api.github.com/users/${username}/repos?type=all&sort=updated`;
+import { FETCH_RECOMMENDATIONS } from './constants';
+import { fetchRecommendationsSuccess, fetchRecommendationsError } from './actions';
+
+import { toJS } from 'immutable';
+
+export function* getRecommendations() {
+  const properties = yield select(makeSelectProperties());
+  const requestURL = `https://carta-168713.appspot.com/api/v1/map/getlocation/`;
+  
+  const data = {
+    count: 5,
+    properties: properties.toJS()
+  }
+
+  const params = {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
 
   try {
-    // Call our request helper (see 'utils/request')
-    const repos = yield call(request, requestURL);
-    yield put(reposLoaded(repos, username));
+    const recommendations = yield call(request, requestURL, params);
+    yield put(fetchRecommendationsSuccess(recommendations));
   } catch (err) {
-    yield put(repoLoadingError(err));
+    yield put(fetchRecommendationsError(recommendations));
   }
 }
 
-/**
- * Root saga manages watcher lifecycle
- */
-export function* githubData() {
-  // Watches for LOAD_REPOS actions and calls getRepos when one comes in.
-  // By using `takeLatest` only the result of the latest API call is applied.
-  // It returns task descriptor (just like fork) so we can continue execution
-  const watcher = yield takeLatest(LOAD_REPOS, getRepos);
-
-  // Suspend execution until location changes
+export function* getLocationData() {
+  const watcher = yield takeLatest(FETCH_RECOMMENDATIONS, getRecommendations);
   yield take(LOCATION_CHANGE);
   yield cancel(watcher);
 }
 
 // Bootstrap sagas
 export default [
-  githubData,
+  getLocationData
 ];

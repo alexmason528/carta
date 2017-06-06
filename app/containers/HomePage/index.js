@@ -6,23 +6,18 @@
 
 import React from 'react';
 import Helmet from 'react-helmet';
-import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { makeSelectRepos, makeSelectLoading, makeSelectError } from 'containers/App/selectors';
-import H2 from 'components/H2';
-import ReposList from 'components/ReposList';
 import { loadRepos } from '../App/actions';
-import { changeUsername, toggleCategory } from './actions';
-import { makeSelectUsername, makeSelectProperties} from './selectors';
+import { toggleCategory, fetchRecommendations } from './actions';
+import { makeSelectProperties, makeSelectRecommendations } from './selectors';
 
-import ReactMapboxGl, { Layer, Feature, Marker, ZoomControl } from "react-mapbox-gl";
-import { mapAccessToken } from './constants';
+import ReactMapboxGl, { Marker, ZoomControl } from "react-mapbox-gl";
+import { MAP_ACCESS_TOKEN } from './constants';
 
 import { SearchBlock, MapBlock, ScoreBoardBlock } from './Block';
 import Button from './Button';
-import Input from './Input';
 
 export class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   /**
@@ -41,19 +36,11 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   componentDidMount() {
-    if (this.props.username && this.props.username.trim().length > 0) {
-      this.props.onSubmitForm();
-    }
   }
 
   render() {
-    const { loading, error, repos } = this.props;
-    const reposListProps = {
-      loading,
-      error,
-      repos,
-    };
-
+    const icons = ['blue', 'red', 'green', 'orange', 'yellow'];
+    
     return (
       <div>
         <Helmet
@@ -66,50 +53,44 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           <SearchBlock>
             {
               this.props.properties.map((property, index) => 
-                <Button key={index} onClick={() => this.props.onToggleCategory(property.get('category'))}>{property.get('category')}</Button>
+                <Button 
+                  active={property.get('value')}
+                  key={index} 
+                  onClick={() => {
+                    this.props.onToggleCategory(property.get('category'));
+                    this.props.fetchRecommendations()
+                  }}
+                >
+                  {property.get('category')}
+                </Button>
               )
             }
           </SearchBlock>
           <MapBlock>
             <ReactMapboxGl
               style={this.mapStyle}
-              accessToken={mapAccessToken}
+              accessToken={MAP_ACCESS_TOKEN}
               containerStyle={this.containerStyle}
               zoom={this.zoom}>
               <ZoomControl position="bottomRight" />
-              <Marker
-                coordinates={[-3.647157194966011, 40.22683199586228]}
-                anchor="bottom">
-                <img src="https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png" />
-              </Marker>
-              <Marker
-                coordinates={[2.55355025434387, 46.558913222390714]}
-                anchor="bottom">
-                <img src="https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png" />
-              </Marker>
-              <Marker
-                coordinates={[12.078198074404876, 42.78972845672251]}
-                anchor="bottom">
-                <img src="https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png" />
-              </Marker>
-              <Marker
-                coordinates={[-53.07658774438149, -10.743661015029495]}
-                anchor="bottom">
-                <img src="https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png" />
-              </Marker>
-              <Marker
-                coordinates={[-112.55642324745719, 45.711338189013595]}
-                anchor="bottom">
-                <img src="https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png" />
-              </Marker>
+              {
+                this.props.recommendations.get('details').map((recommendation, index) =>
+                  <Marker
+                    key={index}
+                    coordinates={recommendation.get('coordinates').toArray()}
+                    anchor="bottom">
+                    <img src={`https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${icons[index]}.png`} />
+                  </Marker>    
+                )
+              }
             </ReactMapboxGl>
           </MapBlock>
           <ScoreBoardBlock>
-            Spain : 31<br/>
-            France : 24 <br/>
-            Italy : 23 <br/>
-            Brazil : 22 <br/>
-            United States : 19 <br/>
+            {
+              this.props.recommendations.get('details').map((recommendation, index) =>
+                <div key={index}>{recommendation.get('name')} : {recommendation.get('score')}</div>
+              )
+            }
           </ScoreBoardBlock>
         </div>
       </div>
@@ -118,38 +99,21 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 }
 
 HomePage.propTypes = {
-  loading: React.PropTypes.bool,
-  error: React.PropTypes.oneOfType([
-    React.PropTypes.object,
-    React.PropTypes.bool,
-  ]),
-  repos: React.PropTypes.oneOfType([
-    React.PropTypes.array,
-    React.PropTypes.bool,
-  ]),
-  onSubmitForm: React.PropTypes.func,
-  username: React.PropTypes.string,
-  onChangeUsername: React.PropTypes.func,
-  onToggleCategory: React.PropTypes.func
+  onToggleCategory: React.PropTypes.func,
+  properties: React.PropTypes.object,
+  recommendations: React.PropTypes.object
 };
 
 export function mapDispatchToProps(dispatch) {
   return {
-    onChangeUsername: (evt) => dispatch(changeUsername(evt.target.value)),
     onToggleCategory: (category) => dispatch(toggleCategory(category)),
-    onSubmitForm: (evt) => {
-      if (evt !== undefined && evt.preventDefault) evt.preventDefault();
-      dispatch(loadRepos());
-    },
+    fetchRecommendations: () => dispatch(fetchRecommendations())
   };
 }
 
 const mapStateToProps = createStructuredSelector({
-  repos: makeSelectRepos(),
-  username: makeSelectUsername(),
-  loading: makeSelectLoading(),
-  error: makeSelectError(),
-  properties: makeSelectProperties()
+  properties: makeSelectProperties(),
+  recommendations: makeSelectRecommendations()
 });
 
 // Wrap the component to inject dispatch and state into it

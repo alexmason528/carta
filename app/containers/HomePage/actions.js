@@ -16,8 +16,10 @@
  */
 
 import {
-  CHANGE_USERNAME,
-  TOGGLE_CATEGORY
+  TOGGLE_CATEGORY,
+  FETCH_RECOMMENDATIONS,
+  FETCH_RECOMMENDATIONS_SUCCESS,
+  FETCH_RECOMMENDATIONS_FAIL
 } from './constants';
 
 /**
@@ -27,16 +29,30 @@ import {
  *
  * @return {object}    An action object with a type of CHANGE_USERNAME
  */
-export function changeUsername(name) {
-  return {
-    type: CHANGE_USERNAME,
-    name,
-  };
-}
 
 export function toggleCategory(category) {
   return {
     type: TOGGLE_CATEGORY,
     category
+  }
+}
+
+export function fetchRecommendations() {
+  return {
+    type: FETCH_RECOMMENDATIONS
+  }
+}
+
+export function fetchRecommendationsSuccess(payload) {
+  return {
+    type: FETCH_RECOMMENDATIONS_SUCCESS,
+    payload
+  }
+}
+
+export function fetchRecommendationsError(payload) {
+  return {
+    type: FETCH_RECOMMENDATIONS_FAIL,
+    payload
   }
 }

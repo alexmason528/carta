@@ -6,18 +6,18 @@ import { createSelector } from 'reselect';
 
 const selectHome = (state) => state.get('home');
 
-const makeSelectUsername = () => createSelector(
-  selectHome,
-  (homeState) => homeState.get('username')
-);
-
 const makeSelectProperties = () => createSelector(
 	selectHome,
 	(homeState) => homeState.get('properties')
 );
 
+const makeSelectRecommendations = () => createSelector(
+	selectHome,
+	(homeState) => homeState.get('recommendations')
+);
+
 export {
   selectHome,
-  makeSelectUsername,
-  makeSelectProperties
+  makeSelectProperties,
+  makeSelectRecommendations
 };

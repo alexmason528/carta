@@ -18,7 +18,7 @@ const buttonStyles = css`
   font-weight:400; 
   font-size:13px;
 
-  &:hover {
+  &:hover, &.active {
     background: #00bb00;
     color: #fff;
   }
@@ -28,12 +28,13 @@ const StyledButton = styled.button`${buttonStyles}`;
 
 function Button(props) {
   // Render an anchor tag
-  let button = (
-    <StyledButton onClick={props.onClick}>
+  let button;
+  
+  button = (
+    <StyledButton onClick={props.onClick} className={ (props.active == 1) ? 'active' : '' }>
       {Children.toArray(props.children)}
     </StyledButton>
   );
-
   // If the Button has a handleRoute prop, we want to render a button
 
   return button;
@@ -42,6 +43,7 @@ function Button(props) {
 Button.propTypes = {
   onClick: PropTypes.func,
   children: PropTypes.node.isRequired,
+  active: PropTypes.number
 };
 
 export default Button;
