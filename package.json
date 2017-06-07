@@ -220,12 +220,13 @@
     "invariant": "2.2.2",
     "ip": "1.1.4",
     "lodash": "4.17.2",
+    "mapbox-gl": "^0.37.0",
     "minimist": "1.2.0",
-    "react": "15.5.3",
-    "react-dom": "15.5.3",
+    "react": "15.4.1",
+    "react-dom": "15.4.1",
     "react-helmet": "3.2.2",
     "react-intl": "2.1.5",
-    "react-mapbox-gl": "1.12.0",
+    "react-mapbox-gl": "^1.12.0",
     "react-redux": "4.4.6",
     "react-router": "3.0.0",
     "react-router-redux": "4.0.6",
@@ -237,8 +238,7 @@
     "sanitize.css": "4.1.0",
     "styled-components": "1.1.2",
     "warning": "3.0.0",
-    "whatwg-fetch": "2.0.1",
-    "mapbox-gl": "^0.36.0"
+    "whatwg-fetch": "2.0.1"
   },
   "devDependencies": {
     "babel-cli": "6.18.0",
@@ -290,7 +290,7 @@
     "sinon": "2.0.0-pre",
     "style-loader": "0.13.1",
     "url-loader": "0.5.7",
-    "webpack": "2.1.0-beta.28",
+    "webpack": "2.2.0-rc.3",
     "webpack-dev-middleware": "1.9.0",
     "webpack-hot-middleware": "2.15.0"
   }
