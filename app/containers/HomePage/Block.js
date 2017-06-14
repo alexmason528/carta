@@ -22,7 +22,7 @@ const ScoreBoardBlock = styled.div`
   right:20px; 
   top:20px; 
   text-align:right; 
-  color:#fff; 
+  color:#000; 
   font-weight:900; 
   text-transform:uppercase; 
   position:absolute;

@@ -13,36 +13,22 @@ import { fromJS } from 'immutable';
 
 import {
   TOGGLE_CATEGORY,
+  FETCH_CATEGORIES,
+  FETCH_CATEGORIES_SUCCESS,
+  FETCH_CATEGORIES_ERROR,
   FETCH_RECOMMENDATIONS,
   FETCH_RECOMMENDATIONS_SUCCESS,
-  FETCH_RECOMMENDATIONS_FAIL,
+  FETCH_RECOMMENDATIONS_ERROR,
 } from './constants';
 
 // The initial state of the App
+
 const initialState = fromJS({
-  username: '',
-  properties: [
-    {
-      category: 'love',
-      value: 0,
-    },
-    {
-      category: 'drink',
-      value: 0,
-    },
-    {
-      category: 'painting',
-      value: 0,
-    },
-    {
-      category: 'history',
-      value: 0,
-    },
-    {
-      category: 'outdoor',
-      value: 0,
-    },
-  ],
+  categories: {
+    fetching: false,
+    error: null,
+    details: [],
+  },
   recommendations: {
     fetching: false,
     error: null,
@@ -50,27 +36,59 @@ const initialState = fromJS({
   },
 });
 
+
 function homeReducer(state = initialState, action) {
-  let properties;
+  let categories;
   let recommendations;
+  let details;
   let nextState;
   switch (action.type) {
     case TOGGLE_CATEGORY:
-      properties = state.get('properties').map((property) => {
-        if (property.get('category') === action.category) {
-          return property.set('value', (property.get('value') === 1 ? 0 : 1));
+      details = state.get('categories').get('details').map((category) => {
+        if (category.get('name') === action.name) {
+          return category.set('value', (category.get('value') === 1 ? 0 : 1));
         }
-        return property;
+        return category;
       });
-      nextState = state.set('properties', properties);
+
+      nextState = state.setIn(['categories', 'details'], details);
       return nextState;
 
-    case FETCH_RECOMMENDATIONS:
-      recommendations = {
+    case FETCH_CATEGORIES:
+      categories = {
         fetching: true,
         error: null,
         details: [],
       };
+
+      nextState = state.setIn(['categories'], fromJS(categories));
+      return nextState;
+
+    case FETCH_CATEGORIES_SUCCESS:
+      categories = {
+        fetching: false,
+        error: null,
+        details: action.payload,
+      };
+
+      nextState = state.setIn(['categories'], fromJS(categories));
+      return nextState;
+
+    case FETCH_CATEGORIES_ERROR:
+      categories = {
+        fetching: false,
+        error: true,
+        details: [],
+      };
+
+      nextState = state.setIn(['categories'], fromJS(categories));
+      return nextState;
+
+    case FETCH_RECOMMENDATIONS:
+      recommendations = state.get('recommendations').set({
+        fetching: true,
+        error: null,
+      });
 
       nextState = state.setIn(['recommendations'], fromJS(recommendations));
       return nextState;
@@ -85,7 +103,7 @@ function homeReducer(state = initialState, action) {
       nextState = state.setIn(['recommendations'], fromJS(recommendations));
       return nextState;
 
-    case FETCH_RECOMMENDATIONS_FAIL:
+    case FETCH_RECOMMENDATIONS_ERROR:
       recommendations = {
         fetching: false,
         error: true,

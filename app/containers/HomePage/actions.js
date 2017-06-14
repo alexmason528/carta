@@ -17,9 +17,12 @@
 
 import {
   TOGGLE_CATEGORY,
+  FETCH_CATEGORIES,
+  FETCH_CATEGORIES_SUCCESS,
+  FETCH_CATEGORIES_ERROR,
   FETCH_RECOMMENDATIONS,
   FETCH_RECOMMENDATIONS_SUCCESS,
-  FETCH_RECOMMENDATIONS_FAIL,
+  FETCH_RECOMMENDATIONS_ERROR,
 } from './constants';
 
 /**
@@ -30,10 +33,30 @@ import {
  * @return {object}    An action object with a type of CHANGE_USERNAME
  */
 
-export function toggleCategory(category) {
+export function toggleCategory(name) {
   return {
     type: TOGGLE_CATEGORY,
-    category,
+    name,
+  };
+}
+
+export function fetchCategories() {
+  return {
+    type: FETCH_CATEGORIES,
+  };
+}
+
+export function fetchCategoriesSuccess(payload) {
+  return {
+    type: FETCH_CATEGORIES_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchCategoriesError(payload) {
+  return {
+    type: FETCH_CATEGORIES_ERROR,
+    payload,
   };
 }
 
@@ -52,7 +75,7 @@ export function fetchRecommendationsSuccess(payload) {
 
 export function fetchRecommendationsError(payload) {
   return {
-    type: FETCH_RECOMMENDATIONS_FAIL,
+    type: FETCH_RECOMMENDATIONS_ERROR,
     payload,
   };
 }

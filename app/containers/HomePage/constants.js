@@ -9,9 +9,17 @@
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
 
-export const CHANGE_USERNAME = 'boilerplate/Home/CHANGE_USERNAME';
-export const TOGGLE_CATEGORY = 'boilerplate/Home/TOGGLE_CATEGORY';
-export const FETCH_RECOMMENDATIONS = 'boilerplate/Home/FETCH_RECOMMENDATIONS';
-export const FETCH_RECOMMENDATIONS_SUCCESS = 'boilerplate/Home/FETCH_RECOMMENDATIONS_SUCCESS';
-export const FETCH_RECOMMENDATIONS_FAIL = 'boilerplate/Home/FETCH_RECOMMENDATIONS_FAIL';
+export const CHANGE_USERNAME = 'carta/Home/CHANGE_USERNAME';
+export const TOGGLE_CATEGORY = 'carta/Home/TOGGLE_CATEGORY';
+
+export const FETCH_CATEGORIES = 'carta/Home/FETCH_CATEGORIES';
+export const FETCH_CATEGORIES_SUCCESS = 'carta/Home/FETCH_CATEGORIES_SUCCESS';
+export const FETCH_CATEGORIES_ERROR = 'carta/Home/FETCH_CATEGORIES_ERROR';
+
+export const FETCH_RECOMMENDATIONS = 'carta/Home/FETCH_RECOMMENDATIONS';
+export const FETCH_RECOMMENDATIONS_SUCCESS = 'carta/Home/FETCH_RECOMMENDATIONS_SUCCESS';
+export const FETCH_RECOMMENDATIONS_ERROR = 'carta/Home/FETCH_RECOMMENDATIONS_ERROR';
+
 export const MAP_ACCESS_TOKEN = 'pk.eyJ1IjoiY2FydGFndWlkZSIsImEiOiJjajMzNG5rcjAwMDFmMnFud3hpNW8wenJpIn0.uQaLvmopUNSmyGSI1WKynw';
+
+export const API_BASE_URL = 'https://carta-168713.appspot.com/';

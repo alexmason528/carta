@@ -6,9 +6,9 @@ import { createSelector } from 'reselect';
 
 const selectHome = (state) => state.get('home');
 
-const makeSelectProperties = () => createSelector(
+const makeSelectCategories = () => createSelector(
   selectHome,
-  (homeState) => homeState.get('properties')
+  (homeState) => homeState.get('categories')
 );
 
 const makeSelectRecommendations = () => createSelector(
@@ -18,6 +18,6 @@ const makeSelectRecommendations = () => createSelector(
 
 export {
   selectHome,
-  makeSelectProperties,
+  makeSelectCategories,
   makeSelectRecommendations,
 };
