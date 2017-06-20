@@ -8,7 +8,7 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import ReactMapboxGl, { Marker, Layer, Feature } from 'react-mapbox-gl';
+import ReactMapboxGl, { Marker /* , Layer, Feature */ } from 'react-mapbox-gl';
 
 import { toggleCategory, fetchRecommendations, fetchCategories } from './actions';
 import { makeSelectCategories, makeSelectRecommendations } from './selectors';
@@ -56,6 +56,18 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 
   }
 
+  // getMarkerCoords(recommendation) {
+    // const countries = require('../geojson/country.geojson');
+    // let coordinates;
+    // countries.features.forEach((country) => {
+    //   if (country.properties.name === recommendation) {
+    //     coordinates = country.geometry.coordinates;
+    //     return;
+    //   }
+    // });
+    // return coordinates;
+  // }
+
   render() {
     const icons = ['blue', 'red', 'green', 'orange', 'yellow'];
 
@@ -91,16 +103,28 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
               containerStyle={this.containerStyle}
             >
               {
+                // this.props.recommendations.get('details').map((recommendation, index) =>
+                //   <div key={index}>
+                //     <Layer
+                //       type="fill"
+                //       paint={{ 'fill-color': '#d80000', 'fill-opacity': 0.1 }}
+                //     >
+                //       <Feature coordinates={recommendation.get('region').toJS()} />
+                //     </Layer>
+
+
+                //     <Marker
+                //       coordinates={this.getMarkerCoords(recommendation.get('name'))}
+                //       anchor="bottom"
+                //     >
+                //       <img src={`https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${icons[index]}.png`} role="presentation" />
+                //     </Marker>
+                //   </div>
+                // )
                 this.props.recommendations.get('details').map((recommendation, index) =>
                   <div key={index}>
-                    <Layer
-                      type="fill"
-                      paint={{ 'fill-color': '#d80000', 'fill-opacity': 0.1 }}
-                    >
-                      <Feature coordinates={recommendation.get('region').toJS()} />
-                    </Layer>
                     <Marker
-                      coordinates={recommendation.get('point').toJS()}
+                      coordinates={this.getMarkerCoords(recommendation.get('name'))}
                       anchor="bottom"
                     >
                       <img src={`https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${icons[index]}.png`} role="presentation" />

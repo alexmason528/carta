@@ -18,6 +18,17 @@ export function* getRecommendations() {
   const data = {
     count: 5,
     categories: categories.get('details').toJS(),
+    zoom_level: 8,
+    coordinate: {
+      northwest: [
+        6.106552567,
+        51.18479522,
+      ],
+      southeast: [
+        6.226552567,
+        52.88479522,
+      ],
+    },
   };
 
   const params = {
@@ -44,14 +55,12 @@ export function* getRecommendationsWatcher() {
   yield cancel(watcher);
 }
 
-
 export function* getCategories() {
   const requestURL = `${API_BASE_URL}api/v1/map/category/`;
 
   const params = {
     method: 'GET',
   };
-
 
   let categories;
 

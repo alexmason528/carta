@@ -50,7 +50,7 @@ module.exports = (options) => ({
       test: /\.html$/,
       loader: 'html-loader',
     }, {
-      test: /\.json$/,
+      test: /\.(json|geojson)$/,
       loader: 'json-loader',
     }, {
       test: /\.(mp4|webm)$/,
@@ -72,6 +72,8 @@ module.exports = (options) => ({
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+        API_BASE_URL: JSON.stringify(process.env.API_BASE_URL),
+        MAP_ACCESS_TOKEN: JSON.stringify(process.env.MAP_ACCESS_TOKEN),
       },
     }),
     new webpack.NamedModulesPlugin(),
@@ -88,6 +90,9 @@ module.exports = (options) => ({
       'jsnext:main',
       'main',
     ],
+  },
+  node: {
+    fs: 'empty',
   },
   devtool: options.devtool,
   target: 'web', // Make web variables accessible to webpack, e.g. window
