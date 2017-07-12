@@ -16,8 +16,20 @@ const makeSelectRecommendations = () => createSelector(
   (homeState) => homeState.get('recommendations')
 );
 
+const makeSelectZoomLevel = () => createSelector(
+  selectHome,
+  (homeState) => homeState.get('zoomlevel')
+);
+
+const makeSelectViewport = () => createSelector(
+  selectHome,
+  (homeState) => homeState.get('viewport')
+);
+
 export {
   selectHome,
   makeSelectCategories,
   makeSelectRecommendations,
+  makeSelectZoomLevel,
+  makeSelectViewport,
 };

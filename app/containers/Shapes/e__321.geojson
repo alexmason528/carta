@@ -1,0 +1,7 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "name": "Pérenchies", "type": "a6", "e": 321, "code": null, "link": "alink", "source": "gadm", "zmin": 8, "zmax": 10, "area": 507 }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 2.96940732002264, 50.681529998779354 ], [ 2.97931265831005, 50.670951843261776 ], [ 2.983693361282292, 50.661228179931584 ], [ 2.970720529556331, 50.658100128173885 ], [ 2.952253580093384, 50.674194335937557 ], [ 2.959902763366813, 50.680282592773494 ], [ 2.96940732002264, 50.681529998779354 ] ] ] } }
+]
+}

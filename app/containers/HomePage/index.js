@@ -8,9 +8,9 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import ReactMapboxGl, { Marker /* , Layer, Feature */ } from 'react-mapbox-gl';
+import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 
-import { toggleCategory, fetchRecommendations, fetchCategories } from './actions';
+import { toggleCategory, zoomChange, fetchRecommendations, fetchCategories } from './actions';
 import { makeSelectCategories, makeSelectRecommendations } from './selectors';
 
 
@@ -48,29 +48,36 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
       height: '100%',
     };
 
-    this.zoom = [0];
+    this.center = [5, 52];
+    this.zoomlevel = [7];
+
     this.props.fetchCategories();
+    this.paintStyle = {
+      'fill-color': '#ff0000',
+      'fill-opacity': 0.7,
+    };
   }
 
   componentWillUnmount() {
 
   }
 
-  // getMarkerCoords(recommendation) {
-    // const countries = require('../geojson/country.geojson');
-    // let coordinates;
-    // countries.features.forEach((country) => {
-    //   if (country.properties.name === recommendation) {
-    //     coordinates = country.geometry.coordinates;
-    //     return;
-    //   }
-    // });
-    // return coordinates;
-  // }
+  onZoomEnd = (map) => {
+    this.props.zoomChange(map.getZoom(), map.getBounds());
+    this.props.fetchRecommendations();
+  }
+
+  onStyleLoad = (map) => {
+    this.props.zoomChange(map.getZoom(), map.getBounds());
+    this.props.fetchRecommendations();
+  }
+
+  onDragEnd = (map) => {
+    this.props.zoomChange(map.getZoom(), map.getBounds());
+    this.props.fetchRecommendations();
+  }
 
   render() {
-    const icons = ['blue', 'red', 'green', 'orange', 'yellow'];
-
     return (
       <div>
         <Helmet
@@ -91,7 +98,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
                     this.props.fetchRecommendations();
                   }}
                 >
-                  {category.get('name')}
+                  {category.get('name').replace(/_/g, ' ')}
                 </Button>
               )
             }
@@ -101,36 +108,29 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
               style={this.mapStyle}
               accessToken={MAP_ACCESS_TOKEN}
               containerStyle={this.containerStyle}
+              center={this.center}
+              zoomlevel={this.zoomlevel}
+              onZoomEnd={this.onZoomEnd}
+              onStyleLoad={this.onStyleLoad}
+              onDragEnd={this.onDragEnd}
+              onResize={this.onResize}
             >
               {
-                // this.props.recommendations.get('details').map((recommendation, index) =>
-                //   <div key={index}>
-                //     <Layer
-                //       type="fill"
-                //       paint={{ 'fill-color': '#d80000', 'fill-opacity': 0.1 }}
-                //     >
-                //       <Feature coordinates={recommendation.get('region').toJS()} />
-                //     </Layer>
+                this.props.recommendations.get('details').map((recommendation, index) => {
+                  const e = recommendation.get('e');
+                  const geojson = require(`../Shapes/e__${e}.geojson`);
+                  const coords = geojson.features[0].geometry.coordinates;
 
-
-                //     <Marker
-                //       coordinates={this.getMarkerCoords(recommendation.get('name'))}
-                //       anchor="bottom"
-                //     >
-                //       <img src={`https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${icons[index]}.png`} role="presentation" />
-                //     </Marker>
-                //   </div>
-                // )
-                this.props.recommendations.get('details').map((recommendation, index) =>
-                  <div key={index}>
-                    <Marker
-                      coordinates={this.getMarkerCoords(recommendation.get('name'))}
-                      anchor="bottom"
+                  return (
+                    <Layer
+                      key={index}
+                      type="fill"
+                      paint={this.paintStyle}
                     >
-                      <img src={`https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${icons[index]}.png`} role="presentation" />
-                    </Marker>
-                  </div>
-                )
+                      <Feature coordinates={coords} />
+                    </Layer>
+                  );
+                })
               }
             </ReactMapboxGl>
           </MapBlock>
@@ -149,15 +149,17 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 
 HomePage.propTypes = {
   onToggleCategory: React.PropTypes.func,
-  categories: React.PropTypes.object,
-  recommendations: React.PropTypes.object,
+  zoomChange: React.PropTypes.func,
   fetchRecommendations: React.PropTypes.func,
   fetchCategories: React.PropTypes.func,
+  categories: React.PropTypes.object,
+  recommendations: React.PropTypes.object,
 };
 
 export function mapDispatchToProps(dispatch) {
   return {
     onToggleCategory: (name) => dispatch(toggleCategory(name)),
+    zoomChange: (zoomlevel, viewport) => dispatch(zoomChange(zoomlevel, viewport)),
     fetchRecommendations: () => dispatch(fetchRecommendations()),
     fetchCategories: () => dispatch(fetchCategories()),
   };

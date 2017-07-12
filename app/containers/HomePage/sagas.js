@@ -6,29 +6,29 @@ import { take, call, put, select, cancel, takeLatest } from 'redux-saga/effects'
 import { LOCATION_CHANGE } from 'react-router-redux';
 
 import request from 'utils/request';
-import { makeSelectCategories } from 'containers/HomePage/selectors';
+import { makeSelectCategories, makeSelectZoomLevel, makeSelectViewport } from 'containers/HomePage/selectors';
 
 import { FETCH_RECOMMENDATIONS, FETCH_CATEGORIES, API_BASE_URL } from './constants';
 import { fetchRecommendationsSuccess, fetchRecommendationsError, fetchCategoriesSuccess, fetchCategoriesError } from './actions';
 
 export function* getRecommendations() {
-  const categories = yield select(makeSelectCategories());
+  const storeCategories = yield select(makeSelectCategories());
+  const zoomlevel = yield select(makeSelectZoomLevel());
+  const viewport = yield select(makeSelectViewport());
+
   const requestURL = `${API_BASE_URL}api/v1/map/recommendation/`;
+
+  let categories = [];
+
+  storeCategories.get('details').toJS().map((category) => {
+    if (category.value !== 0) categories.push(category.name);
+  });
 
   const data = {
     count: 5,
-    categories: categories.get('details').toJS(),
-    zoom_level: 8,
-    coordinate: {
-      northwest: [
-        6.106552567,
-        51.18479522,
-      ],
-      southeast: [
-        6.226552567,
-        52.88479522,
-      ],
-    },
+    interests: categories,
+    zoomlevel: zoomlevel,
+    viewport: viewport,
   };
 
   const params = {

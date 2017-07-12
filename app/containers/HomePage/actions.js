@@ -17,6 +17,7 @@
 
 import {
   TOGGLE_CATEGORY,
+  ZOOM_CHANGE,
   FETCH_CATEGORIES,
   FETCH_CATEGORIES_SUCCESS,
   FETCH_CATEGORIES_ERROR,
@@ -39,7 +40,13 @@ export function toggleCategory(name) {
     name,
   };
 }
-
+export function zoomChange(zoomlevel, viewport) {
+  return {
+    type: ZOOM_CHANGE,
+    zoomlevel,
+    viewport,
+  };
+}
 export function fetchCategories() {
   return {
     type: FETCH_CATEGORIES,
