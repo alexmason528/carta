@@ -4,16 +4,29 @@ const express = require('express');
 const logger = require('./logger');
 const argv = require('minimist')(process.argv.slice(2));
 const setup = require('./middlewares/frontendMiddleware');
+const mongoose = require('mongoose');
 const isDev = process.env.NODE_ENV !== 'production';
 const ngrok = (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel ? require('ngrok') : false;
 const resolve = require('path').resolve;
 const app = express();
+const bodyParser = require('body-parser');
+
+
+// MongoDB Connection
+let mongoUri = 'mongodb://localhost:27017/carta';
+if (!isDev) mongoUri = 'mongodb://root:BGakLR6A@10.128.0.2:27017/carta?authSource=admin';
+
+mongoose.connect(mongoUri, {
+  useMongoClient: true,
+  /* other options */
+});
 
 require('dotenv').config();
 
 // If you need a backend, e.g. an API, add your custom backend-specific middleware here
 // app.use('/api', myApi);
 // In production we need to pass these values in instead of relying on webpack
+app.use(bodyParser.json());
 setup(app, {
   outputPath: resolve(process.cwd(), 'build'),
   publicPath: '/',
@@ -27,6 +40,7 @@ const prettyHost = customHost || 'localhost';
 const port = argv.port || process.env.PORT || 3000;
 
 // Start your app.
+
 app.listen(port, host, (err) => {
   if (err) {
     return logger.error(err.message);

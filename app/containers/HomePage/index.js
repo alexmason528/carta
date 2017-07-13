@@ -8,7 +8,7 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
+import ReactMapboxGl, { Layer, Feature, Marker } from 'react-mapbox-gl';
 
 import { toggleCategory, zoomChange, fetchRecommendations, fetchCategories } from './actions';
 import { makeSelectCategories, makeSelectRecommendations } from './selectors';
@@ -52,10 +52,57 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     this.zoomlevel = [7];
 
     this.props.fetchCategories();
-    this.paintStyle = {
-      'fill-color': '#ff0000',
-      'fill-opacity': 0.7,
-    };
+
+    this.rankColor = [
+      {
+        color: '#dd0008',
+        fontSize: '14px',
+        fontWeight: 'bold',
+      },
+      {
+        color: '#ed7000',
+        fontSize: '14px',
+        fontWeight: 'bold',
+      },
+      {
+        color: '#009985',
+        fontSize: '14px',
+        fontWeight: 'bold',
+      },
+      {
+        color: '#29549a',
+        fontSize: '14px',
+        fontWeight: 'bold',
+      },
+      {
+        color: '#8f1379',
+        fontSize: '14px',
+        fontWeight: 'bold',
+      },
+    ];
+
+    this.paintStyle = [
+      {
+        'fill-color': '#dd0008',
+        'fill-opacity': 0.5,
+      },
+      {
+        'fill-color': '#ed7000',
+        'fill-opacity': 0.5,
+      },
+      {
+        'fill-color': '#009985',
+        'fill-opacity': 0.5,
+      },
+      {
+        'fill-color': '#29549a',
+        'fill-opacity': 0.5,
+      },
+      {
+        'fill-color': '#8f1379',
+        'fill-opacity': 0.5,
+      },
+    ];
   }
 
   componentWillUnmount() {
@@ -117,19 +164,41 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
             >
               {
                 this.props.recommendations.get('details').map((recommendation, index) => {
-                  const e = recommendation.get('e');
-                  const geojson = require(`../Shapes/e__${e}.geojson`);
-                  const coords = geojson.features[0].geometry.coordinates;
+                  const display = recommendation.get('display');
+                  let recommendationElem;
 
-                  return (
-                    <Layer
-                      key={index}
-                      type="fill"
-                      paint={this.paintStyle}
-                    >
-                      <Feature coordinates={coords} />
-                    </Layer>
-                  );
+                  if (display === 'shape') {
+                    const geojson = require(`../Shapes/e__${recommendation.get('e')}.geojson`);
+                    const coords = geojson.features[0].geometry.coordinates;
+
+                    recommendationElem = (
+                      <div key={index}>
+                        <Layer
+                          type="fill"
+                          paint={this.paintStyle[index % 5]}
+                        >
+                          <Feature coordinates={coords} />
+                        </Layer>
+                        <Marker
+                          coordinates={[recommendation.get('x'), recommendation.get('y')]}
+                          anchor="bottom"
+                        >
+                          <span style={this.rankColor[index % 5]}>{recommendation.get('name')}</span>
+                        </Marker>
+                      </div>);
+                  } else if (display === 'icon') {
+                    recommendationElem = (
+                      <Marker
+                        key={index}
+                        coordinates={[recommendation.get('x'), recommendation.get('y')]}
+                        anchor="bottom"
+                      >
+                        <span style={this.rankColor[index % 5]}>{recommendation.get('name')}</span>
+                      </Marker>
+                    );
+                  }
+
+                  return recommendationElem;
                 })
               }
             </ReactMapboxGl>
@@ -137,7 +206,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           <ScoreBoardBlock>
             {
               this.props.recommendations.get('details').map((recommendation, index) =>
-                <div key={index}>{recommendation.get('name')} : {recommendation.get('score')}</div>
+                <div key={index} style={this.rankColor[index % 5]}>{recommendation.get('name')} : {recommendation.get('score')}</div>
               )
             }
           </ScoreBoardBlock>

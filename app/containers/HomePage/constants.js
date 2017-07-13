@@ -21,5 +21,9 @@ export const FETCH_RECOMMENDATIONS_SUCCESS = 'carta/Home/FETCH_RECOMMENDATIONS_S
 export const FETCH_RECOMMENDATIONS_ERROR = 'carta/Home/FETCH_RECOMMENDATIONS_ERROR';
 
 // export const API_BASE_URL = 'https://carta-168713.appspot.com/';
-export const API_BASE_URL = 'http://localhost:8000/';
+
+let API_DOMAIN = 'http://localhost:3000/';
+if (process.env.NODE_ENV === 'production') API_DOMAIN = 'https://carta-frontend-169512.appspot.com/';
+
+export const API_BASE_URL = API_DOMAIN;
 export const MAP_ACCESS_TOKEN = 'pk.eyJ1IjoiY2FydGFndWlkZSIsImEiOiJjajMzNG5rcjAwMDFmMnFud3hpNW8wenJpIn0.uQaLvmopUNSmyGSI1WKynw';

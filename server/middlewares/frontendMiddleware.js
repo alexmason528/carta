@@ -4,6 +4,8 @@ const path = require('path');
 const compression = require('compression');
 const pkg = require(path.resolve(process.cwd(), 'package.json'));
 
+const routes = require('../routes/map.routes');
+
 // Dev middleware
 const addDevMiddlewares = (app, webpackConfig) => {
   const webpack = require('webpack');
@@ -19,6 +21,7 @@ const addDevMiddlewares = (app, webpackConfig) => {
 
   app.use(middleware);
   app.use(webpackHotMiddleware(compiler));
+  app.use('/api/v1/map', routes);
 
   // Since webpackDevMiddleware uses memory-fs internally to store build
   // artifacts, we use it instead
@@ -50,8 +53,10 @@ const addProdMiddlewares = (app, options) => {
   // compression middleware compresses your server responses which makes them
   // smaller (applies also to assets). You can read more about that technique
   // and other good practices on official Express.js docs http://mxs.is/googmy
+
   app.use(compression());
   app.use(publicPath, express.static(outputPath));
+  app.use('/api/v1/map', routes);
 
   app.get('*', (req, res) => res.sendFile(path.resolve(outputPath, 'index.html')));
 };
