@@ -8,7 +8,7 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import ReactMapboxGl from 'react-mapbox-gl';
+import ReactMapboxGl, { GeoJSONLayer } from 'react-mapbox-gl';
 
 import { toggleCategory, zoomChange, fetchRecommendations, fetchCategories } from './actions';
 import { makeSelectCategories, makeSelectRecommendations } from './selectors';
@@ -52,34 +52,16 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     this.zoom = [6];
 
     this.props.fetchCategories();
-
     this.colors = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379'];
-
-    this.geoJSONSource = 'https://storage.googleapis.com/carta-geojson/shapes.geojson';
-
-    this.map = '';
-
-    this.count = 5;
+    this.symbolLayout = {
+      'text-field': '{place}',
+      'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+      'text-size': 13,
+    };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.map) {
-      nextProps.recommendations.get('details').map((recommendation, index) => {
-        const display = recommendation.get('display');
-        let filter = ['==', 'name', recommendation.get('name')];
+  componentWillUnmount() {
 
-        if (display === 'shape') {
-          this.map.setFilter(`area-border-offset-${index}`, filter);
-          this.map.setFilter(`area-border-${index}`, filter);
-          this.map.setFilter(`area-fill-${index}`, filter);
-          this.map.setFilter(`area-caption-${index}`, filter);
-        } else if (display === 'icon') {
-          this.map.setFilter(`area-border-offset-${index}`, ['==', 'name', '']);
-          this.map.setFilter(`area-border-${index}`, ['==', 'name', '']);
-          this.map.setFilter(`area-caption-${index}`, filter);
-        }
-      });
-    }
   }
 
   onZoomEnd = (map) => {
@@ -90,102 +72,6 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   onStyleLoad = (map) => {
     this.props.zoomChange(map.getZoom(), map.getBounds());
     this.props.fetchRecommendations();
-    this.map = map;
-
-    map.addSource('areas', {
-      type: 'geojson',
-      data: this.geoJSONSource,
-    });
-
-    for (let i = 0; i < this.count; i += 1) {
-      map.addLayer({
-        id: `area-fill-${i}`,
-        type: 'fill',
-        source: 'areas',
-        layout: {},
-        paint: {
-          'fill-color': this.colors[i],
-          'fill-opacity': 0.1,
-        },
-        filter: ['==', 'name', ''],
-      });
-
-      map.addLayer({
-        id: `area-border-offset-${i}`,
-        type: 'line',
-        source: 'areas',
-        layout: {},
-        paint: {
-          'line-color': this.colors[i],
-          'line-width': 2.5,
-          'line-opacity': 0.15,
-          'line-offset': 1.5,
-        },
-      });
-
-      map.addLayer({
-        id: `area-border-${i}`,
-        type: 'line',
-        source: 'areas',
-        layout: {},
-        paint: {
-          'line-color': this.colors[i],
-          'line-width': 0.5,
-        },
-      });
-
-      map.addLayer({
-        id: `area-caption-${i}`,
-        type: 'symbol',
-        source: 'areas',
-        layout: {
-          'text-field': '{name}',
-          'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
-          'text-size': 13,
-        },
-        paint: {
-          'text-color': this.colors[i],
-          'text-halo-width': 2,
-          'text-halo-color': '#fff',
-        },
-      });
-
-      map.addLayer({
-        id: `area-fill-${i}`,
-        type: 'fill',
-        source: 'areas',
-        layout: {},
-        paint: {
-          'fill-color': this.colors[i],
-          'fill-opacity': 0,
-        },
-      });
-
-      map.addLayer({
-        id: `area-fill-hover-${i}`,
-        type: 'fill',
-        source: 'areas',
-        layout: {},
-        paint: {
-          'fill-color': this.colors[i],
-          'fill-opacity': 0.1,
-        },
-        filter: ['==', 'name', ''],
-      });
-
-      const areaFill = `area-fill-${i}`;
-      const areaFillHover = `area-fill-hover-${i}`;
-
-      map.on('mouseenter', areaFill, (e) => {
-        map.setFilter(areaFillHover, ['==', 'name', e.features[0].properties.name]);
-        map.getCanvas().style.cursor = 'pointer';
-      });
-
-      map.on('mouseleave', areaFill, () => {
-        map.setFilter(areaFillHover, ['==', 'name', '']);
-        map.getCanvas().style.cursor = '';
-      });
-    }
   }
 
   onDragEnd = (map) => {
@@ -230,8 +116,71 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
               onStyleLoad={this.onStyleLoad}
               onDragEnd={this.onDragEnd}
               onResize={this.onResize}
-              onMouseMove={this.onMouseMove}
             >
+              {
+                this.props.recommendations.get('details').map((recommendation, index) => {
+                  let recommendationElem;
+
+                  const display = recommendation.get('display');
+                  const name = recommendation.get('name').toUpperCase();
+                  const coordinates = [recommendation.get('x'), recommendation.get('y')];
+                  const geojson = `https://storage.googleapis.com/carta-geojson/e__${recommendation.get('e')}.geojson`;
+                  const source = {
+                    type: 'FeatureCollection',
+                    features: [
+                      {
+                        type: 'Feature',
+                        properties: {
+                          place: name,
+                        },
+                        geometry: {
+                          type: 'Point',
+                          coordinates: coordinates,
+                        },
+                      },
+                    ],
+                  };
+
+                  const fillPaint = {
+                    'fill-color': this.colors[index % 5],
+                    'fill-opacity': 0.1,
+                  };
+
+                  const linePaint = {
+                    'line-color': this.colors[index % 5],
+                    'line-width': 1,
+                  };
+
+                  const lineOffsetPaint = {
+                    'line-color': this.colors[index % 5],
+                    'line-width': 1.5,
+                    'line-opacity': 0.3,
+                    'line-offset': 2,
+                  };
+
+                  const symbolPaint = {
+                    'text-color': this.colors[index % 5],
+                    'text-halo-width': 2,
+                    'text-halo-color': '#fff',
+                  };
+
+                  if (display === 'shape') {
+                    recommendationElem = (
+                      <div key={index}>
+                        <GeoJSONLayer data={geojson} fillPaint={fillPaint} />
+                        <GeoJSONLayer data={geojson} linePaint={linePaint} />
+                        <GeoJSONLayer data={geojson} linePaint={lineOffsetPaint} />
+                        <GeoJSONLayer data={source} symbolLayout={this.symbolLayout} symbolPaint={symbolPaint} />
+                      </div>);
+                  } else if (display === 'icon') {
+                    recommendationElem = (
+                      <GeoJSONLayer data={source} symbolLayout={this.symbolLayout} symbolPaint={symbolPaint} />
+                    );
+                  }
+
+                  return recommendationElem;
+                })
+              }
             </ReactMapboxGl>
           </MapBlock>
           <ScoreBoardBlock>
