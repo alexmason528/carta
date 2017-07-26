@@ -20,7 +20,7 @@ export const FETCH_RECOMMENDATIONS = 'carta/Home/FETCH_RECOMMENDATIONS';
 export const FETCH_RECOMMENDATIONS_SUCCESS = 'carta/Home/FETCH_RECOMMENDATIONS_SUCCESS';
 export const FETCH_RECOMMENDATIONS_ERROR = 'carta/Home/FETCH_RECOMMENDATIONS_ERROR';
 
-// export const API_BASE_URL = 'https://carta-168713.appspot.com/';
+// export const API_BASE_URL = 'https://carta-backend-v2.appspot.com/';
 
 let API_DOMAIN = 'http://localhost:3000/';
 if (process.env.NODE_ENV === 'production') API_DOMAIN = 'https://carta-frontend-169512.appspot.com/';

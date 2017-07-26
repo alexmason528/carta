@@ -27,6 +27,7 @@ const ScoreBoardBlock = styled.div`
   font-weight:900; 
   text-transform:uppercase; 
   position:absolute;
+  display:none;
 `;
 
 export {

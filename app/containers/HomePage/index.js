@@ -8,11 +8,10 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import ReactMapboxGl, { Layer, Feature, Marker } from 'react-mapbox-gl';
+import ReactMapboxGl from 'react-mapbox-gl';
 
 import { toggleCategory, zoomChange, fetchRecommendations, fetchCategories } from './actions';
 import { makeSelectCategories, makeSelectRecommendations } from './selectors';
-
 
 import { MAP_ACCESS_TOKEN } from './constants';
 
@@ -41,6 +40,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
         minzoom: 0,
         maxzoom: 22,
       }],
+      glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
     };
 
     this.containerStyle = {
@@ -48,65 +48,38 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
       height: '100%',
     };
 
-    this.center = [5, 52];
-    this.zoomlevel = [7];
+    this.center = [5.822, 52.142];
+    this.zoom = [6];
 
     this.props.fetchCategories();
 
-    this.rankColor = [
-      {
-        color: '#dd0008',
-        fontSize: '14px',
-        fontWeight: 'bold',
-      },
-      {
-        color: '#ed7000',
-        fontSize: '14px',
-        fontWeight: 'bold',
-      },
-      {
-        color: '#009985',
-        fontSize: '14px',
-        fontWeight: 'bold',
-      },
-      {
-        color: '#29549a',
-        fontSize: '14px',
-        fontWeight: 'bold',
-      },
-      {
-        color: '#8f1379',
-        fontSize: '14px',
-        fontWeight: 'bold',
-      },
-    ];
+    this.colors = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379'];
 
-    this.paintStyle = [
-      {
-        'fill-color': '#dd0008',
-        'fill-opacity': 0.5,
-      },
-      {
-        'fill-color': '#ed7000',
-        'fill-opacity': 0.5,
-      },
-      {
-        'fill-color': '#009985',
-        'fill-opacity': 0.5,
-      },
-      {
-        'fill-color': '#29549a',
-        'fill-opacity': 0.5,
-      },
-      {
-        'fill-color': '#8f1379',
-        'fill-opacity': 0.5,
-      },
-    ];
+    this.geoJSONSource = 'https://storage.googleapis.com/carta-geojson/shapes.geojson';
+
+    this.map = '';
+
+    this.count = 5;
   }
 
-  componentWillUnmount() {
+  componentWillReceiveProps(nextProps) {
+    if (this.map) {
+      nextProps.recommendations.get('details').map((recommendation, index) => {
+        const display = recommendation.get('display');
+        let filter = ['==', 'name', recommendation.get('name')];
 
+        if (display === 'shape') {
+          this.map.setFilter(`area-border-offset-${index}`, filter);
+          this.map.setFilter(`area-border-${index}`, filter);
+          this.map.setFilter(`area-fill-${index}`, filter);
+          this.map.setFilter(`area-caption-${index}`, filter);
+        } else if (display === 'icon') {
+          this.map.setFilter(`area-border-offset-${index}`, ['==', 'name', '']);
+          this.map.setFilter(`area-border-${index}`, ['==', 'name', '']);
+          this.map.setFilter(`area-caption-${index}`, filter);
+        }
+      });
+    }
   }
 
   onZoomEnd = (map) => {
@@ -117,6 +90,102 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   onStyleLoad = (map) => {
     this.props.zoomChange(map.getZoom(), map.getBounds());
     this.props.fetchRecommendations();
+    this.map = map;
+
+    map.addSource('areas', {
+      type: 'geojson',
+      data: this.geoJSONSource,
+    });
+
+    for (let i = 0; i < this.count; i += 1) {
+      map.addLayer({
+        id: `area-fill-${i}`,
+        type: 'fill',
+        source: 'areas',
+        layout: {},
+        paint: {
+          'fill-color': this.colors[i],
+          'fill-opacity': 0.1,
+        },
+        filter: ['==', 'name', ''],
+      });
+
+      map.addLayer({
+        id: `area-border-offset-${i}`,
+        type: 'line',
+        source: 'areas',
+        layout: {},
+        paint: {
+          'line-color': this.colors[i],
+          'line-width': 2.5,
+          'line-opacity': 0.15,
+          'line-offset': 1.5,
+        },
+      });
+
+      map.addLayer({
+        id: `area-border-${i}`,
+        type: 'line',
+        source: 'areas',
+        layout: {},
+        paint: {
+          'line-color': this.colors[i],
+          'line-width': 0.5,
+        },
+      });
+
+      map.addLayer({
+        id: `area-caption-${i}`,
+        type: 'symbol',
+        source: 'areas',
+        layout: {
+          'text-field': '{name}',
+          'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+          'text-size': 13,
+        },
+        paint: {
+          'text-color': this.colors[i],
+          'text-halo-width': 2,
+          'text-halo-color': '#fff',
+        },
+      });
+
+      map.addLayer({
+        id: `area-fill-${i}`,
+        type: 'fill',
+        source: 'areas',
+        layout: {},
+        paint: {
+          'fill-color': this.colors[i],
+          'fill-opacity': 0,
+        },
+      });
+
+      map.addLayer({
+        id: `area-fill-hover-${i}`,
+        type: 'fill',
+        source: 'areas',
+        layout: {},
+        paint: {
+          'fill-color': this.colors[i],
+          'fill-opacity': 0.1,
+        },
+        filter: ['==', 'name', ''],
+      });
+
+      const areaFill = `area-fill-${i}`;
+      const areaFillHover = `area-fill-hover-${i}`;
+
+      map.on('mouseenter', areaFill, (e) => {
+        map.setFilter(areaFillHover, ['==', 'name', e.features[0].properties.name]);
+        map.getCanvas().style.cursor = 'pointer';
+      });
+
+      map.on('mouseleave', areaFill, () => {
+        map.setFilter(areaFillHover, ['==', 'name', '']);
+        map.getCanvas().style.cursor = '';
+      });
+    }
   }
 
   onDragEnd = (map) => {
@@ -156,57 +225,19 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
               accessToken={MAP_ACCESS_TOKEN}
               containerStyle={this.containerStyle}
               center={this.center}
-              zoomlevel={this.zoomlevel}
+              zoom={this.zoom}
               onZoomEnd={this.onZoomEnd}
               onStyleLoad={this.onStyleLoad}
               onDragEnd={this.onDragEnd}
               onResize={this.onResize}
+              onMouseMove={this.onMouseMove}
             >
-              {
-                this.props.recommendations.get('details').map((recommendation, index) => {
-                  const display = recommendation.get('display');
-                  let recommendationElem;
-
-                  if (display === 'shape') {
-                    const geojson = require(`../Shapes/e__${recommendation.get('e')}.geojson`);
-                    const coords = geojson.features[0].geometry.coordinates;
-
-                    recommendationElem = (
-                      <div key={index}>
-                        <Layer
-                          type="fill"
-                          paint={this.paintStyle[index % 5]}
-                        >
-                          <Feature coordinates={coords} />
-                        </Layer>
-                        <Marker
-                          coordinates={[recommendation.get('x'), recommendation.get('y')]}
-                          anchor="bottom"
-                        >
-                          <span style={this.rankColor[index % 5]}>{recommendation.get('name')}</span>
-                        </Marker>
-                      </div>);
-                  } else if (display === 'icon') {
-                    recommendationElem = (
-                      <Marker
-                        key={index}
-                        coordinates={[recommendation.get('x'), recommendation.get('y')]}
-                        anchor="bottom"
-                      >
-                        <span style={this.rankColor[index % 5]}>{recommendation.get('name')}</span>
-                      </Marker>
-                    );
-                  }
-
-                  return recommendationElem;
-                })
-              }
             </ReactMapboxGl>
           </MapBlock>
           <ScoreBoardBlock>
             {
               this.props.recommendations.get('details').map((recommendation, index) =>
-                <div key={index} style={this.rankColor[index % 5]}>{recommendation.get('name')} : {recommendation.get('score')}</div>
+                <div key={index} style={{ color: this.colors[index % 5] }}>{recommendation.get('name')} : {recommendation.get('score')}</div>
               )
             }
           </ScoreBoardBlock>
