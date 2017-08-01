@@ -72,9 +72,18 @@ const getRecommendations = (req, res) => {
     $limit: params.count,
   }];
 
-  Element.aggregate(pipeline, (err, result) => {
+  Element.aggregate(pipeline, (err, results) => {
     if (err) throw err;
-    res.json(result);
+
+    let recommendations = [];
+
+    for (const key in results) {
+      if (results[key].score !== 0) {
+        recommendations.push(results[key]);
+      }
+    }
+
+    res.json(recommendations);
   });
 };
 

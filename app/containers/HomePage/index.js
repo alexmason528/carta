@@ -232,7 +232,6 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     return (
       <div>
         <Helmet
-          title="Home Page"
           meta={[
             { name: 'description', content: 'Carta' },
           ]}
