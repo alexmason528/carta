@@ -8,7 +8,7 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import ReactMapboxGl, { GeoJSONLayer } from 'react-mapbox-gl';
+import ReactMapboxGl from 'react-mapbox-gl';
 
 import { toggleCategory, zoomChange, fetchRecommendations, fetchCategories } from './actions';
 import { makeSelectCategories, makeSelectRecommendations } from './selectors';
@@ -17,6 +17,8 @@ import { MAP_ACCESS_TOKEN } from './constants';
 
 import { SearchBlock, MapBlock, ScoreBoardBlock } from './Block';
 import Button from './Button';
+
+const Map = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN });
 
 export class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   /**
@@ -52,16 +54,36 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     this.zoom = [6];
 
     this.props.fetchCategories();
+
     this.colors = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379'];
-    this.symbolLayout = {
-      'text-field': '{place}',
-      'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
-      'text-size': 13,
-    };
+
+    this.shapesGeoJSONSource = 'https://storage.googleapis.com/carta-geojson/shapes.geojson';
+    this.pointsGeoJSONSource = 'https://storage.googleapis.com/carta-geojson/points.geojson';
+
+    this.map = '';
+
+    this.count = 5;
   }
 
-  componentWillUnmount() {
+  componentWillReceiveProps(nextProps) {
+    if (this.map) {
+      this.clearMap();
+      nextProps.recommendations.get('details').map((recommendation, index) => {
+        const display = recommendation.get('display');
+        let filter = ['==', 'e', recommendation.get('e')];
 
+        if (display === 'shape') {
+          this.map.setFilter(`shape-border-offset-${index}`, filter);
+          this.map.setFilter(`shape-border-${index}`, filter);
+          this.map.setFilter(`shape-fill-${index}`, filter);
+          this.map.setFilter(`shape-caption-${index}`, filter);
+        } else if (display === 'icon') {
+          this.map.setFilter(`shape-border-offset-${index}`, ['==', 'e', '']);
+          this.map.setFilter(`shape-border-${index}`, ['==', 'e', '']);
+          this.map.setFilter(`shape-caption-${index}`, filter);
+        }
+      });
+    }
   }
 
   onZoomEnd = (map) => {
@@ -72,11 +94,138 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   onStyleLoad = (map) => {
     this.props.zoomChange(map.getZoom(), map.getBounds());
     this.props.fetchRecommendations();
+    this.map = map;
+
+    map.addSource('shapes', {
+      type: 'geojson',
+      data: this.shapesGeoJSONSource,
+    });
+
+    map.addSource('points', {
+      type: 'geojson',
+      data: this.pointsGeoJSONSource,
+    });
+
+    for (let i = 0; i < this.count; i += 1) {
+      map.addLayer({
+        id: `shape-fill-${i}`,
+        type: 'fill',
+        source: 'shapes',
+        layout: {},
+        paint: {
+          'fill-color': this.colors[i],
+          'fill-opacity': 0.1,
+        },
+        filter: ['==', 'e', ''],
+      });
+
+      map.addLayer({
+        id: `shape-border-offset-${i}`,
+        type: 'line',
+        source: 'shapes',
+        layout: {},
+        paint: {
+          'line-color': this.colors[i],
+          'line-width': 2.5,
+          'line-opacity': 0.15,
+          'line-offset': 1.5,
+        },
+        filter: ['==', 'e', ''],
+      });
+
+      map.addLayer({
+        id: `shape-border-${i}`,
+        type: 'line',
+        source: 'shapes',
+        layout: {},
+        paint: {
+          'line-color': this.colors[i],
+          'line-width': 0.5,
+        },
+        filter: ['==', 'e', ''],
+      });
+
+      map.addLayer({
+        id: `shape-caption-${i}`,
+        type: 'symbol',
+        source: 'points',
+        layout: {
+          'text-field': '{name}',
+          'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+          'text-size': 13,
+        },
+        paint: {
+          'text-color': this.colors[i],
+          'text-halo-width': 2,
+          'text-halo-color': '#fff',
+        },
+        filter: ['==', 'e', ''],
+      });
+
+      map.addLayer({
+        id: `shape-fill-${i}`,
+        type: 'fill',
+        source: 'shapes',
+        layout: {},
+        paint: {
+          'fill-color': this.colors[i],
+          'fill-opacity': 0,
+        },
+        filter: ['==', 'e', ''],
+      });
+
+      const shapeFill = `shape-fill-${i}`;
+      const shapeCaption = `shape-caption-${i}`;
+
+      map.on('mousemove', shapeFill, () => {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+
+      map.on('mouseleave', shapeFill, () => {
+        map.getCanvas().style.cursor = '';
+      });
+
+      map.on('mousemove', shapeCaption, () => {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+
+      map.on('mouseleave', shapeCaption, () => {
+        map.getCanvas().style.cursor = '';
+      });
+
+      map.on('click', shapeFill, (data) => {
+        const e = data.features[0].properties.e;
+        const name = data.features[0].properties.name;
+
+        this.placeClicked(e, name);
+      });
+
+      map.on('click', shapeCaption, (data) => {
+        const e = data.features[0].properties.e;
+        const name = data.features[0].properties.name;
+
+        this.placeClicked(e, name);
+      });
+    }
   }
 
   onDragEnd = (map) => {
     this.props.zoomChange(map.getZoom(), map.getBounds());
     this.props.fetchRecommendations();
+  }
+
+  clearMap = () => {
+    this.props.recommendations.get('details').map((recommendation, index) => {
+      let filter = ['==', 'e', ''];
+
+      this.map.setFilter(`shape-border-offset-${index}`, filter);
+      this.map.setFilter(`shape-border-${index}`, filter);
+      this.map.setFilter(`shape-fill-${index}`, filter);
+      this.map.setFilter(`shape-caption-${index}`, filter);
+    });
+  }
+
+  placeClicked = (e, name) => {
   }
 
   render() {
@@ -106,82 +255,15 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
             }
           </SearchBlock>
           <MapBlock>
-            <ReactMapboxGl
+            <Map
               style={this.mapStyle}
-              accessToken={MAP_ACCESS_TOKEN}
               containerStyle={this.containerStyle}
               center={this.center}
               zoom={this.zoom}
               onZoomEnd={this.onZoomEnd}
               onStyleLoad={this.onStyleLoad}
               onDragEnd={this.onDragEnd}
-              onResize={this.onResize}
-            >
-              {
-                this.props.recommendations.get('details').map((recommendation, index) => {
-                  let recommendationElem;
-
-                  const display = recommendation.get('display');
-                  const name = recommendation.get('name').toUpperCase();
-                  const coordinates = [recommendation.get('x'), recommendation.get('y')];
-                  const geojson = `https://storage.googleapis.com/carta-geojson/e__${recommendation.get('e')}.geojson`;
-                  const source = {
-                    type: 'FeatureCollection',
-                    features: [
-                      {
-                        type: 'Feature',
-                        properties: {
-                          place: name,
-                        },
-                        geometry: {
-                          type: 'Point',
-                          coordinates: coordinates,
-                        },
-                      },
-                    ],
-                  };
-
-                  const fillPaint = {
-                    'fill-color': this.colors[index % 5],
-                    'fill-opacity': 0.1,
-                  };
-
-                  const linePaint = {
-                    'line-color': this.colors[index % 5],
-                    'line-width': 1,
-                  };
-
-                  const lineOffsetPaint = {
-                    'line-color': this.colors[index % 5],
-                    'line-width': 1.5,
-                    'line-opacity': 0.3,
-                    'line-offset': 2,
-                  };
-
-                  const symbolPaint = {
-                    'text-color': this.colors[index % 5],
-                    'text-halo-width': 2,
-                    'text-halo-color': '#fff',
-                  };
-
-                  if (display === 'shape') {
-                    recommendationElem = (
-                      <div key={index}>
-                        <GeoJSONLayer data={geojson} fillPaint={fillPaint} />
-                        <GeoJSONLayer data={geojson} linePaint={linePaint} />
-                        <GeoJSONLayer data={geojson} linePaint={lineOffsetPaint} />
-                        <GeoJSONLayer data={source} symbolLayout={this.symbolLayout} symbolPaint={symbolPaint} />
-                      </div>);
-                  } else if (display === 'icon') {
-                    recommendationElem = (
-                      <GeoJSONLayer data={source} symbolLayout={this.symbolLayout} symbolPaint={symbolPaint} />
-                    );
-                  }
-
-                  return recommendationElem;
-                })
-              }
-            </ReactMapboxGl>
+            />
           </MapBlock>
           <ScoreBoardBlock>
             {
