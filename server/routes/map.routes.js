@@ -8,5 +8,8 @@ router.route('/category').get(MapController.getCategories);
 // Get recommendations
 router.route('/recommendation').post(MapController.getRecommendations);
 
+// Get place
+router.route('/place').post(MapController.getPlace);
+
 // export default router;
 module.exports = router;

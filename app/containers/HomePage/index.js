@@ -9,6 +9,7 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import ReactMapboxGl from 'react-mapbox-gl';
+import { browserHistory } from 'react-router';
 
 import { toggleCategory, zoomChange, fetchRecommendations, fetchCategories } from './actions';
 import { makeSelectCategories, makeSelectRecommendations } from './selectors';
@@ -194,17 +195,13 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
       });
 
       map.on('click', shapeFill, (data) => {
-        const e = data.features[0].properties.e;
         const name = data.features[0].properties.name;
-
-        this.placeClicked(e, name);
+        this.placeClicked(name);
       });
 
       map.on('click', shapeCaption, (data) => {
-        const e = data.features[0].properties.e;
         const name = data.features[0].properties.name;
-
-        this.placeClicked(e, name);
+        this.placeClicked(name);
       });
     }
   }
@@ -225,7 +222,8 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     });
   }
 
-  placeClicked = (e, name) => {
+  placeClicked = (name) => {
+    browserHistory.push(`/place/${name}`);
   }
 
   render() {

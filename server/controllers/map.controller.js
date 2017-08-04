@@ -1,11 +1,6 @@
 const Element = require('../models/element');
 const Characteristic = require('../models/characteristic');
-
-// import Element from '../models/element';
-// import cuid from 'cuid';
-// import slug from 'limax';
-// import sanitizeHtml from 'sanitize-html';
-// import mongoose from 'mongoose';
+const Place = require('../models/place');
 
 /**
  * Get all categories
@@ -87,5 +82,28 @@ const getRecommendations = (req, res) => {
   });
 };
 
+/**
+ * Get recommendations
+ * @param req
+ * @param res
+ * @returns void
+ */
+const getPlace = (req, res) => {
+  const params = req.body;
+  const name = params.name;
+
+  Place.findOne({ name: name }, { _id: 0, e: 0, name: 0 }, (err, place) => {
+    if (err) throw err;
+
+    if (place) {
+      res.json(place);
+    } else {
+      res.json({});
+    }
+  });
+};
+
 module.exports.getCategories = getCategories;
 module.exports.getRecommendations = getRecommendations;
+module.exports.getPlace = getPlace;
+
