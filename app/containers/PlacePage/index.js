@@ -6,13 +6,14 @@
 
 import React from 'react';
 import Helmet from 'react-helmet';
-import $ from 'jquery';
 
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import { fetchPlace } from './actions';
 import { makeSelectPlace } from './selectors';
+
+import DotDotDot from './DotDotDot';
 
 import './style.scss';
 
@@ -52,63 +53,64 @@ export class PlacePage extends React.PureComponent { // eslint-disable-line reac
             { name: 'description', content: 'Carta' },
           ]}
         />
-        <div>
-          <div ref="place">
-            <img role="presentation" className="logo" src="http://carta.guide/content/logo-100.png" />
-            <div className="logo-name-tab">
-              <img role="presentation" src="http://carta.guide/content/name-vertical.png" />
+        <div className="container">
+          <img role="presentation" className="logo" src="http://carta.guide/content/logo-100.png" />
+          <div className="logo-name-tab">
+            <img role="presentation" src="http://carta.guide/content/name-vertical.png" />
+          </div>
+          <div className="main-content">
+            <div className="poster">
+              <h1>
+                {mainPoster.title}
+              </h1>
+              <img role="presentation" src={mainPoster.url} />
             </div>
-            <div className="main-content">
-              <div className="poster">
-                <h1>
-                  {mainPoster.title}
-                </h1>
-                <img role="presentation" src={mainPoster.url} />
-              </div>
-              <div className="description">
-                <div className="col">
-                  <div className="text-tile">
+            <div className="description">
+              <div className="col">
+                <div className="text-tile">
+                  <DotDotDot className="content">
                     {description.text.content}
-                  </div>
+                  </DotDotDot>
                 </div>
-                <div className="col">
-                  <div className="img-tile">
-                    <h2>{description.poster.title}</h2>
-                    <img role="presentation" src={description.poster.url} />
-                  </div>
+              </div>
+              <div className="col">
+                <div className="img-tile">
+                  <h2>{description.poster.title}</h2>
+                  <img role="presentation" src={description.poster.url} />
                 </div>
               </div>
             </div>
+          </div>
 
-            <div className="tileset">
+          <div className="tileset">
 
-              {
-                tiles.map((value, index) => {
-                  let tile;
-                  if (value.type === 'poster') {
-                    const title = value.title;
-                    const url = value.url;
-                    tile = (
-                      <div className="col" key={index}>
-                        <div className="img-tile"><h2>{title}</h2><img role="presentation" src={url} /></div>
-                      </div>);
-                  } else {
-                    const title = value.title;
-                    const content = value.content;
-                    tile = (
-                      <div className="col" key={index}>
-                        <div className="text-tile">
+            {
+              tiles.map((value, index) => {
+                let tile;
+                if (value.type === 'poster') {
+                  const title = value.title;
+                  const url = value.url;
+                  tile = (
+                    <div className="col" key={index}>
+                      <div className="img-tile"><h2>{title}</h2><img role="presentation" src={url} /></div>
+                    </div>);
+                } else {
+                  const title = value.title;
+                  const content = value.content;
+                  tile = (
+                    <div className="col" key={index}>
+                      <div className="text-tile">
+                        <DotDotDot className="content">
                           <h2>{title}</h2>
                           {content}
-                        </div>
-                      </div>);
-                  }
+                        </DotDotDot>
+                      </div>
+                    </div>);
+                }
+                return tile;
+              })
+            }
 
-                  return tile;
-                })
-              }
-
-            </div>
           </div>
         </div>
       </div>
