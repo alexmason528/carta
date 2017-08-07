@@ -12,6 +12,7 @@ import { makeSelectPlace } from './selectors';
 import './style.scss';
 
 class DotDotDot extends React.Component {
+
   componentDidMount() {
     const { className } = this.props;
     const $this = $(ReactDOM.findDOMNode(this));
@@ -46,9 +47,27 @@ class DotDotDot extends React.Component {
         $this.find('.arrow').closest('.col').css('z-index', 5);
       }
     });
+
+    window.addEventListener('resize', this.handleResize);
   }
 
   componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  }
+
+  handleResize = () => {
+    const $this = $(ReactDOM.findDOMNode(this));
+
+    const outerHeight = $this.height();
+    const innerHeight = $this.prop('scrollHeight') - $this.position().top;
+
+    if (outerHeight < innerHeight) {
+      $this.find('.arrow').css('display', 'block');
+      $this.addClass('overflow');
+    } else {
+      $this.find('.arrow').css('display', 'none');
+      $this.removeClass('overflow');
+    }
   }
 
   render() {
