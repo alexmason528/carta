@@ -14,38 +14,39 @@ import './style.scss';
 class DotDotDot extends React.Component {
 
   componentDidMount() {
-    const { className } = this.props;
     const $this = $(ReactDOM.findDOMNode(this));
+    this.reDraw($this);
 
-    const outerHeight = $this.height();
-    const innerHeight = $this.prop('scrollHeight') - $this.position().top;
+    let $arrow = $this.parent().find('.arrow');
 
-    if (outerHeight < innerHeight) {
-      $this.find('.arrow').css('display', 'block');
-      $this.addClass('overflow');
-    } else {
-      $this.find('.arrow').css('display', 'none');
-      $this.removeClass('overflow');
-    }
+    $arrow.click(() => {
+      if ($arrow.hasClass('more')) {
+        $arrow.addClass('less').removeClass('more');
+        $arrow.closest('.col').addClass('opened');
+      } else if ($arrow.hasClass('less')) {
+        $arrow.removeClass('less').addClass('more');
+        $arrow.closest('.col').removeClass('opened');
+        let dot = $arrow.prev();
 
-    $this.find('.arrow').click(() => {
-      let maxZ = 0;
-      $('body').find('.col').each((ind, col) => {
-        const current = parseInt($(col).css('z-index'), 10);
+        const height = dot.css('height');
+        const fontSize = parseFloat(dot.css('font-size'), 10);
+        const lineClamp = parseInt(height / (fontSize * 1.5), 10);
 
-        if (current > maxZ) {
-          maxZ = current;
+        dot.css('WebkitLineClamp', lineClamp.toString());
+
+        let outerHeight = dot.outerHeight();
+        let innerHeight = dot.find('span').outerHeight();
+
+        if (outerHeight < innerHeight) {
+          $arrow.css('display', 'block');
+        } else {
+          $arrow.css('display', 'none');
         }
-      });
-      if ($this.find('.arrow').hasClass('more')) {
-        $this.find('.arrow').addClass('less').removeClass('more');
-        $this.find('.arrow').closest('.text-tile').css('height', 'calc(200% + 10px)');
-        $this.find('.arrow').closest('.col').css('z-index', maxZ + 1);
-      } else if ($this.find('.arrow').hasClass('less')) {
-        $this.find('.arrow').removeClass('less').addClass('more');
-        $this.find('.arrow').closest('.text-tile').css('height', '100%');
-        $this.find('.arrow').closest('.col').css('z-index', 5);
       }
+    });
+
+    $this.closest('.col').click((evt) => {
+      if ($arrow.hasClass('less')) evt.stopPropagation();
     });
 
     window.addEventListener('resize', this.handleResize);
@@ -55,34 +56,76 @@ class DotDotDot extends React.Component {
     window.removeEventListener('resize', this.handleResize);
   }
 
+  getMaxZIndex = () => {
+    let maxZ = 0;
+    $('body').find('.col').each((ind, col) => {
+      const current = parseInt($(col).css('z-index'), 10);
+      if (current > maxZ) {
+        maxZ = current;
+      }
+    });
+    return maxZ;
+  }
+
   handleResize = () => {
     const $this = $(ReactDOM.findDOMNode(this));
+    this.reDraw($this);
+  }
 
-    const outerHeight = $this.height();
-    const innerHeight = $this.prop('scrollHeight') - $this.position().top;
+  reDraw = (dot) => {
+    let $arrow = dot.parent().find('.arrow');
+    if ($arrow.hasClass('less')) return;
+
+    let headingHeight = 0;
+
+    if (dot.parent().find('h2').length > 0) {
+      headingHeight = dot.parent().find('h2').height() + 8;
+    }
+
+    dot.css('height', `calc(100% - ${headingHeight}px)`);
+
+    const height = dot.height();
+    const fontSize = parseFloat(dot.css('font-size'), 10);
+    const lineClamp = parseInt(height / (fontSize * 1.5), 10);
+
+    dot.css('height', `${(lineClamp * fontSize * 1.5) - 7}px`);
+    dot.css('WebkitLineClamp', lineClamp.toString());
+
+    let outerHeight = dot.outerHeight();
+    let innerHeight = dot.find('span').outerHeight();
 
     if (outerHeight < innerHeight) {
-      $this.find('.arrow').css('display', 'block');
-      $this.addClass('overflow');
+      $arrow.css('display', 'block');
     } else {
-      $this.find('.arrow').css('display', 'none');
-      $this.removeClass('overflow');
+      $arrow.css('display', 'none');
     }
+
+    $('body').find('.text-tile h2').each((ind, h2) => {
+      const pWidth = $(h2).parent().outerWidth();
+      $(h2).css('font-size', `${pWidth / 19}px`);
+    });
+
+    $('body').find('.img-tile h2').each((ind, h2) => {
+      const pWidth = $(h2).parent().outerWidth();
+      $(h2).css('font-size', `${pWidth / 11}px`);
+    });
+
+    const mainPosterWidth = $('body').find('.main-content .poster').outerWidth();
+    $('body').find('.main-content .poster h1').css('font-size', `${mainPosterWidth / 11}px`);
   }
 
   render() {
     return (
-      <div className={this.props.className}>
+      <p>
         {this.props.children}
-        <div className="arrow more"></div>
-      </div>
+        <span>{this.props.children}</span>
+      </p>
     );
   }
 }
 
 DotDotDot.propTypes = {
-  className: React.PropTypes.string.isRequired,
-  children: React.PropTypes.node.isRequired,
+  children: React.PropTypes.string,
 };
 
 export default DotDotDot;

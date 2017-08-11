@@ -7,6 +7,8 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 
+import $ from 'jQuery';
+
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
@@ -28,6 +30,12 @@ export class PlacePage extends React.PureComponent { // eslint-disable-line reac
   }
 
   componentDidMount() {
+    $('body').click(() => {
+      // console.log($('body').find('.arrow.less').length);
+      $('body').find('.arrow.less').each((ind, arrow) => {
+        $(arrow).trigger('click');
+      });
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -71,6 +79,7 @@ export class PlacePage extends React.PureComponent { // eslint-disable-line reac
                   <DotDotDot className="content">
                     {description.text.content}
                   </DotDotDot>
+                  <div className="arrow more"></div>
                 </div>
               </div>
               <div className="col">
@@ -92,7 +101,7 @@ export class PlacePage extends React.PureComponent { // eslint-disable-line reac
                   const url = value.url;
                   tile = (
                     <div className="col" key={index}>
-                      <div className="img-tile"><h2>{title}</h2><img role="presentation" src={url} /></div>
+                      <div className="img-tile"><h2 dangerouslySetInnerHTML={{ __html: title }} /><img role="presentation" src={url} /></div>
                     </div>);
                 } else {
                   const title = value.title;
@@ -100,10 +109,11 @@ export class PlacePage extends React.PureComponent { // eslint-disable-line reac
                   tile = (
                     <div className="col" key={index}>
                       <div className="text-tile">
-                        <DotDotDot className="content">
-                          <h2>{title}</h2>
+                        <h2>{title}</h2>
+                        <DotDotDot>
                           {content}
                         </DotDotDot>
+                        <div className="arrow more"></div>
                       </div>
                     </div>);
                 }
