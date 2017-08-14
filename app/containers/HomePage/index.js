@@ -154,6 +154,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           'text-field': '{name}',
           'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
           'text-size': 13,
+          'text-transform': 'uppercase',
         },
         paint: {
           'text-color': this.colors[i],
