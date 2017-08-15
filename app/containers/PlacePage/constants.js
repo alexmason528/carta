@@ -13,9 +13,8 @@ export const FETCH_PLACE = 'carta/Place/FETCH_PLACE';
 export const FETCH_PLACE_SUCCESS = 'carta/Place/FETCH_PLACE_SUCCESS';
 export const FETCH_PLACE_ERROR = 'carta/Place/FETCH_PLACE_ERROR';
 
-// export const API_BASE_URL = 'https://carta-backend-v2.appspot.com/';
-
 let API_DOMAIN = 'http://localhost:3000/';
-if (process.env.NODE_ENV === 'production') API_DOMAIN = 'https://carta-frontend-169512.appspot.com/';
+// if (process.env.NODE_ENV === 'production') API_DOMAIN = 'https://carta-frontend-169512.appspot.com/';
+if (process.env.NODE_ENV === 'production') API_DOMAIN = 'https://cartamap.herokuapp.com/';
 
 export const API_BASE_URL = API_DOMAIN;
