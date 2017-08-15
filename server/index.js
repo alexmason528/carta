@@ -14,7 +14,8 @@ const bodyParser = require('body-parser');
 
 // MongoDB Connection
 let mongoUri = 'mongodb://localhost:27017/carta';
-if (!isDev) mongoUri = 'mongodb://root:BGakLR6A@10.128.0.2:27017/carta?authSource=admin';
+// if (!isDev) mongoUri = 'mongodb://root:BGakLR6A@10.128.0.2:27017/carta?authSource=admin';
+if (!isDev) mongoUri = 'mongodb://root:BGakLR6A@35.188.18.148:27017/carta?authSource=admin';
 
 mongoose.connect(mongoUri, {
   useMongoClient: true,
