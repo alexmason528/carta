@@ -72,23 +72,23 @@ body {
 }
 
 .vertical-divider-s, .horizontal-divider {
-	box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.5);
+	box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.5);
 }
 
 .vertical-divider-s, .vertical-divider {
-	width: 8px; 
+	width: 7px; 
 	height: 100%;
 }
 
-.v1, .v2 {
-	margin-left: -4px;
+.vd-1, .vd-2 {
+	margin-left: -3.5px;
 }
 
 .horizontal-divider-s, .horizontal-divider {
-	height: 8px; 
+	height: 7px; 
 	width: 100%; 
 	position: absolute; 
-	margin-top: -4px;
+	margin-top: -3.5px;
 }
 
 .tile {
@@ -115,7 +115,7 @@ body {
 
 .main-poster {
 	box-sizing: border-box; 
-	border-bottom: 0.3vw solid #fff;
+	border-bottom: 0.2vw solid #fff;
 	z-index: 20; 
 
 	.tile p {

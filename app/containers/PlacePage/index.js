@@ -169,7 +169,7 @@ export class PlacePage extends React.PureComponent { // eslint-disable-line reac
 
       $('.tile').css({ width: `${100 / cols}%`, height: `${tileWidth}px` });
       $('.description').css({ width: '33.33%', height: `${tileWidth}px` });
-      $('.main-poster').css({ width: '66.66%', height: `${tileWidth * 2}px` });
+      $('.main-poster').css({ width: '66.5%', height: `${tileWidth * 2}px` });
       $('.description .tile').css({ width: '100%' });
 
       this.AddDividers(cols, rows);
