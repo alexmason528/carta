@@ -16,8 +16,11 @@ import { makeSelectCategories, makeSelectRecommendations } from './selectors';
 
 import { MAP_ACCESS_TOKEN } from './constants';
 
-import { SearchBlock, MapBlock, ScoreBoardBlock } from './Block';
-import Button from './Button';
+import { MapBlock, ScoreBoardBlock } from './Components/Block';
+import QuestBlock from './Components/QuestBlock';
+import Button from './Components//Button';
+import SearchButton from './Components//SearchButton';
+import './style.scss';
 
 const Map = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN });
 
@@ -25,6 +28,13 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   /**
    * when initial state username is not null, submit the form to load repos
    */
+  constructor() {
+    super();
+
+    this.state = {
+      showQuest: false,
+    };
+  }
 
   componentWillMount() {
     this.mapStyle = {
@@ -227,50 +237,82 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     browserHistory.push(`/place/${name}`);
   }
 
+  searchButtonClicked = () => {
+    this.setState({
+      showQuest: !this.state.showQuest,
+    });
+  }
+
+  minimizeClicked = () => {
+    this.setState({
+      showQuest: false,
+    });
+  }
+
+  closeClicked = () => {
+    this.setState({
+      showQuest: false,
+    });
+  }
+
   render() {
+    const { showQuest } = this.state;
+
+    const mapBlockStyle = {
+      left: showQuest ? '256px' : 0,
+      width: showQuest ? 'calc(100% - 256px)' : '100%',
+    };
+
+    const questBlockStyle = {
+      display: showQuest ? 'block' : 'none',
+    };
+
     return (
-      <div>
+      <div className="home-page">
         <Helmet
           meta={[
             { name: 'description', content: 'Carta' },
           ]}
         />
-        <div>
-          <SearchBlock>
-            {
-              this.props.categories.get('details').map((category, index) =>
-                <Button
-                  active={category.get('value')}
-                  key={index}
-                  onClick={() => {
-                    this.props.onToggleCategory(category.get('name'));
-                    this.props.fetchRecommendations();
-                  }}
-                >
-                  {category.get('name').replace(/_/g, ' ')}
-                </Button>
-              )
-            }
-          </SearchBlock>
-          <MapBlock>
-            <Map
-              style={this.mapStyle}
-              containerStyle={this.containerStyle}
-              center={this.center}
-              zoom={this.zoom}
-              onZoomEnd={this.onZoomEnd}
-              onStyleLoad={this.onStyleLoad}
-              onDragEnd={this.onDragEnd}
-            />
-          </MapBlock>
-          <ScoreBoardBlock>
-            {
-              this.props.recommendations.get('details').map((recommendation, index) =>
-                <div key={index} style={{ color: this.colors[index % 5] }}>{recommendation.get('name')} : {recommendation.get('score')}</div>
-              )
-            }
-          </ScoreBoardBlock>
-        </div>
+        <img className="logo" src="https://carta.guide/content/logo-100.png" role="presentation" />
+
+        <SearchButton
+          onClick={this.searchButtonClicked}
+        />
+        <QuestBlock style={questBlockStyle} minimizeClicked={this.minimizeClicked} closeClicked={this.closeClicked}>
+          {
+            this.props.categories.get('details').map((category, index) =>
+              <Button
+                active={category.get('value')}
+                key={index}
+                onClick={() => {
+                  this.props.onToggleCategory(category.get('name'));
+                  this.props.fetchRecommendations();
+                }}
+              >
+                {category.get('name').replace(/_/g, ' ')}
+              </Button>
+            )
+          }
+        </QuestBlock>
+        <MapBlock style={mapBlockStyle}>
+          <Map
+            style={this.mapStyle}
+            containerStyle={this.containerStyle}
+            center={this.center}
+            zoom={this.zoom}
+            onZoomEnd={this.onZoomEnd}
+            onStyleLoad={this.onStyleLoad}
+            onDragEnd={this.onDragEnd}
+          />
+        </MapBlock>
+        <ScoreBoardBlock>
+          {
+            this.props.recommendations.get('details').map((recommendation, index) =>
+              <div key={index} style={{ color: this.colors[index % 5] }}>{recommendation.get('name')} : {recommendation.get('score')}</div>
+            )
+          }
+        </ScoreBoardBlock>
       </div>
     );
   }

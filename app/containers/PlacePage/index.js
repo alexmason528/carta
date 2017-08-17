@@ -266,7 +266,7 @@ export class PlacePage extends React.PureComponent { // eslint-disable-line reac
     let tiles = info.tiles;
 
     return (
-      <div style={{ visibility: initialized ? 'visible' : 'hidden' }}>
+      <div className="place-page" style={{ visibility: initialized ? 'visible' : 'hidden' }}>
         <Helmet
           meta={[
             { name: 'description', content: 'Carta' },
