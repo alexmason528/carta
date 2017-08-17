@@ -1,7 +1,7 @@
 import React, { PropTypes, Children } from 'react';
 import styled, { css } from 'styled-components';
 
-import Section from './section';
+import Section from './Section';
 import './style.scss';
 
 export class QuestBlock extends React.PureComponent {
@@ -9,7 +9,6 @@ export class QuestBlock extends React.PureComponent {
     super();
     this.state = {
       sectionCount: 1,
-
     };
   }
 

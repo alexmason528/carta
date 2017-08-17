@@ -265,7 +265,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 
     const questBlockClass = classNames({
       'quest-block': true,
-      'hidden': !showQuest,
+      hidden: !showQuest,
     });
 
     return (
