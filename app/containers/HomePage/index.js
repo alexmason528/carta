@@ -9,6 +9,7 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import ReactMapboxGl from 'react-mapbox-gl';
+import classNames from 'classnames';
 import { browserHistory } from 'react-router';
 
 import { toggleCategory, zoomChange, fetchRecommendations, fetchCategories } from './actions';
@@ -18,8 +19,8 @@ import { MAP_ACCESS_TOKEN } from './constants';
 
 import { MapBlock, ScoreBoardBlock } from './Components/Block';
 import QuestBlock from './Components/QuestBlock';
-import Button from './Components//Button';
-import SearchButton from './Components//SearchButton';
+import Button from './Components/Button';
+import SearchButton from './Components/SearchButton';
 import './style.scss';
 
 const Map = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN });
@@ -258,14 +259,14 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   render() {
     const { showQuest } = this.state;
 
-    const mapBlockStyle = {
-      left: showQuest ? '256px' : 0,
-      width: showQuest ? 'calc(100% - 256px)' : '100%',
-    };
+    const mapBlockClass = classNames({
+      'no-quest-block': !showQuest,
+    });
 
-    const questBlockStyle = {
-      display: showQuest ? 'block' : 'none',
-    };
+    const questBlockClass = classNames({
+      'quest-block': true,
+      'hidden': !showQuest,
+    });
 
     return (
       <div className="home-page">
@@ -279,7 +280,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
         <SearchButton
           onClick={this.searchButtonClicked}
         />
-        <QuestBlock style={questBlockStyle} minimizeClicked={this.minimizeClicked} closeClicked={this.closeClicked}>
+        <QuestBlock className={questBlockClass} minimizeClicked={this.minimizeClicked} closeClicked={this.closeClicked}>
           {
             this.props.categories.get('details').map((category, index) =>
               <Button
@@ -295,7 +296,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
             )
           }
         </QuestBlock>
-        <MapBlock style={mapBlockStyle}>
+        <MapBlock className={mapBlockClass}>
           <Map
             style={this.mapStyle}
             containerStyle={this.containerStyle}

@@ -1,4 +1,19 @@
+
+
 .home-page {
+	.hidden {
+		display: none !important;
+	}
+
+	.invisible {
+		visibility: hidden !important;
+	}
+
+	.no-quest-block {
+		left: 0;
+		width: 100%;
+	}
+
 	.logo {
 		top: 10px; 
 		left: 10px; 

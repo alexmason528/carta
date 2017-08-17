@@ -23,7 +23,7 @@ export class QuestBlock extends React.PureComponent {
   render() {
     const { sectionCount } = this.state;
     return (
-      <div className="quest-block">
+      <div className={this.props.className}>
         <div className="buttons">
           <button className="minimize" onClick={this.props.minimizeClicked}><div></div></button>
           <button className="close" onClick={this.props.closeClicked}><img src="http://carta.guide/icon/close.png" role="presentation" /></button>
@@ -44,6 +44,7 @@ QuestBlock.propTypes = {
   // children: PropTypes.node.isRequired,
   minimizeClicked: PropTypes.func.isRequired,
   closeClicked: PropTypes.func.isRequired,
+  className: PropTypes.string,
 };
 
 export default QuestBlock;

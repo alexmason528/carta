@@ -4,8 +4,8 @@ const MapBlock = styled.div`
   position:absolute; 
   top:0; 
   bottom:0; 
-  left:260px; 
-  width:calc(100% - 260px);
+  left:256px; 
+  width: calc(100% - 256px);
   transition: linear 0.1s;
 `;
 
