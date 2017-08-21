@@ -1,15 +1,45 @@
-button {
-	cursor: pointer; 
-	font-family: 'Open Sans', sans-serif; 
-	display: block; 
-	border: none; 
-	outline: none; 
-	text-transform: uppercase; 
-	font-weight: 400; 
-	font-size: 12px; 
-	background: #fff; 
-	padding: 0;
-}
+.search-button {
+	cursor: pointer;
+  position: absolute;
+  z-index: 10; 
+  margin: 6px; 
+  top: 40px;
+  box-sizing: content-box;
+
+  img {
+    width: 12px; 
+    height: 12px; 
+    padding: 5px; 
+    border-radius: 20px; 
+    box-shadow: 0 0 7px rgba(0,0,0,0.4); 
+    background: #fff; 
+    display: block; 
+    margin: 8px; 
+    opacity: 0.75; 
+    cursor: pointer; 
+    border: 1px solid transparent;
+  }
+ }
+
+ .map-block {
+  position:absolute; 
+  top:0; 
+  bottom:0; 
+  left:256px; 
+  width: calc(100% - 256px);
+  transition: linear 0.1s;
+ }
+
+ .scoreboard-block{
+	right:20px; 
+  top:20px; 
+  text-align:right; 
+  color:#000; 
+  font-weight:900; 
+  text-transform:uppercase; 
+  position:absolute;
+  display:none;
+ }
 
 .quest-block {
 	position: relative; 
@@ -47,7 +77,9 @@ button {
 			}
 		}
 
-		.item {opacity:0.7; color:#000;}
+		.item {opacity:0.2; color:#000;}
+		.on {opacity:0.7; color:#000;}
+		
 		.add-section {opacity:0.6; font-size:19px;}
 	}
 
@@ -92,6 +124,8 @@ button {
 
 .sections {
 	.section {
+		display: none;
+		
 		.tabs {
 			padding-top: 17px; 
 			position: relative; 
@@ -107,6 +141,18 @@ button {
 				background: #fff;
 				box-sizing: content-box;
 				transition: ease-in-out 0.15s;
+
+				&.first {
+					left: 0;
+				}
+
+				&.second {
+					left: 28px;
+				}
+
+				&.third {
+					left: 56px;
+				}
 			}
 
 			.line {
@@ -126,7 +172,7 @@ button {
 				cursor: pointer; 
 				box-sizing: content-box;
 
-				&.t1, &:hover {
+				&.active, &:hover {
 					opacity: 1;
 				}
 			}
@@ -134,13 +180,124 @@ button {
 
 		.pages {
 			.page {
+        position: relative;
+
+        .button-wrapper {
+        	text-decoration: none;
+				  -webkit-font-smoothing: antialiased;
+				  -webkit-touch-callout: none;
+				  user-select: none;
+				  cursor: pointer;
+				  font-family:'Open Sans', sans-serif; 
+				  display:block; 
+				  border:none; 
+				  margin:8px; 
+				  outline:none; 
+				  text-transform:uppercase; 
+				  font-weight:400; 
+				  font-size:13px;
+
+				  img {
+				  	position: relative;
+				  	height: 13px;
+				  	display: none;
+				  	margin-left: 2px;
+				  	filter:grayscale(100%);
+				  }
+
+				  button {
+				  	padding: 3px 5px;
+				  	display: inline-block;
+				  }
+
+				  &.active, &:hover {
+				  	button {
+				  		background: #00bb00;
+				  		color: #fff;
+				  	}
+				  }
+
+				  &.active:hover {
+				  	img {
+				  		display: inline-block;
+				  	}
+				  }
+
+				  &.star {
+				  	img {
+				  		filter: none;
+				  		display: inline-block;
+				  	}
+				  }
+        }
+
+				.filtered {
+					display: none;
+				}
+
+        .excluded {
+        	display: none;
+        }
+
 				h1 {
-					font-size:15px; font-weight:600; margin:20px 0 10px 5px; cursor:default;
+					font-size: 15px; 
+          font-weight: 600; 
+          margin: 20px 0 10px 5px; 
+          cursor: default;
 					text-transform: uppercase;
 				}
 
+				.search, .close {
+					position: absolute;
+          height: 13px;
+          opacity: 0.75; 
+          cursor: pointer; 
+          z-index: 10;
+          top: 55px;
+          box-sizing: content-box;
+				}
+
+				.search {
+					left: 0;
+				}
+
+				.close {
+					right: 10px;
+				}
+
 				input {
-					padding:5px; position:relative; width: 85%; margin:15px 0 20px; text-transform:uppercase; font-family:'Open Sans', sans-serif; font-size:12px; border-bottom:0.5px solid #ccc; width:85%;
+					padding: 5px; 
+          position: relative; 
+          width: 85%; 
+          margin: 15px 0 20px; 
+          text-transform: uppercase; 
+          font-family: 'Open Sans', sans-serif; 
+          font-size: 12px; 
+          border-bottom: 0.5px solid #ccc; 
+          width: 85%; 
+          outline: none;
+				}
+
+				.area-button {
+					text-decoration: none;
+				  -webkit-font-smoothing: antialiased;
+				  -webkit-touch-callout: none;
+				  user-select: none;
+				  cursor: pointer;
+				  font-family:'Open Sans', sans-serif; 
+				  display:block; 
+				  border:none; 
+				  padding:3px 5px; 
+				  margin:8px; 
+				  outline:none; 
+				  text-transform:uppercase; 
+				  font-weight:400; 
+				  font-size:13px;
+
+				  &:hover {
+				    background: #00bb00;
+				    color: #fff;
+				  }
 				}
 			}
 		}

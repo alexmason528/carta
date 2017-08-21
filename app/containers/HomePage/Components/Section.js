@@ -1,7 +1,8 @@
 import React, { PropTypes, Children } from 'react';
 import styled, { css } from 'styled-components';
+import classNames from 'classnames';
 
-import Button from './Button';
+import { InPage, FindPage, KnownForPage } from './Pages';
 import './style.scss';
 
 export class Section extends React.Component {
@@ -9,96 +10,70 @@ export class Section extends React.Component {
     super();
 
     this.state = {
-      page: 1,
+      currentTab: 1,
     };
   }
 
   tabClicked = (tab) => {
     this.setState({
-      page: tab,
+      currentTab: tab,
     });
   }
 
   render() {
-    const { page } = this.state;
+    const { currentTab } = this.state;
 
-    let tabStyle;
+    const tabClass = classNames({
+      tab: true,
+      first: currentTab === 1,
+      second: currentTab === 2,
+      third: currentTab === 3,
+    });
 
-    if (page === 1) {
-      tabStyle = { left: 0 };
-    } else if (page === 2) {
-      tabStyle = { left: '28px' };
-    } else {
-      tabStyle = { left: '56px' };
-    }
+    const inTabClass = classNames({
+      'in-tab': true,
+      active: currentTab === 1,
+    });
+
+    const findTabClass = classNames({
+      'find-tab': true,
+      active: currentTab === 2,
+    });
+
+    const knownForTabClass = classNames({
+      'known-for-tab': true,
+      active: currentTab === 3,
+    });
+
+    const inPageClass = classNames({
+      page: true,
+      hidden: currentTab !== 1,
+    });
+
+    const findPageClass = classNames({
+      page: true,
+      hidden: currentTab !== 2,
+    });
+
+    const knownForPageClass = classNames({
+      page: true,
+      hidden: currentTab !== 3,
+    });
 
     return (
-      <div className="section">
+      <div className={this.props.className}>
         <div className="tabs">
           <div className="line"></div>
-          <div className="tab" style={tabStyle}></div>
-          <img className="t1 active" src="http://carta.guide/icon/quest/marker.png" role="presentation" onClick={() => { this.tabClicked(1); }} />
-          <img className="t2" src="http://carta.guide/icon/quest/check.png" role="presentation" onClick={() => { this.tabClicked(2); }} />
-          <img className="t3" src="http://carta.guide/icon/quest/star.png" role="presentation" onClick={() => { this.tabClicked(3); }} />
+          <div className={tabClass}></div>
+          <img className={inTabClass} src="http://carta.guide/icon/quest/marker.png" role="presentation" onClick={() => { this.tabClicked(1); }} />
+          <img className={findTabClass} src="http://carta.guide/icon/quest/check.png" role="presentation" onClick={() => { this.tabClicked(2); }} />
+          <img className={knownForTabClass} src="http://carta.guide/icon/quest/star.png" role="presentation" onClick={() => { this.tabClicked(3); }} />
         </div>
 
         <div className="pages">
-          <div className="page" style={{ display: (page === 1) ? 'block' : 'none' }}>
-            <h1>In</h1>
-            <input />
-            <Button
-              active={1}
-              onClick={() => {}}
-            >
-              Utrecht
-            </Button>
-            <Button
-              active={1}
-              onClick={() => {}}
-            >
-              Gelderland
-            </Button>
-          </div>
-
-          <div className="page" style={{ display: (page === 2) ? 'block' : 'none' }}>
-            <h1>Find</h1>
-            <input />
-            <Button
-              active={1}
-              onClick={() => {}}
-            >
-              Amsterdam
-            </Button>
-            <Button
-              active={1}
-              onClick={() => {}}
-            >
-              Rotterdam
-            </Button>
-            <Button
-              active={1}
-              onClick={() => {}}
-            >
-              Utrecht
-            </Button>
-            <Button
-              active={1}
-              onClick={() => {}}
-            >
-              Gelderland
-            </Button>
-          </div>
-
-          <div className="page" style={{ display: (page === 3) ? 'block' : 'none' }}>
-            <h1>Known For</h1>
-            <input />
-            <Button
-              active={1}
-              onClick={() => {}}
-            >
-              Amsterdam
-            </Button>
-          </div>
+          <InPage className={inPageClass} />
+          <FindPage className={findPageClass} />
+          <KnownForPage className={knownForPageClass} />
         </div>
       </div>
     );
@@ -106,6 +81,7 @@ export class Section extends React.Component {
 }
 
 Section.propTypes = {
+  className: PropTypes.string,
 };
 
 export default Section;

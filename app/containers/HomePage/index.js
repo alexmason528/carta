@@ -17,10 +17,8 @@ import { makeSelectCategories, makeSelectRecommendations } from './selectors';
 
 import { MAP_ACCESS_TOKEN } from './constants';
 
-import { MapBlock, ScoreBoardBlock } from './Components/Block';
-import QuestBlock from './Components/QuestBlock';
-import Button from './Components/Button';
-import SearchButton from './Components/SearchButton';
+import { MapBlock, ScoreBoardBlock, QuestBlock } from './Components/Blocks';
+import { Button, SearchButton } from './Components/Buttons';
 import './style.scss';
 
 const Map = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN });
@@ -260,6 +258,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     const { showQuest } = this.state;
 
     const mapBlockClass = classNames({
+      'map-block': true,
       'no-quest-block': !showQuest,
     });
 

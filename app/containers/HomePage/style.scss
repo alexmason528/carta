@@ -1,12 +1,31 @@
+.hidden {
+	display: none !important;
+}
 
+.show {
+	display: block !important;
+}
+
+.invisible {
+	visibility: hidden !important;
+}
+
+.visible {
+	visibility: visible !important;
+}
 
 .home-page {
-	.hidden {
-		display: none !important;
-	}
-
-	.invisible {
-		visibility: hidden !important;
+	button {
+		cursor: pointer; 
+		font-family: 'Open Sans', sans-serif; 
+		display: block; 
+		border: none; 
+		outline: none; 
+		text-transform: uppercase; 
+		font-weight: 400; 
+		font-size: 12px; 
+		background: #fff; 
+		padding: 0;
 	}
 
 	.no-quest-block {
