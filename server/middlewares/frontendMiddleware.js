@@ -4,7 +4,8 @@ const path = require('path');
 const compression = require('compression');
 const pkg = require(path.resolve(process.cwd(), 'package.json'));
 
-const routes = require('../routes/map.routes');
+const mapRoutes = require('../routes/map.routes');
+const importRoutes = require('../routes/import.routes');
 
 // Dev middleware
 const addDevMiddlewares = (app, webpackConfig) => {
@@ -21,7 +22,8 @@ const addDevMiddlewares = (app, webpackConfig) => {
 
   app.use(middleware);
   app.use(webpackHotMiddleware(compiler));
-  app.use('/api/v1/map', routes);
+  app.use('/api/v1/map', mapRoutes);
+  app.use('/api/v1/import', importRoutes);
 
   // Since webpackDevMiddleware uses memory-fs internally to store build
   // artifacts, we use it instead

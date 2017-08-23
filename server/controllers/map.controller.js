@@ -1,5 +1,6 @@
 const Element = require('../models/element');
-const Characteristic = require('../models/characteristic');
+const Descriptive = require('../models/descriptive');
+const Type = require('../models/type');
 const Place = require('../models/place');
 
 /**
@@ -8,8 +9,8 @@ const Place = require('../models/place');
  * @param res
  * @returns void
  */
-const getCategories = (req, res) => {
-  Characteristic.findOne({ }, { _id: 0, name: 0, id: 0 }, (err, element) => {
+const getQuestInfo = (req, res) => {
+  Descriptive.findOne({ }, { _id: 0, name: 0, id: 0 }, (err, element) => {
     if (err) throw err;
     const categories = Object.keys(element._doc);
     res.json(categories);
@@ -103,7 +104,7 @@ const getPlace = (req, res) => {
   });
 };
 
-module.exports.getCategories = getCategories;
+module.exports.getQuestInfo = getQuestInfo;
 module.exports.getRecommendations = getRecommendations;
 module.exports.getPlace = getPlace;
 
