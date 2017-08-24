@@ -66,7 +66,6 @@ class QuestBlock extends React.PureComponent {
 
   render() {
     const { sections, selectedIndex } = this.state;
-
     return (
       <div className={this.props.className}>
         <div className="buttons">
@@ -102,10 +101,9 @@ class QuestBlock extends React.PureComponent {
                 show: index === selectedIndex,
               });
               return (
-                <Section key={index} className={sectionClass}>
+                <Section key={index} className={sectionClass} questInfo={this.props.questInfo}>
                   {index}
                 </Section>
-
               );
             })
           }
@@ -116,18 +114,19 @@ class QuestBlock extends React.PureComponent {
 }
 
 MapBlock.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   className: PropTypes.string.isRequired,
 };
 
 ScoreBoardBlock.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
 };
 
 QuestBlock.propTypes = {
   minimizeClicked: PropTypes.func.isRequired,
   closeClicked: PropTypes.func.isRequired,
-  className: PropTypes.string.isRequired,
+  questInfo: PropTypes.object,
+  className: PropTypes.string,
 };
 
 export {

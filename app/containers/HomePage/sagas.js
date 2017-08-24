@@ -6,89 +6,102 @@ import { take, call, put, select, cancel, takeLatest } from 'redux-saga/effects'
 import { LOCATION_CHANGE } from 'react-router-redux';
 
 import request from 'utils/request';
-import { makeSelectCategories, makeSelectZoomLevel, makeSelectViewport } from 'containers/HomePage/selectors';
+import { makeSelectQuestInfo, makeSelectZoomLevel, makeSelectViewport } from 'containers/HomePage/selectors';
 
-import { FETCH_RECOMMENDATIONS, FETCH_CATEGORIES, API_BASE_URL } from './constants';
-import { fetchRecommendationsSuccess, fetchRecommendationsError, fetchCategoriesSuccess, fetchCategoriesError } from './actions';
+import { FETCH_RECOMMENDATIONS, FETCH_QUESTINFO, API_BASE_URL } from './constants';
+import { fetchRecommendationsSuccess, fetchRecommendationsError, fetchQuestInfoSuccess, fetchQuestInfoError } from './actions';
 
-export function* getRecommendations() {
-  const storeCategories = yield select(makeSelectCategories());
-  const zoomlevel = yield select(makeSelectZoomLevel());
-  const viewport = yield select(makeSelectViewport());
+// export function* getRecommendations() {
+//   const storeQuestInfo = yield select(makeSelectQuestInfo());
+//   const zoomlevel = yield select(makeSelectZoomLevel());
+//   const viewport = yield select(makeSelectViewport());
 
-  const requestURL = `${API_BASE_URL}api/v1/map/recommendation/`;
+//   const requestURL = `${API_BASE_URL}api/v1/map/recommendation/`;
 
-  let categories = [];
+//   let categories = [];
 
-  storeCategories.get('details').toJS().map((category) => {
-    if (category.value !== 0) categories.push(category.name);
-  });
+//   storeCategories.get('details').toJS().map((category) => {
+//     if (category.value !== 0) categories.push(category.name);
+//   });
 
-  const data = {
-    count: 5,
-    interests: categories,
-    zoomlevel: zoomlevel,
-    viewport: viewport,
-  };
+//   const data = {
+//     count: 5,
+//     interests: categories,
+//     zoomlevel: zoomlevel,
+//     viewport: viewport,
+//   };
 
-  const params = {
-    method: 'POST',
-    body: JSON.stringify(data),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
+//   const params = {
+//     method: 'POST',
+//     body: JSON.stringify(data),
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//   };
 
-  let recommendations;
+//   let recommendations;
 
-  try {
-    recommendations = yield call(request, requestURL, params);
-    yield put(fetchRecommendationsSuccess(recommendations));
-  } catch (err) {
-    yield put(fetchRecommendationsError(recommendations));
-  }
-}
+//   try {
+//     recommendations = yield call(request, requestURL, params);
+//     yield put(fetchRecommendationsSuccess(recommendations));
+//   } catch (err) {
+//     yield put(fetchRecommendationsError(recommendations));
+//   }
+// }
 
-export function* getRecommendationsWatcher() {
-  const watcher = yield takeLatest(FETCH_RECOMMENDATIONS, getRecommendations);
-  yield take(LOCATION_CHANGE);
-  yield cancel(watcher);
-}
+// export function* getRecommendationsWatcher() {
+//   const watcher = yield takeLatest(FETCH_RECOMMENDATIONS, getRecommendations);
+//   yield take(LOCATION_CHANGE);
+//   yield cancel(watcher);
+// }
 
-export function* getCategories() {
-  const requestURL = `${API_BASE_URL}api/v1/map/category/`;
+export function* getQuestInfo() {
+  const requestURL = `${API_BASE_URL}api/v1/map/questinfo/`;
 
   const params = {
     method: 'GET',
   };
 
-  let categories;
+  let questInfo;
+
+  const places = [
+    { name: 'Netherlands', x: 5.582313401, y: 52.26557456, zoom: 6.3 },
+    { name: 'Amsterdam', x: 4.892450122, y: 52.37244399, zoom: 10.6 },
+    { name: 'Antwerpen', x: 4.721043791, y: 51.23190072, zoom: 8.1 },
+    { name: 'Brugge', x: 3.224712514, y: 51.19968549, zoom: 9.4 },
+    { name: 'Rotterdam', x: 4.33717698, y: 51.92386034, zoom: 10.3 },
+    { name: 'Haarlem', x: 4.649587087, y: 52.38320235, zoom: 12.7 },
+    { name: 'Delft', x: 4.367830927, y: 51.99437121, zoom: 8.3 }, /* */
+    { name: 'Groningen', x: 6.768463975, y: 53.21063636, zoom: 8.2 },
+    { name: 'Leiden', x: 4.486764456, y: 52.15469817, zoom: 10.2 }, /* */
+    { name: 'Texel', x: 4.804688548, y: 53.07835164, zoom: 10.8 },
+    { name: 'Maastricht', x: 5.706453477, y: 50.85333479, zoom: 12 },
+    { name: 'Gelderland', x: 5.946999631, y: 52.06117375, zoom: 7.7 },
+  ];
 
   try {
-    categories = yield call(request, requestURL, params);
+    questInfo = yield call(request, requestURL, params);
 
-    const payload = [];
-    categories.forEach((category) => {
-      payload.push({
-        name: category,
-        value: 0,
-      });
-    });
+    const payload = {
+      places: places,
+      types: questInfo.types.map((type) => { return { name: type, visible: 0, active: 0 }; }),
+      descriptives: questInfo.descriptives.map((descriptive) => { return { name: descriptive, star: 0, visible: 0, active: 0 }; }),
+    };
 
-    yield put(fetchCategoriesSuccess(payload));
+    yield put(fetchQuestInfoSuccess(payload));
   } catch (err) {
-    yield put(fetchCategoriesError(categories));
+    yield put(fetchQuestInfoError(questInfo));
   }
 }
 
-export function* getCategoriesWatcher() {
-  const watcher = yield takeLatest(FETCH_CATEGORIES, getCategories);
+export function* getQuestInfoWatcher() {
+  const watcher = yield takeLatest(FETCH_QUESTINFO, getQuestInfo);
   yield take(LOCATION_CHANGE);
   yield cancel(watcher);
 }
 
 // Bootstrap sagas
 export default [
-  getRecommendationsWatcher,
-  getCategoriesWatcher,
+//  getRecommendationsWatcher,
+  getQuestInfoWatcher,
 ];

@@ -12,8 +12,8 @@ import ReactMapboxGl from 'react-mapbox-gl';
 import classNames from 'classnames';
 import { browserHistory } from 'react-router';
 
-import { toggleCategory, zoomChange, fetchRecommendations, fetchCategories } from './actions';
-import { makeSelectCategories, makeSelectRecommendations } from './selectors';
+import { /* toggleCategory, zoomChange, fetchRecommendations, */ fetchQuestInfo } from './actions';
+import { makeSelectQuestInfo, makeSelectCurrentPlace/* , makeSelectRecommendations */ } from './selectors';
 
 import { MAP_ACCESS_TOKEN } from './constants';
 
@@ -63,7 +63,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     this.center = [5.822, 52.142];
     this.zoom = [6];
 
-    this.props.fetchCategories();
+    this.props.fetchQuestInfo();
 
     this.colors = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379'];
 
@@ -78,32 +78,35 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   componentWillReceiveProps(nextProps) {
     if (this.map) {
       this.clearMap();
-      nextProps.recommendations.get('details').map((recommendation, index) => {
-        const display = recommendation.get('display');
-        let filter = ['==', 'e', recommendation.get('e')];
+      const centerCoords = [nextProps.currentPlace.get('x'), nextProps.currentPlace.get('y')];
+      this.map.flyTo({ center: centerCoords });
 
-        if (display === 'shape') {
-          this.map.setFilter(`shape-border-offset-${index}`, filter);
-          this.map.setFilter(`shape-border-${index}`, filter);
-          this.map.setFilter(`shape-fill-${index}`, filter);
-          this.map.setFilter(`shape-caption-${index}`, filter);
-        } else if (display === 'icon') {
-          this.map.setFilter(`shape-border-offset-${index}`, ['==', 'e', '']);
-          this.map.setFilter(`shape-border-${index}`, ['==', 'e', '']);
-          this.map.setFilter(`shape-caption-${index}`, filter);
-        }
-      });
+      // nextProps.recommendations.get('details').map((recommendation, index) => {
+      //   const display = recommendation.get('display');
+      //   let filter = ['==', 'e', recommendation.get('e')];
+
+      //   if (display === 'shape') {
+      //     this.map.setFilter(`shape-border-offset-${index}`, filter);
+      //     this.map.setFilter(`shape-border-${index}`, filter);
+      //     this.map.setFilter(`shape-fill-${index}`, filter);
+      //     this.map.setFilter(`shape-caption-${index}`, filter);
+      //   } else if (display === 'icon') {
+      //     this.map.setFilter(`shape-border-offset-${index}`, ['==', 'e', '']);
+      //     this.map.setFilter(`shape-border-${index}`, ['==', 'e', '']);
+      //     this.map.setFilter(`shape-caption-${index}`, filter);
+      //   }
+      // });
     }
   }
 
   onZoomEnd = (map) => {
-    this.props.zoomChange(map.getZoom(), map.getBounds());
-    this.props.fetchRecommendations();
+    // this.props.zoomChange(map.getZoom(), map.getBounds());
+    // this.props.fetchRecommendations();
   }
 
   onStyleLoad = (map) => {
-    this.props.zoomChange(map.getZoom(), map.getBounds());
-    this.props.fetchRecommendations();
+    // this.props.zoomChange(map.getZoom(), map.getBounds());
+    // this.props.fetchRecommendations();
     this.map = map;
 
     map.addSource('shapes', {
@@ -217,19 +220,19 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   onDragEnd = (map) => {
-    this.props.zoomChange(map.getZoom(), map.getBounds());
-    this.props.fetchRecommendations();
+    // this.props.zoomChange(map.getZoom(), map.getBounds());
+    // this.props.fetchRecommendations();
   }
 
   clearMap = () => {
-    this.props.recommendations.get('details').map((recommendation, index) => {
-      let filter = ['==', 'e', ''];
+    // this.props.recommendations.get('details').map((recommendation, index) => {
+    //   let filter = ['==', 'e', ''];
 
-      this.map.setFilter(`shape-border-offset-${index}`, filter);
-      this.map.setFilter(`shape-border-${index}`, filter);
-      this.map.setFilter(`shape-fill-${index}`, filter);
-      this.map.setFilter(`shape-caption-${index}`, filter);
-    });
+    //   this.map.setFilter(`shape-border-offset-${index}`, filter);
+    //   this.map.setFilter(`shape-border-${index}`, filter);
+    //   this.map.setFilter(`shape-fill-${index}`, filter);
+    //   this.map.setFilter(`shape-caption-${index}`, filter);
+    // });
   }
 
   placeClicked = (name) => {
@@ -279,22 +282,13 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
         <SearchButton
           onClick={this.searchButtonClicked}
         />
-        <QuestBlock className={questBlockClass} minimizeClicked={this.minimizeClicked} closeClicked={this.closeClicked}>
-          {
-            this.props.categories.get('details').map((category, index) =>
-              <Button
-                active={category.get('value')}
-                key={index}
-                onClick={() => {
-                  this.props.onToggleCategory(category.get('name'));
-                  this.props.fetchRecommendations();
-                }}
-              >
-                {category.get('name').replace(/_/g, ' ')}
-              </Button>
-            )
-          }
-        </QuestBlock>
+        <QuestBlock
+          className={questBlockClass}
+          minimizeClicked={this.minimizeClicked}
+          closeClicked={this.closeClicked}
+          questInfo={this.props.questInfo.get('details')}
+        />
+
         <MapBlock className={mapBlockClass}>
           <Map
             style={this.mapStyle}
@@ -308,9 +302,9 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
         </MapBlock>
         <ScoreBoardBlock>
           {
-            this.props.recommendations.get('details').map((recommendation, index) =>
-              <div key={index} style={{ color: this.colors[index % 5] }}>{recommendation.get('name')} : {recommendation.get('score')}</div>
-            )
+            // this.props.recommendations.get('details').map((recommendation, index) =>
+            //   <div key={index} style={{ color: this.colors[index % 5] }}>{recommendation.get('name')} : {recommendation.get('score')}</div>
+            // )
           }
         </ScoreBoardBlock>
       </div>
@@ -319,26 +313,28 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 }
 
 HomePage.propTypes = {
-  onToggleCategory: React.PropTypes.func,
-  zoomChange: React.PropTypes.func,
-  fetchRecommendations: React.PropTypes.func,
-  fetchCategories: React.PropTypes.func,
-  categories: React.PropTypes.object,
-  recommendations: React.PropTypes.object,
+  // onToggleCategory: React.PropTypes.func,
+  // zoomChange: React.PropTypes.func,
+  // fetchRecommendations: React.PropTypes.func,
+  fetchQuestInfo: React.PropTypes.func,
+  questInfo: React.PropTypes.object,
+  currentPlace: React.PropTypes.object,
+  // recommendations: React.PropTypes.object,
 };
 
 export function mapDispatchToProps(dispatch) {
   return {
-    onToggleCategory: (name) => dispatch(toggleCategory(name)),
-    zoomChange: (zoomlevel, viewport) => dispatch(zoomChange(zoomlevel, viewport)),
-    fetchRecommendations: () => dispatch(fetchRecommendations()),
-    fetchCategories: () => dispatch(fetchCategories()),
+    // onToggleCategory: (name) => dispatch(toggleCategory(name)),
+    // zoomChange: (zoomlevel, viewport) => dispatch(zoomChange(zoomlevel, viewport)),
+    // fetchRecommendations: () => dispatch(fetchRecommendations()),
+    fetchQuestInfo: () => dispatch(fetchQuestInfo()),
   };
 }
 
 const mapStateToProps = createStructuredSelector({
-  categories: makeSelectCategories(),
-  recommendations: makeSelectRecommendations(),
+  questInfo: makeSelectQuestInfo(),
+  currentPlace: makeSelectCurrentPlace(),
+  // recommendations: makeSelectRecommendations(),
 });
 
 // Wrap the component to inject dispatch and state into it

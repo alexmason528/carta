@@ -10,10 +10,45 @@ const Place = require('../models/place');
  * @returns void
  */
 const getQuestInfo = (req, res) => {
-  Descriptive.findOne({ }, { _id: 0, name: 0, id: 0 }, (err, element) => {
-    if (err) throw err;
-    const categories = Object.keys(element._doc);
-    res.json(categories);
+  let questInfo = {
+//    places: [],
+    descriptives: [],
+    types: [],
+  };
+
+  let getQuest = {
+//    places: false,
+    descriptives: false,
+    types: false,
+  };
+
+  // Element.find({}, {_id: 0, name: 1, x: 1, y: 1, zoom: 1}, (err, elements) => {
+  //   questInfo.places = elements;
+  //   getQuest.places = true;
+
+  //   if (getQuest.places && getQuest.descriptives && getQuest.types) {
+  //     res.json(questInfo);
+  //   }
+  // });
+
+  Descriptive.findOne({ }, { _id: 0, name: 0, e: 0, sum: 0 }, (err, element) => {
+    const descriptives = Object.keys(element._doc);
+    questInfo.descriptives = descriptives;
+    getQuest.descriptives = true;
+
+    if (getQuest.descriptives && getQuest.types) {
+      res.json(questInfo);
+    }
+  });
+
+  Type.findOne({ }, { _id: 0, name: 0, e: 0, sum: 0 }, (err, element) => {
+    const types = Object.keys(element._doc);
+    questInfo.types = types;
+    getQuest.types = true;
+
+    if (getQuest.descriptives && getQuest.types) {
+      res.json(questInfo);
+    }
   });
 };
 

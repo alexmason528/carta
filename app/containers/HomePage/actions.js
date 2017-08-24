@@ -18,9 +18,10 @@
 import {
   TOGGLE_CATEGORY,
   ZOOM_CHANGE,
-  FETCH_CATEGORIES,
-  FETCH_CATEGORIES_SUCCESS,
-  FETCH_CATEGORIES_ERROR,
+  PLACE_SELECT,
+  FETCH_QUESTINFO,
+  FETCH_QUESTINFO_SUCCESS,
+  FETCH_QUESTINFO_ERROR,
   FETCH_RECOMMENDATIONS,
   FETCH_RECOMMENDATIONS_SUCCESS,
   FETCH_RECOMMENDATIONS_ERROR,
@@ -47,22 +48,28 @@ export function zoomChange(zoomlevel, viewport) {
     viewport,
   };
 }
-export function fetchCategories() {
+export function placeSelect(name) {
   return {
-    type: FETCH_CATEGORIES,
+    type: PLACE_SELECT,
+    name,
+  };
+}
+export function fetchQuestInfo() {
+  return {
+    type: FETCH_QUESTINFO,
   };
 }
 
-export function fetchCategoriesSuccess(payload) {
+export function fetchQuestInfoSuccess(payload) {
   return {
-    type: FETCH_CATEGORIES_SUCCESS,
+    type: FETCH_QUESTINFO_SUCCESS,
     payload,
   };
 }
 
-export function fetchCategoriesError(payload) {
+export function fetchQuestInfoError(payload) {
   return {
-    type: FETCH_CATEGORIES_ERROR,
+    type: FETCH_QUESTINFO_ERROR,
     payload,
   };
 }

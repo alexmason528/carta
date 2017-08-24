@@ -14,9 +14,10 @@ import { fromJS } from 'immutable';
 import {
   TOGGLE_CATEGORY,
   ZOOM_CHANGE,
-  FETCH_CATEGORIES,
-  FETCH_CATEGORIES_SUCCESS,
-  FETCH_CATEGORIES_ERROR,
+  PLACE_SELECT,
+  FETCH_QUESTINFO,
+  FETCH_QUESTINFO_SUCCESS,
+  FETCH_QUESTINFO_ERROR,
   FETCH_RECOMMENDATIONS,
   FETCH_RECOMMENDATIONS_SUCCESS,
   FETCH_RECOMMENDATIONS_ERROR,
@@ -25,10 +26,14 @@ import {
 // The initial state of the App
 
 const initialState = fromJS({
-  categories: {
+  questInfo: {
     fetching: false,
     error: null,
-    details: [],
+    details: {
+      places: [],
+      types: [],
+      descriptives: [],
+    },
   },
   recommendations: {
     fetching: false,
@@ -37,25 +42,26 @@ const initialState = fromJS({
   },
   zoomlevel: 7,
   viewport: {},
+  currentPlace: {},
 });
 
 
 function homeReducer(state = initialState, action) {
-  let categories;
+  let questInfo;
   let recommendations;
   let details;
   let nextState;
 
   switch (action.type) {
     case TOGGLE_CATEGORY:
-      details = state.get('categories').get('details').map((category) => {
+      details = state.get('questInfo').get('details').map((category) => {
         if (category.get('name') === action.name) {
           return category.set('value', (category.get('value') === 1 ? 0 : 1));
         }
         return category;
       });
 
-      nextState = state.setIn(['categories', 'details'], details);
+      nextState = state.setIn(['questInfo', 'details'], details);
 
       return nextState;
 
@@ -75,34 +81,51 @@ function homeReducer(state = initialState, action) {
 
       return nextState;
 
-    case FETCH_CATEGORIES:
-      categories = {
-        fetching: true,
-        error: null,
-        details: [],
-      };
+    case PLACE_SELECT:
+      state.get('questInfo').get('details').get('places').map((place) => {
+        if (place.get('name') === action.name) {
+          nextState = state.set('currentPlace', place);
+        }
+      });
 
-      nextState = state.setIn(['categories'], fromJS(categories));
       return nextState;
 
-    case FETCH_CATEGORIES_SUCCESS:
-      categories = {
+    case FETCH_QUESTINFO:
+      questInfo = {
+        fetching: true,
+        error: null,
+        details: {
+          places: [],
+          types: [],
+          descriptives: [],
+        },
+      };
+
+      nextState = state.setIn(['questInfo'], fromJS(questInfo));
+      return nextState;
+
+    case FETCH_QUESTINFO_SUCCESS:
+      questInfo = {
         fetching: false,
         error: null,
         details: action.payload,
       };
 
-      nextState = state.setIn(['categories'], fromJS(categories));
+      nextState = state.setIn(['questInfo'], fromJS(questInfo)).set('currentPlace', fromJS(action.payload.places[0]));
       return nextState;
 
-    case FETCH_CATEGORIES_ERROR:
-      categories = {
+    case FETCH_QUESTINFO_ERROR:
+      questInfo = {
         fetching: false,
         error: true,
-        details: [],
+        details: {
+          places: [],
+          types: [],
+          descriptives: [],
+        },
       };
 
-      nextState = state.setIn(['categories'], fromJS(categories));
+      nextState = state.setIn(['questInfo'], fromJS(questInfo));
       return nextState;
 
     case FETCH_RECOMMENDATIONS:

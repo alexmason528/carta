@@ -6,9 +6,14 @@ import { createSelector } from 'reselect';
 
 const selectHome = (state) => state.get('home');
 
-const makeSelectCategories = () => createSelector(
+const makeSelectQuestInfo = () => createSelector(
   selectHome,
-  (homeState) => homeState.get('categories')
+  (homeState) => homeState.get('questInfo')
+);
+
+const makeSelectCurrentPlace = () => createSelector(
+  selectHome,
+  (homeState) => homeState.get('currentPlace')
 );
 
 const makeSelectRecommendations = () => createSelector(
@@ -28,7 +33,8 @@ const makeSelectViewport = () => createSelector(
 
 export {
   selectHome,
-  makeSelectCategories,
+  makeSelectQuestInfo,
+  makeSelectCurrentPlace,
   makeSelectRecommendations,
   makeSelectZoomLevel,
   makeSelectViewport,

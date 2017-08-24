@@ -2,13 +2,15 @@ import React, { PropTypes, Children } from 'react';
 import styled, { css } from 'styled-components';
 import classNames from 'classnames';
 
-import { InPage, FindPage, KnownForPage } from './Pages';
+import InPage from './InPage';
+import FindPage from './FindPage';
+import KnownForPage from './KnownForPage';
+
 import './style.scss';
 
 export class Section extends React.Component {
   constructor() {
     super();
-
     this.state = {
       currentTab: 1,
     };
@@ -22,7 +24,6 @@ export class Section extends React.Component {
 
   render() {
     const { currentTab } = this.state;
-
     const tabClass = classNames({
       tab: true,
       first: currentTab === 1,
@@ -71,9 +72,9 @@ export class Section extends React.Component {
         </div>
 
         <div className="pages">
-          <InPage className={inPageClass} />
-          <FindPage className={findPageClass} />
-          <KnownForPage className={knownForPageClass} />
+          <InPage className={inPageClass} places={this.props.questInfo.get('places').toJS()} />
+          <FindPage className={findPageClass} types={this.props.questInfo.get('types').toJS()} />
+          <KnownForPage className={knownForPageClass} descriptives={this.props.questInfo.get('descriptives').toJS()} />
         </div>
       </div>
     );
@@ -82,6 +83,7 @@ export class Section extends React.Component {
 
 Section.propTypes = {
   className: PropTypes.string,
+  questInfo: PropTypes.object.isRequired,
 };
 
 export default Section;
