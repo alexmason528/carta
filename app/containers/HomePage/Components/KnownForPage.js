@@ -147,67 +147,69 @@ export class KnownForPage extends React.PureComponent {
         <img className={searchBtnClass} src="http://carta.guide/icon/search.png" onClick={() => { this.expandHandler(1); }} role="presentation" />
         <img className={closeBtnClass} src="http://carta.guide/icon/close.png" onClick={() => { this.expandHandler(0); }} role="presentation" />
         <input className={searchInputClass} onChange={(evt) => { this.inputChangeHandler(evt.target.value); }} />
-        <Button
-          className={anythingBtnClass}
-          active={anything}
-          onClick={this.anythingClickHandler}
-        >
-          Anything
-        </Button>
-        <div className={filteredClass}>
-          {
-            searchedDescriptives.map((descriptive, index) => {
-              const { name, star, visible, active } = descriptive;
-              let starButton;
+        <div className="suggestions">
+          <Button
+            className={anythingBtnClass}
+            active={anything}
+            onClick={this.anythingClickHandler}
+          >
+            Anything
+          </Button>
+          <div className={filteredClass}>
+            {
+              searchedDescriptives.map((descriptive, index) => {
+                const { name, star, visible, active } = descriptive;
+                let starButton;
 
-              if (expanded === 1) {
-                starButton = (
-                  <StarButton
-                    active={active}
-                    star={star}
-                    onClick={() => { this.descriptiveClickHandler(name); }}
-                    onStarClick={() => { this.descriptiveStarClickHandler(name); }}
-                    key={index}
-                  >
-                    {name}
-                  </StarButton>
-                );
-              } else if (visible === 1) {
-                starButton = (
-                  <StarButton
-                    active={active}
-                    star={star}
-                    onClick={() => { this.descriptiveClickHandler(name); }}
-                    onStarClick={() => { this.descriptiveStarClickHandler(name); }}
-                    key={index}
-                  >
-                    {name}
-                  </StarButton>
-                );
-              }
+                if (expanded === 1) {
+                  starButton = (
+                    <StarButton
+                      active={active}
+                      star={star}
+                      onClick={() => { this.descriptiveClickHandler(name); }}
+                      onStarClick={() => { this.descriptiveStarClickHandler(name); }}
+                      key={index}
+                    >
+                      {name}
+                    </StarButton>
+                  );
+                } else if (visible === 1) {
+                  starButton = (
+                    <StarButton
+                      active={active}
+                      star={star}
+                      onClick={() => { this.descriptiveClickHandler(name); }}
+                      onStarClick={() => { this.descriptiveStarClickHandler(name); }}
+                      key={index}
+                    >
+                      {name}
+                    </StarButton>
+                  );
+                }
 
-              return starButton;
-            })
-        }
-        </div>
-        <div className={excludedClass}>
-          <h1>EXCLUDING</h1>
-          {
-            excludedDescriptives.map((descriptive, index) => {
-              const { name, star, visible, active } = descriptive;
-              return (
-                <StarButton
-                  active={active}
-                  star={star}
-                  onClick={() => { this.descriptiveClickHandler(name); }}
-                  onStarClick={() => { this.descriptiveStarClickHandler(name); }}
-                  key={index}
-                >
-                  {name}
-                </StarButton>
-              );
-            })
+                return starButton;
+              })
           }
+          </div>
+          <div className={excludedClass}>
+            <h1>EXCLUDING</h1>
+            {
+              excludedDescriptives.map((descriptive, index) => {
+                const { name, star, visible, active } = descriptive;
+                return (
+                  <StarButton
+                    active={active}
+                    star={star}
+                    onClick={() => { this.descriptiveClickHandler(name); }}
+                    onStarClick={() => { this.descriptiveStarClickHandler(name); }}
+                    key={index}
+                  >
+                    {name}
+                  </StarButton>
+                );
+              })
+            }
+          </div>
         </div>
       </div>
     );

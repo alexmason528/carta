@@ -129,60 +129,62 @@ export class FindPage extends React.PureComponent {
         <img className={searchBtnClass} src="http://carta.guide/icon/search.png" onClick={() => { this.expandHandler(1); }} role="presentation" />
         <img className={closeBtnClass} src="http://carta.guide/icon/close.png" onClick={() => { this.expandHandler(0); }} role="presentation" />
         <input className={searchInputClass} onChange={(evt) => { this.inputChangeHandler(evt.target.value); }} />
-        <Button
-          className={anythingBtnClass}
-          active={anything}
-          onClick={this.anythingClickHandler}
-        >
-          Anything
-        </Button>
-        <div className={filteredClass}>
-          {
-          searchedTypes.map((type, index) => {
-            const { name, visible, active } = type;
-            let button;
-
-            if (expanded === 1) {
-              button = (
-                <Button
-                  active={active}
-                  onClick={() => { this.typeClickHandler(name); }}
-                  key={index}
-                >
-                  {name}
-                </Button>
-              );
-            } else if (visible === 1) {
-              button = (
-                <Button
-                  active={active}
-                  onClick={() => { this.typeClickHandler(name); }}
-                  key={index}
-                >
-                  {name}
-                </Button>
-              );
-            }
-            return button;
-          })
-        }
-        </div>
-        <div className={excludedClass}>
-          <h1>EXCLUDING</h1>
-          {
-            excludedTypes.map((type, index) => {
+        <div className="suggestion">
+          <Button
+            className={anythingBtnClass}
+            active={anything}
+            onClick={this.anythingClickHandler}
+          >
+            Anything
+          </Button>
+          <div className={filteredClass}>
+            {
+            searchedTypes.map((type, index) => {
               const { name, visible, active } = type;
-              return (
-                <Button
-                  active={active}
-                  onClick={() => { this.typeClickHandler(name); }}
-                  key={index}
-                >
-                  {name}
-                </Button>
-              );
+              let button;
+
+              if (expanded === 1) {
+                button = (
+                  <Button
+                    active={active}
+                    onClick={() => { this.typeClickHandler(name); }}
+                    key={index}
+                  >
+                    {name}
+                  </Button>
+                );
+              } else if (visible === 1) {
+                button = (
+                  <Button
+                    active={active}
+                    onClick={() => { this.typeClickHandler(name); }}
+                    key={index}
+                  >
+                    {name}
+                  </Button>
+                );
+              }
+              return button;
             })
           }
+          </div>
+          <div className={excludedClass}>
+            <h1>EXCLUDING</h1>
+            {
+              excludedTypes.map((type, index) => {
+                const { name, visible, active } = type;
+                return (
+                  <Button
+                    active={active}
+                    onClick={() => { this.typeClickHandler(name); }}
+                    key={index}
+                  >
+                    {name}
+                  </Button>
+                );
+              })
+            }
+          </div>
         </div>
       </div>
     );
