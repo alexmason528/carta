@@ -1,6 +1,9 @@
 import React, { PropTypes, Children } from 'react';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import { Button, StarButton } from './Buttons';
+import { typeSelect } from '../actions';
 import './style.scss';
 
 export class FindPage extends React.PureComponent {
@@ -50,6 +53,8 @@ export class FindPage extends React.PureComponent {
         expanded: 1,
       });
     }
+
+    this.props.typeSelect('anything', null, newAnything);
   }
 
   inputChangeHandler = (text) => {
@@ -59,9 +64,7 @@ export class FindPage extends React.PureComponent {
   }
 
   typeClickHandler = (typeName) => {
-    let types = [...this.state.types];
-    const anything = this.state.anything;
-    const expanded = this.state.expanded;
+    const { types, expanded, anything, search } = this.state;
 
     let newTypes = types.map((type, index) => {
       const { name, visible, active } = type;
@@ -71,6 +74,7 @@ export class FindPage extends React.PureComponent {
 
         if (anything === 0 && expanded === 1) newVisible = newActive;
 
+        this.props.typeSelect(name, newVisible, newActive);
         return { name: name, visible: newVisible, active: newActive };
       }
       return type;
@@ -120,7 +124,7 @@ export class FindPage extends React.PureComponent {
 
     const excludedClass = classNames({
       excluded: true,
-      show: anything === 1 && expanded === 0 && excludedTypes.length > 0,
+      show: anything === 1 && expanded === 0 && excludedTypes.length > 0 && excludedTypes.length !== types.length,
     });
 
     return (
@@ -194,6 +198,18 @@ export class FindPage extends React.PureComponent {
 FindPage.propTypes = {
   className: PropTypes.string,
   types: PropTypes.array,
+  typeSelect: PropTypes.func,
 };
 
-export default FindPage;
+
+export function mapDispatchToProps(dispatch) {
+  return {
+    typeSelect: (name, visible, active) => dispatch(typeSelect(name, visible, active)),
+  };
+}
+
+const mapStateToProps = createStructuredSelector({
+});
+
+// Wrap the component to inject dispatch and state into it
+export default connect(mapStateToProps, mapDispatchToProps)(FindPage);

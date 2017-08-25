@@ -6,13 +6,15 @@
 
 import React from 'react';
 import Helmet from 'react-helmet';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 import ReactMapboxGl from 'react-mapbox-gl';
 import classNames from 'classnames';
+import ReactResizeDetector from 'react-resize-detector';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 
-import { /* toggleCategory, zoomChange, fetchRecommendations, */ fetchQuestInfo } from './actions';
+
+import { /* zoomChange, fetchRecommendations, */ fetchQuestInfo } from './actions';
 import { makeSelectQuestInfo, makeSelectCurrentPlace/* , makeSelectRecommendations */ } from './selectors';
 
 import { MAP_ACCESS_TOKEN } from './constants';
@@ -36,24 +38,26 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   componentWillMount() {
-    this.mapStyle = {
-      version: 8,
-      sources: {
-        'raster-tiles': {
-          type: 'raster',
-          url: 'mapbox://cartaguide.bright',
-          tileSize: 128,
-        },
-      },
-      layers: [{
-        id: 'simple-tiles',
-        type: 'raster',
-        source: 'raster-tiles',
-        minzoom: 0,
-        maxzoom: 22,
-      }],
-      glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
-    };
+    // this.mapStyle = {
+    //   version: 8,
+    //   sources: {
+    //     'raster-tiles': {
+    //       type: 'raster',
+    //       url: 'mapbox://cartaguide.bright',
+    //       tileSize: 128,
+    //     },
+    //   },
+    //   layers: [{
+    //     id: 'simple-tiles',
+    //     type: 'raster',
+    //     source: 'raster-tiles',
+    //     minzoom: 0,
+    //     maxzoom: 22,
+    //   }],
+    //   glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
+    // };
+
+    this.mapStyle = 'mapbox://styles/mapbox/streets-v9';
 
     this.containerStyle = {
       width: '100%',
@@ -78,6 +82,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   componentWillReceiveProps(nextProps) {
     if (this.map) {
       this.clearMap();
+
       const centerCoords = [nextProps.currentPlace.get('x'), nextProps.currentPlace.get('y')];
       this.map.flyTo({ center: centerCoords });
 
@@ -278,7 +283,6 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           ]}
         />
         <img className="logo" src="https://carta.guide/content/logo-100.png" role="presentation" />
-
         <SearchButton
           onClick={this.searchButtonClicked}
         />
@@ -288,8 +292,8 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           closeClicked={this.closeClicked}
           questInfo={this.props.questInfo.get('details')}
         />
-
         <MapBlock className={mapBlockClass}>
+          <ReactResizeDetector handleWidth handleHeight onResize={() => { if (this.map) this.map.resize(); }} />
           <Map
             style={this.mapStyle}
             containerStyle={this.containerStyle}
@@ -313,7 +317,6 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 }
 
 HomePage.propTypes = {
-  // onToggleCategory: React.PropTypes.func,
   // zoomChange: React.PropTypes.func,
   // fetchRecommendations: React.PropTypes.func,
   fetchQuestInfo: React.PropTypes.func,
@@ -324,7 +327,6 @@ HomePage.propTypes = {
 
 export function mapDispatchToProps(dispatch) {
   return {
-    // onToggleCategory: (name) => dispatch(toggleCategory(name)),
     // zoomChange: (zoomlevel, viewport) => dispatch(zoomChange(zoomlevel, viewport)),
     // fetchRecommendations: () => dispatch(fetchRecommendations()),
     fetchQuestInfo: () => dispatch(fetchQuestInfo()),

@@ -1,7 +1,9 @@
 import React, { PropTypes, Children } from 'react';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import { Button, StarButton } from './Buttons';
-
+import { descriptiveSelect } from '../actions';
 import './style.scss';
 
 export class KnownForPage extends React.PureComponent {
@@ -52,6 +54,8 @@ export class KnownForPage extends React.PureComponent {
         expanded: 1,
       });
     }
+
+    this.props.descriptiveSelect('anything', null, null, newAnything);
   }
 
   inputChangeHandler = (text) => {
@@ -61,9 +65,7 @@ export class KnownForPage extends React.PureComponent {
   }
 
   descriptiveClickHandler = (descriptiveName) => {
-    let descriptives = [...this.state.descriptives];
-    const anything = this.state.anything;
-    const expanded = this.state.expanded;
+    const { descriptives, expanded, anything, search } = this.state;
 
     let newDescriptives = descriptives.map((descriptive, index) => {
       const { name, star, visible, active } = descriptive;
@@ -72,6 +74,8 @@ export class KnownForPage extends React.PureComponent {
         let newVisible = visible;
 
         if (anything === 0 && expanded === 1) newVisible = newActive;
+
+        this.props.descriptiveSelect(name, 0, newVisible, newActive);
 
         return { name: name, star: 0, visible: newVisible, active: newActive };
       }
@@ -89,7 +93,10 @@ export class KnownForPage extends React.PureComponent {
     let newDescriptives = descriptives.map((descriptive, index) => {
       const { name, star, visible, active } = descriptive;
       if (name === descriptiveName) {
-        return { name: name, star: star === 1 ? 0 : 1, visible: visible, active: active };
+        const newStar = star === 1 ? 0 : 1;
+        this.props.descriptiveSelect(name, newStar, visible, active);
+
+        return { name: name, star: newStar, visible: visible, active: active };
       }
       return descriptive;
     });
@@ -138,7 +145,7 @@ export class KnownForPage extends React.PureComponent {
 
     const excludedClass = classNames({
       excluded: true,
-      show: anything === 1 && expanded === 0 && excludedDescriptives.length > 0,
+      show: anything === 1 && expanded === 0 && excludedDescriptives.length > 0 && excludedDescriptives.length !== descriptives.length,
     });
 
     return (
@@ -219,6 +226,17 @@ export class KnownForPage extends React.PureComponent {
 KnownForPage.propTypes = {
   className: PropTypes.string,
   descriptives: PropTypes.array,
+  descriptiveSelect: PropTypes.func,
 };
 
-export default KnownForPage;
+export function mapDispatchToProps(dispatch) {
+  return {
+    descriptiveSelect: (name, star, visible, active) => dispatch(descriptiveSelect(name, star, visible, active)),
+  };
+}
+
+const mapStateToProps = createStructuredSelector({
+});
+
+// Wrap the component to inject dispatch and state into it
+export default connect(mapStateToProps, mapDispatchToProps)(KnownForPage);

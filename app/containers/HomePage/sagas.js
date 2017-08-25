@@ -84,8 +84,8 @@ export function* getQuestInfo() {
 
     const payload = {
       places: places,
-      types: questInfo.types.map((type) => { return { name: type, visible: 0, active: 0 }; }),
-      descriptives: questInfo.descriptives.map((descriptive) => { return { name: descriptive, star: 0, visible: 0, active: 0 }; }),
+      types: questInfo.types.map((type) => { return { name: type, visible: 0, active: 1 }; }),
+      descriptives: questInfo.descriptives.map((descriptive) => { return { name: descriptive, star: 0, visible: 0, active: 1 }; }),
     };
 
     yield put(fetchQuestInfoSuccess(payload));

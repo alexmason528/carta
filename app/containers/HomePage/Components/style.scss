@@ -27,7 +27,7 @@
   bottom:0; 
   left:256px; 
   width: calc(100% - 256px);
-  transition: linear 0.1s;
+  transition: all 0.2s;
  }
 
  .scoreboard-block{
@@ -51,6 +51,7 @@
 	box-sizing: border-box; 
 	box-shadow: 0 0 7px rgba(0,0,0,0.2); 
 	z-index: 20;
+
 
 	.list {
 		top: 58px; 
@@ -130,6 +131,20 @@
 			padding-top: 17px; 
 			position: relative; 
 			left: -4px;
+
+      .next {
+        position: absolute;
+        right: 15px;
+        top: 70px;
+        font-size: 14px;
+        text-transform: uppercase;
+        z-index: 10;
+
+        img {
+          padding: 0;
+          margin: -3px 0 0 0;
+        }
+      }
 
 			.tab {
 				border-radius: 3px 3px 0 0; 

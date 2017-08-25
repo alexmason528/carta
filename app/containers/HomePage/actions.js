@@ -16,9 +16,10 @@
  */
 
 import {
-  TOGGLE_CATEGORY,
   ZOOM_CHANGE,
   PLACE_SELECT,
+  TYPE_SELECT,
+  DESCRIPTIVE_SELECT,
   FETCH_QUESTINFO,
   FETCH_QUESTINFO_SUCCESS,
   FETCH_QUESTINFO_ERROR,
@@ -35,12 +36,6 @@ import {
  * @return {object}    An action object with a type of CHANGE_USERNAME
  */
 
-export function toggleCategory(name) {
-  return {
-    type: TOGGLE_CATEGORY,
-    name,
-  };
-}
 export function zoomChange(zoomlevel, viewport) {
   return {
     type: ZOOM_CHANGE,
@@ -52,6 +47,23 @@ export function placeSelect(name) {
   return {
     type: PLACE_SELECT,
     name,
+  };
+}
+export function typeSelect(name, visible, active) {
+  return {
+    type: TYPE_SELECT,
+    name,
+    visible,
+    active,
+  };
+}
+export function descriptiveSelect(name, star, visible, active) {
+  return {
+    type: DESCRIPTIVE_SELECT,
+    name,
+    star,
+    visible,
+    active,
   };
 }
 export function fetchQuestInfo() {

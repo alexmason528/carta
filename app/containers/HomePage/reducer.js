@@ -12,9 +12,10 @@
 import { fromJS } from 'immutable';
 
 import {
-  TOGGLE_CATEGORY,
   ZOOM_CHANGE,
   PLACE_SELECT,
+  TYPE_SELECT,
+  DESCRIPTIVE_SELECT,
   FETCH_QUESTINFO,
   FETCH_QUESTINFO_SUCCESS,
   FETCH_QUESTINFO_ERROR,
@@ -53,17 +54,6 @@ function homeReducer(state = initialState, action) {
   let nextState;
 
   switch (action.type) {
-    case TOGGLE_CATEGORY:
-      details = state.get('questInfo').get('details').map((category) => {
-        if (category.get('name') === action.name) {
-          return category.set('value', (category.get('value') === 1 ? 0 : 1));
-        }
-        return category;
-      });
-
-      nextState = state.setIn(['questInfo', 'details'], details);
-
-      return nextState;
 
     case ZOOM_CHANGE:
       const viewport = {
@@ -87,6 +77,46 @@ function homeReducer(state = initialState, action) {
           nextState = state.set('currentPlace', place);
         }
       });
+
+      return nextState;
+
+    case TYPE_SELECT:
+      if (action.name === 'anything') {
+        const types = state.get('questInfo').get('details').get('types').map((type) => {
+          return type.set('active', action.active);
+        });
+
+        nextState = state.setIn(['questInfo', 'details', 'types'], types);
+      } else {
+        const types = state.get('questInfo').get('details').get('types').map((type) => {
+          if (type.get('name') === action.name) {
+            return type.set('active', action.active).set('visible', action.visible);
+          }
+          return type;
+        });
+
+        nextState = state.setIn(['questInfo', 'details', 'types'], types);
+      }
+
+      return nextState;
+
+    case DESCRIPTIVE_SELECT:
+      if (action.name === 'anything') {
+        const descriptives = state.get('questInfo').get('details').get('descriptives').map((descriptive) => {
+          return descriptive.set('active', action.active);
+        });
+
+        nextState = state.setIn(['questInfo', 'details', 'descriptives'], descriptives);
+      } else {
+        const descriptives = state.get('questInfo').get('details').get('descriptives').map((descriptive) => {
+          if (descriptive.get('name') === action.name) {
+            return descriptive.set('active', action.active).set('visible', action.visible).set('star', action.star);
+          }
+          return descriptive;
+        });
+
+        nextState = state.setIn(['questInfo', 'details', 'descriptives'], descriptives);
+      }
 
       return nextState;
 

@@ -12,7 +12,7 @@ export class Section extends React.Component {
   constructor() {
     super();
     this.state = {
-      currentTab: 1,
+      currentTab: 0,
     };
   }
 
@@ -22,53 +22,61 @@ export class Section extends React.Component {
     });
   }
 
+  nextBtnClicked = () => {
+    let tab = this.state.currentTab;
+    this.setState({
+      currentTab: (tab + 1) % 3,
+    });
+  }
+
   render() {
     const { currentTab } = this.state;
     const tabClass = classNames({
       tab: true,
-      first: currentTab === 1,
-      second: currentTab === 2,
-      third: currentTab === 3,
+      first: currentTab === 0,
+      second: currentTab === 1,
+      third: currentTab === 2,
     });
 
     const inTabClass = classNames({
       'in-tab': true,
-      active: currentTab === 1,
+      active: currentTab === 0,
     });
 
     const findTabClass = classNames({
       'find-tab': true,
-      active: currentTab === 2,
+      active: currentTab === 1,
     });
 
     const knownForTabClass = classNames({
       'known-for-tab': true,
-      active: currentTab === 3,
+      active: currentTab === 2,
     });
 
     const inPageClass = classNames({
       page: true,
-      hidden: currentTab !== 1,
+      hidden: currentTab !== 0,
     });
 
     const findPageClass = classNames({
       page: true,
-      hidden: currentTab !== 2,
+      hidden: currentTab !== 1,
     });
 
     const knownForPageClass = classNames({
       page: true,
-      hidden: currentTab !== 3,
+      hidden: currentTab !== 2,
     });
 
     return (
       <div className={this.props.className}>
         <div className="tabs">
           <div className="line"></div>
+          <button className="next" onClick={this.nextBtnClicked}>Next<img src="http://carta.guide/icon/next.png" role="presentation" /></button>
           <div className={tabClass}></div>
-          <img className={inTabClass} src="http://carta.guide/icon/quest/marker.png" role="presentation" onClick={() => { this.tabClicked(1); }} />
-          <img className={findTabClass} src="http://carta.guide/icon/quest/check.png" role="presentation" onClick={() => { this.tabClicked(2); }} />
-          <img className={knownForTabClass} src="http://carta.guide/icon/quest/star.png" role="presentation" onClick={() => { this.tabClicked(3); }} />
+          <img className={inTabClass} src="http://carta.guide/icon/quest/marker.png" role="presentation" onClick={() => { this.tabClicked(0); }} />
+          <img className={findTabClass} src="http://carta.guide/icon/quest/check.png" role="presentation" onClick={() => { this.tabClicked(1); }} />
+          <img className={knownForTabClass} src="http://carta.guide/icon/quest/star.png" role="presentation" onClick={() => { this.tabClicked(2); }} />
         </div>
 
         <div className="pages">

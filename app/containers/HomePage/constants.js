@@ -9,9 +9,10 @@
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
 
-export const TOGGLE_CATEGORY = 'carta/Home/TOGGLE_CATEGORY';
 export const ZOOM_CHANGE = 'carta/Home/ZOOM_CHANGE';
 export const PLACE_SELECT = 'carta/Home/PLACE_SELECT';
+export const TYPE_SELECT = 'carta/Home/TYPE_SELECT';
+export const DESCRIPTIVE_SELECT = 'carta/Home/DESCRIPTIVE_SELECT';
 
 export const FETCH_QUESTINFO = 'carta/Home/FETCH_QUESTINFO';
 export const FETCH_QUESTINFO_SUCCESS = 'carta/Home/FETCH_QUESTINFO_SUCCESS';
