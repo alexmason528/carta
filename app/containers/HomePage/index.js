@@ -13,13 +13,14 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 
-
-import { /* zoomChange, fetchRecommendations, */ fetchQuestInfo } from './actions';
-import { makeSelectQuestInfo, makeSelectCurrentPlace/* , makeSelectRecommendations */ } from './selectors';
+import { zoomChange, fetchQuestInfo, fetchRecommendations } from './actions';
+import { makeSelectQuestInfo, makeSelectCurrentPlace, makeSelectRecommendations } from './selectors';
 
 import { MAP_ACCESS_TOKEN } from './constants';
 
-import { MapBlock, ScoreBoardBlock, QuestBlock } from './Components/Blocks';
+import { MapBlock, ScoreBoardBlock } from './Components/Blocks';
+import QuestBlock from './Components/QuestBlock';
+
 import { Button, SearchButton } from './Components/Buttons';
 import './style.scss';
 
@@ -38,26 +39,26 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   componentWillMount() {
-    // this.mapStyle = {
-    //   version: 8,
-    //   sources: {
-    //     'raster-tiles': {
-    //       type: 'raster',
-    //       url: 'mapbox://cartaguide.bright',
-    //       tileSize: 128,
-    //     },
-    //   },
-    //   layers: [{
-    //     id: 'simple-tiles',
-    //     type: 'raster',
-    //     source: 'raster-tiles',
-    //     minzoom: 0,
-    //     maxzoom: 22,
-    //   }],
-    //   glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
-    // };
+    this.mapStyle = {
+      version: 8,
+      sources: {
+        'raster-tiles': {
+          type: 'raster',
+          url: 'mapbox://cartaguide.bright',
+          tileSize: 128,
+        },
+      },
+      layers: [{
+        id: 'simple-tiles',
+        type: 'raster',
+        source: 'raster-tiles',
+        minzoom: 0,
+        maxzoom: 22,
+      }],
+      glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
+    };
 
-    this.mapStyle = 'mapbox://styles/mapbox/streets-v9';
+    // this.mapStyle = 'mapbox://styles/mapbox/streets-v9';
 
     this.containerStyle = {
       width: '100%',
@@ -80,11 +81,12 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   componentWillReceiveProps(nextProps) {
+    const questInfo = nextProps.questInfo.get('details');
+    const currentQuestIndex = questInfo.get('currentQuestIndex');
+    const currentQuest = questInfo.get('quests').get(questInfo.get('currentQuestIndex'));
+
     if (this.map) {
       this.clearMap();
-
-      const centerCoords = [nextProps.currentPlace.get('x'), nextProps.currentPlace.get('y')];
-      this.map.flyTo({ center: centerCoords });
 
       // nextProps.recommendations.get('details').map((recommendation, index) => {
       //   const display = recommendation.get('display');
@@ -101,17 +103,18 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
       //     this.map.setFilter(`shape-caption-${index}`, filter);
       //   }
       // });
+      // }
     }
   }
 
   onZoomEnd = (map) => {
-    // this.props.zoomChange(map.getZoom(), map.getBounds());
-    // this.props.fetchRecommendations();
+    this.props.zoomChange(map.getZoom(), map.getBounds());
+    this.props.fetchRecommendations();
   }
 
   onStyleLoad = (map) => {
-    // this.props.zoomChange(map.getZoom(), map.getBounds());
-    // this.props.fetchRecommendations();
+    this.props.zoomChange(map.getZoom(), map.getBounds());
+    this.props.fetchRecommendations();
     this.map = map;
 
     map.addSource('shapes', {
@@ -225,8 +228,8 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   onDragEnd = (map) => {
-    // this.props.zoomChange(map.getZoom(), map.getBounds());
-    // this.props.fetchRecommendations();
+    this.props.zoomChange(map.getZoom(), map.getBounds());
+    this.props.fetchRecommendations();
   }
 
   clearMap = () => {
@@ -238,6 +241,23 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     //   this.map.setFilter(`shape-fill-${index}`, filter);
     //   this.map.setFilter(`shape-caption-${index}`, filter);
     // });
+  }
+
+  mapViewPortChange = (placeName) => {
+    const questInfo = this.props.questInfo.get('details');
+    const currentQuest = questInfo.get('quests').get(questInfo.get('currentQuestIndex'));
+
+    let centerCoords;
+
+    currentQuest.get('places').map((place) => {
+      if (place.get('name') === placeName) {
+        centerCoords = [place.get('x'), place.get('y')];
+      }
+    });
+
+    if (this.map) {
+      this.map.flyTo({ center: centerCoords });
+    }
   }
 
   placeClicked = (name) => {
@@ -290,7 +310,9 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           className={questBlockClass}
           minimizeClicked={this.minimizeClicked}
           closeClicked={this.closeClicked}
-          questInfo={this.props.questInfo.get('details')}
+          questInfo={this.props.questInfo.get('details').get('quests')}
+          currentQuestIndex={this.props.questInfo.get('details').get('currentQuestIndex')}
+          mapViewPortChange={this.mapViewPortChange}
         />
         <MapBlock className={mapBlockClass}>
           <ReactResizeDetector handleWidth handleHeight onResize={() => { if (this.map) this.map.resize(); }} />
@@ -317,26 +339,24 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 }
 
 HomePage.propTypes = {
-  // zoomChange: React.PropTypes.func,
-  // fetchRecommendations: React.PropTypes.func,
-  fetchQuestInfo: React.PropTypes.func,
   questInfo: React.PropTypes.object,
-  currentPlace: React.PropTypes.object,
-  // recommendations: React.PropTypes.object,
+  recommendations: React.PropTypes.object,
+  zoomChange: React.PropTypes.func,
+  fetchQuestInfo: React.PropTypes.func,
+  fetchRecommendations: React.PropTypes.func,
 };
 
 export function mapDispatchToProps(dispatch) {
   return {
-    // zoomChange: (zoomlevel, viewport) => dispatch(zoomChange(zoomlevel, viewport)),
-    // fetchRecommendations: () => dispatch(fetchRecommendations()),
+    zoomChange: (zoomlevel, viewport) => dispatch(zoomChange(zoomlevel, viewport)),
     fetchQuestInfo: () => dispatch(fetchQuestInfo()),
+    fetchRecommendations: () => dispatch(fetchRecommendations()),
   };
 }
 
 const mapStateToProps = createStructuredSelector({
   questInfo: makeSelectQuestInfo(),
-  currentPlace: makeSelectCurrentPlace(),
-  // recommendations: makeSelectRecommendations(),
+  recommendations: makeSelectRecommendations(),
 });
 
 // Wrap the component to inject dispatch and state into it

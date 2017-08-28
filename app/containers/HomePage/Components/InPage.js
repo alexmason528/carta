@@ -23,7 +23,7 @@ export class InPage extends React.PureComponent {
   }
 
   placeClicked = (placeName) => {
-    this.props.placeSelect(placeName);
+    this.props.mapViewPortChange(placeName);
   }
 
   inputChangeHandler = (text) => {
@@ -54,12 +54,14 @@ export class InPage extends React.PureComponent {
 InPage.propTypes = {
   className: PropTypes.string,
   places: PropTypes.array,
+  questIndex: PropTypes.number,
   placeSelect: PropTypes.func,
+  mapViewPortChange: PropTypes.func,
 };
 
 export function mapDispatchToProps(dispatch) {
   return {
-    placeSelect: (name) => dispatch(placeSelect(name)),
+    placeSelect: (name, questIndex) => dispatch(placeSelect(name, questIndex)),
   };
 }
 

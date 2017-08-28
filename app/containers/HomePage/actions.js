@@ -20,6 +20,9 @@ import {
   PLACE_SELECT,
   TYPE_SELECT,
   DESCRIPTIVE_SELECT,
+  QUEST_ADD,
+  QUEST_SELECT,
+  QUEST_REMOVE,
   FETCH_QUESTINFO,
   FETCH_QUESTINFO_SUCCESS,
   FETCH_QUESTINFO_ERROR,
@@ -43,29 +46,56 @@ export function zoomChange(zoomlevel, viewport) {
     viewport,
   };
 }
-export function placeSelect(name) {
+
+export function placeSelect(name, questIndex) {
   return {
     type: PLACE_SELECT,
     name,
+    questIndex,
   };
 }
-export function typeSelect(name, visible, active) {
+
+export function typeSelect(name, visible, active, questIndex) {
   return {
     type: TYPE_SELECT,
     name,
     visible,
     active,
+    questIndex,
   };
 }
-export function descriptiveSelect(name, star, visible, active) {
+
+export function descriptiveSelect(name, star, visible, active, questIndex) {
   return {
     type: DESCRIPTIVE_SELECT,
     name,
     star,
     visible,
     active,
+    questIndex,
   };
 }
+
+export function questAdd() {
+  return {
+    type: QUEST_ADD,
+  };
+}
+
+export function questSelect(index) {
+  return {
+    type: QUEST_SELECT,
+    index,
+  };
+}
+
+export function questRemove(index) {
+  return {
+    type: QUEST_REMOVE,
+    index,
+  };
+}
+
 export function fetchQuestInfo() {
   return {
     type: FETCH_QUESTINFO,

@@ -14,6 +14,10 @@ export const PLACE_SELECT = 'carta/Home/PLACE_SELECT';
 export const TYPE_SELECT = 'carta/Home/TYPE_SELECT';
 export const DESCRIPTIVE_SELECT = 'carta/Home/DESCRIPTIVE_SELECT';
 
+export const QUEST_ADD = 'carta/HOME/QUEST_ADD';
+export const QUEST_SELECT = 'cara/HOME/QUEST_REMOVE';
+export const QUEST_REMOVE = 'carta/HOME/QUEST_REMOVE';
+
 export const FETCH_QUESTINFO = 'carta/Home/FETCH_QUESTINFO';
 export const FETCH_QUESTINFO_SUCCESS = 'carta/Home/FETCH_QUESTINFO_SUCCESS';
 export const FETCH_QUESTINFO_ERROR = 'carta/Home/FETCH_QUESTINFO_ERROR';

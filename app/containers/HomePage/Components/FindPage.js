@@ -2,8 +2,9 @@ import React, { PropTypes, Children } from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { List, is } from 'immutable';
 import { Button, StarButton } from './Buttons';
-import { typeSelect } from '../actions';
+import { fetchRecommendations, typeSelect } from '../actions';
 import './style.scss';
 
 export class FindPage extends React.PureComponent {
@@ -54,7 +55,8 @@ export class FindPage extends React.PureComponent {
       });
     }
 
-    this.props.typeSelect('anything', null, newAnything);
+    this.props.typeSelect('anything', null, newAnything, this.props.questIndex);
+    this.props.fetchRecommendations();
   }
 
   inputChangeHandler = (text) => {
@@ -74,7 +76,7 @@ export class FindPage extends React.PureComponent {
 
         if (anything === 0 && expanded === 1) newVisible = newActive;
 
-        this.props.typeSelect(name, newVisible, newActive);
+        this.props.typeSelect(name, newVisible, newActive, this.props.questIndex);
         return { name: name, visible: newVisible, active: newActive };
       }
       return type;
@@ -83,6 +85,8 @@ export class FindPage extends React.PureComponent {
     this.setState({
       types: newTypes,
     });
+
+    this.props.fetchRecommendations();
   }
 
   render() {
@@ -198,13 +202,16 @@ export class FindPage extends React.PureComponent {
 FindPage.propTypes = {
   className: PropTypes.string,
   types: PropTypes.array,
+  questIndex: PropTypes.number,
   typeSelect: PropTypes.func,
+  fetchRecommendations: PropTypes.func,
 };
 
 
 export function mapDispatchToProps(dispatch) {
   return {
-    typeSelect: (name, visible, active) => dispatch(typeSelect(name, visible, active)),
+    typeSelect: (name, visible, active, questIndex) => dispatch(typeSelect(name, visible, active, questIndex)),
+    fetchRecommendations: () => dispatch(fetchRecommendations()),
   };
 }
 

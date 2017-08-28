@@ -16,6 +16,9 @@ import {
   PLACE_SELECT,
   TYPE_SELECT,
   DESCRIPTIVE_SELECT,
+  QUEST_ADD,
+  QUEST_SELECT,
+  QUEST_REMOVE,
   FETCH_QUESTINFO,
   FETCH_QUESTINFO_SUCCESS,
   FETCH_QUESTINFO_ERROR,
@@ -31,9 +34,15 @@ const initialState = fromJS({
     fetching: false,
     error: null,
     details: {
-      places: [],
-      types: [],
-      descriptives: [],
+      defaultQuest: {
+        places: [],
+        types: [],
+        descriptives: [],
+        currentPlace: null,
+      },
+      quests: [
+      ],
+      currentQuestIndex: 0,
     },
   },
   recommendations: {
@@ -43,7 +52,6 @@ const initialState = fromJS({
   },
   zoomlevel: 7,
   viewport: {},
-  currentPlace: {},
 });
 
 
@@ -52,6 +60,9 @@ function homeReducer(state = initialState, action) {
   let recommendations;
   let details;
   let nextState;
+  let currentQuestIndex;
+  let types;
+  let descriptives;
 
   switch (action.type) {
 
@@ -72,50 +83,74 @@ function homeReducer(state = initialState, action) {
       return nextState;
 
     case PLACE_SELECT:
-      state.get('questInfo').get('details').get('places').map((place) => {
+      currentQuestIndex = state.get('questInfo').get('details').get('currentQuestIndex');
+      let currentPlace;
+
+      state.get('questInfo').get('details').get('quests').get(currentQuestIndex).get('places').map((place) => {
         if (place.get('name') === action.name) {
-          nextState = state.set('currentPlace', place);
+          currentPlace = place;
         }
       });
 
+      nextState = state.setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'currentPlace'], currentPlace);
       return nextState;
 
     case TYPE_SELECT:
+      currentQuestIndex = state.get('questInfo').get('details').get('currentQuestIndex');
+
       if (action.name === 'anything') {
-        const types = state.get('questInfo').get('details').get('types').map((type) => {
+        types = state.get('questInfo').get('details').get('quests').get(currentQuestIndex).get('types').map((type) => {
           return type.set('active', action.active);
         });
-
-        nextState = state.setIn(['questInfo', 'details', 'types'], types);
       } else {
-        const types = state.get('questInfo').get('details').get('types').map((type) => {
+        types = state.get('questInfo').get('details').get('quests').get(currentQuestIndex).get('types').map((type) => {
           if (type.get('name') === action.name) {
             return type.set('active', action.active).set('visible', action.visible);
           }
           return type;
         });
-
-        nextState = state.setIn(['questInfo', 'details', 'types'], types);
       }
 
+      nextState = state.setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'types'], types);
       return nextState;
 
     case DESCRIPTIVE_SELECT:
+      currentQuestIndex = state.get('questInfo').get('details').get('currentQuestIndex');
+
       if (action.name === 'anything') {
-        const descriptives = state.get('questInfo').get('details').get('descriptives').map((descriptive) => {
+        descriptives = state.get('questInfo').get('details').get('quests').get(currentQuestIndex).get('descriptives').map((descriptive) => {
           return descriptive.set('active', action.active);
         });
-
-        nextState = state.setIn(['questInfo', 'details', 'descriptives'], descriptives);
       } else {
-        const descriptives = state.get('questInfo').get('details').get('descriptives').map((descriptive) => {
+        descriptives = state.get('questInfo').get('details').get('quests').get(currentQuestIndex).get('descriptives').map((descriptive) => {
           if (descriptive.get('name') === action.name) {
             return descriptive.set('active', action.active).set('visible', action.visible).set('star', action.star);
           }
           return descriptive;
         });
+      }
 
-        nextState = state.setIn(['questInfo', 'details', 'descriptives'], descriptives);
+      nextState = state.setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'descriptives'], descriptives);
+      return nextState;
+
+    case QUEST_ADD:
+      const defaultQuest = state.get('questInfo').get('details').get('defaultQuest');
+      const newQuests = state.get('questInfo').get('details').get('quests').push(defaultQuest);
+
+      nextState = state.setIn(['questInfo', 'details', 'quests'], newQuests);
+
+      return nextState;
+
+    case QUEST_SELECT:
+      nextState = state.setIn(['questInfo', 'details', 'currentQuestIndex'], action.index);
+      return nextState;
+
+    case QUEST_REMOVE:
+      currentQuestIndex = state.get('questInfo').get('details').get('currentQuestIndex');
+      nextState = state.deleteIn(['questInfo', 'details', 'quests', action.index]);
+
+      if (action.index < currentQuestIndex) {
+        nextState = nextState.setIn(['questInfo', 'details', 'currentQuestIndex'], currentQuestIndex - 1);
       }
 
       return nextState;
@@ -125,9 +160,14 @@ function homeReducer(state = initialState, action) {
         fetching: true,
         error: null,
         details: {
-          places: [],
-          types: [],
-          descriptives: [],
+          defaultQuest: {
+            places: [],
+            types: [],
+            descriptives: [],
+          },
+          quests: [
+          ],
+          currentQuestIndex: 0,
         },
       };
 
@@ -138,10 +178,16 @@ function homeReducer(state = initialState, action) {
       questInfo = {
         fetching: false,
         error: null,
-        details: action.payload,
+        details: {
+          defaultQuest: action.payload,
+          quests: [
+            action.payload,
+          ],
+          currentQuestIndex: 0,
+        },
       };
 
-      nextState = state.setIn(['questInfo'], fromJS(questInfo)).set('currentPlace', fromJS(action.payload.places[0]));
+      nextState = state.setIn(['questInfo'], fromJS(questInfo));
       return nextState;
 
     case FETCH_QUESTINFO_ERROR:
@@ -149,9 +195,14 @@ function homeReducer(state = initialState, action) {
         fetching: false,
         error: true,
         details: {
-          places: [],
-          types: [],
-          descriptives: [],
+          defaultQuest: {
+            places: [],
+            types: [],
+            descriptives: [],
+          },
+          quests: [
+          ],
+          currentQuestIndex: 0,
         },
       };
 

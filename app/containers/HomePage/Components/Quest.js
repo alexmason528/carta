@@ -8,12 +8,15 @@ import KnownForPage from './KnownForPage';
 
 import './style.scss';
 
-export class Section extends React.Component {
+export class Quest extends React.Component {
   constructor() {
     super();
     this.state = {
       currentTab: 0,
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
   }
 
   tabClicked = (tab) => {
@@ -80,18 +83,20 @@ export class Section extends React.Component {
         </div>
 
         <div className="pages">
-          <InPage className={inPageClass} places={this.props.questInfo.get('places').toJS()} />
-          <FindPage className={findPageClass} types={this.props.questInfo.get('types').toJS()} />
-          <KnownForPage className={knownForPageClass} descriptives={this.props.questInfo.get('descriptives').toJS()} />
+          <InPage className={inPageClass} places={this.props.questInfo.get('places').toJS()} questIndex={this.props.questIndex} mapViewPortChange={this.props.mapViewPortChange} />
+          <FindPage className={findPageClass} types={this.props.questInfo.get('types').toJS()} questIndex={this.props.questIndex} />
+          <KnownForPage className={knownForPageClass} descriptives={this.props.questInfo.get('descriptives').toJS()} questIndex={this.props.questIndex} />
         </div>
       </div>
     );
   }
 }
 
-Section.propTypes = {
+Quest.propTypes = {
   className: PropTypes.string,
   questInfo: PropTypes.object.isRequired,
+  questIndex: PropTypes.number,
+  mapViewPortChange: PropTypes.func,
 };
 
-export default Section;
+export default Quest;
