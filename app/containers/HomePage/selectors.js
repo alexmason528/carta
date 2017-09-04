@@ -11,11 +11,6 @@ const makeSelectQuestInfo = () => createSelector(
   (homeState) => homeState.get('questInfo')
 );
 
-const makeSelectCurrentPlace = () => createSelector(
-  selectHome,
-  (homeState) => homeState.get('currentPlace')
-);
-
 const makeSelectRecommendations = () => createSelector(
   selectHome,
   (homeState) => homeState.get('recommendations')
@@ -34,7 +29,6 @@ const makeSelectViewport = () => createSelector(
 export {
   selectHome,
   makeSelectQuestInfo,
-  makeSelectCurrentPlace,
   makeSelectRecommendations,
   makeSelectZoomLevel,
   makeSelectViewport,

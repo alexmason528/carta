@@ -12,8 +12,8 @@ export class KnownForPage extends React.PureComponent {
 
     this.state = {
       descriptives: [],
-      expanded: 0,
-      anything: 1,
+      expanded: 1,
+      anything: 0,
       search: '',
     };
   }
@@ -21,6 +21,7 @@ export class KnownForPage extends React.PureComponent {
   componentWillReceiveProps(nextProps) {
     this.setState({
       descriptives: nextProps.descriptives,
+      anything: nextProps.descriptivesAll,
     });
   }
 
@@ -157,7 +158,7 @@ export class KnownForPage extends React.PureComponent {
       <div className={this.props.className}>
         <h1>Known For</h1>
         <img className={searchBtnClass} src="http://carta.guide/icon/search.png" onClick={() => { this.expandHandler(1); }} role="presentation" />
-        <img className={closeBtnClass} src="http://carta.guide/icon/close.png" onClick={() => { this.expandHandler(0); }} role="presentation" />
+        <img className={closeBtnClass} src="http://carta.guide/icon/back.png" onClick={() => { this.expandHandler(0); }} role="presentation" />
         <input className={searchInputClass} onChange={(evt) => { this.inputChangeHandler(evt.target.value); }} />
         <div className="suggestions">
           <Button

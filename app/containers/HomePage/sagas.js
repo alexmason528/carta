@@ -21,25 +21,66 @@ export function* getRecommendations() {
   const currentQuestIndex = questInfo.get('details').get('currentQuestIndex');
   const currentQuest = questInfo.get('details').get('quests').get(currentQuestIndex);
 
-  let types = [];
+  let descriptives;
+
+  const typesAll = currentQuest.get('typesAll');
+  const descriptivesAll = currentQuest.get('descriptivesAll');
+
+  let activeTypes = [];
+  let inactiveTypes = [];
 
   currentQuest.get('types').map((type) => {
     if (type.get('active') === 1) {
-      types.push(type.get('name'));
+      activeTypes.push(type.get('name'));
+    } else {
+      inactiveTypes.push(type.get('name'));
     }
   });
 
-  let descriptives = [];
+  let types = {
+    active: activeTypes,
+    inactive: inactiveTypes,
+  };
 
-  currentQuest.get('descriptives').map((descriptive) => {
-    if (descriptive.get('active') === 1) {
-      descriptives.push({ name: descriptive.get('name'), star: descriptive.get('star') });
-    }
-  });
+  if (currentQuest.get('descriptivesAll') === 1) {
+    let stars = [];
+    let excludes = [];
+
+    currentQuest.get('descriptives').map((descriptive) => {
+      if (descriptive.get('star') === 1) {
+        stars.push(descriptive.get('name'));
+      } else if (descriptive.get('active') === 0) {
+        excludes.push(descriptive.get('name'));
+      }
+    });
+
+    descriptives = {
+      stars: stars,
+      interests: excludes,
+    };
+  } else {
+    let stars = [];
+    let includes = [];
+
+    currentQuest.get('descriptives').map((descriptive) => {
+      if (descriptive.get('star') === 1) {
+        stars.push(descriptive.get('name'));
+      } else if (descriptive.get('active') === 1) {
+        includes.push(descriptive.get('name'));
+      }
+    });
+
+    descriptives = {
+      stars: stars,
+      interests: includes,
+    };
+  }
 
   const data = {
     count: 5,
+    descriptivesAll: descriptivesAll,
     descriptives: descriptives,
+    typesAll: typesAll,
     types: types,
     zoomlevel: zoomlevel,
     viewport: viewport,
@@ -53,10 +94,18 @@ export function* getRecommendations() {
     },
   };
 
-  let recommendations;
+  let sendRequest = false;
+  if ((typesAll === 1 || types.active.length > 0) && (descriptivesAll === 1 || descriptives.stars.length > 0 || descriptives.interests.length > 0)) {
+    sendRequest = true;
+  }
+
+  let recommendations = [];
 
   try {
-    recommendations = yield call(request, requestURL, params);
+    if (sendRequest) {
+      recommendations = yield call(request, requestURL, params);
+    }
+
     yield put(fetchRecommendationsSuccess(recommendations));
   } catch (err) {
     yield put(fetchRecommendationsError(recommendations));
@@ -94,9 +143,10 @@ export function* getQuestInfo() {
 
     const payload = {
       places: places,
+      typesAll: 1,
       types: questInfo.types.map((type) => { return { name: type, visible: 0, active: 1 }; }),
-      descriptives: questInfo.descriptives.map((descriptive) => { return { name: descriptive, star: 0, visible: 0, active: 1 }; }),
-      currentPlace: places[0],
+      descriptivesAll: 0,
+      descriptives: questInfo.descriptives.map((descriptive) => { return { name: descriptive, star: 0, visible: 0, active: 0 }; }),
     };
 
     yield put(fetchQuestInfoSuccess(payload));

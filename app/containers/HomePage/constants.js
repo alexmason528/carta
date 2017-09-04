@@ -9,7 +9,7 @@
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
 
-export const ZOOM_CHANGE = 'carta/Home/ZOOM_CHANGE';
+export const MAP_CHANGE = 'carta/Home/MAP_CHANGE';
 export const PLACE_SELECT = 'carta/Home/PLACE_SELECT';
 export const TYPE_SELECT = 'carta/Home/TYPE_SELECT';
 export const DESCRIPTIVE_SELECT = 'carta/Home/DESCRIPTIVE_SELECT';

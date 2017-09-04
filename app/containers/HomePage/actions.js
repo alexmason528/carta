@@ -16,7 +16,7 @@
  */
 
 import {
-  ZOOM_CHANGE,
+  MAP_CHANGE,
   PLACE_SELECT,
   TYPE_SELECT,
   DESCRIPTIVE_SELECT,
@@ -39,9 +39,9 @@ import {
  * @return {object}    An action object with a type of CHANGE_USERNAME
  */
 
-export function zoomChange(zoomlevel, viewport) {
+export function mapChange(zoomlevel, viewport) {
   return {
-    type: ZOOM_CHANGE,
+    type: MAP_CHANGE,
     zoomlevel,
     viewport,
   };

@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Button, StarButton } from './Buttons';
-import { placeSelect } from '../actions';
+import { fetchRecommendations, placeSelect } from '../actions';
 
 import './style.scss';
 
@@ -24,6 +24,7 @@ export class InPage extends React.PureComponent {
 
   placeClicked = (placeName) => {
     this.props.mapViewPortChange(placeName);
+    this.props.fetchRecommendations();
   }
 
   inputChangeHandler = (text) => {
@@ -57,11 +58,13 @@ InPage.propTypes = {
   questIndex: PropTypes.number,
   placeSelect: PropTypes.func,
   mapViewPortChange: PropTypes.func,
+  fetchRecommendations: PropTypes.func,
 };
 
 export function mapDispatchToProps(dispatch) {
   return {
     placeSelect: (name, questIndex) => dispatch(placeSelect(name, questIndex)),
+    fetchRecommendations: () => dispatch(fetchRecommendations()),
   };
 }
 

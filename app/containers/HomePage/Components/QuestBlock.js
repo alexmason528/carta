@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { questAdd, questSelect, questRemove } from '../actions';
+import { fetchRecommendations, questAdd, questSelect, questRemove } from '../actions';
 import InPage from './InPage';
 import FindPage from './FindPage';
 import KnownForPage from './KnownForPage';
@@ -32,6 +32,7 @@ export class QuestBlock extends React.PureComponent {
 
   questSelectHandler = (index) => {
     this.props.questSelect(index);
+    this.props.fetchRecommendations();
   }
 
   questRemoveHandler = (evt, index) => {
@@ -99,6 +100,7 @@ QuestBlock.propTypes = {
   currentQuestIndex: PropTypes.number,
   className: PropTypes.string,
   mapViewPortChange: PropTypes.func,
+  fetchRecommendations: PropTypes.func,
   questAdd: PropTypes.func,
   questSelect: PropTypes.func,
   questRemove: PropTypes.func,
@@ -109,6 +111,7 @@ export function mapDispatchToProps(dispatch) {
     questAdd: () => dispatch(questAdd()),
     questSelect: (index) => dispatch(questSelect(index)),
     questRemove: (index) => dispatch(questRemove(index)),
+    fetchRecommendations: () => dispatch(fetchRecommendations()),
   };
 }
 

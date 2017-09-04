@@ -13,8 +13,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 
-import { zoomChange, fetchQuestInfo, fetchRecommendations } from './actions';
-import { makeSelectQuestInfo, makeSelectCurrentPlace, makeSelectRecommendations } from './selectors';
+import { mapChange, fetchQuestInfo, fetchRecommendations } from './actions';
+import { makeSelectQuestInfo, makeSelectRecommendations } from './selectors';
 
 import { MAP_ACCESS_TOKEN } from './constants';
 
@@ -88,32 +88,31 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     if (this.map) {
       this.clearMap();
 
-      // nextProps.recommendations.get('details').map((recommendation, index) => {
-      //   const display = recommendation.get('display');
-      //   let filter = ['==', 'e', recommendation.get('e')];
+      nextProps.recommendations.get('details').map((recommendation, index) => {
+        const display = recommendation.get('display');
+        let filter = ['==', 'e', recommendation.get('e')];
 
-      //   if (display === 'shape') {
-      //     this.map.setFilter(`shape-border-offset-${index}`, filter);
-      //     this.map.setFilter(`shape-border-${index}`, filter);
-      //     this.map.setFilter(`shape-fill-${index}`, filter);
-      //     this.map.setFilter(`shape-caption-${index}`, filter);
-      //   } else if (display === 'icon') {
-      //     this.map.setFilter(`shape-border-offset-${index}`, ['==', 'e', '']);
-      //     this.map.setFilter(`shape-border-${index}`, ['==', 'e', '']);
-      //     this.map.setFilter(`shape-caption-${index}`, filter);
-      //   }
-      // });
-      // }
+        if (display === 'shape') {
+          this.map.setFilter(`shape-border-offset-${index}`, filter);
+          this.map.setFilter(`shape-border-${index}`, filter);
+          this.map.setFilter(`shape-fill-${index}`, filter);
+          this.map.setFilter(`shape-caption-${index}`, filter);
+        } else if (display === 'icon') {
+          this.map.setFilter(`shape-border-offset-${index}`, ['==', 'e', '']);
+          this.map.setFilter(`shape-border-${index}`, ['==', 'e', '']);
+          this.map.setFilter(`shape-caption-${index}`, filter);
+        }
+      });
     }
   }
 
   onZoomEnd = (map) => {
-    this.props.zoomChange(map.getZoom(), map.getBounds());
+    this.props.mapChange(map.getZoom(), map.getBounds());
     this.props.fetchRecommendations();
   }
 
   onStyleLoad = (map) => {
-    this.props.zoomChange(map.getZoom(), map.getBounds());
+    this.props.mapChange(map.getZoom(), map.getBounds());
     this.props.fetchRecommendations();
     this.map = map;
 
@@ -217,30 +216,30 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 
       map.on('click', shapeFill, (data) => {
         const name = data.features[0].properties.name;
-        this.placeClicked(name);
+        this.elementClicked(name);
       });
 
       map.on('click', shapeCaption, (data) => {
         const name = data.features[0].properties.name;
-        this.placeClicked(name);
+        this.elementClicked(name);
       });
     }
   }
 
   onDragEnd = (map) => {
-    this.props.zoomChange(map.getZoom(), map.getBounds());
+    this.props.mapChange(map.getZoom(), map.getBounds());
     this.props.fetchRecommendations();
   }
 
   clearMap = () => {
-    // this.props.recommendations.get('details').map((recommendation, index) => {
-    //   let filter = ['==', 'e', ''];
+    this.props.recommendations.get('details').map((recommendation, index) => {
+      let filter = ['==', 'e', ''];
 
-    //   this.map.setFilter(`shape-border-offset-${index}`, filter);
-    //   this.map.setFilter(`shape-border-${index}`, filter);
-    //   this.map.setFilter(`shape-fill-${index}`, filter);
-    //   this.map.setFilter(`shape-caption-${index}`, filter);
-    // });
+      this.map.setFilter(`shape-border-offset-${index}`, filter);
+      this.map.setFilter(`shape-border-${index}`, filter);
+      this.map.setFilter(`shape-fill-${index}`, filter);
+      this.map.setFilter(`shape-caption-${index}`, filter);
+    });
   }
 
   mapViewPortChange = (placeName) => {
@@ -260,7 +259,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     }
   }
 
-  placeClicked = (name) => {
+  elementClicked = (name) => {
     browserHistory.push(`/place/${name}`);
   }
 
@@ -341,14 +340,14 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 HomePage.propTypes = {
   questInfo: React.PropTypes.object,
   recommendations: React.PropTypes.object,
-  zoomChange: React.PropTypes.func,
+  mapChange: React.PropTypes.func,
   fetchQuestInfo: React.PropTypes.func,
   fetchRecommendations: React.PropTypes.func,
 };
 
 export function mapDispatchToProps(dispatch) {
   return {
-    zoomChange: (zoomlevel, viewport) => dispatch(zoomChange(zoomlevel, viewport)),
+    mapChange: (zoomlevel, viewport) => dispatch(mapChange(zoomlevel, viewport)),
     fetchQuestInfo: () => dispatch(fetchQuestInfo()),
     fetchRecommendations: () => dispatch(fetchRecommendations()),
   };

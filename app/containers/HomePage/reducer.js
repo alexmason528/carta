@@ -12,7 +12,7 @@
 import { fromJS } from 'immutable';
 
 import {
-  ZOOM_CHANGE,
+  MAP_CHANGE,
   PLACE_SELECT,
   TYPE_SELECT,
   DESCRIPTIVE_SELECT,
@@ -36,9 +36,10 @@ const initialState = fromJS({
     details: {
       defaultQuest: {
         places: [],
+        typesAll: 1,
         types: [],
+        descriptivesAll: 0,
         descriptives: [],
-        currentPlace: null,
       },
       quests: [
       ],
@@ -66,7 +67,7 @@ function homeReducer(state = initialState, action) {
 
   switch (action.type) {
 
-    case ZOOM_CHANGE:
+    case MAP_CHANGE:
       const viewport = {
         northeast: {
           x: action.viewport._ne.lng,
@@ -82,23 +83,12 @@ function homeReducer(state = initialState, action) {
 
       return nextState;
 
-    case PLACE_SELECT:
-      currentQuestIndex = state.get('questInfo').get('details').get('currentQuestIndex');
-      let currentPlace;
-
-      state.get('questInfo').get('details').get('quests').get(currentQuestIndex).get('places').map((place) => {
-        if (place.get('name') === action.name) {
-          currentPlace = place;
-        }
-      });
-
-      nextState = state.setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'currentPlace'], currentPlace);
-      return nextState;
-
     case TYPE_SELECT:
       currentQuestIndex = state.get('questInfo').get('details').get('currentQuestIndex');
+      let typesAll = state.get('questInfo').get('details').get('quests').get(currentQuestIndex).get('typesAll');
 
       if (action.name === 'anything') {
+        typesAll = (typesAll === 1) ? 0 : 1;
         types = state.get('questInfo').get('details').get('quests').get(currentQuestIndex).get('types').map((type) => {
           return type.set('active', action.active);
         });
@@ -111,14 +101,21 @@ function homeReducer(state = initialState, action) {
         });
       }
 
-      nextState = state.setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'types'], types);
+      nextState = state.setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'types'], types)
+                       .setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'typesAll'], typesAll);
+
       return nextState;
 
     case DESCRIPTIVE_SELECT:
       currentQuestIndex = state.get('questInfo').get('details').get('currentQuestIndex');
+      let descriptivesAll = state.get('questInfo').get('details').get('quests').get(currentQuestIndex).get('descriptivesAll');
 
       if (action.name === 'anything') {
+        descriptivesAll = (descriptivesAll === 1) ? 0 : 1;
         descriptives = state.get('questInfo').get('details').get('quests').get(currentQuestIndex).get('descriptives').map((descriptive) => {
+          if (descriptivesAll === 0) {
+            return descriptive.set('active', action.active).set('star', 0);
+          }
           return descriptive.set('active', action.active);
         });
       } else {
@@ -130,14 +127,20 @@ function homeReducer(state = initialState, action) {
         });
       }
 
-      nextState = state.setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'descriptives'], descriptives);
+      nextState = state.setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'descriptives'], descriptives)
+                       .setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'descriptivesAll'], descriptivesAll);
       return nextState;
 
     case QUEST_ADD:
       const defaultQuest = state.get('questInfo').get('details').get('defaultQuest');
       const newQuests = state.get('questInfo').get('details').get('quests').push(defaultQuest);
 
-      nextState = state.setIn(['questInfo', 'details', 'quests'], newQuests);
+      const size = state.get('questInfo').get('details').get('quests').size;
+
+      // console.log(state.get('questInfo').get('details').get('currentQuestIndex'));
+
+      nextState = state.setIn(['questInfo', 'details', 'quests'], newQuests).setIn(['questInfo', 'details', 'currentQuestIndex'], size);
+
 
       return nextState;
 
@@ -162,7 +165,9 @@ function homeReducer(state = initialState, action) {
         details: {
           defaultQuest: {
             places: [],
+            typesAll: 1,
             types: [],
+            descriptivesAll: 0,
             descriptives: [],
           },
           quests: [
@@ -197,7 +202,9 @@ function homeReducer(state = initialState, action) {
         details: {
           defaultQuest: {
             places: [],
+            typesAll: 1,
             types: [],
+            descriptivesAll: 0,
             descriptives: [],
           },
           quests: [

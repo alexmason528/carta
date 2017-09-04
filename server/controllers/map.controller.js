@@ -60,57 +60,172 @@ const getQuestInfo = (req, res) => {
  */
 const getRecommendations = (req, res) => {
   const params = req.body;
-  const interests = params.interests;
   let columns = [];
 
-  for (const key in interests) {
-    columns.push(`$ch.${params.interests[key]}`);
-  }
+  const { count, descriptivesAll, descriptives, typesAll, types, zoomlevel, viewport } = params;
 
-  const pipeline = [{
-    $match: {
-      zmin: { $lte: params.zoomlevel },
-      zmax: { $gte: params.zoomlevel },
-      x: { $gte: params.viewport.southwest.x, $lte: params.viewport.northeast.x },
-      y: { $gte: params.viewport.southwest.y, $lte: params.viewport.northeast.y },
-    },
-  }, {
-    $lookup: {
-      from: 'characteristic',
-      localField: 'characteristic',
-      foreignField: '_id',
-      as: 'ch',
-    },
-  }, {
-    $unwind: '$ch',
-  }, {
-    $project: {
-      _id: 0,
-      name: 1,
-      e: 1,
-      display: 1,
-      x: 1,
-      y: 1,
-      score: {
-        $add: columns,
+  let typeMatch = [];
+
+  types.active.map((type) => {
+    let typeSearch = {};
+    typeSearch[`type.${type}`] = '1';
+
+    typeMatch.push(typeSearch);
+  });
+
+  let typeProject = {
+    sum: 1,
+  };
+
+  types.active.map((type) => {
+    typeProject[type] = 1;
+  });
+
+  types.inactive.map((type) => {
+    typeProject[type] = 1;
+  });
+
+  let descriptiveProject = {
+    sum: 1,
+  };
+
+  descriptives.interests.map((interest) => {
+    descriptiveProject[interest] = 1;
+  });
+
+  descriptives.stars.map((star) => {
+    descriptiveProject[star] = 1;
+  });
+
+  const pipeline = [
+    {
+      $match: {
+        zmin: { $lte: zoomlevel },
+        zmax: { $gte: zoomlevel },
+        x: { $gte: viewport.southwest.x, $lte: viewport.northeast.x },
+        y: { $gte: viewport.southwest.y, $lte: viewport.northeast.y },
       },
     },
-  }, {
-    $sort: {
-      score: -1,
+    {
+      $lookup: {
+        from: 'type',
+        localField: 'e',
+        foreignField: 'e',
+        as: 'type',
+      },
     },
-  }, {
-    $limit: params.count,
-  }];
+    {
+      $lookup: {
+        from: 'descriptive',
+        localField: 'e',
+        foreignField: 'e',
+        as: 'descriptive',
+      },
+    },
+    {
+      $unwind: '$type',
+    },
+    {
+      $unwind: '$descriptive',
+    },
+    {
+      $match: {
+        $or: typeMatch,
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        name: 1,
+        e: 1,
+        display: 1,
+        x: 1,
+        y: 1,
+        type: typeProject,
+        descriptive: descriptiveProject,
+      },
+    },
+  ];
 
-  Element.aggregate(pipeline, (err, results) => {
+  Element.aggregate(pipeline, (err, elements) => {
     if (err) throw err;
+
+    let scoreElements = elements.map((element) => {
+      let dScore = 0;
+      let tScore = 0;
+
+      if (descriptivesAll === 0) {
+        descriptives.interests.map((interest) => {
+          if (element.descriptive[interest] !== '') {
+            dScore += parseFloat(element.descriptive[interest]) * 0.3;
+          }
+        });
+
+        descriptives.stars.map((star) => {
+          if (element.descriptive[star] !== '') {
+            dScore += parseFloat(element.descriptive[star]) * 1;
+          }
+        });
+      } else if (descriptivesAll === 1) {
+        if (element.descriptive.sum !== '') {
+          dScore += parseFloat(element.descriptive.sum) * 0.3;
+        }
+
+        descriptives.interests.map((interest) => {
+          if (element.descriptive[interest] !== '') {
+            dScore += parseFloat(element.descriptive[interest]) * (-0.3);
+          }
+        });
+
+        descriptives.stars.map((star) => {
+          if (element.descriptive[star] !== '') {
+            dScore += parseFloat(element.descriptive[star]) * 0.7;
+          }
+        });
+      }
+
+      if (typesAll === 0) {
+        types.active.map((type) => {
+          if (element.type[type] !== '') {
+            tScore += parseFloat(element.type[type]);
+          }
+        });
+      } else if (typesAll === 1) {
+        if (element.type.sum !== '') {
+          tScore += parseFloat(element.type.sum);
+        }
+
+        types.inactive.map((type) => {
+          if (element.type[type] !== '') {
+            tScore -= parseFloat(element.type[type]);
+          }
+        });
+      }
+
+      element.score = tScore * dScore;
+
+      return element;
+    });
+
+    let sortedElements = scoreElements.sort((first, second) => {
+      return parseFloat(second.score - first.score);
+    });
 
     let recommendations = [];
 
-    for (const key in results) {
-      if (results[key].score !== 0) {
-        recommendations.push(results[key]);
+    for (i = 0; i < sortedElements.length; i += 1) {
+      element = sortedElements[i];
+      if (element.score !== 0) {
+        let recommendation = {
+          e: element.e,
+          display: element.display,
+          score: element.score,
+        };
+
+        recommendations.push(recommendation);
+        if (recommendations.length >= 5) {
+          break;
+        }
       }
     }
 

@@ -17,6 +17,7 @@ export class Quest extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+
   }
 
   tabClicked = (tab) => {
@@ -63,11 +64,13 @@ export class Quest extends React.Component {
 
     const findPageClass = classNames({
       page: true,
+      'find-page': true,
       hidden: currentTab !== 1,
     });
 
     const knownForPageClass = classNames({
       page: true,
+      'known-for-page': true,
       hidden: currentTab !== 2,
     });
 
@@ -84,8 +87,8 @@ export class Quest extends React.Component {
 
         <div className="pages">
           <InPage className={inPageClass} places={this.props.questInfo.get('places').toJS()} questIndex={this.props.questIndex} mapViewPortChange={this.props.mapViewPortChange} />
-          <FindPage className={findPageClass} types={this.props.questInfo.get('types').toJS()} questIndex={this.props.questIndex} />
-          <KnownForPage className={knownForPageClass} descriptives={this.props.questInfo.get('descriptives').toJS()} questIndex={this.props.questIndex} />
+          <FindPage className={findPageClass} types={this.props.questInfo.get('types').toJS()} typesAll={this.props.questInfo.get('typesAll')} questIndex={this.props.questIndex} />
+          <KnownForPage className={knownForPageClass} descriptives={this.props.questInfo.get('descriptives').toJS()} descriptivesAll={this.props.questInfo.get('descriptivesAll')} questIndex={this.props.questIndex} />
         </div>
       </div>
     );
