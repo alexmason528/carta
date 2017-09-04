@@ -62,6 +62,8 @@ const getRecommendations = (req, res) => {
   const params = req.body;
   let columns = [];
 
+  console.log(params);
+
   const { count, descriptivesAll, descriptives, typesAll, types, zoomlevel, viewport } = params;
 
   let typeMatch = [];
@@ -146,8 +148,6 @@ const getRecommendations = (req, res) => {
       },
     },
   ];
-
-  console.log(pipeline);
 
   Element.aggregate(pipeline, (err, elements) => {
     if (err) throw err;
