@@ -147,6 +147,8 @@ const getRecommendations = (req, res) => {
     },
   ];
 
+  console.log(pipeline);
+
   Element.aggregate(pipeline, (err, elements) => {
     if (err) throw err;
 
