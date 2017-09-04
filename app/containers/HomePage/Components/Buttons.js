@@ -33,9 +33,9 @@ function StarButton(props) {
   );
 }
 
-function SearchButton(props) {
+function QuestButton(props) {
   return (
-    <div className="search-button" onClick={props.onClick}>
+    <div className="quest-button" onClick={props.onClick}>
       <img src="http://carta.guide/icon/search.png" role="presentation" />
     </div>
   );
@@ -57,12 +57,12 @@ StarButton.propTypes = {
   className: PropTypes.string,
 };
 
-SearchButton.propTypes = {
+QuestButton.propTypes = {
   onClick: PropTypes.func,
 };
 
 export {
   Button,
   StarButton,
-  SearchButton,
+  QuestButton,
 };

@@ -178,7 +178,7 @@ export class FindPage extends React.PureComponent {
           }
           </div>
           <div className={excludedClass}>
-            <h1>EXCLUDING</h1>
+            <h1>EXCEPT</h1>
             {
               excludedTypes.map((type, index) => {
                 const { name, visible, active } = type;

@@ -21,7 +21,7 @@ import { MAP_ACCESS_TOKEN } from './constants';
 import { MapBlock, ScoreBoardBlock } from './Components/Blocks';
 import QuestBlock from './Components/QuestBlock';
 
-import { Button, SearchButton } from './Components/Buttons';
+import { Button, QuestButton } from './Components/Buttons';
 import './style.scss';
 
 const Map = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN });
@@ -247,14 +247,17 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     const currentQuest = questInfo.get('quests').get(questInfo.get('currentQuestIndex'));
 
     let centerCoords;
+    let zoom;
 
     currentQuest.get('places').map((place) => {
       if (place.get('name') === placeName) {
         centerCoords = [place.get('x'), place.get('y')];
+        zoom = place.get('zoom');
       }
     });
 
     if (this.map) {
+      this.map.setZoom(zoom);
       this.map.flyTo({ center: centerCoords });
     }
   }
@@ -263,7 +266,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     browserHistory.push(`/place/${name}`);
   }
 
-  searchButtonClicked = () => {
+  questButtonClicked = () => {
     this.setState({
       showQuest: !this.state.showQuest,
     });
@@ -302,8 +305,11 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           ]}
         />
         <img className="logo" src="https://carta.guide/content/logo-100.png" role="presentation" />
-        <SearchButton
-          onClick={this.searchButtonClicked}
+        <div className="logo-name-tab">
+          <img src="https://carta.guide/content/name-vertical.png" role="presentation" />
+        </div>
+        <QuestButton
+          onClick={this.questButtonClicked}
         />
         <QuestBlock
           className={questBlockClass}

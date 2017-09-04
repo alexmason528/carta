@@ -48,7 +48,7 @@ export class QuestBlock extends React.PureComponent {
     return (
       <div className={this.props.className}>
         <div className="buttons">
-          <button className="minimize" onClick={() => { this.props.minimizeClicked(); }}><div></div></button>
+          <button className="minimize" onClick={() => { this.props.minimizeClicked(); }}><img src="http://carta.guide/icon/min.png" role="presentation" /></button>
           <button className="close" onClick={() => { this.props.closeClicked(); }}><img src="http://carta.guide/icon/close.png" role="presentation" /></button>
         </div>
         <div className="list">

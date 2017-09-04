@@ -205,7 +205,7 @@ export class KnownForPage extends React.PureComponent {
           }
           </div>
           <div className={excludedClass}>
-            <h1>EXCLUDING</h1>
+            <h1>ONLY IGNORING</h1>
             {
               excludedDescriptives.map((descriptive, index) => {
                 const { name, star, visible, active } = descriptive;
