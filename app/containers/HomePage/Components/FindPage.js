@@ -135,8 +135,8 @@ export class FindPage extends React.PureComponent {
     return (
       <div className={this.props.className}>
         <h1 >Find</h1>
-        <img className={searchBtnClass} src="http://carta.guide/icon/search.png" onClick={() => { this.expandHandler(1); }} role="presentation" />
-        <img className={closeBtnClass} src="http://carta.guide/icon/back.png" onClick={() => { this.expandHandler(0); }} role="presentation" />
+        <img className={searchBtnClass} src="https://carta.guide/icon/search.png" onClick={() => { this.expandHandler(1); }} role="presentation" />
+        <img className={closeBtnClass} src="https://carta.guide/icon/back.png" onClick={() => { this.expandHandler(0); }} role="presentation" />
         <input className={searchInputClass} onChange={(evt) => { this.inputChangeHandler(evt.target.value); }} />
         <div className="suggestion">
           <Button

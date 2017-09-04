@@ -78,11 +78,11 @@ export class Quest extends React.Component {
       <div className={this.props.className}>
         <div className="tabs">
           <div className="line"></div>
-          <button className="next" onClick={this.nextBtnClicked}>Next<img src="http://carta.guide/icon/next.png" role="presentation" /></button>
+          <button className="next" onClick={this.nextBtnClicked}>Next<img src="https://carta.guide/icon/next.png" role="presentation" /></button>
           <div className={tabClass}></div>
-          <img className={inTabClass} src="http://carta.guide/icon/quest/marker.png" role="presentation" onClick={() => { this.tabClicked(0); }} />
-          <img className={findTabClass} src="http://carta.guide/icon/quest/check.png" role="presentation" onClick={() => { this.tabClicked(1); }} />
-          <img className={knownForTabClass} src="http://carta.guide/icon/quest/star.png" role="presentation" onClick={() => { this.tabClicked(2); }} />
+          <img className={inTabClass} src="https://carta.guide/icon/quest/marker.png" role="presentation" onClick={() => { this.tabClicked(0); }} />
+          <img className={findTabClass} src="https://carta.guide/icon/quest/check.png" role="presentation" onClick={() => { this.tabClicked(1); }} />
+          <img className={knownForTabClass} src="https://carta.guide/icon/quest/star.png" role="presentation" onClick={() => { this.tabClicked(2); }} />
         </div>
 
         <div className="pages">

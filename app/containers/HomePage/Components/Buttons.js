@@ -28,7 +28,7 @@ function StarButton(props) {
   return (
     <div className={btnClass}>
       <button onClick={props.onClick}>{Children.toArray(props.children)}</button>
-      <img className="star" src="http://carta.guide/icon/quest/star-green.png" onClick={props.onStarClick} role="presentation" />
+      <img className="star" src="https://carta.guide/icon/quest/star-green.png" onClick={props.onStarClick} role="presentation" />
     </div>
   );
 }
@@ -36,7 +36,7 @@ function StarButton(props) {
 function QuestButton(props) {
   return (
     <div className="quest-button" onClick={props.onClick}>
-      <img src="http://carta.guide/icon/search.png" role="presentation" />
+      <img src="https://carta.guide/icon/search.png" role="presentation" />
     </div>
   );
 }
