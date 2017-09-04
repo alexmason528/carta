@@ -62,8 +62,6 @@ const getRecommendations = (req, res) => {
   const params = req.body;
   let columns = [];
 
-  console.log(params);
-
   const { count, descriptivesAll, descriptives, typesAll, types, zoomlevel, viewport } = params;
 
   let typeMatch = [];
