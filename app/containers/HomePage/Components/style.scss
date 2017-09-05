@@ -62,7 +62,8 @@
 	box-sizing: border-box; 
 	box-shadow: 0 0 7px rgba(0,0,0,0.2); 
 	z-index: 20;
-
+  left: 0;
+  transition: ease-in-out 0.1s;
 
 	.list {
 		top: 58px; 
@@ -254,6 +255,13 @@
 				  	filter: grayscale(100%);
 				  }
 
+          .star {
+            opacity: 0.5;
+            &:hover {
+              opacity: 1;
+            }
+          }
+
 				  button {
 				  	padding: 3px 5px;
 				  	display: inline-block;
@@ -284,17 +292,14 @@
 				  	img {
 				  		filter: none;
 				  		display: inline-block;
+              opacity: 1;
 				  	}
 				  }
         }
 
-				.filtered {
+				.filtered, .excluded, .stared {
 					display: none;
 				}
-
-        .excluded {
-        	display: none;
-        }
 
 				h1 {
 					font-size: 15px; 

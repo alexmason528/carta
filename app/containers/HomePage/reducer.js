@@ -16,6 +16,7 @@ import {
   PLACE_SELECT,
   TYPE_SELECT,
   DESCRIPTIVE_SELECT,
+  UPDATE_VISIBILITY,
   QUEST_ADD,
   QUEST_SELECT,
   QUEST_REMOVE,
@@ -131,16 +132,28 @@ function homeReducer(state = initialState, action) {
                        .setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'descriptivesAll'], descriptivesAll);
       return nextState;
 
+    case UPDATE_VISIBILITY:
+      currentQuestIndex = state.get('questInfo').get('details').get('currentQuestIndex');
+      descriptives = state.get('questInfo').get('details').get('quests').get(currentQuestIndex).get('descriptives').map((descriptive) => {
+        if (descriptive.get('active') === 0) return descriptive.set('visible', 0);
+        return descriptive;
+      });
+
+      types = state.get('questInfo').get('details').get('quests').get(currentQuestIndex).get('types').map((type) => {
+        if (type.get('active') === 0) return type.set('visible', 0);
+        return type;
+      });
+
+      nextState = state.setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'descriptives'], descriptives)
+                       .setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'types'], types);
+      return nextState;
+
     case QUEST_ADD:
       const defaultQuest = state.get('questInfo').get('details').get('defaultQuest');
       const newQuests = state.get('questInfo').get('details').get('quests').push(defaultQuest);
-
       const size = state.get('questInfo').get('details').get('quests').size;
 
-      // console.log(state.get('questInfo').get('details').get('currentQuestIndex'));
-
       nextState = state.setIn(['questInfo', 'details', 'quests'], newQuests).setIn(['questInfo', 'details', 'currentQuestIndex'], size);
-
 
       return nextState;
 
@@ -176,7 +189,7 @@ function homeReducer(state = initialState, action) {
         },
       };
 
-      nextState = state.setIn(['questInfo'], fromJS(questInfo));
+      nextState = state.set('questInfo', fromJS(questInfo));
       return nextState;
 
     case FETCH_QUESTINFO_SUCCESS:
@@ -192,7 +205,7 @@ function homeReducer(state = initialState, action) {
         },
       };
 
-      nextState = state.setIn(['questInfo'], fromJS(questInfo));
+      nextState = state.set('questInfo', fromJS(questInfo));
       return nextState;
 
     case FETCH_QUESTINFO_ERROR:
@@ -213,7 +226,7 @@ function homeReducer(state = initialState, action) {
         },
       };
 
-      nextState = state.setIn(['questInfo'], fromJS(questInfo));
+      nextState = state.set('questInfo', fromJS(questInfo));
       return nextState;
 
     case FETCH_RECOMMENDATIONS:
@@ -222,7 +235,7 @@ function homeReducer(state = initialState, action) {
         error: null,
       });
 
-      nextState = state.setIn(['recommendations'], fromJS(recommendations));
+      nextState = state.set('recommendations', fromJS(recommendations));
       return nextState;
 
     case FETCH_RECOMMENDATIONS_SUCCESS:
@@ -232,7 +245,7 @@ function homeReducer(state = initialState, action) {
         details: action.payload,
       };
 
-      nextState = state.setIn(['recommendations'], fromJS(recommendations));
+      nextState = state.set('recommendations', fromJS(recommendations));
       return nextState;
 
     case FETCH_RECOMMENDATIONS_ERROR:
@@ -242,7 +255,7 @@ function homeReducer(state = initialState, action) {
         details: [],
       };
 
-      nextState = state.setIn(['recommendations'], fromJS(recommendations));
+      nextState = state.set('recommendations', fromJS(recommendations));
       return nextState;
 
     default:

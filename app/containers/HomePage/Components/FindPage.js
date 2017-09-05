@@ -19,10 +19,18 @@ export class FindPage extends React.PureComponent {
     };
   }
 
+  componentWillMount() {
+    this.initializeState(this.props);
+  }
+
   componentWillReceiveProps(nextProps) {
+    this.initializeState(nextProps);
+  }
+
+  initializeState(props) {
     this.setState({
-      types: nextProps.types,
-      anything: nextProps.typesAll,
+      types: props.types,
+      anything: props.typesAll,
     });
   }
 

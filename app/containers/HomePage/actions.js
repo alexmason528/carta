@@ -20,6 +20,7 @@ import {
   PLACE_SELECT,
   TYPE_SELECT,
   DESCRIPTIVE_SELECT,
+  UPDATE_VISIBILITY,
   QUEST_ADD,
   QUEST_SELECT,
   QUEST_REMOVE,
@@ -73,6 +74,12 @@ export function descriptiveSelect(name, star, visible, active, questIndex) {
     visible,
     active,
     questIndex,
+  };
+}
+
+export function updateVisibility() {
+  return {
+    type: UPDATE_VISIBILITY,
   };
 }
 

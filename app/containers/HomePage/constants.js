@@ -13,6 +13,7 @@ export const MAP_CHANGE = 'carta/Home/MAP_CHANGE';
 export const PLACE_SELECT = 'carta/Home/PLACE_SELECT';
 export const TYPE_SELECT = 'carta/Home/TYPE_SELECT';
 export const DESCRIPTIVE_SELECT = 'carta/Home/DESCRIPTIVE_SELECT';
+export const UPDATE_VISIBILITY = 'carta/Home/UPDATE_VISIBILITY';
 
 export const QUEST_ADD = 'carta/HOME/QUEST_ADD';
 export const QUEST_SELECT = 'cara/HOME/QUEST_REMOVE';

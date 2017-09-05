@@ -18,10 +18,18 @@ export class KnownForPage extends React.PureComponent {
     };
   }
 
+  componentWillMount() {
+    this.initializeState(this.props);
+  }
+
   componentWillReceiveProps(nextProps) {
+    this.initializeState(nextProps);
+  }
+
+  initializeState(props) {
     this.setState({
-      descriptives: nextProps.descriptives,
-      anything: nextProps.descriptivesAll,
+      descriptives: props.descriptives,
+      anything: props.descriptivesAll,
     });
   }
 
@@ -98,9 +106,11 @@ export class KnownForPage extends React.PureComponent {
       const { name, star, visible, active } = descriptive;
       if (name === descriptiveName) {
         const newStar = star === 1 ? 0 : 1;
-        this.props.descriptiveSelect(name, newStar, visible, active, this.props.questIndex);
+        const newVisible = star;
 
-        return { name: name, star: newStar, visible: visible, active: active };
+        this.props.descriptiveSelect(name, newStar, newVisible, active, this.props.questIndex);
+
+        return { name: name, star: newStar, visible: newVisible, active: active };
       }
       return descriptive;
     });
@@ -117,12 +127,16 @@ export class KnownForPage extends React.PureComponent {
 
     let searchedDescriptives = [];
     if (search === '') searchedDescriptives = descriptives;
-    else searchedDescriptives = descriptives.filter((descriptive) => descriptive.name.toLowerCase().indexOf(search) !== -1);
+    else searchedDescriptives = descriptives.filter((descriptive) => (descriptive.name.toLowerCase().indexOf(search) !== -1));
 
     let visibleCnt = 0;
     let excludedDescriptives = descriptives.filter((descriptive) => {
       if (descriptive.visible === 1) visibleCnt += 1;
       return descriptive.active === 0;
+    });
+
+    let staredDescriptives = descriptives.filter((descriptive) => {
+      return descriptive.star === 1;
     });
 
     const searchBtnClass = classNames({
@@ -132,7 +146,7 @@ export class KnownForPage extends React.PureComponent {
 
     const closeBtnClass = classNames({
       close: true,
-      invisible: expanded === 0 || (anything === 0 && visibleCnt === 0),
+      invisible: expanded === 0 || (anything === 0 && visibleCnt === 0 && staredDescriptives.length === 0),
     });
 
     const anythingBtnClass = classNames({
@@ -152,6 +166,11 @@ export class KnownForPage extends React.PureComponent {
     const excludedClass = classNames({
       excluded: true,
       show: anything === 1 && expanded === 0 && excludedDescriptives.length > 0 && excludedDescriptives.length !== descriptives.length,
+    });
+
+    const staredClass = classNames({
+      stared: true,
+      show: staredDescriptives.length > 0,
     });
 
     return (
@@ -208,6 +227,25 @@ export class KnownForPage extends React.PureComponent {
             <h1>ONLY IGNORING</h1>
             {
               excludedDescriptives.map((descriptive, index) => {
+                const { name, star, visible, active } = descriptive;
+                return (
+                  <StarButton
+                    active={active}
+                    star={star}
+                    onClick={() => { this.descriptiveClickHandler(name); }}
+                    onStarClick={() => { this.descriptiveStarClickHandler(name); }}
+                    key={index}
+                  >
+                    {name}
+                  </StarButton>
+                );
+              })
+            }
+          </div>
+          <div className={staredClass}>
+            <h1>NOTABLY</h1>
+            {
+              staredDescriptives.map((descriptive, index) => {
                 const { name, star, visible, active } = descriptive;
                 return (
                   <StarButton

@@ -26,7 +26,7 @@ import './style.scss';
 
 const Map = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN });
 
-export class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+export class HomePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   /**
    * when initial state username is not null, submit the form to load repos
    */
@@ -58,8 +58,6 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
       glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
     };
 
-    // this.mapStyle = 'mapbox://styles/mapbox/streets-v9';
-
     this.containerStyle = {
       width: '100%',
       height: '100%',
@@ -78,32 +76,12 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     this.map = '';
 
     this.count = 5;
+
+    this.initializeState(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    const questInfo = nextProps.questInfo.get('details');
-    const currentQuestIndex = questInfo.get('currentQuestIndex');
-    const currentQuest = questInfo.get('quests').get(questInfo.get('currentQuestIndex'));
-
-    if (this.map) {
-      this.clearMap();
-
-      nextProps.recommendations.get('details').map((recommendation, index) => {
-        const display = recommendation.get('display');
-        let filter = ['==', 'e', recommendation.get('e')];
-
-        if (display === 'shape') {
-          this.map.setFilter(`shape-border-offset-${index}`, filter);
-          this.map.setFilter(`shape-border-${index}`, filter);
-          this.map.setFilter(`shape-fill-${index}`, filter);
-          this.map.setFilter(`shape-caption-${index}`, filter);
-        } else if (display === 'icon') {
-          this.map.setFilter(`shape-border-offset-${index}`, ['==', 'e', '']);
-          this.map.setFilter(`shape-border-${index}`, ['==', 'e', '']);
-          this.map.setFilter(`shape-caption-${index}`, filter);
-        }
-      });
-    }
+    this.initializeState(nextProps);
   }
 
   onZoomEnd = (map) => {
@@ -231,6 +209,32 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     this.props.fetchRecommendations();
   }
 
+  initializeState(props) {
+    const questInfo = props.questInfo.get('details');
+    const currentQuestIndex = questInfo.get('currentQuestIndex');
+    const currentQuest = questInfo.get('quests').get(questInfo.get('currentQuestIndex'));
+
+    if (this.map) {
+      this.clearMap();
+
+      props.recommendations.get('details').map((recommendation, index) => {
+        const display = recommendation.get('display');
+        let filter = ['==', 'e', recommendation.get('e')];
+
+        if (display === 'shape') {
+          this.map.setFilter(`shape-border-offset-${index}`, filter);
+          this.map.setFilter(`shape-border-${index}`, filter);
+          this.map.setFilter(`shape-fill-${index}`, filter);
+          this.map.setFilter(`shape-caption-${index}`, filter);
+        } else if (display === 'icon') {
+          this.map.setFilter(`shape-border-offset-${index}`, ['==', 'e', '']);
+          this.map.setFilter(`shape-border-${index}`, ['==', 'e', '']);
+          this.map.setFilter(`shape-caption-${index}`, filter);
+        }
+      });
+    }
+  }
+
   clearMap = () => {
     this.props.recommendations.get('details').map((recommendation, index) => {
       let filter = ['==', 'e', ''];
@@ -294,7 +298,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 
     const questBlockClass = classNames({
       'quest-block': true,
-      hidden: !showQuest,
+      'quest-hide': !showQuest,
     });
 
     return (

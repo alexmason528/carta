@@ -1,14 +1,18 @@
 import React, { PropTypes, Children } from 'react';
 import styled, { css } from 'styled-components';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 import InPage from './InPage';
 import FindPage from './FindPage';
 import KnownForPage from './KnownForPage';
 
+import { updateVisibility } from '../actions';
+
 import './style.scss';
 
-export class Quest extends React.Component {
+export class Quest extends React.PureComponent {
   constructor() {
     super();
     this.state = {
@@ -16,14 +20,12 @@ export class Quest extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-
-  }
-
   tabClicked = (tab) => {
     this.setState({
       currentTab: tab,
     });
+
+    this.props.updateVisibility();
   }
 
   nextBtnClicked = () => {
@@ -100,6 +102,18 @@ Quest.propTypes = {
   questInfo: PropTypes.object.isRequired,
   questIndex: PropTypes.number,
   mapViewPortChange: PropTypes.func,
+  updateVisibility: PropTypes.func,
 };
 
-export default Quest;
+// export default Quest;
+
+export function mapDispatchToProps(dispatch) {
+  return {
+    updateVisibility: () => dispatch(updateVisibility()),
+  };
+}
+
+const mapStateToProps = null;
+
+// Wrap the component to inject dispatch and state into it
+export default connect(mapStateToProps, mapDispatchToProps)(Quest);

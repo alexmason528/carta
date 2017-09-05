@@ -16,9 +16,17 @@ export class InPage extends React.PureComponent {
     };
   }
 
+  componentWillMount() {
+    this.initializeState(this.props);
+  }
+
   componentWillReceiveProps(nextProps) {
+    this.initializeState(nextProps);
+  }
+
+  initializeState(props) {
     this.setState({
-      places: nextProps.places,
+      places: props.places,
     });
   }
 
