@@ -22,6 +22,20 @@ export class KnownForPage extends React.PureComponent {
     this.initializeState(this.props);
   }
 
+  componentDidMount() {
+    this.timerID = null;
+    const component = this;
+
+    $('.button-wrapper button').mousedown(function ButtonDownHandler(e) {
+      clearTimeout(this.timerID);
+      this.timerID = setTimeout(() => {
+        component.descriptiveClickHoldHandler(e.currentTarget.textContent);
+      }, 200);
+    }).mouseup(function ButtonUpHandler(e) {
+      clearTimeout(this.timerID);
+    });
+  }
+
   componentWillReceiveProps(nextProps) {
     this.initializeState(nextProps);
   }
@@ -122,6 +136,25 @@ export class KnownForPage extends React.PureComponent {
     this.props.fetchRecommendations();
   }
 
+  descriptiveClickHoldHandler = (descriptiveName) => {
+    let descriptives = [...this.state.descriptives];
+
+    let newDescriptives = descriptives.map((descriptive, index) => {
+      const { name, star, visible, active } = descriptive;
+      if (name === descriptiveName) {
+        this.props.descriptiveSelect(name, 1, 1, 1, this.props.questIndex);
+        return { name: name, star: 1, visible: 1, active: 1 };
+      }
+      return descriptive;
+    });
+
+    this.setState({
+      descriptives: newDescriptives,
+    });
+
+    this.props.fetchRecommendations();
+  }
+
   render() {
     const { descriptives, expanded, anything, search } = this.state;
 
@@ -198,7 +231,7 @@ export class KnownForPage extends React.PureComponent {
                     <StarButton
                       active={active}
                       star={star}
-                      onClick={() => { this.descriptiveClickHandler(name); }}
+                      onMouseDown={() => { this.descriptiveClickHandler(name); }}
                       onStarClick={() => { this.descriptiveStarClickHandler(name); }}
                       key={index}
                     >
@@ -210,7 +243,7 @@ export class KnownForPage extends React.PureComponent {
                     <StarButton
                       active={active}
                       star={star}
-                      onClick={() => { this.descriptiveClickHandler(name); }}
+                      onMouseDown={() => { this.descriptiveClickHandler(name); }}
                       onStarClick={() => { this.descriptiveStarClickHandler(name); }}
                       key={index}
                     >

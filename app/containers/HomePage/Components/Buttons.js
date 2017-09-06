@@ -27,7 +27,7 @@ function StarButton(props) {
 
   return (
     <div className={btnClass}>
-      <button onClick={props.onClick}>{Children.toArray(props.children)}</button>
+      <button onMouseDown={props.onMouseDown}>{Children.toArray(props.children)}</button>
       <img className="star" src="https://carta.guide/icon/quest/star-green.png" onClick={props.onStarClick} role="presentation" />
     </div>
   );
@@ -49,7 +49,7 @@ Button.propTypes = {
 };
 
 StarButton.propTypes = {
-  onClick: PropTypes.func,
+  onMouseDown: PropTypes.func,
   onStarClick: PropTypes.func,
   children: PropTypes.node.isRequired,
   active: PropTypes.number,
