@@ -27,6 +27,7 @@ export class KnownForPage extends React.PureComponent {
     const component = this;
 
     $('.button-wrapper button').mousedown(function ButtonDownHandler(e) {
+      if ($(this).parent().hasClass('active')) return;
       clearTimeout(this.timerID);
       this.timerID = setTimeout(() => {
         component.descriptiveClickHoldHandler(e.currentTarget.textContent);
@@ -120,11 +121,10 @@ export class KnownForPage extends React.PureComponent {
       const { name, star, visible, active } = descriptive;
       if (name === descriptiveName) {
         const newStar = star === 1 ? 0 : 1;
-        const newVisible = star;
 
-        this.props.descriptiveSelect(name, newStar, newVisible, active, this.props.questIndex);
+        this.props.descriptiveSelect(name, newStar, visible, active, this.props.questIndex);
 
-        return { name: name, star: newStar, visible: newVisible, active: active };
+        return { name: name, star: newStar, visible: visible, active: active };
       }
       return descriptive;
     });
@@ -203,7 +203,7 @@ export class KnownForPage extends React.PureComponent {
 
     const staredClass = classNames({
       stared: true,
-      show: staredDescriptives.length > 0,
+      show: anything === 1 && staredDescriptives.length > 0,
     });
 
     return (
@@ -256,16 +256,16 @@ export class KnownForPage extends React.PureComponent {
               })
           }
           </div>
-          <div className={excludedClass}>
-            <h1>ONLY IGNORING</h1>
+          <div className={staredClass}>
+            <div className="notable">NOTABLY</div>
             {
-              excludedDescriptives.map((descriptive, index) => {
+              staredDescriptives.map((descriptive, index) => {
                 const { name, star, visible, active } = descriptive;
                 return (
                   <StarButton
                     active={active}
                     star={star}
-                    onClick={() => { this.descriptiveClickHandler(name); }}
+                    onMouseDown={() => { this.descriptiveClickHandler(name); }}
                     onStarClick={() => { this.descriptiveStarClickHandler(name); }}
                     key={index}
                   >
@@ -275,16 +275,16 @@ export class KnownForPage extends React.PureComponent {
               })
             }
           </div>
-          <div className={staredClass}>
-            <h1>NOTABLY</h1>
+          <div className={excludedClass}>
+            <div className="except">ONLY IGNORING</div>
             {
-              staredDescriptives.map((descriptive, index) => {
+              excludedDescriptives.map((descriptive, index) => {
                 const { name, star, visible, active } = descriptive;
                 return (
                   <StarButton
                     active={active}
                     star={star}
-                    onClick={() => { this.descriptiveClickHandler(name); }}
+                    onMouseDown={() => { this.descriptiveClickHandler(name); }}
                     onStarClick={() => { this.descriptiveStarClickHandler(name); }}
                     key={index}
                   >

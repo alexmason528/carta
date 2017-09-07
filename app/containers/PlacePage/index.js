@@ -253,6 +253,8 @@ export class PlacePage extends React.PureComponent { // eslint-disable-line reac
         $(this).find('h1').css({ 'font-size': `${tileWidth / 8.5}px` });
       }
     });
+
+    $('.main-poster h1').css({ 'font-size': `${tileWidth / 5.5}px` });
   }
 
   render() {
