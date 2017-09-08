@@ -24,6 +24,12 @@ export class InPage extends React.PureComponent {
     this.initializeState(nextProps);
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    setTimeout(() => {
+      this.searchInput.focus();
+    }, 500);
+  }
+
   initializeState(props) {
     this.setState({
       places: props.places,
@@ -51,7 +57,7 @@ export class InPage extends React.PureComponent {
     return (
       <div className={this.props.className}>
         <h1>In</h1>
-        <input className="search-input" onChange={(evt) => { this.inputChangeHandler(evt.target.value); }} />
+        <input ref={(input) => { this.searchInput = input; }} className="search-input place-search" onChange={(evt) => { this.inputChangeHandler(evt.target.value); }} />
         <div className="buttons-row">
           { filteredPlaces.map((place, index) => <button className="place-button" key={index} onClick={() => { this.placeClicked(place.name); }}>{place.name}</button>) }
         </div>

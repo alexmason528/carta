@@ -220,6 +220,7 @@ const getRecommendations = (req, res) => {
           e: element.e,
           display: element.display,
           score: element.score,
+          name: element.name,
         };
 
         recommendations.push(recommendation);

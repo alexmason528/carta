@@ -20,6 +20,22 @@ export class Quest extends React.PureComponent {
     };
   }
 
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeypress);
+  }
+
+  componentWillUnmount() {
+    window.addEventListener('keydown', this.handleKeypress);
+  }
+
+  handleKeypress = (e) => {
+    if (e.altKey || e.ctrlKey || e.shiftKey || e.metaKey) return;
+    if (e.keyCode === 9) {
+      const tab = this.state.currentTab;
+      this.tabClicked((tab + 1) % 3);
+    }
+  }
+
   tabClicked = (tab) => {
     this.setState({
       currentTab: tab,
@@ -29,10 +45,8 @@ export class Quest extends React.PureComponent {
   }
 
   nextBtnClicked = () => {
-    let tab = this.state.currentTab;
-    this.setState({
-      currentTab: (tab + 1) % 3,
-    });
+    const tab = this.state.currentTab;
+    this.tabClicked((tab + 1) % 3);
   }
 
   render() {

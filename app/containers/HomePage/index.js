@@ -274,6 +274,8 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     this.setState({
       showQuest: !this.state.showQuest,
     });
+
+    $('.place-search').focus();
   }
 
   minimizeClicked = () => {
@@ -337,9 +339,9 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
         </MapBlock>
         <ScoreBoardBlock>
           {
-            // this.props.recommendations.get('details').map((recommendation, index) =>
-            //   <div key={index} style={{ color: this.colors[index % 5] }}>{recommendation.get('name')} : {recommendation.get('score')}</div>
-            // )
+            this.props.recommendations.get('details').map((recommendation, index) =>
+              <div key={index} style={{ color: this.colors[index % 5] }}>{recommendation.get('name')} : {recommendation.get('score')}</div>
+            )
           }
         </ScoreBoardBlock>
       </div>

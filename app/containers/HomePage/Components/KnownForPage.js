@@ -41,6 +41,21 @@ export class KnownForPage extends React.PureComponent {
     this.initializeState(nextProps);
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    let closable = 0;
+    nextState.descriptives.map((descriptive) => {
+      if (descriptive.active === 1) closable = 1;
+    });
+
+    if (nextProps.className !== this.props.className) {
+      nextState.expanded = 1 - closable;
+    }
+
+    setTimeout(() => {
+      this.searchInput.focus();
+    }, 500);
+  }
+
   initializeState(props) {
     this.setState({
       descriptives: props.descriptives,
@@ -211,7 +226,7 @@ export class KnownForPage extends React.PureComponent {
         <h1>Known For</h1>
         <img className={searchBtnClass} src="https://carta.guide/icon/search.png" onClick={() => { this.expandHandler(1); }} role="presentation" />
         <img className={closeBtnClass} src="https://carta.guide/icon/back.png" onClick={() => { this.expandHandler(0); }} role="presentation" />
-        <input className={searchInputClass} onChange={(evt) => { this.inputChangeHandler(evt.target.value); }} />
+        <input ref={(input) => { this.searchInput = input; }} className={searchInputClass} onChange={(evt) => { this.inputChangeHandler(evt.target.value); }} />
         <div className="suggestions">
           <Button
             className={anythingBtnClass}

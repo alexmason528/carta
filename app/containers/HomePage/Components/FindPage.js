@@ -27,6 +27,21 @@ export class FindPage extends React.PureComponent {
     this.initializeState(nextProps);
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    let closable = 0;
+    nextState.types.map((type) => {
+      if (type.active === 1) closable = 1;
+    });
+
+    if (nextProps.className !== this.props.className) {
+      nextState.expanded = 1 - closable;
+    }
+
+    setTimeout(() => {
+      this.searchInput.focus();
+    }, 500);
+  }
+
   initializeState(props) {
     this.setState({
       types: props.types,
@@ -145,7 +160,7 @@ export class FindPage extends React.PureComponent {
         <h1 >Find</h1>
         <img className={searchBtnClass} src="https://carta.guide/icon/search.png" onClick={() => { this.expandHandler(1); }} role="presentation" />
         <img className={closeBtnClass} src="https://carta.guide/icon/back.png" onClick={() => { this.expandHandler(0); }} role="presentation" />
-        <input className={searchInputClass} onChange={(evt) => { this.inputChangeHandler(evt.target.value); }} />
+        <input ref={(input) => { this.searchInput = input; }} className={searchInputClass} onChange={(evt) => { this.inputChangeHandler(evt.target.value); }} />
         <div className="suggestion">
           <Button
             className={anythingBtnClass}

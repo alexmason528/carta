@@ -149,7 +149,7 @@ export class PlacePage extends React.PureComponent { // eslint-disable-line reac
 
       $('.tile').css({ width: `${100 / cols}%`, height: `${tileWidth}px` });
       $('.description').css({ width: '100%', height: `${tileWidth * 2}px` });
-      $('.main-poster').css({ width: `${tileWidth}px`, height: `${tileWidth}px` });
+      $('.main-poster').css({ width: `${tileWidth}px`, height: `${tileWidth}px`, 'border-right': 'none' });
       this.AddDividers(cols, rows);
     } else if ($('.container').width() < 1000) {
       cols = 2;
@@ -158,7 +158,7 @@ export class PlacePage extends React.PureComponent { // eslint-disable-line reac
 
       $('.tile').css({ width: `${100 / cols}%`, height: `${tileWidth}px` });
       $('.description').css({ width: '100%', height: `${tileWidth}px` });
-      $('.main-poster').css({ width: `${tileWidth * cols}px`, height: `${tileWidth * cols}px` });
+      $('.main-poster').css({ width: `${tileWidth * cols}px`, height: `${tileWidth * cols}px`, 'border-right': 'none' });
       this.AddDividers(cols, rows);
 
       $('.vd-1').css({ left: `${tileWidth}px` });
@@ -168,8 +168,8 @@ export class PlacePage extends React.PureComponent { // eslint-disable-line reac
       rows = Math.ceil(tileCount / cols);
 
       $('.tile').css({ width: `${100 / cols}%`, height: `${tileWidth}px` });
-      $('.description').css({ width: '33.33%', height: `${tileWidth}px` });
-      $('.main-poster').css({ width: '66.5%', height: `${tileWidth * 2}px` });
+      $('.description').css({ width: '33.5%', height: `${tileWidth}px` });
+      $('.main-poster').css({ width: '66.5%', height: `${tileWidth * 2}px`, 'border-right': '2px solid #fff' });
       $('.description .tile').css({ width: '100%' });
 
       this.AddDividers(cols, rows);
