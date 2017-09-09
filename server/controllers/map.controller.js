@@ -215,7 +215,7 @@ const getRecommendations = (req, res) => {
 
     for (i = 0; i < sortedElements.length; i += 1) {
       element = sortedElements[i];
-      if (element.score !== 0) {
+      if (element.score > 0) {
         let recommendation = {
           e: element.e,
           display: element.display,

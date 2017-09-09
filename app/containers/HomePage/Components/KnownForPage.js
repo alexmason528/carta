@@ -26,13 +26,15 @@ export class KnownForPage extends React.PureComponent {
     this.timerID = null;
     const component = this;
 
-    $('.button-wrapper button').mousedown(function ButtonDownHandler(e) {
+    $('body').delegate('.button-wrapper button', 'mousedown', function ButtonDownHandler(e) {
       if ($(this).parent().hasClass('active')) return;
       clearTimeout(this.timerID);
       this.timerID = setTimeout(() => {
         component.descriptiveClickHoldHandler(e.currentTarget.textContent);
       }, 200);
-    }).mouseup(function ButtonUpHandler(e) {
+    });
+
+    $('body').delegate('.button-wrapper button', 'mouseup', function ButtonDownHandler(e) {
       clearTimeout(this.timerID);
     });
   }

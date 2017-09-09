@@ -49,6 +49,7 @@
   font-weight:900; 
   text-transform:uppercase; 
   position:absolute;
+  display:none;
 }
 
 .quest-block {
@@ -246,34 +247,24 @@
 				  text-transform:uppercase; 
 				  font-weight:bold; 
 				  font-size:12px;
+          opacity: 0.75;
 
 				  img {
 				  	position: relative;
 				  	height: 13px;
 				  	display: none;
-            margin-top: -1px;
+            top: -1px;
 				  	margin-left: 3px;
 				  	filter: grayscale(100%);
 				  }
 
-          .star {
-            opacity: 0.5;
-            &:hover {
-              opacity: 1;
-            }
-          }
-
 				  button {
 				  	padding: 3px 5px;
 				  	display: inline-block;
-            opacity: 0.75;
-
 				  }
 
           &:hover {
-            button {
-              opacity: 1;
-            }
+            opacity: 1;
           }
 
 				  &.active {
