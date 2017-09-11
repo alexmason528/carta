@@ -6,7 +6,7 @@ import { Button, StarButton } from './Buttons';
 import { fetchRecommendations, descriptiveSelect } from '../actions';
 import './style.scss';
 
-export class KnownForPage extends React.PureComponent {
+export class LookingForPage extends React.PureComponent {
   constructor() {
     super();
 
@@ -205,6 +205,7 @@ export class KnownForPage extends React.PureComponent {
 
     const searchInputClass = classNames({
       'search-input': true,
+      'descriptive-search': true,
       invisible: expanded === 0,
     });
 
@@ -225,7 +226,7 @@ export class KnownForPage extends React.PureComponent {
 
     return (
       <div className={this.props.className}>
-        <h1>Known For</h1>
+        <h1>Looking For</h1>
         <img className={searchBtnClass} src="https://carta.guide/icon/search.png" onClick={() => { this.expandHandler(1); }} role="presentation" />
         <img className={closeBtnClass} src="https://carta.guide/icon/back.png" onClick={() => { this.expandHandler(0); }} role="presentation" />
         <input ref={(input) => { this.searchInput = input; }} className={searchInputClass} onChange={(evt) => { this.inputChangeHandler(evt.target.value); }} />
@@ -317,7 +318,7 @@ export class KnownForPage extends React.PureComponent {
   }
 }
 
-KnownForPage.propTypes = {
+LookingForPage.propTypes = {
   className: PropTypes.string,
   descriptives: PropTypes.array,
   questIndex: PropTypes.number,
@@ -336,4 +337,4 @@ const mapStateToProps = createStructuredSelector({
 });
 
 // Wrap the component to inject dispatch and state into it
-export default connect(mapStateToProps, mapDispatchToProps)(KnownForPage);
+export default connect(mapStateToProps, mapDispatchToProps)(LookingForPage);

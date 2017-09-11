@@ -216,20 +216,20 @@
 			.page {
         position: relative;
 
-        &.find-page {
+        &.in-page {
           .button-wrapper.active button {
             background: #007ec6;
           }
         }
 
-        &.known-for-page {
+        &.looking-for-page {
           .button-wrapper.active button{
             background: #00bb76;
           }
         }
 
         .buttons-row, .suggestions {
-          height: 442px;
+          height: calc(100vh - 184px);
           overflow: hidden;
         }
 

@@ -4,9 +4,6 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { fetchRecommendations, questAdd, questSelect, questRemove } from '../actions';
-import InPage from './InPage';
-import FindPage from './FindPage';
-import KnownForPage from './KnownForPage';
 import Quest from './Quest';
 import './style.scss';
 

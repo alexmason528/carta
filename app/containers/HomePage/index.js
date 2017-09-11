@@ -276,6 +276,8 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     });
 
     $('.place-search').focus();
+    $('.type-search').focus();
+    $('.descriptive-search').focus();
   }
 
   minimizeClicked = () => {

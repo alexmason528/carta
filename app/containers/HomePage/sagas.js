@@ -124,18 +124,22 @@ export function* getQuestInfo() {
   const places = [
     { name: 'Netherlands', x: 5.291266, y: 52.132633, zoom: 6.3 },
     { name: 'Amsterdam', x: 4.895168, y: 52.370216, zoom: 10.6 },
-    { name: 'Antwerpen', x: 4.402464, y: 51.219448, zoom: 8.1 },
-    { name: 'Brugge', x: 3.224700, y: 51.209348, zoom: 9.4 },
     { name: 'Rotterdam', x: 4.477733, y: 51.924420, zoom: 10.3 },
     { name: 'Den Haag', x: 4.300700, y: 52.070498, zoom: 10.3 },
     { name: 'Haarlem', x: 4.646219, y: 52.387388, zoom: 12.7 },
     { name: 'Delft', x: 4.357068, y: 52.011577, zoom: 8.3 },
-    { name: 'Groningen', x: 6.566502, y: 53.219383, zoom: 8.2 },
     { name: 'Leiden', x: 4.497010, y: 52.160114, zoom: 10.2 },
-    { name: 'Texel', x: 4.797715, y: 53.054763, zoom: 10.8 },
     { name: 'Maastricht', x: 5.690973, y: 50.851368, zoom: 12 },
     { name: 'Brabant', x: 5.232169, y: 51.482654, zoom: 12 },
-    { name: 'Gelderland', x: 5.871824, y: 52.045155, zoom: 7.7 },
+    { name: 'Utrecht (city)', x: 5.07898891, y: 52.09130042, zoom: 15 },
+    { name: 'Groningen (city)', x: 6.572026205, y: 53.22174606, zoom: 15 },
+    { name: 'Friesland', x: 5.84860417, y: 53.11035652, zoom: 9 },
+    { name: 'Drenthe', x: 6.625179798, y: 52.86318343, zoom: 9 },
+    { name: 'Noord-Holland', x: 4.872905565, y: 52.58246219, zoom: 9 },
+    { name: 'Flevoland', x: 5.601028581, y: 52.52705193, zoom: 9 },
+    { name: 'Overijssel', x: 6.451303939, y: 52.44486644, zoom: 9 },
+    { name: 'Zeeland', x: 3.835448283, y: 52.52705193, zoom: 9 },
+    { name: 'Limburg', x: 5.938272858, y: 52.52705193, zoom: 9 },
   ];
 
   try {
