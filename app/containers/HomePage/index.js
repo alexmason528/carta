@@ -77,11 +77,11 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 
     this.count = 5;
 
-    this.initializeState(this.props);
+    this.redrawMap(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.initializeState(nextProps);
+    this.redrawMap(nextProps);
   }
 
   onZoomEnd = (map) => {
@@ -104,7 +104,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
       data: this.pointsGeoJSONSource,
     });
 
-    for (let i = 0; i < this.count; i += 1) {
+    for (let i = this.count - 1; i >= 0; i -= 1) {
       map.addLayer({
         id: `shape-fill-${i}`,
         type: 'fill',
@@ -152,6 +152,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
           'text-size': 13,
           'text-transform': 'uppercase',
+          'text-allow-overlap': true,
         },
         paint: {
           'text-color': this.colors[i],
@@ -209,7 +210,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     this.props.fetchRecommendations();
   }
 
-  initializeState(props) {
+  redrawMap(props) {
     const questInfo = props.questInfo.get('details');
     const currentQuestIndex = questInfo.get('currentQuestIndex');
     const currentQuest = questInfo.get('quests').get(questInfo.get('currentQuestIndex'));
