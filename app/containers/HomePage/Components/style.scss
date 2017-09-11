@@ -216,13 +216,13 @@
 			.page {
         position: relative;
 
-        &.in-page {
+        &.types-page {
           .button-wrapper.active button {
             background: #007ec6;
           }
         }
 
-        &.looking-for-page {
+        &.descriptives-page {
           .button-wrapper.active button{
             background: #00bb76;
           }

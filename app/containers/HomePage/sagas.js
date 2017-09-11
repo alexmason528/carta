@@ -147,8 +147,8 @@ export function* getQuestInfo() {
 
     const payload = {
       places: places,
-      typesAll: 1,
-      types: questInfo.types.map((type) => { return { name: type, visible: 0, active: 1 }; }),
+      typesAll: 0,
+      types: questInfo.types.map((type) => { return { name: type, visible: 0, active: 0 }; }),
       descriptivesAll: 0,
       descriptives: questInfo.descriptives.map((descriptive) => { return { name: descriptive, star: 0, visible: 0, active: 0 }; }),
     };

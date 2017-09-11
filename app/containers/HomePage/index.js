@@ -276,6 +276,8 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
       showQuest: !this.state.showQuest,
     });
 
+    this.redrawMap(this.props);
+
     $('.place-search').focus();
     $('.type-search').focus();
     $('.descriptive-search').focus();
@@ -291,6 +293,10 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     this.setState({
       showQuest: false,
     });
+
+    if (this.map) {
+      this.clearMap();
+    }
   }
 
   render() {

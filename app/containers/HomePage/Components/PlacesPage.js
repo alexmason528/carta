@@ -7,7 +7,7 @@ import { fetchRecommendations, placeSelect } from '../actions';
 
 import './style.scss';
 
-export class InRegionPage extends React.PureComponent {
+export class PlacesPage extends React.PureComponent {
   constructor() {
     super();
     this.state = {
@@ -56,7 +56,7 @@ export class InRegionPage extends React.PureComponent {
 
     return (
       <div className={this.props.className}>
-        <h1>In Region</h1>
+        <h1>In</h1>
         <input ref={(input) => { this.searchInput = input; }} className="search-input place-search" onChange={(evt) => { this.inputChangeHandler(evt.target.value); }} />
         <div className="buttons-row">
           { filteredPlaces.map((place, index) => <button className="place-button" key={index} onClick={() => { this.placeClicked(place.name); }}>{place.name}</button>) }
@@ -66,7 +66,7 @@ export class InRegionPage extends React.PureComponent {
   }
 }
 
-InRegionPage.propTypes = {
+PlacesPage.propTypes = {
   className: PropTypes.string,
   places: PropTypes.array,
   questIndex: PropTypes.number,
@@ -86,4 +86,4 @@ const mapStateToProps = createStructuredSelector({
 });
 
 // Wrap the component to inject dispatch and state into it
-export default connect(mapStateToProps, mapDispatchToProps)(InRegionPage);
+export default connect(mapStateToProps, mapDispatchToProps)(PlacesPage);

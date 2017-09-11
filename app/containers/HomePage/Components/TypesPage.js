@@ -7,14 +7,14 @@ import { Button, StarButton } from './Buttons';
 import { fetchRecommendations, typeSelect } from '../actions';
 import './style.scss';
 
-export class InPage extends React.PureComponent {
+export class TypesPage extends React.PureComponent {
   constructor() {
     super();
 
     this.state = {
       types: [],
-      expanded: 0,
-      anything: 1,
+      expanded: 1,
+      anything: 0,
       search: '',
     };
   }
@@ -158,7 +158,7 @@ export class InPage extends React.PureComponent {
 
     return (
       <div className={this.props.className}>
-        <h1>In</h1>
+        <h1>Show Me</h1>
         <img className={searchBtnClass} src="https://carta.guide/icon/search.png" onClick={() => { this.expandHandler(1); }} role="presentation" />
         <img className={closeBtnClass} src="https://carta.guide/icon/back.png" onClick={() => { this.expandHandler(0); }} role="presentation" />
         <input ref={(input) => { this.searchInput = input; }} className={searchInputClass} onChange={(evt) => { this.inputChangeHandler(evt.target.value); }} />
@@ -224,7 +224,7 @@ export class InPage extends React.PureComponent {
   }
 }
 
-InPage.propTypes = {
+TypesPage.propTypes = {
   className: PropTypes.string,
   types: PropTypes.array,
   questIndex: PropTypes.number,
@@ -244,4 +244,4 @@ const mapStateToProps = createStructuredSelector({
 });
 
 // Wrap the component to inject dispatch and state into it
-export default connect(mapStateToProps, mapDispatchToProps)(InPage);
+export default connect(mapStateToProps, mapDispatchToProps)(TypesPage);
