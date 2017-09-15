@@ -202,7 +202,7 @@ const getRecommendations = (req, res) => {
         });
       }
 
-      element.score = tScore * dScore;
+      element.score = tScore * (1 + dScore);
 
       return element;
     });

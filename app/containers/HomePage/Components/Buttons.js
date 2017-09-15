@@ -35,8 +35,12 @@ function StarButton(props) {
 
 function QuestButton(props) {
   return (
-    <div className="quest-button" onClick={props.onClick}>
-      <img src="https://carta.guide/icon/search.png" role="presentation" />
+    <div className={props.className}>
+      <div onClick={props.onClick}>
+        <img src="https://carta.guide/icon/search.png" className="inactive" role="presentation" />
+        <img src="https://carta.guide/icon/search-blue.png" className="active" role="presentation" />
+      </div>
+      <span onClick={props.onCloseClick}><img src="http://carta.guide/icon/close.png" role="presentation" /></span>
     </div>
   );
 }
@@ -58,7 +62,9 @@ StarButton.propTypes = {
 };
 
 QuestButton.propTypes = {
+  className: PropTypes.string,
   onClick: PropTypes.func,
+  onCloseClick: PropTypes.func,
 };
 
 export {

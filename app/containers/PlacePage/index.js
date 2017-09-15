@@ -150,6 +150,8 @@ export class PlacePage extends React.PureComponent { // eslint-disable-line reac
       $('.tile').css({ width: `${100 / cols}%`, height: `${tileWidth}px` });
       $('.description').css({ width: '100%', height: `${tileWidth * 2}px` });
       $('.main-poster').css({ width: `${tileWidth}px`, height: `${tileWidth}px`, 'border-right': 'none' });
+      $('.main-poster h1').css({ 'font-size': `${tileWidth / 10}px` });
+
       this.AddDividers(cols, rows);
     } else if ($('.container').width() < 1000) {
       cols = 2;
@@ -159,6 +161,8 @@ export class PlacePage extends React.PureComponent { // eslint-disable-line reac
       $('.tile').css({ width: `${100 / cols}%`, height: `${tileWidth}px` });
       $('.description').css({ width: '100%', height: `${tileWidth}px` });
       $('.main-poster').css({ width: `${tileWidth * cols}px`, height: `${tileWidth * cols}px`, 'border-right': 'none' });
+      $('.main-poster h1').css({ 'font-size': `${tileWidth / 5.5}px` });
+
       this.AddDividers(cols, rows);
 
       $('.vd-1').css({ left: `${tileWidth}px` });
@@ -171,6 +175,7 @@ export class PlacePage extends React.PureComponent { // eslint-disable-line reac
       $('.description').css({ width: '33.5%', height: `${tileWidth}px` });
       $('.main-poster').css({ width: '66.5%', height: `${tileWidth * 2}px`, 'border-right': '2px solid #fff' });
       $('.description .tile').css({ width: '100%' });
+      $('.main-poster h1').css({ 'font-size': `${tileWidth / 5.5}px` });
 
       this.AddDividers(cols, rows);
 
@@ -245,16 +250,16 @@ export class PlacePage extends React.PureComponent { // eslint-disable-line reac
     });
 
     $('.tile').each(function tileHeaderPosAdjust() {
-      if ($(this).hasClass('text-tile')) {
-        $(this).find('h2').css({ 'font-size': `${tileWidth / 19}px` });
-      } else if ($(this).hasClass('image-tile')) {
-        $(this).find('h2').css({ 'font-size': `${tileWidth / 11}px` });
-      } else {
-        $(this).find('h1').css({ 'font-size': `${tileWidth / 8.5}px` });
+      if (!$(this).hasClass('main-poster')) {
+        if ($(this).hasClass('text-tile')) {
+          $(this).find('h2').css({ 'font-size': `${tileWidth / 19}px` });
+        } else if ($(this).hasClass('image-tile')) {
+          $(this).find('h2').css({ 'font-size': `${tileWidth / 11}px` });
+        } else {
+          $(this).find('h1').css({ 'font-size': `${tileWidth / 8.5}px` });
+        }
       }
     });
-
-    $('.main-poster h1').css({ 'font-size': `${tileWidth / 5.5}px` });
   }
 
   render() {

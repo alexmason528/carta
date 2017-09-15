@@ -22,22 +22,23 @@ export class DescriptivesPage extends React.PureComponent {
     this.initializeState(this.props);
   }
 
-  componentDidMount() {
-    this.timerID = null;
-    const component = this;
+  // componentDidMount() {
+  //   this.timerID = null;
+  //   const component = this;
 
-    $('body').delegate('.button-wrapper button', 'mousedown', function ButtonDownHandler(e) {
-      if ($(this).parent().hasClass('active')) return;
-      clearTimeout(this.timerID);
-      this.timerID = setTimeout(() => {
-        component.descriptiveClickHoldHandler(e.currentTarget.textContent);
-      }, 200);
-    });
-
-    $('body').delegate('.button-wrapper button', 'mouseup', function ButtonDownHandler(e) {
-      clearTimeout(this.timerID);
-    });
-  }
+  //   $('body').delegate('.button-wrapper button', 'mousedown mouseup', function(e) {
+  //     if (e.type == 'mousedown') {
+  //       clearTimeout(this.timerID);
+  //       if(!$(this).parent().hasClass('active')) {
+  //         this.timerID = setTimeout(() => {
+  //           component.descriptiveClickHoldHandler(e.currentTarget.textContent);
+  //         }, 200);
+  //       }
+  //     } else if (e.type == 'mouseup') {
+  //       clearTimeout(this.timerID);
+  //     }
+  //   });
+  // }
 
   componentWillReceiveProps(nextProps) {
     this.initializeState(nextProps);
@@ -112,7 +113,7 @@ export class DescriptivesPage extends React.PureComponent {
     let newDescriptives = descriptives.map((descriptive, index) => {
       const { name, star, visible, active } = descriptive;
       if (name === descriptiveName) {
-        const newActive = active === 1 ? 0 : 1;
+        const newActive = 1 - active;
         let newVisible = visible;
 
         if (anything === 0 && expanded === 1) newVisible = newActive;
@@ -137,7 +138,7 @@ export class DescriptivesPage extends React.PureComponent {
     let newDescriptives = descriptives.map((descriptive, index) => {
       const { name, star, visible, active } = descriptive;
       if (name === descriptiveName) {
-        const newStar = star === 1 ? 0 : 1;
+        const newStar = 1 - star;
 
         this.props.descriptiveSelect(name, newStar, visible, active, this.props.questIndex);
 
@@ -200,7 +201,7 @@ export class DescriptivesPage extends React.PureComponent {
     });
 
     const anythingBtnClass = classNames({
-      hidden: expanded === 0 && anything === 0,
+      hidden: (expanded === 0 && anything === 0) || ('anything'.indexOf(search.toLowerCase()) === -1),
     });
 
     const searchInputClass = classNames({
@@ -229,7 +230,7 @@ export class DescriptivesPage extends React.PureComponent {
         <h1>Known For</h1>
         <img className={searchBtnClass} src="https://carta.guide/icon/search.png" onClick={() => { this.expandHandler(1); }} role="presentation" />
         <img className={closeBtnClass} src="https://carta.guide/icon/back.png" onClick={() => { this.expandHandler(0); }} role="presentation" />
-        <input ref={(input) => { this.searchInput = input; }} className={searchInputClass} onChange={(evt) => { this.inputChangeHandler(evt.target.value); }} />
+        <input ref={(input) => { this.searchInput = input; }} className={searchInputClass} value={search} onChange={(evt) => { this.inputChangeHandler(evt.target.value); }} />
         <div className="suggestions">
           <Button
             className={anythingBtnClass}

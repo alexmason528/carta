@@ -162,7 +162,6 @@ body {
 	h1, h2 {
 		color: #fff; 
 		font-weight: 900; 
-		text-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
 		position: absolute; 
 		margin: 0; 
 		text-transform: uppercase; 
@@ -172,6 +171,7 @@ body {
 		padding: 30px 50px; 
 		font-size: 5em; 
 		line-height: 125%;
+		text-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
 	}
 
 	h2 {

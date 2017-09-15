@@ -13,16 +13,20 @@ const Place = require('../models/place');
  */
 
 const importElements = (req, res) => {
-  const csvPath = path.join(__dirname, '../csv/elements.csv');
-  const stream = fs.createReadStream(csvPath);
-  csv
-  .fromStream(stream, { headers: true })
-  .on('data', (data) => {
-    let element = new Element(data);
-    element.save();
-  })
-  .on('end', () => {
-    res.send('Importing elements finished');
+  Element.remove({}, (err) => {
+    if (err) throw err;
+
+    const csvPath = path.join(__dirname, '../csv/elements.csv');
+    const stream = fs.createReadStream(csvPath);
+    csv
+    .fromStream(stream, { headers: true })
+    .on('data', (data) => {
+      let element = new Element(data);
+      element.save();
+    })
+    .on('end', () => {
+      res.send('Importing elements finished');
+    });
   });
 };
 
@@ -33,16 +37,20 @@ const importElements = (req, res) => {
  */
 
 const importDescriptives = (req, res) => {
-  const csvPath = path.join(__dirname, '../csv/descriptives.csv');
-  const stream = fs.createReadStream(csvPath);
-  csv
-  .fromStream(stream, { headers: true })
-  .on('data', (data) => {
-    let descriptive = new Descriptive(data);
-    descriptive.save();
-  })
-  .on('end', () => {
-    res.send('Importing descriptives finished');
+  Descriptive.remove({}, (err) => {
+    if (err) throw err;
+
+    const csvPath = path.join(__dirname, '../csv/descriptives.csv');
+    const stream = fs.createReadStream(csvPath);
+    csv
+    .fromStream(stream, { headers: true })
+    .on('data', (data) => {
+      let descriptive = new Descriptive(data);
+      descriptive.save();
+    })
+    .on('end', () => {
+      res.send('Importing descriptives finished');
+    });
   });
 };
 
@@ -53,16 +61,20 @@ const importDescriptives = (req, res) => {
  */
 
 const importTypes = (req, res) => {
-  const csvPath = path.join(__dirname, '../csv/types.csv');
-  const stream = fs.createReadStream(csvPath);
-  csv
-  .fromStream(stream, { headers: true })
-  .on('data', (data) => {
-    let type = new Type(data);
-    type.save();
-  })
-  .on('end', () => {
-    res.send('Importing types finished');
+  Type.remove({}, (err) => {
+    if (err) throw err;
+
+    const csvPath = path.join(__dirname, '../csv/types.csv');
+    const stream = fs.createReadStream(csvPath);
+    csv
+    .fromStream(stream, { headers: true })
+    .on('data', (data) => {
+      let type = new Type(data);
+      type.save();
+    })
+    .on('end', () => {
+      res.send('Importing types finished');
+    });
   });
 };
 

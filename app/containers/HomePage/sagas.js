@@ -30,7 +30,9 @@ export function* getRecommendations() {
   let inactiveTypes = [];
 
   currentQuest.get('types').map((type) => {
-    if (type.get('active') === 1) {
+    if (type.get('name') === 'Regions') {
+      activeTypes.push('Regions');
+    } else if (type.get('active') === 1) {
       activeTypes.push(type.get('name'));
     } else {
       inactiveTypes.push(type.get('name'));

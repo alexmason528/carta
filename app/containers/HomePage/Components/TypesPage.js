@@ -23,6 +23,12 @@ export class TypesPage extends React.PureComponent {
     this.initializeState(this.props);
   }
 
+  componentDidMount() {
+    setTimeout(() => {
+      this.searchInput.focus();
+    }, 500);
+  }
+
   componentWillReceiveProps(nextProps) {
     this.initializeState(nextProps);
   }
@@ -43,8 +49,9 @@ export class TypesPage extends React.PureComponent {
   }
 
   initializeState(props) {
+    const newTypes = props.types.filter((type) => type.name !== 'Regions');
     this.setState({
-      types: props.types,
+      types: newTypes,
       anything: props.typesAll,
     });
   }
@@ -83,9 +90,9 @@ export class TypesPage extends React.PureComponent {
     this.props.fetchRecommendations();
   }
 
-  inputChangeHandler = (text) => {
+  inputChangeHandler = (evt) => {
     this.setState({
-      search: text,
+      search: evt.target.value,
     });
   }
 
@@ -95,7 +102,7 @@ export class TypesPage extends React.PureComponent {
     let newTypes = types.map((type, index) => {
       const { name, visible, active } = type;
       if (name === typeName) {
-        const newActive = active === 1 ? 0 : 1;
+        const newActive = 1 - active;
         let newVisible = visible;
 
         if (anything === 0 && expanded === 1) newVisible = newActive;
@@ -118,7 +125,7 @@ export class TypesPage extends React.PureComponent {
 
     let searchedTypes = [];
     if (search === '') searchedTypes = types;
-    else searchedTypes = types.filter((type) => type.name.toLowerCase().indexOf(search) !== -1);
+    else searchedTypes = types.filter((type) => type.name.toLowerCase().indexOf(search.toLowerCase()) !== -1);
 
     let visibleCnt = 0;
     let excludedTypes = types.filter((type) => {
@@ -137,7 +144,7 @@ export class TypesPage extends React.PureComponent {
     });
 
     const anythingBtnClass = classNames({
-      hidden: expanded === 0 && anything === 0,
+      hidden: (expanded === 0 && anything === 0) || ('anything'.indexOf(search.toLowerCase()) === -1),
     });
 
     const searchInputClass = classNames({
@@ -161,7 +168,7 @@ export class TypesPage extends React.PureComponent {
         <h1>Show Me</h1>
         <img className={searchBtnClass} src="https://carta.guide/icon/search.png" onClick={() => { this.expandHandler(1); }} role="presentation" />
         <img className={closeBtnClass} src="https://carta.guide/icon/back.png" onClick={() => { this.expandHandler(0); }} role="presentation" />
-        <input ref={(input) => { this.searchInput = input; }} className={searchInputClass} onChange={(evt) => { this.inputChangeHandler(evt.target.value); }} />
+        <input ref={(input) => { this.searchInput = input; }} className={searchInputClass} value={search} onChange={(evt) => { this.inputChangeHandler(evt); }} />
         <div className="suggestion">
           <Button
             className={anythingBtnClass}

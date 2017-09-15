@@ -34,7 +34,9 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     super();
 
     this.state = {
-      showQuest: false,
+      showQuest: true,
+      minimized: false,
+      closed: false,
     };
   }
 
@@ -80,13 +82,24 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     this.redrawMap(this.props);
   }
 
+  componentDidMount() {
+    $('.place-search').focus();
+    $('.descriptive-search').focus();
+    $('.type-search').focus();
+  }
+
   componentWillReceiveProps(nextProps) {
     this.redrawMap(nextProps);
   }
 
   onZoomEnd = (map) => {
     this.props.mapChange(map.getZoom(), map.getBounds());
-    this.props.fetchRecommendations();
+
+    const { showQuest, minimized, closed } = this.state;
+
+    if (showQuest || minimized) {
+      this.props.fetchRecommendations();
+    }
   }
 
   onStyleLoad = (map) => {
@@ -104,6 +117,21 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
       data: this.pointsGeoJSONSource,
     });
 
+    this.addShapes(map);
+    this.addCaptions(map);
+  }
+
+  onDragEnd = (map) => {
+    this.props.mapChange(map.getZoom(), map.getBounds());
+
+    const { showQuest, minimized, closed } = this.state;
+
+    if (showQuest || minimized) {
+      this.props.fetchRecommendations();
+    }
+  }
+
+  addShapes = (map) => {
     for (let i = this.count - 1; i >= 0; i -= 1) {
       map.addLayer({
         id: `shape-fill-${i}`,
@@ -143,39 +171,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
         filter: ['==', 'e', ''],
       });
 
-      map.addLayer({
-        id: `shape-caption-${i}`,
-        type: 'symbol',
-        source: 'points',
-        layout: {
-          'text-field': '{name}',
-          'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
-          'text-size': 13,
-          'text-transform': 'uppercase',
-          'text-allow-overlap': true,
-        },
-        paint: {
-          'text-color': this.colors[i],
-          'text-halo-width': 2,
-          'text-halo-color': '#fff',
-        },
-        filter: ['==', 'e', ''],
-      });
-
-      map.addLayer({
-        id: `shape-fill-${i}`,
-        type: 'fill',
-        source: 'shapes',
-        layout: {},
-        paint: {
-          'fill-color': this.colors[i],
-          'fill-opacity': 0,
-        },
-        filter: ['==', 'e', ''],
-      });
-
       const shapeFill = `shape-fill-${i}`;
-      const shapeCaption = `shape-caption-${i}`;
 
       map.on('mousemove', shapeFill, () => {
         map.getCanvas().style.cursor = 'pointer';
@@ -185,6 +181,36 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
         map.getCanvas().style.cursor = '';
       });
 
+
+      map.on('click', shapeFill, (data) => {
+        const name = data.features[0].properties.name;
+        this.elementClicked(name);
+      });
+    }
+  }
+
+  addCaptions = (map) => {
+    for (let i = this.count - 1; i >= 0; i -= 1) {
+      map.addLayer({
+        id: `shape-caption-${i}`,
+        type: 'symbol',
+        source: 'points',
+        layout: {
+          'text-field': '{name}',
+          'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+          'text-size': 13,
+          'text-transform': 'uppercase',
+        },
+        paint: {
+          'text-color': this.colors[i],
+          'text-halo-width': 2,
+          'text-halo-color': '#fff',
+        },
+        filter: ['==', 'e', ''],
+      });
+
+      const shapeCaption = `shape-caption-${i}`;
+
       map.on('mousemove', shapeCaption, () => {
         map.getCanvas().style.cursor = 'pointer';
       });
@@ -193,21 +219,11 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
         map.getCanvas().style.cursor = '';
       });
 
-      map.on('click', shapeFill, (data) => {
-        const name = data.features[0].properties.name;
-        this.elementClicked(name);
-      });
-
       map.on('click', shapeCaption, (data) => {
         const name = data.features[0].properties.name;
         this.elementClicked(name);
       });
     }
-  }
-
-  onDragEnd = (map) => {
-    this.props.mapChange(map.getZoom(), map.getBounds());
-    this.props.fetchRecommendations();
   }
 
   redrawMap(props) {
@@ -274,24 +290,30 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   questButtonClicked = () => {
     this.setState({
       showQuest: !this.state.showQuest,
+      minimized: false,
+      closed: false,
     });
 
     this.redrawMap(this.props);
 
     $('.place-search').focus();
-    $('.type-search').focus();
     $('.descriptive-search').focus();
+    $('.type-search').focus();
   }
 
   minimizeClicked = () => {
     this.setState({
       showQuest: false,
+      minimized: true,
+      closed: false,
     });
   }
 
   closeClicked = () => {
     this.setState({
       showQuest: false,
+      minimized: false,
+      closed: true,
     });
 
     if (this.map) {
@@ -300,7 +322,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   render() {
-    const { showQuest } = this.state;
+    const { showQuest, minimized, closed } = this.state;
 
     const mapBlockClass = classNames({
       'map-block': true,
@@ -310,6 +332,12 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     const questBlockClass = classNames({
       'quest-block': true,
       'quest-hide': !showQuest,
+    });
+
+    const questButtonClass = classNames({
+      'quest-button': true,
+      active: minimized,
+      inactive: !minimized,
     });
 
     return (
@@ -324,7 +352,9 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           <img src="https://carta.guide/content/name-vertical.png" role="presentation" />
         </div>
         <QuestButton
+          className={questButtonClass}
           onClick={this.questButtonClicked}
+          onCloseClick={this.closeClicked}
         />
         <QuestBlock
           className={questBlockClass}

@@ -40,7 +40,6 @@ export class Quest extends React.PureComponent {
     this.setState({
       currentTab: tab,
     });
-
     this.props.updateVisibility();
   }
 
