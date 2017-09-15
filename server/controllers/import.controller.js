@@ -85,7 +85,7 @@ const importTypes = (req, res) => {
  */
 
 const importCategories = (req, res) => {
-  Type.remove({}, (err) => {
+  Category.remove({}, (err) => {
     if (err) throw err;
 
     const csvPath = path.join(__dirname, '../csv/categories.csv');
@@ -93,8 +93,8 @@ const importCategories = (req, res) => {
     csv
     .fromStream(stream, { headers: true })
     .on('data', (data) => {
-      let type = new Category(data);
-      type.save();
+      let category = new Category(data);
+      category.save();
     })
     .on('end', () => {
       res.send('Importing categories finished');

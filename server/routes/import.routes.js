@@ -12,5 +12,8 @@ router.route('/descriptive').get(ImportController.importDescriptives);
 // Import types
 router.route('/type').get(ImportController.importTypes);
 
+// Import categories
+router.route('/category').get(ImportController.importCategories);
+
 // export default router;
 module.exports = router;

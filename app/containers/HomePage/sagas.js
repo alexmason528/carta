@@ -31,11 +31,11 @@ export function* getRecommendations() {
 
   currentQuest.get('types').map((type) => {
     if (type.get('name') === 'Regions') {
-      activeTypes.push('Regions');
+      activeTypes.push(type.get('c'));
     } else if (type.get('active') === 1) {
-      activeTypes.push(type.get('name'));
+      activeTypes.push(type.get('c'));
     } else {
-      inactiveTypes.push(type.get('name'));
+      inactiveTypes.push(type.get('c'));
     }
   });
 
@@ -50,9 +50,9 @@ export function* getRecommendations() {
 
     currentQuest.get('descriptives').map((descriptive) => {
       if (descriptive.get('star') === 1) {
-        stars.push(descriptive.get('name'));
+        stars.push(descriptive.get('c'));
       } else if (descriptive.get('active') === 0) {
-        excludes.push(descriptive.get('name'));
+        excludes.push(descriptive.get('c'));
       }
     });
 
@@ -66,9 +66,9 @@ export function* getRecommendations() {
 
     currentQuest.get('descriptives').map((descriptive) => {
       if (descriptive.get('star') === 1) {
-        stars.push(descriptive.get('name'));
+        stars.push(descriptive.get('c'));
       } else if (descriptive.get('active') === 1) {
-        includes.push(descriptive.get('name'));
+        includes.push(descriptive.get('c'));
       }
     });
 
@@ -150,9 +150,9 @@ export function* getQuestInfo() {
     const payload = {
       places: places,
       typesAll: 0,
-      types: questInfo.types.map((type) => { return { name: type, visible: 0, active: 0 }; }),
+      types: questInfo.types.map((type) => { return { c: type.c, name: type.name, visible: 0, active: 0 }; }),
       descriptivesAll: 0,
-      descriptives: questInfo.descriptives.map((descriptive) => { return { name: descriptive, star: 0, visible: 0, active: 0 }; }),
+      descriptives: questInfo.descriptives.map((descriptive) => { return { c: descriptive.c, name: descriptive.name, star: 0, visible: 0, active: 0 }; }),
     };
 
     yield put(fetchQuestInfoSuccess(payload));

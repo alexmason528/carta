@@ -6,4 +6,4 @@ const categorySchema = new Schema({
   name: String,
 }, { strict: false, versionKey: false });
 
-module.exports = mongoose.model('Category', categorySchema, 'descriptive');
+module.exports = mongoose.model('Category', categorySchema, 'category');

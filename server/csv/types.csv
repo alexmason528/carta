@@ -1,2028 +1,1 @@
-e,name,sum,Places to eat,Sights,Nightspots,Shops,Places to visit,Activities,Regions
-0,Brummen,1,,,,,,,1
-1,Buren,1,,,,,,,1
-2,Culemborg,1,,,,,,,1
-3,Didam,1,,,,,,,1
-4,Dinxperlo,1,,,,,,,1
-5,Doesburg,1,,,,,,,1
-6,Doetinchem,1,,,,,,,1
-7,Druten,1,,,,,,,1
-8,Duiven,1,,,,,,,1
-9,Ede,1,,,,,,,1
-10,Eibergen,1,,,,,,,1
-11,Elburg,1,,,,,,,1
-12,Epe,1,,,,,,,1
-13,Ermelo,1,,,,,,,1
-14,Geldermalsen,1,,,,,,,1
-15,Gendringen,1,,,,,,,1
-16,Gorssel,1,,,,,,,1
-17,Groenlo,1,,,,,,,1
-18,Belgium,1,,,,,,,1
-19,Groesbeek,1,,,,,,,1
-20,Harderwijk,1,,,,,,,1
-21,Hattem,1,,,,,,,1
-22,Heerde,1,,,,,,,1
-23,Hengelo,1,,,,,,,1
-24,Heumen,1,,,,,,,1
-25,Hummelo en Keppel,1,,,,,,,1
-26,Kesteren,1,,,,,,,1
-27,Lichtenvoorde,1,,,,,,,1
-28,Lingewaal,1,,,,,,,1
-29,Lingewaard,1,,,,,,,1
-30,Lochem,1,,,,,,,1
-31,Spiere-Helkijn,1,,,,,,,1
-32,Maasdriel,1,,,,,,,1
-33,Millingen aan de Rijn,1,,,,,,,1
-34,Neede,1,,,,,,,1
-35,Neerijnen,1,,,,,,,1
-36,Nijkerk,1,,,,,,,1
-37,Nijmegen,1,,,,,,,1
-38,Nunspeet,1,,,,,,,1
-39,Oldebroek,1,,,,,,,1
-40,Overbetuwe,1,,,,,,,1
-41,Putten,1,,,,,,,1
-42,Renkum,1,,,,,,,1
-43,Rheden,1,,,,,,,1
-44,Rijnwaarden,1,,,,,,,1
-45,Rozendaal,1,,,,,,,1
-46,Ruurlo,1,,,,,,,1
-47,Scherpenzeel,1,,,,,,,1
-48,Steenderen,1,,,,,,,1
-49,Tiel,1,,,,,,,1
-50,Ubbergen,1,,,,,,,1
-51,Voorst,1,,,,,,,1
-52,Vorden,1,,,,,,,1
-53,Wageningen,1,,,,,,,1
-54,Warnsveld,1,,,,,,,1
-55,Wehl,1,,,,,,,1
-56,West Maas en Waal,1,,,,,,,1
-57,Westervoort,1,,,,,,,1
-58,Wijchen,1,,,,,,,1
-59,Winterswijk,1,,,,,,,1
-60,Wisch,1,,,,,,,1
-61,Zaltbommel,1,,,,,,,1
-62,Zelhem,1,,,,,,,1
-63,Zevenaar,1,,,,,,,1
-64,Zutphen,1,,,,,,,1
-65,Appingedam,1,,,,,,,1
-66,Bedum,1,,,,,,,1
-67,Bellingwedde,1,,,,,,,1
-68,Drenthe,1,,,,,,,1
-69,De Marne,1,,,,,,,1
-70,Delfzijl,1,,,,,,,1
-71,Eemsmond,1,,,,,,,1
-72,Groningen,1,,,,,,,1
-73,Grootegast,1,,,,,,,1
-74,Haren,1,,,,,,,1
-75,Hoogezand-Sappemeer,1,,,,,,,1
-76,Leek,1,,,,,,,1
-77,Loppersum,1,,,,,,,1
-78,Marum,1,,,,,,,1
-79,Menterwolde,1,,,,,,,1
-80,Pekela,1,,,,,,,1
-81,Reiderland,1,,,,,,,1
-82,Scheemda,1,,,,,,,1
-83,Slochteren,1,,,,,,,1
-84,Stadskanaal,1,,,,,,,1
-85,Ten Boer,1,,,,,,,1
-86,Veendam,1,,,,,,,1
-87,Vlagtwedde,1,,,,,,,1
-88,Winschoten,1,,,,,,,1
-89,Winsum,1,,,,,,,1
-90,Zuidhorn,1,,,,,,,1
-91,Ambt Montfort,1,,,,,,,1
-92,Arcen en Velden,1,,,,,,,1
-93,Beek,1,,,,,,,1
-94,Beesel,1,,,,,,,1
-95,Bergen,1,,,,,,,1
-96,Brunssum,1,,,,,,,1
-97,Echt-Susteren,1,,,,,,,1
-98,Eijsden,1,,,,,,,1
-99,Gennep,1,,,,,,,1
-100,Gulpen-Wittem,1,,,,,,,1
-101,Haelen,1,,,,,,,1
-102,Heel,1,,,,,,,1
-103,Heerlen,1,,,,,,,1
-104,Helden,1,,,,,,,1
-105,Heythuysen,1,,,,,,,1
-106,Horst aan de Maas,1,,,,,,,1
-107,Hunsel,1,,,,,,,1
-108,Kerkrade,1,,,,,,,1
-109,Kessel,1,,,,,,,1
-110,Landgraaf,1,,,,,,,1
-111,Maasbracht,1,,,,,,,1
-112,Maasbree,1,,,,,,,1
-113,Maastricht,1,,,,,,,1
-114,Margraten,1,,,,,,,1
-115,Meerlo-Wanssum,1,,,,,,,1
-116,Meerssen,1,,,,,,,1
-117,Meijel,1,,,,,,,1
-118,Mook en Middelaar,1,,,,,,,1
-119,Nederweert,1,,,,,,,1
-120,Nuth,1,,,,,,,1
-121,Onderbanken,1,,,,,,,1
-122,Roerdalen,1,,,,,,,1
-123,Roermond,1,,,,,,,1
-124,Roggel en Neer,1,,,,,,,1
-125,Schinnen,1,,,,,,,1
-126,Sevenum,1,,,,,,,1
-127,Simpelveld,1,,,,,,,1
-128,Sittard-Geleen,1,,,,,,,1
-129,Stein,1,,,,,,,1
-130,Swalmen,1,,,,,,,1
-131,Thorn,1,,,,,,,1
-132,Vaals,1,,,,,,,1
-133,Valkenburg aan de Geul,1,,,,,,,1
-134,Venlo,1,,,,,,,1
-135,Venray,1,,,,,,,1
-136,Voerendaal,1,,,,,,,1
-137,Weert,1,,,,,,,1
-138,'s-Hertogenbosch,1,,,,,,,1
-139,Aalburg,1,,,,,,,1
-140,Alphen-Chaam,1,,,,,,,1
-141,Asten,1,,,,,,,1
-142,Baarle-Nassau,1,,,,,,,1
-143,Bergeijk,1,,,,,,,1
-144,Bergen op Zoom,1,,,,,,,1
-145,Bernheze,1,,,,,,,1
-146,Best,1,,,,,,,1
-147,Bladel,1,,,,,,,1
-148,Boekel,1,,,,,,,1
-149,Boxmeer,1,,,,,,,1
-150,Boxtel,1,,,,,,,1
-151,Breda,1,,,,,,,1
-152,Cranendonck,1,,,,,,,1
-153,Cuijk,1,,,,,,,1
-154,Deurne,1,,,,,,,1
-155,Dongen,1,,,,,,,1
-156,Drimmelen,1,,,,,,,1
-157,Eersel,1,,,,,,,1
-158,Eindhoven,1,,,,,,,1
-159,Etten-Leur,1,,,,,,,1
-160,Geertruidenberg,1,,,,,,,1
-161,Geldrop,1,,,,,,,1
-162,Gemert-Bakel,1,,,,,,,1
-163,Gilze en Rijen,1,,,,,,,1
-164,Goirle,1,,,,,,,1
-165,Grave,1,,,,,,,1
-166,Haaren,1,,,,,,,1
-167,Halderberge,1,,,,,,,1
-168,Heeze-Leende,1,,,,,,,1
-169,Helmond,1,,,,,,,1
-170,Heusden,1,,,,,,,1
-171,Hilvarenbeek,1,,,,,,,1
-172,Netherlands,1,,,,,,,1
-173,Laarbeek,1,,,,,,,1
-174,Landerd,1,,,,,,,1
-175,Lith,1,,,,,,,1
-176,Loon op Zand,1,,,,,,,1
-177,Maasdonk,1,,,,,,,1
-178,Mierlo,1,,,,,,,1
-179,Mill en Sint Hubert,1,,,,,,,1
-180,Moerdijk,1,,,,,,,1
-181,Nuenen c.a.,1,,,,,,,1
-182,Oirschot,1,,,,,,,1
-183,Oisterwijk,1,,,,,,,1
-184,Oosterhout,1,,,,,,,1
-185,Oss,1,,,,,,,1
-186,Flevoland,1,,,,,,,1
-187,Reusel-De Mierden,1,,,,,,,1
-188,Roosendaal,1,,,,,,,1
-189,Rucphen,1,,,,,,,1
-190,Schijndel,1,,,,,,,1
-191,Sint-Michielsgestel,1,,,,,,,1
-192,Sint-Oedenrode,1,,,,,,,1
-193,Sint Anthonis,1,,,,,,,1
-194,Someren,1,,,,,,,1
-195,Son en Breugel,1,,,,,,,1
-196,Steenbergen,1,,,,,,,1
-197,Tilburg,1,,,,,,,1
-198,Uden,1,,,,,,,1
-199,Valkenswaard,1,,,,,,,1
-200,Friesland,1,,,,,,,1
-201,Veghel,1,,,,,,,1
-202,Veldhoven,1,,,,,,,1
-203,Vught,1,,,,,,,1
-204,Waalre,1,,,,,,,1
-205,Waalwijk,1,,,,,,,1
-206,Werkendam,1,,,,,,,1
-207,Woensdrecht,1,,,,,,,1
-208,Woudrichem,1,,,,,,,1
-209,Zundert,1,,,,,,,1
-210,Aalsmeer,1,,,,,,,1
-211,Alkmaar,1,,,,,,,1
-212,Amstelveen,1,,,,,,,1
-213,Armenti,1,,,,,,,1
-214,Amsterdam,1,,,,,,,1
-215,Andijk,1,,,,,,,1
-216,Anna Paulowna,1,,,,,,,1
-217,Beemster,1,,,,,,,1
-218,Frelinghien,1,,,,,,,1
-219,Bennebroek,1,,,,,,,1
-220,Houplines,1,,,,,,,1
-221,Bergen,1,,,,,,,1
-222,La Chapelle,1,,,,,,,1
-223,Beverwijk,1,,,,,,,1
-224,P,1,,,,,,,1
-225,Blaricum,1,,,,,,,1
-226,Bloemendaal,1,,,,,,,1
-227,Bussum,1,,,,,,,1
-228,Castricum,1,,,,,,,1
-229,Den Helder,1,,,,,,,1
-230,Diemen,1,,,,,,,1
-231,Drechterland,1,,,,,,,1
-232,Edam-Volendam,1,,,,,,,1
-233,Enkhuizen,1,,,,,,,1
-234,Graft-De Rijp,1,,,,,,,1
-235,Haarlem,1,,,,,,,1
-236,Haarlemmerliede c.a.,1,,,,,,,1
-237,Haarlemmermeer,1,,,,,,,1
-238,Harenkarspel,1,,,,,,,1
-239,Heemskerk,1,,,,,,,1
-240,Heemstede,1,,,,,,,1
-241,Heerhugowaard,1,,,,,,,1
-242,Heiloo,1,,,,,,,1
-243,Hilversum,1,,,,,,,1
-244,Hoorn,1,,,,,,,1
-245,Huizen,1,,,,,,,1
-246,Landsmeer,1,,,,,,,1
-247,Langedijk,1,,,,,,,1
-248,Gelderland,1,,,,,,,1
-249,Laren,1,,,,,,,1
-250,Medemblik,1,,,,,,,1
-251,Muiden,1,,,,,,,1
-252,Naarden,1,,,,,,,1
-253,Niedorp,1,,,,,,,1
-254,Noorder-Koggenland,1,,,,,,,1
-255,Obdam,1,,,,,,,1
-256,Oostzaan,1,,,,,,,1
-257,Opmeer,1,,,,,,,1
-258,Ouder-Amstel,1,,,,,,,1
-259,Purmerend,1,,,,,,,1
-260,Schagen,1,,,,,,,1
-261,Schermer,1,,,,,,,1
-262,Stede Broec,1,,,,,,,1
-263,Texel,1,,,,,,,1
-264,Leers,1,,,,,,,1
-265,Uitgeest,1,,,,,,,1
-266,Lys-lez-Lannoy,1,,,,,,,1
-267,Uithoorn,1,,,,,,,1
-268,Velsen,1,,,,,,,1
-269,Venhuizen,1,,,,,,,1
-270,Waterland,1,,,,,,,1
-271,Weesp,1,,,,,,,1
-272,Wervershoof,1,,,,,,,1
-273,Wester-Koggenland,1,,,,,,,1
-274,Wieringen,1,,,,,,,1
-275,Wieringermeer,1,,,,,,,1
-276,Marquette-lez-Lille,1,,,,,,,1
-277,Wijdemeren,1,,,,,,,1
-278,Wognum,1,,,,,,,1
-279,Wambrechies,1,,,,,,,1
-280,Wormerland,1,,,,,,,1
-281,Zaanstad,1,,,,,,,1
-282,Zandvoort,1,,,,,,,1
-283,Zeevang,1,,,,,,,1
-284,Zijpe,1,,,,,,,1
-285,Almelo,1,,,,,,,1
-286,Bathmen,1,,,,,,,1
-287,Borne,1,,,,,,,1
-288,Noord-Brabant,1,,,,,,,1
-289,Dalfsen,1,,,,,,,1
-290,Noord-Holland,1,,,,,,,1
-291,Deventer,1,,,,,,,1
-292,Dinkelland,1,,,,,,,1
-293,Enschede,1,,,,,,,1
-294,Haaksbergen,1,,,,,,,1
-295,Bondues,1,,,,,,,1
-296,Hardenberg,1,,,,,,,1
-298,Hellendoorn,1,,,,,,,1
-299,Hengelo,1,,,,,,,1
-300,Nord-Pas-de-Calais,1,,,,,,,1
-301,Hof van Twente,1,,,,,,,1
-302,Kampen,1,,,,,,,1
-303,Losser,1,,,,,,,1
-304,Oldenzaal,1,,,,,,,1
-305,Nordrhein-Westfalen,1,,,,,,,1
-306,Olst-Wijhe,1,,,,,,,1
-307,Ommen,1,,,,,,,1
-308,Raalte,1,,,,,,,1
-309,Rijssen,1,,,,,,,1
-310,Staphorst,1,,,,,,,1
-311,Steenwijkerland,1,,,,,,,1
-312,Tubbergen,1,,,,,,,1
-313,Twenterand,1,,,,,,,1
-314,Wierden,1,,,,,,,1
-315,Zwartewaterland,1,,,,,,,1
-316,Comines,1,,,,,,,1
-317,Zwolle,1,,,,,,,1
-318,De,1,,,,,,,1
-319,Abcoude,1,,,,,,,1
-320,Amerongen,1,,,,,,,1
-321,Pi,1,,,,,,,1
-322,Amersfoort,1,,,,,,,1
-324,Baarn,1,,,,,,,1
-325,Verlinghem,1,,,,,,,1
-326,Breukelen,1,,,,,,,1
-327,Warneton,1,,,,,,,1
-328,Bunnik,1,,,,,,,1
-329,Wervicq-Sud,1,,,,,,,1
-330,Bunschoten,1,,,,,,,1
-331,Roubaix,1,,,,,,,1
-332,De Bilt,1,,,,,,,1
-333,Croix,1,,,,,,,1
-334,De Ronde Venen,1,,,,,,,1
-335,Wasquehal,1,,,,,,,1
-336,Doorn,1,,,,,,,1
-337,Driebergen-Rijsenburg,1,,,,,,,1
-338,Groningen,1,,,,,,,1
-339,Eemnes,1,,,,,,,1
-340,Utrecht,1,,,,,,,1
-341,Houten,1,,,,,,,1
-342,IJsselstein,1,,,,,,,1
-343,Leersum,1,,,,,,,1
-344,Leusden,1,,,,,,,1
-345,Loenen,1,,,,,,,1
-346,Lopik,1,,,,,,,1
-347,Maarn,1,,,,,,,1
-348,Maarssen,1,,,,,,,1
-349,Montfoort,1,,,,,,,1
-350,Nieuwegein,1,,,,,,,1
-351,Oudewater,1,,,,,,,1
-352,Renswoude,1,,,,,,,1
-353,Rhenen,1,,,,,,,1
-354,Soest,1,,,,,,,1
-355,Utrecht,1,,,,,,,1
-356,Tourcoing,1,,,,,,,1
-357,Veenendaal,1,,,,,,,1
-358,Bousbecque,1,,,,,,,1
-359,Vianen,1,,,,,,,1
-360,Halluin,1,,,,,,,1
-361,Wijk bij Duurstede,1,,,,,,,1
-362,Linselles,1,,,,,,,1
-363,Woerden,1,,,,,,,1
-364,Roncq,1,,,,,,,1
-365,Woudenberg,1,,,,,,,1
-366,Neuville-en-Ferrain,1,,,,,,,1
-367,Zeist,1,,,,,,,1
-368,Mouvaux,1,,,,,,,1
-369,Borsele,1,,,,,,,1
-370,Goes,1,,,,,,,1
-371,Wattrelos,1,,,,,,,1
-372,Hulst,1,,,,,,,1
-373,Kapelle,1,,,,,,,1
-374,Middelburg,1,,,,,,,1
-375,Noord-Beveland,1,,,,,,,1
-376,Reimerswaal,1,,,,,,,1
-377,Schouwen-Duiveland,1,,,,,,,1
-378,Sluis,1,,,,,,,1
-379,Terneuzen,1,,,,,,,1
-380,Tholen,1,,,,,,,1
-381,Veere,1,,,,,,,1
-382,Vlissingen,1,,,,,,,1
-383,'s-Gravendeel,1,,,,,,,1
-384,'s-Gravenhage,1,,,,,,,1
-385,'s-Gravenzande,1,,,,,,,1
-386,Alblasserdam,1,,,,,,,1
-387,Albrandswaard,1,,,,,,,1
-388,Alkemade,1,,,,,,,1
-389,Alphen aan den Rijn,1,,,,,,,1
-390,Barendrecht,1,,,,,,,1
-391,Bergambacht,1,,,,,,,1
-392,Bergschenhoek,1,,,,,,,1
-393,Berkel en Rodenrijs,1,,,,,,,1
-394,Bernisse,1,,,,,,,1
-395,Binnenmaas,1,,,,,,,1
-396,Bleiswijk,1,,,,,,,1
-397,Bodegraven,1,,,,,,,1
-398,Boskoop,1,,,,,,,1
-399,Brielle,1,,,,,,,1
-400,Capelle aan den IJssel,1,,,,,,,1
-401,Cromstrijen,1,,,,,,,1
-402,De Lier,1,,,,,,,1
-403,Delft,1,,,,,,,1
-404,Dirksland,1,,,,,,,1
-405,Dordrecht,1,,,,,,,1
-406,Giessenlanden,1,,,,,,,1
-407,Goedereede,1,,,,,,,1
-408,Gorinchem,1,,,,,,,1
-409,Gouda,1,,,,,,,1
-410,Graafstroom,1,,,,,,,1
-411,Hardinxveld-Giessendam,1,,,,,,,1
-412,Hellevoetsluis,1,,,,,,,1
-413,Hendrik-Ido-Ambacht,1,,,,,,,1
-414,Hillegom,1,,,,,,,1
-415,Jacobswoude,1,,,,,,,1
-416,Katwijk,1,,,,,,,1
-417,Korendijk,1,,,,,,,1
-418,Krimpen aan den IJssel,1,,,,,,,1
-419,Leerdam,1,,,,,,,1
-420,Leiden,1,,,,,,,1
-421,Leiderdorp,1,,,,,,,1
-422,Leidschendam-Voorburg,1,,,,,,,1
-423,Liemeer,1,,,,,,,1
-424,Liesveld,1,,,,,,,1
-425,Vlaanderen,1,,,,,,,1
-426,Lisse,1,,,,,,,1
-427,Maasland,1,,,,,,,1
-428,Maassluis,1,,,,,,,1
-429,Middelharnis,1,,,,,,,1
-430,Monster,1,,,,,,,1
-431,Moordrecht,1,,,,,,,1
-432,Naaldwijk,1,,,,,,,1
-433,Nederlek,1,,,,,,,1
-434,Nieuw-Lekkerland,1,,,,,,,1
-435,Nieuwerkerk aan den IJssel,1,,,,,,,1
-436,Nieuwkoop,1,,,,,,,1
-437,Noordwijk,1,,,,,,,1
-438,Noordwijkerhout,1,,,,,,,1
-439,Oegstgeest,1,,,,,,,1
-440,Oostflakkee,1,,,,,,,1
-441,Oud-Beijerland,1,,,,,,,1
-442,Ouderkerk,1,,,,,,,1
-443,Papendrecht,1,,,,,,,1
-444,Pijnacker-Nootdorp,1,,,,,,,1
-445,Reeuwijk,1,,,,,,,1
-446,Ridderkerk,1,,,,,,,1
-447,Wallonie,1,,,,,,,1
-448,Rijnsburg,1,,,,,,,1
-449,Rijnwoude,1,,,,,,,1
-450,Rijswijk,1,,,,,,,1
-451,Rotterdam,1,,,,,,,1
-452,Rozenburg,1,,,,,,,1
-453,Sassenheim,1,,,,,,,1
-454,Schiedam,1,,,,,,,1
-455,Schipluiden,1,,,,,,,1
-456,Schoonhoven,1,,,,,,,1
-457,Sliedrecht,1,,,,,,,1
-458,Lille,1,,,,,,,1
-459,Spijkenisse,1,,,,,,,1
-460,Strijen,1,,,,,,,1
-461,Ter Aar,1,,,,,,,1
-462,Valkenburg,1,,,,,,,1
-463,Vlaardingen,1,,,,,,,1
-464,Vlist,1,,,,,,,1
-465,Voorhout,1,,,,,,,1
-466,Voorschoten,1,,,,,,,1
-467,Waddinxveen,1,,,,,,,1
-468,Warmond,1,,,,,,,1
-469,Wassenaar,1,,,,,,,1
-470,Wateringen,1,,,,,,,1
-471,Westvoorne,1,,,,,,,1
-472,Zederik,1,,,,,,,1
-473,Zevenhuizen-Moerkapelle,1,,,,,,,1
-474,Zoetermeer,1,,,,,,,1
-475,Zoeterwoude,1,,,,,,,1
-476,Zwijndrecht,1,,,,,,,1
-477,Overijssel,1,,,,,,,1
-478,IJsselmeer,1,,,,,,,1
-479,Nord,1,,,,,,,1
-480,Anderlecht,1,,,,,,,1
-481,Brussel,1,,,,,,,1
-482,Elsene,1,,,,,,,1
-483,Etterbeek,1,,,,,,,1
-484,Evere,1,,,,,,,1
-485,Ganshoren,1,,,,,,,1
-486,Jette,1,,,,,,,1
-487,Koekelberg,1,,,,,,,1
-488,Oudergem,1,,,,,,,1
-489,Schaarbeek,1,,,,,,,1
-490,Sint-Agatha-Berchem,1,,,,,,,1
-491,Sint-Gillis,1,,,,,,,1
-492,Sint-Jans-Molenbeek,1,,,,,,,1
-493,Sint-Joost-ten-Node,1,,,,,,,1
-494,Sint-Lambrechts-Woluwe,1,,,,,,,1
-495,Sint-Pieters-Woluwe,1,,,,,,,1
-496,Ukkel,1,,,,,,,1
-497,Vorst,1,,,,,,,1
-498,Watermaal-Bosvoorde,1,,,,,,,1
-499,Aartselaar,1,,,,,,,1
-500,Antwerpen,1,,,,,,,1
-501,Boechout,1,,,,,,,1
-502,Boom,1,,,,,,,1
-503,Borsbeek,1,,,,,,,1
-504,Brasschaat,1,,,,,,,1
-505,Brecht,1,,,,,,,1
-506,Edegem,1,,,,,,,1
-507,Essen,1,,,,,,,1
-508,Hemiksem,1,,,,,,,1
-509,Hove,1,,,,,,,1
-510,Kalmthout,1,,,,,,,1
-511,Kapellen,1,,,,,,,1
-512,Kontich,1,,,,,,,1
-513,Lint,1,,,,,,,1
-514,Malle,1,,,,,,,1
-515,Mortsel,1,,,,,,,1
-516,Niel,1,,,,,,,1
-517,Ranst,1,,,,,,,1
-518,Rumst,1,,,,,,,1
-519,Schelle,1,,,,,,,1
-520,Schilde,1,,,,,,,1
-521,Schoten,1,,,,,,,1
-522,Stabroek,1,,,,,,,1
-523,Wijnegem,1,,,,,,,1
-524,Wommelgem,1,,,,,,,1
-525,Wuustwezel,1,,,,,,,1
-526,Zandhoven,1,,,,,,,1
-527,Zoersel,1,,,,,,,1
-528,Zwijndrecht,1,,,,,,,1
-529,Berlaar,1,,,,,,,1
-530,Bonheiden,1,,,,,,,1
-531,Zeeland,1,,,,,,,1
-532,Bornem,1,,,,,,,1
-533,Zeeuwse meren,1,,,,,,,1
-534,Duffel,1,,,,,,,1
-535,Heist-op-den-Berg,1,,,,,,,1
-536,Lier,1,,,,,,,1
-537,Mechelen,1,,,,,,,1
-538,Nijlen,1,,,,,,,1
-539,Putte,1,,,,,,,1
-540,Puurs,1,,,,,,,1
-541,Sint-Amands,1,,,,,,,1
-542,Sint-Katelijne-Waver,1,,,,,,,1
-543,Willebroek,1,,,,,,,1
-544,Arendonk,1,,,,,,,1
-545,Baarle-Hertog,1,,,,,,,1
-546,Balen,1,,,,,,,1
-547,Beerse,1,,,,,,,1
-548,Dessel,1,,,,,,,1
-549,Geel,1,,,,,,,1
-550,Grobbendonk,1,,,,,,,1
-551,Herentals,1,,,,,,,1
-552,Herenthout,1,,,,,,,1
-553,Zuid-Holland,1,,,,,,,1
-554,Herselt,1,,,,,,,1
-555,Hoogstraten,1,,,,,,,1
-556,Hulshout,1,,,,,,,1
-557,Kasterlee,1,,,,,,,1
-558,Laakdal,1,,,,,,,1
-559,Lille,1,,,,,,,1
-560,Meerhout,1,,,,,,,1
-561,Merksplas,1,,,,,,,1
-562,Mol,1,,,,,,,1
-563,Olen,1,,,,,,,1
-564,Oud-Turnhout,1,,,,,,,1
-565,Ravels,1,,,,,,,1
-566,Retie,1,,,,,,,1
-567,Rijkevorsel,1,,,,,,,1
-568,Turnhout,1,,,,,,,1
-569,Vorselaar,1,,,,,,,1
-570,Vosselaar,1,,,,,,,1
-571,Westerlo,1,,,,,,,1
-572,Mesen,1,,,,,,,1
-573,Avelgem,1,,,,,,,1
-574,As,1,,,,,,,1
-575,Beringen,1,,,,,,,1
-576,Diepenbeek,1,,,,,,,1
-577,Genk,1,,,,,,,1
-578,Halen,1,,,,,,,1
-579,Ham,1,,,,,,,1
-580,Hasselt,1,,,,,,,1
-581,Herk-de-Stad,1,,,,,,,1
-582,Heusden-Zolder,1,,,,,,,1
-583,Leopoldsburg,1,,,,,,,1
-584,Lummen,1,,,,,,,1
-585,Nieuwerkerken,1,,,,,,,1
-586,Opglabbeek,1,,,,,,,1
-587,Sint-Truiden,1,,,,,,,1
-588,Tessenderlo,1,,,,,,,1
-589,Zonhoven,1,,,,,,,1
-590,Zutendaal,1,,,,,,,1
-591,Bocholt,1,,,,,,,1
-592,Bree,1,,,,,,,1
-593,Dilsen-Stokkem,1,,,,,,,1
-594,Hamont-Achel,1,,,,,,,1
-595,Hechtel-Eksel,1,,,,,,,1
-596,Houthalen-Helchteren,1,,,,,,,1
-597,Kinrooi,1,,,,,,,1
-598,Lommel,1,,,,,,,1
-599,Maaseik,1,,,,,,,1
-600,Meeuwen-Gruitrode,1,,,,,,,1
-601,Neerpelt,1,,,,,,,1
-602,Overpelt,1,,,,,,,1
-603,Peer,1,,,,,,,1
-604,Alken,1,,,,,,,1
-605,Bilzen,1,,,,,,,1
-606,Borgloon,1,,,,,,,1
-607,Heers,1,,,,,,,1
-608,Herstappe,1,,,,,,,1
-609,Hoeselt,1,,,,,,,1
-610,Kortessem,1,,,,,,,1
-611,Lanaken,1,,,,,,,1
-612,Maasmechelen,1,,,,,,,1
-613,Riemst,1,,,,,,,1
-614,Tongeren,1,,,,,,,1
-615,Voeren,1,,,,,,,1
-616,Bruxelles,1,,,,,,,1
-617,Wellen,1,,,,,,,1
-618,Antwerpen,1,,,,,,,1
-619,Aalst,1,,,,,,,1
-620,Hainaut,1,,,,,,,1
-621,Denderleeuw,1,,,,,,,1
-622,Limburg,1,,,,,,,1
-623,Erpe-Mere,1,,,,,,,1
-624,Oost-Vlaanderen,1,,,,,,,1
-625,Geraardsbergen,1,,,,,,,1
-626,Vlaams Brabant,1,,,,,,,1
-627,Haaltert,1,,,,,,,1
-628,West-Vlaanderen,1,,,,,,,1
-629,Herzele,1,,,,,,,1
-630,Brabant Wallon,1,,,,,,,1
-631,Lede,1,,,,,,,1
-632,Hainaut,1,,,,,,,1
-633,Ninove,1,,,,,,,1
-634,Luik,1,,,,,,,1
-635,Sint-Lievens-Houtem,1,,,,,,,1
-636,Limburg,1,,,,,,,1
-637,Zottegem,1,,,,,,,1
-638,Berlare,1,,,,,,,1
-639,Buggenhout,1,,,,,,,1
-640,West-Vlaanderen,1,,,,,,,1
-641,Dendermonde,1,,,,,,,1
-642,Hamme,1,,,,,,,1
-643,Laarne,1,,,,,,,1
-644,Lebbeke,1,,,,,,,1
-645,Waasmunster,1,,,,,,,1
-646,Wetteren,1,,,,,,,1
-647,Wichelen,1,,,,,,,1
-648,Zele,1,,,,,,,1
-649,Assenede,1,,,,,,,1
-650,Eeklo,1,,,,,,,1
-651,Kaprijke,1,,,,,,,1
-652,Maldegem,1,,,,,,,1
-653,Sint-Laureins,1,,,,,,,1
-654,Zelzate,1,,,,,,,1
-655,Aalter,1,,,,,,,1
-656,De Pinte,1,,,,,,,1
-657,Deinze,1,,,,,,,1
-658,Destelbergen,1,,,,,,,1
-659,Evergem,1,,,,,,,1
-660,Gavere,1,,,,,,,1
-661,Gent,1,,,,,,,1
-662,Knesselare,1,,,,,,,1
-663,Lochristi,1,,,,,,,1
-664,Lovendegem,1,,,,,,,1
-665,Melle,1,,,,,,,1
-666,Merelbeke,1,,,,,,,1
-667,Moerbeke,1,,,,,,,1
-668,Nazareth,1,,,,,,,1
-669,Nevele,1,,,,,,,1
-670,Oosterzele,1,,,,,,,1
-671,Sint-Martens-Latem,1,,,,,,,1
-672,Waarschoot,1,,,,,,,1
-673,Wachtebeke,1,,,,,,,1
-674,Zomergem,1,,,,,,,1
-675,Zulte,1,,,,,,,1
-676,Brakel,1,,,,,,,1
-677,Horebeke,1,,,,,,,1
-678,Kluisbergen,1,,,,,,,1
-679,Kruishoutem,1,,,,,,,1
-680,Lierde,1,,,,,,,1
-681,Maarkedal,1,,,,,,,1
-682,Oudenaarde,1,,,,,,,1
-683,Ronse,1,,,,,,,1
-684,Wortegem-Petegem,1,,,,,,,1
-685,Zingem,1,,,,,,,1
-686,Zwalm,1,,,,,,,1
-687,Beveren,1,,,,,,,1
-688,Kruibeke,1,,,,,,,1
-689,Lokeren,1,,,,,,,1
-690,Saint-Nicolas,1,,,,,,,1
-691,Sint-Gillis-Waas,1,,,,,,,1
-692,Stekene,1,,,,,,,1
-693,Temse,1,,,,,,,1
-694,Affligem,1,,,,,,,1
-695,Asse,1,,,,,,,1
-696,Beersel,1,,,,,,,1
-697,Weser-Ems,1,,,,,,,1
-698,Bever,1,,,,,,,1
-699,Arnsberg,1,,,,,,,1
-700,Dilbeek,1,,,,,,,1
-701,Drogenbos,1,,,,,,,1
-702,Dusseldorf,1,,,,,,,1
-703,Galmaarden,1,,,,,,,1
-704,Keulen,1,,,,,,,1
-705,Gooik,1,,,,,,,1
-706,Munster,1,,,,,,,1
-707,Grimbergen,1,,,,,,,1
-708,Halle,1,,,,,,,1
-709,Herne,1,,,,,,,1
-710,Hoeilaart,1,,,,,,,1
-711,Kampenhout,1,,,,,,,1
-712,Kapelle-op-den-Bos,1,,,,,,,1
-713,Kraainem,1,,,,,,,1
-714,Lennik,1,,,,,,,1
-715,Liedekerke,1,,,,,,,1
-716,Linkebeek,1,,,,,,,1
-717,Londerzeel,1,,,,,,,1
-718,Machelen,1,,,,,,,1
-719,Meise,1,,,,,,,1
-720,Merchtem,1,,,,,,,1
-721,Opwijk,1,,,,,,,1
-722,Overijse,1,,,,,,,1
-723,Pepingen,1,,,,,,,1
-724,Roosdaal,1,,,,,,,1
-725,Sint-Genesius-Rode,1,,,,,,,1
-726,Sint-Pieters-Leeuw,1,,,,,,,1
-727,Steenokkerzeel,1,,,,,,,1
-728,Ternat,1,,,,,,,1
-729,Vilvoorde,1,,,,,,,1
-730,Wemmel,1,,,,,,,1
-731,Wezembeek-Oppem,1,,,,,,,1
-732,Zaventem,1,,,,,,,1
-733,Zemst,1,,,,,,,1
-734,Aarschot,1,,,,,,,1
-735,Begijnendijk,1,,,,,,,1
-736,Bekkevoort,1,,,,,,,1
-737,Bertem,1,,,,,,,1
-738,Bierbeek,1,,,,,,,1
-739,Boortmeerbeek,1,,,,,,,1
-740,Boutersem,1,,,,,,,1
-741,Diest,1,,,,,,,1
-742,Geetbets,1,,,,,,,1
-743,Glabbeek,1,,,,,,,1
-744,Haacht,1,,,,,,,1
-745,Herent,1,,,,,,,1
-746,Hoegaarden,1,,,,,,,1
-747,Holsbeek,1,,,,,,,1
-748,Huldenberg,1,,,,,,,1
-749,Keerbergen,1,,,,,,,1
-750,Kortenaken,1,,,,,,,1
-751,Kortenberg,1,,,,,,,1
-752,Landen,1,,,,,,,1
-753,Leuven,1,,,,,,,1
-754,Linter,1,,,,,,,1
-755,Lubbeek,1,,,,,,,1
-756,Oud-Heverlee,1,,,,,,,1
-757,Rotselaar,1,,,,,,,1
-758,Scherpenheuvel-Zichem,1,,,,,,,1
-759,Tervuren,1,,,,,,,1
-760,Tielt-Winge,1,,,,,,,1
-761,Tienen,1,,,,,,,1
-762,Tremelo,1,,,,,,,1
-763,Zoutleeuw,1,,,,,,,1
-764,Beernem,1,,,,,,,1
-765,Blankenberge,1,,,,,,,1
-766,Brugge,1,,,,,,,1
-767,Bruxelles,1,,,,,,,1
-768,Damme,1,,,,,,,1
-769,Jabbeke,1,,,,,,,1
-770,Knokke-Heist,1,,,,,,,1
-771,Oostkamp,1,,,,,,,1
-772,Torhout,1,,,,,,,1
-773,Zedelgem,1,,,,,,,1
-774,Aurich,1,,,,,,,1
-775,Zuienkerke,1,,,,,,,1
-776,Diksmuide,1,,,,,,,1
-777,Emden,1,,,,,,,1
-778,Houthulst,1,,,,,,,1
-779,Emsland,1,,,,,,,1
-780,Koekelare,1,,,,,,,1
-781,Kortemark,1,,,,,,,1
-782,Grafschaft Bentheim,1,,,,,,,1
-783,Leer,1,,,,,,,1
-784,Heuvelland,1,,,,,,,1
-785,Ieper,1,,,,,,,1
-786,Langemark-Poelkapelle,1,,,,,,,1
-787,Wervik,1,,,,,,,1
-788,Zonnebeke,1,,,,,,,1
-789,Anzegem,1,,,,,,,1
-790,Deerlijk,1,,,,,,,1
-791,Bochum,1,,,,,,,1
-792,Harelbeke,1,,,,,,,1
-793,Dortmund,1,,,,,,,1
-794,Kortrijk,1,,,,,,,1
-795,Ennepe-Ruhr,1,,,,,,,1
-796,Kuurne,1,,,,,,,1
-797,Lendelede,1,,,,,,,1
-798,Menen,1,,,,,,,1
-799,Herne,1,,,,,,,1
-800,Waregem,1,,,,,,,1
-801,Wevelgem,1,,,,,,,1
-802,Zwevegem,1,,,,,,,1
-803,Bredene,1,,,,,,,1
-804,De Haan,1,,,,,,,1
-805,Gistel,1,,,,,,,1
-806,Ichtegem,1,,,,,,,1
-807,Middelkerke,1,,,,,,,1
-808,Oostende,1,,,,,,,1
-809,Oudenburg,1,,,,,,,1
-810,Hooglede,1,,,,,,,1
-811,Ingelmunster,1,,,,,,,1
-812,Izegem,1,,,,,,,1
-813,Ledegem,1,,,,,,,1
-814,Cleves,1,,,,,,,1
-815,Lichtervelde,1,,,,,,,1
-816,Duisburg,1,,,,,,,1
-817,Moorslede,1,,,,,,,1
-818,Dusseldorf St,1,,,,,,,1
-819,Roeselare,1,,,,,,,1
-820,Essen,1,,,,,,,1
-821,Staden,1,,,,,,,1
-822,Krefeld,1,,,,,,,1
-823,Ardooie,1,,,,,,,1
-824,Mettmann,1,,,,,,,1
-825,Dentergem,1,,,,,,,1
-829,Oostrozebeke,1,,,,,,,1
-831,Pittem,1,,,,,,,1
-833,Ruiselede,1,,,,,,,1
-834,Rhein-Kreis Neuss,1,,,,,,,1
-835,Tielt,1,,,,,,,1
-837,Wielsbeke,1,,,,,,,1
-838,Viersen,1,,,,,,,1
-839,Wingene,1,,,,,,,1
-840,Wesel,1,,,,,,,1
-842,Aachen,1,,,,,,,1
-846,Beauvechain,1,,,,,,,1
-848,Braine-l'Alleud,1,,,,,,,1
-849,Euskirchen,1,,,,,,,1
-851,Heinsberg,1,,,,,,,1
-853,Chaumont-Gistoux,1,,,,,,,1
-854,Oberbergischer Kreis,1,,,,,,,1
-855,Rhein-Erft-Kreis,1,,,,,,,1
-856,Rhein-Sieg,1,,,,,,,1
-857,Grez-Doiceau,1,,,,,,,1
-858,Rheinisch-Bergischer Kreis,1,,,,,,,1
-860,Borken,1,,,,,,,1
-861,Incourt,1,,,,,,,1
-863,Ittre,1,,,,,,,1
-864,Coesfeld,1,,,,,,,1
-865,Jodoigne,1,,,,,,,1
-867,La Hulpe,1,,,,,,,1
-868,Lasne,1,,,,,,,1
-869,Recklinghausen,1,,,,,,,1
-870,Steinfurt,1,,,,,,,1
-871,Orp-Jauche,1,,,,,,,1
-872,Ottignies-Louvain-la-Neuve,1,,,,,,,1
-873,Ramillies,1,,,,,,,1
-874,Rebecq,1,,,,,,,1
-875,Rixensart,1,,,,,,,1
-876,Tubize,1,,,,,,,1
-877,Waterloo,1,,,,,,,1
-878,Wavre,1,,,,,,,1
-879,Ath,1,,,,,,,1
-880,Ellezelles,1,,,,,,,1
-881,Flobecq,1,,,,,,,1
-882,Frasnes-lez-Anvaing,1,,,,,,,1
-883,Comines-Warneton,1,,,,,,,1
-884,Mouscron,1,,,,,,,1
-885,Enghien,1,,,,,,,1
-886,Lessines,1,,,,,,,1
-887,Silly,1,,,,,,,1
-888,Limburg,1,,,,,,,1
-889,Celles,1,,,,,,,1
-890,Estaimpuis,1,,,,,,,1
-891,Mont-de-l'Enclus,1,,,,,,,1
-892,Pecq,1,,,,,,,1
-893,Tournai,1,,,,,,,1
-894,Ans,1,,,,,,,1
-895,Awans,1,,,,,,,1
-896,Bitsingen,1,,,,,,,1
-897,Blegny,1,,,,,,,1
-898,Dalhem,1,,,,,,,1
-899,Herstal,1,,,,,,,1
-900,Juprelle,1,,,,,,,1
-902,Oupeye,1,,,,,,,1
-904,Aubel,1,,,,,,,1
-905,Herve,1,,,,,,,1
-906,Kelmis,1,,,,,,,1
-907,Lontzen,1,,,,,,,1
-909,Raeren,1,,,,,,,1
-910,Thimister-Clermont,1,,,,,,,1
-912,Brussel,1,,,,,,,1
-913,Welkenraedt,1,,,,,,,1
-914,Antwerpen,1,,,,,,,1
-915,Berloz,1,,,,,,,1
-916,Lannoy,1,,,,,,,1
-917,Mechelen,1,,,,,,,1
-918,Turnhout,1,,,,,,,1
-920,Moeskroen,1,,,,,,,1
-921,Tournai,1,,,,,,,1
-922,Lille-Ouest,1,,,,,,,1
-923,Hasselt,1,,,,,,,1
-924,Fexhe-le-Haut-Clocher,1,,,,,,,1
-925,Maaseik,1,,,,,,,1
-926,Geer,1,,,,,,,1
-927,Tongeren,1,,,,,,,1
-928,Hannuit,1,,,,,,,1
-930,Aalst,1,,,,,,,1
-931,Lincent,1,,,,,,,1
-932,Dendermonde,1,,,,,,,1
-933,Oreye,1,,,,,,,1
-935,Eeklo,1,,,,,,,1
-936,Remicourt,1,,,,,,,1
-937,Roubaix,1,,,,,,,1
-938,Aa en Hunze,1,,,,,,,1
-939,Gent,1,,,,,,,1
-940,Roubaix-Ouest,1,,,,,,,1
-941,Assen,1,,,,,,,1
-942,Oudenaarde,1,,,,,,,1
-943,Waremme,1,,,,,,,1
-944,Borger-Odoorn,1,,,,,,,1
-945,Sint-Niklaas,1,,,,,,,1
-946,Coevorden,1,,,,,,,1
-947,Halle-Vilvoorde,1,,,,,,,1
-948,Gingelom,1,,,,,,,1
-949,De Wolden,1,,,,,,,1
-950,Leuven,1,,,,,,,1
-951,Tourcoing,1,,,,,,,1
-952,Emmen,1,,,,,,,1
-953,Brugge,1,,,,,,,1
-954,Tourcoing-Nord,1,,,,,,,1
-955,Hoogeveen,1,,,,,,,1
-956,Diksmuide,1,,,,,,,1
-957,Tourcoing-Nord-Est,1,,,,,,,1
-958,Meppel,1,,,,,,,1
-959,Ieper,1,,,,,,,1
-960,Tourcoing-Sud,1,,,,,,,1
-961,Midden-Drenthe,1,,,,,,,1
-962,Kortrijk,1,,,,,,,1
-963,Noordenveld,1,,,,,,,1
-964,Oostende,1,,,,,,,1
-965,Wattrelos,1,,,,,,,1
-966,Tynaarlo,1,,,,,,,1
-967,Roeselare,1,,,,,,,1
-968,Westerveld,1,,,,,,,1
-969,Tielt,1,,,,,,,1
-970,Almere,1,,,,,,,1
-971,Dronten,1,,,,,,,1
-972,Nivelles,1,,,,,,,1
-973,Lelystad,1,,,,,,,1
-974,Ath,1,,,,,,,1
-975,Noordoostpolder,1,,,,,,,1
-976,Urk,1,,,,,,,1
-977,Moeskroen,1,,,,,,,1
-978,Zeewolde,1,,,,,,,1
-979,Achtkarspelen,1,,,,,,,1
-980,Soignies,1,,,,,,,1
-981,Ameland,1,,,,,,,1
-982,Boarnsterhim,1,,,,,,,1
-983,Tournai,1,,,,,,,1
-984,Bolsward,1,,,,,,,1
-985,Dantumadeel,1,,,,,,,1
-987,Dongeradeel,1,,,,,,,1
-988,Verviers,1,,,,,,,1
-989,Ferwerderadiel,1,,,,,,,1
-990,Waremme,1,,,,,,,1
-991,Franekeradeel,1,,,,,,,1
-992,Hasselt,1,,,,,,,1
-994,Harlingen,1,,,,,,,1
-995,Heerenveen,1,,,,,,,1
-996,Het Bildt,1,,,,,,,1
-997,Kollumerland c.a.,1,,,,,,,1
-998,Leeuwarden,1,,,,,,,1
-999,Leeuwarderadeel,1,,,,,,,1
-1000,Lemsterland,1,,,,,,,1
-1001,Littenseradiel,1,,,,,,,1
-1002,Kortrijk,1,,,,,,,1
-1003,Menaldumadeel,1,,,,,,,1
-1004,Nijefurd,1,,,,,,,1
-1005,Ooststellingwerf,1,,,,,,,1
-1006,Opsterland,1,,,,,,,1
-1007,Schiermonnikoog,1,,,,,,,1
-1009,Smallingerland,1,,,,,,,1
-1010,Sneek,1,,,,,,,1
-1011,Terschelling,1,,,,,,,1
-1012,Tytsjerksteradiel,1,,,,,,,1
-1013,Vlieland,1,,,,,,,1
-1014,Weststellingwerf,1,,,,,,,1
-1016,Wymbritseradiel,1,,,,,,,1
-1017,Aalten,1,,,,,,,1
-1018,Angerlo,1,,,,,,,1
-1019,Apeldoorn,1,,,,,,,1
-1020,Arnhem,1,,,,,,,1
-1021,Barneveld,1,,,,,,,1
-1022,Bergh,1,,,,,,,1
-1023,Beuningen,1,,,,,,,1
-1024,Borculo,1,,,,,,,1
-1025,De Oosterpoort,1,,,1,,,,
-1026,O'Ceallaigh,1,,,1,,,,
-1027,Four Rose's,1,1,,,,,,
-1028,Images,1,,,1,,,,
-1030,Vera,1,,,1,,,,
-1031,Roezemoes,1,,,1,,,,
-1032,Gardens,1,,1,,,,,
-1033,Prinsenhof Gardens,1,,1,,,,,
-1034,Grand Theatre,1,,,1,,,,
-1035,Martinikerk,1,,1,,,,,
-1036,Palace,1,,,1,,,,
-1037,Town Hall,1,,1,,,,,
-1038,Canal Tours,1,,,,,,1,
-1039,Het Goudkantoor,1,1,,,,,,
-1040,Selexyz Scholtens,1,,,,1,,,
-1041,Synagogues,1,,1,,,,,
-1042,Golden Arm,1,,,1,,,,
-1043,Ariola,1,1,,,,,,
-1044,De 7e Hemel,1,1,,,,,,
-1045,Brussels Lof,1,1,,,,,,
-1046,De Pintelier,1,,,1,,,,
-1047,Granny's,1,1,,,,,,
-1048,Noordelijk Scheepvaartmuseum,1,,1,,,,,
-1049,Bonnefantenmuseum,1,,1,,,,,
-1050,Derlon Theater,1,,,1,,,,
-1051,Beluga,1,1,,,,,,
-1052,Zondag,1,,,1,,,,
-1053,Take One,1,,,1,,,,
-1054,Restaurant O,1,1,,,,,,
-1055,Gadjah Mas,1,1,,,,,,
-1056,John Mullins,1,,,1,,,,
-1057,Helpoort,1,,1,,,,,
-1058,Stiphout Cruises,1,,,,,,1,
-1059,Onze Lieve Vrouwebasiliek,1,,1,,,,,
-1060,Night Live,1,,,1,,,,
-1061,Bisschopsmolen,1,1,,,,,,
-1062,Sjieke,1,1,,,,,,
-1063,Matuchi,1,,,1,,,,
-1064,Selexyz n' Dominicanen,1,,,,,1,,
-1065,Reitz,1,1,,,,,,
-1066,Johannes Petrus Minckelers Statue,1,,1,,,,,
-1067,Take Five,1,,,1,,,,
-1068,Mestizo,1,1,,,,,,
-1069,In Den Ouden Vogelstruys,1,,,1,,,,
-1070,Spanish Government Museum,1,,1,,,,,
-1071,Vrijthof,1,,1,,,,,
-1072,Cinema Lumiere,1,,,1,,,,
-1073,Sint Janskerk,1,,1,,,,,
-1074,Sint Servaasbasiliek,1,,1,,,,,
-1075,Restaurant Jean La Brouche,1,1,,,,,,
-1076,Ginger,1,1,,,,,,
-1077,Goesting,1,1,,,,,,
-1078,Nederlands Spoorwegmuseum,1,,1,,,,,
-1079,Centraal Museum,1,,1,,,,,
-1080,Universiteitsmuseum,1,,1,,,,,
-1081,Dick Bruna Huis,1,,1,,,,,
-1082,Museum Catharijneconvent,1,,1,,,,,
-1083,Pieterskerk,1,,1,,,,,
-1084,De Artisjok,1,1,,,,,,
-1086,Polman's,1,,,,,1,,
-1087,Broers,1,1,,,,,,
-1088,Utrecht University Ceremonial Buildings,1,,1,,,,,
-1089,t Oude Pothuys,1,,,,,1,,
-1090,ACU,1,,,1,,,,
-1091,Opium,1,,,1,,,,
-1093,Lokaal de Reunie,1,1,,,,,,
-1094,Aboriginal Art Museum,1,,1,,,,,
-1095,Domtoren,1,,1,,,,,
-1096,Tivoli,1,,1,,,,,
-1097,Museum voor het Kruideniersbedrijf,1,,,,1,,,
-1098,Nationaal Museum van Speelklok tot Pierement,1,,1,,,,,
-1099,Springhaver Theater,1,,,1,,,,
-1100,Blauw,1,1,,,,,,
-1101,Nederlands Waterleidingmuseum,1,,1,,,,,
-1102,Winkel van Sinkel,1,,,1,,,,
-1104,Konnichi Wa,1,1,,,,,,
-1105,Canal Tours,1,,,,,,1,
-1106,Oudaen,1,1,,,,,,
-1107,Oudegracht,1,,1,,,,,
-1108,Vredenburg,1,,,1,,,,
-1109,Living Tomorrow Pavilion,1,,1,,,,,
-1110,Persmuseum,1,,1,,,,,
-1111,Odessa,1,1,,,,,,
-1112,Lisboa,1,,,1,,,,
-1113,Gare de l'Est,1,,,,,1,,
-1114,KHL,1,,,1,,,,
-1115,Frankendael,1,,1,,,,,
-1116,Voorbij Het Einde,1,1,,,,,,
-1117,Panama,1,,,1,,,,
-1118,Tropentheater,1,,,1,,,,
-1119,EnergeticA,1,,1,,,,,
-1120,Tropenmuseum,1,,1,,,,,
-1121,Werfmuseum 'T Kromhout,1,,,,,1,,
-1122,Muiderpoort,1,,1,,,,,
-1123,Fifteen,1,1,,,,,,
-1124,Nederlands Scheepvaartmuseum,1,,1,,,,,
-1125,Entrepotdok,1,,1,,,,,
-1126,Bloem,1,1,,,,,,
-1127,Muziekgebouw aan 't IJ,1,,,,,1,,
-1128,Star Ferry,1,,,,,,1,
-1129,Artis,1,,1,,,,,
-1130,Verzetsmuseum,1,,1,,,,,
-1131,Arcam,1,,1,,,,,
-1132,Plancius,1,1,,,,,,
-1133,NEMO,1,,1,,,,,
-1134,Koffiehuis van den Volksbond,1,1,,,,,,
-1136,Abe Veneto,1,1,,,,,,
-1137,Conservatorium Van Amsterdam,1,,,1,,,,
-1138,Hortus Botanicus,1,,1,,,,,
-1139,Sea Palace,1,1,,,,,,
-1140,Amstel Haven,1,,,1,,,,
-1141,Betty's,1,1,,,,,,
-1142,Montelbaanstoren,1,,1,,,,,
-1143,Amstel Bar & Brasserie,1,,,1,,,,
-1144,Portuguese-Israelite Synagogue,1,,1,,,,,
-1146,Scheepvaarthuis,1,,1,,,,,
-1147,Joods Historisch Museum,1,,1,,,,,
-1148,Amsterdams Marionetten Theater,1,,,1,,,,
-1149,Mozes en Aaronkerk,1,,,,,1,,
-1150,Amstelsluizen,1,,1,,,,,
-1151,Hermitage Amsterdam,1,,1,,,,,
-1152,Klokspijs,1,1,,,,,,
-1153,Cotton Club,1,,,1,,,,
-1154,Magere Brug,1,,1,,,,,
-1155,Schreierstoren,1,,1,,,,,
-1156,Waterlooplein Flea Market,1,,,,1,,,
-1158,St Nicolaaskerk,1,,1,,,,,
-1159,Molly Malone's,1,,,1,,,,
-1161,In 't Aepjen,1,,,,,1,,
-1163,Po Chai Tong,1,,,,1,,,
-1164,De Engel Van Amsterdam,1,,,1,,,,
-1165,Stopera,1,,1,,,,,
-1166,Blauwbrug,1,,1,,,,,
-1168,Muziektheater,1,,,1,,,,
-1170,Knuffels,1,,,,1,,,
-1171,Henxs,1,,,,1,,,
-1172,Queen's Head,1,1,,,,,,
-1173,Riele,1,,,,1,,,
-1174,Nam Kee,1,1,,,,,,
-1175,Eat Mode,1,1,,,,,,
-1176,New King,1,1,,,,,,
-1178,Waag,1,,1,,,,,
-1180,Lime,1,,,1,,,,
-1181,Guan Yin Shrine,1,,1,,,,,
-1182,Seventyfive,1,,,,1,,,
-1183,'t Klompenhuisje,1,,,,1,,,
-1184,Hill Street Blues,1,,,1,,,,
-1185,Zuiderkerk,1,,1,,,,,
-1186,Proeflokaal de Ooievaar,1,,,1,,,,
-1187,Joe's Vliegerwinkel,1,,,,,1,,
-1188,Kam Yin,1,1,,,,,,
-1189,De Huyschkaemer,1,,,1,,,,
-1190,Museum Amstelkring,1,,1,,,,,
-1191,De Dageraad,1,,1,,,,,
-1192,Sarphaat,1,,,1,,,,
-1193,Erotic Museum,1,,1,,,,,
-1194,Golden Temple,1,,1,,,,,
-1195,Kokopelli,1,,,,1,,,
-1196,Oosterling,1,,,1,,,,
-1197,Get Records,1,,,,1,,,
-1198,Museum Willet-Holthuysen,1,,1,,,,,
-1199,Dantzig,1,,,1,,,,
-1200,Look Out,1,,,,1,,,
-1201,Take Thai,1,1,,,,,,
-1202,Segugio,1,1,,,,,,
-1203,Tempo Doeloe,1,1,,,,,,
-1204,Casa Rosso,1,,,1,,,,
-1206,Puccini Bomboni,1,,,,1,,,
-1207,Concerto,1,,,,1,,,
-1208,Twins Backstage,1,,,1,,,,
-1209,Sluizer,1,1,,,,,,
-1210,Nijhof & Lee,1,,,,1,,,
-1211,Oostindisch Huis,1,,1,,,,,
-1212,NEL,1,,,1,,,,
-1213,Krua Thai,1,1,,,,,,
-1214,Blauw aan de Wal,1,1,,,,,,
-1215,Himalaya,1,,,,1,,,
-1216,De Beestenwinkel,1,,,,1,,,
-1217,Herrie,1,1,,,,,,
-1218,Geels & Co,1,,,,1,,,
-1219,Vivelavie,1,,,1,,,,
-1220,De Emaillekeizer,1,,,,1,,,
-1221,RoB,1,,,,1,,,
-1222,Prostitution Information Centre,1,,1,,,,,
-1223,Typo Gallery,1,,,,1,,,
-1224,Museum het Rembrandthuis,1,,1,,,,,
-1225,Baba,1,,,1,,,,
-1226,Lellebel,1,,,1,,,,
-1227,Book Exchange,1,,,,1,,,
-1228,Sexmuseum Amsterdam,1,,1,,,,,
-1229,Droog Design,1,,,,1,,,
-1230,Antiquariaat Kok,1,,,,1,,,
-1231,"Hash, Marijuana & Hemp Museum",1,,1,,,,,
-1232,Badcuyp,1,,,1,,,,
-1233,Sterk Staaltje,1,1,,,,,,
-1234,Doelen,1,,,1,,,,
-1235,De Duif,1,,1,,,,,
-1236,Tassenmuseum Hendrikje,1,,1,,,,,
-1237,Mulligans,1,,,1,,,,
-1238,Durty Nelly's,1,1,,,,,,
-1239,Amstelkerk,1,,1,,,,,
-1240,Beurs van Berlage,1,,1,,,,,
-1241,Winston Kingdom,1,,,1,,,,
-1243,Herberg Hooghoudt,1,,,1,,,,
-1244,Escape,1,1,,,,,,
-1245,Uliveto,1,1,,,,,,
-1246,Wonderwood,1,,,,1,,,
-1247,De Heeren Van Aemstel,1,,,1,,,,
-1248,De Kleine Komedie,1,,,1,,,,
-1249,Condomerie het Gulden Vlies,1,,,,1,,,
-1250,Entre Nous,1,,,1,,,,
-1251,Chills & Thrills,1,,,,1,,,
-1254,Web,1,,,1,,,,
-1255,Bazar,1,1,,,,,,
-1256,Vlieger,1,,,,1,,,
-1257,Proeflokaal Wijnand Fockink,1,,,1,,,,
-1258,In De Wildman,1,,,1,,,,
-1259,Van Dobben,1,1,,,,,,
-1260,Bebob Design,1,,,,1,,,
-1261,De Buurvrouw,1,,,1,,,,
-1263,Zushi,1,1,,,,,,
-1264,Albert Cuypmarkt,1,,,,1,,,
-1265,Cuckoo's Nest,1,,,,,1,,
-1266,Geelvinck Hinlopen Huis,1,,1,,,,,
-1267,C&A,1,,,,1,,,
-1268,De Brakke Grond,1,,,1,,,,
-1269,Bitterzoet,1,,,1,,,,
-1270,Akhnaton,1,,,1,,,,
-1271,Van Den Berg's Broodjesbar,1,1,,,,,,
-1272,Beaufort,1,,,,1,,,
-1273,Oporto,1,,,1,,,,
-1274,De Keuken Van 187,1,,,,,1,,
-1275,De Bijenkorf,1,,,,1,,,
-1276,Blincker,1,,,1,,,,
-1277,Kapitein Zeppo's,1,,,,,1,,
-1278,Rialto Cinema,1,,,1,,,,
-1279,El Guapo,1,,,1,,,,
-1280,Hans Appenzeller,1,,,,1,,,
-1281,Cosmic Theatre,1,,,1,,,,
-1282,3-D Hologrammen,1,,,,1,,,
-1283,Pannenkoekenhuis Upstairs,1,1,,,,,,
-1284,Chocolate,1,,,1,,,,
-1285,Museum Van Loon,1,,1,,,,,
-1286,Poezenboot,1,,1,,,,,
-1287,Allard Pierson Museum,1,,1,,,,,
-1289,Tara,1,,,1,,,,
-1290,Het Oranje Voetbal Museum,1,,1,,,,,
-1291,Blue Note,1,,,1,,,,
-1292,Pilsvogel,1,,,1,,,,
-1293,Vroom & Dreesmann,1,,,,1,,,
-1294,Madame Tussauds Amsterdam,1,,1,,,,,
-1295,Shirt Shop,1,,,,1,,,
-1296,Amsterdam Photography,1,,,,1,,,
-1297,Hana Zuki,1,,,,1,,,
-1298,Sappho,1,1,,,,,,
-1299,Mamouche,1,1,,,,,,
-1300,De Drie Fleschjes,1,,,1,,,,
-1301,Stout,1,1,,,,,,
-1302,Stadsarchief,1,,1,,,,,
-1303,Kalvertoren Shopping Centre,1,,,,1,,,
-1304,Homegrown Fantasy,1,,,,1,,,
-1305,Lof,1,1,,,,,,
-1306,American Book Center,1,,,,1,,,
-1307,Van Vlaanderen,1,1,,,,,,
-1308,Village Bagels,1,1,,,,,,
-1309,De Belhamel,1,1,,,,,,
-1310,ARC,1,,,1,,,,
-1311,Meeuwig & Zn,1,,,,1,,,
-1312,Fame Music,1,,,,1,,,
-1313,Bar A,1,,,,,1,,
-1314,Piet de Leeuw,1,1,,,,,,
-1315,Bloemenmarkt,1,,,,1,,,
-1316,Hart's Wijnhandel,1,,,,,1,,
-1317,Heineken Experience,1,,1,,,,,
-1318,H&M,1,,,,1,,,
-1319,Laundry Industry,1,,,,1,,,
-1320,Rose's Cantina,1,1,,,,,,
-1321,Sal Meijer,1,1,,,,,,
-1322,Kattenkabinet,1,,1,,,,,
-1323,Supperclub,1,,,1,,,,
-1324,Cityboek,1,,,,1,,,
-1325,Waterstone's,1,,,,1,,,
-1326,Vleminckx,1,1,,,,,,
-1327,Multatuli Museum,1,,1,,,,,
-1328,Barney's,1,,,,,1,,
-1329,Female & Partners,1,,,,1,,,
-1330,Fair Trade Shop,1,,,,1,,,
-1331,Pilsener Club,1,,,1,,,,
-1332,De Schutter,1,,,1,,,,
-1335,Prik,1,,,1,,,,
-1336,De Blauwe Parade,1,,,1,,,,
-1337,Taart van m'n Tante,1,,,,,1,,
-1338,Lieve Hemel,1,,,,1,,,
-1339,Innerspace,1,,,,1,,,
-1340,Dampkring,1,,,1,,,,
-1341,Bar Bep,1,,,1,,,,
-1342,Turkiye,1,1,,,,,,
-1343,Golden Bend,1,,1,,,,,
-1344,Le Cellier,1,,,,1,,,
-1345,Magna Plaza,1,,,,1,,,
-1346,Canal Motorboats,1,,,,,,1,
-1347,Pinokkio,1,,,,1,,,
-1348,Green Planet,1,,,,,,1,
-1349,Decorativa,1,,,,1,,,
-1350,Dansen Bij Jansen,1,,,1,,,,
-1351,Dulac,1,,,1,,,,
-1352,Pasta e Basta,1,1,,,,,,
-1353,Volksbond Shop,1,,,,1,,,
-1354,Vrolijk,1,,,,1,,,
-1355,Cambodja City,1,1,,,,,,
-1356,De Bierkoning,1,,,,1,,,
-1358,De Appel,1,,1,,,,,
-1359,Kadinsky,1,,,1,,,,
-1360,Maraon Hangmatten,1,,,,,1,,
-1362,Saturnino,1,,,1,,,,
-1363,University Library,1,,1,,,,,
-1364,Zagros,1,1,,,,,,
-1365,Lucius,1,1,,,,,,
-1366,Intermale,1,,,,1,,,
-1367,Other Side,1,,,1,,,,
-1368,Jaski,1,,,,1,,,
-1369,Restaurant Red,1,1,,,,,,
-1370,Concrete,1,,,1,,,,
-1371,'t Arendsnest,1,,,1,,,,
-1372,Vrankrijk,1,,,1,,,,
-1374,Fates,1,,,,1,,,
-1375,Grey Area,1,,,,1,,,
-1376,Odeon,1,,,1,,,,
-1377,Luxembourg,1,1,,,,,,
-1378,Cracked Kettle,1,,,,1,,,
-1379,Gollem,1,,,1,,,,
-1380,De Burgermeester,1,1,,,,,,
-1381,d'Vijff Vlieghen,1,,,,,1,,
-1383,Hoppe,1,,,1,,,,
-1384,Zen,1,1,,,,,,
-1385,Wella Warenhaus,1,,,,1,,,
-1386,Grekas,1,1,,,,,,
-1387,De Zwart,1,,,1,,,,
-1388,Selexyz Scheltema,1,,,,1,,,
-1390,Carl Denig,1,,,,1,,,
-1391,Krijtberg,1,,1,,,,,
-1392,Dutch Flowers,1,,,1,,,,
-1393,Eduard Kramer,1,,,,1,,,
-1394,Nic Nic,1,,,,1,,,
-1395,Het Papeneiland,1,,,1,,,,
-1396,Brilmuseum,1,,,,1,,,
-1397,Conscious Dreams Dreamlounge,1,,,,1,,,
-1398,Huis Met de Hoofden,1,,1,,,,,
-1399,Proust,1,,,1,,,,
-1400,Van Brienenhofje,1,,1,,,,,
-1401,Fietsfabriek,1,,,,1,,,
-1402,Yoi,1,,,,1,,,
-1403,Finch,1,,,1,,,,
-1404,Urban Picnic,1,,,,1,,,
-1405,Klein Antiek,1,,,,1,,,
-1406,De Admiraal,1,,,1,,,,
-1407,Buffet van Odette,1,1,,,,,,
-1408,Tinkerbell,1,,,,1,,,
-1409,Be Innocent,1,,,,1,,,
-1410,De Rode Hoed,1,,1,,,,,
-1411,Discostars,1,,,,1,,,
-1412,Small World Catering,1,1,,,,,,
-1413,Bordewijk,1,1,,,,,,
-1414,Stenelux,1,,,,1,,,
-1415,La Diablita,1,,,,1,,,
-1416,Lambiek,1,,,,1,,,
-1417,Theatermuseum,1,,1,,,,,
-1418,Reflex New Art Gallery,1,,,,1,,,
-1419,De 2 Grieken,1,1,,,,,,
-1420,Architectura & Natura,1,,,,1,,,
-1423,Metz Department Store,1,,1,,,,,
-1424,Noordermarkt,1,,,,1,,,
-1425,Hester van Eeghen,1,,,,1,,,
-1426,Reflex Modern Art Gallery,1,,,,1,,,
-1427,Noodle & Go,1,1,,,,,,
-1428,Lady Day,1,,,,1,,,
-1429,Zipper,1,,,,1,,,
-1431,Exota,1,,,,1,,,
-1432,Pancake Bakery,1,1,,,,,,
-1433,Noorderkerk,1,,1,,,,,
-1434,Duende,1,1,,,,,,
-1435,Los Pilones,1,1,,,,,,
-1436,Laura Dols,1,,,,1,,,
-1437,Bijbels Museum,1,,1,,,,,
-1438,Winkel,1,1,,,,,,
-1440,Brix Food 'N' Drinx,1,,,,,1,,
-1441,Thai Corner,1,1,,,,,,
-1442,Deshima,1,,,,1,,,
-1443,Nou Moe Stripwinkel,1,,,,1,,,
-1444,Nou Moe,1,,,,1,,,
-1445,Zinne & Minne,1,,,,1,,,
-1447,Gamekeeper,1,,,,1,,,
-1448,Bagels & Beans,1,1,,,,,,
-1449,Global Chillage,1,,,1,,,,
-1450,De Bolhoed cv,1,1,,,,,,
-1451,Spoiled,1,,,,1,,,
-1452,Eichholtz,1,,,,1,,,
-1453,Bourbon Street Jazz & Blues Club,1,,,1,,,,
-1454,Wolvenstraat 23,1,,,1,,,,
-1455,Moeder's Pot Eethuisje,1,1,,,,,,
-1456,Rijksmuseum,1,,1,,,,,
-1457,Miauw,1,,,,1,,,
-1458,Christophe,1,1,,,,,,
-1459,Jg Beune,1,,,,1,,,
-1460,Uri Duri,1,,,,1,,,
-1461,Huis Marseille,1,,1,,,,,
-1462,Restaurant Ps,1,1,,,,,,
-1463,Cora Kemperman,1,,,,1,,,
-1464,Bojo,1,1,,,,,,
-1465,Sabor de Maria,1,1,,,,,,
-1466,Mechanisch Speelgoed,1,,,,1,,,
-1468,Homomonument,1,,1,,,,,
-1469,Rokerij,1,,,1,,,,
-1470,De Uitkijk,1,,,1,,,,
-1471,Episode,1,,,,1,,,
-1472,Felix Meritis Building,1,,1,,,,,
-1473,Cobra Cafe-Restaurant,1,1,,,,,,
-1474,De Struisvogel,1,1,,,,,,
-1475,Netherlands Media Art Institute,1,,1,,,,,
-1476,Amsterdam Tulip Museum,1,,1,,,,,
-1477,Local Service,1,,,,1,,,
-1478,Anne Frank Huis,1,,1,,,,,
-1480,De Twee Zwaantjes,1,,,1,,,,
-1481,Heinen Delftware,1,,,,1,,,
-1482,Movies,1,,,1,,,,
-1484,Westerkerk,1,,1,,,,,
-1485,De Prins,1,,,1,,,,
-1486,De Kaaskamer,1,1,,,,,,
-1487,De Witte Tanden Winkel,1,,,,1,,,
-1488,Cilubang,1,1,,,,,,
-1489,FEBO,1,1,,,,,,
-1490,Pianola Museum,1,,1,,,,,
-1491,Wil Graanstra Friteshuis,1,1,,,,,,
-1492,Nielsen,1,1,,,,,,
-1493,Hug Gallery For International Photography,1,,,,1,,,
-1494,Hein,1,1,,,,,,
-1495,Skins Cosmetics,1,,,,1,,,
-1496,Wagamama,1,1,,,,,,
-1497,Jean Jean,1,1,,,,,,
-1498,Nieuws,1,,,,1,,,
-1499,De Blaffende Vis,1,,,1,,,,
-1500,Haarlemmerpoort,1,,1,,,,,
-1501,Lust,1,,,,1,,,
-1502,Van Puffelen,1,,,1,,,,
-1503,De Doffer,1,,,1,,,,
-1504,Sama Sebo,1,1,,,,,,
-1505,De Waterwinkel,1,,,,1,,,
-1507,De Balie,1,,,1,,,,
-1508,Bulldog,1,,,1,,,,
-1510,Brasil Music Bar,1,,,1,,,,
-1511,Diamond Museum,1,,1,,,,,
-1512,Paleis Van Justitie,1,,1,,,,,
-1513,Frozen Fountain,1,,,,1,,,
-1515,Josine Bokhoven,1,,,,1,,,
-1517,Galleria d'Arte Rinascimento,1,,,,,1,,
-1518,Houseboat Museum,1,,1,,,,,
-1519,Museumplein,1,,1,,,,,
-1520,Kitsch Kitchen,1,,,,1,,,
-1521,La Savonnerie,1,,,,1,,,
-1522,Suzy Wong,1,,,1,,,,
-1523,Pasta di Mamma,1,1,,,,,,
-1524,De Pieper,1,,,1,,,,
-1525,Stadsschouwburg,1,,,1,,,,
-1526,International Theatre & Film Books,1,,,,1,,,
-1527,Local,1,1,,,,,,
-1528,Japanese Pancake World,1,1,,,,,,
-1529,La Tertulia,1,,,1,,,,
-1530,Eylders,1,,,1,,,,
-1531,De Tuin,1,,,1,,,,
-1532,Het Oud-Hollandsch Snoepwinkeltje,1,,,,1,,,
-1533,Broodje Mokum,1,1,,,,,,
-1534,Cinema Paradiso,1,,,1,,,,
-1535,Sugar Factory,1,,,1,,,,
-1536,Burger's Patio,1,,,,,1,,
-1538,De Lach,1,,,,1,,,
-1539,Cinecenter,1,,,1,,,,
-1540,Melkweg,1,,,1,,,,
-1541,House of Bols,1,,1,,,,,
-1542,Stedelijk Museum Bureau Amsterdam,1,,1,,,,,
-1543,Rakang Thai,1,1,,,,,,
-1544,Lux,1,1,,,,,,
-1545,Van Gogh Museum,1,,1,,,,,
-1547,Kamer 41,1,,,,,1,,
-1548,Weber,1,1,,,,,,
-1549,De Smoeshaan,1,,,1,,,,
-1550,Kleurgamma,1,,,,1,,,
-1551,Saarein,1,,,1,,,,
-1552,Torch Gallery,1,,,,1,,,
-1553,Arnold Cornelis,1,,,,1,,,
-1556,Xsmall,1,,,,1,,,
-1557,Cats & Things,1,,,,1,,,
-1558,Goldstrasse,1,,,,1,,,
-1559,Eva Damave,1,,,,1,,,
-1560,Broer & Zus,1,,,,1,,,
-1561,English Bookshop,1,,,,1,,,
-1562,Concertgebouw,1,,,1,,,,
-1563,Nomads,1,,,,,,1,
-1564,Bever Zwerfsport,1,,,,1,,,
-1565,De Vliegende Schotel,1,1,,,,,,
-1566,De Belly,1,,,,1,,,
-1567,Maloe Melo,1,,,1,,,,
-1568,Korsakoff,1,,,1,,,,
-1569,Women's Outdoor World,1,,,,,1,,
-1570,Wonen 2,1,,,,,1,,
-1571,Lairesse Apotheek,1,,,,1,,,
-1572,Moeders,1,1,,,,,,
-1573,Flex Bar,1,,,1,,,,
-1575,Het Ketelhuis,1,,,1,,,,
-1576,Het Schip,1,,1,,,,,
-1577,Vondelkerk,1,,1,,,,,
-1578,Blender,1,1,,,,,,
-1580,Westergasfabriek,1,,1,,,,,
-1581,'t Blauwe Theehuis,1,,,1,,,,
-1582,De Trut,1,,,1,,,,
-1583,Pacific Parc,1,1,,,,,,
-1584,Hollandsche Manege,1,,1,,,,,
-1585,Gary's Muffins,1,1,,,,,,
-1586,Het Groot Melkhuis,1,,,1,,,,
-1588,Lalibela,1,,1,,,,,
-1589,Orgelpark,1,,1,,,,,
-1590,Paloma Blanca,1,1,,,,,,
-1591,Waroeng Asje,1,1,,,,,,
-1592,De Vondeltuin,1,,,,,,1,
-1593,Electrische Museumtramlijn Amsterdam,1,,1,,,,,
-1594,Tenniscentrum Amstelpark,1,,,,,,1,
-1595,So Dutch Fashion,1,,,,1,,,
-1596,Amsterdamse Bos Theatre,1,,,1,,,,
-1597,Campsite De Liede,1,,,,,,1,
-1598,Bakenesserkerk,1,,1,,,,,
-1599,Teylers Museum,1,,1,,,,,
-1600,Hofje Van Staats,1,,1,,,,,
-1601,Toneelschuur,1,,,1,,,,
-1602,Grand Cafe Nobel,1,1,,,,,,
-1603,Philharmonie,1,,1,,,,,
-1604,Proeflokaal In den Uiver,1,,,1,,,,
-1605,Grote Kerk van St Bavo,1,,1,,,,,
-1606,Falafel Land,1,1,,,,,,
-1607,Flamboyant,1,1,,,,,,
-1609,Jacobus Pieck,1,1,,,,,,
-1610,Specktakel,1,1,,,,,,
-1611,De Hallen,1,,1,,,,,
-1613,De Haerlemsche Vlaamse,1,1,,,,,,
-1614,Corrie Ten Boom House,1,,1,,,,,
-1615,La Forca,1,1,,,,,,
-1617,Complimenti,1,1,,,,,,
-1618,A la Turka,1,1,,,,,,
-1619,Grote Markt,1,,1,,,,,
-1620,Grote Markt,1,,1,,,,,
-1621,Town Hall,1,,1,,,,,
-1622,Frans Hals Museum,1,,1,,,,,
-1624,Botermarkt,1,,,,1,,,
-1626,Proveniershuis,1,,1,,,,,
-1627,Nieuwe Kerk,1,,1,,,,,
-1628,Patronaat,1,,,1,,,,
-1629,Stadsschouwburg,1,,,1,,,,
-1630,Willemsbrug,1,,,1,,,,
-1631,Leiden American Pilgrim Museum,1,,1,,,,,
-1632,Openlucht Binnenvaart Museum,1,,1,,,,,
-1633,Oude Haven,1,,1,,,,,
-1634,Luxor Theater,1,,,1,,,,
-1636,Willemswerf,1,,1,,,,,
-1637,Joho,1,,,,1,,,
-1638,Kijkhuis,1,,,1,,,,
-1639,In Casa,1,,,1,,,,
-1640,Blits,1,1,,,,,,
-1641,Lakenhal,1,,1,,,,,
-1642,Nederlands Fotomuseum,1,,1,,,,,
-1643,De Valk,1,,1,,,,,
-1645,Verboden Toegang,1,1,,,,,,
-1647,Restaurant In Den Doofpot,1,1,,,,,,
-1648,Rederij Rembrandt,1,,,,,,1,
-1649,Viva Italia,1,1,,,,,,
-1651,Rotterdam Walk of Fame,1,,1,,,,,
-1652,Restaurant 't Einde,1,1,,,,,,
-1653,Historisch Museum het Schielandhuis,1,,1,,,,,
-1654,Wereldmuseum,1,,1,,,,,
-1655,The Beurstraverse,1,,,,1,,,
-1656,Gay Palace,1,,,1,,,,
-1657,Kip,1,1,,,,,,
-1658,The Lijnbaan,1,,,,1,,,
-1659,off_corso,1,,,1,,,,
-1660,Schouwburg,1,,,1,,,,
-1661,Kunsthal,1,,1,,,,,
-1662,Naturalis & NHM,1,,,,,1,,
-1663,Museum Boijmans van Beuningen,1,,1,,,,,
-1664,De Doelen,1,,,1,,,,
-1665,Stalles,1,,,1,,,,
-1666,Parkheuvel,1,1,,,,,,
-1667,Rotown,1,,,1,,,,
-1668,Nederlands Architectuur Instituut,1,,1,,,,,
-1669,Panorama,1,,,1,,,,
-1670,Look,1,1,,,,,,
-1671,Dizzy,1,,,1,,,,
-1672,Nieuwe Binnenweg,1,,,,1,,,
-1673,Stadsbrouwerij De Pelgrim,1,1,,,,,,
-1674,De Dubbelde Palmboom,1,,1,,,,,
-1675,Oude Kerk,1,,1,,,,,
-1678,Vlaanderen,1,1,,,,,,
-1680,Legermuseum,1,,1,,,,,
-1681,Locus Publicus,1,,,1,,,,
-1682,Nieuwe Kerk,1,,1,,,,,
-1683,de Candelaer,1,,1,,,,,
-1685,Town Hall,1,,1,,,,,
-1686,OJV de Koornbeurs,1,,,1,,,,
-1687,De Zeven Zonden,1,1,,,,,,
-1688,Boekhandel Huyser,1,,,,1,,,
-1689,Stadys Koffyhuis,1,1,,,,,,
-1690,Artusi,1,1,,,,,,
-1691,Oude Kerk,1,,1,,,,,
-1692,Municipal Museum het Prinsenhof,1,,1,,,,,
-1693,De Delftse Pauw,1,,1,,,,,
-1694,OKA,1,1,,,,,,
-1695,Dr Anton Philipszaal,1,,,1,,,,
-1696,Nederlands Dans Theater,1,,,1,,,,
-1697,Cinematheek Haags Filmhuis,1,,,1,,,,
-1698,De Sax,1,,,1,,,,
-1699,New Town Hall,1,,1,,,,,
-1700,Escher in het Paleis Museum,1,,1,,,,,
-1701,Mauritshuis,1,,1,,,,,
-1702,Binnenhof,1,,1,,,,,
-1703,Galerij Prins Willem V,1,,1,,,,,
-1704,Gevangenpoort,1,,1,,,,,
-1705,De Zwarte Ruiter,1,,,1,,,,
-1706,Van Stockum,1,,,,1,,,
-1707,Boterwaag,1,1,,,,,,
-1709,Fiddler,1,,,1,,,,
-1710,Montmartre,1,1,,,,,,
-1711,Grote Kerk,1,,1,,,,,
-1712,Paard van Troje,1,,,1,,,,
-1713,Paleis Noordeinde,1,,1,,,,,
-1714,PUCK,1,1,,,,,,
-1715,It Rains Fishes,1,1,,,,,,
-1716,Panorama Mesdag,1,,1,,,,,
-1717,Madurodam,1,,1,,,,,
-1718,Vredespaleis,1,,1,,,,,
-1719,Kurzaal Bar,1,,,1,,,,
-1720,Topkapi Sense Restaurant,1,1,,,,,,
-1721,Gemeentemuseum,1,,1,,,,,
-1722,Concert- en Gehoorzaal,1,,,1,,,,
-1723,De Tuin Van Broeder Ludovicus,1,1,,,,,,
-1725,Koorkerk,1,,1,,,,,
-1726,Wandelkerk,1,,1,,,,,
-1727,Historama,1,,1,,,,,
-1728,Zeeuws Museum,1,,1,,,,,
-1729,Abdji,1,,1,,,,,
-1730,Nieuwe Kerk,1,,1,,,,,
-1731,De Drvkkery,1,,,,1,,,
-1732,Peper & Zout,1,1,,,,,,
-1733,Zuidwester,1,1,,,,,,
-1734,Town Hall,1,,1,,,,,
-1735,De Mug,1,,,1,,,,
-1736,Schuttershof,1,,,1,,,,
-1737,Jewish Cemetery,1,,1,,,,,
-1738,Groninger Museum,1,,1,,,,,
-1739,Ramparts,1,,,,,,1,
-1740,Deeg,1,1,,,,,,
-1741,Domkerk,1,,1,,,,,
-1742,Selexyz Broese,1,,,,1,,,
-1746,Flevoparkbad,1,,,,,,1,
-1748,IJscomplex Jaap Eden,1,,,,,,1,
-1749,Roos en Noor,1,1,,,,,,
-1750,De Wereldbol,1,1,,,,,,
-1751,Kanis & Meiland,1,1,,,,,,
-1752,Kompaszaal,1,1,,,,,,
-1753,Keet in Huis,1,,,,1,,,
-1754,Loods 6,1,,,,1,,,
-1755,De Ode,1,,,,1,,,
-1756,Vishandel Rinkoen,1,1,,,,,,
-1757,Snel,1,1,,,,,,
-1758,Studio K,1,,,1,,,,
-1759,Einde Van de Wereld,1,1,,,,,,
-1760,De Kas,1,1,,,,,,
-1761,Dappermarkt,1,,,,1,,,
-1762,Brouwerij 'tIj,1,,,,,1,,
-1763,De Gooyer Windmill,1,,1,,,,,
-1764,Trinbago,1,1,,,,,,
-1765,Roopram Roti,1,1,,,,,,
-1767,Frank's Smokehouse,1,,,,,1,,
-1768,Oosterpark,1,,1,,,,,
-1769,Elkaar,1,1,,,,,,
-1770,Floraparkbad,1,,,,,,1,
-1771,To Night,1,,,1,,,,
-1772,Bimhuis,1,,,1,,,,
-1773,A Tavola,1,1,,,,,,
-1775,Canvas,1,1,,,,,,
-1777,Hollandsche Schouwburg,1,,1,,,,,
-1778,Nationaal Vakbondsmuseum,1,,1,,,,,
-1779,Kriterion,1,,,1,,,,
-1780,Villa Ruysch,1,1,,,,,,
-1781,Greetje,1,1,,,,,,
-1782,De Ijsbreker,1,,,1,,,,
-1783,Stadsboekwinkel,1,,,,1,,,
-1784,Le Hollandais,1,1,,,,,,
-1785,Gassan Diamonds,1,,,,,,1,
-1786,Hemelse Modder,1,1,,,,,,
-1787,Garden Gym,1,,,,,,1,
-1788,Het Fort Van Sjakoo,1,,,,1,,,
-1789,De Tokoman,1,1,,,,,,
-1790,De Mirandabad,1,,,,,,1,
-1791,Holland Experience,1,,1,,,,,
-1792,Hofje van Wijs,1,,,1,,,,
-1793,'t Mandje,1,,,1,,,,
-1794,Casablanca,1,,,1,,,,
-1795,Outland Records,1,,,,1,,,
-1797,Thais Snackbar Bird,1,1,,,,,,
-1798,Gijsbert Dommer Huis,1,,1,,,,,
-1799,Latei,1,,,1,,,,
-1800,Lo Stivale d'oro,1,,,,,1,,
-1801,'Skek,1,1,,,,,,
-1802,Dwaze Zaken,1,1,,,,,,
-1803,Brouwerij de Prael,1,,,,1,,,
-1804,Gaziantep/Harison's,1,,,,,1,,
-1805,In de Olofspoort,1,,,1,,,,
-1807,Toko Joyce,1,1,,,,,,
-1808,Trippenhuis,1,,1,,,,,
-1809,De Bekeerde Suster,1,,,1,,,,
-1810,Chiellerie,1,,,,1,,,
-1811,Jacob Hooy & Co,1,,,,1,,,
-1812,Coffee & Jazz,1,1,,,,,,
-1813,Randy Roy's Redlight Tours,1,,,,,1,,
-1814,Frenzi,1,1,,,,,,
-1815,Tujuh Maret,1,1,,,,,,
-1816,De Engelbewaarder,1,,,1,,,,
-1817,Loekie,1,1,,,,,,
-1818,Absolute Danny,1,,,,1,,,
-1819,Getto,1,,,1,,,,
-1820,Oude Kerk,1,,1,,,,,
-1821,Hema,1,,,,1,,,
-1822,Cannabis College,1,,1,,,,,
-1823,Plant Market,1,,,,1,,,
-1824,Mr B,1,,,,1,,,
-1825,Filmantiquariaat Cine Qua Non,1,,,,1,,,
-1826,Studio 8,1,,,,,1,,
-1828,Antiques Market,1,,,,1,,,
-1829,Argos,1,,,,1,,,
-1830,De Kroon,1,,,1,,,,
-1831,Cockring,1,,,1,,,,
-1832,Oriental City,1,1,,,,,,
-1833,Mokum Events,1,,,,,,1,
-1834,Montmartre,1,1,,,,,,
-1835,Greenhouse,1,1,,,,,,
-1836,Amstel Taverne,1,,,1,,,,
-1837,Oudemanhuispoort,1,,1,,,,,
-1838,Oudemanhuis Book Market,1,,,,1,,,
-1839,Bazar Amsterdam,1,1,,,,,,
-1841,Tuschinskitheater,1,,,1,,,,
-1843,Amstelpark,1,,1,,,,,
-1844,Fitness First,1,,,,,,1,
-1845,Rob Wigboldus Vishandel,1,1,,,,,,
-1846,Free I,1,,,1,,,,
-1847,Van Kerkwijk,1,1,,,,,,
-1848,Bubbles & Wines Champagne Bar,1,,,1,,,,
-1849,Nationaal Monument,1,,1,,,,,
-1850,Ronde Lutherse Kerk,1,,1,,,,,
-1851,Dam Square & Nationaal Monument,1,,1,,,,,
-1852,Frascati,1,1,,,,,,
-1853,Brasserie Harkema,1,1,,,,,,
-1854,Puyck,1,1,,,,,,
-1855,News Photo,1,,1,,,,,
-1857,Runneboom,1,1,,,,,,
-1858,Aurora Kontakt,1,,,,1,,,
-1859,Munttoren,1,,1,,,,,
-1860,Nukuhiva,1,,,,1,,,
-1861,Ijscuypje,1,1,,,,,,
-1862,FOAM,1,,1,,,,,
-1863,Appel 67,1,,,,1,,,
-1864,De Vredespijp,1,,,,1,,,
-1865,La Place,1,1,,,,,,
-1866,Maison de Bonneterie,1,,,,1,,,
-1867,Pgc Hajenius,1,,,,1,,,
-1868,Gone With the Wind,1,,,,1,,,
-1869,Nieuwe Kerk,1,,1,,,,,
-1870,Papagaai,1,,1,,,,,
-1871,Pop @rt,1,,,,1,,,
-1872,Gartine,1,1,,,,,,
-1873,Dop,1,1,,,,,,
-1875,Rush Hour Records,1,,,,1,,,
-1876,Amsterdams Historisch Museum,1,,1,,,,,
-1877,Civic Guard Gallery,1,,1,,,,,
-1878,Open,1,,,1,,,,
-1879,Kingfisher,1,1,,,,,,
-1880,Morning Star,1,1,,,,,,
-1882,Stamp & coin market,1,,,,1,,,
-1883,Lunchroom Hannibal,1,1,,,,,,
-1884,Unlimited Delicious,1,,,,1,,,
-1885,18 Twintig,1,,,1,,,,
-1886,Pygma-Lion,1,1,,,,,,
-1887,Downtown Amsterdam,1,1,,,,,,
-1888,Begijnhof,1,,1,,,,,
-1889,Kismet,1,1,,,,,,
-1890,Albert Cuyp 67,1,1,,,,,,
-1891,Tjing Tjing,1,1,,,,,,
-1892,Villa Zeezicht,1,1,,,,,,
-1893,Le Petit Latin,1,1,,,,,,
-1894,University Shop,1,,,,1,,,
-1895,Squash City,1,,,,,,1,
-1896,Bakken Met Passie,1,1,,,,,,
-1898,British Language Training Centre,1,,,,,,1,
-1899,Havanna,1,1,,,,,,
-1900,Athenaeum Bookshop & Newsagency,1,,,,1,,,
-1901,Reypenaer,1,,,,,,1,
-1902,De Waaghals,1,1,,,,,,
-1903,Jordino,1,1,,,,,,
-1904,Balti House,1,1,,,,,,
-1905,Haesje Claes,1,1,,,,,,
-1906,Au Bout du Monde,1,,,,1,,,
-1907,Orontes,1,1,,,,,,
-1908,Tweede Kamer,1,,,1,,,,
-1909,De Witte Uyl,1,1,,,,,,
-1910,Blond,1,,,,1,,,
-1911,Lanskroon,1,1,,,,,,
-1912,'t Zonnetje,1,,,,1,,,
-1913,Callas 43,1,,,,1,,,
-1914,Antonia by Yvette,1,,,,1,,,
-1915,Mike's Bike Tours,1,,,,,,1,
-1916,Papabubble,1,,,,1,,,
-1917,Koan Float,1,,,,,,1,
-1919,Tiller Galerie,1,,,,1,,,
-1920,Architectuurantiquariat Opbouw,1,,,,1,,,
-1921,Art & Vine,1,,,,1,,,
-1922,Amsterdam Watch Company,1,,,,1,,,
-1923,De II Prinsen,1,,,1,,,,
-1924,Beadies,1,,,,1,,,
-1925,When Nature Calls,1,,,,1,,,
-1926,Zuiderbad,1,,,,,,1,
-1927,De Pizza Bakkers,1,1,,,,,,
-1928,Young Designers United,1,,,,1,,,
-1929,Hj Van de Kerkhof,1,,,,1,,,
-1930,Your Cup of T,1,,,,1,,,
-1931,Goodies,1,1,,,,,,
-1935,Toscanini,1,1,,,,,,
-1936,Spanjer en Van Twist,1,1,,,,,,
-1938,Koevoet,1,1,,,,,,
-1939,Ook,1,,,,1,,,
-1940,Pastini,1,1,,,,,,
-1941,Di'Vino Wijnbar,1,,,,,1,,
-1942,Lindengracht market,1,,,,1,,,
-1943,Loetje,1,1,,,,,,
-1944,Negen Straatjes,1,,,,1,,,
-1945,Rock Archive,1,,,,1,,,
-1946,CoBrA Museum,1,,1,,,,,
-1947,Paradiso,1,,,,,,1,
-1948,Bar Barbou,1,,,1,,,,
-1949,Mendo,1,,,,1,,,
-1950,De Kat in de Wijngaert,1,,,1,,,,
-1951,Bingo at De Spijker,1,,,1,,,,
-1952,Koh-I-Noor,1,1,,,,,,
-1953,Marlies Dekkers,1,,,,1,,,
-1954,Werck,1,1,,,,,,
-1955,Wok to Walk,1,1,,,,,,
-1956,La Falote,1,1,,,,,,
-1957,Pancakes!,1,1,,,,,,
-1958,Envy,1,1,,,,,,
-1959,Vyne,1,,,1,,,,
-1960,Coster Diamonds,1,,,,1,,,
-1961,Lab 13,1,,,,1,,,
-1962,Max Euwe Centrum,1,,1,,,,,
-1963,Wildschut,1,,,1,,,,
-1964,Shirdak,1,,,,1,,,
-1965,Boom Chicago,1,,,1,,,,
-1966,De Reiger,1,,,1,,,,
-1967,Mansion,1,,,1,,,,
-1968,Broodje Van Kootje,1,1,,,,,,
-1969,Johnny Jordaanplein,1,,1,,,,,
-1970,G-Spot,1,,,1,,,,
-1971,Divan,1,1,,,,,,
-1972,Jimmy Woo,1,1,,,,,,
-1973,Moooi Gallery,1,,,,1,,,
-1974,Festina Lente,1,1,,,,,,
-1975,Westermarkt,1,,,,1,,,
-1976,Renzo's,1,,,,,1,,
-1977,De Zotte,1,,,1,,,,
-1978,Electric Lady Land,1,,1,,,,,
-1979,Bark,1,1,,,,,,
-1980,Theater Bellevue,1,,,1,,,,
-1981,Jefferson Hotel,1,,,,1,,,
-1982,Br.wn Clothes,1,,,,1,,,
-1983,Petsalon,1,,,,1,,,
-1985,Balthazar's Keuken,1,,,,,1,,
-1986,Stedelijk Museum,1,,1,,,,,
-1987,Atelier Elandsgracht 89,1,,,,1,,,
-1988,Fotografia,1,,,,1,,,
-1989,Broekmans & Van Poppel,1,,,,1,,,
-1990,De Drie Hendricken,1,,1,,,,,
-1991,De Looier antiques market,1,,,,1,,,
-1992,Mercan,1,1,,,,,,
-1993,Sanementereng,1,,,1,,,,
-1994,Het Marnix,1,,,,,,1,
-1995,Struik,1,,,1,,,,
-1996,SPRMRKT,1,,,,1,,,
-1997,Oilily,1,,,,1,,,
-1998,Blue Pepper,1,1,,,,,,
-1999,Neef Louis Design,1,,,,1,,,
-2000,Welling,1,,,1,,,,
-2001,De Winkel Van Nijntje,1,,,,1,,,
-2002,Hammam,1,,1,,,,,
-2003,Hap Hmm,1,1,,,,,,
-2004,Vondelpark,1,,1,,,,,
-2006,Filmmuseum,1,,1,,,,,
-2007,Filmmuseum,1,,1,,,,,
-2008,Overtoom Groente en Fruit,1,1,,,,,,
-2009,De Nieuwe Anita,1,,,1,,,,
-2010,Riaz,1,1,,,,,,
-2011,De Kunstfabriek,1,,,,1,,,
-2012,Westergasterras,1,,,1,,,,
-2013,Zout & Co,1,,,,1,,,
-2014,Filmhuis Cavia,1,,,1,,,,
-2015,De Peper,1,1,,,,,,
-2016,OT31,1,,,,,1,,
-2017,Amsterdamse Bos,1,,1,,,,,
-2018,Occii,1,,1,,,,,
-2019,Occii,1,,1,,,,,
-2020,Olympic Stadium,1,,1,,,,,
-2022,Vakzuid,1,,,1,,,,
-2023,Sloterparkbad,1,,,,,,1,
-2024,Statue of Laurens Coster,1,,1,,,,,
-2025,Nas Brasas,1,1,,,,,,
-2026,Locus Publicus,1,,,1,,,,
-2027,Mayflower Bookshop,1,,,,1,,,
-2028,St Pancraskerk,1,,1,,,,,
-2030,Weimar,1,1,,,,,,
-2031,Brasserie Het Koetshuis,1,1,,,,,,
-2032,De Burcht,1,,1,,,,,
-2033,Annie's,1,,,,,1,,
-2034,Show Cube,1,,1,,,,,
-2035,Mangerie De Jonge Koekop,1,1,,,,,,
-2036,Marekerk,1,,1,,,,,
-2037,De Brasserie de Engelenbak,1,1,,,,,,
-2038,LVC,1,,,1,,,,
-2039,Museum Boerhaave,1,,1,,,,,
-2041,Latin School,1,,1,,,,,
-2042,Blaak Market,1,,,,1,,,
-2043,La Cloche,1,1,,,,,,
-2044,Rijksmuseum van Oudheden,1,,1,,,,,
-2045,Hortus Botanicus,1,,1,,,,,
-2046,Museum Volkenkunde,1,,1,,,,,
-2047,Surakarta,1,1,,,,,,
-2048,Spido,1,,,,,,1,
-2049,Dudok,1,1,,,,,,
-2050,Haven Museum,1,,1,,,,,
-2051,Botenverhuur 't Galgewater,1,,,,,1,,
-2052,Bagel Bakery,1,1,,,,,,
-2053,Maoz,1,1,,,,,,
-2054,Bagels & Beans,1,1,,,,,,
-2055,Selexyz & Donner,1,,,,1,,,
-2056,Abacanto,1,1,,,,,,
-2057,Zinc,1,1,,,,,,
-2058,Tuin Schoonoord,1,,1,,,,,
-2059,Huis Sonneveld,1,,1,,,,,
-2060,De Unie,1,,,1,,,,
-2061,Bootleg DJ Cafe,1,,,1,,,,
-2063,Toko Konfa,1,1,,,,,,
-2064,Lantaren/Venster,1,,,1,,,,
-2065,Pluto,1,,,,1,,,
-2066,Euromast,1,,1,,,,,
-2067,Westerpaviljoen,1,1,,,,,,
-2068,De Pannenkoekenboot,1,1,,,,,,
-2069,RailZ Miniworld,1,,1,,,,,
-2070,Worm,1,,,1,,,,
-2071,Het Eethuisje,1,1,,,,,,
-2072,t Walletje,1,,,,,1,,
-2073,Vermeer Centre Delft,1,,1,,,,,
-2074,Filmhuis Lumen,1,,,1,,,,
-2076,Canal Boat Tour,1,,,,,,1,
-2077,De Visbanken,1,1,,,,,,
-2078,Cafe de Oude Jan,1,,,1,,,,
-2079,La Vieux Jean,1,1,,,,,,
-2080,Museum Nusantara,1,,1,,,,,
-2081,Museum Lambert van Meerten,1,,1,,,,,
-2082,De Ooievaart,1,,,,,,1,
-2083,Cafe Hathor,1,,,1,,,,
-2084,Traditional Market,1,1,,,,,,
-2085,Les Ombrellas,1,1,,,,,,
-2086,Garoeda,1,1,,,,,,
-2087,Stanley & Livingstone,1,,,,1,,,
-2088,Coffee @ Company,1,1,,,,,,
-2090,Zebedea's,1,,,,,1,,
-2091,Pussy Deluxe Store,1,,,,1,,,
-2092,Photography Museum,1,,1,,,,,
-2093,Beachclub Doen,1,,,1,,,,
-2094,Puur! Natural Food,1,1,,,,,,
-2095,JC Creations,1,,,,1,,,
-2096,Wertheimpark,1,,1,,,,,
-2097,La Rive,1,1,,,,,,
-2098,TunFun,1,,,,,,1,
-2099,Yo-Yo,1,,,1,,,,
-2100,Centraal Station,1,,1,,,,,
-2101,Yellow Bike Tours,1,,,,,,1,
-2102,Szmulewicz,1,1,,,,,,
-2103,Sarphatipark,1,,1,,,,,
-2104,Op de Tuin,1,1,,,,,,
-2105,Mono,1,,,,1,,,
-2106,Maoz,1,1,,,,,,
-2107,Ristorante D'antica,1,,,,,1,,
-2108,Rituals,1,,,,1,,,
-2109,Koninklijk Paleis,1,,1,,,,,
-2110,Soho,1,,,1,,,,
-2111,Magic Mushroom Gallery,1,,,,1,,,
-2112,Athenaeum,1,,,1,,,,
-2113,Orange Bike,1,,,,,,1,
-2114,Foodism,1,1,,,,,,
-2115,Heuvel,1,,,1,,,,
-2116,Shoebaloo,1,,,,1,,,
-2117,Cellarrich,1,,,,1,,,
-2118,Marius,1,1,,,,,,
-2120,Van Ravenstein,1,,,,1,,,
-2121,Minibar,1,,,1,,,,
-2122,Felix Meritis,1,,,1,,,,
-2123,Boekie Woekie,1,,,,1,,,
-2126,Pauw,1,,,,1,,,
-2127,Markt,1,,1,,,,,
-2128,Semhar,1,1,,,,,,
-2129,Openluchttheater,1,,,1,,,,
-2131,Hoofdbureau,1,,,,1,,,
-2132,Terang Boelan,1,1,,,,,,
-2133,C'est La Vie,1,1,,,,,,
-2134,Zee Zout,1,1,,,,,,
-2135,Nemo,1,,,,1,,,
-2136,Oorlogs Verzets Museum,1,,1,,,,,
-2137,De Oude Sluis,1,,,1,,,,
-2138,Cloos,1,1,,,,,,
-2139,De Passage,1,,,,1,,,
-2140,Lokaal 'T Loosje,1,,,,,1,,
-2141,NDSM-Werf,1,,1,,,,,
-2142,Sauna Deco,1,,,,,,1,
-2143,Vleeshal,1,,1,,,,,
-2144,Verweyhal,1,,1,,,,,
-2145,Abraxas,1,,,1,,,,
-2146,Post Verkade Cruises,1,,,,,,1,
-2147,North End,1,,,1,,,,
-2148,Thermos Day Sauna,1,,,,,,1,
+﻿e,name,sum,c123,c124,c125,c126,c127,c128,c1290,Brummen,1,,,,,,,11,Buren,1,,,,,,,12,Culemborg,1,,,,,,,13,Didam,1,,,,,,,14,Dinxperlo,1,,,,,,,15,Doesburg,1,,,,,,,16,Doetinchem,1,,,,,,,17,Druten,1,,,,,,,18,Duiven,1,,,,,,,19,Ede,1,,,,,,,110,Eibergen,1,,,,,,,111,Elburg,1,,,,,,,112,Epe,1,,,,,,,113,Ermelo,1,,,,,,,114,Geldermalsen,1,,,,,,,115,Gendringen,1,,,,,,,116,Gorssel,1,,,,,,,117,Groenlo,1,,,,,,,118,Belgium,1,,,,,,,119,Groesbeek,1,,,,,,,120,Harderwijk,1,,,,,,,121,Hattem,1,,,,,,,122,Heerde,1,,,,,,,123,Hengelo,1,,,,,,,124,Heumen,1,,,,,,,125,Hummelo en Keppel,1,,,,,,,126,Kesteren,1,,,,,,,127,Lichtenvoorde,1,,,,,,,128,Lingewaal,1,,,,,,,129,Lingewaard,1,,,,,,,130,Lochem,1,,,,,,,131,Spiere-Helkijn,1,,,,,,,132,Maasdriel,1,,,,,,,133,Millingen aan de Rijn,1,,,,,,,134,Neede,1,,,,,,,135,Neerijnen,1,,,,,,,136,Nijkerk,1,,,,,,,137,Nijmegen,1,,,,,,,138,Nunspeet,1,,,,,,,139,Oldebroek,1,,,,,,,140,Overbetuwe,1,,,,,,,141,Putten,1,,,,,,,142,Renkum,1,,,,,,,143,Rheden,1,,,,,,,144,Rijnwaarden,1,,,,,,,145,Rozendaal,1,,,,,,,146,Ruurlo,1,,,,,,,147,Scherpenzeel,1,,,,,,,148,Steenderen,1,,,,,,,149,Tiel,1,,,,,,,150,Ubbergen,1,,,,,,,151,Voorst,1,,,,,,,152,Vorden,1,,,,,,,153,Wageningen,1,,,,,,,154,Warnsveld,1,,,,,,,155,Wehl,1,,,,,,,156,West Maas en Waal,1,,,,,,,157,Westervoort,1,,,,,,,158,Wijchen,1,,,,,,,159,Winterswijk,1,,,,,,,160,Wisch,1,,,,,,,161,Zaltbommel,1,,,,,,,162,Zelhem,1,,,,,,,163,Zevenaar,1,,,,,,,164,Zutphen,1,,,,,,,165,Appingedam,1,,,,,,,166,Bedum,1,,,,,,,167,Bellingwedde,1,,,,,,,168,Drenthe,1,,,,,,,169,De Marne,1,,,,,,,170,Delfzijl,1,,,,,,,171,Eemsmond,1,,,,,,,172,Groningen,1,,,,,,,173,Grootegast,1,,,,,,,174,Haren,1,,,,,,,175,Hoogezand-Sappemeer,1,,,,,,,176,Leek,1,,,,,,,177,Loppersum,1,,,,,,,178,Marum,1,,,,,,,179,Menterwolde,1,,,,,,,180,Pekela,1,,,,,,,181,Reiderland,1,,,,,,,182,Scheemda,1,,,,,,,183,Slochteren,1,,,,,,,184,Stadskanaal,1,,,,,,,185,Ten Boer,1,,,,,,,186,Veendam,1,,,,,,,187,Vlagtwedde,1,,,,,,,188,Winschoten,1,,,,,,,189,Winsum,1,,,,,,,190,Zuidhorn,1,,,,,,,191,Ambt Montfort,1,,,,,,,192,Arcen en Velden,1,,,,,,,193,Beek,1,,,,,,,194,Beesel,1,,,,,,,195,Bergen,1,,,,,,,196,Brunssum,1,,,,,,,197,Echt-Susteren,1,,,,,,,198,Eijsden,1,,,,,,,199,Gennep,1,,,,,,,1100,Gulpen-Wittem,1,,,,,,,1101,Haelen,1,,,,,,,1102,Heel,1,,,,,,,1103,Heerlen,1,,,,,,,1104,Helden,1,,,,,,,1105,Heythuysen,1,,,,,,,1106,Horst aan de Maas,1,,,,,,,1107,Hunsel,1,,,,,,,1108,Kerkrade,1,,,,,,,1109,Kessel,1,,,,,,,1110,Landgraaf,1,,,,,,,1111,Maasbracht,1,,,,,,,1112,Maasbree,1,,,,,,,1113,Maastricht,1,,,,,,,1114,Margraten,1,,,,,,,1115,Meerlo-Wanssum,1,,,,,,,1116,Meerssen,1,,,,,,,1117,Meijel,1,,,,,,,1118,Mook en Middelaar,1,,,,,,,1119,Nederweert,1,,,,,,,1120,Nuth,1,,,,,,,1121,Onderbanken,1,,,,,,,1122,Roerdalen,1,,,,,,,1123,Roermond,1,,,,,,,1124,Roggel en Neer,1,,,,,,,1125,Schinnen,1,,,,,,,1126,Sevenum,1,,,,,,,1127,Simpelveld,1,,,,,,,1128,Sittard-Geleen,1,,,,,,,1129,Stein,1,,,,,,,1130,Swalmen,1,,,,,,,1131,Thorn,1,,,,,,,1132,Vaals,1,,,,,,,1133,Valkenburg aan de Geul,1,,,,,,,1134,Venlo,1,,,,,,,1135,Venray,1,,,,,,,1136,Voerendaal,1,,,,,,,1137,Weert,1,,,,,,,1138,'s-Hertogenbosch,1,,,,,,,1139,Aalburg,1,,,,,,,1140,Alphen-Chaam,1,,,,,,,1141,Asten,1,,,,,,,1142,Baarle-Nassau,1,,,,,,,1143,Bergeijk,1,,,,,,,1144,Bergen op Zoom,1,,,,,,,1145,Bernheze,1,,,,,,,1146,Best,1,,,,,,,1147,Bladel,1,,,,,,,1148,Boekel,1,,,,,,,1149,Boxmeer,1,,,,,,,1150,Boxtel,1,,,,,,,1151,Breda,1,,,,,,,1152,Cranendonck,1,,,,,,,1153,Cuijk,1,,,,,,,1154,Deurne,1,,,,,,,1155,Dongen,1,,,,,,,1156,Drimmelen,1,,,,,,,1157,Eersel,1,,,,,,,1158,Eindhoven,1,,,,,,,1159,Etten-Leur,1,,,,,,,1160,Geertruidenberg,1,,,,,,,1161,Geldrop,1,,,,,,,1162,Gemert-Bakel,1,,,,,,,1163,Gilze en Rijen,1,,,,,,,1164,Goirle,1,,,,,,,1165,Grave,1,,,,,,,1166,Haaren,1,,,,,,,1167,Halderberge,1,,,,,,,1168,Heeze-Leende,1,,,,,,,1169,Helmond,1,,,,,,,1170,Heusden,1,,,,,,,1171,Hilvarenbeek,1,,,,,,,1172,Netherlands,1,,,,,,,1173,Laarbeek,1,,,,,,,1174,Landerd,1,,,,,,,1175,Lith,1,,,,,,,1176,Loon op Zand,1,,,,,,,1177,Maasdonk,1,,,,,,,1178,Mierlo,1,,,,,,,1179,Mill en Sint Hubert,1,,,,,,,1180,Moerdijk,1,,,,,,,1181,Nuenen c.a.,1,,,,,,,1182,Oirschot,1,,,,,,,1183,Oisterwijk,1,,,,,,,1184,Oosterhout,1,,,,,,,1185,Oss,1,,,,,,,1186,Flevoland,1,,,,,,,1187,Reusel-De Mierden,1,,,,,,,1188,Roosendaal,1,,,,,,,1189,Rucphen,1,,,,,,,1190,Schijndel,1,,,,,,,1191,Sint-Michielsgestel,1,,,,,,,1192,Sint-Oedenrode,1,,,,,,,1193,Sint Anthonis,1,,,,,,,1194,Someren,1,,,,,,,1195,Son en Breugel,1,,,,,,,1196,Steenbergen,1,,,,,,,1197,Tilburg,1,,,,,,,1198,Uden,1,,,,,,,1199,Valkenswaard,1,,,,,,,1200,Friesland,1,,,,,,,1201,Veghel,1,,,,,,,1202,Veldhoven,1,,,,,,,1203,Vught,1,,,,,,,1204,Waalre,1,,,,,,,1205,Waalwijk,1,,,,,,,1206,Werkendam,1,,,,,,,1207,Woensdrecht,1,,,,,,,1208,Woudrichem,1,,,,,,,1209,Zundert,1,,,,,,,1210,Aalsmeer,1,,,,,,,1211,Alkmaar,1,,,,,,,1212,Amstelveen,1,,,,,,,1213,Armenti,1,,,,,,,1214,Amsterdam,1,,,,,,,1215,Andijk,1,,,,,,,1216,Anna Paulowna,1,,,,,,,1217,Beemster,1,,,,,,,1218,Frelinghien,1,,,,,,,1219,Bennebroek,1,,,,,,,1220,Houplines,1,,,,,,,1221,Bergen,1,,,,,,,1222,La Chapelle,1,,,,,,,1223,Beverwijk,1,,,,,,,1224,P,1,,,,,,,1225,Blaricum,1,,,,,,,1226,Bloemendaal,1,,,,,,,1227,Bussum,1,,,,,,,1228,Castricum,1,,,,,,,1229,Den Helder,1,,,,,,,1230,Diemen,1,,,,,,,1231,Drechterland,1,,,,,,,1232,Edam-Volendam,1,,,,,,,1233,Enkhuizen,1,,,,,,,1234,Graft-De Rijp,1,,,,,,,1235,Haarlem,1,,,,,,,1236,Haarlemmerliede c.a.,1,,,,,,,1237,Haarlemmermeer,1,,,,,,,1238,Harenkarspel,1,,,,,,,1239,Heemskerk,1,,,,,,,1240,Heemstede,1,,,,,,,1241,Heerhugowaard,1,,,,,,,1242,Heiloo,1,,,,,,,1243,Hilversum,1,,,,,,,1244,Hoorn,1,,,,,,,1245,Huizen,1,,,,,,,1246,Landsmeer,1,,,,,,,1247,Langedijk,1,,,,,,,1248,Gelderland,1,,,,,,,1249,Laren,1,,,,,,,1250,Medemblik,1,,,,,,,1251,Muiden,1,,,,,,,1252,Naarden,1,,,,,,,1253,Niedorp,1,,,,,,,1254,Noorder-Koggenland,1,,,,,,,1255,Obdam,1,,,,,,,1256,Oostzaan,1,,,,,,,1257,Opmeer,1,,,,,,,1258,Ouder-Amstel,1,,,,,,,1259,Purmerend,1,,,,,,,1260,Schagen,1,,,,,,,1261,Schermer,1,,,,,,,1262,Stede Broec,1,,,,,,,1263,Texel,1,,,,,,,1264,Leers,1,,,,,,,1265,Uitgeest,1,,,,,,,1266,Lys-lez-Lannoy,1,,,,,,,1267,Uithoorn,1,,,,,,,1268,Velsen,1,,,,,,,1269,Venhuizen,1,,,,,,,1270,Waterland,1,,,,,,,1271,Weesp,1,,,,,,,1272,Wervershoof,1,,,,,,,1273,Wester-Koggenland,1,,,,,,,1274,Wieringen,1,,,,,,,1275,Wieringermeer,1,,,,,,,1276,Marquette-lez-Lille,1,,,,,,,1277,Wijdemeren,1,,,,,,,1278,Wognum,1,,,,,,,1279,Wambrechies,1,,,,,,,1280,Wormerland,1,,,,,,,1281,Zaanstad,1,,,,,,,1282,Zandvoort,1,,,,,,,1283,Zeevang,1,,,,,,,1284,Zijpe,1,,,,,,,1285,Almelo,1,,,,,,,1286,Bathmen,1,,,,,,,1287,Borne,1,,,,,,,1288,Noord-Brabant,1,,,,,,,1289,Dalfsen,1,,,,,,,1290,Noord-Holland,1,,,,,,,1291,Deventer,1,,,,,,,1292,Dinkelland,1,,,,,,,1293,Enschede,1,,,,,,,1294,Haaksbergen,1,,,,,,,1295,Bondues,1,,,,,,,1296,Hardenberg,1,,,,,,,1298,Hellendoorn,1,,,,,,,1299,Hengelo,1,,,,,,,1300,Nord-Pas-de-Calais,1,,,,,,,1301,Hof van Twente,1,,,,,,,1302,Kampen,1,,,,,,,1303,Losser,1,,,,,,,1304,Oldenzaal,1,,,,,,,1305,Nordrhein-Westfalen,1,,,,,,,1306,Olst-Wijhe,1,,,,,,,1307,Ommen,1,,,,,,,1308,Raalte,1,,,,,,,1309,Rijssen,1,,,,,,,1310,Staphorst,1,,,,,,,1311,Steenwijkerland,1,,,,,,,1312,Tubbergen,1,,,,,,,1313,Twenterand,1,,,,,,,1314,Wierden,1,,,,,,,1315,Zwartewaterland,1,,,,,,,1316,Comines,1,,,,,,,1317,Zwolle,1,,,,,,,1318,De,1,,,,,,,1319,Abcoude,1,,,,,,,1320,Amerongen,1,,,,,,,1321,Pi,1,,,,,,,1322,Amersfoort,1,,,,,,,1324,Baarn,1,,,,,,,1325,Verlinghem,1,,,,,,,1326,Breukelen,1,,,,,,,1327,Warneton,1,,,,,,,1328,Bunnik,1,,,,,,,1329,Wervicq-Sud,1,,,,,,,1330,Bunschoten,1,,,,,,,1331,Roubaix,1,,,,,,,1332,De Bilt,1,,,,,,,1333,Croix,1,,,,,,,1334,De Ronde Venen,1,,,,,,,1335,Wasquehal,1,,,,,,,1336,Doorn,1,,,,,,,1337,Driebergen-Rijsenburg,1,,,,,,,1338,Groningen,1,,,,,,,1339,Eemnes,1,,,,,,,1340,Utrecht,1,,,,,,,1341,Houten,1,,,,,,,1342,IJsselstein,1,,,,,,,1343,Leersum,1,,,,,,,1344,Leusden,1,,,,,,,1345,Loenen,1,,,,,,,1346,Lopik,1,,,,,,,1347,Maarn,1,,,,,,,1348,Maarssen,1,,,,,,,1349,Montfoort,1,,,,,,,1350,Nieuwegein,1,,,,,,,1351,Oudewater,1,,,,,,,1352,Renswoude,1,,,,,,,1353,Rhenen,1,,,,,,,1354,Soest,1,,,,,,,1355,Utrecht,1,,,,,,,1356,Tourcoing,1,,,,,,,1357,Veenendaal,1,,,,,,,1358,Bousbecque,1,,,,,,,1359,Vianen,1,,,,,,,1360,Halluin,1,,,,,,,1361,Wijk bij Duurstede,1,,,,,,,1362,Linselles,1,,,,,,,1363,Woerden,1,,,,,,,1364,Roncq,1,,,,,,,1365,Woudenberg,1,,,,,,,1366,Neuville-en-Ferrain,1,,,,,,,1367,Zeist,1,,,,,,,1368,Mouvaux,1,,,,,,,1369,Borsele,1,,,,,,,1370,Goes,1,,,,,,,1371,Wattrelos,1,,,,,,,1372,Hulst,1,,,,,,,1373,Kapelle,1,,,,,,,1374,Middelburg,1,,,,,,,1375,Noord-Beveland,1,,,,,,,1376,Reimerswaal,1,,,,,,,1377,Schouwen-Duiveland,1,,,,,,,1378,Sluis,1,,,,,,,1379,Terneuzen,1,,,,,,,1380,Tholen,1,,,,,,,1381,Veere,1,,,,,,,1382,Vlissingen,1,,,,,,,1383,'s-Gravendeel,1,,,,,,,1384,'s-Gravenhage,1,,,,,,,1385,'s-Gravenzande,1,,,,,,,1386,Alblasserdam,1,,,,,,,1387,Albrandswaard,1,,,,,,,1388,Alkemade,1,,,,,,,1389,Alphen aan den Rijn,1,,,,,,,1390,Barendrecht,1,,,,,,,1391,Bergambacht,1,,,,,,,1392,Bergschenhoek,1,,,,,,,1393,Berkel en Rodenrijs,1,,,,,,,1394,Bernisse,1,,,,,,,1395,Binnenmaas,1,,,,,,,1396,Bleiswijk,1,,,,,,,1397,Bodegraven,1,,,,,,,1398,Boskoop,1,,,,,,,1399,Brielle,1,,,,,,,1400,Capelle aan den IJssel,1,,,,,,,1401,Cromstrijen,1,,,,,,,1402,De Lier,1,,,,,,,1403,Delft,1,,,,,,,1404,Dirksland,1,,,,,,,1405,Dordrecht,1,,,,,,,1406,Giessenlanden,1,,,,,,,1407,Goedereede,1,,,,,,,1408,Gorinchem,1,,,,,,,1409,Gouda,1,,,,,,,1410,Graafstroom,1,,,,,,,1411,Hardinxveld-Giessendam,1,,,,,,,1412,Hellevoetsluis,1,,,,,,,1413,Hendrik-Ido-Ambacht,1,,,,,,,1414,Hillegom,1,,,,,,,1415,Jacobswoude,1,,,,,,,1416,Katwijk,1,,,,,,,1417,Korendijk,1,,,,,,,1418,Krimpen aan den IJssel,1,,,,,,,1419,Leerdam,1,,,,,,,1420,Leiden,1,,,,,,,1421,Leiderdorp,1,,,,,,,1422,Leidschendam-Voorburg,1,,,,,,,1423,Liemeer,1,,,,,,,1424,Liesveld,1,,,,,,,1425,Vlaanderen,1,,,,,,,1426,Lisse,1,,,,,,,1427,Maasland,1,,,,,,,1428,Maassluis,1,,,,,,,1429,Middelharnis,1,,,,,,,1430,Monster,1,,,,,,,1431,Moordrecht,1,,,,,,,1432,Naaldwijk,1,,,,,,,1433,Nederlek,1,,,,,,,1434,Nieuw-Lekkerland,1,,,,,,,1435,Nieuwerkerk aan den IJssel,1,,,,,,,1436,Nieuwkoop,1,,,,,,,1437,Noordwijk,1,,,,,,,1438,Noordwijkerhout,1,,,,,,,1439,Oegstgeest,1,,,,,,,1440,Oostflakkee,1,,,,,,,1441,Oud-Beijerland,1,,,,,,,1442,Ouderkerk,1,,,,,,,1443,Papendrecht,1,,,,,,,1444,Pijnacker-Nootdorp,1,,,,,,,1445,Reeuwijk,1,,,,,,,1446,Ridderkerk,1,,,,,,,1447,Wallonie,1,,,,,,,1448,Rijnsburg,1,,,,,,,1449,Rijnwoude,1,,,,,,,1450,Rijswijk,1,,,,,,,1451,Rotterdam,1,,,,,,,1452,Rozenburg,1,,,,,,,1453,Sassenheim,1,,,,,,,1454,Schiedam,1,,,,,,,1455,Schipluiden,1,,,,,,,1456,Schoonhoven,1,,,,,,,1457,Sliedrecht,1,,,,,,,1458,Lille,1,,,,,,,1459,Spijkenisse,1,,,,,,,1460,Strijen,1,,,,,,,1461,Ter Aar,1,,,,,,,1462,Valkenburg,1,,,,,,,1463,Vlaardingen,1,,,,,,,1464,Vlist,1,,,,,,,1465,Voorhout,1,,,,,,,1466,Voorschoten,1,,,,,,,1467,Waddinxveen,1,,,,,,,1468,Warmond,1,,,,,,,1469,Wassenaar,1,,,,,,,1470,Wateringen,1,,,,,,,1471,Westvoorne,1,,,,,,,1472,Zederik,1,,,,,,,1473,Zevenhuizen-Moerkapelle,1,,,,,,,1474,Zoetermeer,1,,,,,,,1475,Zoeterwoude,1,,,,,,,1476,Zwijndrecht,1,,,,,,,1477,Overijssel,1,,,,,,,1478,IJsselmeer,1,,,,,,,1479,Nord,1,,,,,,,1480,Anderlecht,1,,,,,,,1481,Brussel,1,,,,,,,1482,Elsene,1,,,,,,,1483,Etterbeek,1,,,,,,,1484,Evere,1,,,,,,,1485,Ganshoren,1,,,,,,,1486,Jette,1,,,,,,,1487,Koekelberg,1,,,,,,,1488,Oudergem,1,,,,,,,1489,Schaarbeek,1,,,,,,,1490,Sint-Agatha-Berchem,1,,,,,,,1491,Sint-Gillis,1,,,,,,,1492,Sint-Jans-Molenbeek,1,,,,,,,1493,Sint-Joost-ten-Node,1,,,,,,,1494,Sint-Lambrechts-Woluwe,1,,,,,,,1495,Sint-Pieters-Woluwe,1,,,,,,,1496,Ukkel,1,,,,,,,1497,Vorst,1,,,,,,,1498,Watermaal-Bosvoorde,1,,,,,,,1499,Aartselaar,1,,,,,,,1500,Antwerpen,1,,,,,,,1501,Boechout,1,,,,,,,1502,Boom,1,,,,,,,1503,Borsbeek,1,,,,,,,1504,Brasschaat,1,,,,,,,1505,Brecht,1,,,,,,,1506,Edegem,1,,,,,,,1507,Essen,1,,,,,,,1508,Hemiksem,1,,,,,,,1509,Hove,1,,,,,,,1510,Kalmthout,1,,,,,,,1511,Kapellen,1,,,,,,,1512,Kontich,1,,,,,,,1513,Lint,1,,,,,,,1514,Malle,1,,,,,,,1515,Mortsel,1,,,,,,,1516,Niel,1,,,,,,,1517,Ranst,1,,,,,,,1518,Rumst,1,,,,,,,1519,Schelle,1,,,,,,,1520,Schilde,1,,,,,,,1521,Schoten,1,,,,,,,1522,Stabroek,1,,,,,,,1523,Wijnegem,1,,,,,,,1524,Wommelgem,1,,,,,,,1525,Wuustwezel,1,,,,,,,1526,Zandhoven,1,,,,,,,1527,Zoersel,1,,,,,,,1528,Zwijndrecht,1,,,,,,,1529,Berlaar,1,,,,,,,1530,Bonheiden,1,,,,,,,1531,Zeeland,1,,,,,,,1532,Bornem,1,,,,,,,1533,Zeeuwse meren,1,,,,,,,1534,Duffel,1,,,,,,,1535,Heist-op-den-Berg,1,,,,,,,1536,Lier,1,,,,,,,1537,Mechelen,1,,,,,,,1538,Nijlen,1,,,,,,,1539,Putte,1,,,,,,,1540,Puurs,1,,,,,,,1541,Sint-Amands,1,,,,,,,1542,Sint-Katelijne-Waver,1,,,,,,,1543,Willebroek,1,,,,,,,1544,Arendonk,1,,,,,,,1545,Baarle-Hertog,1,,,,,,,1546,Balen,1,,,,,,,1547,Beerse,1,,,,,,,1548,Dessel,1,,,,,,,1549,Geel,1,,,,,,,1550,Grobbendonk,1,,,,,,,1551,Herentals,1,,,,,,,1552,Herenthout,1,,,,,,,1553,Zuid-Holland,1,,,,,,,1554,Herselt,1,,,,,,,1555,Hoogstraten,1,,,,,,,1556,Hulshout,1,,,,,,,1557,Kasterlee,1,,,,,,,1558,Laakdal,1,,,,,,,1559,Lille,1,,,,,,,1560,Meerhout,1,,,,,,,1561,Merksplas,1,,,,,,,1562,Mol,1,,,,,,,1563,Olen,1,,,,,,,1564,Oud-Turnhout,1,,,,,,,1565,Ravels,1,,,,,,,1566,Retie,1,,,,,,,1567,Rijkevorsel,1,,,,,,,1568,Turnhout,1,,,,,,,1569,Vorselaar,1,,,,,,,1570,Vosselaar,1,,,,,,,1571,Westerlo,1,,,,,,,1572,Mesen,1,,,,,,,1573,Avelgem,1,,,,,,,1574,As,1,,,,,,,1575,Beringen,1,,,,,,,1576,Diepenbeek,1,,,,,,,1577,Genk,1,,,,,,,1578,Halen,1,,,,,,,1579,Ham,1,,,,,,,1580,Hasselt,1,,,,,,,1581,Herk-de-Stad,1,,,,,,,1582,Heusden-Zolder,1,,,,,,,1583,Leopoldsburg,1,,,,,,,1584,Lummen,1,,,,,,,1585,Nieuwerkerken,1,,,,,,,1586,Opglabbeek,1,,,,,,,1587,Sint-Truiden,1,,,,,,,1588,Tessenderlo,1,,,,,,,1589,Zonhoven,1,,,,,,,1590,Zutendaal,1,,,,,,,1591,Bocholt,1,,,,,,,1592,Bree,1,,,,,,,1593,Dilsen-Stokkem,1,,,,,,,1594,Hamont-Achel,1,,,,,,,1595,Hechtel-Eksel,1,,,,,,,1596,Houthalen-Helchteren,1,,,,,,,1597,Kinrooi,1,,,,,,,1598,Lommel,1,,,,,,,1599,Maaseik,1,,,,,,,1600,Meeuwen-Gruitrode,1,,,,,,,1601,Neerpelt,1,,,,,,,1602,Overpelt,1,,,,,,,1603,Peer,1,,,,,,,1604,Alken,1,,,,,,,1605,Bilzen,1,,,,,,,1606,Borgloon,1,,,,,,,1607,Heers,1,,,,,,,1608,Herstappe,1,,,,,,,1609,Hoeselt,1,,,,,,,1610,Kortessem,1,,,,,,,1611,Lanaken,1,,,,,,,1612,Maasmechelen,1,,,,,,,1613,Riemst,1,,,,,,,1614,Tongeren,1,,,,,,,1615,Voeren,1,,,,,,,1616,Bruxelles,1,,,,,,,1617,Wellen,1,,,,,,,1618,Antwerpen,1,,,,,,,1619,Aalst,1,,,,,,,1620,Hainaut,1,,,,,,,1621,Denderleeuw,1,,,,,,,1622,Limburg,1,,,,,,,1623,Erpe-Mere,1,,,,,,,1624,Oost-Vlaanderen,1,,,,,,,1625,Geraardsbergen,1,,,,,,,1626,Vlaams Brabant,1,,,,,,,1627,Haaltert,1,,,,,,,1628,West-Vlaanderen,1,,,,,,,1629,Herzele,1,,,,,,,1630,Brabant Wallon,1,,,,,,,1631,Lede,1,,,,,,,1632,Hainaut,1,,,,,,,1633,Ninove,1,,,,,,,1634,Luik,1,,,,,,,1635,Sint-Lievens-Houtem,1,,,,,,,1636,Limburg,1,,,,,,,1637,Zottegem,1,,,,,,,1638,Berlare,1,,,,,,,1639,Buggenhout,1,,,,,,,1640,West-Vlaanderen,1,,,,,,,1641,Dendermonde,1,,,,,,,1642,Hamme,1,,,,,,,1643,Laarne,1,,,,,,,1644,Lebbeke,1,,,,,,,1645,Waasmunster,1,,,,,,,1646,Wetteren,1,,,,,,,1647,Wichelen,1,,,,,,,1648,Zele,1,,,,,,,1649,Assenede,1,,,,,,,1650,Eeklo,1,,,,,,,1651,Kaprijke,1,,,,,,,1652,Maldegem,1,,,,,,,1653,Sint-Laureins,1,,,,,,,1654,Zelzate,1,,,,,,,1655,Aalter,1,,,,,,,1656,De Pinte,1,,,,,,,1657,Deinze,1,,,,,,,1658,Destelbergen,1,,,,,,,1659,Evergem,1,,,,,,,1660,Gavere,1,,,,,,,1661,Gent,1,,,,,,,1662,Knesselare,1,,,,,,,1663,Lochristi,1,,,,,,,1664,Lovendegem,1,,,,,,,1665,Melle,1,,,,,,,1666,Merelbeke,1,,,,,,,1667,Moerbeke,1,,,,,,,1668,Nazareth,1,,,,,,,1669,Nevele,1,,,,,,,1670,Oosterzele,1,,,,,,,1671,Sint-Martens-Latem,1,,,,,,,1672,Waarschoot,1,,,,,,,1673,Wachtebeke,1,,,,,,,1674,Zomergem,1,,,,,,,1675,Zulte,1,,,,,,,1676,Brakel,1,,,,,,,1677,Horebeke,1,,,,,,,1678,Kluisbergen,1,,,,,,,1679,Kruishoutem,1,,,,,,,1680,Lierde,1,,,,,,,1681,Maarkedal,1,,,,,,,1682,Oudenaarde,1,,,,,,,1683,Ronse,1,,,,,,,1684,Wortegem-Petegem,1,,,,,,,1685,Zingem,1,,,,,,,1686,Zwalm,1,,,,,,,1687,Beveren,1,,,,,,,1688,Kruibeke,1,,,,,,,1689,Lokeren,1,,,,,,,1690,Saint-Nicolas,1,,,,,,,1691,Sint-Gillis-Waas,1,,,,,,,1692,Stekene,1,,,,,,,1693,Temse,1,,,,,,,1694,Affligem,1,,,,,,,1695,Asse,1,,,,,,,1696,Beersel,1,,,,,,,1697,Weser-Ems,1,,,,,,,1698,Bever,1,,,,,,,1699,Arnsberg,1,,,,,,,1700,Dilbeek,1,,,,,,,1701,Drogenbos,1,,,,,,,1702,Dusseldorf,1,,,,,,,1703,Galmaarden,1,,,,,,,1704,Keulen,1,,,,,,,1705,Gooik,1,,,,,,,1706,Munster,1,,,,,,,1707,Grimbergen,1,,,,,,,1708,Halle,1,,,,,,,1709,Herne,1,,,,,,,1710,Hoeilaart,1,,,,,,,1711,Kampenhout,1,,,,,,,1712,Kapelle-op-den-Bos,1,,,,,,,1713,Kraainem,1,,,,,,,1714,Lennik,1,,,,,,,1715,Liedekerke,1,,,,,,,1716,Linkebeek,1,,,,,,,1717,Londerzeel,1,,,,,,,1718,Machelen,1,,,,,,,1719,Meise,1,,,,,,,1720,Merchtem,1,,,,,,,1721,Opwijk,1,,,,,,,1722,Overijse,1,,,,,,,1723,Pepingen,1,,,,,,,1724,Roosdaal,1,,,,,,,1725,Sint-Genesius-Rode,1,,,,,,,1726,Sint-Pieters-Leeuw,1,,,,,,,1727,Steenokkerzeel,1,,,,,,,1728,Ternat,1,,,,,,,1729,Vilvoorde,1,,,,,,,1730,Wemmel,1,,,,,,,1731,Wezembeek-Oppem,1,,,,,,,1732,Zaventem,1,,,,,,,1733,Zemst,1,,,,,,,1734,Aarschot,1,,,,,,,1735,Begijnendijk,1,,,,,,,1736,Bekkevoort,1,,,,,,,1737,Bertem,1,,,,,,,1738,Bierbeek,1,,,,,,,1739,Boortmeerbeek,1,,,,,,,1740,Boutersem,1,,,,,,,1741,Diest,1,,,,,,,1742,Geetbets,1,,,,,,,1743,Glabbeek,1,,,,,,,1744,Haacht,1,,,,,,,1745,Herent,1,,,,,,,1746,Hoegaarden,1,,,,,,,1747,Holsbeek,1,,,,,,,1748,Huldenberg,1,,,,,,,1749,Keerbergen,1,,,,,,,1750,Kortenaken,1,,,,,,,1751,Kortenberg,1,,,,,,,1752,Landen,1,,,,,,,1753,Leuven,1,,,,,,,1754,Linter,1,,,,,,,1755,Lubbeek,1,,,,,,,1756,Oud-Heverlee,1,,,,,,,1757,Rotselaar,1,,,,,,,1758,Scherpenheuvel-Zichem,1,,,,,,,1759,Tervuren,1,,,,,,,1760,Tielt-Winge,1,,,,,,,1761,Tienen,1,,,,,,,1762,Tremelo,1,,,,,,,1763,Zoutleeuw,1,,,,,,,1764,Beernem,1,,,,,,,1765,Blankenberge,1,,,,,,,1766,Brugge,1,,,,,,,1767,Bruxelles,1,,,,,,,1768,Damme,1,,,,,,,1769,Jabbeke,1,,,,,,,1770,Knokke-Heist,1,,,,,,,1771,Oostkamp,1,,,,,,,1772,Torhout,1,,,,,,,1773,Zedelgem,1,,,,,,,1774,Aurich,1,,,,,,,1775,Zuienkerke,1,,,,,,,1776,Diksmuide,1,,,,,,,1777,Emden,1,,,,,,,1778,Houthulst,1,,,,,,,1779,Emsland,1,,,,,,,1780,Koekelare,1,,,,,,,1781,Kortemark,1,,,,,,,1782,Grafschaft Bentheim,1,,,,,,,1783,Leer,1,,,,,,,1784,Heuvelland,1,,,,,,,1785,Ieper,1,,,,,,,1786,Langemark-Poelkapelle,1,,,,,,,1787,Wervik,1,,,,,,,1788,Zonnebeke,1,,,,,,,1789,Anzegem,1,,,,,,,1790,Deerlijk,1,,,,,,,1791,Bochum,1,,,,,,,1792,Harelbeke,1,,,,,,,1793,Dortmund,1,,,,,,,1794,Kortrijk,1,,,,,,,1795,Ennepe-Ruhr,1,,,,,,,1796,Kuurne,1,,,,,,,1797,Lendelede,1,,,,,,,1798,Menen,1,,,,,,,1799,Herne,1,,,,,,,1800,Waregem,1,,,,,,,1801,Wevelgem,1,,,,,,,1802,Zwevegem,1,,,,,,,1803,Bredene,1,,,,,,,1804,De Haan,1,,,,,,,1805,Gistel,1,,,,,,,1806,Ichtegem,1,,,,,,,1807,Middelkerke,1,,,,,,,1808,Oostende,1,,,,,,,1809,Oudenburg,1,,,,,,,1810,Hooglede,1,,,,,,,1811,Ingelmunster,1,,,,,,,1812,Izegem,1,,,,,,,1813,Ledegem,1,,,,,,,1814,Cleves,1,,,,,,,1815,Lichtervelde,1,,,,,,,1816,Duisburg,1,,,,,,,1817,Moorslede,1,,,,,,,1818,Dusseldorf St,1,,,,,,,1819,Roeselare,1,,,,,,,1820,Essen,1,,,,,,,1821,Staden,1,,,,,,,1822,Krefeld,1,,,,,,,1823,Ardooie,1,,,,,,,1824,Mettmann,1,,,,,,,1825,Dentergem,1,,,,,,,1829,Oostrozebeke,1,,,,,,,1831,Pittem,1,,,,,,,1833,Ruiselede,1,,,,,,,1834,Rhein-Kreis Neuss,1,,,,,,,1835,Tielt,1,,,,,,,1837,Wielsbeke,1,,,,,,,1838,Viersen,1,,,,,,,1839,Wingene,1,,,,,,,1840,Wesel,1,,,,,,,1842,Aachen,1,,,,,,,1846,Beauvechain,1,,,,,,,1848,Braine-l'Alleud,1,,,,,,,1849,Euskirchen,1,,,,,,,1851,Heinsberg,1,,,,,,,1853,Chaumont-Gistoux,1,,,,,,,1854,Oberbergischer Kreis,1,,,,,,,1855,Rhein-Erft-Kreis,1,,,,,,,1856,Rhein-Sieg,1,,,,,,,1857,Grez-Doiceau,1,,,,,,,1858,Rheinisch-Bergischer Kreis,1,,,,,,,1860,Borken,1,,,,,,,1861,Incourt,1,,,,,,,1863,Ittre,1,,,,,,,1864,Coesfeld,1,,,,,,,1865,Jodoigne,1,,,,,,,1867,La Hulpe,1,,,,,,,1868,Lasne,1,,,,,,,1869,Recklinghausen,1,,,,,,,1870,Steinfurt,1,,,,,,,1871,Orp-Jauche,1,,,,,,,1872,Ottignies-Louvain-la-Neuve,1,,,,,,,1873,Ramillies,1,,,,,,,1874,Rebecq,1,,,,,,,1875,Rixensart,1,,,,,,,1876,Tubize,1,,,,,,,1877,Waterloo,1,,,,,,,1878,Wavre,1,,,,,,,1879,Ath,1,,,,,,,1880,Ellezelles,1,,,,,,,1881,Flobecq,1,,,,,,,1882,Frasnes-lez-Anvaing,1,,,,,,,1883,Comines-Warneton,1,,,,,,,1884,Mouscron,1,,,,,,,1885,Enghien,1,,,,,,,1886,Lessines,1,,,,,,,1887,Silly,1,,,,,,,1888,Limburg,1,,,,,,,1889,Celles,1,,,,,,,1890,Estaimpuis,1,,,,,,,1891,Mont-de-l'Enclus,1,,,,,,,1892,Pecq,1,,,,,,,1893,Tournai,1,,,,,,,1894,Ans,1,,,,,,,1895,Awans,1,,,,,,,1896,Bitsingen,1,,,,,,,1897,Blegny,1,,,,,,,1898,Dalhem,1,,,,,,,1899,Herstal,1,,,,,,,1900,Juprelle,1,,,,,,,1902,Oupeye,1,,,,,,,1904,Aubel,1,,,,,,,1905,Herve,1,,,,,,,1906,Kelmis,1,,,,,,,1907,Lontzen,1,,,,,,,1909,Raeren,1,,,,,,,1910,Thimister-Clermont,1,,,,,,,1912,Brussel,1,,,,,,,1913,Welkenraedt,1,,,,,,,1914,Antwerpen,1,,,,,,,1915,Berloz,1,,,,,,,1916,Lannoy,1,,,,,,,1917,Mechelen,1,,,,,,,1918,Turnhout,1,,,,,,,1920,Moeskroen,1,,,,,,,1921,Tournai,1,,,,,,,1922,Lille-Ouest,1,,,,,,,1923,Hasselt,1,,,,,,,1924,Fexhe-le-Haut-Clocher,1,,,,,,,1925,Maaseik,1,,,,,,,1926,Geer,1,,,,,,,1927,Tongeren,1,,,,,,,1928,Hannuit,1,,,,,,,1930,Aalst,1,,,,,,,1931,Lincent,1,,,,,,,1932,Dendermonde,1,,,,,,,1933,Oreye,1,,,,,,,1935,Eeklo,1,,,,,,,1936,Remicourt,1,,,,,,,1937,Roubaix,1,,,,,,,1938,Aa en Hunze,1,,,,,,,1939,Gent,1,,,,,,,1940,Roubaix-Ouest,1,,,,,,,1941,Assen,1,,,,,,,1942,Oudenaarde,1,,,,,,,1943,Waremme,1,,,,,,,1944,Borger-Odoorn,1,,,,,,,1945,Sint-Niklaas,1,,,,,,,1946,Coevorden,1,,,,,,,1947,Halle-Vilvoorde,1,,,,,,,1948,Gingelom,1,,,,,,,1949,De Wolden,1,,,,,,,1950,Leuven,1,,,,,,,1951,Tourcoing,1,,,,,,,1952,Emmen,1,,,,,,,1953,Brugge,1,,,,,,,1954,Tourcoing-Nord,1,,,,,,,1955,Hoogeveen,1,,,,,,,1956,Diksmuide,1,,,,,,,1957,Tourcoing-Nord-Est,1,,,,,,,1958,Meppel,1,,,,,,,1959,Ieper,1,,,,,,,1960,Tourcoing-Sud,1,,,,,,,1961,Midden-Drenthe,1,,,,,,,1962,Kortrijk,1,,,,,,,1963,Noordenveld,1,,,,,,,1964,Oostende,1,,,,,,,1965,Wattrelos,1,,,,,,,1966,Tynaarlo,1,,,,,,,1967,Roeselare,1,,,,,,,1968,Westerveld,1,,,,,,,1969,Tielt,1,,,,,,,1970,Almere,1,,,,,,,1971,Dronten,1,,,,,,,1972,Nivelles,1,,,,,,,1973,Lelystad,1,,,,,,,1974,Ath,1,,,,,,,1975,Noordoostpolder,1,,,,,,,1976,Urk,1,,,,,,,1977,Moeskroen,1,,,,,,,1978,Zeewolde,1,,,,,,,1979,Achtkarspelen,1,,,,,,,1980,Soignies,1,,,,,,,1981,Ameland,1,,,,,,,1982,Boarnsterhim,1,,,,,,,1983,Tournai,1,,,,,,,1984,Bolsward,1,,,,,,,1985,Dantumadeel,1,,,,,,,1987,Dongeradeel,1,,,,,,,1988,Verviers,1,,,,,,,1989,Ferwerderadiel,1,,,,,,,1990,Waremme,1,,,,,,,1991,Franekeradeel,1,,,,,,,1992,Hasselt,1,,,,,,,1994,Harlingen,1,,,,,,,1995,Heerenveen,1,,,,,,,1996,Het Bildt,1,,,,,,,1997,Kollumerland c.a.,1,,,,,,,1998,Leeuwarden,1,,,,,,,1999,Leeuwarderadeel,1,,,,,,,11000,Lemsterland,1,,,,,,,11001,Littenseradiel,1,,,,,,,11002,Kortrijk,1,,,,,,,11003,Menaldumadeel,1,,,,,,,11004,Nijefurd,1,,,,,,,11005,Ooststellingwerf,1,,,,,,,11006,Opsterland,1,,,,,,,11007,Schiermonnikoog,1,,,,,,,11009,Smallingerland,1,,,,,,,11010,Sneek,1,,,,,,,11011,Terschelling,1,,,,,,,11012,Tytsjerksteradiel,1,,,,,,,11013,Vlieland,1,,,,,,,11014,Weststellingwerf,1,,,,,,,11016,Wymbritseradiel,1,,,,,,,11017,Aalten,1,,,,,,,11018,Angerlo,1,,,,,,,11019,Apeldoorn,1,,,,,,,11020,Arnhem,1,,,,,,,11021,Barneveld,1,,,,,,,11022,Bergh,1,,,,,,,11023,Beuningen,1,,,,,,,11024,Borculo,1,,,,,,,11025,De Oosterpoort,1,,,1,,,,1026,O'Ceallaigh,1,,,1,,,,1027,Four Rose's,1,1,,,,,,1028,Images,1,,,1,,,,1030,Vera,1,,,1,,,,1031,Roezemoes,1,,,1,,,,1032,Gardens,1,,1,,,,,1033,Prinsenhof Gardens,1,,1,,,,,1034,Grand Theatre,1,,,1,,,,1035,Martinikerk,1,,1,,,,,1036,Palace,1,,,1,,,,1037,Town Hall,1,,1,,,,,1038,Canal Tours,1,,,,,,1,1039,Het Goudkantoor,1,1,,,,,,1040,Selexyz Scholtens,1,,,,1,,,1041,Synagogues,1,,1,,,,,1042,Golden Arm,1,,,1,,,,1043,Ariola,1,1,,,,,,1044,De 7e Hemel,1,1,,,,,,1045,Brussels Lof,1,1,,,,,,1046,De Pintelier,1,,,1,,,,1047,Granny's,1,1,,,,,,1048,Noordelijk Scheepvaartmuseum,1,,1,,,,,1049,Bonnefantenmuseum,1,,1,,,,,1050,Derlon Theater,1,,,1,,,,1051,Beluga,1,1,,,,,,1052,Zondag,1,,,1,,,,1053,Take One,1,,,1,,,,1054,Restaurant O,1,1,,,,,,1055,Gadjah Mas,1,1,,,,,,1056,John Mullins,1,,,1,,,,1057,Helpoort,1,,1,,,,,1058,Stiphout Cruises,1,,,,,,1,1059,Onze Lieve Vrouwebasiliek,1,,1,,,,,1060,Night Live,1,,,1,,,,1061,Bisschopsmolen,1,1,,,,,,1062,Sjieke,1,1,,,,,,1063,Matuchi,1,,,1,,,,1064,Selexyz n' Dominicanen,1,,,,,1,,1065,Reitz,1,1,,,,,,1066,Johannes Petrus Minckelers Statue,1,,1,,,,,1067,Take Five,1,,,1,,,,1068,Mestizo,1,1,,,,,,1069,In Den Ouden Vogelstruys,1,,,1,,,,1070,Spanish Government Museum,1,,1,,,,,1071,Vrijthof,1,,1,,,,,1072,Cinema Lumiere,1,,,1,,,,1073,Sint Janskerk,1,,1,,,,,1074,Sint Servaasbasiliek,1,,1,,,,,1075,Restaurant Jean La Brouche,1,1,,,,,,1076,Ginger,1,1,,,,,,1077,Goesting,1,1,,,,,,1078,Nederlands Spoorwegmuseum,1,,1,,,,,1079,Centraal Museum,1,,1,,,,,1080,Universiteitsmuseum,1,,1,,,,,1081,Dick Bruna Huis,1,,1,,,,,1082,Museum Catharijneconvent,1,,1,,,,,1083,Pieterskerk,1,,1,,,,,1084,De Artisjok,1,1,,,,,,1086,Polman's,1,,,,,1,,1087,Broers,1,1,,,,,,1088,Utrecht University Ceremonial Buildings,1,,1,,,,,1089,t Oude Pothuys,1,,,,,1,,1090,ACU,1,,,1,,,,1091,Opium,1,,,1,,,,1093,Lokaal de Reunie,1,1,,,,,,1094,Aboriginal Art Museum,1,,1,,,,,1095,Domtoren,1,,1,,,,,1096,Tivoli,1,,1,,,,,1097,Museum voor het Kruideniersbedrijf,1,,,,1,,,1098,Nationaal Museum van Speelklok tot Pierement,1,,1,,,,,1099,Springhaver Theater,1,,,1,,,,1100,Blauw,1,1,,,,,,1101,Nederlands Waterleidingmuseum,1,,1,,,,,1102,Winkel van Sinkel,1,,,1,,,,1104,Konnichi Wa,1,1,,,,,,1105,Canal Tours,1,,,,,,1,1106,Oudaen,1,1,,,,,,1107,Oudegracht,1,,1,,,,,1108,Vredenburg,1,,,1,,,,1109,Living Tomorrow Pavilion,1,,1,,,,,1110,Persmuseum,1,,1,,,,,1111,Odessa,1,1,,,,,,1112,Lisboa,1,,,1,,,,1113,Gare de l'Est,1,,,,,1,,1114,KHL,1,,,1,,,,1115,Frankendael,1,,1,,,,,1116,Voorbij Het Einde,1,1,,,,,,1117,Panama,1,,,1,,,,1118,Tropentheater,1,,,1,,,,1119,EnergeticA,1,,1,,,,,1120,Tropenmuseum,1,,1,,,,,1121,Werfmuseum 'T Kromhout,1,,,,,1,,1122,Muiderpoort,1,,1,,,,,1123,Fifteen,1,1,,,,,,1124,Nederlands Scheepvaartmuseum,1,,1,,,,,1125,Entrepotdok,1,,1,,,,,1126,Bloem,1,1,,,,,,1127,Muziekgebouw aan 't IJ,1,,,,,1,,1128,Star Ferry,1,,,,,,1,1129,Artis,1,,1,,,,,1130,Verzetsmuseum,1,,1,,,,,1131,Arcam,1,,1,,,,,1132,Plancius,1,1,,,,,,1133,NEMO,1,,1,,,,,1134,Koffiehuis van den Volksbond,1,1,,,,,,1136,Abe Veneto,1,1,,,,,,1137,Conservatorium Van Amsterdam,1,,,1,,,,1138,Hortus Botanicus,1,,1,,,,,1139,Sea Palace,1,1,,,,,,1140,Amstel Haven,1,,,1,,,,1141,Betty's,1,1,,,,,,1142,Montelbaanstoren,1,,1,,,,,1143,Amstel Bar & Brasserie,1,,,1,,,,1144,Portuguese-Israelite Synagogue,1,,1,,,,,1146,Scheepvaarthuis,1,,1,,,,,1147,Joods Historisch Museum,1,,1,,,,,1148,Amsterdams Marionetten Theater,1,,,1,,,,1149,Mozes en Aaronkerk,1,,,,,1,,1150,Amstelsluizen,1,,1,,,,,1151,Hermitage Amsterdam,1,,1,,,,,1152,Klokspijs,1,1,,,,,,1153,Cotton Club,1,,,1,,,,1154,Magere Brug,1,,1,,,,,1155,Schreierstoren,1,,1,,,,,1156,Waterlooplein Flea Market,1,,,,1,,,1158,St Nicolaaskerk,1,,1,,,,,1159,Molly Malone's,1,,,1,,,,1161,In 't Aepjen,1,,,,,1,,1163,Po Chai Tong,1,,,,1,,,1164,De Engel Van Amsterdam,1,,,1,,,,1165,Stopera,1,,1,,,,,1166,Blauwbrug,1,,1,,,,,1168,Muziektheater,1,,,1,,,,1170,Knuffels,1,,,,1,,,1171,Henxs,1,,,,1,,,1172,Queen's Head,1,1,,,,,,1173,Riele,1,,,,1,,,1174,Nam Kee,1,1,,,,,,1175,Eat Mode,1,1,,,,,,1176,New King,1,1,,,,,,1178,Waag,1,,1,,,,,1180,Lime,1,,,1,,,,1181,Guan Yin Shrine,1,,1,,,,,1182,Seventyfive,1,,,,1,,,1183,'t Klompenhuisje,1,,,,1,,,1184,Hill Street Blues,1,,,1,,,,1185,Zuiderkerk,1,,1,,,,,1186,Proeflokaal de Ooievaar,1,,,1,,,,1187,Joe's Vliegerwinkel,1,,,,,1,,1188,Kam Yin,1,1,,,,,,1189,De Huyschkaemer,1,,,1,,,,1190,Museum Amstelkring,1,,1,,,,,1191,De Dageraad,1,,1,,,,,1192,Sarphaat,1,,,1,,,,1193,Erotic Museum,1,,1,,,,,1194,Golden Temple,1,,1,,,,,1195,Kokopelli,1,,,,1,,,1196,Oosterling,1,,,1,,,,1197,Get Records,1,,,,1,,,1198,Museum Willet-Holthuysen,1,,1,,,,,1199,Dantzig,1,,,1,,,,1200,Look Out,1,,,,1,,,1201,Take Thai,1,1,,,,,,1202,Segugio,1,1,,,,,,1203,Tempo Doeloe,1,1,,,,,,1204,Casa Rosso,1,,,1,,,,1206,Puccini Bomboni,1,,,,1,,,1207,Concerto,1,,,,1,,,1208,Twins Backstage,1,,,1,,,,1209,Sluizer,1,1,,,,,,1210,Nijhof & Lee,1,,,,1,,,1211,Oostindisch Huis,1,,1,,,,,1212,NEL,1,,,1,,,,1213,Krua Thai,1,1,,,,,,1214,Blauw aan de Wal,1,1,,,,,,1215,Himalaya,1,,,,1,,,1216,De Beestenwinkel,1,,,,1,,,1217,Herrie,1,1,,,,,,1218,Geels & Co,1,,,,1,,,1219,Vivelavie,1,,,1,,,,1220,De Emaillekeizer,1,,,,1,,,1221,RoB,1,,,,1,,,1222,Prostitution Information Centre,1,,1,,,,,1223,Typo Gallery,1,,,,1,,,1224,Museum het Rembrandthuis,1,,1,,,,,1225,Baba,1,,,1,,,,1226,Lellebel,1,,,1,,,,1227,Book Exchange,1,,,,1,,,1228,Sexmuseum Amsterdam,1,,1,,,,,1229,Droog Design,1,,,,1,,,1230,Antiquariaat Kok,1,,,,1,,,1231,"Hash, Marijuana & Hemp Museum",1,,1,,,,,1232,Badcuyp,1,,,1,,,,1233,Sterk Staaltje,1,1,,,,,,1234,Doelen,1,,,1,,,,1235,De Duif,1,,1,,,,,1236,Tassenmuseum Hendrikje,1,,1,,,,,1237,Mulligans,1,,,1,,,,1238,Durty Nelly's,1,1,,,,,,1239,Amstelkerk,1,,1,,,,,1240,Beurs van Berlage,1,,1,,,,,1241,Winston Kingdom,1,,,1,,,,1243,Herberg Hooghoudt,1,,,1,,,,1244,Escape,1,1,,,,,,1245,Uliveto,1,1,,,,,,1246,Wonderwood,1,,,,1,,,1247,De Heeren Van Aemstel,1,,,1,,,,1248,De Kleine Komedie,1,,,1,,,,1249,Condomerie het Gulden Vlies,1,,,,1,,,1250,Entre Nous,1,,,1,,,,1251,Chills & Thrills,1,,,,1,,,1254,Web,1,,,1,,,,1255,Bazar,1,1,,,,,,1256,Vlieger,1,,,,1,,,1257,Proeflokaal Wijnand Fockink,1,,,1,,,,1258,In De Wildman,1,,,1,,,,1259,Van Dobben,1,1,,,,,,1260,Bebob Design,1,,,,1,,,1261,De Buurvrouw,1,,,1,,,,1263,Zushi,1,1,,,,,,1264,Albert Cuypmarkt,1,,,,1,,,1265,Cuckoo's Nest,1,,,,,1,,1266,Geelvinck Hinlopen Huis,1,,1,,,,,1267,C&A,1,,,,1,,,1268,De Brakke Grond,1,,,1,,,,1269,Bitterzoet,1,,,1,,,,1270,Akhnaton,1,,,1,,,,1271,Van Den Berg's Broodjesbar,1,1,,,,,,1272,Beaufort,1,,,,1,,,1273,Oporto,1,,,1,,,,1274,De Keuken Van 187,1,,,,,1,,1275,De Bijenkorf,1,,,,1,,,1276,Blincker,1,,,1,,,,1277,Kapitein Zeppo's,1,,,,,1,,1278,Rialto Cinema,1,,,1,,,,1279,El Guapo,1,,,1,,,,1280,Hans Appenzeller,1,,,,1,,,1281,Cosmic Theatre,1,,,1,,,,1282,3-D Hologrammen,1,,,,1,,,1283,Pannenkoekenhuis Upstairs,1,1,,,,,,1284,Chocolate,1,,,1,,,,1285,Museum Van Loon,1,,1,,,,,1286,Poezenboot,1,,1,,,,,1287,Allard Pierson Museum,1,,1,,,,,1289,Tara,1,,,1,,,,1290,Het Oranje Voetbal Museum,1,,1,,,,,1291,Blue Note,1,,,1,,,,1292,Pilsvogel,1,,,1,,,,1293,Vroom & Dreesmann,1,,,,1,,,1294,Madame Tussauds Amsterdam,1,,1,,,,,1295,Shirt Shop,1,,,,1,,,1296,Amsterdam Photography,1,,,,1,,,1297,Hana Zuki,1,,,,1,,,1298,Sappho,1,1,,,,,,1299,Mamouche,1,1,,,,,,1300,De Drie Fleschjes,1,,,1,,,,1301,Stout,1,1,,,,,,1302,Stadsarchief,1,,1,,,,,1303,Kalvertoren Shopping Centre,1,,,,1,,,1304,Homegrown Fantasy,1,,,,1,,,1305,Lof,1,1,,,,,,1306,American Book Center,1,,,,1,,,1307,Van Vlaanderen,1,1,,,,,,1308,Village Bagels,1,1,,,,,,1309,De Belhamel,1,1,,,,,,1310,ARC,1,,,1,,,,1311,Meeuwig & Zn,1,,,,1,,,1312,Fame Music,1,,,,1,,,1313,Bar A,1,,,,,1,,1314,Piet de Leeuw,1,1,,,,,,1315,Bloemenmarkt,1,,,,1,,,1316,Hart's Wijnhandel,1,,,,,1,,1317,Heineken Experience,1,,1,,,,,1318,H&M,1,,,,1,,,1319,Laundry Industry,1,,,,1,,,1320,Rose's Cantina,1,1,,,,,,1321,Sal Meijer,1,1,,,,,,1322,Kattenkabinet,1,,1,,,,,1323,Supperclub,1,,,1,,,,1324,Cityboek,1,,,,1,,,1325,Waterstone's,1,,,,1,,,1326,Vleminckx,1,1,,,,,,1327,Multatuli Museum,1,,1,,,,,1328,Barney's,1,,,,,1,,1329,Female & Partners,1,,,,1,,,1330,Fair Trade Shop,1,,,,1,,,1331,Pilsener Club,1,,,1,,,,1332,De Schutter,1,,,1,,,,1335,Prik,1,,,1,,,,1336,De Blauwe Parade,1,,,1,,,,1337,Taart van m'n Tante,1,,,,,1,,1338,Lieve Hemel,1,,,,1,,,1339,Innerspace,1,,,,1,,,1340,Dampkring,1,,,1,,,,1341,Bar Bep,1,,,1,,,,1342,Turkiye,1,1,,,,,,1343,Golden Bend,1,,1,,,,,1344,Le Cellier,1,,,,1,,,1345,Magna Plaza,1,,,,1,,,1346,Canal Motorboats,1,,,,,,1,1347,Pinokkio,1,,,,1,,,1348,Green Planet,1,,,,,,1,1349,Decorativa,1,,,,1,,,1350,Dansen Bij Jansen,1,,,1,,,,1351,Dulac,1,,,1,,,,1352,Pasta e Basta,1,1,,,,,,1353,Volksbond Shop,1,,,,1,,,1354,Vrolijk,1,,,,1,,,1355,Cambodja City,1,1,,,,,,1356,De Bierkoning,1,,,,1,,,1358,De Appel,1,,1,,,,,1359,Kadinsky,1,,,1,,,,1360,Maraon Hangmatten,1,,,,,1,,1362,Saturnino,1,,,1,,,,1363,University Library,1,,1,,,,,1364,Zagros,1,1,,,,,,1365,Lucius,1,1,,,,,,1366,Intermale,1,,,,1,,,1367,Other Side,1,,,1,,,,1368,Jaski,1,,,,1,,,1369,Restaurant Red,1,1,,,,,,1370,Concrete,1,,,1,,,,1371,'t Arendsnest,1,,,1,,,,1372,Vrankrijk,1,,,1,,,,1374,Fates,1,,,,1,,,1375,Grey Area,1,,,,1,,,1376,Odeon,1,,,1,,,,1377,Luxembourg,1,1,,,,,,1378,Cracked Kettle,1,,,,1,,,1379,Gollem,1,,,1,,,,1380,De Burgermeester,1,1,,,,,,1381,d'Vijff Vlieghen,1,,,,,1,,1383,Hoppe,1,,,1,,,,1384,Zen,1,1,,,,,,1385,Wella Warenhaus,1,,,,1,,,1386,Grekas,1,1,,,,,,1387,De Zwart,1,,,1,,,,1388,Selexyz Scheltema,1,,,,1,,,1390,Carl Denig,1,,,,1,,,1391,Krijtberg,1,,1,,,,,1392,Dutch Flowers,1,,,1,,,,1393,Eduard Kramer,1,,,,1,,,1394,Nic Nic,1,,,,1,,,1395,Het Papeneiland,1,,,1,,,,1396,Brilmuseum,1,,,,1,,,1397,Conscious Dreams Dreamlounge,1,,,,1,,,1398,Huis Met de Hoofden,1,,1,,,,,1399,Proust,1,,,1,,,,1400,Van Brienenhofje,1,,1,,,,,1401,Fietsfabriek,1,,,,1,,,1402,Yoi,1,,,,1,,,1403,Finch,1,,,1,,,,1404,Urban Picnic,1,,,,1,,,1405,Klein Antiek,1,,,,1,,,1406,De Admiraal,1,,,1,,,,1407,Buffet van Odette,1,1,,,,,,1408,Tinkerbell,1,,,,1,,,1409,Be Innocent,1,,,,1,,,1410,De Rode Hoed,1,,1,,,,,1411,Discostars,1,,,,1,,,1412,Small World Catering,1,1,,,,,,1413,Bordewijk,1,1,,,,,,1414,Stenelux,1,,,,1,,,1415,La Diablita,1,,,,1,,,1416,Lambiek,1,,,,1,,,1417,Theatermuseum,1,,1,,,,,1418,Reflex New Art Gallery,1,,,,1,,,1419,De 2 Grieken,1,1,,,,,,1420,Architectura & Natura,1,,,,1,,,1423,Metz Department Store,1,,1,,,,,1424,Noordermarkt,1,,,,1,,,1425,Hester van Eeghen,1,,,,1,,,1426,Reflex Modern Art Gallery,1,,,,1,,,1427,Noodle & Go,1,1,,,,,,1428,Lady Day,1,,,,1,,,1429,Zipper,1,,,,1,,,1431,Exota,1,,,,1,,,1432,Pancake Bakery,1,1,,,,,,1433,Noorderkerk,1,,1,,,,,1434,Duende,1,1,,,,,,1435,Los Pilones,1,1,,,,,,1436,Laura Dols,1,,,,1,,,1437,Bijbels Museum,1,,1,,,,,1438,Winkel,1,1,,,,,,1440,Brix Food 'N' Drinx,1,,,,,1,,1441,Thai Corner,1,1,,,,,,1442,Deshima,1,,,,1,,,1443,Nou Moe Stripwinkel,1,,,,1,,,1444,Nou Moe,1,,,,1,,,1445,Zinne & Minne,1,,,,1,,,1447,Gamekeeper,1,,,,1,,,1448,Bagels & Beans,1,1,,,,,,1449,Global Chillage,1,,,1,,,,1450,De Bolhoed cv,1,1,,,,,,1451,Spoiled,1,,,,1,,,1452,Eichholtz,1,,,,1,,,1453,Bourbon Street Jazz & Blues Club,1,,,1,,,,1454,Wolvenstraat 23,1,,,1,,,,1455,Moeder's Pot Eethuisje,1,1,,,,,,1456,Rijksmuseum,1,,1,,,,,1457,Miauw,1,,,,1,,,1458,Christophe,1,1,,,,,,1459,Jg Beune,1,,,,1,,,1460,Uri Duri,1,,,,1,,,1461,Huis Marseille,1,,1,,,,,1462,Restaurant Ps,1,1,,,,,,1463,Cora Kemperman,1,,,,1,,,1464,Bojo,1,1,,,,,,1465,Sabor de Maria,1,1,,,,,,1466,Mechanisch Speelgoed,1,,,,1,,,1468,Homomonument,1,,1,,,,,1469,Rokerij,1,,,1,,,,1470,De Uitkijk,1,,,1,,,,1471,Episode,1,,,,1,,,1472,Felix Meritis Building,1,,1,,,,,1473,Cobra Cafe-Restaurant,1,1,,,,,,1474,De Struisvogel,1,1,,,,,,1475,Netherlands Media Art Institute,1,,1,,,,,1476,Amsterdam Tulip Museum,1,,1,,,,,1477,Local Service,1,,,,1,,,1478,Anne Frank Huis,1,,1,,,,,1480,De Twee Zwaantjes,1,,,1,,,,1481,Heinen Delftware,1,,,,1,,,1482,Movies,1,,,1,,,,1484,Westerkerk,1,,1,,,,,1485,De Prins,1,,,1,,,,1486,De Kaaskamer,1,1,,,,,,1487,De Witte Tanden Winkel,1,,,,1,,,1488,Cilubang,1,1,,,,,,1489,FEBO,1,1,,,,,,1490,Pianola Museum,1,,1,,,,,1491,Wil Graanstra Friteshuis,1,1,,,,,,1492,Nielsen,1,1,,,,,,1493,Hug Gallery For International Photography,1,,,,1,,,1494,Hein,1,1,,,,,,1495,Skins Cosmetics,1,,,,1,,,1496,Wagamama,1,1,,,,,,1497,Jean Jean,1,1,,,,,,1498,Nieuws,1,,,,1,,,1499,De Blaffende Vis,1,,,1,,,,1500,Haarlemmerpoort,1,,1,,,,,1501,Lust,1,,,,1,,,1502,Van Puffelen,1,,,1,,,,1503,De Doffer,1,,,1,,,,1504,Sama Sebo,1,1,,,,,,1505,De Waterwinkel,1,,,,1,,,1507,De Balie,1,,,1,,,,1508,Bulldog,1,,,1,,,,1510,Brasil Music Bar,1,,,1,,,,1511,Diamond Museum,1,,1,,,,,1512,Paleis Van Justitie,1,,1,,,,,1513,Frozen Fountain,1,,,,1,,,1515,Josine Bokhoven,1,,,,1,,,1517,Galleria d'Arte Rinascimento,1,,,,,1,,1518,Houseboat Museum,1,,1,,,,,1519,Museumplein,1,,1,,,,,1520,Kitsch Kitchen,1,,,,1,,,1521,La Savonnerie,1,,,,1,,,1522,Suzy Wong,1,,,1,,,,1523,Pasta di Mamma,1,1,,,,,,1524,De Pieper,1,,,1,,,,1525,Stadsschouwburg,1,,,1,,,,1526,International Theatre & Film Books,1,,,,1,,,1527,Local,1,1,,,,,,1528,Japanese Pancake World,1,1,,,,,,1529,La Tertulia,1,,,1,,,,1530,Eylders,1,,,1,,,,1531,De Tuin,1,,,1,,,,1532,Het Oud-Hollandsch Snoepwinkeltje,1,,,,1,,,1533,Broodje Mokum,1,1,,,,,,1534,Cinema Paradiso,1,,,1,,,,1535,Sugar Factory,1,,,1,,,,1536,Burger's Patio,1,,,,,1,,1538,De Lach,1,,,,1,,,1539,Cinecenter,1,,,1,,,,1540,Melkweg,1,,,1,,,,1541,House of Bols,1,,1,,,,,1542,Stedelijk Museum Bureau Amsterdam,1,,1,,,,,1543,Rakang Thai,1,1,,,,,,1544,Lux,1,1,,,,,,1545,Van Gogh Museum,1,,1,,,,,1547,Kamer 41,1,,,,,1,,1548,Weber,1,1,,,,,,1549,De Smoeshaan,1,,,1,,,,1550,Kleurgamma,1,,,,1,,,1551,Saarein,1,,,1,,,,1552,Torch Gallery,1,,,,1,,,1553,Arnold Cornelis,1,,,,1,,,1556,Xsmall,1,,,,1,,,1557,Cats & Things,1,,,,1,,,1558,Goldstrasse,1,,,,1,,,1559,Eva Damave,1,,,,1,,,1560,Broer & Zus,1,,,,1,,,1561,English Bookshop,1,,,,1,,,1562,Concertgebouw,1,,,1,,,,1563,Nomads,1,,,,,,1,1564,Bever Zwerfsport,1,,,,1,,,1565,De Vliegende Schotel,1,1,,,,,,1566,De Belly,1,,,,1,,,1567,Maloe Melo,1,,,1,,,,1568,Korsakoff,1,,,1,,,,1569,Women's Outdoor World,1,,,,,1,,1570,Wonen 2,1,,,,,1,,1571,Lairesse Apotheek,1,,,,1,,,1572,Moeders,1,1,,,,,,1573,Flex Bar,1,,,1,,,,1575,Het Ketelhuis,1,,,1,,,,1576,Het Schip,1,,1,,,,,1577,Vondelkerk,1,,1,,,,,1578,Blender,1,1,,,,,,1580,Westergasfabriek,1,,1,,,,,1581,'t Blauwe Theehuis,1,,,1,,,,1582,De Trut,1,,,1,,,,1583,Pacific Parc,1,1,,,,,,1584,Hollandsche Manege,1,,1,,,,,1585,Gary's Muffins,1,1,,,,,,1586,Het Groot Melkhuis,1,,,1,,,,1588,Lalibela,1,,1,,,,,1589,Orgelpark,1,,1,,,,,1590,Paloma Blanca,1,1,,,,,,1591,Waroeng Asje,1,1,,,,,,1592,De Vondeltuin,1,,,,,,1,1593,Electrische Museumtramlijn Amsterdam,1,,1,,,,,1594,Tenniscentrum Amstelpark,1,,,,,,1,1595,So Dutch Fashion,1,,,,1,,,1596,Amsterdamse Bos Theatre,1,,,1,,,,1597,Campsite De Liede,1,,,,,,1,1598,Bakenesserkerk,1,,1,,,,,1599,Teylers Museum,1,,1,,,,,1600,Hofje Van Staats,1,,1,,,,,1601,Toneelschuur,1,,,1,,,,1602,Grand Cafe Nobel,1,1,,,,,,1603,Philharmonie,1,,1,,,,,1604,Proeflokaal In den Uiver,1,,,1,,,,1605,Grote Kerk van St Bavo,1,,1,,,,,1606,Falafel Land,1,1,,,,,,1607,Flamboyant,1,1,,,,,,1609,Jacobus Pieck,1,1,,,,,,1610,Specktakel,1,1,,,,,,1611,De Hallen,1,,1,,,,,1613,De Haerlemsche Vlaamse,1,1,,,,,,1614,Corrie Ten Boom House,1,,1,,,,,1615,La Forca,1,1,,,,,,1617,Complimenti,1,1,,,,,,1618,A la Turka,1,1,,,,,,1619,Grote Markt,1,,1,,,,,1620,Grote Markt,1,,1,,,,,1621,Town Hall,1,,1,,,,,1622,Frans Hals Museum,1,,1,,,,,1624,Botermarkt,1,,,,1,,,1626,Proveniershuis,1,,1,,,,,1627,Nieuwe Kerk,1,,1,,,,,1628,Patronaat,1,,,1,,,,1629,Stadsschouwburg,1,,,1,,,,1630,Willemsbrug,1,,,1,,,,1631,Leiden American Pilgrim Museum,1,,1,,,,,1632,Openlucht Binnenvaart Museum,1,,1,,,,,1633,Oude Haven,1,,1,,,,,1634,Luxor Theater,1,,,1,,,,1636,Willemswerf,1,,1,,,,,1637,Joho,1,,,,1,,,1638,Kijkhuis,1,,,1,,,,1639,In Casa,1,,,1,,,,1640,Blits,1,1,,,,,,1641,Lakenhal,1,,1,,,,,1642,Nederlands Fotomuseum,1,,1,,,,,1643,De Valk,1,,1,,,,,1645,Verboden Toegang,1,1,,,,,,1647,Restaurant In Den Doofpot,1,1,,,,,,1648,Rederij Rembrandt,1,,,,,,1,1649,Viva Italia,1,1,,,,,,1651,Rotterdam Walk of Fame,1,,1,,,,,1652,Restaurant 't Einde,1,1,,,,,,1653,Historisch Museum het Schielandhuis,1,,1,,,,,1654,Wereldmuseum,1,,1,,,,,1655,The Beurstraverse,1,,,,1,,,1656,Gay Palace,1,,,1,,,,1657,Kip,1,1,,,,,,1658,The Lijnbaan,1,,,,1,,,1659,off_corso,1,,,1,,,,1660,Schouwburg,1,,,1,,,,1661,Kunsthal,1,,1,,,,,1662,Naturalis & NHM,1,,,,,1,,1663,Museum Boijmans van Beuningen,1,,1,,,,,1664,De Doelen,1,,,1,,,,1665,Stalles,1,,,1,,,,1666,Parkheuvel,1,1,,,,,,1667,Rotown,1,,,1,,,,1668,Nederlands Architectuur Instituut,1,,1,,,,,1669,Panorama,1,,,1,,,,1670,Look,1,1,,,,,,1671,Dizzy,1,,,1,,,,1672,Nieuwe Binnenweg,1,,,,1,,,1673,Stadsbrouwerij De Pelgrim,1,1,,,,,,1674,De Dubbelde Palmboom,1,,1,,,,,1675,Oude Kerk,1,,1,,,,,1678,Vlaanderen,1,1,,,,,,1680,Legermuseum,1,,1,,,,,1681,Locus Publicus,1,,,1,,,,1682,Nieuwe Kerk,1,,1,,,,,1683,de Candelaer,1,,1,,,,,1685,Town Hall,1,,1,,,,,1686,OJV de Koornbeurs,1,,,1,,,,1687,De Zeven Zonden,1,1,,,,,,1688,Boekhandel Huyser,1,,,,1,,,1689,Stadys Koffyhuis,1,1,,,,,,1690,Artusi,1,1,,,,,,1691,Oude Kerk,1,,1,,,,,1692,Municipal Museum het Prinsenhof,1,,1,,,,,1693,De Delftse Pauw,1,,1,,,,,1694,OKA,1,1,,,,,,1695,Dr Anton Philipszaal,1,,,1,,,,1696,Nederlands Dans Theater,1,,,1,,,,1697,Cinematheek Haags Filmhuis,1,,,1,,,,1698,De Sax,1,,,1,,,,1699,New Town Hall,1,,1,,,,,1700,Escher in het Paleis Museum,1,,1,,,,,1701,Mauritshuis,1,,1,,,,,1702,Binnenhof,1,,1,,,,,1703,Galerij Prins Willem V,1,,1,,,,,1704,Gevangenpoort,1,,1,,,,,1705,De Zwarte Ruiter,1,,,1,,,,1706,Van Stockum,1,,,,1,,,1707,Boterwaag,1,1,,,,,,1709,Fiddler,1,,,1,,,,1710,Montmartre,1,1,,,,,,1711,Grote Kerk,1,,1,,,,,1712,Paard van Troje,1,,,1,,,,1713,Paleis Noordeinde,1,,1,,,,,1714,PUCK,1,1,,,,,,1715,It Rains Fishes,1,1,,,,,,1716,Panorama Mesdag,1,,1,,,,,1717,Madurodam,1,,1,,,,,1718,Vredespaleis,1,,1,,,,,1719,Kurzaal Bar,1,,,1,,,,1720,Topkapi Sense Restaurant,1,1,,,,,,1721,Gemeentemuseum,1,,1,,,,,1722,Concert- en Gehoorzaal,1,,,1,,,,1723,De Tuin Van Broeder Ludovicus,1,1,,,,,,1725,Koorkerk,1,,1,,,,,1726,Wandelkerk,1,,1,,,,,1727,Historama,1,,1,,,,,1728,Zeeuws Museum,1,,1,,,,,1729,Abdji,1,,1,,,,,1730,Nieuwe Kerk,1,,1,,,,,1731,De Drvkkery,1,,,,1,,,1732,Peper & Zout,1,1,,,,,,1733,Zuidwester,1,1,,,,,,1734,Town Hall,1,,1,,,,,1735,De Mug,1,,,1,,,,1736,Schuttershof,1,,,1,,,,1737,Jewish Cemetery,1,,1,,,,,1738,Groninger Museum,1,,1,,,,,1739,Ramparts,1,,,,,,1,1740,Deeg,1,1,,,,,,1741,Domkerk,1,,1,,,,,1742,Selexyz Broese,1,,,,1,,,1746,Flevoparkbad,1,,,,,,1,1748,IJscomplex Jaap Eden,1,,,,,,1,1749,Roos en Noor,1,1,,,,,,1750,De Wereldbol,1,1,,,,,,1751,Kanis & Meiland,1,1,,,,,,1752,Kompaszaal,1,1,,,,,,1753,Keet in Huis,1,,,,1,,,1754,Loods 6,1,,,,1,,,1755,De Ode,1,,,,1,,,1756,Vishandel Rinkoen,1,1,,,,,,1757,Snel,1,1,,,,,,1758,Studio K,1,,,1,,,,1759,Einde Van de Wereld,1,1,,,,,,1760,De Kas,1,1,,,,,,1761,Dappermarkt,1,,,,1,,,1762,Brouwerij 'tIj,1,,,,,1,,1763,De Gooyer Windmill,1,,1,,,,,1764,Trinbago,1,1,,,,,,1765,Roopram Roti,1,1,,,,,,1767,Frank's Smokehouse,1,,,,,1,,1768,Oosterpark,1,,1,,,,,1769,Elkaar,1,1,,,,,,1770,Floraparkbad,1,,,,,,1,1771,To Night,1,,,1,,,,1772,Bimhuis,1,,,1,,,,1773,A Tavola,1,1,,,,,,1775,Canvas,1,1,,,,,,1777,Hollandsche Schouwburg,1,,1,,,,,1778,Nationaal Vakbondsmuseum,1,,1,,,,,1779,Kriterion,1,,,1,,,,1780,Villa Ruysch,1,1,,,,,,1781,Greetje,1,1,,,,,,1782,De Ijsbreker,1,,,1,,,,1783,Stadsboekwinkel,1,,,,1,,,1784,Le Hollandais,1,1,,,,,,1785,Gassan Diamonds,1,,,,,,1,1786,Hemelse Modder,1,1,,,,,,1787,Garden Gym,1,,,,,,1,1788,Het Fort Van Sjakoo,1,,,,1,,,1789,De Tokoman,1,1,,,,,,1790,De Mirandabad,1,,,,,,1,1791,Holland Experience,1,,1,,,,,1792,Hofje van Wijs,1,,,1,,,,1793,'t Mandje,1,,,1,,,,1794,Casablanca,1,,,1,,,,1795,Outland Records,1,,,,1,,,1797,Thais Snackbar Bird,1,1,,,,,,1798,Gijsbert Dommer Huis,1,,1,,,,,1799,Latei,1,,,1,,,,1800,Lo Stivale d'oro,1,,,,,1,,1801,'Skek,1,1,,,,,,1802,Dwaze Zaken,1,1,,,,,,1803,Brouwerij de Prael,1,,,,1,,,1804,Gaziantep/Harison's,1,,,,,1,,1805,In de Olofspoort,1,,,1,,,,1807,Toko Joyce,1,1,,,,,,1808,Trippenhuis,1,,1,,,,,1809,De Bekeerde Suster,1,,,1,,,,1810,Chiellerie,1,,,,1,,,1811,Jacob Hooy & Co,1,,,,1,,,1812,Coffee & Jazz,1,1,,,,,,1813,Randy Roy's Redlight Tours,1,,,,,1,,1814,Frenzi,1,1,,,,,,1815,Tujuh Maret,1,1,,,,,,1816,De Engelbewaarder,1,,,1,,,,1817,Loekie,1,1,,,,,,1818,Absolute Danny,1,,,,1,,,1819,Getto,1,,,1,,,,1820,Oude Kerk,1,,1,,,,,1821,Hema,1,,,,1,,,1822,Cannabis College,1,,1,,,,,1823,Plant Market,1,,,,1,,,1824,Mr B,1,,,,1,,,1825,Filmantiquariaat Cine Qua Non,1,,,,1,,,1826,Studio 8,1,,,,,1,,1828,Antiques Market,1,,,,1,,,1829,Argos,1,,,,1,,,1830,De Kroon,1,,,1,,,,1831,Cockring,1,,,1,,,,1832,Oriental City,1,1,,,,,,1833,Mokum Events,1,,,,,,1,1834,Montmartre,1,1,,,,,,1835,Greenhouse,1,1,,,,,,1836,Amstel Taverne,1,,,1,,,,1837,Oudemanhuispoort,1,,1,,,,,1838,Oudemanhuis Book Market,1,,,,1,,,1839,Bazar Amsterdam,1,1,,,,,,1841,Tuschinskitheater,1,,,1,,,,1843,Amstelpark,1,,1,,,,,1844,Fitness First,1,,,,,,1,1845,Rob Wigboldus Vishandel,1,1,,,,,,1846,Free I,1,,,1,,,,1847,Van Kerkwijk,1,1,,,,,,1848,Bubbles & Wines Champagne Bar,1,,,1,,,,1849,Nationaal Monument,1,,1,,,,,1850,Ronde Lutherse Kerk,1,,1,,,,,1851,Dam Square & Nationaal Monument,1,,1,,,,,1852,Frascati,1,1,,,,,,1853,Brasserie Harkema,1,1,,,,,,1854,Puyck,1,1,,,,,,1855,News Photo,1,,1,,,,,1857,Runneboom,1,1,,,,,,1858,Aurora Kontakt,1,,,,1,,,1859,Munttoren,1,,1,,,,,1860,Nukuhiva,1,,,,1,,,1861,Ijscuypje,1,1,,,,,,1862,FOAM,1,,1,,,,,1863,Appel 67,1,,,,1,,,1864,De Vredespijp,1,,,,1,,,1865,La Place,1,1,,,,,,1866,Maison de Bonneterie,1,,,,1,,,1867,Pgc Hajenius,1,,,,1,,,1868,Gone With the Wind,1,,,,1,,,1869,Nieuwe Kerk,1,,1,,,,,1870,Papagaai,1,,1,,,,,1871,Pop @rt,1,,,,1,,,1872,Gartine,1,1,,,,,,1873,Dop,1,1,,,,,,1875,Rush Hour Records,1,,,,1,,,1876,Amsterdams Historisch Museum,1,,1,,,,,1877,Civic Guard Gallery,1,,1,,,,,1878,Open,1,,,1,,,,1879,Kingfisher,1,1,,,,,,1880,Morning Star,1,1,,,,,,1882,Stamp & coin market,1,,,,1,,,1883,Lunchroom Hannibal,1,1,,,,,,1884,Unlimited Delicious,1,,,,1,,,1885,18 Twintig,1,,,1,,,,1886,Pygma-Lion,1,1,,,,,,1887,Downtown Amsterdam,1,1,,,,,,1888,Begijnhof,1,,1,,,,,1889,Kismet,1,1,,,,,,1890,Albert Cuyp 67,1,1,,,,,,1891,Tjing Tjing,1,1,,,,,,1892,Villa Zeezicht,1,1,,,,,,1893,Le Petit Latin,1,1,,,,,,1894,University Shop,1,,,,1,,,1895,Squash City,1,,,,,,1,1896,Bakken Met Passie,1,1,,,,,,1898,British Language Training Centre,1,,,,,,1,1899,Havanna,1,1,,,,,,1900,Athenaeum Bookshop & Newsagency,1,,,,1,,,1901,Reypenaer,1,,,,,,1,1902,De Waaghals,1,1,,,,,,1903,Jordino,1,1,,,,,,1904,Balti House,1,1,,,,,,1905,Haesje Claes,1,1,,,,,,1906,Au Bout du Monde,1,,,,1,,,1907,Orontes,1,1,,,,,,1908,Tweede Kamer,1,,,1,,,,1909,De Witte Uyl,1,1,,,,,,1910,Blond,1,,,,1,,,1911,Lanskroon,1,1,,,,,,1912,'t Zonnetje,1,,,,1,,,1913,Callas 43,1,,,,1,,,1914,Antonia by Yvette,1,,,,1,,,1915,Mike's Bike Tours,1,,,,,,1,1916,Papabubble,1,,,,1,,,1917,Koan Float,1,,,,,,1,1919,Tiller Galerie,1,,,,1,,,1920,Architectuurantiquariat Opbouw,1,,,,1,,,1921,Art & Vine,1,,,,1,,,1922,Amsterdam Watch Company,1,,,,1,,,1923,De II Prinsen,1,,,1,,,,1924,Beadies,1,,,,1,,,1925,When Nature Calls,1,,,,1,,,1926,Zuiderbad,1,,,,,,1,1927,De Pizza Bakkers,1,1,,,,,,1928,Young Designers United,1,,,,1,,,1929,Hj Van de Kerkhof,1,,,,1,,,1930,Your Cup of T,1,,,,1,,,1931,Goodies,1,1,,,,,,1935,Toscanini,1,1,,,,,,1936,Spanjer en Van Twist,1,1,,,,,,1938,Koevoet,1,1,,,,,,1939,Ook,1,,,,1,,,1940,Pastini,1,1,,,,,,1941,Di'Vino Wijnbar,1,,,,,1,,1942,Lindengracht market,1,,,,1,,,1943,Loetje,1,1,,,,,,1944,Negen Straatjes,1,,,,1,,,1945,Rock Archive,1,,,,1,,,1946,CoBrA Museum,1,,1,,,,,1947,Paradiso,1,,,,,,1,1948,Bar Barbou,1,,,1,,,,1949,Mendo,1,,,,1,,,1950,De Kat in de Wijngaert,1,,,1,,,,1951,Bingo at De Spijker,1,,,1,,,,1952,Koh-I-Noor,1,1,,,,,,1953,Marlies Dekkers,1,,,,1,,,1954,Werck,1,1,,,,,,1955,Wok to Walk,1,1,,,,,,1956,La Falote,1,1,,,,,,1957,Pancakes!,1,1,,,,,,1958,Envy,1,1,,,,,,1959,Vyne,1,,,1,,,,1960,Coster Diamonds,1,,,,1,,,1961,Lab 13,1,,,,1,,,1962,Max Euwe Centrum,1,,1,,,,,1963,Wildschut,1,,,1,,,,1964,Shirdak,1,,,,1,,,1965,Boom Chicago,1,,,1,,,,1966,De Reiger,1,,,1,,,,1967,Mansion,1,,,1,,,,1968,Broodje Van Kootje,1,1,,,,,,1969,Johnny Jordaanplein,1,,1,,,,,1970,G-Spot,1,,,1,,,,1971,Divan,1,1,,,,,,1972,Jimmy Woo,1,1,,,,,,1973,Moooi Gallery,1,,,,1,,,1974,Festina Lente,1,1,,,,,,1975,Westermarkt,1,,,,1,,,1976,Renzo's,1,,,,,1,,1977,De Zotte,1,,,1,,,,1978,Electric Lady Land,1,,1,,,,,1979,Bark,1,1,,,,,,1980,Theater Bellevue,1,,,1,,,,1981,Jefferson Hotel,1,,,,1,,,1982,Br.wn Clothes,1,,,,1,,,1983,Petsalon,1,,,,1,,,1985,Balthazar's Keuken,1,,,,,1,,1986,Stedelijk Museum,1,,1,,,,,1987,Atelier Elandsgracht 89,1,,,,1,,,1988,Fotografia,1,,,,1,,,1989,Broekmans & Van Poppel,1,,,,1,,,1990,De Drie Hendricken,1,,1,,,,,1991,De Looier antiques market,1,,,,1,,,1992,Mercan,1,1,,,,,,1993,Sanementereng,1,,,1,,,,1994,Het Marnix,1,,,,,,1,1995,Struik,1,,,1,,,,1996,SPRMRKT,1,,,,1,,,1997,Oilily,1,,,,1,,,1998,Blue Pepper,1,1,,,,,,1999,Neef Louis Design,1,,,,1,,,2000,Welling,1,,,1,,,,2001,De Winkel Van Nijntje,1,,,,1,,,2002,Hammam,1,,1,,,,,2003,Hap Hmm,1,1,,,,,,2004,Vondelpark,1,,1,,,,,2006,Filmmuseum,1,,1,,,,,2007,Filmmuseum,1,,1,,,,,2008,Overtoom Groente en Fruit,1,1,,,,,,2009,De Nieuwe Anita,1,,,1,,,,2010,Riaz,1,1,,,,,,2011,De Kunstfabriek,1,,,,1,,,2012,Westergasterras,1,,,1,,,,2013,Zout & Co,1,,,,1,,,2014,Filmhuis Cavia,1,,,1,,,,2015,De Peper,1,1,,,,,,2016,OT31,1,,,,,1,,2017,Amsterdamse Bos,1,,1,,,,,2018,Occii,1,,1,,,,,2019,Occii,1,,1,,,,,2020,Olympic Stadium,1,,1,,,,,2022,Vakzuid,1,,,1,,,,2023,Sloterparkbad,1,,,,,,1,2024,Statue of Laurens Coster,1,,1,,,,,2025,Nas Brasas,1,1,,,,,,2026,Locus Publicus,1,,,1,,,,2027,Mayflower Bookshop,1,,,,1,,,2028,St Pancraskerk,1,,1,,,,,2030,Weimar,1,1,,,,,,2031,Brasserie Het Koetshuis,1,1,,,,,,2032,De Burcht,1,,1,,,,,2033,Annie's,1,,,,,1,,2034,Show Cube,1,,1,,,,,2035,Mangerie De Jonge Koekop,1,1,,,,,,2036,Marekerk,1,,1,,,,,2037,De Brasserie de Engelenbak,1,1,,,,,,2038,LVC,1,,,1,,,,2039,Museum Boerhaave,1,,1,,,,,2041,Latin School,1,,1,,,,,2042,Blaak Market,1,,,,1,,,2043,La Cloche,1,1,,,,,,2044,Rijksmuseum van Oudheden,1,,1,,,,,2045,Hortus Botanicus,1,,1,,,,,2046,Museum Volkenkunde,1,,1,,,,,2047,Surakarta,1,1,,,,,,2048,Spido,1,,,,,,1,2049,Dudok,1,1,,,,,,2050,Haven Museum,1,,1,,,,,2051,Botenverhuur 't Galgewater,1,,,,,1,,2052,Bagel Bakery,1,1,,,,,,2053,Maoz,1,1,,,,,,2054,Bagels & Beans,1,1,,,,,,2055,Selexyz & Donner,1,,,,1,,,2056,Abacanto,1,1,,,,,,2057,Zinc,1,1,,,,,,2058,Tuin Schoonoord,1,,1,,,,,2059,Huis Sonneveld,1,,1,,,,,2060,De Unie,1,,,1,,,,2061,Bootleg DJ Cafe,1,,,1,,,,2063,Toko Konfa,1,1,,,,,,2064,Lantaren/Venster,1,,,1,,,,2065,Pluto,1,,,,1,,,2066,Euromast,1,,1,,,,,2067,Westerpaviljoen,1,1,,,,,,2068,De Pannenkoekenboot,1,1,,,,,,2069,RailZ Miniworld,1,,1,,,,,2070,Worm,1,,,1,,,,2071,Het Eethuisje,1,1,,,,,,2072,t Walletje,1,,,,,1,,2073,Vermeer Centre Delft,1,,1,,,,,2074,Filmhuis Lumen,1,,,1,,,,2076,Canal Boat Tour,1,,,,,,1,2077,De Visbanken,1,1,,,,,,2078,Cafe de Oude Jan,1,,,1,,,,2079,La Vieux Jean,1,1,,,,,,2080,Museum Nusantara,1,,1,,,,,2081,Museum Lambert van Meerten,1,,1,,,,,2082,De Ooievaart,1,,,,,,1,2083,Cafe Hathor,1,,,1,,,,2084,Traditional Market,1,1,,,,,,2085,Les Ombrellas,1,1,,,,,,2086,Garoeda,1,1,,,,,,2087,Stanley & Livingstone,1,,,,1,,,2088,Coffee @ Company,1,1,,,,,,2090,Zebedea's,1,,,,,1,,2091,Pussy Deluxe Store,1,,,,1,,,2092,Photography Museum,1,,1,,,,,2093,Beachclub Doen,1,,,1,,,,2094,Puur! Natural Food,1,1,,,,,,2095,JC Creations,1,,,,1,,,2096,Wertheimpark,1,,1,,,,,2097,La Rive,1,1,,,,,,2098,TunFun,1,,,,,,1,2099,Yo-Yo,1,,,1,,,,2100,Centraal Station,1,,1,,,,,2101,Yellow Bike Tours,1,,,,,,1,2102,Szmulewicz,1,1,,,,,,2103,Sarphatipark,1,,1,,,,,2104,Op de Tuin,1,1,,,,,,2105,Mono,1,,,,1,,,2106,Maoz,1,1,,,,,,2107,Ristorante D'antica,1,,,,,1,,2108,Rituals,1,,,,1,,,2109,Koninklijk Paleis,1,,1,,,,,2110,Soho,1,,,1,,,,2111,Magic Mushroom Gallery,1,,,,1,,,2112,Athenaeum,1,,,1,,,,2113,Orange Bike,1,,,,,,1,2114,Foodism,1,1,,,,,,2115,Heuvel,1,,,1,,,,2116,Shoebaloo,1,,,,1,,,2117,Cellarrich,1,,,,1,,,2118,Marius,1,1,,,,,,2120,Van Ravenstein,1,,,,1,,,2121,Minibar,1,,,1,,,,2122,Felix Meritis,1,,,1,,,,2123,Boekie Woekie,1,,,,1,,,2126,Pauw,1,,,,1,,,2127,Markt,1,,1,,,,,2128,Semhar,1,1,,,,,,2129,Openluchttheater,1,,,1,,,,2131,Hoofdbureau,1,,,,1,,,2132,Terang Boelan,1,1,,,,,,2133,C'est La Vie,1,1,,,,,,2134,Zee Zout,1,1,,,,,,2135,Nemo,1,,,,1,,,2136,Oorlogs Verzets Museum,1,,1,,,,,2137,De Oude Sluis,1,,,1,,,,2138,Cloos,1,1,,,,,,2139,De Passage,1,,,,1,,,2140,Lokaal 'T Loosje,1,,,,,1,,2141,NDSM-Werf,1,,1,,,,,2142,Sauna Deco,1,,,,,,1,2143,Vleeshal,1,,1,,,,,2144,Verweyhal,1,,1,,,,,2145,Abraxas,1,,,1,,,,2146,Post Verkade Cruises,1,,,,,,1,2147,North End,1,,,1,,,,2148,Thermos Day Sauna,1,,,,,,1,

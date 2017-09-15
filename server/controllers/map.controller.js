@@ -2,6 +2,7 @@ const Element = require('../models/element');
 const Descriptive = require('../models/descriptive');
 const Type = require('../models/type');
 const Place = require('../models/place');
+const Category = require('../models/category');
 
 /**
  * Get all categories
@@ -31,24 +32,30 @@ const getQuestInfo = (req, res) => {
   //   }
   // });
 
-  Descriptive.findOne({ }, { _id: 0, name: 0, e: 0, sum: 0 }, (err, element) => {
+  Descriptive.findOne({ }, { _id: 0, name: 0, e: 0, sum: 0 }, (descriptiveError, element) => {
     const descriptives = Object.keys(element._doc);
-    questInfo.descriptives = descriptives;
-    getQuest.descriptives = true;
 
-    if (getQuest.descriptives && getQuest.types) {
-      res.json(questInfo);
-    }
+    Category.find({ c: { $in: descriptives } }, { _id: 0 }, (categoryError, elements) => {
+      questInfo.descriptives = elements;
+      getQuest.descriptives = true;
+
+      if (getQuest.descriptives && getQuest.types) {
+        res.json(questInfo);
+      }
+    });
   });
 
-  Type.findOne({ }, { _id: 0, name: 0, e: 0, sum: 0 }, (err, element) => {
+  Type.findOne({ }, { _id: 0, name: 0, e: 0, sum: 0 }, (typeError, element) => {
     const types = Object.keys(element._doc);
-    questInfo.types = types;
-    getQuest.types = true;
 
-    if (getQuest.descriptives && getQuest.types) {
-      res.json(questInfo);
-    }
+    Category.find({ c: { $in: types } }, { _id: 0 }, (categoryError, elements) => {
+      questInfo.types = elements;
+      getQuest.types = true;
+
+      if (getQuest.descriptives && getQuest.types) {
+        res.json(questInfo);
+      }
+    });
   });
 };
 
