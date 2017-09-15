@@ -28,7 +28,6 @@ export const FETCH_RECOMMENDATIONS_SUCCESS = 'carta/Home/FETCH_RECOMMENDATIONS_S
 export const FETCH_RECOMMENDATIONS_ERROR = 'carta/Home/FETCH_RECOMMENDATIONS_ERROR';
 
 let API_DOMAIN = 'http://localhost:3000/';
-// if (process.env.NODE_ENV === 'production') API_DOMAIN = 'https://carta-frontend-169512.appspot.com/';
 if (process.env.NODE_ENV === 'production') API_DOMAIN = 'https://cartamap.herokuapp.com/';
 
 export const API_BASE_URL = API_DOMAIN;

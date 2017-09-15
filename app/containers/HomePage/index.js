@@ -27,9 +27,6 @@ import './style.scss';
 const Map = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN });
 
 export class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-  /**
-   * when initial state username is not null, submit the form to load repos
-   */
   constructor() {
     super();
 
@@ -278,13 +275,12 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     });
 
     if (this.map) {
-      this.map.setZoom(zoom);
-      this.map.flyTo({ center: centerCoords });
+      this.map.flyTo({ center: centerCoords, zoom: zoom });
     }
   }
 
   elementClicked = (name) => {
-    browserHistory.push(`/place/${name}`);
+    browserHistory.push(`/brochure/${name}`);
   }
 
   questButtonClicked = () => {

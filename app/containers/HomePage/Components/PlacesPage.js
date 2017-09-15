@@ -56,7 +56,7 @@ export class PlacesPage extends React.PureComponent {
 
     return (
       <div className={this.props.className}>
-        <h1>In</h1>
+        <h1>In & around</h1>
         <input ref={(input) => { this.searchInput = input; }} className="search-input place-search" onChange={(evt) => { this.inputChangeHandler(evt.target.value); }} />
         <div className="buttons-row">
           { filteredPlaces.map((place, index) => <button className="place-button" key={index} onClick={() => { this.placeClicked(place.name); }}>{place.name}</button>) }

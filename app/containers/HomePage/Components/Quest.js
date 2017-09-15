@@ -57,36 +57,36 @@ export class Quest extends React.PureComponent {
       third: currentTab === 2,
     });
 
-    const typesTabClass = classNames({
-      'types-tab': true,
-      active: currentTab === 0,
-    });
-
-    const typesPageClass = classNames({
-      page: true,
-      'types-page': true,
-      hidden: currentTab !== 0,
-    });
-
-    const descriptivesTabClass = classNames({
-      'descriptives-tab': true,
-      active: currentTab === 1,
-    });
-
-    const descriptivesPageClass = classNames({
-      page: true,
-      'descriptives-page': true,
-      hidden: currentTab !== 1,
-    });
-
     const placesTabClass = classNames({
       'places-tab': true,
-      active: currentTab === 2,
+      active: currentTab === 0,
     });
 
     const placesPageClass = classNames({
       page: true,
       'places-page': true,
+      hidden: currentTab !== 0,
+    });
+
+    const typesTabClass = classNames({
+      'types-tab': true,
+      active: currentTab === 1,
+    });
+
+    const typesPageClass = classNames({
+      page: true,
+      'types-page': true,
+      hidden: currentTab !== 1,
+    });
+
+    const descriptivesTabClass = classNames({
+      'descriptives-tab': true,
+      active: currentTab === 2,
+    });
+
+    const descriptivesPageClass = classNames({
+      page: true,
+      'descriptives-page': true,
       hidden: currentTab !== 2,
     });
 
@@ -96,15 +96,15 @@ export class Quest extends React.PureComponent {
           <div className="line"></div>
           <button className="next" onClick={this.nextBtnClicked}>Next<img src="https://carta.guide/icon/next.png" role="presentation" /></button>
           <div className={tabClass}></div>
-          <img className={typesTabClass} src="https://carta.guide/icon/quest/check.png" role="presentation" onClick={() => { this.tabClicked(0); }} />
-          <img className={descriptivesTabClass} src="https://carta.guide/icon/quest/star.png" role="presentation" onClick={() => { this.tabClicked(1); }} />
-          <img className={placesTabClass} src="https://carta.guide/icon/quest/marker.png" role="presentation" onClick={() => { this.tabClicked(2); }} />
+          <img className={placesTabClass} src="https://carta.guide/icon/quest/marker.png" role="presentation" onClick={() => { this.tabClicked(0); }} />
+          <img className={typesTabClass} src="https://carta.guide/icon/quest/check.png" role="presentation" onClick={() => { this.tabClicked(1); }} />
+          <img className={descriptivesTabClass} src="https://carta.guide/icon/quest/star.png" role="presentation" onClick={() => { this.tabClicked(2); }} />
         </div>
 
         <div className="pages">
+          <PlacesPage className={placesPageClass} places={this.props.questInfo.get('places').toJS()} questIndex={this.props.questIndex} mapViewPortChange={this.props.mapViewPortChange} />
           <TypesPage className={typesPageClass} types={this.props.questInfo.get('types').toJS()} typesAll={this.props.questInfo.get('typesAll')} questIndex={this.props.questIndex} />
           <DescriptivesPage className={descriptivesPageClass} descriptives={this.props.questInfo.get('descriptives').toJS()} descriptivesAll={this.props.questInfo.get('descriptivesAll')} questIndex={this.props.questIndex} />
-          <PlacesPage className={placesPageClass} places={this.props.questInfo.get('places').toJS()} questIndex={this.props.questIndex} mapViewPortChange={this.props.mapViewPortChange} />
         </div>
       </div>
     );

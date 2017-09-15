@@ -8,7 +8,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import Toggle from 'components/Toggle';
 import Wrapper from './Wrapper';
 import messages from './messages';
 import { appLocales } from '../../i18n';
@@ -19,7 +18,6 @@ export class LocaleToggle extends React.Component { // eslint-disable-line react
   render() {
     return (
       <Wrapper>
-        <Toggle value={this.props.locale} values={appLocales} messages={messages} onToggle={this.props.onLocaleToggle} />
       </Wrapper>
     );
   }

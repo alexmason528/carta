@@ -39,19 +39,19 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
-      path: '/place/:placeName',
-      name: 'homePlace',
+      path: '/brochure/:placeName',
+      name: 'brochurePage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          import('containers/PlacePage/reducer'),
-          import('containers/PlacePage/sagas'),
-          import('containers/PlacePage'),
+          import('containers/BrochurePage/reducer'),
+          import('containers/BrochurePage/sagas'),
+          import('containers/BrochurePage'),
         ]);
 
         const renderRoute = loadModule(cb);
 
         importModules.then(([reducer, sagas, component]) => {
-          injectReducer('place', reducer.default);
+          injectReducer('brochure', reducer.default);
           injectSagas(sagas.default);
 
           renderRoute(component);

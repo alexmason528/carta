@@ -1,5 +1,5 @@
 /**
- * Gets the repositories of the user from Github
+ * Gets the recommendations and locations
  */
 
 import { take, call, put, select, cancel, takeLatest } from 'redux-saga/effects';
