@@ -5,7 +5,7 @@ const path = require('path');
 const Element = require('../models/element');
 const Descriptive = require('../models/descriptive');
 const Type = require('../models/type');
-const Place = require('../models/place');
+const Category = require('../models/category');
 /**
  * Import elements
  * @param null
@@ -78,8 +78,31 @@ const importTypes = (req, res) => {
   });
 };
 
+/**
+ * Import categories
+ * @param null
+ * @returns void
+ */
+
+const importCategories = (req, res) => {
+  Type.remove({}, (err) => {
+    if (err) throw err;
+
+    const csvPath = path.join(__dirname, '../csv/categories.csv');
+    const stream = fs.createReadStream(csvPath);
+    csv
+    .fromStream(stream, { headers: true })
+    .on('data', (data) => {
+      let type = new Category(data);
+      type.save();
+    })
+    .on('end', () => {
+      res.send('Importing categories finished');
+    });
+  });
+};
 
 module.exports.importElements = importElements;
 module.exports.importDescriptives = importDescriptives;
 module.exports.importTypes = importTypes;
-
+module.exports.importCategories = importCategories;

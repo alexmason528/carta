@@ -314,13 +314,17 @@
 				  font-size:12px;
           opacity: 0.75;
 
-				  img {
+				  .star {
 				  	position: relative;
 				  	height: 13px;
 				  	display: none;
             top: -1px;
 				  	margin-left: 3px;
 				  	filter: grayscale(100%);
+
+            &:hover {
+              filter: none;
+            }
 				  }
 
 				  button {
@@ -337,16 +341,14 @@
               opacity: 1;
               color: #fff;
 				  	}
-				  }
 
-				  &.active:hover {
-				  	img {
-				  		display: inline-block;
-				  	}
+           .star {
+              display: inline-block;
+            }
 				  }
 
 				  &.star {
-				  	img {
+				  	.star {
 				  		filter: none;
 				  		display: inline-block;
               opacity: 1;
