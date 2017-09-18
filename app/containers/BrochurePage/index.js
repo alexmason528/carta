@@ -24,12 +24,10 @@ export class BrochurePage extends React.PureComponent { // eslint-disable-line r
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const placeName = this.props.params.placeName;
     this.props.fetchBrochure(placeName);
-  }
 
-  componentDidMount() {
     const interval =
     setInterval(() => {
       if ($('.container').width() > 0) {

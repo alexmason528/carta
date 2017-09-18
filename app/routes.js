@@ -18,7 +18,7 @@ export default function createRoutes(store) {
 
   return [
     {
-      path: '/(:questURL)',
+      path: '/(:viewport/:types/:descriptives)',
       name: 'homePage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([

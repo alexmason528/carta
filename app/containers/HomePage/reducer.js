@@ -26,6 +26,7 @@ import {
   FETCH_RECOMMENDATIONS,
   FETCH_RECOMMENDATIONS_SUCCESS,
   FETCH_RECOMMENDATIONS_ERROR,
+  SET_DEFAULT_QUEST,
 } from './constants';
 
 // The initial state of the App
@@ -170,6 +171,9 @@ function homeReducer(state = initialState, action) {
       }
 
       return nextState;
+
+    case SET_DEFAULT_QUEST:
+      return state;
 
     case FETCH_QUESTINFO:
       questInfo = {

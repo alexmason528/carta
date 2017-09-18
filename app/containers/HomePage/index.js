@@ -13,13 +13,15 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 
-import { mapChange, fetchQuestInfo, fetchRecommendations } from './actions';
+import { mapChange, fetchQuestInfo, fetchRecommendations, setDefaultQuest } from './actions';
 import { makeSelectQuestInfo, makeSelectRecommendations } from './selectors';
 
 import { MAP_ACCESS_TOKEN } from './constants';
 
 import { MapBlock, ScoreBoardBlock } from './Components/Blocks';
 import QuestBlock from './Components/QuestBlock';
+
+import URLParser from '../../utils/questURLparser';
 
 import { Button, QuestButton } from './Components/Buttons';
 import './style.scss';
@@ -38,6 +40,16 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   componentWillMount() {
+    const { viewport, types, descriptives } = this.props.params;
+
+    if (viewport && types && descriptives) {
+      const res = URLParser({ viewport, types, descriptives });
+
+      if (!res.error) {
+        this.props.setDefaultQuest(res.data);
+      }
+    }
+
     this.mapStyle = {
       version: 8,
       sources: {
@@ -66,6 +78,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     this.zoom = [6];
 
     this.props.fetchQuestInfo();
+    // this.props.fetchRecommendations();
 
     this.colors = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379'];
 
@@ -387,9 +400,15 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 HomePage.propTypes = {
   questInfo: React.PropTypes.object,
   recommendations: React.PropTypes.object,
+  params: React.PropTypes.object({
+    viewport: React.PropTypes.string,
+    types: React.PropTypes.string,
+    descriptives: React.PropTypes.string,
+  }),
   mapChange: React.PropTypes.func,
   fetchQuestInfo: React.PropTypes.func,
   fetchRecommendations: React.PropTypes.func,
+  setDefaultQuest: React.PropTypes.func,
 };
 
 export function mapDispatchToProps(dispatch) {
@@ -397,6 +416,7 @@ export function mapDispatchToProps(dispatch) {
     mapChange: (zoomlevel, viewport) => dispatch(mapChange(zoomlevel, viewport)),
     fetchQuestInfo: () => dispatch(fetchQuestInfo()),
     fetchRecommendations: () => dispatch(fetchRecommendations()),
+    setDefaultQuest: (data) => dispatch(setDefaultQuest(data)),
   };
 }
 

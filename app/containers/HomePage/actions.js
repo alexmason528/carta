@@ -30,6 +30,7 @@ import {
   FETCH_RECOMMENDATIONS,
   FETCH_RECOMMENDATIONS_SUCCESS,
   FETCH_RECOMMENDATIONS_ERROR,
+  SET_DEFAULT_QUEST,
 } from './constants';
 
 /**
@@ -139,6 +140,13 @@ export function fetchRecommendationsSuccess(payload) {
 export function fetchRecommendationsError(payload) {
   return {
     type: FETCH_RECOMMENDATIONS_ERROR,
+    payload,
+  };
+}
+
+export function setDefaultQuest(payload) {
+  return {
+    type: SET_DEFAULT_QUEST,
     payload,
   };
 }
