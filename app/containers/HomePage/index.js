@@ -78,7 +78,6 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     this.zoom = [6];
 
     this.props.fetchQuestInfo();
-    // this.props.fetchRecommendations();
 
     this.colors = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379'];
 
@@ -400,7 +399,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 HomePage.propTypes = {
   questInfo: React.PropTypes.object,
   recommendations: React.PropTypes.object,
-  params: React.PropTypes.object({
+  params: React.PropTypes.shape({
     viewport: React.PropTypes.string,
     types: React.PropTypes.string,
     descriptives: React.PropTypes.string,

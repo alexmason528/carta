@@ -9,7 +9,7 @@ function getType(input) {
   if (input[0] === '.') return -1;
   if (input.indexOf('e') !== -1) return -1;
   if (isNaN(input)) return -1;
-  if ((parseFloat(input) === parseIt(input, 10)) && input === parseInt(input, 10).toString()) return 1;
+  if ((parseFloat(input) === parseInt(input, 10)) && input === parseInt(input, 10).toString()) return 1;
   return 0;
 }
 

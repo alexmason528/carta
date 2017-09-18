@@ -182,7 +182,7 @@ function homeReducer(state = initialState, action) {
         details: {
           defaultQuest: {
             places: [],
-            typesAll: 1,
+            typesAll: 0,
             types: [],
             descriptivesAll: 0,
             descriptives: [],
