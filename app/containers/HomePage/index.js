@@ -14,7 +14,7 @@ import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 
 import { mapChange, fetchQuestInfo, fetchRecommendations, setDefaultQuest } from './actions';
-import { makeSelectQuestInfo, makeSelectRecommendations } from './selectors';
+import { makeSelectRecommendations, makeSelectPlaces } from './selectors';
 
 import { MAP_ACCESS_TOKEN } from './constants';
 
@@ -102,7 +102,10 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   onZoomEnd = (map) => {
-    this.props.mapChange(map.getZoom(), map.getBounds());
+    this.props.mapChange({
+      zoom: map.getZoom(),
+      bounds: map.getBounds(),
+    });
 
     const { showQuest, minimized, closed } = this.state;
 
@@ -112,7 +115,11 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   onStyleLoad = (map) => {
-    this.props.mapChange(map.getZoom(), map.getBounds());
+    this.props.mapChange({
+      zoom: map.getZoom(),
+      bounds: map.getBounds(),
+    });
+
     this.props.fetchRecommendations();
     this.map = map;
 
@@ -131,7 +138,10 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   onDragEnd = (map) => {
-    this.props.mapChange(map.getZoom(), map.getBounds());
+    this.props.mapChange({
+      zoom: map.getZoom(),
+      bounds: map.getBounds(),
+    });
 
     const { showQuest, minimized, closed } = this.state;
 
@@ -236,10 +246,6 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   redrawMap(props) {
-    const questInfo = props.questInfo.get('details');
-    const currentQuestIndex = questInfo.get('currentQuestIndex');
-    const currentQuest = questInfo.get('quests').get(questInfo.get('currentQuestIndex'));
-
     if (this.map) {
       this.clearMap();
 
@@ -273,21 +279,16 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   mapViewPortChange = (placeName) => {
-    const questInfo = this.props.questInfo.get('details');
-    const currentQuest = questInfo.get('quests').get(questInfo.get('currentQuestIndex'));
+    const { places } = this.props;
 
-    let centerCoords;
-    let zoom;
-
-    currentQuest.get('places').map((place) => {
-      if (place.get('name') === placeName) {
-        centerCoords = [place.get('x'), place.get('y')];
-        zoom = place.get('zoom');
+    for (let place of places) {
+      if (place.name === placeName) {
+        const { x, y, zoom } = place;
+        this.map.flyTo({
+          center: [x, y],
+          zoom: zoom,
+        });
       }
-    });
-
-    if (this.map) {
-      this.map.flyTo({ center: centerCoords, zoom: zoom });
     }
   }
 
@@ -368,8 +369,6 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           className={questBlockClass}
           minimizeClicked={this.minimizeClicked}
           closeClicked={this.closeClicked}
-          questInfo={this.props.questInfo.get('details').get('quests')}
-          currentQuestIndex={this.props.questInfo.get('details').get('currentQuestIndex')}
           mapViewPortChange={this.mapViewPortChange}
         />
         <MapBlock className={mapBlockClass}>
@@ -397,8 +396,8 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 }
 
 HomePage.propTypes = {
-  questInfo: React.PropTypes.object,
   recommendations: React.PropTypes.object,
+  places: React.PropTypes.array,
   params: React.PropTypes.shape({
     viewport: React.PropTypes.string,
     types: React.PropTypes.string,
@@ -412,7 +411,7 @@ HomePage.propTypes = {
 
 export function mapDispatchToProps(dispatch) {
   return {
-    mapChange: (zoomlevel, viewport) => dispatch(mapChange(zoomlevel, viewport)),
+    mapChange: (mapInfo) => dispatch(mapChange(mapInfo)),
     fetchQuestInfo: () => dispatch(fetchQuestInfo()),
     fetchRecommendations: () => dispatch(fetchRecommendations()),
     setDefaultQuest: (data) => dispatch(setDefaultQuest(data)),
@@ -420,8 +419,8 @@ export function mapDispatchToProps(dispatch) {
 }
 
 const mapStateToProps = createStructuredSelector({
-  questInfo: makeSelectQuestInfo(),
   recommendations: makeSelectRecommendations(),
+  places: makeSelectPlaces(),
 });
 
 // Wrap the component to inject dispatch and state into it

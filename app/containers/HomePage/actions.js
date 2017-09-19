@@ -41,40 +41,31 @@ import {
  * @return {object}    An action object with a type of CHANGE_USERNAME
  */
 
-export function mapChange(zoomlevel, viewport) {
+export function mapChange(payload) {
   return {
     type: MAP_CHANGE,
-    zoomlevel,
-    viewport,
+    payload,
   };
 }
 
-export function placeSelect(name, questIndex) {
+export function placeSelect(payload) {
   return {
     type: PLACE_SELECT,
-    name,
-    questIndex,
+    payload,
   };
 }
 
-export function typeSelect(name, visible, active, questIndex) {
+export function typeSelect(payload) {
   return {
     type: TYPE_SELECT,
-    name,
-    visible,
-    active,
-    questIndex,
+    payload,
   };
 }
 
-export function descriptiveSelect(name, star, visible, active, questIndex) {
+export function descriptiveSelect(payload) {
   return {
     type: DESCRIPTIVE_SELECT,
-    name,
-    star,
-    visible,
-    active,
-    questIndex,
+    payload,
   };
 }
 
@@ -90,17 +81,17 @@ export function questAdd() {
   };
 }
 
-export function questSelect(index) {
+export function questSelect(payload) {
   return {
     type: QUEST_SELECT,
-    index,
+    payload,
   };
 }
 
-export function questRemove(index) {
+export function questRemove(payload) {
   return {
     type: QUEST_REMOVE,
-    index,
+    payload,
   };
 }
 

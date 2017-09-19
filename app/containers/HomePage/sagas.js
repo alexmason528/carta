@@ -6,85 +6,43 @@ import { take, call, put, select, cancel, takeLatest } from 'redux-saga/effects'
 import { LOCATION_CHANGE } from 'react-router-redux';
 
 import request from 'utils/request';
-import { makeSelectQuestInfo, makeSelectZoomLevel, makeSelectViewport } from 'containers/HomePage/selectors';
+import { makeSelectCurrentTypes, makeSelectCurrentDescriptives, makeSelectViewport } from 'containers/HomePage/selectors';
 
 import { FETCH_RECOMMENDATIONS, FETCH_QUESTINFO, API_BASE_URL } from './constants';
 import { fetchRecommendationsSuccess, fetchRecommendationsError, fetchQuestInfoSuccess, fetchQuestInfoError } from './actions';
 
 export function* getRecommendations() {
-  const questInfo = yield select(makeSelectQuestInfo());
-  const zoomlevel = yield select(makeSelectZoomLevel());
+  const curDescriptives = yield select(makeSelectCurrentDescriptives());
+  const curTypes = yield select(makeSelectCurrentTypes());
   const viewport = yield select(makeSelectViewport());
 
   const requestURL = `${API_BASE_URL}api/v1/map/recommendation/`;
 
-  const currentQuestIndex = questInfo.get('details').get('currentQuestIndex');
-  const currentQuest = questInfo.get('details').get('quests').get(currentQuestIndex);
+  let types = {
+    active: curTypes.active,
+    inactive: curTypes.inactive,
+  };
 
   let descriptives;
 
-  const typesAll = currentQuest.get('typesAll');
-  const descriptivesAll = currentQuest.get('descriptivesAll');
-
-  let activeTypes = [];
-  let inactiveTypes = [];
-
-  currentQuest.get('types').map((type) => {
-    if (type.get('name') === 'Regions') {
-      activeTypes.push(type.get('c'));
-    } else if (type.get('active') === 1) {
-      activeTypes.push(type.get('c'));
-    } else {
-      inactiveTypes.push(type.get('c'));
-    }
-  });
-
-  let types = {
-    active: activeTypes,
-    inactive: inactiveTypes,
-  };
-
-  if (currentQuest.get('descriptivesAll') === 1) {
-    let stars = [];
-    let excludes = [];
-
-    currentQuest.get('descriptives').map((descriptive) => {
-      if (descriptive.get('star') === 1) {
-        stars.push(descriptive.get('c'));
-      } else if (descriptive.get('active') === 0) {
-        excludes.push(descriptive.get('c'));
-      }
-    });
-
+  if (curDescriptives.anything === 1) {
     descriptives = {
-      stars: stars,
-      interests: excludes,
+      stars: curDescriptives.star,
+      interests: curDescriptives.inactive,
     };
   } else {
-    let stars = [];
-    let includes = [];
-
-    currentQuest.get('descriptives').map((descriptive) => {
-      if (descriptive.get('star') === 1) {
-        stars.push(descriptive.get('c'));
-      } else if (descriptive.get('active') === 1) {
-        includes.push(descriptive.get('c'));
-      }
-    });
-
     descriptives = {
-      stars: stars,
-      interests: includes,
+      stars: curDescriptives.star,
+      interests: curDescriptives.active,
     };
   }
 
   const data = {
     count: 5,
-    descriptivesAll: descriptivesAll,
+    descriptivesAll: curDescriptives.anything,
     descriptives: descriptives,
-    typesAll: typesAll,
+    typesAll: curTypes.anything,
     types: types,
-    zoomlevel: zoomlevel,
     viewport: viewport,
   };
 
@@ -97,7 +55,7 @@ export function* getRecommendations() {
   };
 
   let sendRequest = false;
-  if ((typesAll === 1 || types.active.length > 0) && (descriptivesAll === 1 || descriptives.stars.length > 0 || descriptives.interests.length > 0)) {
+  if ((data.typesAll === 1 || data.types.active.length > 0) && (data.descriptivesAll === 1 || data.descriptives.stars.length > 0 || data.descriptives.interests.length > 0)) {
     sendRequest = true;
   }
 
@@ -149,10 +107,8 @@ export function* getQuestInfo() {
 
     const payload = {
       places: places,
-      typesAll: 0,
-      types: questInfo.types.map((type) => { return { c: type.c, name: type.name, visible: 0, active: 0 }; }),
-      descriptivesAll: 0,
-      descriptives: questInfo.descriptives.map((descriptive) => { return { c: descriptive.c, name: descriptive.name, star: 0, visible: 0, active: 0 }; }),
+      types: questInfo.types.map((type) => { return { c: type.c, name: type.name }; }),
+      descriptives: questInfo.descriptives.map((descriptive) => { return { c: descriptive.c, name: descriptive.name }; }),
     };
 
     yield put(fetchQuestInfoSuccess(payload));

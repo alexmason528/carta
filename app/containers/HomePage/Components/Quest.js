@@ -40,7 +40,7 @@ export class Quest extends React.PureComponent {
     this.setState({
       currentTab: tab,
     });
-    this.props.updateVisibility();
+    // this.props.updateVisibility();
   }
 
   nextBtnClicked = () => {
@@ -102,9 +102,9 @@ export class Quest extends React.PureComponent {
         </div>
 
         <div className="pages">
-          <PlacesPage className={placesPageClass} places={this.props.questInfo.get('places').toJS()} questIndex={this.props.questIndex} mapViewPortChange={this.props.mapViewPortChange} />
-          <TypesPage className={typesPageClass} types={this.props.questInfo.get('types').toJS()} typesAll={this.props.questInfo.get('typesAll')} questIndex={this.props.questIndex} />
-          <DescriptivesPage className={descriptivesPageClass} descriptives={this.props.questInfo.get('descriptives').toJS()} descriptivesAll={this.props.questInfo.get('descriptivesAll')} questIndex={this.props.questIndex} />
+          <PlacesPage className={placesPageClass} mapViewPortChange={this.props.mapViewPortChange} />
+          <TypesPage className={typesPageClass} />
+          <DescriptivesPage className={descriptivesPageClass} />
         </div>
       </div>
     );
@@ -113,8 +113,6 @@ export class Quest extends React.PureComponent {
 
 Quest.propTypes = {
   className: PropTypes.string,
-  questInfo: PropTypes.object.isRequired,
-  questIndex: PropTypes.number,
   mapViewPortChange: PropTypes.func,
   updateVisibility: PropTypes.func,
 };

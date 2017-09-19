@@ -35,103 +35,93 @@ const initialState = fromJS({
   questInfo: {
     fetching: false,
     error: null,
-    details: {
-      defaultQuest: {
-        places: [],
-        typesAll: 1,
-        types: [],
-        descriptivesAll: 0,
-        descriptives: [],
-      },
-      quests: [
-      ],
-      currentQuestIndex: 0,
+    categories: {
+      places: [],
+      types: [],
+      descriptives: [],
     },
+    quests: [{
+      viewport: {
+        x: 0,
+        y: 0,
+        zoomlevel: 0,
+      },
+      types: {
+        anything: 0,
+        active: [],
+        inactive: [],
+      },
+      descriptives: {
+        anything: 0,
+        star: [],
+        active: [],
+        inactive: [],
+      },
+    }],
+    currentQuestIndex: 0,
   },
   recommendations: {
     fetching: false,
     error: null,
     details: [],
   },
-  zoomlevel: 7,
-  viewport: {},
+
+  viewport: {
+    zoom: 7,
+    northeast: {},
+    southwest: {},
+  },
 });
 
 
 function homeReducer(state = initialState, action) {
   let questInfo;
   let recommendations;
-  let details;
-  let nextState;
   let currentQuestIndex;
   let types;
   let descriptives;
+  let quests;
 
   switch (action.type) {
 
     case MAP_CHANGE:
       const viewport = {
+        zoom: action.payload.zoom,
         northeast: {
-          x: action.viewport._ne.lng,
-          y: action.viewport._ne.lat,
+          x: action.payload.bounds._ne.lng,
+          y: action.payload.bounds._ne.lat,
         },
         southwest: {
-          x: action.viewport._sw.lng,
-          y: action.viewport._sw.lat,
+          x: action.payload.bounds._sw.lng,
+          y: action.payload.bounds._sw.lat,
         },
       };
 
-      nextState = state.set('zoomlevel', action.zoomlevel).set('viewport', viewport);
+      return state.set('viewport', viewport);
 
-      return nextState;
+    case PLACE_SELECT:
+      currentQuestIndex = state.getIn(['questInfo', 'currentQuestIndex']);
+      quests = state.getIn(['questInfo', 'quests']).toJS();
+
+      quests[currentQuestIndex].place = action.payload;
+
+      return state.setIn(['questInfo', 'quests'], fromJS(quests));
 
     case TYPE_SELECT:
-      currentQuestIndex = state.get('questInfo').get('details').get('currentQuestIndex');
-      let typesAll = state.get('questInfo').get('details').get('quests').get(currentQuestIndex).get('typesAll');
+      currentQuestIndex = state.getIn(['questInfo', 'currentQuestIndex']);
+      quests = state.getIn(['questInfo', 'quests']).toJS();
 
-      if (action.name === 'anything') {
-        typesAll = (typesAll === 1) ? 0 : 1;
-        types = state.get('questInfo').get('details').get('quests').get(currentQuestIndex).get('types').map((type) => {
-          return type.set('active', action.active);
-        });
-      } else {
-        types = state.get('questInfo').get('details').get('quests').get(currentQuestIndex).get('types').map((type) => {
-          if (type.get('name') === action.name) {
-            return type.set('active', action.active).set('visible', action.visible);
-          }
-          return type;
-        });
-      }
+      quests[currentQuestIndex].types = action.payload;
 
-      nextState = state.setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'types'], types)
-                       .setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'typesAll'], typesAll);
-
-      return nextState;
+      return state.setIn(['questInfo', 'quests'], fromJS(quests));
 
     case DESCRIPTIVE_SELECT:
-      currentQuestIndex = state.get('questInfo').get('details').get('currentQuestIndex');
-      let descriptivesAll = state.get('questInfo').get('details').get('quests').get(currentQuestIndex).get('descriptivesAll');
+      currentQuestIndex = state.getIn(['questInfo', 'currentQuestIndex']);
+      quests = state.getIn(['questInfo', 'quests']).toJS();
 
-      if (action.name === 'anything') {
-        descriptivesAll = (descriptivesAll === 1) ? 0 : 1;
-        descriptives = state.get('questInfo').get('details').get('quests').get(currentQuestIndex).get('descriptives').map((descriptive) => {
-          if (descriptivesAll === 0) {
-            return descriptive.set('active', action.active).set('star', 0);
-          }
-          return descriptive.set('active', action.active);
-        });
-      } else {
-        descriptives = state.get('questInfo').get('details').get('quests').get(currentQuestIndex).get('descriptives').map((descriptive) => {
-          if (descriptive.get('name') === action.name) {
-            return descriptive.set('active', action.active).set('visible', action.visible).set('star', action.star);
-          }
-          return descriptive;
-        });
-      }
+      quests[currentQuestIndex].descriptives = action.payload;
 
-      nextState = state.setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'descriptives'], descriptives)
-                       .setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'descriptivesAll'], descriptivesAll);
-      return nextState;
+      return state.setIn(['questInfo', 'quests'], fromJS(quests));
 
     case UPDATE_VISIBILITY:
       currentQuestIndex = state.get('questInfo').get('details').get('currentQuestIndex');
@@ -145,32 +135,40 @@ function homeReducer(state = initialState, action) {
         return type;
       });
 
-      nextState = state.setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'descriptives'], descriptives)
+      return state.setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'descriptives'], descriptives)
                        .setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'types'], types);
-      return nextState;
 
     case QUEST_ADD:
-      const defaultQuest = state.get('questInfo').get('details').get('defaultQuest');
-      const newQuests = state.get('questInfo').get('details').get('quests').push(defaultQuest);
-      const size = state.get('questInfo').get('details').get('quests').size;
+      const defaultQuest = {
+        viewport: {
+          x: 0,
+          y: 0,
+          zoomlevel: 0,
+        },
+        types: {
+          anything: 0,
+          active: [],
+          inactive: [],
+        },
+        descriptives: {
+          anything: 0,
+          star: [],
+          active: [],
+          inactive: [],
+        },
+      };
 
-      nextState = state.setIn(['questInfo', 'details', 'quests'], newQuests).setIn(['questInfo', 'details', 'currentQuestIndex'], size);
-
-      return nextState;
+      return state.setIn(['questInfo', 'quests'], state.getIn(['questInfo', 'quests']).push(defaultQuest));
 
     case QUEST_SELECT:
-      nextState = state.setIn(['questInfo', 'details', 'currentQuestIndex'], action.index);
-      return nextState;
+      return state.setIn(['questInfo', 'currentQuestIndex'], action.payload);
 
     case QUEST_REMOVE:
-      currentQuestIndex = state.get('questInfo').get('details').get('currentQuestIndex');
-      nextState = state.deleteIn(['questInfo', 'details', 'quests', action.index]);
+      currentQuestIndex = state.getIn(['questInfo', 'currentQuestIndex']);
 
-      if (action.index < currentQuestIndex) {
-        nextState = nextState.setIn(['questInfo', 'details', 'currentQuestIndex'], currentQuestIndex - 1);
-      }
-
-      return nextState;
+      return (action.payload < currentQuestIndex)
+        ? state.deleteIn(['questInfo', 'quests', action.payload]).setIn(['questInfo', 'currentQuestIndex'], currentQuestIndex - 1)
+        : state.deleteIn(['questInfo', 'quests', action.payload]);
 
     case SET_DEFAULT_QUEST:
       return state;
@@ -179,59 +177,42 @@ function homeReducer(state = initialState, action) {
       questInfo = {
         fetching: true,
         error: null,
-        details: {
-          defaultQuest: {
-            places: [],
-            typesAll: 0,
-            types: [],
-            descriptivesAll: 0,
-            descriptives: [],
-          },
-          quests: [
-          ],
-          currentQuestIndex: 0,
+        categories: {
+          places: [],
+          types: [],
+          descriptives: [],
         },
+        quests: initialState.getIn(['questInfo', 'quests']).toJS(),
+        currentQuestIndex: 0,
       };
 
-      nextState = state.set('questInfo', fromJS(questInfo));
-      return nextState;
+      return state.set('questInfo', fromJS(questInfo));
 
     case FETCH_QUESTINFO_SUCCESS:
       questInfo = {
         fetching: false,
         error: null,
-        details: {
-          defaultQuest: action.payload,
-          quests: [
-            action.payload,
-          ],
-          currentQuestIndex: 0,
-        },
+        categories: action.payload,
+        quests: initialState.getIn(['questInfo', 'quests']).toJS(),
+        currentQuestIndex: 0,
       };
 
-      nextState = state.set('questInfo', fromJS(questInfo));
-      return nextState;
+      return state.set('questInfo', fromJS(questInfo));
 
     case FETCH_QUESTINFO_ERROR:
       questInfo = {
         fetching: false,
         error: true,
-        details: {
-          defaultQuest: {
-            places: [],
-            typesAll: 1,
-            types: [],
-            descriptivesAll: 0,
-            descriptives: [],
-          },
-          quests: [
-          ],
-          currentQuestIndex: 0,
+        categories: {
+          places: [],
+          types: [],
+          descriptives: [],
         },
+        quests: initialState.getIn(['questInfo', 'quests']).toJS(),
+        currentQuestIndex: 0,
       };
 
-      nextState = state.set('questInfo', fromJS(questInfo));
-      return nextState;
+      return state.set('questInfo', fromJS(questInfo));
 
     case FETCH_RECOMMENDATIONS:
       recommendations = state.get('recommendations').set({
@@ -239,8 +220,7 @@ function homeReducer(state = initialState, action) {
         error: null,
       });
 
-      nextState = state.set('recommendations', fromJS(recommendations));
-      return nextState;
+      return state.set('recommendations', fromJS(recommendations));
 
     case FETCH_RECOMMENDATIONS_SUCCESS:
       recommendations = {
@@ -249,8 +229,7 @@ function homeReducer(state = initialState, action) {
         details: action.payload,
       };
 
-      nextState = state.set('recommendations', fromJS(recommendations));
-      return nextState;
+      return state.set('recommendations', fromJS(recommendations));
 
     case FETCH_RECOMMENDATIONS_ERROR:
       recommendations = {
@@ -259,8 +238,7 @@ function homeReducer(state = initialState, action) {
         details: [],
       };
 
-      nextState = state.set('recommendations', fromJS(recommendations));
-      return nextState;
+      return state.set('recommendations', fromJS(recommendations));
 
     default:
       return state;

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Button, StarButton } from './Buttons';
 import { fetchRecommendations, descriptiveSelect } from '../actions';
+import { makeSelectDescriptives, makeSelectCurrentDescriptives } from '../selectors';
 import './style.scss';
 
 export class DescriptivesPage extends React.PureComponent {
@@ -46,11 +47,18 @@ export class DescriptivesPage extends React.PureComponent {
 
   componentWillUpdate(nextProps, nextState) {
     let closable = 0;
-    nextState.descriptives.map((descriptive) => {
-      if (descriptive.active === 1) closable = 1;
-    });
 
-    if (nextProps.className !== this.props.className) {
+    const { descriptives } = nextState;
+    const { className } = nextProps;
+
+    for (let descriptive of descriptives) {
+      if (descriptive.active === 1) {
+        closable = 1;
+        break;
+      }
+    }
+
+    if (className !== this.props.className) {
       nextState.expanded = 1 - closable;
     }
 
@@ -60,9 +68,19 @@ export class DescriptivesPage extends React.PureComponent {
   }
 
   initializeState(props) {
+    const { descriptives, currentDescriptives } = props;
+
+    const newDescriptives = descriptives.map((descriptive) => {
+      if (currentDescriptives.star.indexOf(descriptive.c) !== -1) {
+        return { c: descriptive.c, name: descriptive.name, star: 1, active: 1 };
+      } else if (currentDescriptives.active.indexOf(descriptive.c) !== -1) {
+        return { c: descriptive.c, name: descriptive.name, star: 0, active: 1 };
+      }
+      return { c: descriptive.c, name: descriptive.name, star: 0, active: 0 };
+    });
+
     this.setState({
-      descriptives: props.descriptives,
-      anything: props.descriptivesAll,
+      descriptives: newDescriptives,
     });
   }
 
@@ -80,98 +98,104 @@ export class DescriptivesPage extends React.PureComponent {
     }
   }
 
-  anythingClickHandler = () => {
-    const { descriptives, expanded, anything, search } = this.state;
-    let newAnything = (anything === 0) ? 1 : 0;
-
-    let newDescriptives = descriptives.map((descriptive) => ({ name: descriptive.name, star: newAnything === 0 ? 0 : descriptive.star, visible: newAnything, active: newAnything }));
-
-    this.setState({
-      anything: newAnything,
-      descriptives: newDescriptives,
-    });
-
-    if (newAnything === 0) {
-      this.setState({
-        expanded: 1,
-      });
-    }
-
-    this.props.descriptiveSelect('anything', null, null, newAnything, this.props.questIndex);
-    this.props.fetchRecommendations();
-  }
-
   inputChangeHandler = (text) => {
     this.setState({
       search: text,
     });
   }
 
+  anythingClickHandler = () => {
+    const { descriptives, anything } = this.state;
+    let newDescriptives = descriptives.map((descriptive) => ({ c: descriptive.c, name: descriptive.name, star: anything === 1 ? 0 : descriptive.star, active: 1 - anything }));
+
+    let stateData = {
+      anything: 1 - anything,
+      descriptives: newDescriptives,
+    };
+
+    if (anything === 1) {
+      stateData.expanded = 1;
+    }
+
+    this.setState(stateData, this.fetchRecommendations);
+  }
+
   descriptiveClickHandler = (descriptiveName) => {
-    const { descriptives, expanded, anything, search } = this.state;
+    const { descriptives } = this.state;
 
     let newDescriptives = descriptives.map((descriptive, index) => {
-      const { name, star, visible, active } = descriptive;
-      if (name === descriptiveName) {
-        const newActive = 1 - active;
-        let newVisible = visible;
-
-        if (anything === 0 && expanded === 1) newVisible = newActive;
-
-        this.props.descriptiveSelect(name, 0, newVisible, newActive, this.props.questIndex);
-
-        return { name: name, star: 0, visible: newVisible, active: newActive };
-      }
-      return descriptive;
+      const { c, name, star, active } = descriptive;
+      return (name === descriptiveName) ? { c, name, star: 0, active: 1 - active } : descriptive;
     });
 
     this.setState({
       descriptives: newDescriptives,
-    });
-
-    this.props.fetchRecommendations();
+    }, this.fetchRecommendations);
   }
 
   descriptiveStarClickHandler = (descriptiveName) => {
-    let descriptives = [...this.state.descriptives];
+    const { descriptives } = this.state;
 
     let newDescriptives = descriptives.map((descriptive, index) => {
-      const { name, star, visible, active } = descriptive;
+      const { c, name, star, active } = descriptive;
       if (name === descriptiveName) {
         const newStar = 1 - star;
-
-        this.props.descriptiveSelect(name, newStar, visible, active, this.props.questIndex);
-
-        return { name: name, star: newStar, visible: visible, active: active };
+        return { c, name, star: 1 - star, active };
       }
       return descriptive;
     });
 
     this.setState({
       descriptives: newDescriptives,
-    });
-
-    this.props.fetchRecommendations();
+    }, this.fetchRecommendations);
   }
 
-  descriptiveClickHoldHandler = (descriptiveName) => {
-    let descriptives = [...this.state.descriptives];
+  fetchRecommendations = () => {
+    const { descriptives, anything } = this.state;
 
-    let newDescriptives = descriptives.map((descriptive, index) => {
-      const { name, star, visible, active } = descriptive;
-      if (name === descriptiveName) {
-        this.props.descriptiveSelect(name, 1, 1, 1, this.props.questIndex);
-        return { name: name, star: 1, visible: 1, active: 1 };
+    let star = [];
+    let active = [];
+    let inactive = [];
+
+    descriptives.forEach((descriptive) => {
+      if (descriptive.star === 1) {
+        star.push(descriptive.c);
+      } else if (descriptive.active === 1) {
+        active.push(descriptive.c);
+      } else {
+        inactive.push(descriptive.c);
       }
-      return descriptive;
     });
 
-    this.setState({
-      descriptives: newDescriptives,
-    });
+    let questDescriptives = {
+      anything: anything,
+      active: active,
+      inactive: inactive,
+      star: star,
+    };
 
+    this.props.descriptiveSelect(questDescriptives);
     this.props.fetchRecommendations();
   }
+
+  // descriptiveClickHoldHandler = (descriptiveName) => {
+  //   let descriptives = [...this.state.descriptives];
+
+  //   let newDescriptives = descriptives.map((descriptive, index) => {
+  //     const { name, star, visible, active } = descriptive;
+  //     if (name === descriptiveName) {
+  //       this.props.descriptiveSelect(name, 1, 1, 1, this.props.questIndex);
+  //       return { name: name, star: 1, visible: 1, active: 1 };
+  //     }
+  //     return descriptive;
+  //   });
+
+  //   this.setState({
+  //     descriptives: newDescriptives,
+  //   });
+
+  //   this.props.fetchRecommendations();
+  // }
 
   render() {
     const { descriptives, expanded, anything, search } = this.state;
@@ -180,15 +204,9 @@ export class DescriptivesPage extends React.PureComponent {
     if (search === '') searchedDescriptives = descriptives;
     else searchedDescriptives = descriptives.filter((descriptive) => (descriptive.name.toLowerCase().indexOf(search) !== -1));
 
-    let visibleCnt = 0;
-    let excludedDescriptives = descriptives.filter((descriptive) => {
-      if (descriptive.visible === 1) visibleCnt += 1;
-      return descriptive.active === 0;
-    });
-
-    let staredDescriptives = descriptives.filter((descriptive) => {
-      return descriptive.star === 1;
-    });
+    let excludedDescriptives = descriptives.filter((descriptive) => descriptive.active === 0);
+    let staredDescriptives = descriptives.filter((descriptive) => descriptive.star === 1);
+    let activeDescriptives = descriptives.filter((descriptive) => descriptive.active === 1);
 
     const searchBtnClass = classNames({
       search: true,
@@ -197,7 +215,7 @@ export class DescriptivesPage extends React.PureComponent {
 
     const closeBtnClass = classNames({
       close: true,
-      invisible: expanded === 0 || (anything === 0 && visibleCnt === 0 && staredDescriptives.length === 0),
+      invisible: expanded === 0 || (anything === 0 && staredDescriptives.length === 0 && activeDescriptives.length === 0),
     });
 
     const anythingBtnClass = classNames({
@@ -242,7 +260,7 @@ export class DescriptivesPage extends React.PureComponent {
           <div className={filteredClass}>
             {
               searchedDescriptives.map((descriptive, index) => {
-                const { name, star, visible, active } = descriptive;
+                const { name, star, active } = descriptive;
                 let starButton;
 
                 if (expanded === 1) {
@@ -257,7 +275,7 @@ export class DescriptivesPage extends React.PureComponent {
                       {name}
                     </StarButton>
                   );
-                } else if (visible === 1) {
+                } else if (star === 1 || active === 1) {
                   starButton = (
                     <StarButton
                       active={active}
@@ -279,7 +297,7 @@ export class DescriptivesPage extends React.PureComponent {
             <div className="notable">NOTABLY</div>
             {
               staredDescriptives.map((descriptive, index) => {
-                const { name, star, visible, active } = descriptive;
+                const { name, star, active } = descriptive;
                 return (
                   <StarButton
                     active={active}
@@ -298,7 +316,7 @@ export class DescriptivesPage extends React.PureComponent {
             <div className="except">ONLY IGNORING</div>
             {
               excludedDescriptives.map((descriptive, index) => {
-                const { name, star, visible, active } = descriptive;
+                const { name, star, active } = descriptive;
                 return (
                   <StarButton
                     active={active}
@@ -329,12 +347,14 @@ DescriptivesPage.propTypes = {
 
 export function mapDispatchToProps(dispatch) {
   return {
-    descriptiveSelect: (name, star, visible, active, questIndex) => dispatch(descriptiveSelect(name, star, visible, active, questIndex)),
+    descriptiveSelect: (descriptiveInfo) => dispatch(descriptiveSelect(descriptiveInfo)),
     fetchRecommendations: () => dispatch(fetchRecommendations()),
   };
 }
 
 const mapStateToProps = createStructuredSelector({
+  descriptives: makeSelectDescriptives(),
+  currentDescriptives: makeSelectCurrentDescriptives(),
 });
 
 // Wrap the component to inject dispatch and state into it

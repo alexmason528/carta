@@ -4,25 +4,11 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { fetchRecommendations, questAdd, questSelect, questRemove } from '../actions';
+import { makeSelectQuests, makeSelectCurrentQuestIndex } from '../selectors';
 import Quest from './Quest';
 import './style.scss';
 
 export class QuestBlock extends React.PureComponent {
-  constructor() {
-    super();
-    this.state = {
-      quests: [],
-      selectedIndex: 0,
-    };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      quests: nextProps.questInfo,
-      selectedIndex: nextProps.currentQuestIndex,
-    });
-  }
-
   questAddHandler = () => {
     this.props.questAdd();
   }
@@ -34,14 +20,14 @@ export class QuestBlock extends React.PureComponent {
 
   questRemoveHandler = (evt, index) => {
     evt.preventDefault();
-    const selectedIndex = this.state.selectedIndex;
-    if (selectedIndex === index || this.state.quests.length === 1) return;
-
+    const { currentQuestIndex, quests } = this.props;
+    if (currentQuestIndex === index || quests.length === 1) return;
     this.props.questRemove(index);
   }
 
   render() {
-    const { quests, selectedIndex } = this.state;
+    const { quests, currentQuestIndex } = this.props;
+
     return (
       <div className={this.props.className}>
         <div className="buttons">
@@ -53,7 +39,7 @@ export class QuestBlock extends React.PureComponent {
             quests.map((quest, index) => {
               const questTabClass = classNames({
                 item: true,
-                on: index === selectedIndex,
+                on: index === currentQuestIndex,
               });
               return (
                 <button
@@ -74,10 +60,10 @@ export class QuestBlock extends React.PureComponent {
             quests.map((quest, index) => {
               const questClass = classNames({
                 quest: true,
-                show: index === selectedIndex,
+                show: index === currentQuestIndex,
               });
               return (
-                <Quest key={index} className={questClass} questInfo={quest} questIndex={index} mapViewPortChange={this.props.mapViewPortChange}>
+                <Quest key={index} className={questClass} mapViewPortChange={this.props.mapViewPortChange}>
                   {index}
                 </Quest>
               );
@@ -93,7 +79,7 @@ export class QuestBlock extends React.PureComponent {
 QuestBlock.propTypes = {
   minimizeClicked: PropTypes.func.isRequired,
   closeClicked: PropTypes.func.isRequired,
-  questInfo: PropTypes.object,
+  quests: PropTypes.object,
   currentQuestIndex: PropTypes.number,
   className: PropTypes.string,
   mapViewPortChange: PropTypes.func,
@@ -113,6 +99,8 @@ export function mapDispatchToProps(dispatch) {
 }
 
 const mapStateToProps = createStructuredSelector({
+  quests: makeSelectQuests(),
+  currentQuestIndex: makeSelectCurrentQuestIndex(),
 });
 
 // Wrap the component to inject dispatch and state into it

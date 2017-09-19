@@ -5,6 +5,7 @@ import { createStructuredSelector } from 'reselect';
 import { List, is } from 'immutable';
 import { Button, StarButton } from './Buttons';
 import { fetchRecommendations, typeSelect } from '../actions';
+import { makeSelectTypes, makeSelectCurrentTypes } from '../selectors';
 import './style.scss';
 
 export class TypesPage extends React.PureComponent {
@@ -35,11 +36,18 @@ export class TypesPage extends React.PureComponent {
 
   componentWillUpdate(nextProps, nextState) {
     let closable = 0;
-    nextState.types.map((type) => {
-      if (type.active === 1) closable = 1;
-    });
 
-    if (nextProps.className !== this.props.className) {
+    const { types } = nextState;
+    const { className } = nextProps;
+
+    for (let tp of types) {
+      if (tp.active === 1) {
+        closable = 1;
+        break;
+      }
+    }
+
+    if (className !== this.props.className) {
       nextState.expanded = 1 - closable;
     }
 
@@ -49,10 +57,17 @@ export class TypesPage extends React.PureComponent {
   }
 
   initializeState(props) {
-    const newTypes = props.types.filter((type) => type.name !== 'Regions');
+    const { types, currentTypes } = props;
+
+    const newTypes = types.map((type) => {
+      if (currentTypes.active.indexOf(type.c) !== -1) {
+        return { c: type.c, name: type.name, active: 1 };
+      }
+      return { c: type.c, name: type.name, active: 0 };
+    });
+
     this.setState({
       types: newTypes,
-      anything: props.typesAll,
     });
   }
 
@@ -70,53 +85,60 @@ export class TypesPage extends React.PureComponent {
     }
   }
 
-  anythingClickHandler = () => {
-    const { types, expanded, anything, search } = this.state;
-    let newAnything = (anything === 0) ? 1 : 0;
-    let newTypes = types.map((type) => ({ name: type.name, visible: newAnything, active: newAnything }));
-
-    this.setState({
-      anything: newAnything,
-      types: newTypes,
-    });
-
-    if (newAnything === 0) {
-      this.setState({
-        expanded: 1,
-      });
-    }
-
-    this.props.typeSelect('anything', null, newAnything, this.props.questIndex);
-    this.props.fetchRecommendations();
-  }
-
   inputChangeHandler = (evt) => {
     this.setState({
       search: evt.target.value,
     });
   }
 
+  anythingClickHandler = () => {
+    const { types, anything } = this.state;
+
+    const newTypes = types.map((type) => ({ c: type.c, name: type.name, active: 1 - anything }));
+
+    let stateData = {
+      anything: 1 - anything,
+      types: newTypes,
+    };
+
+    if (anything === 1) {
+      stateData.expanded = 1;
+    }
+
+    this.setState(stateData, this.fetchRecommendations);
+  }
+
   typeClickHandler = (typeName) => {
-    const { types, expanded, anything, search } = this.state;
+    const { types, expanded, anything } = this.state;
 
     let newTypes = types.map((type, index) => {
-      const { name, visible, active } = type;
+      const { name, active } = type;
       if (name === typeName) {
-        const newActive = 1 - active;
-        let newVisible = visible;
-
-        if (anything === 0 && expanded === 1) newVisible = newActive;
-
-        this.props.typeSelect(name, newVisible, newActive, this.props.questIndex);
-        return { name: name, visible: newVisible, active: newActive };
+        return { c: type.c, name: name, active: 1 - active };
       }
       return type;
     });
 
     this.setState({
       types: newTypes,
-    });
+    }, this.fetchRecommendations);
+  }
 
+  fetchRecommendations = () => {
+    const { types, anything } = this.state;
+
+    let active = [];
+    let inactive = [];
+
+    types.forEach((type) => (type.active === 1) ? active.push(type.c) : inactive.push(type.c));
+
+    let questTypes = {
+      anything: anything,
+      active: active,
+      inactive: inactive,
+    };
+
+    this.props.typeSelect(questTypes);
     this.props.fetchRecommendations();
   }
 
@@ -127,11 +149,8 @@ export class TypesPage extends React.PureComponent {
     if (search === '') searchedTypes = types;
     else searchedTypes = types.filter((type) => type.name.toLowerCase().indexOf(search.toLowerCase()) !== -1);
 
-    let visibleCnt = 0;
-    let excludedTypes = types.filter((type) => {
-      if (type.visible === 1) visibleCnt += 1;
-      return type.active === 0;
-    });
+    let excludedTypes = types.filter((type) => type.active === 0);
+    let activeTypes = types.filter((type) => type.active === 1);
 
     const searchBtnClass = classNames({
       search: true,
@@ -140,7 +159,7 @@ export class TypesPage extends React.PureComponent {
 
     const closeBtnClass = classNames({
       close: true,
-      invisible: expanded === 0 || (anything === 0 && visibleCnt === 0),
+      invisible: expanded === 0 || (anything === 0 && activeTypes.length === 0),
     });
 
     const anythingBtnClass = classNames({
@@ -180,7 +199,7 @@ export class TypesPage extends React.PureComponent {
           <div className={filteredClass}>
             {
             searchedTypes.map((type, index) => {
-              const { name, visible, active } = type;
+              const { name, active } = type;
               let button;
 
               if (expanded === 1) {
@@ -193,7 +212,7 @@ export class TypesPage extends React.PureComponent {
                     {name}
                   </Button>
                 );
-              } else if (visible === 1) {
+              } else if (active === 1) {
                 button = (
                   <Button
                     active={active}
@@ -212,7 +231,7 @@ export class TypesPage extends React.PureComponent {
             <div className="except">ONLY IGNORING</div>
             {
               excludedTypes.map((type, index) => {
-                const { name, visible, active } = type;
+                const { name, active } = type;
                 return (
                   <Button
                     active={active}
@@ -234,7 +253,6 @@ export class TypesPage extends React.PureComponent {
 TypesPage.propTypes = {
   className: PropTypes.string,
   types: PropTypes.array,
-  questIndex: PropTypes.number,
   typeSelect: PropTypes.func,
   fetchRecommendations: PropTypes.func,
 };
@@ -242,12 +260,14 @@ TypesPage.propTypes = {
 
 export function mapDispatchToProps(dispatch) {
   return {
-    typeSelect: (name, visible, active, questIndex) => dispatch(typeSelect(name, visible, active, questIndex)),
     fetchRecommendations: () => dispatch(fetchRecommendations()),
+    typeSelect: (typeInfo) => dispatch(typeSelect(typeInfo)),
   };
 }
 
 const mapStateToProps = createStructuredSelector({
+  types: makeSelectTypes(),
+  currentTypes: makeSelectCurrentTypes(),
 });
 
 // Wrap the component to inject dispatch and state into it

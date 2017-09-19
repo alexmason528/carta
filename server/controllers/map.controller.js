@@ -69,7 +69,7 @@ const getRecommendations = (req, res) => {
   const params = req.body;
   let columns = [];
 
-  const { count, descriptivesAll, descriptives, typesAll, types, zoomlevel, viewport } = params;
+  const { count, descriptivesAll, descriptives, typesAll, types, viewport } = params;
 
   let typeMatch = [];
 
@@ -107,8 +107,8 @@ const getRecommendations = (req, res) => {
   const pipeline = [
     {
       $match: {
-        zmin: { $lte: zoomlevel },
-        zmax: { $gte: zoomlevel },
+        zmin: { $lte: viewport.zoom },
+        zmax: { $gte: viewport.zoom },
         x: { $gte: viewport.southwest.x, $lte: viewport.northeast.x },
         y: { $gte: viewport.southwest.y, $lte: viewport.northeast.y },
       },

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Button, StarButton } from './Buttons';
 import { fetchRecommendations, placeSelect } from '../actions';
+import { makeSelectPlaces } from '../selectors';
 
 import './style.scss';
 
@@ -38,7 +39,6 @@ export class PlacesPage extends React.PureComponent {
 
   placeClicked = (placeName) => {
     this.props.mapViewPortChange(placeName);
-    this.props.fetchRecommendations();
   }
 
   inputChangeHandler = (text) => {
@@ -70,19 +70,18 @@ PlacesPage.propTypes = {
   className: PropTypes.string,
   places: PropTypes.array,
   questIndex: PropTypes.number,
-  placeSelect: PropTypes.func,
   mapViewPortChange: PropTypes.func,
   fetchRecommendations: PropTypes.func,
 };
 
 export function mapDispatchToProps(dispatch) {
   return {
-    placeSelect: (name, questIndex) => dispatch(placeSelect(name, questIndex)),
     fetchRecommendations: () => dispatch(fetchRecommendations()),
   };
 }
 
 const mapStateToProps = createStructuredSelector({
+  places: makeSelectPlaces(),
 });
 
 // Wrap the component to inject dispatch and state into it
