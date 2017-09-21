@@ -1,13 +1,13 @@
-import React, { PropTypes, Children } from 'react';
+import React, { Component, PropTypes, Children } from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Button, StarButton } from './Buttons';
 import { fetchRecommendations, descriptiveSelect } from '../actions';
 import { makeSelectDescriptives, makeSelectCurrentDescriptives } from '../selectors';
-import './style.scss';
+import '../style.scss';
 
-export class DescriptivesPage extends React.PureComponent {
+class DescriptivesPage extends Component {
   constructor() {
     super();
 
@@ -345,7 +345,7 @@ DescriptivesPage.propTypes = {
   fetchRecommendations: PropTypes.func,
 };
 
-export function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     descriptiveSelect: (descriptiveInfo) => dispatch(descriptiveSelect(descriptiveInfo)),
     fetchRecommendations: () => dispatch(fetchRecommendations()),

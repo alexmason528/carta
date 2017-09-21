@@ -21,16 +21,23 @@ import {
   TYPE_SELECT,
   DESCRIPTIVE_SELECT,
   UPDATE_VISIBILITY,
+  SET_DEFAULT_QUEST,
+
   QUEST_ADD,
   QUEST_SELECT,
   QUEST_REMOVE,
+
   FETCH_QUESTINFO,
   FETCH_QUESTINFO_SUCCESS,
   FETCH_QUESTINFO_ERROR,
+
   FETCH_RECOMMENDATIONS,
   FETCH_RECOMMENDATIONS_SUCCESS,
   FETCH_RECOMMENDATIONS_ERROR,
-  SET_DEFAULT_QUEST,
+
+  FETCH_BROCHURE,
+  FETCH_BROCHURE_SUCCESS,
+  FETCH_BROCHURE_ERROR,
 } from './constants';
 
 /**
@@ -131,6 +138,27 @@ export function fetchRecommendationsSuccess(payload) {
 export function fetchRecommendationsError(payload) {
   return {
     type: FETCH_RECOMMENDATIONS_ERROR,
+    payload,
+  };
+}
+
+export function fetchBrochure(name) {
+  return {
+    type: FETCH_BROCHURE,
+    name,
+  };
+}
+
+export function fetchBrochureSuccess(payload) {
+  return {
+    type: FETCH_BROCHURE_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchBrochureError(payload) {
+  return {
+    type: FETCH_BROCHURE_ERROR,
     payload,
   };
 }

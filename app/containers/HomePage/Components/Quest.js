@@ -1,4 +1,4 @@
-import React, { PropTypes, Children } from 'react';
+import React, { Component, PropTypes, Children } from 'react';
 import styled, { css } from 'styled-components';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
@@ -10,9 +10,9 @@ import TypesPage from './TypesPage';
 
 import { updateVisibility } from '../actions';
 
-import './style.scss';
+import '../style.scss';
 
-export class Quest extends React.PureComponent {
+class Quest extends Component {
   constructor() {
     super();
     this.state = {
@@ -117,9 +117,7 @@ Quest.propTypes = {
   updateVisibility: PropTypes.func,
 };
 
-// export default Quest;
-
-export function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     updateVisibility: () => dispatch(updateVisibility()),
   };

@@ -4,7 +4,7 @@
  * This is the first thing users see of our App, at the '/' route
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 import Helmet from 'react-helmet';
 import ReactMapboxGl from 'react-mapbox-gl';
 import classNames from 'classnames';
@@ -19,16 +19,19 @@ import { makeSelectRecommendations, makeSelectPlaces } from './selectors';
 import { MAP_ACCESS_TOKEN } from './constants';
 
 import { MapBlock, ScoreBoardBlock } from './Components/Blocks';
+
 import QuestBlock from './Components/QuestBlock';
+import Brochure from './Components/Brochure';
 
 import URLParser from '../../utils/questURLparser';
 
 import { Button, QuestButton } from './Components/Buttons';
+
 import './style.scss';
 
 const Map = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN });
 
-export class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+class HomePage extends Component { // eslint-disable-line react/prefer-stateless-function
   constructor() {
     super();
 
@@ -40,15 +43,17 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   componentWillMount() {
-    const { viewport, types, descriptives } = this.props.params;
+    // const { viewport, types, descriptives } = this.props.params;
 
-    if (viewport && types && descriptives) {
-      const res = URLParser({ viewport, types, descriptives });
+    // if (viewport && types && descriptives) {
+    //   const res = URLParser({ viewport, types, descriptives });
 
-      if (!res.error) {
-        this.props.setDefaultQuest(res.data);
-      }
-    }
+    //   if (!res.error) {
+    //     this.props.setDefaultQuest(res.data);
+    //     console.log(res.data);
+    //     this.props.fetchRecommendations();
+    //   }
+    // }
 
     this.mapStyle = {
       version: 8,
@@ -200,7 +205,6 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
         map.getCanvas().style.cursor = '';
       });
 
-
       map.on('click', shapeFill, (data) => {
         const name = data.features[0].properties.name;
         this.elementClicked(name);
@@ -293,7 +297,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   elementClicked = (name) => {
-    browserHistory.push(`/brochure/${name}`);
+    browserHistory.push(`/i/${name}`);
   }
 
   questButtonClicked = () => {
@@ -332,6 +336,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 
   render() {
     const { showQuest, minimized, closed } = this.state;
+    const { brochure } = this.props.params;
 
     const mapBlockClass = classNames({
       'map-block': true,
@@ -390,6 +395,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
             )
           }
         </ScoreBoardBlock>
+        { brochure && <Brochure name={brochure} />}
       </div>
     );
   }
@@ -399,6 +405,7 @@ HomePage.propTypes = {
   recommendations: React.PropTypes.object,
   places: React.PropTypes.array,
   params: React.PropTypes.shape({
+    brochure: React.PropTypes.string,
     viewport: React.PropTypes.string,
     types: React.PropTypes.string,
     descriptives: React.PropTypes.string,
@@ -409,7 +416,7 @@ HomePage.propTypes = {
   setDefaultQuest: React.PropTypes.func,
 };
 
-export function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     mapChange: (mapInfo) => dispatch(mapChange(mapInfo)),
     fetchQuestInfo: () => dispatch(fetchQuestInfo()),

@@ -1,21 +1,21 @@
 /*
- * BrochurePage
+ * Brochure
  *
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 import Helmet from 'react-helmet';
 
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { browserHistory } from 'react-router';
 
-import { fetchBrochure } from './actions';
-import { makeSelectBrochure } from './selectors';
+import { fetchBrochure } from '../actions';
+import { makeSelectBrochure } from '../selectors';
 
+import '../style.scss';
 
-import './style.scss';
-
-export class BrochurePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+class Brochure extends Component { // eslint-disable-line react/prefer-stateless-function
 
   constructor() {
     super();
@@ -25,8 +25,7 @@ export class BrochurePage extends React.PureComponent { // eslint-disable-line r
   }
 
   componentDidMount() {
-    const placeName = this.props.params.placeName;
-    this.props.fetchBrochure(placeName);
+    this.props.fetchBrochure(this.props.name);
 
     const interval =
     setInterval(() => {
@@ -267,7 +266,7 @@ export class BrochurePage extends React.PureComponent { // eslint-disable-line r
     let tiles = info.tiles;
 
     return (
-      <div className="brochure-page" style={{ visibility: initialized ? 'visible' : 'hidden' }}>
+      <div className="brochure" style={{ visibility: initialized ? 'visible' : 'hidden' }}>
         <Helmet
           meta={[
             { name: 'description', content: 'Carta' },
@@ -287,6 +286,7 @@ export class BrochurePage extends React.PureComponent { // eslint-disable-line r
           </div>
           <div className="description">
             <div className="tile text-tile">
+              <a onClick={() => { browserHistory.push('/'); }}>Close</a>
               <div className="content">
                 <p>
                   {description.text.content}
@@ -345,13 +345,13 @@ export class BrochurePage extends React.PureComponent { // eslint-disable-line r
   }
 }
 
-BrochurePage.propTypes = {
+Brochure.propTypes = {
   fetchBrochure: React.PropTypes.func,
   brochure: React.PropTypes.object,
-  params: React.PropTypes.object,
+  name: React.PropTypes.string.isRequired,
 };
 
-export function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     fetchBrochure: (name) => dispatch(fetchBrochure(name)),
   };
@@ -361,6 +361,5 @@ const mapStateToProps = createStructuredSelector({
   brochure: makeSelectBrochure(),
 });
 
-
 // Wrap the component to inject dispatch and state into it
-export default connect(mapStateToProps, mapDispatchToProps)(BrochurePage);
+export default connect(mapStateToProps, mapDispatchToProps)(Brochure);

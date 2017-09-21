@@ -1,5 +1,5 @@
 import React, { PropTypes, Children } from 'react';
-import './style.scss';
+import '../style.scss';
 
 function MapBlock(props) {
   return (

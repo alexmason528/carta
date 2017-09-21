@@ -1,4 +1,4 @@
-import React, { PropTypes, Children } from 'react';
+import React, { Component, PropTypes, Children } from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -6,9 +6,9 @@ import { List, is } from 'immutable';
 import { Button, StarButton } from './Buttons';
 import { fetchRecommendations, typeSelect } from '../actions';
 import { makeSelectTypes, makeSelectCurrentTypes } from '../selectors';
-import './style.scss';
+import '../style.scss';
 
-export class TypesPage extends React.PureComponent {
+class TypesPage extends Component {
   constructor() {
     super();
 
@@ -258,7 +258,7 @@ TypesPage.propTypes = {
 };
 
 
-export function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     fetchRecommendations: () => dispatch(fetchRecommendations()),
     typeSelect: (typeInfo) => dispatch(typeSelect(typeInfo)),

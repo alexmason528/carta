@@ -1,4 +1,4 @@
-import React, { PropTypes, Children } from 'react';
+import React, { Component, PropTypes, Children } from 'react';
 import styled, { css } from 'styled-components';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
@@ -6,9 +6,9 @@ import { createStructuredSelector } from 'reselect';
 import { fetchRecommendations, questAdd, questSelect, questRemove } from '../actions';
 import { makeSelectQuests, makeSelectCurrentQuestIndex } from '../selectors';
 import Quest from './Quest';
-import './style.scss';
+import '../style.scss';
 
-export class QuestBlock extends React.PureComponent {
+class QuestBlock extends Component {
   questAddHandler = () => {
     this.props.questAdd();
   }
@@ -26,10 +26,10 @@ export class QuestBlock extends React.PureComponent {
   }
 
   render() {
-    const { quests, currentQuestIndex } = this.props;
+    const { quests, currentQuestIndex, className } = this.props;
 
     return (
-      <div className={this.props.className}>
+      <div className={className}>
         <div className="buttons">
           <button className="minimize" onClick={() => { this.props.minimizeClicked(); }}><img src="https://carta.guide/icon/min.png" role="presentation" /></button>
           <button className="close" onClick={() => { this.props.closeClicked(); }}><img src="https://carta.guide/icon/close.png" role="presentation" /></button>
@@ -75,7 +75,6 @@ export class QuestBlock extends React.PureComponent {
   }
 }
 
-
 QuestBlock.propTypes = {
   minimizeClicked: PropTypes.func.isRequired,
   closeClicked: PropTypes.func.isRequired,
@@ -89,7 +88,7 @@ QuestBlock.propTypes = {
   questRemove: PropTypes.func,
 };
 
-export function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     questAdd: () => dispatch(questAdd()),
     questSelect: (index) => dispatch(questSelect(index)),

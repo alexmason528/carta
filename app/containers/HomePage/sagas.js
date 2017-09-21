@@ -8,8 +8,15 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import request from 'utils/request';
 import { makeSelectCurrentTypes, makeSelectCurrentDescriptives, makeSelectViewport } from 'containers/HomePage/selectors';
 
-import { FETCH_RECOMMENDATIONS, FETCH_QUESTINFO, API_BASE_URL } from './constants';
-import { fetchRecommendationsSuccess, fetchRecommendationsError, fetchQuestInfoSuccess, fetchQuestInfoError } from './actions';
+import { FETCH_BROCHURE, FETCH_RECOMMENDATIONS, FETCH_QUESTINFO, API_BASE_URL } from './constants';
+import {
+  fetchRecommendationsSuccess,
+  fetchRecommendationsError,
+  fetchQuestInfoSuccess,
+  fetchQuestInfoError,
+  fetchBrochureSuccess,
+  fetchBrochureError,
+} from './actions';
 
 export function* getRecommendations() {
   const curDescriptives = yield select(makeSelectCurrentDescriptives());
@@ -117,6 +124,30 @@ export function* getQuestInfo() {
   }
 }
 
+export function* getBrochureInformation(payload) {
+  const requestURL = `${API_BASE_URL}api/v1/map/place/`;
+
+  const data = {
+    name: payload.name,
+  };
+
+  const params = {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  let response;
+  try {
+    response = yield call(request, requestURL, params);
+    yield put(fetchBrochureSuccess(response));
+  } catch (err) {
+    yield put(fetchBrochureError(response));
+  }
+}
+
 export function* getRecommendationsWatcher() {
   const watcher = yield takeLatest(FETCH_RECOMMENDATIONS, getRecommendations);
   yield take(LOCATION_CHANGE);
@@ -129,8 +160,16 @@ export function* getQuestInfoWatcher() {
   yield cancel(watcher);
 }
 
+export function* getBrochureInformationWatcher() {
+  const watcher = yield takeLatest(FETCH_BROCHURE, getBrochureInformation);
+  yield take(LOCATION_CHANGE);
+  yield cancel(watcher);
+}
+
 // Bootstrap sagas
 export default [
   getRecommendationsWatcher,
   getQuestInfoWatcher,
+  getBrochureInformationWatcher,
 ];
+

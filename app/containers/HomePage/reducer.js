@@ -17,16 +17,23 @@ import {
   TYPE_SELECT,
   DESCRIPTIVE_SELECT,
   UPDATE_VISIBILITY,
+  SET_DEFAULT_QUEST,
+
   QUEST_ADD,
   QUEST_SELECT,
   QUEST_REMOVE,
+
   FETCH_QUESTINFO,
   FETCH_QUESTINFO_SUCCESS,
   FETCH_QUESTINFO_ERROR,
+
   FETCH_RECOMMENDATIONS,
   FETCH_RECOMMENDATIONS_SUCCESS,
   FETCH_RECOMMENDATIONS_ERROR,
-  SET_DEFAULT_QUEST,
+
+  FETCH_BROCHURE,
+  FETCH_BROCHURE_SUCCESS,
+  FETCH_BROCHURE_ERROR,
 } from './constants';
 
 // The initial state of the App
@@ -71,6 +78,12 @@ const initialState = fromJS({
     northeast: {},
     southwest: {},
   },
+
+  brochure: {
+    fetching: false,
+    error: null,
+    details: {},
+  },
 });
 
 
@@ -81,6 +94,7 @@ function homeReducer(state = initialState, action) {
   let types;
   let descriptives;
   let quests;
+  let brochure;
 
   switch (action.type) {
 
@@ -202,7 +216,7 @@ function homeReducer(state = initialState, action) {
     case FETCH_QUESTINFO_ERROR:
       questInfo = {
         fetching: false,
-        error: true,
+        error: action.payload,
         categories: {
           places: [],
           types: [],
@@ -234,11 +248,38 @@ function homeReducer(state = initialState, action) {
     case FETCH_RECOMMENDATIONS_ERROR:
       recommendations = {
         fetching: false,
-        error: true,
+        error: action.payload,
         details: [],
       };
 
       return state.set('recommendations', fromJS(recommendations));
+
+    case FETCH_BROCHURE:
+      brochure = {
+        fetching: true,
+        error: null,
+        details: {},
+      };
+
+      return state.set('brochure', fromJS(brochure));
+
+    case FETCH_BROCHURE_SUCCESS:
+      brochure = {
+        fetching: false,
+        error: null,
+        details: action.payload,
+      };
+
+      return state.set('brochure', fromJS(brochure));
+
+    case FETCH_BROCHURE_ERROR:
+      brochure = {
+        fetching: false,
+        error: action.payload,
+        details: {},
+      };
+
+      return state.set('brochure', fromJS(brochure));
 
     default:
       return state;

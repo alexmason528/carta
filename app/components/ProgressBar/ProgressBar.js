@@ -4,11 +4,11 @@
  *
 */
 
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Wrapper from './Wrapper';
 import Percent from './Percent';
 
-class ProgressBar extends React.Component {
+class ProgressBar extends Component {
 
   static defaultProps = {
     percent: -1,

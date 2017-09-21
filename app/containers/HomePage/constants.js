@@ -14,6 +14,7 @@ export const PLACE_SELECT = 'carta/Home/PLACE_SELECT';
 export const TYPE_SELECT = 'carta/Home/TYPE_SELECT';
 export const DESCRIPTIVE_SELECT = 'carta/Home/DESCRIPTIVE_SELECT';
 export const UPDATE_VISIBILITY = 'carta/Home/UPDATE_VISIBILITY';
+export const SET_DEFAULT_QUEST = 'carta/HOME/SET_DEFAULT_QUEST';
 
 export const QUEST_ADD = 'carta/HOME/QUEST_ADD';
 export const QUEST_SELECT = 'cara/HOME/QUEST_REMOVE';
@@ -27,7 +28,9 @@ export const FETCH_RECOMMENDATIONS = 'carta/Home/FETCH_RECOMMENDATIONS';
 export const FETCH_RECOMMENDATIONS_SUCCESS = 'carta/Home/FETCH_RECOMMENDATIONS_SUCCESS';
 export const FETCH_RECOMMENDATIONS_ERROR = 'carta/Home/FETCH_RECOMMENDATIONS_ERROR';
 
-export const SET_DEFAULT_QUEST = 'carta/HOME/SET_DEFAULT_QUEST';
+export const FETCH_BROCHURE = 'carta/Home/FETCH_BROCHURE';
+export const FETCH_BROCHURE_SUCCESS = 'carta/Home/FETCH_BROCHURE_SUCCESS';
+export const FETCH_BROCHURE_ERROR = 'carta/Home/FETCH_BROCHURE_ERROR';
 
 let API_DOMAIN = 'http://localhost:3000/';
 if (process.env.NODE_ENV === 'production') API_DOMAIN = 'https://cartamap.herokuapp.com/';

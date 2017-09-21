@@ -4,7 +4,7 @@
  *
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
@@ -14,7 +14,7 @@ import { appLocales } from '../../i18n';
 import { changeLocale } from '../LanguageProvider/actions';
 import { makeSelectLocale } from '../LanguageProvider/selectors';
 
-export class LocaleToggle extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class LocaleToggle extends Component { // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
       <Wrapper>

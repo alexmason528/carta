@@ -69,6 +69,11 @@ const makeSelectCurrentDescriptives = () => createSelector(
   }
 );
 
+const makeSelectBrochure = () => createSelector(
+  selectHome,
+  (homeState) => homeState.get('brochure')
+);
+
 export {
   selectHome,
   makeSelectQuestInfo,
@@ -82,4 +87,5 @@ export {
   makeSelectCurrentTypes,
   makeSelectDescriptives,
   makeSelectCurrentDescriptives,
+  makeSelectBrochure,
 };
