@@ -11,11 +11,7 @@ const resolve = require('path').resolve;
 const app = express();
 const bodyParser = require('body-parser');
 
-
-// MongoDB Connection
-let mongoUri = 'mongodb://localhost:27017/carta';
-// if (!isDev) mongoUri = 'mongodb://root:BGakLR6A@10.128.0.2:27017/carta?authSource=admin';
-if (!isDev) mongoUri = 'mongodb://root:BGakLR6A@35.188.18.148:27017/carta?authSource=admin';
+let mongoUri = isDev ? 'mongodb://localhost:27017/carta' : 'mongodb://heroku_mhwps3cx:585m6idt8moae9v55h3oh504dh@ds149934.mlab.com:49934/heroku_mhwps3cx';
 
 mongoose.connect(mongoUri, {
   useMongoClient: true,

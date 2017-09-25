@@ -19,6 +19,27 @@ export default function createRoutes(store) {
   return [
     {
       path: '/(i/:brochure)(p/:viewport/:types/:descriptives)',
+      name: 'questPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          import('containers/QuestPage/reducer'),
+          import('containers/QuestPage/sagas'),
+          import('containers/QuestPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('quest', reducer.default);
+          injectSagas(sagas.default);
+
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      path: '/home',
       name: 'homePage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([

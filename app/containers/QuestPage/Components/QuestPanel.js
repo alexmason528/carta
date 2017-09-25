@@ -8,7 +8,7 @@ import { makeSelectQuests, makeSelectCurrentQuestIndex } from '../selectors';
 import Quest from './Quest';
 import '../style.scss';
 
-class QuestBlock extends Component {
+class QuestPanel extends Component {
   questAddHandler = () => {
     this.props.questAdd();
   }
@@ -75,7 +75,7 @@ class QuestBlock extends Component {
   }
 }
 
-QuestBlock.propTypes = {
+QuestPanel.propTypes = {
   minimizeClicked: PropTypes.func.isRequired,
   closeClicked: PropTypes.func.isRequired,
   quests: PropTypes.object,
@@ -103,4 +103,4 @@ const mapStateToProps = createStructuredSelector({
 });
 
 // Wrap the component to inject dispatch and state into it
-export default connect(mapStateToProps, mapDispatchToProps)(QuestBlock);
+export default connect(mapStateToProps, mapDispatchToProps)(QuestPanel);
