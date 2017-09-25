@@ -86,8 +86,8 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
 
     this.colors = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379'];
 
-    this.shapesGeoJSONSource = 'https://storage.googleapis.com/carta-geojson/shapes.geojson';
-    this.pointsGeoJSONSource = 'https://storage.googleapis.com/carta-geojson/points.geojson';
+    this.shapesGeoJSONSource = 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506359935/shapes.geojson';
+    this.pointsGeoJSONSource = 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506359923/points.geojson';
 
     this.map = '';
 
