@@ -23,9 +23,8 @@ body {
 
 * {
   font-family: 'Open Sans', sans-serif !important;
-  box-sizing: border-box;
-  // margin:0; 
-  // padding:0; 
+  margin:0; 
+  padding:0; 
   -webkit-font-smoothing: auto !important;
 }
 
@@ -76,7 +75,8 @@ body {
   }
 
   .column {
-    display: inline-block;
+    display: block;
+    float: left;
     height: 100%;
     position: relative;
     width: 33.33%;
@@ -84,8 +84,120 @@ body {
 
     .content {
       height: 100%;
-      box-shadow: inset 8px 0px 8px -8px rgba(0,0,0,0.5), 
-                  inset -8px 0px 8px -8px rgba(0,0,0,0.5);
+    }
+
+    .tile {
+      &:not(:last-child) {
+        margin-bottom: 8px;
+      }
+
+      .profile, .start-quest, .poster, .post {
+        position: relative;
+
+        &:before {
+          content: "";
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
+          -moz-box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
+          -webkit-box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
+        }
+
+        img {
+          width: 100%;
+          height: auto;
+        }
+
+        h2 {
+          padding: 19px 30px;
+          position: absolute;
+          z-index: 20;
+          text-transform: uppercase;
+          color: #fff;
+          font-size: 44px;
+          font-weight: 900;
+          line-height: 1.3;
+          text-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+        }
+      }
+
+      .profile {
+        h2 {
+          left: 30%;
+          bottom: 0;
+        }
+
+        .profile-pic {
+          position: absolute;
+          width: 28%;
+          padding-top: calc(28% - 30px);
+          z-index: 50;
+          border-radius: 100%;
+          background: #fff;
+          overflow: hidden;
+          bottom: -22.5%;
+          left: 30px;
+          box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+          border: 15px solid #fff;
+
+          img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+          }
+        }
+      }
+
+      .start-quest {
+        h2 {
+          left: 40px;
+          top: 30%;
+          width: 30%;
+        }
+      }
+
+      .poster {
+        h2 {
+          left: 0;
+          top: 0;
+        }
+      }
+
+      .post {
+        h2 {
+          left: 0;
+          bottom: 0;
+        }
+      }
+
+      .description {
+        padding: 25px;
+
+        .heading {
+          margin-bottom: 8px;
+
+          .title {
+            text-transform: uppercase;
+            font-weight: 500;
+            color: black;
+            font-size: 20px;
+          }
+
+          .date {
+            color: gray;
+            font-size: 20px;
+          }
+        }
+
+        .content {
+          font-size: 20px;
+        }
+      }
     }
   }
 }
