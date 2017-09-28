@@ -68,6 +68,10 @@ body {
   background: #fff;
   position: relative;
   overflow-x: hidden;
+
+  button:focus, input:focus {
+    outline: none;
+  }
   
   .row {
     margin: 0 -4px;
@@ -87,8 +91,30 @@ body {
     }
 
     .tile {
+      transition: ease-in-out 0.5s;
+      position: relative;
+      z-index: 10;
+
       &:not(:last-child) {
         margin-bottom: 8px;
+        margin-top: 0;
+      }
+
+      &.auth-tile {
+        z-index: 1;
+
+        &.hidden {
+          margin-top: calc(-80%);
+          margin-bottom: 0;
+
+          .auth-form-wrapper {
+            padding-top: 80px;
+          }
+        }
+      }
+
+      &.start-quest-tile {
+        z-index: 1;
       }
 
       .profile, .start-quest, .poster, .post {
@@ -172,6 +198,101 @@ body {
         h2 {
           left: 0;
           bottom: 0;
+        }
+      }
+
+      .auth-form-wrapper {
+        height: 0%;
+        padding: 100px 30px 20px 70px;
+        position: relative;
+
+        .close-btn {
+          position: absolute;
+          right: 30px;
+          top: 10px;
+          cursor: pointer;
+
+          img {
+            width: 15px;
+            height: 15px;
+            filter: grayscale(100%);
+          }
+        }
+
+        .inline-buttons {
+          display: flex;
+          justify-content: space-between;
+          margin: 15px 0;
+
+          button {
+            width: calc(50% - 5px);
+            border: 1px solid #ddd;
+            background: #eee;
+            color: #888;
+            padding: 8px 0 8px 8px;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+
+            img {
+              width: 20px;
+              height: 20px;
+              margin-right: 8px;
+            }
+          }
+        }
+
+        .buttons {
+          button {
+            border: 1px solid #ddd;
+            background: #eee;
+            color: #888;
+            padding: 8px 8px 8px 8px;
+
+            &:not(:last-child) {
+              margin-right: 10px;
+            }
+          }
+        }
+
+        .divider {
+          text-align: center;
+          position: relative;
+
+          &:before {
+            border-bottom: 1px solid #aaa;
+            content: ' ';
+            position: absolute;
+            display: block;
+            top: 50%;
+            width: 100%;
+          }
+
+          span {
+            font-size: 16px;
+            padding: 0 20px;
+            background-color: #fff;
+            position: relative;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: #aaa;
+          }
+        }
+
+        form {
+          margin-top: 10px;
+
+          input {
+            width: 100%;
+            border: 1px solid #ccc;
+            padding: 8px;
+            color: #333;
+
+            &:not(:last-child) {
+              margin-bottom: 8px;
+            }
+          }
         }
       }
 

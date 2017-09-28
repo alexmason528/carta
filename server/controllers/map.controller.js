@@ -265,4 +265,3 @@ const getPlace = (req, res) => {
 module.exports.getQuestInfo = getQuestInfo;
 module.exports.getRecommendations = getRecommendations;
 module.exports.getPlace = getPlace;
-

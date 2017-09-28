@@ -5,13 +5,57 @@
 
 import React, { Component } from 'react';
 import Helmet from 'react-helmet';
+import className from 'classnames';
 
 import { browserHistory } from 'react-router';
 
 import './style.scss';
 
 export default class HomePage extends Component { // eslint-disable-line react/prefer-stateless-function
+
+  constructor() {
+    super();
+    this.state = {
+      hideAuthForm: true,
+    };
+  }
+
+  handleSubmit = (evt) => {
+    evt.preventDefault();
+  }
+
+  googleLogin = (evt) => {
+    evt.preventDefault();
+  }
+
+  facebookLogin = (evt) => {
+    evt.preventDefault();
+  }
+
+  closeAuthForm = (evt) => {
+    evt.preventDefault();
+
+    this.setState({
+      hideAuthForm: true,
+    });
+  }
+
+  toggleAuthForm = (evt) => {
+    const { hideAuthForm } = this.state;
+
+    this.setState({
+      hideAuthForm: !hideAuthForm,
+    });
+  }
+
   render() {
+    const { hideAuthForm } = this.state;
+    const authFormClass = className({
+      tile: true,
+      'auth-tile': true,
+      hidden: hideAuthForm,
+    });
+
     return (
       <div className="home-page">
         <Helmet
@@ -26,7 +70,7 @@ export default class HomePage extends Component { // eslint-disable-line react/p
         <div className="row">
           <div className="column profile-column">
             <div className="content">
-              <div className="tile">
+              <div className="tile profile-tile" onClick={this.toggleAuthForm}>
                 <div className="profile">
                   <img src="https://carta.guide/image/wide/0025.jpg" role="presentation" />
                   <div className="profile-pic">
@@ -35,11 +79,38 @@ export default class HomePage extends Component { // eslint-disable-line react/p
                   <h2>Sign in</h2>
                 </div>
               </div>
-              <div className="tile">
-                <div className="auth-form">
+              <div className={authFormClass}>
+                <div className="auth-form-wrapper">
+                  <button className="close-btn" onClick={this.closeAuthForm}><img src="https://carta.guide/icon/close.png" role="presentation" /></button>
+                  <div className="divider">
+                    <span>With</span>
+                  </div>
+                  <div className="inline-buttons">
+                    <button onClick={this.googleLogin}><img src="https://carta.guide/icon/logo/google.png" role="presentation" /><span>Google</span></button>
+                    <button onClick={this.facebookLogin}><img src="https://carta.guide/icon/logo/facebook.png" role="presentation" /><span>Facebook</span></button>
+                  </div>
+                  <div className="divider">
+                    <span>Or</span>
+                  </div>
+                  <div className="form">
+                    <form onSubmit={this.handleSubmit}>
+                      <input type="text" placeholder="Email" />
+                      <input type="password" placeholder="Password" />
+                      <input type="password" placeholder="Repeat password" />
+                      <input type="text" placeholder="Full name" />
+                      <div className="inline-buttons">
+                        <button>Profile Pic</button>
+                        <button>Cover img</button>
+                      </div>
+                      <div className="buttons">
+                        <button>Register</button>
+                        <button>Login</button>
+                      </div>
+                    </form>
+                  </div>
                 </div>
               </div>
-              <div className="tile">
+              <div className="tile start-quest-tile">
                 <div className="start-quest">
                   <img src="https://carta.guide/image/quest/start/1.jpg" role="presentation" />
                   <h2>Start your personal quest</h2>
