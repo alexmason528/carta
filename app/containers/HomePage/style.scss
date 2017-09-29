@@ -26,6 +26,11 @@ body {
   margin:0; 
   padding:0; 
   -webkit-font-smoothing: auto !important;
+  -khtml-user-select: none;
+  -o-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;  
 }
 
 @media screen and (orientation:portrait) {
@@ -64,261 +69,285 @@ body {
   }
 }
 
-.home-page {
+.homepage {
   background: #fff;
-  position: relative;
-  overflow-x: hidden;
+  padding: 0;
 
   button:focus, input:focus {
     outline: none;
   }
-  
-  .row {
+
+  &__row {
     margin: 0 -4px;
-    height: 100vh;
   }
 
-  .column {
-    display: block;
-    float: left;
-    height: 100%;
-    position: relative;
-    width: 33.33%;
+  &__col {
     padding: 0 4px;
+    position: relative;
+  }
+}
 
-    .content {
+.addPostBtn {
+  position: absolute; 
+  left: 20px;
+  top: 15px;
+  z-index: 10;
+  display: flex;
+  cursor: pointer;
+
+  &__img {
+    padding: 5px;
+    background: #fff;
+    border-radius: 20px;
+    line-height: 0;
+    
+    box-shadow: 0 0 7px rgba(0, 0, 0, 0.4);  
+
+    img {
+      width: 12px;
+      height: 12px;
+      opacity: 0.75;
+    }
+    
+  }
+
+  &__text {
+    margin-left: 8px;
+    color: #fff;
+    text-shadow: 0 0 7px rgba(0, 0, 0, 0.4);  
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  &:hover {
+    .addPostBtn__img img {
+      opacity: 1;
+    }
+  }
+}
+
+.tile {
+  position: relative;
+  font-size: 100%;
+
+  &:not(:first-child) {
+    margin-top: 8px;
+  }
+
+  &__profile, &__startQuest, &__suggestion, &__post {
+    position: relative;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+
+    &:before {
+      content: ' ';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right:  0;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
+      -moz-box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
+      -webkit-box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
+    }
+
+    h2 {
+      padding: 19px 30px;
+      text-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+      color: #fff;
+      text-transform: uppercase;
+      position: absolute;
+      font-weight: 900;
+      font-size: 3rem;
+      line-height: 1.3;
+    }
+  }
+
+  &__profilePic {
+    position: absolute;
+    width: 28%;
+    padding-top: calc(28% - 16px);
+    z-index: 50;
+    border-radius: 100%;
+    background: #fff;
+    overflow: hidden;
+    left: 30px;
+    bottom: -95px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    border: 8px solid #fff;
+
+    img {
+      position: absolute;
+      width: 100%;
       height: 100%;
+      top: 0;
+      left: 0;
+    }
+  }
+
+  &__profile {
+    h2 {
+      left: 30%;
+      bottom: 0;
+    }
+  }  
+    
+  &__startQuest {
+    h2 {
+      left: 40px;
+      bottom: 0;
+    }
+  }
+
+  &__post {
+    h2 {
+      left: 0;
+      bottom: 0;
+    }
+  }
+
+  &__description {
+    padding: 15px 25px;
+  }
+
+  &__title {
+    text-transform: uppercase;
+    font-size: 25px;
+    font-weight: 400;
+    margin-bottom: 15px;
+  }
+
+  &__info {
+    margin-bottom: 8px;
+    color: gray;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+  }
+
+  &__content {
+    font-size: 18px;
+    margin-bottom: 0;
+  }
+
+  &__suggestion {
+    h2 {
+      left: 0;
+      top: 0;
+    }
+  }
+}
+
+.authTile {
+  padding: 100px 30px 20px 70px;
+  position: relative;
+  max-height: 1000px;
+  opacity: 1;
+  transition: all 0.3s;
+
+  &--hidden {
+    max-height: 0;
+    margin-top: 0 !important;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+  }
+
+  &__closeBtn {
+    position: absolute;
+    right: 30px;
+    top: 10px;
+    cursor: pointer;
+
+    img {
+      width: 15px;
+      height: 15px;
+      filter: grayscale(100%);
+    }
+  }
+
+  &__inlineButtons {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0;
+
+    button {
+      width: calc(50% - 5px);
+      border: 1px solid #ddd;
+      background: #eee;
+      color: #888;
+      padding: 8px 0 8px 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+
+      img {
+        width: 20px;
+        height: 20px;
+        margin-right: 8px;
+      }
+    }
+  }
+
+  &__button {
+    color: #888;
+    padding: 8px;
+    cursor: pointer;
+    margin-right: 10px;
+
+    &--active {
+      border: 1px solid #ddd;
+      background: #eee;  
     }
 
-    .tile {
-      transition: ease-in-out 0.5s;
+    img {
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+    }
+  }
+
+
+  &__divider {
+    text-align: center;
+    position: relative;
+
+    &:before {
+      border-bottom: 1px solid #aaa;
+      content: ' ';
+      position: absolute;
+      display: block;
+      top: 50%;
+      width: 100%;
+    }
+
+    span {
+      font-size: 16px;
+      padding: 0 20px;
+      background-color: #fff;
       position: relative;
-      z-index: 10;
-
-      &:not(:last-child) {
-        margin-bottom: 8px;
-        margin-top: 0;
-      }
-
-      &.auth-tile {
-        z-index: 1;
-
-        &.hidden {
-          margin-top: calc(-80%);
-          margin-bottom: 0;
-
-          .auth-form-wrapper {
-            padding-top: 80px;
-          }
-        }
-      }
-
-      &.start-quest-tile {
-        z-index: 1;
-      }
-
-      .profile, .start-quest, .poster, .post {
-        position: relative;
-
-        &:before {
-          content: "";
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
-          -moz-box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
-          -webkit-box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
-        }
-
-        img {
-          width: 100%;
-          height: auto;
-        }
-
-        h2 {
-          padding: 19px 30px;
-          position: absolute;
-          z-index: 20;
-          text-transform: uppercase;
-          color: #fff;
-          font-size: 44px;
-          font-weight: 900;
-          line-height: 1.3;
-          text-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-        }
-      }
-
-      .profile {
-        h2 {
-          left: 30%;
-          bottom: 0;
-        }
-
-        .profile-pic {
-          position: absolute;
-          width: 28%;
-          padding-top: calc(28% - 30px);
-          z-index: 50;
-          border-radius: 100%;
-          background: #fff;
-          overflow: hidden;
-          bottom: -22.5%;
-          left: 30px;
-          box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-          border: 15px solid #fff;
-
-          img {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-          }
-        }
-      }
-
-      .start-quest {
-        h2 {
-          left: 40px;
-          top: 30%;
-          width: 30%;
-        }
-      }
-
-      .poster {
-        h2 {
-          left: 0;
-          top: 0;
-        }
-      }
-
-      .post {
-        h2 {
-          left: 0;
-          bottom: 0;
-        }
-      }
-
-      .auth-form-wrapper {
-        height: 0%;
-        padding: 100px 30px 20px 70px;
-        position: relative;
-
-        .close-btn {
-          position: absolute;
-          right: 30px;
-          top: 10px;
-          cursor: pointer;
-
-          img {
-            width: 15px;
-            height: 15px;
-            filter: grayscale(100%);
-          }
-        }
-
-        .inline-buttons {
-          display: flex;
-          justify-content: space-between;
-          margin: 15px 0;
-
-          button {
-            width: calc(50% - 5px);
-            border: 1px solid #ddd;
-            background: #eee;
-            color: #888;
-            padding: 8px 0 8px 8px;
-            text-align: left;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-
-            img {
-              width: 20px;
-              height: 20px;
-              margin-right: 8px;
-            }
-          }
-        }
-
-        .buttons {
-          button {
-            border: 1px solid #ddd;
-            background: #eee;
-            color: #888;
-            padding: 8px 8px 8px 8px;
-
-            &:not(:last-child) {
-              margin-right: 10px;
-            }
-          }
-        }
-
-        .divider {
-          text-align: center;
-          position: relative;
-
-          &:before {
-            border-bottom: 1px solid #aaa;
-            content: ' ';
-            position: absolute;
-            display: block;
-            top: 50%;
-            width: 100%;
-          }
-
-          span {
-            font-size: 16px;
-            padding: 0 20px;
-            background-color: #fff;
-            position: relative;
-            text-transform: uppercase;
-            font-weight: 600;
-            color: #aaa;
-          }
-        }
-
-        form {
-          margin-top: 10px;
-
-          input {
-            width: 100%;
-            border: 1px solid #ccc;
-            padding: 8px;
-            color: #333;
-
-            &:not(:last-child) {
-              margin-bottom: 8px;
-            }
-          }
-        }
-      }
-
-      .description {
-        padding: 25px;
-
-        .heading {
-          margin-bottom: 8px;
-
-          .title {
-            text-transform: uppercase;
-            font-weight: 500;
-            color: black;
-            font-size: 20px;
-          }
-
-          .date {
-            color: gray;
-            font-size: 20px;
-          }
-        }
-
-        .content {
-          font-size: 20px;
-        }
-      }
+      text-transform: uppercase;
+      font-weight: 600;
+      color: #aaa;
     }
+  }
+
+  &__form {
+    margin-top: 10px;
+
+    input {
+      width: 100%;
+      border: 1px solid #ccc;
+      padding: 8px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+  }
+
+  &__error {
+    margin-top: 10px;
+    color: red;
   }
 }
