@@ -29,25 +29,6 @@ export default class HomePage extends Component { // eslint-disable-line react/p
     };
   }
 
-  componentDidMount() {
-    // const interval =
-    // setInterval(() => {
-    //   if ($('.row').width() > 0) {
-    //     clearInterval(interval);
-    //     this.handleResize();
-    //   }
-    // });
-
-    // window.addEventListener('resize', this.handleResize);
-  }
-
-  componentWillUnmount() {
-    // window.removeEventListener('resize', this.handleResize);
-  }
-
-  // handleResize = () => {
-  // }
-
   handleSubmit = (evt) => {
     evt.preventDefault();
   }

@@ -23,6 +23,13 @@ require('dotenv').config();
 // If you need a backend, e.g. an API, add your custom backend-specific middleware here
 // app.use('/api', myApi);
 // In production we need to pass these values in instead of relying on webpack
+const allowCrossDomain = (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+};
+
+app.use(allowCrossDomain);
 app.use(bodyParser.json());
 setup(app, {
   outputPath: resolve(process.cwd(), 'build'),
