@@ -1,6 +1,7 @@
 /* eslint consistent-return:0 */
 
 const express = require('express');
+const cors = require('cors')
 const logger = require('./logger');
 const argv = require('minimist')(process.argv.slice(2));
 const setup = require('./middlewares/frontendMiddleware');
@@ -24,6 +25,7 @@ require('dotenv').config();
 // app.use('/api', myApi);
 // In production we need to pass these values in instead of relying on webpack
 
+app.use(cors());
 app.use(bodyParser.json());
 setup(app, {
   outputPath: resolve(process.cwd(), 'build'),
