@@ -273,9 +273,9 @@ class Brochure extends Component { // eslint-disable-line react/prefer-stateless
           ]}
         />
 
-        <img className="logo" src="https://carta.guide/content/logo-100.png" role="presentation" />
+        <img className="logo" src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506785283/image/content/logo-100.png" role="presentation" />
         <div className="logo-name-tab">
-          <img src="https://carta.guide/content/name-vertical.png" role="presentation" />
+          <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506785283/image/content/name-vertical.png" role="presentation" />
         </div>
 
         <div className="container">
