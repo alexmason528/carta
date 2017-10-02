@@ -3,6 +3,8 @@ import { Field, reduxForm } from 'redux-form';
 import className from 'classnames';
 import RenderField from './RenderField';
 
+import './style.scss';
+
 const validate = (values) => {
   const errors = {};
   if (!values.username) {
@@ -25,7 +27,7 @@ const validate = (values) => {
   return errors;
 };
 
-class LoginForm extends Component {
+class AuthForm extends Component {
   constructor() {
     super();
     this.state = {
@@ -39,36 +41,51 @@ class LoginForm extends Component {
     });
   }
 
+  handleSubmit = (evt) => {
+    evt.preventDefault();
+  }
+
   render() {
     const { handleSubmit, submitting } = this.props;
     const { authType } = this.state;
     const register = authType === 'register';
 
     const loginButtonClass = className({
-      authTile__button: true,
-      'authTile__button--active': (authType === 'login'),
+      authForm__button: true,
+      'authForm__button--active': (authType === 'login'),
     });
 
     const registerButtonClass = className({
-      authTile__button: true,
-      'authTile__button--active': (authType === 'register'),
+      authForm__button: true,
+      'authForm__button--active': (authType === 'register'),
     });
 
     return (
-      <form className="authTile__form" onSubmit={handleSubmit}>
+      <form className={this.props.className} onSubmit={this.handleSubmit}>
+        <button className="authForm__closeBtn" onClick={this.props.onClose}><img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/icon/close.png" role="presentation" /></button>
+        <div className="authForm__divider">
+          <span>With</span>
+        </div>
+        <div className="authForm__inlineButtons">
+          <button onClick={this.googleLogin}><img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784819/image/icon/logo/google.png" role="presentation" /><span>Google</span></button>
+          <button onClick={this.facebookLogin}><img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784819/image/icon/logo/facebook.png" role="presentation" /><span>Facebook</span></button>
+        </div>
+        <div className="authForm__divider">
+          <span>Or</span>
+        </div>
         <Field name="email" type="text" component={RenderField} label="Email" />
         <Field name="password" type="email" component={RenderField} label="Password" />
         {register && <Field name="confirmPassword" type="password" component={RenderField} label="Repeat password" />}
         {register && <Field name="fullname" type="text" component={RenderField} label="Full name" />}
-        {register && <div className="authTile__inlineButtons">
+        {register && <div className="authForm__inlineButtons">
           <button>Profile Pic</button>
           <button>Cover img</button>
         </div>}
-        <div className="authTile__buttons">
-          <button name="login" type="submit" className={loginButtonClass} onClick={this.authMethodChange} disabled={submitting}>
+        <div className="authForm__buttons">
+          <button name="login" className={loginButtonClass} onClick={this.authMethodChange} disabled={submitting}>
             Login
           </button>
-          <button name="register" type="submit" className={registerButtonClass} onClick={this.authMethodChange} disabled={submitting}>
+          <button name="register" className={registerButtonClass} onClick={this.authMethodChange} disabled={submitting}>
             Register
           </button>
         </div>
@@ -77,12 +94,14 @@ class LoginForm extends Component {
   }
 }
 
-LoginForm.propTypes = {
+AuthForm.propTypes = {
   handleSubmit: PropTypes.func,
   submitting: PropTypes.bool,
+  className: PropTypes.string,
+  onClose: PropTypes.func,
 };
 
 export default reduxForm({
-  form: 'LoginForm',
+  form: 'AuthForm',
   validate,
-})(LoginForm);
+})(AuthForm);

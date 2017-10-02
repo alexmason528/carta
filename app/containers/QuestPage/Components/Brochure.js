@@ -3,7 +3,7 @@
  *
  */
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Helmet from 'react-helmet';
 
 import { connect } from 'react-redux';
@@ -346,9 +346,9 @@ class Brochure extends Component { // eslint-disable-line react/prefer-stateless
 }
 
 Brochure.propTypes = {
-  fetchBrochure: React.PropTypes.func,
-  brochure: React.PropTypes.object,
-  name: React.PropTypes.string.isRequired,
+  fetchBrochure: PropTypes.func,
+  brochure: PropTypes.object,
+  name: PropTypes.string.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {

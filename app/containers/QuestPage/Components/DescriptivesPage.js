@@ -246,8 +246,8 @@ class DescriptivesPage extends Component {
     return (
       <div className={this.props.className}>
         <h1>Known For</h1>
-        <img className={searchBtnClass} src="https://carta.guide/icon/search.png" onClick={() => { this.expandHandler(1); }} role="presentation" />
-        <img className={closeBtnClass} src="https://carta.guide/icon/back.png" onClick={() => { this.expandHandler(0); }} role="presentation" />
+        <img className={searchBtnClass} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/search.png" onClick={() => { this.expandHandler(1); }} role="presentation" />
+        <img className={closeBtnClass} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/back.png" onClick={() => { this.expandHandler(0); }} role="presentation" />
         <input ref={(input) => { this.searchInput = input; }} className={searchInputClass} value={search} onChange={(evt) => { this.inputChangeHandler(evt.target.value); }} />
         <div className="suggestions">
           <Button

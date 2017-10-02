@@ -24,8 +24,8 @@ export class LocaleToggle extends Component { // eslint-disable-line react/prefe
 }
 
 LocaleToggle.propTypes = {
-  onLocaleToggle: React.PropTypes.func,
-  locale: React.PropTypes.string,
+  onLocaleToggle: PropTypes.func,
+  locale: PropTypes.string,
 };
 
 const mapStateToProps = createSelector(

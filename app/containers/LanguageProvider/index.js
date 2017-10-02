@@ -6,7 +6,7 @@
  * IntlProvider component and i18n messages (loaded from `app/translations`)
  */
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { IntlProvider } from 'react-intl';
@@ -24,9 +24,9 @@ export class LanguageProvider extends Component { // eslint-disable-line react/p
 }
 
 LanguageProvider.propTypes = {
-  locale: React.PropTypes.string,
-  messages: React.PropTypes.object,
-  children: React.PropTypes.element.isRequired,
+  locale: PropTypes.string,
+  messages: PropTypes.object,
+  children: PropTypes.element.isRequired,
 };
 
 const mapStateToProps = createSelector(

@@ -1,0 +1,108 @@
+.authForm {
+  margin-top: 8px;
+  padding: 100px 30px 20px 70px;
+  position: relative;
+  max-height: 1000px;
+  opacity: 1;
+  transition: all 0.3s;
+
+  &--hidden {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+  }
+
+  &__closeBtn {
+    position: absolute;
+    right: 30px;
+    top: 10px;
+    cursor: pointer;
+
+    img {
+      width: 15px;
+      height: 15px;
+      filter: grayscale(100%);
+    }
+  }
+
+  &__inlineButtons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+
+    button {
+      width: calc(50% - 5px);
+      border: 1px solid #ddd;
+      background: #eee;
+      color: #888;
+      padding: 8px 0 8px 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+
+      img {
+        width: 20px;
+        height: 20px;
+        margin-right: 8px;
+      }
+    }
+  }
+
+  &__button {
+    color: #888;
+    padding: 8px;
+    cursor: pointer;
+    margin-right: 10px;
+
+    &--active {
+      border: 1px solid #ddd;
+      background: #eee;  
+    }
+
+    img {
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+    }
+  }
+
+
+  &__divider {
+    text-align: center;
+    position: relative;
+    margin-bottom: 10px;
+
+    &:before {
+      border-bottom: 1px solid #aaa;
+      content: ' ';
+      position: absolute;
+      display: block;
+      top: 50%;
+      width: 100%;
+    }
+
+    span {
+      font-size: 16px;
+      padding: 0 20px;
+      background-color: #fff;
+      position: relative;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: #aaa;
+    }
+  }
+
+  input {
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 8px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  &__error {
+    margin-top: 10px;
+    color: red;
+  }
+}

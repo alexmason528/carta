@@ -4,7 +4,7 @@
  * This is the first thing users see of our App, at the '/' route
  */
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Helmet from 'react-helmet';
 import ReactMapboxGl from 'react-mapbox-gl';
 import classNames from 'classnames';
@@ -361,9 +361,9 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
             { name: 'description', content: 'Carta' },
           ]}
         />
-        <img className="logo" onClick={() => { browserHistory.push('/home'); }} src="https://carta.guide/content/logo-100.png" role="presentation" />
+        <img className="logo" onClick={() => { browserHistory.push('/home'); }} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506785283/image/content/logo-100.png" role="presentation" />
         <div className="logo-name-tab">
-          <img src="https://carta.guide/content/name-vertical.png" role="presentation" />
+          <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506785283/image/content/name-vertical.png" role="presentation" />
         </div>
         <QuestButton
           className={questButtonClass}
@@ -402,18 +402,18 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
 }
 
 QuestPage.propTypes = {
-  recommendations: React.PropTypes.object,
-  places: React.PropTypes.array,
-  params: React.PropTypes.shape({
-    brochure: React.PropTypes.string,
-    viewport: React.PropTypes.string,
-    types: React.PropTypes.string,
-    descriptives: React.PropTypes.string,
+  recommendations: PropTypes.object,
+  places: PropTypes.array,
+  params: PropTypes.shape({
+    brochure: PropTypes.string,
+    viewport: PropTypes.string,
+    types: PropTypes.string,
+    descriptives: PropTypes.string,
   }),
-  mapChange: React.PropTypes.func,
-  fetchQuestInfo: React.PropTypes.func,
-  fetchRecommendations: React.PropTypes.func,
-  setDefaultQuest: React.PropTypes.func,
+  mapChange: PropTypes.func,
+  fetchQuestInfo: PropTypes.func,
+  fetchRecommendations: PropTypes.func,
+  setDefaultQuest: PropTypes.func,
 };
 
 function mapDispatchToProps(dispatch) {
