@@ -7,44 +7,36 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 
 import request from 'utils/request';
 
-import { FETCH_BROCHURE, API_BASE_URL } from './constants';
+import { FETCH_COMMUNITYINFO, API_BASE_URL } from './constants';
 import {
-  fetchBrochureSuccess,
-  fetchBrochureError,
+  fetchCommunityInfoSuccess,
+  fetchCommunityInfoError,
 } from './actions';
 
-export function* getBrochureInformation(payload) {
-  const requestURL = `${API_BASE_URL}api/v1/map/place/`;
-
-  const data = {
-    name: payload.name,
-  };
+export function* getCommunityInfo() {
+  const requestURL = `${API_BASE_URL}api/v1/community/info`;
 
   const params = {
-    method: 'POST',
-    body: JSON.stringify(data),
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    method: 'GET',
   };
 
   let response;
   try {
     response = yield call(request, requestURL, params);
-    yield put(fetchBrochureSuccess(response));
+    yield put(fetchCommunityInfoSuccess(response));
   } catch (err) {
-    yield put(fetchBrochureError(response));
+    yield put(fetchCommunityInfoError(response));
   }
 }
 
-export function* getBrochureInformationWatcher() {
-  const watcher = yield takeLatest(FETCH_BROCHURE, getBrochureInformation);
+export function* getCommunityInfoWatcher() {
+  const watcher = yield takeLatest(FETCH_COMMUNITYINFO, getCommunityInfo);
   yield take(LOCATION_CHANGE);
   yield cancel(watcher);
 }
 
 // Bootstrap sagas
 export default [
-  getBrochureInformationWatcher,
+  getCommunityInfoWatcher,
 ];
 

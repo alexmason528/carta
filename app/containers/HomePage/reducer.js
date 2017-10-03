@@ -12,53 +12,37 @@
 import { fromJS } from 'immutable';
 
 import {
-  FETCH_BROCHURE,
-  FETCH_BROCHURE_SUCCESS,
-  FETCH_BROCHURE_ERROR,
+  FETCH_COMMUNITYINFO,
+  FETCH_COMMUNITYINFO_SUCCESS,
+  FETCH_COMMUNITYINFO_ERROR,
 } from './constants';
 
 // The initial state of the App
 
 const initialState = fromJS({
-  brochure: {
+  community: {
     fetching: false,
     error: null,
-    details: {},
+    details: {
+      posts: [],
+      suggestions: [],
+    },
   },
 });
 
 
 function homeReducer(state = initialState, action) {
-  let brochure;
+  let community;
 
   switch (action.type) {
-    case FETCH_BROCHURE:
-      brochure = {
-        fetching: true,
-        error: null,
-        details: {},
-      };
+    case FETCH_COMMUNITYINFO:
+      return initialState;
 
-      return state.set('brochure', fromJS(brochure));
+    case FETCH_COMMUNITYINFO_SUCCESS:
+      return state.setIn(['community', 'fetching'], false).setIn(['community', 'error'], null).setIn(['community', 'details'], fromJS(action.payload));
 
-    case FETCH_BROCHURE_SUCCESS:
-      brochure = {
-        fetching: false,
-        error: null,
-        details: action.payload,
-      };
-
-      return state.set('brochure', fromJS(brochure));
-
-    case FETCH_BROCHURE_ERROR:
-      brochure = {
-        fetching: false,
-        error: action.payload,
-        details: {},
-      };
-
-      return state.set('brochure', fromJS(brochure));
-
+    case FETCH_COMMUNITYINFO_ERROR:
+      return state.setIn(['community', 'fetching'], false).setIn(['community', 'error'], fromJS(action.payload));
     default:
       return state;
   }

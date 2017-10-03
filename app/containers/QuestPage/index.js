@@ -60,7 +60,7 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
       sources: {
         'raster-tiles': {
           type: 'raster',
-          url: 'mapbox://cartaguide.bright',
+          url: 'mapbox://cartaguide.white',
           tileSize: 128,
         },
       },

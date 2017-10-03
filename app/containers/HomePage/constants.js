@@ -9,8 +9,8 @@
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
 
-export const FETCH_BROCHURE = 'carta/Home/FETCH_BROCHURE';
-export const FETCH_BROCHURE_SUCCESS = 'carta/Home/FETCH_BROCHURE_SUCCESS';
-export const FETCH_BROCHURE_ERROR = 'carta/Home/FETCH_BROCHURE_ERROR';
+export const FETCH_COMMUNITYINFO = 'carta/Home/FETCH_COMMUNITYINFO';
+export const FETCH_COMMUNITYINFO_SUCCESS = 'carta/Home/FETCH_COMMUNITYINFO_SUCCESS';
+export const FETCH_COMMUNITYINFO_ERROR = 'carta/Home/FETCH_COMMUNITYINFO_ERROR';
 
 export const API_BASE_URL = (process.env.NODE_ENV === 'development') ? 'http://localhost:3000/' : 'https://cartamap.herokuapp.com/';

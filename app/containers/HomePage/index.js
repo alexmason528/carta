@@ -3,13 +3,18 @@
  *
  */
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Helmet from 'react-helmet';
 import className from 'classnames';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 import { Container, Row, Col } from 'reactstrap';
 
 import { ImagePost, TextPost, NormalPost } from './Component/Posts';
+import { makeSelectPosts, makeSelectSuggestions } from './selectors';
+import { fetchCommunityInfo } from './actions';
+
 import Suggestion from './Component/Suggestion';
 import Quest from './Component/Quest';
 import Profile from './Component/Profile';
@@ -18,7 +23,9 @@ import AddPostButton from './Component/AddPostButton';
 
 import './style.scss';
 
-export default class HomePage extends Component { // eslint-disable-line react/prefer-stateless-function
+const Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+class HomePage extends Component { // eslint-disable-line react/prefer-stateless-function
 
   constructor() {
     super();
@@ -33,6 +40,10 @@ export default class HomePage extends Component { // eslint-disable-line react/p
         fullname: '',
       },
     };
+  }
+
+  componentWillMount() {
+    this.props.fetchCommunityInfo();
   }
 
   handleSubmit = (evt) => {
@@ -65,6 +76,8 @@ export default class HomePage extends Component { // eslint-disable-line react/p
 
   render() {
     const { authType, showAuthForm, userInfo } = this.state;
+    const { posts, suggestions } = this.props;
+
     const register = authType === 'register';
     const error = 'Wrong password';
 
@@ -72,6 +85,12 @@ export default class HomePage extends Component { // eslint-disable-line react/p
       authForm: true,
       'authForm--hidden': !showAuthForm,
     });
+
+    const today = new Date();
+    const todayStr = today.toJSON().slice(0, 10);
+
+    const yesterday = new Date(today.setDate(today.getDate() - 1));
+    const yesterdayStr = yesterday.toJSON().slice(0, 10);
 
     return (
       <Container fluid className="homepage">
@@ -85,31 +104,89 @@ export default class HomePage extends Component { // eslint-disable-line react/p
           <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506785283/image/content/name-vertical.png" role="presentation" />
         </div>
         <Row className="homepage__row">
-          <Col md={4} sm={6} className="homepage__col">
+          <Col lg={4} md={6} sm={12} xs={12} className="homepage__col">
             <Profile onClick={this.toggleAuthForm} />
             <AuthForm className={authFormClass} onClose={this.closeAuthForm} />
             <Quest />
           </Col>
 
-          <Col md={4} sm={6} className="homepage__col">
+          <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-sm-down">
             <AddPostButton />
-            <ImagePost imageUrl={'http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/wide/0012.jpg'} title={'Find your favorite weather'} username={'Martijn Snelder'} date={'Yesterday 20.30'} />
-            <TextPost title={'This is a test message'} username={'Martin Snelder'} date={'Tue 26 Sep'} content={'This is post without an image. Here the writer writes all kinds of stuff, like things, this and that. Are we done already?'} />
-            <NormalPost imageUrl={'http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/wide/0003.jpg'} title={'Iran'} username={'Jos Hummelen'} date={'Mon 25 Sep'} content={"Photos of Iran. This doesn't include people portraits. Those photos are reserved for the printed album I'm going to make."} />
-          </Col>
+            {
+              posts.map((post, index) => {
+                let component;
+                const { title, created_at, content, img, author } = post.toJS();
+                const username = `${author[0].firstname} ${author[0].lastname}`;
 
-          <Col md={4} sm={6} className="homepage__col">
-            <Suggestion
-              imageUrl="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/0027.jpg"
-              title="What are your favorite coffee spots?"
-            />
-            <Suggestion
-              imageUrl="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/0061.jpg"
-              title="Best dinners in Amsterdam"
-            />
+                const date = created_at.slice(0, 10);
+                const time = created_at.slice(11);
+
+                const month = Months[parseInt(date.slice(5, 7), 10) - 1];
+                let day = parseInt(date.slice(8, 10), 10);
+
+                if (day === 1) {
+                  day = '1st';
+                } else if (day === 2) {
+                  day = '2nd';
+                } else if (day === 3) {
+                  day = '3rd';
+                } else {
+                  day = `${day}th`;
+                }
+
+                let dateStr;
+
+                if (date === yesterdayStr) {
+                  dateStr = 'yesterday ';
+                } else if (date === todayStr) {
+                  dateStr = '';
+                } else if (date.slice(0, 4) === todayStr.slice(0, 4)) {
+                  dateStr = `${month} ${day}`;
+                } else {
+                  dateStr = `${month} ${day}, ${date.slice(0, 4)}`;
+                }
+
+                dateStr += ` ${time}`;
+
+
+                if (content && img) {
+                  component = <NormalPost key={index} imageUrl={img} title={title} username={username} date={dateStr} content={content} />;
+                } else if (content && !img) {
+                  component = <TextPost key={index} title={title} username={username} date={dateStr} content={content} />;
+                } else if (!content && img) {
+                  component = <ImagePost key={index} imageUrl={img} title={title} username={username} date={dateStr} />;
+                }
+
+                return component;
+              })
+            }
+          </Col>
+          <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-md-down">
+            {
+              suggestions.map((suggestion, index) => <Suggestion key={index} imageUrl={suggestion.get('img')} title={suggestion.get('title')} />)
+            }
           </Col>
         </Row>
       </Container>
     );
   }
 }
+
+HomePage.propTypes = {
+  fetchCommunityInfo: PropTypes.func,
+  posts: PropTypes.object,
+  suggestions: PropTypes.object,
+};
+
+const mapStateToProps = createStructuredSelector({
+  posts: makeSelectPosts(),
+  suggestions: makeSelectSuggestions(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchCommunityInfo: () => dispatch(fetchCommunityInfo()),
+  };
+}
+// Wrap the component to inject dispatch and state into it
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

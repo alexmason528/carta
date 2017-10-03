@@ -6,11 +6,11 @@ body {
   -webkit-text-size-adjust: 100%; 
   overflow-x: hidden; 
   font-weight: 300; 
-  width: calc(100% + 10px); 
+  width: calc(100% + 20px); 
   position: relative;
 
   &::-webkit-scrollbar {
-    width:10px;
+    width: 10px;
     * {
       background:transparent;
     }
@@ -87,3 +87,4 @@ body {
     position: relative;
   }
 }
+

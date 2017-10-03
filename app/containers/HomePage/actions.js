@@ -16,9 +16,9 @@
  */
 
 import {
-  FETCH_BROCHURE,
-  FETCH_BROCHURE_SUCCESS,
-  FETCH_BROCHURE_ERROR,
+  FETCH_COMMUNITYINFO,
+  FETCH_COMMUNITYINFO_SUCCESS,
+  FETCH_COMMUNITYINFO_ERROR,
 } from './constants';
 
 /**
@@ -29,23 +29,22 @@ import {
  * @return {object}    An action object with a type of CHANGE_USERNAME
  */
 
-export function fetchBrochure(name) {
+export function fetchCommunityInfo() {
   return {
-    type: FETCH_BROCHURE,
-    name,
+    type: FETCH_COMMUNITYINFO,
   };
 }
 
-export function fetchBrochureSuccess(payload) {
+export function fetchCommunityInfoSuccess(payload) {
   return {
-    type: FETCH_BROCHURE_SUCCESS,
+    type: FETCH_COMMUNITYINFO_SUCCESS,
     payload,
   };
 }
 
-export function fetchBrochureError(payload) {
+export function fetchCommunityInfoError(payload) {
   return {
-    type: FETCH_BROCHURE_ERROR,
+    type: FETCH_COMMUNITYINFO_ERROR,
     payload,
   };
 }

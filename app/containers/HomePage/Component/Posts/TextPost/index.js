@@ -19,7 +19,10 @@ const TextPost = ({ title, username, date, content }) => {
 
 TextPost.propTypes = {
   title: PropTypes.string,
-  username: PropTypes.string,
+  username: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
   date: PropTypes.string,
   content: PropTypes.string,
 };

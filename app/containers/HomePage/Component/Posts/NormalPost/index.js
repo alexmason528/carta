@@ -9,7 +9,7 @@ const NormalPost = ({ imageUrl, title, username, date, content }) => {
         <h2>{title}</h2>
       </div>
       <div className="normalPost__info">
-        {username} | {date}
+        {username} - CARTA | {date}
       </div>
       <p className="normalPost__content">
         {content}
@@ -21,7 +21,10 @@ const NormalPost = ({ imageUrl, title, username, date, content }) => {
 NormalPost.propTypes = {
   imageUrl: PropTypes.string,
   title: PropTypes.string,
-  username: PropTypes.string,
+  username: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
   date: PropTypes.string,
   content: PropTypes.string,
 };

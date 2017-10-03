@@ -38,7 +38,7 @@ export default class ImagePost extends Component {
     } else if (winWidth > 550) {
       fontSize = postWidth / 11;
     } else {
-      fontSize = postWidth / 5.5;
+      fontSize = postWidth / 11;
     }
 
     $(imagePost).find('h2').css('font-size', `${fontSize}px`);
@@ -90,6 +90,9 @@ export default class ImagePost extends Component {
 ImagePost.propTypes = {
   imageUrl: PropTypes.string,
   title: PropTypes.string,
-  username: PropTypes.string,
+  username: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
   date: PropTypes.string,
 };
