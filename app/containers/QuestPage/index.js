@@ -55,24 +55,26 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
     //   }
     // }
 
-    this.mapStyle = {
-      version: 8,
-      sources: {
-        'raster-tiles': {
-          type: 'raster',
-          url: 'mapbox://cartaguide.white',
-          tileSize: 128,
-        },
-      },
-      layers: [{
-        id: 'simple-tiles',
-        type: 'raster',
-        source: 'raster-tiles',
-        minzoom: 0,
-        maxzoom: 22,
-      }],
-      glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
-    };
+    // this.mapStyle = {
+    //   version: 8,
+    //   sources: {
+    //     'raster-tiles': {
+    //       type: 'raster',
+    //       url: 'mapbox://cartaguide.white',
+    //       tileSize: 128,
+    //     },
+    //   },
+    //   layers: [{
+    //     id: 'simple-tiles',
+    //     type: 'raster',
+    //     source: 'raster-tiles',
+    //     minzoom: 0,
+    //     maxzoom: 22,
+    //   }],
+    //   glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
+    // };
+
+    this.mapStyle = 'mapbox://styles/cartaguide/cj3d35ump00032rqm1j6xlaij';
 
     this.containerStyle = {
       width: '100%',
