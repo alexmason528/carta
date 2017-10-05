@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Button, StarButton } from './Buttons';
 import { fetchRecommendations, descriptiveSelect } from '../actions';
-import { makeSelectDescriptives, makeSelectCurrentDescriptives } from '../selectors';
+import { selectDescriptives, selectCurrentDescriptives } from '../selectors';
 import '../style.scss';
 
 class DescriptivesPage extends Component {
@@ -353,8 +353,8 @@ function mapDispatchToProps(dispatch) {
 }
 
 const mapStateToProps = createStructuredSelector({
-  descriptives: makeSelectDescriptives(),
-  currentDescriptives: makeSelectCurrentDescriptives(),
+  descriptives: selectDescriptives(),
+  currentDescriptives: selectCurrentDescriptives(),
 });
 
 // Wrap the component to inject dispatch and state into it

@@ -9,7 +9,6 @@
  * case YOUR_ACTION_CONSTANT:
  *   return state.set('yourStateVariable', true);
  */
-import { fromJS } from 'immutable';
 
 import {
   MAP_CHANGE,
@@ -38,7 +37,7 @@ import {
 
 // The initial state of the App
 
-const initialState = fromJS({
+const initialState = {
   questInfo: {
     fetching: false,
     error: null,
@@ -84,7 +83,7 @@ const initialState = fromJS({
     error: null,
     details: {},
   },
-});
+};
 
 
 function questReducer(state = initialState, action) {
@@ -99,58 +98,59 @@ function questReducer(state = initialState, action) {
   switch (action.type) {
 
     case MAP_CHANGE:
-      const viewport = {
-        zoom: action.payload.zoom,
-        northeast: {
-          x: action.payload.bounds._ne.lng,
-          y: action.payload.bounds._ne.lat,
-        },
-        southwest: {
-          x: action.payload.bounds._sw.lng,
-          y: action.payload.bounds._sw.lat,
+      return {
+        ...state,
+        viewport: {
+          zoom: action.payload.zoom,
+          northeast: {
+            x: action.payload.bounds._ne.lng,
+            y: action.payload.bounds._ne.lat,
+          },
+          southwest: {
+            x: action.payload.bounds._sw.lng,
+            y: action.payload.bounds._sw.lat,
+          },
         },
       };
 
-      return state.set('viewport', viewport);
-
     case PLACE_SELECT:
-      currentQuestIndex = state.getIn(['questInfo', 'currentQuestIndex']);
-      quests = state.getIn(['questInfo', 'quests']).toJS();
-
+      currentQuestIndex = state.questInfo.currentQuestIndex;
+      quests = state.questInfo.quests;
       quests[currentQuestIndex].place = action.payload;
 
-      return state.setIn(['questInfo', 'quests'], fromJS(quests));
+      return {
+        ...state,
+        questInfo: {
+          ...state.questInfo,
+          quests,
+        },
+      };
 
     case TYPE_SELECT:
-      currentQuestIndex = state.getIn(['questInfo', 'currentQuestIndex']);
-      quests = state.getIn(['questInfo', 'quests']).toJS();
-
+      currentQuestIndex = state.questInfo.currentQuestIndex;
+      quests = state.questInfo.quests;
       quests[currentQuestIndex].types = action.payload;
 
-      return state.setIn(['questInfo', 'quests'], fromJS(quests));
+      return {
+        ...state,
+        questInfo: {
+          ...state.questInfo,
+          quests,
+        },
+      };
 
     case DESCRIPTIVE_SELECT:
-      currentQuestIndex = state.getIn(['questInfo', 'currentQuestIndex']);
-      quests = state.getIn(['questInfo', 'quests']).toJS();
-
+      currentQuestIndex = state.questInfo.currentQuestIndex;
+      quests = state.questInfo.quests;
       quests[currentQuestIndex].descriptives = action.payload;
 
-      return state.setIn(['questInfo', 'quests'], fromJS(quests));
-
-    case UPDATE_VISIBILITY:
-      currentQuestIndex = state.get('questInfo').get('details').get('currentQuestIndex');
-      descriptives = state.get('questInfo').get('details').get('quests').get(currentQuestIndex).get('descriptives').map((descriptive) => {
-        if (descriptive.get('active') === 0) return descriptive.set('visible', 0);
-        return descriptive;
-      });
-
-      types = state.get('questInfo').get('details').get('quests').get(currentQuestIndex).get('types').map((type) => {
-        if (type.get('active') === 0) return type.set('visible', 0);
-        return type;
-      });
-
-      return state.setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'descriptives'], descriptives)
-                       .setIn(['questInfo', 'details', 'quests', currentQuestIndex, 'types'], types);
+      return {
+        ...state,
+        questInfo: {
+          ...state.questInfo,
+          quests,
+        },
+      };
 
     case QUEST_ADD:
       const defaultQuest = {
@@ -172,17 +172,51 @@ function questReducer(state = initialState, action) {
         },
       };
 
-      return state.setIn(['questInfo', 'quests'], state.getIn(['questInfo', 'quests']).push(defaultQuest));
+      const newState = {
+        ...state,
+        questInfo: {
+          ...state.questInfo,
+          quests: [
+            ...state.questInfo.quests,
+            defaultQuest,
+          ],
+        },
+      };
+
+      return newState;
 
     case QUEST_SELECT:
-      return state.setIn(['questInfo', 'currentQuestIndex'], action.payload);
+      return {
+        ...state,
+        questInfo: {
+          ...state.questInfo,
+          currentQuestIndex: action.payload,
+        },
+      };
 
     case QUEST_REMOVE:
-      currentQuestIndex = state.getIn(['questInfo', 'currentQuestIndex']);
+      currentQuestIndex = state.questInfo.currentQuestIndex;
+      let newQuests = [...state.questInfo.quests];
+      newQuests.splice(action.payload, 1);
 
-      return (action.payload < currentQuestIndex)
-        ? state.deleteIn(['questInfo', 'quests', action.payload]).setIn(['questInfo', 'currentQuestIndex'], currentQuestIndex - 1)
-        : state.deleteIn(['questInfo', 'quests', action.payload]);
+      if (action.payload < currentQuestIndex) {
+        return {
+          ...state,
+          questInfo: {
+            ...state.questInfo,
+            quests: newQuests,
+            currentQuestIndex: currentQuestIndex - 1,
+          },
+        };
+      }
+
+      return {
+        ...state,
+        questInfo: {
+          ...state.questInfo,
+          quests: newQuests,
+        },
+      };
 
     case SET_DEFAULT_QUEST:
       return state;
@@ -196,22 +230,28 @@ function questReducer(state = initialState, action) {
           types: [],
           descriptives: [],
         },
-        quests: initialState.getIn(['questInfo', 'quests']).toJS(),
+        quests: initialState.questInfo.quests,
         currentQuestIndex: 0,
       };
 
-      return state.set('questInfo', fromJS(questInfo));
+      return {
+        ...state,
+        questInfo,
+      };
 
     case FETCH_QUESTINFO_SUCCESS:
       questInfo = {
         fetching: false,
         error: null,
         categories: action.payload,
-        quests: initialState.getIn(['questInfo', 'quests']).toJS(),
+        quests: initialState.questInfo.quests,
         currentQuestIndex: 0,
       };
 
-      return state.set('questInfo', fromJS(questInfo));
+      return {
+        ...state,
+        questInfo,
+      };
 
     case FETCH_QUESTINFO_ERROR:
       questInfo = {
@@ -222,64 +262,74 @@ function questReducer(state = initialState, action) {
           types: [],
           descriptives: [],
         },
-        quests: initialState.getIn(['questInfo', 'quests']).toJS(),
+        quests: initialState.questInfo.quests,
         currentQuestIndex: 0,
       };
 
-      return state.set('questInfo', fromJS(questInfo));
+      return {
+        ...state,
+        questInfo,
+      };
 
     case FETCH_RECOMMENDATIONS:
-      recommendations = state.get('recommendations').set({
-        fetching: true,
-        error: null,
-      });
-
-      return state.set('recommendations', fromJS(recommendations));
+      return {
+        ...state,
+        recommendations: {
+          ...state.recommendations,
+          fetching: true,
+          error: null,
+        },
+      };
 
     case FETCH_RECOMMENDATIONS_SUCCESS:
-      recommendations = {
-        fetching: false,
-        error: null,
-        details: action.payload,
+      return {
+        ...state,
+        recommendations: {
+          fetching: false,
+          error: null,
+          details: action.payload,
+        },
       };
-
-      return state.set('recommendations', fromJS(recommendations));
 
     case FETCH_RECOMMENDATIONS_ERROR:
-      recommendations = {
-        fetching: false,
-        error: action.payload,
-        details: [],
+      return {
+        ...state,
+        recommendations: {
+          fetching: false,
+          error: action.payload,
+          details: [],
+        },
       };
-
-      return state.set('recommendations', fromJS(recommendations));
 
     case FETCH_BROCHURE:
-      brochure = {
-        fetching: true,
-        error: null,
-        details: {},
+      return {
+        ...state,
+        brochure: {
+          fetching: true,
+          error: null,
+          details: {},
+        },
       };
-
-      return state.set('brochure', fromJS(brochure));
 
     case FETCH_BROCHURE_SUCCESS:
-      brochure = {
-        fetching: false,
-        error: null,
-        details: action.payload,
+      return {
+        ...state,
+        brochure: {
+          fetching: false,
+          error: null,
+          details: action.payload,
+        },
       };
-
-      return state.set('brochure', fromJS(brochure));
 
     case FETCH_BROCHURE_ERROR:
-      brochure = {
-        fetching: false,
-        error: action.payload,
-        details: {},
+      return {
+        ...state,
+        brochure: {
+          fetching: false,
+          error: action.payload,
+          details: {},
+        },
       };
-
-      return state.set('brochure', fromJS(brochure));
 
     default:
       return state;

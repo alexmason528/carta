@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import { loginRequest } from '../../actions';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
-import { makeSelectLogin, makeSelectRegister, makeSelectUser } from '../../selectors';
+import { selectLogin, selectRegister, selectUser } from '../../selectors';
 import './style.scss';
 
 class AuthForm extends Component {
@@ -16,7 +16,7 @@ class AuthForm extends Component {
   }
 
   handleLoginSubmit = (values) => {
-    this.props.loginRequest(values.toJS());
+    this.props.loginRequest(values);
   }
 
   handleRegisterSubmit = (values) => {
@@ -68,9 +68,9 @@ function mapDispatchToProps(dispatch) {
 }
 
 const mapStateToProps = createStructuredSelector({
-  login: makeSelectLogin(),
-  register: makeSelectRegister(),
-  user: makeSelectUser(),
+  login: selectLogin(),
+  register: selectRegister(),
+  user: selectUser(),
 });
 
 // Wrap the component to inject dispatch and state into it

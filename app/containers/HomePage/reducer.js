@@ -9,8 +9,6 @@
  * case YOUR_ACTION_CONSTANT:
  *   return state.set('yourStateVariable', true);
  */
-import { fromJS } from 'immutable';
-
 import {
   FETCH_COMMUNITYINFO_REQUEST,
   FETCH_COMMUNITYINFO_SUCCESS,
@@ -23,7 +21,7 @@ import {
 
 // The initial state of the App
 
-const initialState = fromJS({
+const initialState = {
   community: {
     fetching: false,
     error: null,
@@ -42,30 +40,72 @@ const initialState = fromJS({
       error: null,
     },
   },
-});
-
+};
 
 function homeReducer(state = initialState, action) {
-  let community;
-
   switch (action.type) {
     case FETCH_COMMUNITYINFO_REQUEST:
       return initialState;
 
     case FETCH_COMMUNITYINFO_SUCCESS:
-      return state.setIn(['community', 'fetching'], false).setIn(['community', 'error'], null).setIn(['community', 'details'], fromJS(action.payload));
+      return {
+        ...state,
+        community: {
+          fetching: false,
+          error: null,
+          details: action.payload,
+        },
+      };
 
     case FETCH_COMMUNITYINFO_ERROR:
-      return state.setIn(['community', 'fetching'], false).setIn(['community', 'error'], fromJS(action.payload));
+      return {
+        ...state,
+        community: {
+          fetching: false,
+          error: action.payload,
+        },
+      };
 
     case LOGIN_REQUEST:
-      return state.setIn(['community', 'login', 'fetching'], true).setIn(['community', 'login', 'error'], null).setIn(['community', 'user'], {});
+      return {
+        ...state,
+        community: {
+          ...state.community,
+          login: {
+            fetching: true,
+            error: null,
+            user: {},
+          },
+        },
+      };
 
     case LOGIN_SUCCESS:
-      return state.setIn(['community', 'login', 'fetching'], false).setIn(['community', 'login', 'error'], null).setIn(['community', 'authenticated'], true).setIn(['community', 'user'], action.payload);
+      return {
+        ...state,
+        community: {
+          ...state.community,
+          login: {
+            fetching: false,
+            error: null,
+          },
+          authenticated: true,
+          user: action.payload,
+        },
+      };
 
     case LOGIN_ERROR:
-      return state.setIn(['community', 'login', 'fetching'], false).setIn(['community', 'login', 'error'], action.payload).setIn(['community', 'authenticated'], false).setIn(['community', 'user'], {});
+      return {
+        ...state,
+        community: {
+          ...state.community,
+          login: {
+            fetching: false,
+            error: action.payload,
+          },
+          authenticated: false,
+          user: {},
+        },
+      };
 
     default:
       return state;

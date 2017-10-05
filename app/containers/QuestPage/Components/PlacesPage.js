@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Button, StarButton } from './Buttons';
 import { fetchRecommendations, placeSelect } from '../actions';
-import { makeSelectPlaces } from '../selectors';
+import { selectPlaces } from '../selectors';
 
 import '../style.scss';
 
@@ -81,7 +81,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const mapStateToProps = createStructuredSelector({
-  places: makeSelectPlaces(),
+  places: selectPlaces(),
 });
 
 // Wrap the component to inject dispatch and state into it

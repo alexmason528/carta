@@ -3,9 +3,8 @@
  * If we were to do this in store.js, reducers wouldn't be hot reloadable.
  */
 
-import { fromJS } from 'immutable';
-import { combineReducers } from 'redux-immutable';
-import { reducer as formReducer } from 'redux-form/immutable';
+import { combineReducers } from 'redux';
+import { reducer as formReducer } from 'redux-form';
 import { routerReducer } from 'react-router-redux';
 import globalReducer from 'containers/App/reducer';
 

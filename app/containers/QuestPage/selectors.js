@@ -4,88 +4,88 @@
 
 import { createSelector } from 'reselect';
 
-const selectQuest = (state) => state.get('quest');
+const selectQuest = (state) => state.quest;
 
-const makeSelectQuestInfo = () => createSelector(
+const selectQuestInfo = () => createSelector(
   selectQuest,
-  (homeState) => homeState.get('questInfo')
+  (questState) => questState.questInfo
 );
 
-const makeSelectRecommendations = () => createSelector(
+const selectRecommendations = () => createSelector(
   selectQuest,
-  (homeState) => homeState.get('recommendations')
+  (questState) => questState.recommendations
 );
 
-const makeSelectViewport = () => createSelector(
+const selectViewport = () => createSelector(
   selectQuest,
-  (homeState) => homeState.get('viewport')
+  (questState) => questState.viewport
 );
 
-const makeSelectCategories = () => createSelector(
+const selectCategories = () => createSelector(
   selectQuest,
-  (homeState) => homeState.get('questInfo').get('categories')
+  (questState) => questState.questInfo.categories
 );
 
-const makeSelectQuests = () => createSelector(
+const selectQuests = () => createSelector(
   selectQuest,
-  (homeState) => homeState.get('questInfo').get('quests')
+  (questState) => questState.questInfo.quests
 );
 
-const makeSelectCurrentQuestIndex = () => createSelector(
+const selectCurrentQuestIndex = () => createSelector(
   selectQuest,
-  (homeState) => homeState.get('questInfo').get('currentQuestIndex')
+  (questState) => questState.questInfo.currentQuestIndex
 );
 
-const makeSelectPlaces = () => createSelector(
+const selectPlaces = () => createSelector(
   selectQuest,
-  (homeState) => homeState.get('questInfo').get('categories').get('places').toJS()
+  (questState) => questState.questInfo.categories.places
 );
 
-const makeSelectTypes = () => createSelector(
+const selectTypes = () => createSelector(
   selectQuest,
-  (homeState) => homeState.get('questInfo').get('categories').get('types').toJS()
+  (questState) => questState.questInfo.categories.types
 );
 
-const makeSelectCurrentTypes = () => createSelector(
+const selectCurrentTypes = () => createSelector(
   selectQuest,
-  (homeState) => {
-    const currentIndex = homeState.getIn(['questInfo', 'currentQuestIndex']);
-    const quests = homeState.getIn(['questInfo', 'quests']).toJS();
+  (questState) => {
+    const currentIndex = questState.questInfo.currentQuestIndex;
+    const quests = questState.questInfo.quests;
     return quests[currentIndex].types;
   }
 );
 
-const makeSelectDescriptives = () => createSelector(
+const selectDescriptives = () => createSelector(
   selectQuest,
-  (homeState) => homeState.get('questInfo').get('categories').get('descriptives').toJS()
+  (questState) => questState.questInfo.categories.descriptives
 );
 
-const makeSelectCurrentDescriptives = () => createSelector(
+const selectCurrentDescriptives = () => createSelector(
   selectQuest,
-  (homeState) => {
-    const currentIndex = homeState.getIn(['questInfo', 'currentQuestIndex']);
-    const quests = homeState.getIn(['questInfo', 'quests']).toJS();
+  (questState) => {
+    const currentIndex = questState.questInfo.currentQuestIndex;
+    const quests = questState.questInfo.quests;
     return quests[currentIndex].descriptives;
   }
 );
 
-const makeSelectBrochure = () => createSelector(
+const selectBrochure = () => createSelector(
   selectQuest,
-  (homeState) => homeState.get('brochure')
+  (questState) => questState.brochure
 );
 
 export {
   selectQuest,
-  makeSelectQuestInfo,
-  makeSelectRecommendations,
-  makeSelectViewport,
-  makeSelectCategories,
-  makeSelectQuests,
-  makeSelectCurrentQuestIndex,
-  makeSelectPlaces,
-  makeSelectTypes,
-  makeSelectCurrentTypes,
-  makeSelectDescriptives,
-  makeSelectCurrentDescriptives,
-  makeSelectBrochure,
+  selectQuestInfo,
+  selectRecommendations,
+  selectViewport,
+  selectCategories,
+  selectQuests,
+  selectCurrentQuestIndex,
+  selectPlaces,
+  selectTypes,
+  selectCurrentTypes,
+  selectDescriptives,
+  selectCurrentDescriptives,
+  selectBrochure,
 };

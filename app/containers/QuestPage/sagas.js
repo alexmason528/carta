@@ -6,7 +6,7 @@ import { take, call, put, select, cancel, takeLatest } from 'redux-saga/effects'
 import { LOCATION_CHANGE } from 'react-router-redux';
 
 import request from 'utils/request';
-import { makeSelectCurrentTypes, makeSelectCurrentDescriptives, makeSelectViewport } from 'containers/QuestPage/selectors';
+import { selectCurrentTypes, selectCurrentDescriptives, selectViewport } from 'containers/QuestPage/selectors';
 
 import { FETCH_BROCHURE, FETCH_RECOMMENDATIONS, FETCH_QUESTINFO, API_BASE_URL } from './constants';
 import {
@@ -19,9 +19,9 @@ import {
 } from './actions';
 
 export function* getRecommendations() {
-  const curDescriptives = yield select(makeSelectCurrentDescriptives());
-  const curTypes = yield select(makeSelectCurrentTypes());
-  const viewport = yield select(makeSelectViewport());
+  const curDescriptives = yield select(selectCurrentDescriptives());
+  const curTypes = yield select(selectCurrentTypes());
+  const viewport = yield select(selectViewport());
 
   const requestURL = `${API_BASE_URL}api/v1/map/recommendation/`;
 

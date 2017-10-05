@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { fetchRecommendations, questAdd, questSelect, questRemove } from '../actions';
-import { makeSelectQuests, makeSelectCurrentQuestIndex } from '../selectors';
+import { selectQuests, selectCurrentQuestIndex } from '../selectors';
 import Quest from './Quest';
 import '../style.scss';
 
@@ -27,7 +27,6 @@ class QuestPanel extends Component {
 
   render() {
     const { quests, currentQuestIndex, className } = this.props;
-
     return (
       <div className={className}>
         <div className="buttons">
@@ -78,7 +77,7 @@ class QuestPanel extends Component {
 QuestPanel.propTypes = {
   minimizeClicked: PropTypes.func.isRequired,
   closeClicked: PropTypes.func.isRequired,
-  quests: PropTypes.object,
+  quests: PropTypes.array,
   currentQuestIndex: PropTypes.number,
   className: PropTypes.string,
   mapViewPortChange: PropTypes.func,
@@ -98,8 +97,8 @@ function mapDispatchToProps(dispatch) {
 }
 
 const mapStateToProps = createStructuredSelector({
-  quests: makeSelectQuests(),
-  currentQuestIndex: makeSelectCurrentQuestIndex(),
+  quests: selectQuests(),
+  currentQuestIndex: selectCurrentQuestIndex(),
 });
 
 // Wrap the component to inject dispatch and state into it

@@ -11,7 +11,7 @@ import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 
 import { fetchBrochure } from '../actions';
-import { makeSelectBrochure } from '../selectors';
+import { selectBrochure } from '../selectors';
 
 import '../style.scss';
 
@@ -29,7 +29,7 @@ class Brochure extends Component { // eslint-disable-line react/prefer-stateless
 
     const interval =
     setInterval(() => {
-      if ($('.container').width() > 0) {
+      if ($('.brochure-container').width() > 0) {
         clearInterval(interval);
         this.handleResize();
         $('p').dotdotdot({
@@ -42,15 +42,15 @@ class Brochure extends Component { // eslint-disable-line react/prefer-stateless
           evt.stopPropagation();
           let tileWidth;
 
-          if ($('.container').width() < 550) {
-            tileWidth = $('.container').width();
-          } else if ($('.container').width() < 1000) {
-            tileWidth = $('.container').width() / 2;
+          if ($('.brochure-container').width() < 550) {
+            tileWidth = $('.brochure-container').width();
+          } else if ($('.brochure-container').width() < 1000) {
+            tileWidth = $('.brochure-container').width() / 2;
           } else {
-            tileWidth = $('.container').width() / 3;
+            tileWidth = $('.brochure-container').width() / 3;
           }
 
-          const bottom = $('.container').height() - $(this).offset().top;
+          const bottom = $('.brochure-container').height() - $(this).offset().top;
 
           if (bottom > 50) {
             $(this).closest('.tile').css({ 'z-index': '40' });
@@ -59,7 +59,7 @@ class Brochure extends Component { // eslint-disable-line react/prefer-stateless
             .addClass('expanded to-below')
             .animate({ height: tileWidth * 2 }, 150, function tileOpen() { $(this).find('p').trigger('update.dot'); });
           } else {
-            const right = $('.container').width() - $(this).offset().left;
+            const right = $('.brochure-container').width() - $(this).offset().left;
             if (right > 50) {
               $(this).closest('.tile').css({ 'z-index': '40' });
               $(this)
@@ -135,9 +135,9 @@ class Brochure extends Component { // eslint-disable-line react/prefer-stateless
 
     tileCount = $('.tile').length;
 
-    if ($('.container').width() < 550) {
+    if ($('.brochure-container').width() < 550) {
       cols = 1;
-      tileWidth = $('.container').width() / cols;
+      tileWidth = $('.brochure-container').width() / cols;
       rows = Math.ceil(tileCount - 1);
 
       $('.tile').css({ width: `${100 / cols}%`, height: `${tileWidth}px` });
@@ -146,9 +146,9 @@ class Brochure extends Component { // eslint-disable-line react/prefer-stateless
       $('.main-poster h1').css({ 'font-size': `${tileWidth / 10}px` });
 
       this.AddDividers(cols, rows);
-    } else if ($('.container').width() < 1000) {
+    } else if ($('.brochure-container').width() < 1000) {
       cols = 2;
-      tileWidth = $('.container').width() / cols;
+      tileWidth = $('.brochure-container').width() / cols;
       rows = Math.ceil((tileCount / cols) + 0.5);
 
       $('.tile').css({ width: `${100 / cols}%`, height: `${tileWidth}px` });
@@ -161,7 +161,7 @@ class Brochure extends Component { // eslint-disable-line react/prefer-stateless
       $('.vd-1').css({ left: `${tileWidth}px` });
     } else {
       cols = 3;
-      tileWidth = $('.container').width() / cols;
+      tileWidth = $('.brochure-container').width() / cols;
       rows = Math.ceil(tileCount / cols);
 
       $('.tile').css({ width: `${100 / cols}%`, height: `${tileWidth}px` });
@@ -222,14 +222,14 @@ class Brochure extends Component { // eslint-disable-line react/prefer-stateless
         const lastTile = $('.tile')[tileCount - 1];
         const tileHeight = $(lastTile).height();
         for (let i = 0; i < (3 - (tileCount % 3)); i += 1) {
-          $('.container').append(`<div class="tile text-tile tile-placeholder" style="width: 33.33%; height: ${tileHeight}px"></div>`);
+          $('.brochure-container').append(`<div class="tile text-tile tile-placeholder" style="width: 33.33%; height: ${tileHeight}px"></div>`);
         }
       }
     } else if (cols === 2) {
       if (tileCount % 2 === 0) {
         const lastTile = $('.tile')[tileCount - 1];
         const tileHeight = $(lastTile).height();
-        $('.container').append(`<div class="tile text-tile tile-placeholder" style="width: 50%; height: ${tileHeight}px"></div>`);
+        $('.brochure-container').append(`<div class="tile text-tile tile-placeholder" style="width: 50%; height: ${tileHeight}px"></div>`);
       }
     }
 
@@ -256,8 +256,8 @@ class Brochure extends Component { // eslint-disable-line react/prefer-stateless
   }
 
   render() {
-    if (!this.props.brochure.get('details').get('info')) return null;
-    let info = this.props.brochure.get('details').get('info').toJS();
+    if (!this.props.brochure.details.info) return null;
+    let info = this.props.brochure.details.info;
 
     const { initialized } = this.state;
 
@@ -278,7 +278,7 @@ class Brochure extends Component { // eslint-disable-line react/prefer-stateless
           <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506785283/image/content/name-vertical.png" role="presentation" />
         </div>
 
-        <div className="container">
+        <div className="brochure-container">
           <div className="dividers"></div>
           <div className="tile main-poster">
             <img src={mainPoster.url} role="presentation" />
@@ -358,7 +358,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const mapStateToProps = createStructuredSelector({
-  brochure: makeSelectBrochure(),
+  brochure: selectBrochure(),
 });
 
 // Wrap the component to inject dispatch and state into it

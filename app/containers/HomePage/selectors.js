@@ -4,44 +4,44 @@
 
 import { createSelector } from 'reselect';
 
-const selectHome = (state) => state.get('home');
+const selectHome = (state) => state.home;
 
-const makeSelectPosts = () => createSelector(
+const selectPosts = () => createSelector(
   selectHome,
-  (homeState) => homeState.getIn(['community', 'details', 'posts'])
+  (homeState) => homeState.community.details.posts
 );
 
-const makeSelectSuggestions = () => createSelector(
+const selectSuggestions = () => createSelector(
   selectHome,
-  (homeState) => homeState.getIn(['community', 'details', 'suggestions'])
+  (homeState) => homeState.community.details.suggestions
 );
 
-const makeSelectLogin = () => createSelector(
+const selectLogin = () => createSelector(
   selectHome,
-  (homeState) => homeState.getIn(['community', 'login'])
+  (homeState) => homeState.community.login
 );
 
-const makeSelectRegister = () => createSelector(
+const selectRegister = () => createSelector(
   selectHome,
-  (homeState) => homeState.getIn(['community', 'register'])
+  (homeState) => homeState.community.register
 );
 
-const makeSelectAuthenticated = () => createSelector(
+const selectAuthenticated = () => createSelector(
   selectHome,
-  (homeState) => homeState.getIn(['community', 'authenticated'])
+  (homeState) => homeState.community.authenticated
 );
 
-const makeSelectUser = () => createSelector(
+const selectUser = () => createSelector(
   selectHome,
-  (homeState) => homeState.getIn(['community', 'user'])
+  (homeState) => homeState.community.user
 );
 
 export {
   selectHome,
-  makeSelectPosts,
-  makeSelectSuggestions,
-  makeSelectLogin,
-  makeSelectRegister,
-  makeSelectAuthenticated,
-  makeSelectUser,
+  selectPosts,
+  selectSuggestions,
+  selectLogin,
+  selectRegister,
+  selectAuthenticated,
+  selectUser,
 };

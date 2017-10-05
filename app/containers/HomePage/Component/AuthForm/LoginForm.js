@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { reduxForm, Field } from 'redux-form/immutable';
+import { reduxForm, Field } from 'redux-form';
 
 import RenderField from './RenderField';
 import { required, email, passwordStrong } from './validate';

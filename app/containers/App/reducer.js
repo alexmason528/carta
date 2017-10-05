@@ -10,11 +10,8 @@
  *   return state.set('yourStateVariable', true);
  */
 
-import { fromJS } from 'immutable';
-
 // The initial state of the App
-const initialState = fromJS({
-});
+const initialState = {};
 
 function appReducer(state = initialState, action) {
   return state;

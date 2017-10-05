@@ -12,7 +12,7 @@ import { browserHistory } from 'react-router';
 import { Container, Row, Col } from 'reactstrap';
 
 import { ImagePost, TextPost, NormalPost } from './Component/Posts';
-import { makeSelectPosts, makeSelectSuggestions, makeSelectAuthenticated } from './selectors';
+import { selectPosts, selectSuggestions, selectAuthenticated } from './selectors';
 import { fetchCommunityInfoRequest } from './actions';
 
 import Suggestion from './Component/Suggestion';
@@ -96,7 +96,7 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
             {
               posts.map((post, index) => {
                 let component;
-                const { title, created_at, content, img, author } = post.toJS();
+                const { title, created_at, content, img, author } = post;
                 const username = `${author[0].firstname} ${author[0].lastname}`;
 
                 const date = created_at.slice(0, 10);
@@ -146,7 +146,10 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
           </Col>
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-md-down">
             {
-              suggestions.map((suggestion, index) => <Suggestion key={index} imageUrl={suggestion.get('img')} title={suggestion.get('title')} />)
+              suggestions.map((suggestion, index) => {
+                const { img, title } = suggestion;
+                return <Suggestion key={index} imageUrl={img} title={title} />;
+              })
             }
           </Col>
         </Row>
@@ -157,15 +160,15 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
 
 HomePage.propTypes = {
   fetchCommunityInfoRequest: PropTypes.func,
-  posts: PropTypes.object,
-  suggestions: PropTypes.object,
+  posts: PropTypes.array,
+  suggestions: PropTypes.array,
   authenticated: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
-  posts: makeSelectPosts(),
-  suggestions: makeSelectSuggestions(),
-  authenticated: makeSelectAuthenticated(),
+  posts: selectPosts(),
+  suggestions: selectSuggestions(),
+  authenticated: selectAuthenticated(),
 });
 
 function mapDispatchToProps(dispatch) {

@@ -14,7 +14,7 @@ import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
 
 import { mapChange, fetchQuestInfo, fetchRecommendations, setDefaultQuest } from './actions';
-import { makeSelectRecommendations, makeSelectPlaces } from './selectors';
+import { selectRecommendations, selectPlaces } from './selectors';
 
 import { MAP_ACCESS_TOKEN } from './constants';
 
@@ -253,9 +253,9 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
     if (this.map) {
       this.clearMap();
 
-      props.recommendations.get('details').map((recommendation, index) => {
-        const display = recommendation.get('display');
-        let filter = ['==', 'e', recommendation.get('e')];
+      props.recommendations.details.map((recommendation, index) => {
+        const { display, e } = recommendation;
+        let filter = ['==', 'e', e];
 
         if (display === 'shape') {
           this.map.setFilter(`shape-border-offset-${index}`, filter);
@@ -272,7 +272,7 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   clearMap = () => {
-    this.props.recommendations.get('details').map((recommendation, index) => {
+    this.props.recommendations.details.map((recommendation, index) => {
       let filter = ['==', 'e', ''];
 
       this.map.setFilter(`shape-border-offset-${index}`, filter);
@@ -390,9 +390,10 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
         </MapBlock>
         <ScoreBoardBlock>
           {
-            this.props.recommendations.get('details').map((recommendation, index) =>
-              <div key={index} style={{ color: this.colors[index % 5] }}>{recommendation.get('name')} : {recommendation.get('score')}</div>
-            )
+            this.props.recommendations.details.map((recommendation, index) => {
+              const { name, score } = recommendation;
+              return <div key={index} style={{ color: this.colors[index % 5] }}>{name} : {score}</div>;
+            })
           }
         </ScoreBoardBlock>
         { brochure && <Brochure name={brochure} />}
@@ -426,8 +427,8 @@ function mapDispatchToProps(dispatch) {
 }
 
 const mapStateToProps = createStructuredSelector({
-  recommendations: makeSelectRecommendations(),
-  places: makeSelectPlaces(),
+  recommendations: selectRecommendations(),
+  places: selectPlaces(),
 });
 
 // Wrap the component to inject dispatch and state into it

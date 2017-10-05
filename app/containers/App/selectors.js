@@ -4,8 +4,8 @@
 
 import { createSelector } from 'reselect';
 
-const selectGlobal = (state) => state.get('global');
-const selectLocationState = () => (state) => state.get('route');
+const selectGlobal = (state) => state.global;
+const selectLocationState = () => (state) => state.route;
 
 export {
   selectGlobal,

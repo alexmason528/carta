@@ -2,10 +2,9 @@ import React, { Component, PropTypes, Children } from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { List, is } from 'immutable';
 import { Button, StarButton } from './Buttons';
 import { fetchRecommendations, typeSelect } from '../actions';
-import { makeSelectTypes, makeSelectCurrentTypes } from '../selectors';
+import { selectTypes, selectCurrentTypes } from '../selectors';
 import '../style.scss';
 
 class TypesPage extends Component {
@@ -266,8 +265,8 @@ function mapDispatchToProps(dispatch) {
 }
 
 const mapStateToProps = createStructuredSelector({
-  types: makeSelectTypes(),
-  currentTypes: makeSelectCurrentTypes(),
+  types: selectTypes(),
+  currentTypes: selectCurrentTypes(),
 });
 
 // Wrap the component to inject dispatch and state into it
