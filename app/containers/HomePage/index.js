@@ -12,8 +12,8 @@ import { browserHistory } from 'react-router';
 import { Container, Row, Col } from 'reactstrap';
 
 import { ImagePost, TextPost, NormalPost } from './Component/Posts';
-import { makeSelectPosts, makeSelectSuggestions } from './selectors';
-import { fetchCommunityInfo } from './actions';
+import { makeSelectPosts, makeSelectSuggestions, makeSelectAuthenticated } from './selectors';
+import { fetchCommunityInfoRequest } from './actions';
 
 import Suggestion from './Component/Suggestion';
 import Quest from './Component/Quest';
@@ -31,23 +31,11 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
     super();
     this.state = {
       showAuthForm: false,
-      showAddForm: false,
-      authType: 'login',
-      userInfo: {
-        email: '',
-        password: '',
-        confirmPassword: '',
-        fullname: '',
-      },
     };
   }
 
   componentWillMount() {
-    this.props.fetchCommunityInfo();
-  }
-
-  handleSubmit = (evt) => {
-    evt.preventDefault();
+    this.props.fetchCommunityInfoRequest();
   }
 
   googleLogin = () => {
@@ -68,17 +56,10 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
     });
   }
 
-  showAddForm = () => {
-    this.setState({
-      showAddForm: true,
-    });
-  }
-
   render() {
-    const { authType, showAuthForm, userInfo } = this.state;
-    const { posts, suggestions } = this.props;
+    const { showAuthForm } = this.state;
+    const { posts, suggestions, authenticated } = this.props;
 
-    const register = authType === 'register';
     const error = 'Wrong password';
 
     const authFormClass = className({
@@ -106,7 +87,7 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
         <Row className="homepage__row">
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col">
             <Profile onClick={this.toggleAuthForm} />
-            <AuthForm className={authFormClass} onClose={this.closeAuthForm} />
+            { !authenticated && <AuthForm className={authFormClass} /> }
             <Quest />
           </Col>
 
@@ -124,15 +105,18 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
                 const month = Months[parseInt(date.slice(5, 7), 10) - 1];
                 let day = parseInt(date.slice(8, 10), 10);
 
-                if (day === 1) {
-                  day = '1st';
-                } else if (day === 2) {
-                  day = '2nd';
-                } else if (day === 3) {
-                  day = '3rd';
+                let suffix;
+                if (day % 10 === 1) {
+                  suffix = 'st';
+                } else if (day % 10 === 2) {
+                  suffix = 'nd';
+                } else if (day % 10 === 3) {
+                  suffix = 'rd';
                 } else {
-                  day = `${day}th`;
+                  suffix = 'th';
                 }
+
+                day = `${day}${suffix}`;
 
                 let dateStr;
 
@@ -146,8 +130,7 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
                   dateStr = `${month} ${day}, ${date.slice(0, 4)}`;
                 }
 
-                dateStr += ` ${time}`;
-
+                dateStr += ` ${time.slice(0, 5)}`;
 
                 if (content && img) {
                   component = <NormalPost key={index} imageUrl={img} title={title} username={username} date={dateStr} content={content} />;
@@ -173,19 +156,21 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
 }
 
 HomePage.propTypes = {
-  fetchCommunityInfo: PropTypes.func,
+  fetchCommunityInfoRequest: PropTypes.func,
   posts: PropTypes.object,
   suggestions: PropTypes.object,
+  authenticated: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   posts: makeSelectPosts(),
   suggestions: makeSelectSuggestions(),
+  authenticated: makeSelectAuthenticated(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchCommunityInfo: () => dispatch(fetchCommunityInfo()),
+    fetchCommunityInfoRequest: () => dispatch(fetchCommunityInfoRequest()),
   };
 }
 // Wrap the component to inject dispatch and state into it

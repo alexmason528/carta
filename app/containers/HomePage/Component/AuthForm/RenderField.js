@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Alert } from 'reactstrap';
 
 const RenderField = ({
   input,
@@ -9,15 +10,10 @@ const RenderField = ({
   <div>
     <div>
       <input {...input} placeholder={label} type={type} />
-      {touched &&
-        ((error &&
-          <span>
-            {error}
-          </span>) ||
-          (warning &&
-            <span>
-              {warning}
-            </span>))}
+      {
+        touched && error &&
+        <div className="authForm__error">{error}</div>
+      }
     </div>
   </div>;
 

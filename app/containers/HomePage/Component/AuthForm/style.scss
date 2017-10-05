@@ -30,6 +30,7 @@
     &__inlineButtons {
       display: flex;
       justify-content: space-between;
+      margin-top: 10px;
       margin-bottom: 10px;
 
       button {
@@ -50,21 +51,19 @@
       }
     }
 
-    &__button {
-      color: #888;
-      padding: 8px;
-      cursor: pointer;
-      margin-right: 10px;
+    &__buttons {
 
-      &--active {
-        border: 1px solid #ddd;
-        background: #eee;  
-      }
+      button {
+        color: #888;
+        padding: 8px;
+        cursor: pointer;
+        margin-right: 10px;
+        margin-top: 20px;
 
-      img {
-        width: 20px;
-        height: 20px;
-        margin-right: 8px;
+        &.active {
+          border: 1px solid #ddd;
+          background: #eee;  
+        }
       }
     }
 
@@ -95,15 +94,15 @@
     }
 
     input {
+      margin-top: 10px;
       width: 100%;
       border: 1px solid #ccc;
       padding: 8px;
       color: #333;
-      margin-bottom: 10px;
     }
 
     &__error {
-      margin-top: 10px;
+      padding: 5px 0 0 5px;
       color: red;
     }
   }
