@@ -362,5 +362,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-// Wrap the component to inject dispatch and state into it
 export default connect(mapStateToProps, mapDispatchToProps)(Brochure)

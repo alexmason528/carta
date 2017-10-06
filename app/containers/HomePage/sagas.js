@@ -1,5 +1,5 @@
 /**
- * Gets the recommendations and locations
+ * Gets the community info
  */
 
 import { take, call, put, select, cancel, takeLatest } from 'redux-saga/effects'
@@ -68,7 +68,6 @@ export function* loginRequestWatcher() {
   yield cancel(watcher)
 }
 
-// Bootstrap sagas
 export default [
   getCommunityInfoRequestWatcher,
   loginRequestWatcher,

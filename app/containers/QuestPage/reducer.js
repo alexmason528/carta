@@ -1,15 +1,3 @@
-/*
- * HomeReducer
- *
- * The reducer takes care of our data. Using actions, we can change our
- * application state.
- * To add a new action, add it to the switch statement in the reducer function
- *
- * Example:
- * case YOUR_ACTION_CONSTANT:
- *   return state.set('yourStateVariable', true)
- */
-
 import {
   MAP_CHANGE,
   PLACE_SELECT,
@@ -34,8 +22,6 @@ import {
   FETCH_BROCHURE_SUCCESS,
   FETCH_BROCHURE_ERROR,
 } from './constants'
-
-// The initial state of the App
 
 const initialState = {
   questInfo: {

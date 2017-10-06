@@ -1,7 +1,5 @@
 /*
  * QuestPage
- *
- * This is the first thing users see of our App, at the '/' route
  */
 
 import React, { Component, PropTypes } from 'react'
@@ -426,5 +424,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-// Wrap the component to inject dispatch and state into it
 export default connect(mapStateToProps, mapDispatchToProps)(QuestPage)

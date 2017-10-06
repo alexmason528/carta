@@ -166,10 +166,8 @@ export function* getBrochureInformationWatcher() {
   yield cancel(watcher)
 }
 
-// Bootstrap sagas
 export default [
   getRecommendationsWatcher,
   getQuestInfoWatcher,
   getBrochureInformationWatcher,
 ]
-
