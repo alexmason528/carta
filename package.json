@@ -103,17 +103,13 @@
       }
     },
     "rules": {
-      "arrow-parens": [
-        "error",
-        "always"
-      ],
+      "arrow-parens": 0,
       "arrow-body-style": 0,
       "comma-dangle": [
         2,
         "always-multiline"
       ],
       "semi": 0,
-      "arrow-parens": 0,
       "import/imports-first": 0,
       "import/newline-after-import": 0,
       "import/no-dynamic-require": 0,
@@ -253,6 +249,7 @@
     "react-dom": "15.4.1",
     "react-helmet": "3.2.2",
     "react-intl": "2.1.5",
+    "react-loader-advanced": "^1.7.0",
     "react-mapbox-gl": "^2.1.0",
     "react-redux": "4.4.6",
     "react-router": "3.0.0",

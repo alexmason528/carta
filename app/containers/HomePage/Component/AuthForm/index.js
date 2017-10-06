@@ -1,8 +1,11 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
+import Loader from 'react-loader-advanced'
 import { loginRequest } from 'containers/App/actions'
-import { selectLoginError, selectRegisterError, selectUser } from 'containers/App/selectors'
+import { selectLoginInfo, selectRegisterInfo } from 'containers/App/selectors'
+import LoadingSpinner from 'components/LoadingSpinner'
+import { QuarterSpinner } from 'components/SvgIcon'
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'
 import './style.scss'
@@ -19,9 +22,9 @@ class AuthForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { loginError, registerError } = nextProps
+    const { loginInfo, registerInfo } = nextProps
 
-    if (loginError === 'Invalid username') {
+    if (loginInfo.error === 'Invalid username') {
       this.setState({
         loginError: null,
         authType: 'register',
@@ -29,17 +32,10 @@ class AuthForm extends Component {
     } else {
       this.setState({
         ...this.state,
-        loginError,
-        registerError,
+        loginError: loginInfo.error,
+        registerError: registerInfo.error,
       })
     }
-  }
-
-  handleLoginSubmit = values => {
-    this.props.loginRequest(values)
-  }
-
-  handleRegisterSubmit = values => {
   }
 
   handleAuthTypeChange = authType => {
@@ -52,9 +48,15 @@ class AuthForm extends Component {
 
   render() {
     const { authType, loginError, registerError, userInfo } = this.state
+    const { loginInfo, registerInfo } = this.props
+
+    const spinnerShow = loginInfo.submitting || registerInfo.submitting
 
     return (
       <div className={this.props.className}>
+        <LoadingSpinner show={spinnerShow}>
+          <QuarterSpinner width={30} height={30} />
+        </LoadingSpinner>
         <button className="authForm__closeBtn" onClick={this.props.onClose}><img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/icon/close.png" role="presentation" /></button>
         <div className="authForm__divider">
           <span>With</span>
@@ -66,7 +68,7 @@ class AuthForm extends Component {
         <div className="authForm__divider">
           <span>Or</span>
         </div>
-        { authType === 'login' && <LoginForm onSubmit={this.handleLoginSubmit} loginError={loginError} onAuthTypeChange={this.handleAuthTypeChange} /> }
+        { authType === 'login' && <LoginForm onSubmit={this.props.loginRequest} loginError={loginError} onAuthTypeChange={this.handleAuthTypeChange} /> }
         { authType === 'register' && <RegisterForm onSubmit={this.handleLoginSubmit} registerError={registerError} onAuthTypeChange={this.handleAuthTypeChange} /> }
       </div>
     )
@@ -76,14 +78,14 @@ class AuthForm extends Component {
 AuthForm.propTypes = {
   loginRequest: PropTypes.func,
   onClose: PropTypes.func,
-  loginError: PropTypes.string,
-  registerError: PropTypes.string,
+  loginInfo: PropTypes.object,
+  registerInfo: PropTypes.object,
   className: PropTypes.string,
 }
 
 const mapStateToProps = createStructuredSelector({
-  loginError: selectLoginError(),
-  registerError: selectRegisterError(),
+  loginInfo: selectLoginInfo(),
+  registerInfo: selectRegisterInfo(),
 })
 
 const mapDispatchToProps = dispatch => {

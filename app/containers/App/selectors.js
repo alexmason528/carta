@@ -7,14 +7,14 @@ import { createSelector } from 'reselect';
 const selectGlobal = state => state.global;
 const selectLocationState = () => state => state.route;
 
-const selectLoginError = () => createSelector(
+const selectLoginInfo = () => createSelector(
   selectGlobal,
-  substate => substate.loginError
+  substate => substate.login
 );
 
-const selectRegisterError = () => createSelector(
+const selectRegisterInfo = () => createSelector(
   selectGlobal,
-  substate => substate.registerError
+  substate => substate.register
 );
 
 const selectAuthenticated = () => createSelector(
@@ -30,8 +30,8 @@ const selectUser = () => createSelector(
 export {
   selectGlobal,
   selectLocationState,
-  selectLoginError,
-  selectRegisterError,
+  selectLoginInfo,
+  selectRegisterInfo,
   selectAuthenticated,
   selectUser,
 };

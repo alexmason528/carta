@@ -26,8 +26,14 @@ import {
 const initialState = {
   user: JSON.parse(getItem('auth')) || {},
   authenticated: !!getItem('auth'),
-  loginError: null,
-  registerError: null,
+  login: {
+    submitting: false,
+    error: null,
+  },
+  register: {
+    submitting: false,
+    error: null,
+  },
 }
 
 function appReducer(state = initialState, action) {
@@ -37,7 +43,10 @@ function appReducer(state = initialState, action) {
         ...state,
         user: {},
         authenticated: false,
-        loginError: null,
+        login: {
+          submitting: true,
+          error: null,
+        },
       }
 
     case LOGIN_SUCCESS:
@@ -45,7 +54,10 @@ function appReducer(state = initialState, action) {
         ...state,
         user: action.payload,
         authenticated: true,
-        loginError: null,
+        login: {
+          submitting: false,
+          error: null,
+        },
       }
 
     case LOGIN_ERROR:
@@ -53,18 +65,15 @@ function appReducer(state = initialState, action) {
         ...state,
         user: {},
         authenticated: false,
-        loginError: action.payload,
+        login: {
+          submitting: false,
+          error: action.payload,
+        },
       }
 
     case LOGOUT:
       removeItem('auth')
-
-      return {
-        ...state,
-        user: {},
-        authenticated: false,
-        loginError: null,
-      }
+      return initialState
 
     default:
       return state
