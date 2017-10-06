@@ -9,8 +9,9 @@ import TypesPage from './TypesPage'
 import '../style.scss'
 
 export default class Quest extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
+
     this.state = {
       currentTab: 0,
     }

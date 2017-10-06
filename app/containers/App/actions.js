@@ -19,6 +19,8 @@ import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_ERROR,
+
+  LOGOUT,
 } from './constants'
 
 /**
@@ -48,6 +50,12 @@ export function loginError(payload) {
   return {
     type: LOGIN_ERROR,
     payload,
+  }
+}
+
+export function logOut() {
+  return {
+    type: LOGOUT,
   }
 }
 

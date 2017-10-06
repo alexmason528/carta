@@ -8,8 +8,9 @@ import RegisterForm from './RegisterForm'
 import './style.scss'
 
 class AuthForm extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
+
     this.state = {
       authType: 'login',
       loginError: null,
@@ -80,16 +81,16 @@ AuthForm.propTypes = {
   className: PropTypes.string,
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    loginRequest: payload => dispatch(loginRequest(payload)),
-  }
-}
-
 const mapStateToProps = createStructuredSelector({
   loginError: selectLoginError(),
   registerError: selectRegisterError(),
 })
+
+const mapDispatchToProps = dispatch => {
+  return {
+    loginRequest: payload => dispatch(loginRequest(payload)),
+  }
+}
 
 // Wrap the component to inject dispatch and state into it
 export default connect(mapStateToProps, mapDispatchToProps)(AuthForm)

@@ -10,13 +10,15 @@
  *   return state.set('yourStateVariable', true)
  */
 
-import { getItem } from '../../utils/localStorage'
+import { getItem, removeItem } from '../../utils/localStorage'
 
 // The initial state of the App
 import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_ERROR,
+
+  LOGOUT,
 } from './constants'
 
 // The initial state of the App
@@ -52,6 +54,16 @@ function appReducer(state = initialState, action) {
         user: {},
         authenticated: false,
         loginError: action.payload,
+      }
+
+    case LOGOUT:
+      removeItem('auth')
+
+      return {
+        ...state,
+        user: {},
+        authenticated: false,
+        loginError: null,
       }
 
     default:

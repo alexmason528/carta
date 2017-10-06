@@ -8,8 +8,8 @@ import { selectTypes, selectCurrentTypes } from '../selectors'
 import '../style.scss'
 
 class TypesPage extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
 
     this.state = {
       types: [],
@@ -257,18 +257,17 @@ TypesPage.propTypes = {
   fetchRecommendations: PropTypes.func,
 }
 
+const mapStateToProps = createStructuredSelector({
+  types: selectTypes(),
+  currentTypes: selectCurrentTypes(),
+})
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return {
     fetchRecommendations: () => dispatch(fetchRecommendations()),
     typeSelect: typeInfo => dispatch(typeSelect(typeInfo)),
   }
 }
-
-const mapStateToProps = createStructuredSelector({
-  types: selectTypes(),
-  currentTypes: selectCurrentTypes(),
-})
 
 // Wrap the component to inject dispatch and state into it
 export default connect(mapStateToProps, mapDispatchToProps)(TypesPage)

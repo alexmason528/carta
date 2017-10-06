@@ -4,8 +4,9 @@ import className from 'classnames'
 import './style.scss'
 
 export default class ImagePost extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
+
     this.state = {
       showInfo: false,
     }

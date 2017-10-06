@@ -17,8 +17,9 @@ import '../style.scss'
 
 class Brochure extends Component { // eslint-disable-line react/prefer-stateless-function
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
+
     this.state = {
       initialized: false,
     }
@@ -351,15 +352,15 @@ Brochure.propTypes = {
   name: PropTypes.string.isRequired,
 }
 
-function mapDispatchToProps(dispatch) {
+const mapStateToProps = createStructuredSelector({
+  brochure: selectBrochure(),
+})
+
+const mapDispatchToProps = dispatch => {
   return {
     fetchBrochure: name => dispatch(fetchBrochure(name)),
   }
 }
-
-const mapStateToProps = createStructuredSelector({
-  brochure: selectBrochure(),
-})
 
 // Wrap the component to inject dispatch and state into it
 export default connect(mapStateToProps, mapDispatchToProps)(Brochure)

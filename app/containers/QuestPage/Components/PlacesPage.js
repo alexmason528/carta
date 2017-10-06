@@ -9,8 +9,9 @@ import { selectPlaces } from '../selectors'
 import '../style.scss'
 
 class PlacesPage extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
+
     this.state = {
       places: [],
       search: '',
@@ -74,15 +75,15 @@ PlacesPage.propTypes = {
   fetchRecommendations: PropTypes.func,
 }
 
-function mapDispatchToProps(dispatch) {
+const mapStateToProps = createStructuredSelector({
+  places: selectPlaces(),
+})
+
+const mapDispatchToProps = dispatch => {
   return {
     fetchRecommendations: () => dispatch(fetchRecommendations()),
   }
 }
-
-const mapStateToProps = createStructuredSelector({
-  places: selectPlaces(),
-})
 
 // Wrap the component to inject dispatch and state into it
 export default connect(mapStateToProps, mapDispatchToProps)(PlacesPage)

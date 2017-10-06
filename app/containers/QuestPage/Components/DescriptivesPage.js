@@ -8,8 +8,8 @@ import { selectDescriptives, selectCurrentDescriptives } from '../selectors'
 import '../style.scss'
 
 class DescriptivesPage extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
 
     this.state = {
       descriptives: [],
@@ -346,17 +346,17 @@ DescriptivesPage.propTypes = {
   fetchRecommendations: PropTypes.func,
 }
 
-function mapDispatchToProps(dispatch) {
+const mapStateToProps = createStructuredSelector({
+  descriptives: selectDescriptives(),
+  currentDescriptives: selectCurrentDescriptives(),
+})
+
+const mapDispatchToProps = dispatch => {
   return {
     descriptiveSelect: (descriptiveInfo) => dispatch(descriptiveSelect(descriptiveInfo)),
     fetchRecommendations: () => dispatch(fetchRecommendations()),
   }
 }
-
-const mapStateToProps = createStructuredSelector({
-  descriptives: selectDescriptives(),
-  currentDescriptives: selectCurrentDescriptives(),
-})
 
 // Wrap the component to inject dispatch and state into it
 export default connect(mapStateToProps, mapDispatchToProps)(DescriptivesPage)

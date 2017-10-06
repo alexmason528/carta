@@ -12,6 +12,8 @@ import ReactResizeDetector from 'react-resize-detector'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
+import Logo from 'components/Logo'
+import LogoTab from 'components/LogoTab'
 import URLParser from 'utils/questURLparser'
 import { mapChange, fetchQuestInfo, fetchRecommendations, setDefaultQuest } from './actions'
 import { selectRecommendations, selectPlaces } from './selectors'
@@ -25,8 +27,8 @@ import './style.scss'
 const Map = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN })
 
 class QuestPage extends Component { // eslint-disable-line react/prefer-stateless-function
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
 
     this.state = {
       showQuest: true,
@@ -356,10 +358,8 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
             { name: 'description', content: 'Carta' },
           ]}
         />
-        <img className="logo" onClick={() => { browserHistory.push('/home') }} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506785283/image/content/logo-100.png" role="presentation" />
-        <div className="logo-name-tab">
-          <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506785283/image/content/name-vertical.png" role="presentation" />
-        </div>
+        <Logo />
+        <LogoTab />
         <QuestButton
           className={questButtonClass}
           onClick={this.questButtonClicked}
@@ -412,7 +412,12 @@ QuestPage.propTypes = {
   setDefaultQuest: PropTypes.func,
 }
 
-function mapDispatchToProps(dispatch) {
+const mapStateToProps = createStructuredSelector({
+  recommendations: selectRecommendations(),
+  places: selectPlaces(),
+})
+
+const mapDispatchToProps = dispatch => {
   return {
     mapChange: mapInfo => dispatch(mapChange(mapInfo)),
     fetchQuestInfo: () => dispatch(fetchQuestInfo()),
@@ -420,11 +425,6 @@ function mapDispatchToProps(dispatch) {
     setDefaultQuest: data => dispatch(setDefaultQuest(data)),
   }
 }
-
-const mapStateToProps = createStructuredSelector({
-  recommendations: selectRecommendations(),
-  places: selectPlaces(),
-})
 
 // Wrap the component to inject dispatch and state into it
 export default connect(mapStateToProps, mapDispatchToProps)(QuestPage)

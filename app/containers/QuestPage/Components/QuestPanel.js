@@ -87,7 +87,12 @@ QuestPanel.propTypes = {
   questRemove: PropTypes.func,
 }
 
-function mapDispatchToProps(dispatch) {
+const mapStateToProps = createStructuredSelector({
+  quests: selectQuests(),
+  currentQuestIndex: selectCurrentQuestIndex(),
+})
+
+const mapDispatchToProps = dispatch => {
   return {
     questAdd: () => dispatch(questAdd()),
     questSelect: index => dispatch(questSelect(index)),
@@ -95,11 +100,6 @@ function mapDispatchToProps(dispatch) {
     fetchRecommendations: () => dispatch(fetchRecommendations()),
   }
 }
-
-const mapStateToProps = createStructuredSelector({
-  quests: selectQuests(),
-  currentQuestIndex: selectCurrentQuestIndex(),
-})
 
 // Wrap the component to inject dispatch and state into it
 export default connect(mapStateToProps, mapDispatchToProps)(QuestPanel)

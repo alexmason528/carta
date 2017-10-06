@@ -11,6 +11,8 @@ import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
 import { Container, Row, Col } from 'reactstrap'
 import { selectAuthenticated, selectUser } from 'containers/App/selectors'
+import Logo from 'components/Logo'
+import LogoTab from 'components/LogoTab'
 import { ImagePost, TextPost, NormalPost } from './Component/Posts'
 import { selectPosts, selectSuggestions } from './selectors'
 import { fetchCommunityInfoRequest } from './actions'
@@ -19,14 +21,13 @@ import Quest from './Component/Quest'
 import Profile from './Component/Profile'
 import AuthForm from './Component/AuthForm'
 import AddPostButton from './Component/AddPostButton'
-
 import './style.scss'
 
 const Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 class HomePage extends Component { // eslint-disable-line react/prefer-stateless-function
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       showAuthForm: false,
     }
@@ -78,10 +79,8 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
             { name: 'description', content: 'Carta' },
           ]}
         />
-        <img className="logo" onClick={() => { browserHistory.push('/') }} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506785283/image/content/logo-100.png" role="presentation" />
-        <div className="logo-name-tab">
-          <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506785283/image/content/name-vertical.png" role="presentation" />
-        </div>
+        <Logo />
+        <LogoTab />
         <Row className="homepage__row">
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col">
             <Profile onClick={this.toggleAuthForm} authenticated={authenticated} user={user} />
@@ -171,7 +170,7 @@ const mapStateToProps = createStructuredSelector({
   user: selectUser(),
 })
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return {
     fetchCommunityInfoRequest: () => dispatch(fetchCommunityInfoRequest()),
   }
