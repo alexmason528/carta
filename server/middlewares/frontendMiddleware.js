@@ -62,9 +62,10 @@ const addProdMiddlewares = (app, options) => {
 
   app.use(compression())
   app.use(publicPath, express.static(outputPath))
-  app.use('/api/v1/map', mapRoutes)
-  app.use('/api/v1/import', importRoutes)
+  app.use('/api/v1/auth', authRoutes)
   app.use('/api/v1/community', communityRoutes)
+  app.use('/api/v1/import', importRoutes)
+  app.use('/api/v1/map', mapRoutes)
 
   app.get('*', (req, res) => res.sendFile(path.resolve(outputPath, 'index.html')))
 }
