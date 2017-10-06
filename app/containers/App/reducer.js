@@ -73,7 +73,11 @@ function appReducer(state = initialState, action) {
 
     case LOGOUT:
       removeItem('auth')
-      return initialState
+      return {
+        ...state,
+        user: {},
+        authenticated: false,
+      }
 
     default:
       return state
