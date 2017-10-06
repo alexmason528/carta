@@ -5,7 +5,9 @@ import './style.scss'
 class Profile extends Component {
 
   componentWillMount() {
-    this.rand = Math.floor((Math.random() * 76)) + 1
+    let rand = Math.floor((Math.random() * 76)) + 1
+    this.coverImgRand = (rand < 10) ? `000${rand}` : `00${rand}`;
+    this.profilePicRand = Math.floor((Math.random() * 9))
   }
 
   componentDidMount() {
@@ -17,7 +19,6 @@ class Profile extends Component {
         this.handleResize()
       }
     })
-
     window.addEventListener('resize', this.handleResize)
   }
 
@@ -34,14 +35,18 @@ class Profile extends Component {
   }
 
   render() {
-    const filename = (this.rand < 10) ? `000${this.rand}` : `00${this.rand}`
+    const { authenticated, user } = this.props
+    const username = (authenticated) ? `${user.firstname} ${user.lastname}` : 'Sign in'
+    const coverImg = (authenticated && user.cover_img) ? user.cover_img : `http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/wide/${this.coverImgRand}.jpg`
+    const profileImg = (authenticated && user.profile_pic) ? user.profile_pic : `http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/profile/bag/${this.profilePicRand}.jpg`
+
     return (
       <div className="profile" onClick={this.props.onClick}>
-        <img src={`http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/wide/${filename}.jpg`} role="presentation" />
+        <img src={coverImg} role="presentation" />
         <div className="profile__pic">
-          <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/profile/bag/6.jpg" role="presentation" />
+          <img src={profileImg} role="presentation" />
         </div>
-        <h2>Sign in</h2>
+        <h2>{username}</h2>
       </div>
     )
   }
@@ -49,6 +54,8 @@ class Profile extends Component {
 
 Profile.propTypes = {
   onClick: PropTypes.func,
+  authenticated: PropTypes.bool,
+  user: PropTypes.object,
 }
 
 export default Profile

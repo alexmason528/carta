@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
 import { Container, Row, Col } from 'reactstrap'
-import { selectAuthenticated } from 'containers/App/selectors'
+import { selectAuthenticated, selectUser } from 'containers/App/selectors'
 import { ImagePost, TextPost, NormalPost } from './Component/Posts'
 import { selectPosts, selectSuggestions } from './selectors'
 import { fetchCommunityInfoRequest } from './actions'
@@ -25,7 +25,6 @@ import './style.scss'
 const Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 class HomePage extends Component { // eslint-disable-line react/prefer-stateless-function
-
   constructor() {
     super()
     this.state = {
@@ -57,7 +56,7 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
 
   render() {
     const { showAuthForm } = this.state
-    const { posts, suggestions, authenticated } = this.props
+    const { posts, suggestions, authenticated, user } = this.props
 
     const error = 'Wrong password'
 
@@ -85,7 +84,7 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
         </div>
         <Row className="homepage__row">
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col">
-            <Profile onClick={this.toggleAuthForm} />
+            <Profile onClick={this.toggleAuthForm} authenticated={authenticated} user={user} />
             { !authenticated && <AuthForm className={authFormClass} onClose={this.closeAuthForm} /> }
             <Quest />
           </Col>
@@ -160,6 +159,7 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
 HomePage.propTypes = {
   fetchCommunityInfoRequest: PropTypes.func,
   posts: PropTypes.array,
+  user: PropTypes.object,
   suggestions: PropTypes.array,
   authenticated: PropTypes.bool,
 }
@@ -168,6 +168,7 @@ const mapStateToProps = createStructuredSelector({
   posts: selectPosts(),
   suggestions: selectSuggestions(),
   authenticated: selectAuthenticated(),
+  user: selectUser(),
 })
 
 function mapDispatchToProps(dispatch) {

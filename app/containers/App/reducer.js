@@ -22,7 +22,7 @@ import {
 // The initial state of the App
 
 const initialState = {
-  user: getItem('auth') || {},
+  user: JSON.parse(getItem('auth')) || {},
   authenticated: !!getItem('auth'),
   loginError: null,
   registerError: null,
