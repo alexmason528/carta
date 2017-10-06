@@ -1,7 +1,17 @@
-export const required = (value) => (value ? undefined : 'Required');
-export const email = (value) =>
-  value && !/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/i.test(value)
-    ? 'Invalid email address'
-    : undefined;
+import { validatorFactory } from 'utils/reduxForm'
 
-export const passwordStrong = (value) => value && value.length > 7 ? undefined : 'Password must me greater than 6 characters';
+const schema = {
+  email: { presence: true, email: true },
+  password: {
+    presence: true,
+    length: {
+      minimum: 3,
+    },
+  },
+  confirmPassword: {
+    equality: 'password',
+  },
+  fullname: { presence: true },
+}
+
+export default validatorFactory(schema)

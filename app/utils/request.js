@@ -1,5 +1,5 @@
-import 'whatwg-fetch';
-import { pick } from 'lodash';
+import 'whatwg-fetch'
+import { pick } from 'lodash'
 /**
  * Parses the JSON returned by a network request
  *
@@ -8,7 +8,7 @@ import { pick } from 'lodash';
  * @return {object}          The parsed JSON from the request
  */
 function parseJSON(response) {
-  return response.json();
+  return response.json()
 }
 
 /**
@@ -20,17 +20,17 @@ function parseJSON(response) {
  */
 function checkStatus(response) {
   if (response.ok) {
-    return response;
+    return response
   }
 
-  const err = pick(response, ['status', 'statusText']);
+  const err = pick(response, ['status', 'statusText'])
 
   return response.json()
-    .then((json) => {
-      throw Object.assign(err, pick(json.error, ['details']));
+    .then(json => {
+      throw Object.assign(err, pick(json.error, ['details']))
     }, () => {
-      throw Object.assign(err, { message: 'Failed to parse JSON' });
-    });
+      throw Object.assign(err, { message: 'Failed to parse JSON' })
+    })
 }
 
 /**
@@ -44,5 +44,5 @@ function checkStatus(response) {
 export default function request(url, options) {
   return fetch(url, options)
     .then(checkStatus)
-    .then(parseJSON);
+    .then(parseJSON)
 }

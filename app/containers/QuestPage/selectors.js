@@ -2,77 +2,77 @@
  * Homepage selectors
  */
 
-import { createSelector } from 'reselect';
+import { createSelector } from 'reselect'
 
-const selectQuest = (state) => state.quest;
+const selectQuest = state => state.quest
 
 const selectQuestInfo = () => createSelector(
   selectQuest,
-  (questState) => questState.questInfo
-);
+  substate => substate.questInfo
+)
 
 const selectRecommendations = () => createSelector(
   selectQuest,
-  (questState) => questState.recommendations
-);
+  substate => substate.recommendations
+)
 
 const selectViewport = () => createSelector(
   selectQuest,
-  (questState) => questState.viewport
-);
+  substate => substate.viewport
+)
 
 const selectCategories = () => createSelector(
   selectQuest,
-  (questState) => questState.questInfo.categories
-);
+  substate => substate.questInfo.categories
+)
 
 const selectQuests = () => createSelector(
   selectQuest,
-  (questState) => questState.questInfo.quests
-);
+  substate => substate.questInfo.quests
+)
 
 const selectCurrentQuestIndex = () => createSelector(
   selectQuest,
-  (questState) => questState.questInfo.currentQuestIndex
-);
+  substate => substate.questInfo.currentQuestIndex
+)
 
 const selectPlaces = () => createSelector(
   selectQuest,
-  (questState) => questState.questInfo.categories.places
-);
+  substate => substate.questInfo.categories.places
+)
 
 const selectTypes = () => createSelector(
   selectQuest,
-  (questState) => questState.questInfo.categories.types
-);
+  substate => substate.questInfo.categories.types
+)
 
 const selectCurrentTypes = () => createSelector(
   selectQuest,
-  (questState) => {
-    const currentIndex = questState.questInfo.currentQuestIndex;
-    const quests = questState.questInfo.quests;
-    return quests[currentIndex].types;
+  substate => {
+    const currentIndex = substate.questInfo.currentQuestIndex
+    const quests = substate.questInfo.quests
+    return quests[currentIndex].types
   }
-);
+)
 
 const selectDescriptives = () => createSelector(
   selectQuest,
-  (questState) => questState.questInfo.categories.descriptives
-);
+  substate => substate.questInfo.categories.descriptives
+)
 
 const selectCurrentDescriptives = () => createSelector(
   selectQuest,
-  (questState) => {
-    const currentIndex = questState.questInfo.currentQuestIndex;
-    const quests = questState.questInfo.quests;
-    return quests[currentIndex].descriptives;
+  substate => {
+    const currentIndex = substate.questInfo.currentQuestIndex
+    const quests = substate.questInfo.quests
+    return quests[currentIndex].descriptives
   }
-);
+)
 
 const selectBrochure = () => createSelector(
   selectQuest,
-  (questState) => questState.brochure
-);
+  substate => substate.brochure
+)
 
 export {
   selectQuest,
@@ -88,4 +88,4 @@ export {
   selectDescriptives,
   selectCurrentDescriptives,
   selectBrochure,
-};
+}

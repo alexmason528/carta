@@ -3,10 +3,10 @@
  * If we were to do this in store.js, reducers wouldn't be hot reloadable.
  */
 
-import { combineReducers } from 'redux';
-import { reducer as formReducer } from 'redux-form';
-import { routerReducer } from 'react-router-redux';
-import globalReducer from 'containers/App/reducer';
+import { combineReducers } from 'redux'
+import { reducer as formReducer } from 'redux-form'
+import { routerReducer } from 'react-router-redux'
+import globalReducer from 'containers/App/reducer'
 
 /**
  * Creates the main reducer with the asynchronously loaded ones
@@ -17,5 +17,5 @@ export default function createReducer(asyncReducers) {
     form: formReducer,
     global: globalReducer,
     ...asyncReducers,
-  });
+  })
 }

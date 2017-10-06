@@ -7,7 +7,7 @@
  *
  * Example:
  * case YOUR_ACTION_CONSTANT:
- *   return state.set('yourStateVariable', true);
+ *   return state.set('yourStateVariable', true)
  */
 
 import {
@@ -33,7 +33,7 @@ import {
   FETCH_BROCHURE,
   FETCH_BROCHURE_SUCCESS,
   FETCH_BROCHURE_ERROR,
-} from './constants';
+} from './constants'
 
 // The initial state of the App
 
@@ -83,17 +83,17 @@ const initialState = {
     error: null,
     details: {},
   },
-};
+}
 
 
 function questReducer(state = initialState, action) {
-  let questInfo;
-  let recommendations;
-  let currentQuestIndex;
-  let types;
-  let descriptives;
-  let quests;
-  let brochure;
+  let questInfo
+  let recommendations
+  let currentQuestIndex
+  let types
+  let descriptives
+  let quests
+  let brochure
 
   switch (action.type) {
 
@@ -111,12 +111,12 @@ function questReducer(state = initialState, action) {
             y: action.payload.bounds._sw.lat,
           },
         },
-      };
+      }
 
     case PLACE_SELECT:
-      currentQuestIndex = state.questInfo.currentQuestIndex;
-      quests = state.questInfo.quests;
-      quests[currentQuestIndex].place = action.payload;
+      currentQuestIndex = state.questInfo.currentQuestIndex
+      quests = state.questInfo.quests
+      quests[currentQuestIndex].place = action.payload
 
       return {
         ...state,
@@ -124,12 +124,12 @@ function questReducer(state = initialState, action) {
           ...state.questInfo,
           quests,
         },
-      };
+      }
 
     case TYPE_SELECT:
-      currentQuestIndex = state.questInfo.currentQuestIndex;
-      quests = state.questInfo.quests;
-      quests[currentQuestIndex].types = action.payload;
+      currentQuestIndex = state.questInfo.currentQuestIndex
+      quests = state.questInfo.quests
+      quests[currentQuestIndex].types = action.payload
 
       return {
         ...state,
@@ -137,12 +137,12 @@ function questReducer(state = initialState, action) {
           ...state.questInfo,
           quests,
         },
-      };
+      }
 
     case DESCRIPTIVE_SELECT:
-      currentQuestIndex = state.questInfo.currentQuestIndex;
-      quests = state.questInfo.quests;
-      quests[currentQuestIndex].descriptives = action.payload;
+      currentQuestIndex = state.questInfo.currentQuestIndex
+      quests = state.questInfo.quests
+      quests[currentQuestIndex].descriptives = action.payload
 
       return {
         ...state,
@@ -150,7 +150,7 @@ function questReducer(state = initialState, action) {
           ...state.questInfo,
           quests,
         },
-      };
+      }
 
     case QUEST_ADD:
       const defaultQuest = {
@@ -170,7 +170,7 @@ function questReducer(state = initialState, action) {
           active: [],
           inactive: [],
         },
-      };
+      }
 
       const newState = {
         ...state,
@@ -181,9 +181,9 @@ function questReducer(state = initialState, action) {
             defaultQuest,
           ],
         },
-      };
+      }
 
-      return newState;
+      return newState
 
     case QUEST_SELECT:
       return {
@@ -192,12 +192,12 @@ function questReducer(state = initialState, action) {
           ...state.questInfo,
           currentQuestIndex: action.payload,
         },
-      };
+      }
 
     case QUEST_REMOVE:
-      currentQuestIndex = state.questInfo.currentQuestIndex;
-      let newQuests = [...state.questInfo.quests];
-      newQuests.splice(action.payload, 1);
+      currentQuestIndex = state.questInfo.currentQuestIndex
+      let newQuests = [...state.questInfo.quests]
+      newQuests.splice(action.payload, 1)
 
       if (action.payload < currentQuestIndex) {
         return {
@@ -207,7 +207,7 @@ function questReducer(state = initialState, action) {
             quests: newQuests,
             currentQuestIndex: currentQuestIndex - 1,
           },
-        };
+        }
       }
 
       return {
@@ -216,10 +216,10 @@ function questReducer(state = initialState, action) {
           ...state.questInfo,
           quests: newQuests,
         },
-      };
+      }
 
     case SET_DEFAULT_QUEST:
-      return state;
+      return state
 
     case FETCH_QUESTINFO:
       questInfo = {
@@ -232,12 +232,12 @@ function questReducer(state = initialState, action) {
         },
         quests: initialState.questInfo.quests,
         currentQuestIndex: 0,
-      };
+      }
 
       return {
         ...state,
         questInfo,
-      };
+      }
 
     case FETCH_QUESTINFO_SUCCESS:
       questInfo = {
@@ -246,12 +246,12 @@ function questReducer(state = initialState, action) {
         categories: action.payload,
         quests: initialState.questInfo.quests,
         currentQuestIndex: 0,
-      };
+      }
 
       return {
         ...state,
         questInfo,
-      };
+      }
 
     case FETCH_QUESTINFO_ERROR:
       questInfo = {
@@ -264,12 +264,12 @@ function questReducer(state = initialState, action) {
         },
         quests: initialState.questInfo.quests,
         currentQuestIndex: 0,
-      };
+      }
 
       return {
         ...state,
         questInfo,
-      };
+      }
 
     case FETCH_RECOMMENDATIONS:
       return {
@@ -279,7 +279,7 @@ function questReducer(state = initialState, action) {
           fetching: true,
           error: null,
         },
-      };
+      }
 
     case FETCH_RECOMMENDATIONS_SUCCESS:
       return {
@@ -289,7 +289,7 @@ function questReducer(state = initialState, action) {
           error: null,
           details: action.payload,
         },
-      };
+      }
 
     case FETCH_RECOMMENDATIONS_ERROR:
       return {
@@ -299,7 +299,7 @@ function questReducer(state = initialState, action) {
           error: action.payload,
           details: [],
         },
-      };
+      }
 
     case FETCH_BROCHURE:
       return {
@@ -309,7 +309,7 @@ function questReducer(state = initialState, action) {
           error: null,
           details: {},
         },
-      };
+      }
 
     case FETCH_BROCHURE_SUCCESS:
       return {
@@ -319,7 +319,7 @@ function questReducer(state = initialState, action) {
           error: null,
           details: action.payload,
         },
-      };
+      }
 
     case FETCH_BROCHURE_ERROR:
       return {
@@ -329,11 +329,11 @@ function questReducer(state = initialState, action) {
           error: action.payload,
           details: {},
         },
-      };
+      }
 
     default:
-      return state;
+      return state
   }
 }
 
-export default questReducer;
+export default questReducer

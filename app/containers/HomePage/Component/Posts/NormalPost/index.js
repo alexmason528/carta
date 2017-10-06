@@ -1,5 +1,5 @@
-import React, { Component, PropTypes } from 'react';
-import './style.scss';
+import React, { Component, PropTypes } from 'react'
+import './style.scss'
 
 const NormalPost = ({ imageUrl, title, username, date, content }) => {
   return (
@@ -15,8 +15,8 @@ const NormalPost = ({ imageUrl, title, username, date, content }) => {
         {content}
       </p>
     </div>
-  );
-};
+  )
+}
 
 NormalPost.propTypes = {
   imageUrl: PropTypes.string,
@@ -27,6 +27,6 @@ NormalPost.propTypes = {
   ]),
   date: PropTypes.string,
   content: PropTypes.string,
-};
+}
 
-export default NormalPost;
+export default NormalPost

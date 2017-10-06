@@ -1,5 +1,5 @@
-const Post = require('../models/post');
-const Suggestion = require('../models/suggestion');
+const Post = require('../models/post')
+const Suggestion = require('../models/suggestion')
 
 /**
  * Get all categories
@@ -11,12 +11,12 @@ const getCommunityInfo = (req, res) => {
   let communityInfo = {
     posts: [],
     suggestions: [],
-  };
+  }
 
   let getInfo = {
     posts: false,
     suggestions: false,
-  };
+  }
 
   const pipeline = [
     {
@@ -38,29 +38,29 @@ const getCommunityInfo = (req, res) => {
         'author.verified': 0,
       },
     },
-  ];
+  ]
 
   Post.aggregate(pipeline, (error, elements) => {
-    if (error) throw error;
+    if (error) throw error
 
-    communityInfo.posts = elements;
-    getInfo.posts = true;
+    communityInfo.posts = elements
+    getInfo.posts = true
 
     if (getInfo.posts && getInfo.suggestions) {
-      res.json(communityInfo);
+      res.json(communityInfo)
     }
-  });
+  })
 
   Suggestion.find({}, { _id: 0 }, (error, elements) => {
-    if (error) throw error;
+    if (error) throw error
 
-    communityInfo.suggestions = elements;
-    getInfo.suggestions = true;
+    communityInfo.suggestions = elements
+    getInfo.suggestions = true
 
     if (getInfo.posts && getInfo.suggestions) {
-      res.json(communityInfo);
+      res.json(communityInfo)
     }
-  });
-};
+  })
+}
 
-module.exports.getCommunityInfo = getCommunityInfo;
+module.exports.getCommunityInfo = getCommunityInfo

@@ -20,10 +20,7 @@ import {
   FETCH_COMMUNITYINFO_SUCCESS,
   FETCH_COMMUNITYINFO_ERROR,
 
-  LOGIN_REQUEST,
-  LOGIN_SUCCESS,
-  LOGIN_ERROR,
-} from './constants';
+} from './constants'
 
 /**
  * Changes the input field of the form
@@ -36,61 +33,19 @@ import {
 export function fetchCommunityInfoRequest() {
   return {
     type: FETCH_COMMUNITYINFO_REQUEST,
-  };
+  }
 }
 
 export function fetchCommunityInfoSuccess(payload) {
   return {
     type: FETCH_COMMUNITYINFO_SUCCESS,
     payload,
-  };
+  }
 }
 
 export function fetchCommunityInfoError(payload) {
   return {
     type: FETCH_COMMUNITYINFO_ERROR,
     payload,
-  };
-}
-
-export function loginRequest(payload) {
-  return {
-    type: LOGIN_REQUEST,
-    payload,
-  };
-}
-
-export function loginSuccess(payload) {
-  return {
-    type: LOGIN_SUCCESS,
-    payload,
-  };
-}
-
-export function loginError(payload) {
-  return {
-    type: LOGIN_ERROR,
-    payload,
-  };
-}
-
-export function register(payload) {
-  return {
-    type: REGISTER,
-    payload,
-  };
-}
-
-export function registerSuccess(payload) {
-  return {
-    type: REGISTER_SUCCESS,
-    payload,
-  };
-}
-
-export function registerError(payload) {
-  return {
-    type: REGISTER_ERROR,
-    payload,
-  };
+  }
 }

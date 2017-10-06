@@ -1,5 +1,5 @@
-import React, { Component, PropTypes } from 'react';
-import './style.scss';
+import React, { Component, PropTypes } from 'react'
+import './style.scss'
 
 const TextPost = ({ title, username, date, content }) => {
   return (
@@ -14,8 +14,8 @@ const TextPost = ({ title, username, date, content }) => {
         {content}
       </p>
     </div>
-  );
-};
+  )
+}
 
 TextPost.propTypes = {
   title: PropTypes.string,
@@ -25,6 +25,6 @@ TextPost.propTypes = {
   ]),
   date: PropTypes.string,
   content: PropTypes.string,
-};
+}
 
-export default TextPost;
+export default TextPost

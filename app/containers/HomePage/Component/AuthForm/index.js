@@ -1,36 +1,56 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { loginRequest } from '../../actions';
-import LoginForm from './LoginForm';
-import RegisterForm from './RegisterForm';
-import { selectLogin, selectRegister, selectUser } from '../../selectors';
-import './style.scss';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import { loginRequest } from 'containers/App/actions'
+import { selectLoginError, selectRegisterError, selectUser } from 'containers/App/selectors'
+import LoginForm from './LoginForm'
+import RegisterForm from './RegisterForm'
+import './style.scss'
 
 class AuthForm extends Component {
   constructor() {
-    super();
+    super()
     this.state = {
       authType: 'login',
-    };
+      loginError: null,
+      registerError: null,
+    }
   }
 
-  handleLoginSubmit = (values) => {
-    this.props.loginRequest(values);
+  componentWillReceiveProps(nextProps) {
+    const { loginError, registerError } = nextProps
+
+    if (loginError === 'Invalid username') {
+      this.setState({
+        loginError: null,
+        authType: 'register',
+      })
+    } else {
+      this.setState({
+        ...this.state,
+        loginError,
+        registerError,
+      })
+    }
   }
 
-  handleRegisterSubmit = (values) => {
+  handleLoginSubmit = values => {
+    this.props.loginRequest(values)
   }
 
-  handleAuthTypeChange = (authType) => {
+  handleRegisterSubmit = values => {
+  }
+
+  handleAuthTypeChange = authType => {
     this.setState({
       authType,
-    });
+      loginError: null,
+      registerError: null,
+    })
   }
 
   render() {
-    const { authType } = this.state;
-    const { login, register, user } = this.props;
+    const { authType, loginError, registerError, userInfo } = this.state
 
     return (
       <div className={this.props.className}>
@@ -45,33 +65,31 @@ class AuthForm extends Component {
         <div className="authForm__divider">
           <span>Or</span>
         </div>
-        { authType === 'login' && <LoginForm onSubmit={this.handleLoginSubmit} onAuthTypeChange={this.handleAuthTypeChange} {...login} /> }
-        { authType === 'register' && <RegisterForm onSubmit={this.handleLoginSubmit} onAuthTypeChange={this.handleAuthTypeChange} {...register} /> }
+        { authType === 'login' && <LoginForm onSubmit={this.handleLoginSubmit} loginError={loginError} onAuthTypeChange={this.handleAuthTypeChange} /> }
+        { authType === 'register' && <RegisterForm onSubmit={this.handleLoginSubmit} registerError={registerError} onAuthTypeChange={this.handleAuthTypeChange} /> }
       </div>
-    );
+    )
   }
 }
 
 AuthForm.propTypes = {
   loginRequest: PropTypes.func,
   onClose: PropTypes.func,
-  login: PropTypes.object,
-  register: PropTypes.object,
-  user: PropTypes.object,
+  loginError: PropTypes.string,
+  registerError: PropTypes.string,
   className: PropTypes.string,
-};
+}
 
 function mapDispatchToProps(dispatch) {
   return {
-    loginRequest: (payload) => dispatch(loginRequest(payload)),
-  };
+    loginRequest: payload => dispatch(loginRequest(payload)),
+  }
 }
 
 const mapStateToProps = createStructuredSelector({
-  login: selectLogin(),
-  register: selectRegister(),
-  user: selectUser(),
-});
+  loginError: selectLoginError(),
+  registerError: selectRegisterError(),
+})
 
 // Wrap the component to inject dispatch and state into it
-export default connect(mapStateToProps, mapDispatchToProps)(AuthForm);
+export default connect(mapStateToProps, mapDispatchToProps)(AuthForm)

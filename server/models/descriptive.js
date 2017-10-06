@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const descriptiveSchema = new Schema({
   e: Number,
-}, { strict: false, versionKey: false });
+}, { strict: false, versionKey: false })
 
-module.exports = mongoose.model('Descriptive', descriptiveSchema, 'descriptive');
+module.exports = mongoose.model('Descriptive', descriptiveSchema, 'descriptive')
