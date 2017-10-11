@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react'
 import { reduxForm, Field } from 'redux-form'
-
+import Dropzone from 'react-dropzone'
 import RenderField from './RenderField'
+import RenderDropzone from './RenderDropzone'
 import registerFormValidator from './validate'
 import './style.scss'
 
 const RegisterForm = props => {
-  const { handleSubmit, onAuthTypeChange } = props
+  const { handleSubmit, registerError, onAuthTypeChange } = props
 
   return (
     <form onSubmit={handleSubmit}>
@@ -29,14 +30,30 @@ const RegisterForm = props => {
         label="Repeat password"
       />
       <Field
-        name="fullname"
+        name="firstname"
         type="text"
         component={RenderField}
-        label="Full name"
+        label="First name"
       />
-      <div className="authForm__inlineButtons">
-        <button>Profile Pic</button>
-        <button>Cover img</button>
+      <Field
+        name="lastname"
+        type="text"
+        component={RenderField}
+        label="Last name"
+      />
+      <div className="authForm__uploadButtons">
+        <Field
+          className="authForm__uploadButton"
+          name="profile_pic"
+          label="Profile Pic"
+          component={RenderDropzone}
+        />
+        <Field
+          className="authForm__uploadButton"
+          name="cover_img"
+          label="Cover Img"
+          component={RenderDropzone}
+        />
       </div>
       <div className="authForm__buttons">
         <button type="button" onClick={() => { onAuthTypeChange('login') }}>
@@ -46,6 +63,7 @@ const RegisterForm = props => {
           Register
         </button>
       </div>
+      {registerError && <div className="authForm__error">{registerError}</div>}
     </form>
   )
 }
@@ -53,6 +71,7 @@ const RegisterForm = props => {
 RegisterForm.propTypes = {
   handleSubmit: PropTypes.func,
   onAuthTypeChange: PropTypes.func,
+  registerError: PropTypes.string,
 }
 
 export default reduxForm({

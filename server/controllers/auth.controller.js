@@ -1,5 +1,4 @@
 const User = require('../models/user')
-
 /**
  * Login
  * @param req
@@ -7,8 +6,7 @@ const User = require('../models/user')
  * @returns userInfo
  */
 const login = (req, res) => {
-  const params = req.body
-  const { email, password } = params
+  const { email, password } = req.body
 
   User.find({ email: email }, { _id: 0 }, (err, element) => {
     if (element.length > 0) {
@@ -39,8 +37,49 @@ const login = (req, res) => {
  * @returns userInfo
  */
 const register = (req, res) => {
-  const params = req.body
-  res.json(params)
+  const { firstname, lastname, email, password, confirmPassword } = req.body
+
+  if (password !== confirmPassword) {
+    res.status(400).send({
+      error: {
+        details: 'Confirm password is not correct',
+      },
+    })
+  }
+
+  let data = {
+    firstname,
+    lastname,
+    email,
+    password,
+    profile_pic: '',
+    cover_img: '',
+    verified: false,
+  }
+
+  for (let file of req.files) {
+    data[file.fieldname] = `http://localhost:3000/public/uploads/user/${file.filename}`
+  }
+
+  User.create(data, (err, element) => {
+    if (err) {
+      if (err.name === 'MongoError' && err.code === 11000) {
+        res.status(400).send({
+          error: {
+            details: 'Email is already taken by other user',
+          },
+        })
+      } else {
+        res.status(400).send({
+          error: {
+            details: err,
+          },
+        })
+      }
+    } else {
+      res.send(data)
+    }
+  })
 }
 
 module.exports.login = login

@@ -51,14 +51,43 @@
     }
   }
 
-  &__buttons {
+  &__uploadButtons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 10px;
 
+    & > div {
+      width: calc(50% - 4px);
+    }
+  }
+
+  &__uploadButton {
+    position: relative;
+    overflow: hidden;
+    background: #eee;
+    color: #888;
+    cursor: pointer;
+    padding: 8px;
+    border: 1px solid #ddd;
+
+    img {
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      right: 5px;
+      top: calc(50% - 10px);
+    }
+  }
+
+  &__buttons {
+    margin-top: 10px;
+    
     button {
       color: #888;
       padding: 8px;
       cursor: pointer;
       margin-right: 10px;
-      margin-top: 20px;
 
       &.active {
         border: 1px solid #ddd;
@@ -93,7 +122,7 @@
     }
   }
 
-  input {
+  input[type=text], input[type=email], input[type=password] {
     margin-top: 10px;
     width: 100%;
     border: 1px solid #ccc;

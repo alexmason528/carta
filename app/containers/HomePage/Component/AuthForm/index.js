@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import Loader from 'react-loader-advanced'
-import { loginRequest } from 'containers/App/actions'
+import { loginRequest, registerRequest } from 'containers/App/actions'
 import { selectLoginInfo, selectRegisterInfo } from 'containers/App/selectors'
 import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
@@ -46,8 +46,22 @@ class AuthForm extends Component {
     })
   }
 
+  registerHandler = values => {
+    let formData = new FormData()
+
+    for (let key in values) {
+      if (key === 'profile_pic' || key === 'cover_img') {
+        formData.append(key, values[key][0])
+      } else {
+        formData.append(key, values[key])
+      }
+    }
+
+    this.props.registerRequest(formData)
+  }
+
   render() {
-    const { authType, loginError, registerError, userInfo } = this.state
+    const { authType, loginError, registerError } = this.state
     const { loginInfo, registerInfo } = this.props
 
     const spinnerShow = loginInfo.submitting || registerInfo.submitting
@@ -69,7 +83,7 @@ class AuthForm extends Component {
           <span>Or</span>
         </div>
         { authType === 'login' && <LoginForm onSubmit={this.props.loginRequest} loginError={loginError} onAuthTypeChange={this.handleAuthTypeChange} /> }
-        { authType === 'register' && <RegisterForm onSubmit={this.handleLoginSubmit} registerError={registerError} onAuthTypeChange={this.handleAuthTypeChange} /> }
+        { authType === 'register' && <RegisterForm onSubmit={this.registerHandler} registerError={registerError} onAuthTypeChange={this.handleAuthTypeChange} /> }
       </div>
     )
   }
@@ -77,6 +91,7 @@ class AuthForm extends Component {
 
 AuthForm.propTypes = {
   loginRequest: PropTypes.func,
+  registerRequest: PropTypes.func,
   onClose: PropTypes.func,
   loginInfo: PropTypes.object,
   registerInfo: PropTypes.object,
@@ -91,6 +106,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = dispatch => {
   return {
     loginRequest: payload => dispatch(loginRequest(payload)),
+    registerRequest: payload => dispatch(registerRequest(payload)),
   }
 }
 

@@ -66,10 +66,9 @@ const getQuestInfo = (req, res) => {
  * @returns void
  */
 const getRecommendations = (req, res) => {
-  const params = req.body
   let columns = []
 
-  const { count, descriptivesAll, descriptives, typesAll, types, viewport } = params
+  const { count, descriptivesAll, descriptives, typesAll, types, viewport } = req.body
 
   let typeMatch = []
 
@@ -247,8 +246,7 @@ const getRecommendations = (req, res) => {
  * @returns void
  */
 const getPlace = (req, res) => {
-  const params = req.body
-  const name = params.name
+  const name = req.body
 
   Place.findOne({ name: name }, { _id: 0, e: 0, name: 0 }, (err, place) => {
     if (err) throw err

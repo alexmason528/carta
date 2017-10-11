@@ -8,6 +8,7 @@ const setup = require('./middlewares/frontendMiddleware')
 const mongoose = require('mongoose')
 const isDev = process.env.NODE_ENV !== 'production'
 const ngrok = (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel ? require('ngrok') : false
+const path = require('path')
 const resolve = require('path').resolve
 const app = express()
 const bodyParser = require('body-parser')
@@ -27,6 +28,8 @@ require('dotenv').config()
 
 app.use(cors())
 app.use(bodyParser.json())
+app.use('/public', express.static(path.join(__dirname, 'public')))
+
 setup(app, {
   outputPath: resolve(process.cwd(), 'build'),
   publicPath: '/',

@@ -4,13 +4,13 @@ const router = new express.Router()
 const MapController = require('../controllers/map.controller')
 
 // Get quest information
-router.route('/questinfo').get(MapController.getQuestInfo)
+router.get('/questinfo', MapController.getQuestInfo)
 
 // Get recommendations
-router.route('/recommendation').post(MapController.getRecommendations)
+router.post('/recommendation', MapController.getRecommendations)
 
 // Get place
-router.route('/place').post(MapController.getPlace)
+router.post('/place', MapController.getPlace)
 
 // export default router
 module.exports = router

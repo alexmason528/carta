@@ -21,6 +21,10 @@ import {
   LOGIN_ERROR,
 
   LOGOUT,
+
+  REGISTER_REQUEST,
+  REGISTER_SUCCESS,
+  REGISTER_ERROR,
 } from './constants'
 
 /**
@@ -59,9 +63,9 @@ export function logOut() {
   }
 }
 
-export function register(payload) {
+export function registerRequest(payload) {
   return {
-    type: REGISTER,
+    type: REGISTER_REQUEST,
     payload,
   }
 }

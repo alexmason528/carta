@@ -7,10 +7,12 @@ import { LOCATION_CHANGE } from 'react-router-redux'
 
 import request from 'utils/request'
 
-import { LOGIN_REQUEST } from 'containers/App/constants'
+import { LOGIN_REQUEST, REGISTER_REQUEST } from 'containers/App/constants'
 import {
   loginSuccess,
   loginError,
+  registerSuccess,
+  registerError,
 } from 'containers/App/actions'
 
 import { FETCH_COMMUNITYINFO_REQUEST, API_BASE_URL } from './constants'
@@ -68,7 +70,31 @@ export function* loginRequestWatcher() {
   yield cancel(watcher)
 }
 
+export function* registerRequest(action) {
+  const requestURL = `${API_BASE_URL}api/v1/auth/register`
+
+  const params = {
+    method: 'POST',
+    body: action.payload,
+  }
+
+  try {
+    const res = yield call(request, requestURL, params)
+    yield call(setItem, 'auth', JSON.stringify(res))
+    yield put(registerSuccess(res))
+  } catch (err) {
+    yield put(registerError(err.details))
+  }
+}
+
+export function* registerRequestWatcher() {
+  const watcher = yield takeLatest(REGISTER_REQUEST, registerRequest)
+  yield take(LOCATION_CHANGE)
+  yield cancel(watcher)
+}
+
 export default [
   getCommunityInfoRequestWatcher,
   loginRequestWatcher,
+  registerRequestWatcher,
 ]

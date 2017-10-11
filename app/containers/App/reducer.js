@@ -6,6 +6,10 @@ import {
   LOGIN_ERROR,
 
   LOGOUT,
+
+  REGISTER_REQUEST,
+  REGISTER_SUCCESS,
+  REGISTER_ERROR,
 } from './constants'
 
 const initialState = {
@@ -62,6 +66,39 @@ function appReducer(state = initialState, action) {
         ...state,
         user: {},
         authenticated: false,
+      }
+
+    case REGISTER_REQUEST:
+      return {
+        ...state,
+        user: {},
+        authenticated: false,
+        register: {
+          submitting: true,
+          error: null,
+        },
+      }
+
+    case REGISTER_SUCCESS:
+      return {
+        ...state,
+        user: action.payload,
+        authenticated: true,
+        register: {
+          submitting: false,
+          error: null,
+        },
+      }
+
+    case REGISTER_ERROR:
+      return {
+        ...state,
+        user: {},
+        authenticated: false,
+        register: {
+          submitting: false,
+          error: action.payload,
+        },
       }
 
     default:

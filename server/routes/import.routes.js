@@ -4,16 +4,16 @@ const router = new express.Router()
 const ImportController = require('../controllers/import.controller')
 
 // Import elements
-router.route('/element').get(ImportController.importElements)
+router.get('/element', ImportController.importElements)
 
 // Import descriptives
-router.route('/descriptive').get(ImportController.importDescriptives)
+router.get('/descriptive', ImportController.importDescriptives)
 
 // Import types
-router.route('/type').get(ImportController.importTypes)
+router.get('/type', ImportController.importTypes)
 
 // Import categories
-router.route('/category').get(ImportController.importCategories)
+router.get('/category', ImportController.importCategories)
 
 // export default router
 module.exports = router

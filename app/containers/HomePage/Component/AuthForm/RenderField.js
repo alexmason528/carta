@@ -1,21 +1,15 @@
 import React, { Component, PropTypes } from 'react'
 import { Alert } from 'reactstrap'
 
-const RenderField = ({
-  input,
-  label,
-  type,
-  meta: { touched, error, warning },
-}) =>
+const RenderField = ({ input, label, type, meta: { touched, error, warning } }) => (
   <div>
-    <div>
-      <input {...input} placeholder={label} type={type} />
-      {
-        touched && error &&
-        <div className="authForm__error">{error}</div>
-      }
-    </div>
+    <input {...input} placeholder={label} type={type} />
+    {
+      touched && error &&
+      <div className="authForm__error">{error}</div>
+    }
   </div>
+)
 
 RenderField.propTypes = {
   input: PropTypes.object,
