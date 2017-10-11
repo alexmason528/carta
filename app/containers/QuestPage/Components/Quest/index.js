@@ -2,11 +2,9 @@ import React, { Component, PropTypes, Children } from 'react'
 import styled, { css } from 'styled-components'
 import classNames from 'classnames'
 
-import PlacesPage from './PlacesPage'
-import DescriptivesPage from './DescriptivesPage'
-import TypesPage from './TypesPage'
+import { DescriptiveSection, PlaceSection, TypeSection } from '../Sections'
 
-import '../style.scss'
+import './style.scss'
 
 export default class Quest extends Component {
   constructor(props) {
@@ -98,9 +96,9 @@ export default class Quest extends Component {
         </div>
 
         <div className="pages">
-          <PlacesPage className={placesPageClass} mapViewPortChange={this.props.mapViewPortChange} />
-          <TypesPage className={typesPageClass} />
-          <DescriptivesPage className={descriptivesPageClass} />
+          <PlaceSection className={placesPageClass} mapViewPortChange={this.props.mapViewPortChange} />
+          <TypeSection className={typesPageClass} />
+          <DescriptiveSection className={descriptivesPageClass} />
         </div>
       </div>
     )

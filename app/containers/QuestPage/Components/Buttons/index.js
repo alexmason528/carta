@@ -1,7 +1,7 @@
 import React, { PropTypes, Children } from 'react'
 import classNames from 'classnames'
 
-function Button(props) {
+const Button = props => {
   let btnClass = classNames({
     'button-wrapper': true,
     active: props.active === 1,
@@ -16,7 +16,7 @@ function Button(props) {
   )
 }
 
-function StarButton(props) {
+const StarButton = props => {
   let btnClass = classNames({
     'button-wrapper': true,
     star: props.star === 1,
@@ -33,7 +33,7 @@ function StarButton(props) {
   )
 }
 
-function QuestButton(props) {
+const QuestButton = props => {
   return (
     <div className={props.className}>
       <div onClick={props.onClick}>

@@ -9,14 +9,13 @@ import Helmet from 'react-helmet'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
-
 import Logo from 'components/Logo'
 import LogoTab from 'components/LogoTab'
 
 import { fetchBrochure } from 'containers/QuestPage/actions'
 import { selectBrochure } from 'containers/QuestPage/selectors'
 
-import '../style.scss'
+import './style.scss'
 
 class Brochure extends Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -276,9 +275,6 @@ class Brochure extends Component { // eslint-disable-line react/prefer-stateless
             { name: 'description', content: 'Carta' },
           ]}
         />
-
-        <Logo />
-        <LogoTab />
 
         <div className="brochure-container">
           <div className="dividers"></div>

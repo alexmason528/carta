@@ -3,10 +3,10 @@ import styled, { css } from 'styled-components'
 import classNames from 'classnames'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { fetchRecommendations, questAdd, questSelect, questRemove } from '../actions'
-import { selectQuests, selectCurrentQuestIndex } from '../selectors'
-import Quest from './Quest'
-import '../style.scss'
+import { fetchRecommendations, questAdd, questSelect, questRemove } from 'containers/QuestPage/actions'
+import { selectQuests, selectCurrentQuestIndex } from 'containers/QuestPage/selectors'
+import Quest from '../Quest'
+import './style.scss'
 
 class QuestPanel extends Component {
   questAddHandler = () => {

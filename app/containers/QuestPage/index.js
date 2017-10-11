@@ -10,6 +10,7 @@ import ReactResizeDetector from 'react-resize-detector'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
+import { Container } from 'reactstrap'
 import Logo from 'components/Logo'
 import LogoTab from 'components/LogoTab'
 import URLParser from 'utils/questURLparser'
@@ -350,7 +351,7 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
     })
 
     return (
-      <div className="quest-page">
+      <Container fluid className="questpage">
         <Helmet
           meta={[
             { name: 'description', content: 'Carta' },
@@ -390,7 +391,7 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
           }
         </ScoreBoardBlock>
         { brochure && <Brochure name={brochure} />}
-      </div>
+      </Container>
     )
   }
 }

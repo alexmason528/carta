@@ -1,7 +1,7 @@
 import React, { PropTypes, Children } from 'react'
-import '../style.scss'
+import './style.scss'
 
-function MapBlock(props) {
+const MapBlock = props => {
   return (
     <div className={props.className}>
       {Children.toArray(props.children)}
@@ -9,7 +9,7 @@ function MapBlock(props) {
   )
 }
 
-function ScoreBoardBlock(props) {
+const ScoreBoardBlock = props => {
   return (
     <div className="scoreboard-block">
       {Children.toArray(props.children)}
@@ -25,7 +25,6 @@ MapBlock.propTypes = {
 ScoreBoardBlock.propTypes = {
   children: PropTypes.node,
 }
-
 
 export {
   MapBlock,

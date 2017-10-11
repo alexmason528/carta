@@ -2,12 +2,11 @@ import React, { Component, PropTypes, Children } from 'react'
 import classNames from 'classnames'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { Button, StarButton } from './Buttons'
-import { fetchRecommendations, typeSelect } from '../actions'
-import { selectTypes, selectCurrentTypes } from '../selectors'
-import '../style.scss'
+import { fetchRecommendations, typeSelect } from 'containers/QuestPage/actions'
+import { selectTypes, selectCurrentTypes } from 'containers/QuestPage/selectors'
+import { Button, StarButton } from '../Buttons'
 
-class TypesPage extends Component {
+class TypeSection extends Component {
   constructor(props) {
     super(props)
 
@@ -249,7 +248,7 @@ class TypesPage extends Component {
   }
 }
 
-TypesPage.propTypes = {
+TypeSection.propTypes = {
   className: PropTypes.string,
   types: PropTypes.array,
   currentTypes: PropTypes.object,
@@ -269,4 +268,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TypesPage)
+export default connect(mapStateToProps, mapDispatchToProps)(TypeSection)

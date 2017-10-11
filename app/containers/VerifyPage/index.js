@@ -1,5 +1,5 @@
 /*
- * HomePage
+ * VerifyPage
  *
  */
 
@@ -28,8 +28,8 @@ export default class VerifyPage extends Component { // eslint-disable-line react
         <Logo />
         <LogoTab />
         <Row className="verifypage__row">
-          <Col className="verifypage__col">
-            <img className="verifypage__background" src="https://cartamap.herokuapp.com/public/uploads/user/d82c6582e908bf63b0cf0bec79ee7d16.JPG" role="presentation" />
+          <Col md={12} sm={12} className="verifypage__col">
+            <img className="verifypage__background" src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/wide/0035.jpg" role="presentation" />
           </Col>
         </Row>
       </Container>

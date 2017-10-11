@@ -1,0 +1,179 @@
+.brochure {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  z-index: 20;
+
+  .brochure-container {
+    position: relative;
+    background: #fff;
+  }
+
+  .vertical-divider-s, .vertical-divider, .horizontal-divider {
+    background: #fff; 
+    position: absolute; 
+    z-index: 10;
+  }
+
+  .vertical-divider-s, .horizontal-divider {
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.5);
+  }
+
+  .vertical-divider-s, .vertical-divider {
+    width: 8px; 
+    height: 100%;
+  }
+
+  .vd-1, .vd-2 {
+    margin-left: -4px;
+  }
+
+  .horizontal-divider-s, .horizontal-divider {
+    height: 8px; 
+    width: 100%; 
+    position: absolute; 
+    margin-top: -4px;
+  }
+
+  .tile {
+    display: inline-block; 
+    vertical-align: top; 
+    position: relative; 
+    cursor: default;
+
+    img {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+    }
+  }
+
+  .description {
+    display:inline-block; 
+    position:relative;
+    width: 33.5%;
+
+    .tile .content p{
+      padding-top: 40px;
+    }
+  }
+
+  .main-poster {
+    box-sizing: border-box; 
+    border-bottom: 0.2vw solid #fff;
+    z-index: 20; 
+    position: relative;
+    
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
+      -moz-box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
+      -webkit-box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
+      z-index: 20;
+    }
+  }
+
+  .text-tile {
+    z-index:20; 
+    background:#fff;
+
+    h2 {
+      font-weight:400; 
+      text-transform:uppercase; 
+      padding: 0 0 0.5em 0; 
+      margin: 0; 
+      color: #000; 
+      font-size: 1.5em; 
+      position: relative;
+    }
+  }
+
+  .content {
+    position: absolute; 
+    width: 100%; 
+    height: 100%; 
+    background: #fff; 
+    box-sizing: border-box; 
+    padding: 30px;
+  }
+
+  h1, h2 {
+    color: #fff; 
+    font-weight: 900; 
+    position: absolute; 
+    margin: 0; 
+    text-transform: uppercase; 
+  }
+
+  h1 {
+    padding: 30px 50px; 
+    font-size: 5em; 
+    line-height: 125%;
+    text-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  }
+
+  h2 {
+    padding: 19px 30px; 
+    font-size: 2.5em;
+  }
+
+  p {
+    padding: 0px; 
+    box-sizing: border-box; 
+    background: #fff; 
+    margin: 0; 
+    height: 100%;
+    font-weight: lighter;
+    font-size: 14.5px;
+    line-height: 20px;
+  }
+
+  a {
+    text-decoration: none; 
+    font-weight: 400; 
+    color: #006bca;
+    cursor: pointer;
+  }
+
+  .more, .less, .arrow .blue {
+    position: absolute; 
+    border: 10px solid transparent; 
+    border-left: 10px solid #ddd;
+  }
+
+  .arrow .blue {
+    border-left: 10px solid #006bca; 
+    display: none; 
+    top: -10px; 
+    left: -10px; 
+  }
+
+  .more {
+    -ms-transform: rotate(45deg); 
+    -webkit-transform: rotate(45deg); 
+    transform: rotate(45deg); 
+    bottom: 5px; 
+    right: 5px; 
+    display:none;
+  }
+
+  .less {
+    -ms-transform: rotate(225deg); 
+    -webkit-transform: rotate(225deg); 
+    transform: rotate(225deg); 
+    bottom: 15px; 
+    right: 17px; 
+    display:none;
+  }
+
+  .arrow:hover .blue {
+    display: block;
+  }
+
+}

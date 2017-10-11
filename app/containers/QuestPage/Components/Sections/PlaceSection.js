@@ -2,13 +2,11 @@ import React, { Component, PropTypes, Children } from 'react'
 import classNames from 'classnames'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { Button, StarButton } from './Buttons'
-import { fetchRecommendations, placeSelect } from '../actions'
-import { selectPlaces } from '../selectors'
+import { fetchRecommendations, placeSelect } from 'containers/QuestPage/actions'
+import { selectPlaces } from 'containers/QuestPage/selectors'
+import { Button, StarButton } from '../Buttons'
 
-import '../style.scss'
-
-class PlacesPage extends Component {
+class PlaceSection extends Component {
   constructor(props) {
     super(props)
 
@@ -67,7 +65,7 @@ class PlacesPage extends Component {
   }
 }
 
-PlacesPage.propTypes = {
+PlaceSection.propTypes = {
   className: PropTypes.string,
   places: PropTypes.array,
   questIndex: PropTypes.number,
@@ -85,4 +83,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PlacesPage)
+export default connect(mapStateToProps, mapDispatchToProps)(PlaceSection)
