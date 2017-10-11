@@ -60,6 +60,14 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading)
       },
     }, {
+      path: '/verify',
+      name: 'verifyPage',
+      getComponent(nextState, cb) {
+        import('containers/VerifyPage')
+          .then(loadModule(cb))
+          .catch(errorLoading)
+      },
+    }, {
       path: '*',
       name: 'notfound',
       getComponent(nextState, cb) {

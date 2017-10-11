@@ -10,8 +10,11 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
 
-import { fetchBrochure } from '../actions'
-import { selectBrochure } from '../selectors'
+import Logo from 'components/Logo'
+import LogoTab from 'components/LogoTab'
+
+import { fetchBrochure } from 'containers/QuestPage/actions'
+import { selectBrochure } from 'containers/QuestPage/selectors'
 
 import '../style.scss'
 
@@ -223,14 +226,14 @@ class Brochure extends Component { // eslint-disable-line react/prefer-stateless
         const lastTile = $('.tile')[tileCount - 1]
         const tileHeight = $(lastTile).height()
         for (let i = 0; i < (3 - (tileCount % 3)); i += 1) {
-          $('.brochure-container').append(`<div class="tile text-tile tile-placeholder" style="width: 33.33% height: ${tileHeight}px"></div>`)
+          $('.brochure-container').append(`<div class="tile text-tile tile-placeholder" style="width: 33.33%; height: ${tileHeight}px"></div>`)
         }
       }
     } else if (cols === 2) {
       if (tileCount % 2 === 0) {
         const lastTile = $('.tile')[tileCount - 1]
         const tileHeight = $(lastTile).height()
-        $('.brochure-container').append(`<div class="tile text-tile tile-placeholder" style="width: 50% height: ${tileHeight}px"></div>`)
+        $('.brochure-container').append(`<div class="tile text-tile tile-placeholder" style="width: 50%; height: ${tileHeight}px"></div>`)
       }
     }
 
@@ -274,10 +277,8 @@ class Brochure extends Component { // eslint-disable-line react/prefer-stateless
           ]}
         />
 
-        <img className="logo" src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506785283/image/content/logo-100.png" role="presentation" />
-        <div className="logo-name-tab">
-          <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506785283/image/content/name-vertical.png" role="presentation" />
-        </div>
+        <Logo />
+        <LogoTab />
 
         <div className="brochure-container">
           <div className="dividers"></div>
@@ -287,7 +288,6 @@ class Brochure extends Component { // eslint-disable-line react/prefer-stateless
           </div>
           <div className="description">
             <div className="tile text-tile">
-              <a onClick={() => { browserHistory.push('/') }}>Close</a>
               <div className="content">
                 <p>
                   {description.text.content}

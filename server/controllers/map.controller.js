@@ -246,7 +246,7 @@ const getRecommendations = (req, res) => {
  * @returns void
  */
 const getPlace = (req, res) => {
-  const name = req.body
+  const { name } = req.body
 
   Place.findOne({ name: name }, { _id: 0, e: 0, name: 0 }, (err, place) => {
     if (err) throw err
