@@ -58,7 +58,8 @@ const register = (req, res) => {
   }
 
   for (let file of req.files) {
-    data[file.fieldname] = `http://localhost:3000/public/uploads/user/${file.filename}`
+    data[file.fieldname] = (process.env.NODE_ENV === 'development') ?
+    `http://localhost:3000/public/uploads/user/${file.filename}` : `https://cartamap.herokuapp.com/public/uploads/user/${file.filename}`
   }
 
   User.create(data, (err, element) => {
