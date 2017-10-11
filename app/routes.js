@@ -14,7 +14,12 @@ const loadModule = cb => componentModule => {
 
 export default function createRoutes(store) {
   // create reusable async injectors using getAsyncInjectors factory
-  const { injectReducer, injectSagas } = getAsyncInjectors(store)
+  const {
+    injectReducer,
+    injectSagas,
+    redirectToHome,
+    redirectToVerify,
+  } = getAsyncInjectors(store)
 
   return [
     {
@@ -39,6 +44,7 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading)
       },
     }, {
+      onEnter: redirectToVerify,
       path: '/home',
       name: 'homePage',
       getComponent(nextState, cb) {
@@ -60,6 +66,7 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading)
       },
     }, {
+      onEnter: redirectToHome,
       path: '/verify',
       name: 'verifyPage',
       getComponent(nextState, cb) {

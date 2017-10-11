@@ -13,7 +13,7 @@ import {
 } from './constants'
 
 const initialState = {
-  user: JSON.parse(getItem('auth')) || {},
+  user: JSON.parse(getItem('auth')) || null,
   authenticated: !!getItem('auth'),
   login: {
     submitting: false,
@@ -30,7 +30,7 @@ function appReducer(state = initialState, action) {
     case LOGIN_REQUEST:
       return {
         ...state,
-        user: {},
+        user: null,
         authenticated: false,
         login: {
           submitting: true,
@@ -52,7 +52,7 @@ function appReducer(state = initialState, action) {
     case LOGIN_ERROR:
       return {
         ...state,
-        user: {},
+        user: null,
         authenticated: false,
         login: {
           submitting: false,
@@ -64,14 +64,14 @@ function appReducer(state = initialState, action) {
       removeItem('auth')
       return {
         ...state,
-        user: {},
+        user: null,
         authenticated: false,
       }
 
     case REGISTER_REQUEST:
       return {
         ...state,
-        user: {},
+        user: null,
         authenticated: false,
         register: {
           submitting: true,
@@ -93,7 +93,7 @@ function appReducer(state = initialState, action) {
     case REGISTER_ERROR:
       return {
         ...state,
-        user: {},
+        user: null,
         authenticated: false,
         register: {
           submitting: false,

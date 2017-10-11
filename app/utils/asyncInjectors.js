@@ -6,6 +6,8 @@ import isString from 'lodash/isString'
 import invariant from 'invariant'
 import warning from 'warning'
 
+import { selectAuthenticated, selectUser } from 'containers/App/selectors'
+
 import createReducer from '../reducers'
 
 /**
@@ -66,6 +68,28 @@ export function injectAsyncSagas(store, isValid) {
   }
 }
 
+function redirectToVerify(store) {
+  return (nextState) => {
+    const authenticated = selectAuthenticated()(store.getState())
+    const user = selectUser()(store.getState())
+
+    if (authenticated && !user.verified) {
+      location.href = '/verify'
+    }
+  }
+}
+
+function redirectToHome(store) {
+  return (nextState) => {
+    const authenticated = selectAuthenticated()(store.getState())
+    const user = selectUser()(store.getState())
+
+    if (!authenticated || user.verified) {
+      location.href = '/home'
+    }
+  }
+}
+
 /**
  * Helper for creating injectors
  */
@@ -75,5 +99,7 @@ export function getAsyncInjectors(store) {
   return {
     injectReducer: injectAsyncReducer(store, true),
     injectSagas: injectAsyncSagas(store, true),
+    redirectToVerify: redirectToVerify(store),
+    redirectToHome: redirectToHome(store),
   }
 }

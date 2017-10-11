@@ -22,6 +22,11 @@ class Logo extends Component {
     })
   }
 
+  logOut = () => {
+    this.props.logOut()
+    browserHistory.push('/home')
+  }
+
   render() {
     const { authenticated } = this.props
     const { dropdownOpen } = this.state
@@ -36,7 +41,7 @@ class Logo extends Component {
             <DropdownItem className="logo__dropdownMenuItem">Settings</DropdownItem>
             <DropdownItem className="logo__dropdownMenuItem">About</DropdownItem>
             <DropdownItem className="logo__dropdownMenuItem">Credits</DropdownItem>
-            <DropdownItem className="logo__dropdownMenuItem" onClick={this.props.logOut}>Logout</DropdownItem>
+            <DropdownItem className="logo__dropdownMenuItem" onClick={this.logOut}>Logout</DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </div>) :

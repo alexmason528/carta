@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom'
 import './style.scss'
 
 class Profile extends Component {
-
   componentWillMount() {
     let rand = Math.floor((Math.random() * 76)) + 1
     this.coverImgRand = (rand < 10) ? `000${rand}` : `00${rand}`;

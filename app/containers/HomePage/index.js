@@ -37,6 +37,12 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
     this.props.fetchCommunityInfoRequest()
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.user && !nextProps.user.verified) {
+      browserHistory.push('/verify')
+    }
+  }
+
   googleLogin = () => {
   }
 
