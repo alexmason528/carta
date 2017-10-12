@@ -1,4 +1,52 @@
 const User = require('../models/user')
+const nodemailer = require('nodemailer')
+const Cryptr = require('cryptr')
+const cryptr = new Cryptr('carta')
+
+let transporter = nodemailer.createTransport({
+  host: 'smtp.ethereal.email',
+  port: 587,
+  secure: false,
+  auth: {
+    user: 'wtun2bibtcxsrwmt@ethereal.email',
+    pass: 'DBK8x19yknPh2YawST',
+  },
+})
+
+const verify = (req, res) => {
+  const { vcode } = req.body
+
+  let email
+  try {
+    email = cryptr.decrypt(vcode)
+  } catch (e) {
+    res.status(400).send({
+      error: {
+        details: 'Failed to verify',
+      },
+    })
+  }
+
+  User.findOneAndUpdate({ email: email }, { $set: { verified: true } }, { new: true }, (err, element) => {
+    if (err) {
+      res.status(400).send({
+        error: {
+          details: 'Failed to verify',
+        },
+      })
+    } else {
+      let response = {
+        firstname: element.firstname,
+        lastname: element.lastname,
+        email: element.email,
+        profile_pic: element.profile_pic,
+        cover_img: element.cover_img,
+        verified: true,
+      }
+      res.json(response)
+    }
+  })
+}
 /**
  * Login
  * @param req
@@ -78,10 +126,28 @@ const register = (req, res) => {
         })
       }
     } else {
-      res.send(data)
+      let mailOptions = {
+        from: '<no-reply@carta.guide>',
+        to: data.email,
+        subject: 'Verification required',
+        text: `Hi, ${data.firstname} ${data.lastname}`,
+        html: `Please verify your email by clicking <a href="http://localhost:3000/verify/${cryptr.encrypt(data.email)}">this link</a>`,
+      }
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        res.send(data)
+      })
     }
   })
 }
 
+/**
+ * verify
+ * @param req
+ * @param res
+ * @returns success or fail
+ */
+
 module.exports.login = login
 module.exports.register = register
+module.exports.verify = verify

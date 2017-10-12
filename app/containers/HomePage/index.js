@@ -65,8 +65,6 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
     const { showAuthForm } = this.state
     const { posts, suggestions, authenticated, user } = this.props
 
-    const error = 'Wrong password'
-
     const authFormClass = className({
       authForm: true,
       'authForm--hidden': !showAuthForm,

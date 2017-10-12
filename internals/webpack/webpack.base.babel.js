@@ -80,8 +80,7 @@ module.exports = (options) => ({
     // drop any unreachable code.
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-        API_BASE_URL: JSON.stringify(process.env.API_BASE_URL),
+        API_BASE_URL: JSON.stringify(process.env.NODE_ENV === 'production' ? 'https://cartamap.herokuapp.com/' : 'http://localhost:3000/'),
         MAP_ACCESS_TOKEN: JSON.stringify(process.env.MAP_ACCESS_TOKEN),
       },
     }),
@@ -102,6 +101,10 @@ module.exports = (options) => ({
   },
   node: {
     fs: 'empty',
+    dns: 'empty',
+    net: 'empty',
+    child_process: 'empty',
+    tls: 'empty',
   },
   devtool: options.devtool,
   target: 'web', // Make web variables accessible to webpack, e.g. window

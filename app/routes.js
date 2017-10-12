@@ -67,12 +67,23 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToHome,
-      path: '/verify',
-      name: 'verifyPage',
+      path: '/verify(/:vcode)',
+      name: 'homePage',
       getComponent(nextState, cb) {
-        import('containers/VerifyPage')
-          .then(loadModule(cb))
-          .catch(errorLoading)
+        const importModules = Promise.all([
+          import('containers/VerifyPage/sagas'),
+          import('containers/VerifyPage'),
+        ])
+
+        const renderRoute = loadModule(cb)
+
+        importModules.then(([sagas, component]) => {
+          injectSagas(sagas.default)
+
+          renderRoute(component)
+        })
+
+        importModules.catch(errorLoading)
       },
     }, {
       path: '*',

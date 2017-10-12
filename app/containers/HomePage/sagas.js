@@ -10,15 +10,15 @@ import request from 'utils/request'
 import { LOGIN_REQUEST, REGISTER_REQUEST } from 'containers/App/constants'
 import {
   loginSuccess,
-  loginError,
+  loginFail,
   registerSuccess,
-  registerError,
+  registerFail,
 } from 'containers/App/actions'
 
 import { FETCH_COMMUNITYINFO_REQUEST, API_BASE_URL } from './constants'
 import {
   fetchCommunityInfoSuccess,
-  fetchCommunityInfoError,
+  fetchCommunityInfoFail,
 } from './actions'
 
 import { setItem, getItem, removeItem } from '../../utils/localStorage'
@@ -34,7 +34,7 @@ export function* getCommunityInfoRequest() {
     const res = yield call(request, requestURL, params)
     yield put(fetchCommunityInfoSuccess(res))
   } catch (err) {
-    yield put(fetchCommunityInfoError(err))
+    yield put(fetchCommunityInfoFail(err))
   }
 }
 
@@ -60,7 +60,7 @@ export function* loginRequest(action) {
     yield call(setItem, 'auth', JSON.stringify(res))
     yield put(loginSuccess(res))
   } catch (err) {
-    yield put(loginError(err.details))
+    yield put(loginFail(err.details))
   }
 }
 
@@ -83,7 +83,7 @@ export function* registerRequest(action) {
     yield call(setItem, 'auth', JSON.stringify(res))
     yield put(registerSuccess(res))
   } catch (err) {
-    yield put(registerError(err.details))
+    yield put(registerFail(err.details))
   }
 }
 

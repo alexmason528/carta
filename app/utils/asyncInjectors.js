@@ -7,7 +7,6 @@ import invariant from 'invariant'
 import warning from 'warning'
 
 import { selectAuthenticated, selectUser } from 'containers/App/selectors'
-
 import createReducer from '../reducers'
 
 /**
@@ -84,7 +83,7 @@ function redirectToHome(store) {
     const authenticated = selectAuthenticated()(store.getState())
     const user = selectUser()(store.getState())
 
-    if (!authenticated || user.verified) {
+    if (authenticated && user.verified) {
       location.href = '/home'
     }
   }

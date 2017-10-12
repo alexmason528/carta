@@ -12,7 +12,7 @@
 import {
   FETCH_COMMUNITYINFO_REQUEST,
   FETCH_COMMUNITYINFO_SUCCESS,
-  FETCH_COMMUNITYINFO_ERROR,
+  FETCH_COMMUNITYINFO_FAIL,
 } from './constants'
 
 // The initial state of the App
@@ -44,7 +44,7 @@ function homeReducer(state = initialState, action) {
         },
       }
 
-    case FETCH_COMMUNITYINFO_ERROR:
+    case FETCH_COMMUNITYINFO_FAIL:
       return {
         ...state,
         community: {

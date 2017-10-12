@@ -12,15 +12,15 @@ import {
 
   FETCH_QUESTINFO,
   FETCH_QUESTINFO_SUCCESS,
-  FETCH_QUESTINFO_ERROR,
+  FETCH_QUESTINFO_FAIL,
 
   FETCH_RECOMMENDATIONS,
   FETCH_RECOMMENDATIONS_SUCCESS,
-  FETCH_RECOMMENDATIONS_ERROR,
+  FETCH_RECOMMENDATIONS_FAIL,
 
   FETCH_BROCHURE,
   FETCH_BROCHURE_SUCCESS,
-  FETCH_BROCHURE_ERROR,
+  FETCH_BROCHURE_FAIL,
 } from './constants'
 
 const initialState = {
@@ -239,7 +239,7 @@ function questReducer(state = initialState, action) {
         questInfo,
       }
 
-    case FETCH_QUESTINFO_ERROR:
+    case FETCH_QUESTINFO_FAIL:
       questInfo = {
         fetching: false,
         error: action.payload,
@@ -277,7 +277,7 @@ function questReducer(state = initialState, action) {
         },
       }
 
-    case FETCH_RECOMMENDATIONS_ERROR:
+    case FETCH_RECOMMENDATIONS_FAIL:
       return {
         ...state,
         recommendations: {
@@ -307,7 +307,7 @@ function questReducer(state = initialState, action) {
         },
       }
 
-    case FETCH_BROCHURE_ERROR:
+    case FETCH_BROCHURE_FAIL:
       return {
         ...state,
         brochure: {

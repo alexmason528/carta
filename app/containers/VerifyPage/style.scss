@@ -19,6 +19,23 @@
 
   &__background {
     width: 100vw;
+    position: relative;
+    z-index: 10;
+  }
+
+  .verifyNotice {
+    position: fixed;
+    background: rgba(255, 255, 255, 0.9);
+    z-index: 100;
+    padding: 50px 100px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, 0);
   }
 
   .verifyAlert {
@@ -27,6 +44,7 @@
     bottom: 50px;
     display: flex;
     align-items: center;
+    z-index: 20;
 
     &__profilePic {
       width: 140px;

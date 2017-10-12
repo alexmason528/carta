@@ -11,11 +11,11 @@ import { selectCurrentTypes, selectCurrentDescriptives, selectViewport } from 'c
 import { FETCH_BROCHURE, FETCH_RECOMMENDATIONS, FETCH_QUESTINFO, API_BASE_URL } from './constants'
 import {
   fetchRecommendationsSuccess,
-  fetchRecommendationsError,
+  fetchRecommendationsFail,
   fetchQuestInfoSuccess,
-  fetchQuestInfoError,
+  fetchQuestInfoFail,
   fetchBrochureSuccess,
-  fetchBrochureError,
+  fetchBrochureFail,
 } from './actions'
 
 export function* getRecommendations() {
@@ -75,7 +75,7 @@ export function* getRecommendations() {
 
     yield put(fetchRecommendationsSuccess(recommendations))
   } catch (err) {
-    yield put(fetchRecommendationsError(recommendations))
+    yield put(fetchRecommendationsFail(recommendations))
   }
 }
 
@@ -120,7 +120,7 @@ export function* getQuestInfo() {
 
     yield put(fetchQuestInfoSuccess(payload))
   } catch (err) {
-    yield put(fetchQuestInfoError(questInfo))
+    yield put(fetchQuestInfoFail(questInfo))
   }
 }
 
@@ -144,7 +144,7 @@ export function* getBrochureInformation(payload) {
     response = yield call(request, requestURL, params)
     yield put(fetchBrochureSuccess(response))
   } catch (err) {
-    yield put(fetchBrochureError(response))
+    yield put(fetchBrochureFail(response))
   }
 }
 

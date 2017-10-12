@@ -29,15 +29,15 @@ import {
 
   FETCH_QUESTINFO,
   FETCH_QUESTINFO_SUCCESS,
-  FETCH_QUESTINFO_ERROR,
+  FETCH_QUESTINFO_FAIL,
 
   FETCH_RECOMMENDATIONS,
   FETCH_RECOMMENDATIONS_SUCCESS,
-  FETCH_RECOMMENDATIONS_ERROR,
+  FETCH_RECOMMENDATIONS_FAIL,
 
   FETCH_BROCHURE,
   FETCH_BROCHURE_SUCCESS,
-  FETCH_BROCHURE_ERROR,
+  FETCH_BROCHURE_FAIL,
 } from './constants'
 
 /**
@@ -115,9 +115,9 @@ export function fetchQuestInfoSuccess(payload) {
   }
 }
 
-export function fetchQuestInfoError(payload) {
+export function fetchQuestInfoFail(payload) {
   return {
-    type: FETCH_QUESTINFO_ERROR,
+    type: FETCH_QUESTINFO_FAIL,
     payload,
   }
 }
@@ -135,9 +135,9 @@ export function fetchRecommendationsSuccess(payload) {
   }
 }
 
-export function fetchRecommendationsError(payload) {
+export function fetchRecommendationsFail(payload) {
   return {
-    type: FETCH_RECOMMENDATIONS_ERROR,
+    type: FETCH_RECOMMENDATIONS_FAIL,
     payload,
   }
 }
@@ -156,9 +156,9 @@ export function fetchBrochureSuccess(payload) {
   }
 }
 
-export function fetchBrochureError(payload) {
+export function fetchBrochureFail(payload) {
   return {
-    type: FETCH_BROCHURE_ERROR,
+    type: FETCH_BROCHURE_FAIL,
     payload,
   }
 }

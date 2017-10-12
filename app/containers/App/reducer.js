@@ -3,13 +3,17 @@ import { getItem, removeItem } from '../../utils/localStorage'
 import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
-  LOGIN_ERROR,
+  LOGIN_FAIL,
 
   LOGOUT,
 
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
-  REGISTER_ERROR,
+  REGISTER_FAIL,
+
+  VERIFY_REQUEST,
+  VERIFY_SUCCESS,
+  VERIFY_FAIL,
 } from './constants'
 
 const initialState = {
@@ -20,6 +24,10 @@ const initialState = {
     error: null,
   },
   register: {
+    submitting: false,
+    error: null,
+  },
+  verify: {
     submitting: false,
     error: null,
   },
@@ -49,7 +57,7 @@ function appReducer(state = initialState, action) {
         },
       }
 
-    case LOGIN_ERROR:
+    case LOGIN_FAIL:
       return {
         ...state,
         user: null,
@@ -90,12 +98,49 @@ function appReducer(state = initialState, action) {
         },
       }
 
-    case REGISTER_ERROR:
+    case REGISTER_FAIL:
       return {
         ...state,
         user: null,
         authenticated: false,
         register: {
+          submitting: false,
+          error: action.payload,
+        },
+      }
+
+    case VERIFY_REQUEST:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          verified: false,
+        },
+        verify: {
+          submitting: true,
+          error: null,
+        },
+      }
+
+    case VERIFY_SUCCESS:
+      return {
+        ...state,
+        user: action.payload,
+        authenticated: true,
+        verify: {
+          submitting: false,
+          error: null,
+        },
+      }
+
+    case VERIFY_FAIL:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          verified: false,
+        },
+        verify: {
           submitting: false,
           error: action.payload,
         },

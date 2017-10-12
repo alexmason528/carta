@@ -28,5 +28,8 @@ const upload = multer({ storage: storage })
 
 router.post('/register', upload.any(), AuthController.register)
 
+// Verify
+router.post('/verify', AuthController.verify)
+
 // export default router
 module.exports = router

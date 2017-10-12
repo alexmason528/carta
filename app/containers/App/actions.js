@@ -18,13 +18,17 @@
 import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
-  LOGIN_ERROR,
+  LOGIN_FAIL,
 
   LOGOUT,
 
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
-  REGISTER_ERROR,
+  REGISTER_FAIL,
+
+  VERIFY_REQUEST,
+  VERIFY_SUCCESS,
+  VERIFY_FAIL,
 } from './constants'
 
 /**
@@ -50,9 +54,9 @@ export function loginSuccess(payload) {
   }
 }
 
-export function loginError(payload) {
+export function loginFail(payload) {
   return {
-    type: LOGIN_ERROR,
+    type: LOGIN_FAIL,
     payload,
   }
 }
@@ -77,10 +81,30 @@ export function registerSuccess(payload) {
   }
 }
 
-export function registerError(payload) {
+export function registerFail(payload) {
   return {
-    type: REGISTER_ERROR,
+    type: REGISTER_FAIL,
     payload,
   }
 }
 
+export function verifyRequest(payload) {
+  return {
+    type: VERIFY_REQUEST,
+    payload,
+  }
+}
+
+export function verifySuccess(payload) {
+  return {
+    type: VERIFY_SUCCESS,
+    payload,
+  }
+}
+
+export function verifyFail(payload) {
+  return {
+    type: VERIFY_FAIL,
+    payload,
+  }
+}

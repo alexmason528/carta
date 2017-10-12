@@ -18,7 +18,7 @@
 import {
   FETCH_COMMUNITYINFO_REQUEST,
   FETCH_COMMUNITYINFO_SUCCESS,
-  FETCH_COMMUNITYINFO_ERROR,
+  FETCH_COMMUNITYINFO_FAIL,
 
 } from './constants'
 
@@ -43,9 +43,9 @@ export function fetchCommunityInfoSuccess(payload) {
   }
 }
 
-export function fetchCommunityInfoError(payload) {
+export function fetchCommunityInfoFail(payload) {
   return {
-    type: FETCH_COMMUNITYINFO_ERROR,
+    type: FETCH_COMMUNITYINFO_FAIL,
     payload,
   }
 }

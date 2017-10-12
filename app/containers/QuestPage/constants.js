@@ -22,15 +22,15 @@ export const QUEST_REMOVE = 'carta/Quest/QUEST_REMOVE'
 
 export const FETCH_QUESTINFO = 'carta/Quest/FETCH_QUESTINFO'
 export const FETCH_QUESTINFO_SUCCESS = 'carta/Quest/FETCH_QUESTINFO_SUCCESS'
-export const FETCH_QUESTINFO_ERROR = 'carta/Quest/FETCH_QUESTINFO_ERROR'
+export const FETCH_QUESTINFO_FAIL = 'carta/Quest/FETCH_QUESTINFO_FAIL'
 
 export const FETCH_RECOMMENDATIONS = 'carta/Quest/FETCH_RECOMMENDATIONS'
 export const FETCH_RECOMMENDATIONS_SUCCESS = 'carta/Quest/FETCH_RECOMMENDATIONS_SUCCESS'
-export const FETCH_RECOMMENDATIONS_ERROR = 'carta/Quest/FETCH_RECOMMENDATIONS_ERROR'
+export const FETCH_RECOMMENDATIONS_FAIL = 'carta/Quest/FETCH_RECOMMENDATIONS_FAIL'
 
 export const FETCH_BROCHURE = 'carta/Quest/FETCH_BROCHURE'
 export const FETCH_BROCHURE_SUCCESS = 'carta/Quest/FETCH_BROCHURE_SUCCESS'
-export const FETCH_BROCHURE_ERROR = 'carta/Quest/FETCH_BROCHURE_ERROR'
+export const FETCH_BROCHURE_FAIL = 'carta/Quest/FETCH_BROCHURE_FAIL'
 
-export const API_BASE_URL = (process.env.NODE_ENV === 'development') ? 'http://localhost:3000/' : 'https://cartamap.herokuapp.com/'
-export const MAP_ACCESS_TOKEN = 'pk.eyJ1IjoiY2FydGFndWlkZSIsImEiOiJjajMzNG5rcjAwMDFmMnFud3hpNW8wenJpIn0.uQaLvmopUNSmyGSI1WKynw'
+export const API_BASE_URL = process.env.API_BASE_URL
+export const MAP_ACCESS_TOKEN = process.env.MAP_ACCESS_TOKEN
