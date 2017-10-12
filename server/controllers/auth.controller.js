@@ -27,14 +27,8 @@ const verify = (req, res) => {
     })
   }
 
-  User.update({ email: email }, { $set: { verified: true } }, { new: true }, (err, element) => {
-    if (err) {
-      return res.status(400).send({
-        error: {
-          details: 'Failed to verify',
-        },
-      })
-    } else {
+  User.findOneAndUpdate({ email: email }, { $set: { verified: true } }, { new: true }, (err, element) => {
+    if (element && element.firstname) {
       let response = {
         firstname: element.firstname,
         lastname: element.lastname,
@@ -43,8 +37,14 @@ const verify = (req, res) => {
         cover_img: element.cover_img,
         verified: true,
       }
-      return res.json(response)
-    }
+      return res.json(response)  
+    } 
+
+    return res.status(400).send({
+      error: {
+        details: 'Failed to verify',
+      },
+    })
   })
 }
 /**

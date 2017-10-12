@@ -82,7 +82,7 @@ module.exports = (options) => ({
     new webpack.DefinePlugin({
       'process.env': {
         API_BASE_URL: JSON.stringify(process.env.NODE_ENV === 'production' ? 'https://cartamap.herokuapp.com/' : 'http://localhost:3000/'),
-        MAP_ACCESS_TOKEN: JSON.stringify(process.env.MAP_ACCESS_TOKEN),
+        MAP_ACCESS_TOKEN: JSON.stringify('pk.eyJ1IjoiY2FydGFndWlkZSIsImEiOiJjajMzNG5rcjAwMDFmMnFud3hpNW8wenJpIn0.uQaLvmopUNSmyGSI1WKynw'),
       },
     }),
     new webpack.NamedModulesPlugin(),
