@@ -47,7 +47,7 @@ const getCommunityInfo = (req, res) => {
     getInfo.posts = true
 
     if (getInfo.posts && getInfo.suggestions) {
-      res.json(communityInfo)
+      return res.json(communityInfo)
     }
   })
 
@@ -58,7 +58,7 @@ const getCommunityInfo = (req, res) => {
     getInfo.suggestions = true
 
     if (getInfo.posts && getInfo.suggestions) {
-      res.json(communityInfo)
+      return res.json(communityInfo)
     }
   })
 }

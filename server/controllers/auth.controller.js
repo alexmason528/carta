@@ -20,16 +20,16 @@ const verify = (req, res) => {
   try {
     email = cryptr.decrypt(vcode)
   } catch (e) {
-    res.status(400).send({
+    return res.status(400).send({
       error: {
         details: 'Failed to verify',
       },
     })
   }
 
-  User.findOneAndUpdate({ email: email }, { $set: { verified: true } }, { new: true }, (err, element) => {
+  User.update({ email: email }, { $set: { verified: true } }, { new: true }, (err, element) => {
     if (err) {
-      res.status(400).send({
+      return res.status(400).send({
         error: {
           details: 'Failed to verify',
         },
@@ -43,7 +43,7 @@ const verify = (req, res) => {
         cover_img: element.cover_img,
         verified: true,
       }
-      res.json(response)
+      return res.json(response)
     }
   })
 }
@@ -59,16 +59,16 @@ const login = (req, res) => {
   User.find({ email: email }, { _id: 0 }, (err, element) => {
     if (element.length > 0) {
       if (element[0].password === password) {
-        res.json(element[0])
+        return res.json(element[0])
       } else {
-        res.status(400).send({
+        return res.status(400).send({
           error: {
             details: 'Wrong password',
           },
         })
       }
     } else {
-      res.status(400).send({
+      return res.status(400).send({
         error: {
           details: 'Invalid username',
         },
@@ -88,7 +88,7 @@ const register = (req, res) => {
   const { firstname, lastname, email, password, confirmPassword } = req.body
 
   if (password !== confirmPassword) {
-    res.status(400).send({
+    return res.status(400).send({
       error: {
         details: 'Confirm password is not correct',
       },
@@ -119,7 +119,7 @@ const register = (req, res) => {
           },
         })
       } else {
-        res.status(400).send({
+        return res.status(400).send({
           error: {
             details: err,
           },
@@ -135,7 +135,7 @@ const register = (req, res) => {
       }
 
       transporter.sendMail(mailOptions, (error, info) => {
-        res.send(data)
+        return res.send(data)
       })
     }
   })

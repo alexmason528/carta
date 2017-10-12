@@ -25,7 +25,7 @@ const importElements = (req, res) => {
       element.save()
     })
     .on('end', () => {
-      res.send('Importing elements finished')
+      return res.send('Importing elements finished')
     })
   })
 }
@@ -49,7 +49,7 @@ const importDescriptives = (req, res) => {
       descriptive.save()
     })
     .on('end', () => {
-      res.send('Importing descriptives finished')
+      return res.send('Importing descriptives finished')
     })
   })
 }
@@ -73,7 +73,7 @@ const importTypes = (req, res) => {
       type.save()
     })
     .on('end', () => {
-      res.send('Importing types finished')
+      return res.send('Importing types finished')
     })
   })
 }
@@ -97,7 +97,7 @@ const importCategories = (req, res) => {
       category.save()
     })
     .on('end', () => {
-      res.send('Importing categories finished')
+      return res.send('Importing categories finished')
     })
   })
 }

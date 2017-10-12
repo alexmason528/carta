@@ -40,7 +40,7 @@ const getQuestInfo = (req, res) => {
       getQuest.descriptives = true
 
       if (getQuest.descriptives && getQuest.types) {
-        res.json(questInfo)
+        return res.json(questInfo)
       }
     })
   })
@@ -53,7 +53,7 @@ const getQuestInfo = (req, res) => {
       getQuest.types = true
 
       if (getQuest.descriptives && getQuest.types) {
-        res.json(questInfo)
+        return res.json(questInfo)
       }
     })
   })
@@ -235,7 +235,7 @@ const getRecommendations = (req, res) => {
       }
     }
 
-    res.json(recommendations)
+    return res.json(recommendations)
   })
 }
 
@@ -252,9 +252,9 @@ const getPlace = (req, res) => {
     if (err) throw err
 
     if (place) {
-      res.json(place)
+      return res.json(place)
     } else {
-      res.json({})
+      return res.json({})
     }
   })
 }
