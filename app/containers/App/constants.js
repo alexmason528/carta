@@ -12,5 +12,5 @@ export const VERIFY_REQUEST = 'carta/App/VERIFY_REQUEST'
 export const VERIFY_SUCCESS = 'carta/App/VERIFY_SUCCESS'
 export const VERIFY_FAIL = 'carta/App/VERIFY_FAIL'
 
-export const API_BASE_URL = (process.env.API_BASE_URL === 'production') ? 'https://cartamap.herokuapp.com/' : 'http://localhost:3000/'
+export const API_BASE_URL = (process.env.NODE_ENV === 'production') ? 'https://cartamap.herokuapp.com/' : 'http://localhost:3000/'
 export const MAP_ACCESS_TOKEN = 'pk.eyJ1IjoiY2FydGFndWlkZSIsImEiOiJjajMzNG5rcjAwMDFmMnFud3hpNW8wenJpIn0.uQaLvmopUNSmyGSI1WKynw'
