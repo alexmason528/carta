@@ -78,13 +78,6 @@ module.exports = (options) => ({
     // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
     // inside your code for any environment checks; UglifyJS will automatically
     // drop any unreachable code.
-
-    new webpack.DefinePlugin({
-      'process.env': {
-        API_BASE_URL: JSON.stringify(process.env.NODE_ENV === 'production' ? 'https://cartamap.herokuapp.com/' : 'http://localhost:3000/'),
-        MAP_ACCESS_TOKEN: JSON.stringify('pk.eyJ1IjoiY2FydGFndWlkZSIsImEiOiJjajMzNG5rcjAwMDFmMnFud3hpNW8wenJpIn0.uQaLvmopUNSmyGSI1WKynw'),
-      },
-    }),
     new webpack.NamedModulesPlugin(),
   ]),
   resolve: {

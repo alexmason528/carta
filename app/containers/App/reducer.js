@@ -1,4 +1,4 @@
-import { getItem, removeItem } from '../../utils/localStorage'
+import { getItem, removeItem } from 'utils/localStorage'
 
 import {
   LOGIN_REQUEST,

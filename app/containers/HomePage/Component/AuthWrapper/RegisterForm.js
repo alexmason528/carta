@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { reduxForm, Field } from 'redux-form'
 import Dropzone from 'react-dropzone'
-import RenderField from './RenderField'
+import RenderField from 'components/RenderField'
 import RenderDropzone from './RenderDropzone'
 import registerFormValidator from './validate'
 import './style.scss'
@@ -41,21 +41,21 @@ const RegisterForm = props => {
         component={RenderField}
         label="Last name"
       />
-      <div className="authForm__uploadButtons">
+      <div className="authWrapper__uploadButtons">
         <Field
-          className="authForm__uploadButton"
+          className="authWrapper__uploadButton"
           name="profile_pic"
           label="Profile Pic"
           component={RenderDropzone}
         />
         <Field
-          className="authForm__uploadButton"
+          className="authWrapper__uploadButton"
           name="cover_img"
           label="Cover Img"
           component={RenderDropzone}
         />
       </div>
-      <div className="authForm__buttons">
+      <div className="authWrapper__buttons">
         <button type="button" onClick={() => { onAuthTypeChange('login') }}>
           Login
         </button>
@@ -63,7 +63,7 @@ const RegisterForm = props => {
           Register
         </button>
       </div>
-      {registerError && <div className="authForm__error">{registerError}</div>}
+      {registerError && <div className="error">{registerError}</div>}
     </form>
   )
 }

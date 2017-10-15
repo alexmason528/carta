@@ -2,7 +2,6 @@
   background: #fff;
   padding: 0;
   margin: 0;
-  margin-top: -8px;
 
   button:focus, input:focus {
     outline: none;
@@ -15,6 +14,38 @@
   &__col {
     padding: 0 4px;
     position: relative;
+  }
+
+  .error {
+    margin: 5px 0 0 0;
+    color: red;
+  }
+
+  .slide-appear {
+    opacity : 0;
+    transition: opacity 0.1s;
+  }
+
+  .slide-appear.slide-appear-active {
+    opacity: 1;
+  }
+
+  .slide-enter {
+    max-height: 0;
+    transition: all 0.3s;
+  }
+
+  .slide-enter.slide-enter-active {
+    max-height: 1000px;
+  }
+
+  .slide-leave {
+    max-height: 1000px;
+    transition: all 0.3s;
+  }
+
+  .slide-leave.slide-leave-active {
+    max-height: 0;
   }
 }
 

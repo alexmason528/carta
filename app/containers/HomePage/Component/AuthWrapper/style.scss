@@ -1,4 +1,4 @@
-.authForm {
+.authWrapper {
   margin-top: 8px;
   padding: 100px 30px 20px 70px;
   position: relative;
@@ -128,10 +128,5 @@
     border: 1px solid #ccc;
     padding: 8px;
     color: #333;
-  }
-
-  &__error {
-    margin: 5px 0 0 5px;
-    color: red;
   }
 }

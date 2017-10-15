@@ -6,9 +6,11 @@ import { take, call, put, select, cancel, takeLatest } from 'redux-saga/effects'
 import { LOCATION_CHANGE } from 'react-router-redux'
 
 import request from 'utils/request'
+import { API_BASE_URL } from 'containers/App/constants'
 import { selectCurrentTypes, selectCurrentDescriptives, selectViewport } from 'containers/QuestPage/selectors'
 
-import { FETCH_BROCHURE, FETCH_RECOMMENDATIONS, FETCH_QUESTINFO, API_BASE_URL } from './constants'
+
+import { FETCH_BROCHURE, FETCH_RECOMMENDATIONS, FETCH_QUESTINFO } from './constants'
 import {
   fetchRecommendationsSuccess,
   fetchRecommendationsFail,

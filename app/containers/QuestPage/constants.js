@@ -31,6 +31,3 @@ export const FETCH_RECOMMENDATIONS_FAIL = 'carta/Quest/FETCH_RECOMMENDATIONS_FAI
 export const FETCH_BROCHURE = 'carta/Quest/FETCH_BROCHURE'
 export const FETCH_BROCHURE_SUCCESS = 'carta/Quest/FETCH_BROCHURE_SUCCESS'
 export const FETCH_BROCHURE_FAIL = 'carta/Quest/FETCH_BROCHURE_FAIL'
-
-export const API_BASE_URL = process.env.API_BASE_URL
-export const MAP_ACCESS_TOKEN = process.env.MAP_ACCESS_TOKEN

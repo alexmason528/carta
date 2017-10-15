@@ -19,17 +19,17 @@ import { fetchCommunityInfoRequest } from './actions'
 import Suggestion from './Component/Suggestion'
 import Quest from './Component/Quest'
 import Profile from './Component/Profile'
-import AuthForm from './Component/AuthForm'
+import AuthWrapper from './Component/AuthWrapper'
 import AddPostButton from './Component/AddPostButton'
+import AddPostForm from './Component/AddPostForm'
 import './style.scss'
-
-const Months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 class HomePage extends Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props)
     this.state = {
-      showAuthForm: false,
+      showAuthWrapper: false,
+      showAddPostForm: false,
     }
   }
 
@@ -49,32 +49,27 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
   facebookLogin = () => {
   }
 
-  closeAuthForm = () => {
+  toggleAuthWrapper = () => {
     this.setState({
-      showAuthForm: false,
+      showAuthWrapper: !this.state.showAuthWrapper,
     })
   }
 
-  toggleAuthForm = () => {
+  toggleAddPostForm = () => {
     this.setState({
-      showAuthForm: !this.state.showAuthForm,
+      showAddPostForm: !this.state.showAddPostForm,
     })
   }
 
   render() {
-    const { showAuthForm } = this.state
+    const { showAuthWrapper, showAddPostForm } = this.state
     const { posts, suggestions, authenticated, user } = this.props
 
-    const authFormClass = className({
-      authForm: true,
-      'authForm--hidden': !showAuthForm,
-    })
+    let addPostButtonType = 'text'
 
-    const today = new Date()
-    const todayStr = today.toJSON().slice(0, 10)
-
-    const yesterday = new Date(today.setDate(today.getDate() - 1))
-    const yesterdayStr = yesterday.toJSON().slice(0, 10)
+    if (posts.length > 0 && posts[0].img) {
+      addPostButtonType = 'image'
+    }
 
     return (
       <Container fluid className="homepage">
@@ -87,61 +82,28 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
         <LogoTab />
         <Row className="homepage__row">
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col">
-            <Profile onClick={this.toggleAuthForm} authenticated={authenticated} user={user} />
-            { !authenticated && <AuthForm className={authFormClass} onClose={this.closeAuthForm} /> }
+            <Profile onClick={this.toggleAuthWrapper} authenticated={authenticated} user={user} />
+            { !authenticated && <AuthWrapper show={showAuthWrapper} onClose={this.toggleAuthWrapper} /> }
             <Quest />
           </Col>
 
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-sm-down">
-            <AddPostButton />
+            <AddPostButton type={addPostButtonType} show={showAddPostForm} onClick={this.toggleAddPostForm} />
+            <AddPostForm show={showAddPostForm} onClose={this.toggleAddPostForm} />
             {
               posts.map((post, index) => {
-                let component
-                const { title, created_at, content, img, author } = post
-                const username = `${author[0].firstname} ${author[0].lastname}`
-
-                const date = created_at.slice(0, 10)
-                const time = created_at.slice(11)
-
-                const month = Months[parseInt(date.slice(5, 7), 10) - 1]
-                let day = parseInt(date.slice(8, 10), 10)
-
-                let suffix
-                if (day % 10 === 1) {
-                  suffix = 'st'
-                } else if (day % 10 === 2) {
-                  suffix = 'nd'
-                } else if (day % 10 === 3) {
-                  suffix = 'rd'
-                } else {
-                  suffix = 'th'
+                const { content, img } = post
+                let data = { ...post }
+                if (index === 0) {
+                  data.first = true
                 }
-
-                day = `${day}${suffix}`
-
-                let dateStr
-
-                if (date === yesterdayStr) {
-                  dateStr = 'yesterday '
-                } else if (date === todayStr) {
-                  dateStr = ''
-                } else if (date.slice(0, 4) === todayStr.slice(0, 4)) {
-                  dateStr = `${month} ${day}`
-                } else {
-                  dateStr = `${month} ${day}, ${date.slice(0, 4)}`
-                }
-
-                dateStr += ` ${time.slice(0, 5)}`
 
                 if (content && img) {
-                  component = <NormalPost key={index} imageUrl={img} title={title} username={username} date={dateStr} content={content} />
+                  return <NormalPost key={index} {...data} />
                 } else if (content && !img) {
-                  component = <TextPost key={index} title={title} username={username} date={dateStr} content={content} />
-                } else if (!content && img) {
-                  component = <ImagePost key={index} imageUrl={img} title={title} username={username} date={dateStr} />
+                  return <TextPost key={index} {...data} />
                 }
-
-                return component
+                return <ImagePost key={index} {...data} />
               })
             }
           </Col>

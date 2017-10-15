@@ -37,8 +37,8 @@ const verify = (req, res) => {
         cover_img: element.cover_img,
         verified: true,
       }
-      return res.json(response)  
-    } 
+      return res.json(response)
+    }
 
     return res.status(400).send({
       error: {

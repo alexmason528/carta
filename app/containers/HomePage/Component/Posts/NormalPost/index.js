@@ -1,15 +1,18 @@
 import React, { Component, PropTypes } from 'react'
+import { getTextFromDate } from 'utils/dateHelper'
 import './style.scss'
 
-const NormalPost = ({ imageUrl, title, username, date, content }) => {
+const NormalPost = ({ img, title, author, created_at, content }) => {
+  const { firstname, lastname } = author[0]
+
   return (
     <div className="normalPost">
       <div className="normalPost__image">
-        <img src={imageUrl} role="presentation" />
+        <img src={img} role="presentation" />
         <h2>{title}</h2>
       </div>
       <div className="normalPost__info">
-        {username} - CARTA | {date}
+        {firstname} {lastname} - CARTA | {getTextFromDate(created_at)}
       </div>
       <p className="normalPost__content">
         {content}
@@ -19,13 +22,10 @@ const NormalPost = ({ imageUrl, title, username, date, content }) => {
 }
 
 NormalPost.propTypes = {
-  imageUrl: PropTypes.string,
+  img: PropTypes.string,
   title: PropTypes.string,
-  username: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]),
-  date: PropTypes.string,
+  author: PropTypes.array,
+  created_at: PropTypes.string,
   content: PropTypes.string,
 }
 

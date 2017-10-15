@@ -1,6 +1,6 @@
 .homepage {
   .normalPost {
-    margin-top: 8px;
+    margin-bottom: 8px;
     
     &__image {
       position: relative;
@@ -48,6 +48,7 @@
     &__content {
       font-size: 18px;
       padding: 0 20px;
+      word-wrap: break-word;
     }
   }
 }

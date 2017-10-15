@@ -6,8 +6,9 @@ import { take, call, put, select, cancel, takeLatest } from 'redux-saga/effects'
 import { LOCATION_CHANGE } from 'react-router-redux'
 
 import request from 'utils/request'
+import { setItem, getItem, removeItem } from 'utils/localStorage'
 
-import { LOGIN_REQUEST, REGISTER_REQUEST } from 'containers/App/constants'
+import { LOGIN_REQUEST, REGISTER_REQUEST, API_BASE_URL } from 'containers/App/constants'
 import {
   loginSuccess,
   loginFail,
@@ -15,13 +16,11 @@ import {
   registerFail,
 } from 'containers/App/actions'
 
-import { FETCH_COMMUNITYINFO_REQUEST, API_BASE_URL } from './constants'
+import { FETCH_COMMUNITYINFO_REQUEST } from './constants'
 import {
   fetchCommunityInfoSuccess,
   fetchCommunityInfoFail,
 } from './actions'
-
-import { setItem, getItem, removeItem } from '../../utils/localStorage'
 
 export function* getCommunityInfoRequest() {
   const requestURL = `${API_BASE_URL}api/v1/community/info`

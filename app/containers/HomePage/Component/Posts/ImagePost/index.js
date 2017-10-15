@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import className from 'classnames'
+import { getTextFromDate } from 'utils/dateHelper'
 import './style.scss'
 
 export default class ImagePost extends Component {
@@ -71,17 +72,18 @@ export default class ImagePost extends Component {
       'imagePost__info--hidden': !showInfo,
     })
 
-    const { imageUrl, title, username, date } = this.props
+    const { img, title, author, created_at } = this.props
+    const { firstname, lastname } = author[0]
 
     return (
       <div className="imagePost" onClick={this.hideInfo}>
-        <img src={imageUrl} role="presentation" />
+        <img src={img} role="presentation" />
         <h2>{title}</h2>
         <button className="imagePost__infoBtn" onClick={this.toggleInfo}>
           <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/icon/info.png" role="presentation" />
         </button>
         <div className={postInfoClass}>
-          {username} - Carta | {date}
+          {firstname} {lastname} - Carta | {getTextFromDate(created_at)}
         </div>
       </div>
     )
@@ -89,11 +91,8 @@ export default class ImagePost extends Component {
 }
 
 ImagePost.propTypes = {
-  imageUrl: PropTypes.string,
+  img: PropTypes.string,
   title: PropTypes.string,
-  username: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]),
-  date: PropTypes.string,
+  author: PropTypes.array,
+  created_at: PropTypes.string,
 }

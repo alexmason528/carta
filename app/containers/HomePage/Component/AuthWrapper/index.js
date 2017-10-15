@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import Loader from 'react-loader-advanced'
+import className from 'classnames'
 import { loginRequest, registerRequest } from 'containers/App/actions'
 import { selectLoginInfo, selectRegisterInfo } from 'containers/App/selectors'
 import LoadingSpinner from 'components/LoadingSpinner'
@@ -10,7 +11,7 @@ import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'
 import './style.scss'
 
-class AuthForm extends Component {
+class AuthWrapper extends Component {
   constructor(props) {
     super(props)
 
@@ -62,24 +63,29 @@ class AuthForm extends Component {
 
   render() {
     const { authType, loginError, registerError } = this.state
-    const { loginInfo, registerInfo } = this.props
+    const { loginInfo, registerInfo, show } = this.props
 
     const spinnerShow = loginInfo.submitting || registerInfo.submitting
 
+    const authWrapperClass = className({
+      authWrapper: true,
+      'authWrapper--hidden': !show,
+    })
+
     return (
-      <div className={this.props.className}>
+      <div className={authWrapperClass}>
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
-        <button className="authForm__closeBtn" onClick={this.props.onClose}><img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/icon/close.png" role="presentation" /></button>
-        <div className="authForm__divider">
+        <button className="authWrapper__closeBtn" onClick={this.props.onClose}><img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/icon/close.png" role="presentation" /></button>
+        <div className="authWrapper__divider">
           <span>With</span>
         </div>
-        <div className="authForm__inlineButtons">
+        <div className="authWrapper__inlineButtons">
           <button onClick={this.googleLogin}><img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784819/image/icon/logo/google.png" role="presentation" /><span>Google</span></button>
           <button onClick={this.facebookLogin}><img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784819/image/icon/logo/facebook.png" role="presentation" /><span>Facebook</span></button>
         </div>
-        <div className="authForm__divider">
+        <div className="authWrapper__divider">
           <span>Or</span>
         </div>
         { authType === 'login' && <LoginForm onSubmit={this.props.loginRequest} loginError={loginError} onAuthTypeChange={this.handleAuthTypeChange} /> }
@@ -89,13 +95,13 @@ class AuthForm extends Component {
   }
 }
 
-AuthForm.propTypes = {
+AuthWrapper.propTypes = {
   loginRequest: PropTypes.func,
   registerRequest: PropTypes.func,
   onClose: PropTypes.func,
   loginInfo: PropTypes.object,
   registerInfo: PropTypes.object,
-  className: PropTypes.string,
+  show: PropTypes.bool,
 }
 
 const mapStateToProps = createStructuredSelector({
@@ -110,4 +116,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AuthForm)
+export default connect(mapStateToProps, mapDispatchToProps)(AuthWrapper)

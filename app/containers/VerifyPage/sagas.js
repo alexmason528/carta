@@ -13,7 +13,7 @@ import {
   verifyFail,
 } from 'containers/App/actions'
 
-import { setItem, getItem, removeItem } from '../../utils/localStorage'
+import { setItem, getItem, removeItem } from 'utils/localStorage'
 
 export function* verifyRequest(action) {
   const requestURL = `${API_BASE_URL}api/v1/auth/verify`

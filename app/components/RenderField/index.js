@@ -6,7 +6,7 @@ const RenderField = ({ input, label, type, meta: { touched, error, warning } }) 
     <input {...input} placeholder={label} type={type} />
     {
       touched && error &&
-      <div className="authForm__error">{error}</div>
+      <div className="error">{error}</div>
     }
   </div>
 )

@@ -1,0 +1,81 @@
+.addPostForm {
+  transition: all 0.1s;
+  position: relative;
+  max-height: 1000px;
+  overflow: hidden;
+  z-index: 20;
+
+  .postImage {
+    width: 100%;
+    height: auto;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  &__buttons {
+    display: flex;
+    padding: 10px 20px;
+    justify-content: space-between;
+    align-items: center;
+
+    .left, .right {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .left button{
+      margin-right: 5px;
+    }
+
+    .right button {
+      margin-left: 5px;
+    }
+  }
+
+  &__borderButton {
+    z-index: 10;
+    font-size: 14px;
+    cursor: pointer;
+    background: #fff;
+    padding: 4px 8px;
+    border: 1px solid #ddd;
+    margin-right: 5px; 
+  }
+
+  &__closeButton, &__deleteButton {
+    img {
+      width: 13px;
+      height: 13px;
+    }
+  }
+
+  &__closeButton {
+    right: 10px;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+
+    &--hasContent {
+      transform: none;
+      top: 10px;
+      color: #fff;
+    }
+  }
+
+  &__deleteButton {
+    line-height: 0;
+    margin: 0 10px !important;
+  }
+
+  &--hidden {
+    max-height: 0px;
+    padding: 0;
+  }
+
+  input[type=file] {
+    display: none;
+  }
+}
