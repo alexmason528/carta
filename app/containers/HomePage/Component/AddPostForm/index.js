@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import FileImage from 'react-file-image'
 import className from 'classnames'
 import CSSTransitionGroup from 'react-addons-css-transition-group'
+import { Popover, PopoverBody } from 'reactstrap'
 import './style.scss'
 
 class AddPostForm extends Component {
@@ -9,8 +10,10 @@ class AddPostForm extends Component {
     super(props)
 
     this.state = {
-      file: null,
-      postType: null,
+      image: null,
+      title: null,
+      content: null,
+      showDeleteConfirm: false,
     }
   }
 
@@ -20,7 +23,7 @@ class AddPostForm extends Component {
 
   handleFiles = (evt) => {
     this.setState({
-      file: evt.target.files[0],
+      image: evt.target.files[0],
     })
   }
 
@@ -28,83 +31,158 @@ class AddPostForm extends Component {
   }
 
   handleAddText = () => {
+    this.setState({
+      content: true,
+    })
+  }
+
+  handleContentChange = (evt) => {
+    this.setState({
+      content: evt.target.value ? evt.target.value : true,
+    })
   }
 
   handleDelete = () => {
+    this.setState({
+      showDeleteConfirm: !this.state.showDeleteConfirm,
+    })
+  }
+
+  handleDeleteConfirm = () => {
+    this.setState({
+      image: null,
+      title: null,
+      content: null,
+      showDeleteConfirm: false,
+    })
   }
 
   handleRemovePostImage = () => {
     this.setState({
-      file: null,
+      image: null,
+    })
+  }
+
+  handleRemoveContent = () => {
+    this.setState({
+      content: null,
     })
   }
 
   render() {
     const { show, onClose } = this.props
-    const { file, postType } = this.state
+    const { image, title, content, showDeleteConfirm } = this.state
+
+    let postType
+
+    if (image && content) {
+      postType = 'normalPost'
+    } else if (image && !content) {
+      postType = 'imagePost'
+    } else if (!image && content) {
+      postType = 'textPost'
+    }
 
     const addPostFormClass = className({
       addPostForm: true,
       'addPostForm--hidden': !show,
     })
 
-    const hasContent = !!file
-
     const closeButtonClass = className({
-      addPostForm__closeButton: true,
-      'addPostForm__closeButton--hasContent': !!file,
+      closeButton: true,
+      'closeButton--hasContent': postType,
     })
 
     return (
       <div className={addPostFormClass}>
-        <CSSTransitionGroup
-          transitionName="slide"
-          transitionAppear
-          transitionAppearTimeout={500}
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={500}
-        >
-          { file &&
-            <div>
-              <FileImage className="addPostForm__postImage" file={file} />
-              <button type="button" className="addPostForm__removeImageButton" onClick={this.handleRemovePostImage}>
-                <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close-white-shadow.png" role="presentation" />
-              </button>
-              <button type="button" className="addPostForm__linkButton" onClick={this.handleLinkButtonClick}>
-                <div className="btnImage">
-                  <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/icon/add-post.png" role="presentation" />
-                </div>
-                <div className="btnText">Link</div>
-              </button>
+        { postType === 'imagePost' &&
+          <div className={`addPostForm__${postType}`}>
+            <FileImage className="postImage" file={image} />
+            <button type="button" className="removeImageButton" onClick={this.handleRemovePostImage}>
+              <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close-white-shadow.png" role="presentation" />
+            </button>
+            <button type="button" className="linkButton" onClick={this.handleLinkButtonClick}>
+              <div className="btnImage">
+                <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/icon/add-post.png" role="presentation" />
+              </div>
+              <div className="btnText">Link</div>
+            </button>
+            <div className="postTitle">
+              <input type="text" placeholder="Title" />
             </div>
-          }
-        </CSSTransitionGroup>
+          </div>
+        }
 
-        <div className="addPostForm__postTitle">
-          <input type="text" placeholder="Title" />
-        </div>
-        <div className="addPostForm__postText">
-          asdfasdf
-        </div>
+        { postType === 'normalPost' &&
+          <div className={`addPostForm__${postType}`}>
+            <FileImage className="postImage" file={image} />
+            <button type="button" className="removeImageButton" onClick={this.handleRemovePostImage}>
+              <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close-white-shadow.png" role="presentation" />
+            </button>
+            <button type="button" className="linkButton" onClick={this.handleLinkButtonClick}>
+              <div className="btnImage">
+                <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/icon/add-post.png" role="presentation" />
+              </div>
+              <div className="btnText">Link</div>
+            </button>
+            <div className="postTitle">
+              <input type="text" placeholder="Title" />
+            </div>
+            <div className="postContent">
+              <button type="button" className="removeContentButton" onClick={this.handleRemoveContent}>
+                <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close.png" role="presentation" />
+              </button>
+              <div className="postContentMeta">
+                MARTIJN SNELDER - CARTA | NOW
+              </div>
+              <textarea className="postContentText" onChange={this.handleContentChange} placeholder="Type here...">
+              </textarea>
+            </div>
+          </div>
+        }
+
+        { postType === 'textPost' &&
+          <div className={`addPostForm__${postType}`}>
+            <div className="postTitle">
+              <input type="text" placeholder="Title" />
+            </div>
+            <div className="postContent">
+              <button type="button" className="removeContentButton" onClick={this.handleRemoveContent}>
+                <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close.png" role="presentation" />
+              </button>
+              <div className="postContentMeta">
+                MARTIJN SNELDER - CARTA | NOW
+              </div>
+              <textarea className="postContentText" onChange={this.handleContentChange} placeholder="Type here...">
+              </textarea>
+            </div>
+          </div>
+        }
 
         <div className="addPostForm__buttons">
           <div className="left">
             <input type="file" ref={(ref) => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
-            {(postType === 'normal' || postType === 'image') && <button type="button" className="addPostForm__borderButton" onClick={this.handleAddMedia}>
+            {(postType === 'textPost' || postType === 'normalPost') &&
+              <span style={{ marginRight: '8px' }}>{ content === true ? 1000 : (1000 - content.length) }</span>
+            }
+            {(postType !== 'imagePost' && postType !== 'normalPost') && <button type="button" className="addPostForm__borderButton" onClick={this.handleAddMedia}>
               + MEDIA
             </button>}
-            {<button type="button" className="addPostForm__borderButton" onClick={this.handleAddText}>
+            {(postType !== 'textPost' && postType !== 'normalPost') && <button type="button" className="addPostForm__borderButton" onClick={this.handleAddText}>
               + TEXT
             </button>}
           </div>
-          { file &&
+          { postType &&
             <div className="right">
               <button type="button" className="addPostForm__button" onClick={this.handleCancel}>
                 CANCEL
               </button>
-              <button type="button" className="addPostForm__deleteButton" onClick={this.handleDelete}>
+              <div className="addPostForm__deleteButton" onClick={this.handleDelete}>
                 <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/trash.png" role="presentation" />
-              </button>
+                <div className="popOver" style={{ display: showDeleteConfirm ? 'block' : 'none' }}>
+                  <button type="button" onClick={this.handleDeleteConfirm}>SURE?</button>
+                </div>
+              </div>
               <button type="button" className="addPostForm__borderButton" onClick={this.handleSubmit}>
                 SUBMIT
               </button>

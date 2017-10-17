@@ -3,7 +3,7 @@ import className from 'classnames'
 import { getTextFromDate } from 'utils/dateHelper'
 import './style.scss'
 
-const TextPost = ({ title, author, created_at, content, first }) => {
+const TextPost = ({ title, author, created_at, content, first, editable }) => {
   const { firstname, lastname } = author[0]
   const postClass = className({
     textPost: true,
@@ -31,6 +31,7 @@ TextPost.propTypes = {
   created_at: PropTypes.string,
   content: PropTypes.string,
   first: PropTypes.bool,
+  editable: PropTypes.bool,
 }
 
 export default TextPost

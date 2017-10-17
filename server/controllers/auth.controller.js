@@ -56,7 +56,7 @@ const verify = (req, res) => {
 const login = (req, res) => {
   const { email, password } = req.body
 
-  User.find({ email: email }, { _id: 0 }, (err, element) => {
+  User.find({ email: email }, (err, element) => {
     if (element.length > 0) {
       if (element[0].password === password) {
         return res.json(element[0])

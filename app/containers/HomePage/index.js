@@ -88,8 +88,8 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
           </Col>
 
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-sm-down">
-            <AddPostButton type={addPostButtonType} show={showAddPostForm} onClick={this.toggleAddPostForm} />
-            <AddPostForm show={showAddPostForm} onClose={this.toggleAddPostForm} />
+            { !showAddPostForm && authenticated && <AddPostButton type={addPostButtonType} show={showAddPostForm} onClick={this.toggleAddPostForm} />}
+            { authenticated && <AddPostForm show={showAddPostForm} onClose={this.toggleAddPostForm} /> }
             {
               posts.map((post, index) => {
                 const { content, img } = post
@@ -98,12 +98,14 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
                   data.first = true
                 }
 
+                const authorID = post.author[0]._id
+
                 if (content && img) {
-                  return <NormalPost key={index} {...data} />
+                  return <NormalPost key={index} {...data} editable={authorID === user._id} />
                 } else if (content && !img) {
-                  return <TextPost key={index} {...data} />
+                  return <TextPost key={index} {...data} editable={authorID === user._id} />
                 }
-                return <ImagePost key={index} {...data} />
+                return <ImagePost key={index} {...data} editable={authorID === user._id} />
               })
             }
           </Col>

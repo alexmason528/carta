@@ -72,7 +72,7 @@ export default class ImagePost extends Component {
       'imagePost__info--hidden': !showInfo,
     })
 
-    const { img, title, author, created_at } = this.props
+    const { img, title, author, created_at, editable } = this.props
     const { firstname, lastname } = author[0]
 
     return (
@@ -95,4 +95,5 @@ ImagePost.propTypes = {
   title: PropTypes.string,
   author: PropTypes.array,
   created_at: PropTypes.string,
+  editable: PropTypes.bool,
 }

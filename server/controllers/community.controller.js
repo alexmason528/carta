@@ -29,9 +29,7 @@ const getCommunityInfo = (req, res) => {
     },
     {
       $project: {
-        _id: 0,
         'author.password': 0,
-        'author._id': 0,
         'author.email': 0,
         'author.profile_pic': 0,
         'author.cover_img': 0,

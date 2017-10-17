@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { getTextFromDate } from 'utils/dateHelper'
 import './style.scss'
 
-const NormalPost = ({ img, title, author, created_at, content }) => {
+const NormalPost = ({ img, title, author, created_at, content, editable }) => {
   const { firstname, lastname } = author[0]
 
   return (
@@ -27,6 +27,7 @@ NormalPost.propTypes = {
   author: PropTypes.array,
   created_at: PropTypes.string,
   content: PropTypes.string,
+  editable: PropTypes.bool,
 }
 
 export default NormalPost

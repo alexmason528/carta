@@ -2,15 +2,15 @@
   transition: all 0.1s;
   position: relative;
   max-height: 1000px;
-  overflow: hidden;
   z-index: 20;
+  opacity: 1;
 
-  &__postImage {
+  .postImage {
     width: 100%;
     height: auto;
   }
 
-  &__postTitle {
+  .postTitle {
     position: absolute;
     top: 50%;
     left: 20px;
@@ -29,8 +29,66 @@
     }
   }
 
-  &__postText {
-    display: none; 
+  .postContent {
+    padding: 20px 20px 0 20px;
+    border-bottom: 1px solid #f00;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .postContentMeta {
+
+  }
+
+  .postContentText {
+    border: 1px solid #f00;
+    border-bottom: none;
+    resize: none;
+    margin-top: 10px;
+    padding: 5px;
+    width: 100%;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__normalPost {
+    .postTitle {
+      bottom: 165px;
+      top: inherit;
+      transform: none;
+    }
+  }
+
+  &__textPost {
+    .postTitle {
+      position: relative;
+      transform: none;
+      left: inherit;
+      top: inherit;
+      padding: 20px 20px 0 20px;
+
+      input[type=text] {
+        color: gray !important;
+        text-shadow: none;
+        font-size: 30px;
+
+        &::placeholder{
+          color: gray;
+        }
+      }
+    }
+
+    .postContent, .postContentText {
+      border: none;
+    }
+
+    .postContentText {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 
   &__buttons {
@@ -67,10 +125,11 @@
     margin-right: 5px; 
   }
 
-  &__removeImageButton {
+  .removeImageButton {
     position: absolute;
     top: 10px;
     right: 20px;
+    line-height: 0;
 
     img {
       width: 20px;
@@ -78,14 +137,27 @@
     }
   }
 
-  &__closeButton, &__deleteButton {
+  .removeContentButton {
+    position: absolute;
+    top: 25px;
+    right: 20px;
+    line-height: 0;
+
     img {
       width: 13px;
       height: 13px;
     }
   }
 
-  &__linkButton {
+  .closeButton, &__deleteButton {
+    line-height: 0;
+    img {
+      width: 13px;
+      height: 13px;
+    }
+  }
+
+  .linkButton {
     position: absolute;
     left: 20px;
     top: 10px;
@@ -114,20 +186,60 @@
     }
   }
 
-  &__closeButton {
+  .closeButton {
     &--hasContent {
       display: none
     }
   }
 
   &__deleteButton {
+    border: none;
     line-height: 0;
     margin: 0 10px !important;
+    position: relative;
+    cursor: pointer;
+
+    .popOver {
+      background-color: #fff;
+      box-shadow: 0 0 5px rgba(0,0,0,0.9);
+      color: #fff;
+      font-size: 12px;
+      padding: 15px;
+      position: absolute;
+      bottom: -45px;
+      left: -28px;
+      display: none;
+
+      button {
+        color: gray;
+      }
+
+      &:after, &:before {
+        background: #fff;
+        transform: rotate(-45deg);
+        z-index: -1;
+        width: 10px;
+        height: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.9);
+        content: '';
+        display: block;
+        position: absolute;
+        top: -5px;
+        left: calc(50% - 5px);
+      }
+
+      &:before {
+        box-shadow: none;
+        z-index: 1;
+      }
+    }
   }
 
   &--hidden {
     max-height: 0px;
     padding: 0;
+    opacity: 0;
+    overflow: hidden;
   }
 
   input[type=file] {
