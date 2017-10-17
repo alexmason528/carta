@@ -27,11 +27,13 @@
       text-transform: uppercase;
       position: absolute;
       font-weight: 900;
-      font-size: 2rem;
+      font-size: 2.5rem;
       line-height: 1.3;
       margin-bottom: 0;
       left: 40px;
-      bottom: 0;
+      top: 50%;
+      width: 70%;
+      transform: translate(0, -50%);
     }
   }
 }

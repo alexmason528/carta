@@ -34,21 +34,21 @@ export default class ImagePost extends Component {
     const postWidth = $(imagePost).width()
     const winWidth = $(window).width()
 
-    let fontSize
-    if (winWidth > 1000) {
-      fontSize = postWidth / 19
-    } else if (winWidth > 550) {
-      fontSize = postWidth / 11
-    } else {
-      fontSize = postWidth / 11
-    }
+    // let fontSize
+    // if (winWidth > 1000) {
+    //   fontSize = postWidth / 19
+    // } else if (winWidth > 550) {
+    //   fontSize = postWidth / 15
+    // } else {
+    //   fontSize = postWidth / 15
+    // }
 
-    $(imagePost).find('h2').css('font-size', `${fontSize}px`)
+    // $(imagePost).find('h2').css('font-size', `${fontSize}px`)
 
-    let postHeight = $(imagePost).outerHeight()
-    let headerHeight = $(imagePost).find('h2').outerHeight()
+    // let postHeight = $(imagePost).outerHeight()
+    // let headerHeight = $(imagePost).find('h2').outerHeight()
 
-    $(imagePost).find('h2').css('bottom', `${(postHeight - headerHeight) / 2}px`)
+    // $(imagePost).find('h2').css('bottom', `${(postHeight - headerHeight) / 2}px`)
   }
 
   toggleInfo = (evt) => {

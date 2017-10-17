@@ -126,12 +126,13 @@ const register = (req, res) => {
         })
       }
     } else {
+      const verifyUrl = (process.env.NODE_ENV === 'development') ? 'http://localhost:3000/verify' : 'https://cartamap.herokuapp.com/verify'
       let mailOptions = {
         from: '<no-reply@carta.guide>',
         to: data.email,
         subject: 'Verification required',
         text: `Hi, ${data.firstname} ${data.lastname}`,
-        html: `Please verify your email by clicking <a href="http://localhost:3000/verify/${cryptr.encrypt(data.email)}">this link</a>`,
+        html: `Please verify your email by clicking <a href="${verifyUrl}/${cryptr.encrypt(data.email)}">this link</a>`,
       }
 
       transporter.sendMail(mailOptions, (error, info) => {

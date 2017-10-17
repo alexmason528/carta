@@ -10,10 +10,11 @@ class AddPostForm extends Component {
 
     this.state = {
       file: null,
+      postType: null,
     }
   }
 
-  addMedia = evt => {
+  handleAddMedia = evt => {
     this.mediaUploader.click()
   }
 
@@ -24,18 +25,23 @@ class AddPostForm extends Component {
   }
 
   handleCancel = () => {
-
   }
 
-  addText = () => {
+  handleAddText = () => {
   }
 
   handleDelete = () => {
   }
 
+  handleRemovePostImage = () => {
+    this.setState({
+      file: null,
+    })
+  }
+
   render() {
     const { show, onClose } = this.props
-    const { file } = this.state
+    const { file, postType } = this.state
 
     const addPostFormClass = className({
       addPostForm: true,
@@ -51,27 +57,45 @@ class AddPostForm extends Component {
 
     return (
       <div className={addPostFormClass}>
-        <button type="button" className={closeButtonClass} onClick={onClose}>
-          <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close.png" role="presentation" />
-        </button>
         <CSSTransitionGroup
           transitionName="slide"
           transitionAppear
           transitionAppearTimeout={500}
-          transitionEnterTimeout={300}
-          transitionLeaveTimeout={300}
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={500}
         >
-          { file && <FileImage className="postImage" file={file} /> }
+          { file &&
+            <div>
+              <FileImage className="addPostForm__postImage" file={file} />
+              <button type="button" className="addPostForm__removeImageButton" onClick={this.handleRemovePostImage}>
+                <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close-white-shadow.png" role="presentation" />
+              </button>
+              <button type="button" className="addPostForm__linkButton" onClick={this.handleLinkButtonClick}>
+                <div className="btnImage">
+                  <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/icon/add-post.png" role="presentation" />
+                </div>
+                <div className="btnText">Link</div>
+              </button>
+            </div>
+          }
         </CSSTransitionGroup>
+
+        <div className="addPostForm__postTitle">
+          <input type="text" placeholder="Title" />
+        </div>
+        <div className="addPostForm__postText">
+          asdfasdf
+        </div>
+
         <div className="addPostForm__buttons">
           <div className="left">
             <input type="file" ref={(ref) => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
-            {!file && <button type="button" className="addPostForm__borderButton" onClick={this.addMedia}>
+            {(postType === 'normal' || postType === 'image') && <button type="button" className="addPostForm__borderButton" onClick={this.handleAddMedia}>
               + MEDIA
             </button>}
-            <button type="button" className="addPostForm__borderButton" onClick={this.addText}>
+            {<button type="button" className="addPostForm__borderButton" onClick={this.handleAddText}>
               + TEXT
-            </button>
+            </button>}
           </div>
           { file &&
             <div className="right">
@@ -86,6 +110,9 @@ class AddPostForm extends Component {
               </button>
             </div>
           }
+          <button type="button" className={closeButtonClass} onClick={onClose}>
+            <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close.png" role="presentation" />
+          </button>
         </div>
       </div>
     )

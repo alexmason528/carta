@@ -54,4 +54,12 @@ injectGlobal`
       font-size: calc(12px + 0.4vh);
     }
   }
+  
+  button {
+    cursor: pointer;
+  }
+
+  button:focus, input:focus {
+    outline: none;
+  }
 `
