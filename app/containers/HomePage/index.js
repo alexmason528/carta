@@ -101,11 +101,11 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
                 const authorID = post.author[0]._id
 
                 if (content && img) {
-                  return <NormalPost key={index} {...data} editable={authorID === user._id} />
+                  return <NormalPost key={index} {...data} editable={user && authorID === user._id} />
                 } else if (content && !img) {
-                  return <TextPost key={index} {...data} editable={authorID === user._id} />
+                  return <TextPost key={index} {...data} editable={user && authorID === user._id} />
                 }
-                return <ImagePost key={index} {...data} editable={authorID === user._id} />
+                return <ImagePost key={index} {...data} editable={user && authorID === user._id} />
               })
             }
           </Col>
