@@ -21,7 +21,7 @@ import Quest from './Component/Quest'
 import Profile from './Component/Profile'
 import AuthWrapper from './Component/AuthWrapper'
 import AddPostButton from './Component/AddPostButton'
-import AddPostForm from './Component/AddPostForm'
+import Post from './Component/Post'
 import './style.scss'
 
 class HomePage extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -89,32 +89,40 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
 
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-sm-down">
             { !showAddPostForm && authenticated && <AddPostButton type={addPostButtonType} show={showAddPostForm} onClick={this.toggleAddPostForm} />}
-            { authenticated && <AddPostForm show={showAddPostForm} onClose={this.toggleAddPostForm} /> }
+            { authenticated && <Post show={showAddPostForm} onClose={this.toggleAddPostForm} /> }
             {
               posts.map((post, index) => {
-                const { content, img } = post
-                let data = { ...post }
-                if (index === 0) {
-                  data.first = true
-                }
+                const { content, img, created_at, title } = post
+                let data = { content, img, created_at, title }
 
-                const authorID = post.author[0]._id
-
-                if (content && img) {
-                  return <NormalPost key={index} {...data} editable={user && authorID === user._id} />
-                } else if (content && !img) {
-                  return <TextPost key={index} {...data} editable={user && authorID === user._id} />
-                }
-                return <ImagePost key={index} {...data} editable={user && authorID === user._id} />
+                data.username = `${post.author[0].firstname} ${post.author[0].lastname}`
+                // data.editable = false
+                data.first = index === 0
+                data.editable = (user && post.author[0]._id === user._id)
+                return <Post show key={index} {...data} />
               })
+            }
+            {
+              // posts.map((post, index) => {
+              //   const { content, img } = post
+              //   const authorID = post.author[0]._id
+              //   let data = { ...post }
+              //   if (index === 0) {
+              //     data.first = true
+              //   }
+
+              //   if (content && img) {
+              //     return <NormalPost key={index} {...data} editable={user && authorID === user._id} />
+              //   } else if (content && !img) {
+              //     return <TextPost key={index} {...data} editable={user && authorID === user._id} />
+              //   }
+              //   return <ImagePost key={index} {...data} editable={user && authorID === user._id} />
+              // })
             }
           </Col>
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-md-down">
             {
-              suggestions.map((suggestion, index) => {
-                const { img, title } = suggestion
-                return <Suggestion key={index} imageUrl={img} title={title} />
-              })
+              suggestions.map((suggestion, index) => (<Suggestion key={index} imageUrl={suggestion.img} title={suggestion.title} />))
             }
           </Col>
         </Row>

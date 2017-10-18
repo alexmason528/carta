@@ -2,16 +2,13 @@ const User = require('../models/user')
 const nodemailer = require('nodemailer')
 const Cryptr = require('cryptr')
 const cryptr = new Cryptr('carta')
+const ses = require('nodemailer-ses-transport')
 
-let transporter = nodemailer.createTransport({
-  host: 'smtp.ethereal.email',
-  port: 587,
-  secure: false,
-  auth: {
-    user: 'wtun2bibtcxsrwmt@ethereal.email',
-    pass: 'DBK8x19yknPh2YawST',
-  },
-})
+let transporter = nodemailer.createTransport(ses({
+  accessKeyId: 'AKIAILWMKMTWHAJBH5HQ',
+  secretAccessKey: '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',
+  region: 'eu-west-1',
+}))
 
 const verify = (req, res) => {
   const { vcode } = req.body

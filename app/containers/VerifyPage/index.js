@@ -99,7 +99,7 @@ class VerifyPage extends Component { // eslint-disable-line react/prefer-statele
               <div className="verifyAlert__message">
                 <div>
                   We sent a mail to<br />
-                  <b>martijn.snelder@gmail.com</b><br />
+                  <b>{ user.email }</b><br />
                   Please verify your email.
                 </div>
                 <div className={helpClass}>
