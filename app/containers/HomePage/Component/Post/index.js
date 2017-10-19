@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react'
-import Image from 'react-image'
+import FileImage from 'react-file-image'
 import className from 'classnames'
 import CSSTransitionGroup from 'react-addons-css-transition-group'
 import { Popover, PopoverBody } from 'reactstrap'
 import { getTextFromDate } from 'utils/dateHelper'
+import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
 import './style.scss'
 
 class Post extends Component {
@@ -20,6 +21,7 @@ class Post extends Component {
       first: false,
       showDeleteConfirm: false,
       showInfo: false,
+      editing: false,
     }
   }
 
@@ -40,6 +42,9 @@ class Post extends Component {
   }
 
   handleCancel = () => {
+    this.setState({
+      editing: false,
+    })
   }
 
   handleAddText = () => {
@@ -50,7 +55,7 @@ class Post extends Component {
 
   handleContentChange = (evt) => {
     this.setState({
-      content: evt.target.value ? evt.target.value : true,
+      content: evt.target.value,
     })
   }
 
@@ -58,6 +63,10 @@ class Post extends Component {
     this.setState({
       showDeleteConfirm: !this.state.showDeleteConfirm,
     })
+  }
+
+  handleLinkButtonClick = () => {
+
   }
 
   handleDeleteConfirm = () => {
@@ -81,6 +90,12 @@ class Post extends Component {
     })
   }
 
+  handleStartEdit = () => {
+    this.setState({
+      editing: true,
+    })
+  }
+
   toggleInfo = () => {
     this.setState({
       showInfo: !this.state.showInfo,
@@ -89,7 +104,7 @@ class Post extends Component {
 
   render() {
     const { show, onClose } = this.props
-    const { img, title, content, created_at, username, editable, showDeleteConfirm, showInfo } = this.state
+    const { img, title, content, created_at, username, editable, showDeleteConfirm, showInfo, editing, first, adding } = this.state
 
     let postType
 
@@ -101,9 +116,9 @@ class Post extends Component {
       postType = 'textPost'
     }
 
-    const addPostFormClass = className({
-      addPostForm: true,
-      'addPostForm--hidden': !show,
+    const postFormClass = className({
+      postForm: true,
+      first: first,
     })
 
     const closeButtonClass = className({
@@ -117,64 +132,44 @@ class Post extends Component {
     })
 
     return (
-      <div className={addPostFormClass}>
+      <div className={postFormClass}>
         { postType === 'imagePost' &&
-          <div className={`addPostForm__${postType}`}>
-            <Image className="postImage" src={img} />
-            { editable &&
-              <button type="button" className="removeImageButton" onClick={this.handleRemovePostImage}>
-                <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close-white-shadow.png" role="presentation" />
-              </button>
-            }
-            { editable &&
-              <button type="button" className="linkButton" onClick={this.handleLinkButtonClick}>
-                <div className="btnImage">
-                  <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/icon/add-post.png" role="presentation" />
-                </div>
-                <div className="btnText">Link</div>
-              </button>
-            }
+          <div className={`postForm__${postType}`}>
+            { editable && !editing && <EditButton className="postEditBtn" image="edit-white" onClick={this.handleStartEdit} /> }
+            { img && typeof (img) === 'string' && <img className="postImage" src={img} role="presentation" />}
+            { img && typeof (img) === 'object' && <FileImage className="postImage" file={img} />}
+            { editable && editing && <RemoveButton className="removeImageButton" image="close-white-shadow" onClick={this.handleRemovePostImage} /> }
+            { editable && editing && <LinkButton className="linkButton" onClick={this.handleLinkButtonClick} />}
             <div className="postTitle">
               {title}
             </div>
             <div className={postInfoClass}>
               {username} - Carta | {getTextFromDate(created_at)}
             </div>
-            <button className="infoBtn" onClick={this.toggleInfo}>
-              <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/icon/info.png" role="presentation" />
-            </button>
+            <InfoButton className="infoBtn" onClick={this.toggleInfo} />
           </div>
         }
 
         { postType === 'normalPost' &&
-          <div className={`addPostForm__${postType}`}>
-            <Image className="postImage" src={img} />
-            {editable &&
-              <button type="button" className="removeImageButton" onClick={this.handleRemovePostImage}>
-                <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close-white-shadow.png" role="presentation" />
-              </button>
-            }
-            { editable &&
-              <button type="button" className="linkButton" onClick={this.handleLinkButtonClick}>
-                <div className="btnImage">
-                  <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/icon/add-post.png" role="presentation" />
+          <div className={`postForm__${postType}`}>
+            <div className="postImage">
+              { img && typeof (img) === 'string' && <img className="postImage" src={img} role="presentation" />}
+              { img && typeof (img) === 'object' && <FileImage className="postImage" file={img} />}
+              { editable && editing && <RemoveButton className="removeImageButton" image="close-white-shadow" onClick={this.handleRemovePostImage} /> }
+              { editable && editing && <LinkButton className="linkButton" onClick={this.handleLinkButtonClick} /> }
+              <div className="postTitle">
+                <div>
+                  {title}
                 </div>
-                <div className="btnText">Link</div>
-              </button>
-            }
-            <div className="postTitle">
-              <div>
-                {title}
               </div>
             </div>
             <div className="postContent">
-              {editable && <button type="button" className="removeContentButton" onClick={this.handleRemoveContent}>
-                <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close.png" role="presentation" />
-              </button>}
+              { editable && editing && <RemoveButton className="removeContentButton" image="close" onClick={this.handleRemoveContent} /> }
               <div className="postContentMeta">
                 {username} - CARTA | {getTextFromDate(created_at)}
+                { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
               </div>
-              <div contentEditable={editable || show} className="postContentText" onChange={this.handleContentChange}>
+              <div className="postContentText" onChange={this.handleContentChange} value={content}>
                 {content}
               </div>
             </div>
@@ -182,52 +177,44 @@ class Post extends Component {
         }
 
         { postType === 'textPost' &&
-          <div className={`addPostForm__${postType}`}>
+          <div className={`postForm__${postType}`}>
             <div className="postTitle">
               {title}
             </div>
             <div className="postContent">
-              {editable &&
-                <button type="button" className="removeContentButton" onClick={this.handleRemoveContent}>
-                  <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close.png" role="presentation" />
-                </button>
-              }
+              { editable && editing && <RemoveButton className="removeContentButton" image="close" onClick={this.handleRemoveContent} /> }
               <div className="postContentMeta">
                 {username} - CARTA | {getTextFromDate(created_at)}
+                { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
               </div>
-              <div contentEditable={editable || show} className="postContentText" onChange={this.handleContentChange}>
+              <div className="postContentText" onChange={this.handleContentChange}>
                 {content}
               </div>
             </div>
           </div>
         }
 
-        { (editable || show) &&
-          <div className="addPostForm__buttons">
+        { editable && editing &&
+          <div className="postForm__buttons">
             <div className="left">
               <input type="file" ref={(ref) => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
               {(postType === 'textPost' || postType === 'normalPost') &&
                 <span style={{ marginRight: '8px' }}>{ content === true ? 1000 : (1000 - content.length) }</span>
               }
-              {(postType !== 'imagePost' && postType !== 'normalPost') && <button type="button" className="addPostForm__borderButton" onClick={this.handleAddMedia}>
+              {(postType !== 'imagePost' && postType !== 'normalPost') && <button type="button" className="postForm__borderButton" onClick={this.handleAddMedia}>
                 + MEDIA
               </button>}
-              {(postType !== 'textPost' && postType !== 'normalPost') && <button type="button" className="addPostForm__borderButton" onClick={this.handleAddText}>
+              {(postType !== 'textPost' && postType !== 'normalPost') && <button type="button" className="postForm__borderButton" onClick={this.handleAddText}>
                 + TEXT
               </button>}
             </div>
             { postType &&
               <div className="right">
-                <button type="button" className="addPostForm__button" onClick={this.handleCancel}>
+                <button type="button" className="postForm__button" onClick={this.handleCancel}>
                   CANCEL
                 </button>
-                <div className="addPostForm__deleteButton" onClick={this.handleDelete}>
-                  <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/trash.png" role="presentation" />
-                  <div className="popOver" style={{ display: showDeleteConfirm ? 'block' : 'none' }}>
-                    <button type="button" onClick={this.handleDeleteConfirm}>SURE?</button>
-                  </div>
-                </div>
-                <button type="button" className="addPostForm__borderButton" onClick={this.handleSubmit}>
+                <DeleteButton className="postForm__deleteButton" onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
+                <button type="button" className="postForm__borderButton" onClick={this.handleSubmit}>
                   SUBMIT
                 </button>
               </div>

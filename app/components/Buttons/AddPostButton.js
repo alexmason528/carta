@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import className from 'classnames'
-import './style.scss'
 
 const AddPostButton = ({ show, type, onClick }) => {
   const addPostBtnClass = className({

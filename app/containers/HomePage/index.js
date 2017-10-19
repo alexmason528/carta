@@ -13,14 +13,13 @@ import { Container, Row, Col } from 'reactstrap'
 import { selectAuthenticated, selectUser } from 'containers/App/selectors'
 import Logo from 'components/Logo'
 import LogoTab from 'components/LogoTab'
-import { ImagePost, TextPost, NormalPost } from './Component/Posts'
+import { AddPostButton } from 'components/Buttons'
 import { selectPosts, selectSuggestions } from './selectors'
 import { fetchCommunityInfoRequest } from './actions'
 import Suggestion from './Component/Suggestion'
 import Quest from './Component/Quest'
 import Profile from './Component/Profile'
 import AuthWrapper from './Component/AuthWrapper'
-import AddPostButton from './Component/AddPostButton'
 import Post from './Component/Post'
 import './style.scss'
 
@@ -89,36 +88,19 @@ class HomePage extends Component { // eslint-disable-line react/prefer-stateless
 
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-sm-down">
             { !showAddPostForm && authenticated && <AddPostButton type={addPostButtonType} show={showAddPostForm} onClick={this.toggleAddPostForm} />}
-            { authenticated && <Post show={showAddPostForm} onClose={this.toggleAddPostForm} /> }
-            {
-              posts.map((post, index) => {
+            { authenticated && <Post onClose={this.toggleAddPostForm} /> }
+            <div>
+              {
+              posts.map(post => {
                 const { content, img, created_at, title } = post
                 let data = { content, img, created_at, title }
 
                 data.username = `${post.author[0].firstname} ${post.author[0].lastname}`
-                // data.editable = false
-                data.first = index === 0
                 data.editable = (user && post.author[0]._id === user._id)
-                return <Post show key={index} {...data} />
+                return <Post key={post._id} {...data} />
               })
-            }
-            {
-              // posts.map((post, index) => {
-              //   const { content, img } = post
-              //   const authorID = post.author[0]._id
-              //   let data = { ...post }
-              //   if (index === 0) {
-              //     data.first = true
-              //   }
-
-              //   if (content && img) {
-              //     return <NormalPost key={index} {...data} editable={user && authorID === user._id} />
-              //   } else if (content && !img) {
-              //     return <TextPost key={index} {...data} editable={user && authorID === user._id} />
-              //   }
-              //   return <ImagePost key={index} {...data} editable={user && authorID === user._id} />
-              // })
-            }
+              }
+            </div>
           </Col>
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-md-down">
             {
