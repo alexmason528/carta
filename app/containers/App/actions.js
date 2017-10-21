@@ -1,20 +1,3 @@
-/*
- * QuestPage Actions
- *
- * Actions change things in your application
- * Since this boilerplate uses a uni-directional data flow, specifically redux,
- * we have these actions which are the only way your application interacts with
- * your application state. This guarantees that your state is up to date and nobody
- * messes it up weirdly somewhere.
- *
- * To add a new Action:
- * 1) Import your constant
- * 2) Add a function like this:
- *    export function yourAction(var) {
- *        return { type: YOUR_ACTION_CONSTANT, var: var }
- *    }
- */
-
 import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
@@ -29,16 +12,11 @@ import {
   VERIFY_REQUEST,
   VERIFY_SUCCESS,
   VERIFY_FAIL,
+
+  DELETE_USER_REQUEST,
+  DELETE_USER_SUCCESS,
+  DELETE_USER_FAIL,
 } from './constants'
-
-/**
- * Changes the input field of the form
- *
- * @param  {name} name The new text of the input field
- *
- * @return {object}    An action object with a type of CHANGE_USERNAME
- */
-
 
 export function loginRequest(payload) {
   return {
@@ -108,3 +86,24 @@ export function verifyFail(payload) {
     payload,
   }
 }
+
+export function deleteUserRequest(payload) {
+  return {
+    type: DELETE_USER_REQUEST,
+    payload,
+  }
+}
+
+export function deleteUserSuccess() {
+  return {
+    type: DELETE_USER_REQUEST,
+  }
+}
+
+export function deleteUserFail(payload) {
+  return {
+    type: DELETE_USER_REQUEST,
+    payload,
+  }
+}
+

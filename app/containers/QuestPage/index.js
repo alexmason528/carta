@@ -13,7 +13,7 @@ import { browserHistory } from 'react-router'
 import { Container } from 'reactstrap'
 import { MAP_ACCESS_TOKEN } from 'containers/App/constants'
 import Logo from 'components/Logo'
-import LogoTab from 'components/LogoTab'
+import Menu from 'components/Menu'
 import URLParser from 'utils/questURLparser'
 import { mapChange, fetchQuestInfo, fetchRecommendations, setDefaultQuest } from './actions'
 import { selectRecommendations, selectPlaces } from './selectors'
@@ -25,7 +25,22 @@ import './style.scss'
 
 const Map = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN })
 
-class QuestPage extends Component { // eslint-disable-line react/prefer-stateless-function
+class QuestPage extends Component {
+  static propTypes = {
+    recommendations: PropTypes.object,
+    places: PropTypes.array,
+    params: PropTypes.shape({
+      brochure: PropTypes.string,
+      viewport: PropTypes.string,
+      types: PropTypes.string,
+      descriptives: PropTypes.string,
+    }),
+    mapChange: PropTypes.func,
+    fetchQuestInfo: PropTypes.func,
+    fetchRecommendations: PropTypes.func,
+    setDefaultQuest: PropTypes.func,
+  }
+
   constructor(props) {
     super(props)
 
@@ -37,15 +52,15 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   componentWillMount() {
-    // const { viewport, types, descriptives } = this.props.params
+    // const { params: { viewport, types, descriptives }, setDefaultQuest, fetchRecommendations } = this.props
 
     // if (viewport && types && descriptives) {
     //   const res = URLParser({ viewport, types, descriptives })
 
     //   if (!res.error) {
-    //     this.props.setDefaultQuest(res.data)
+    //     setDefaultQuest(res.data)
     //     console.log(res.data)
-    //     this.props.fetchRecommendations()
+    //     fetchRecommendations()
     //   }
     // }
 
@@ -89,7 +104,7 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
 
     this.count = 5
 
-    this.redrawMap(this.props)
+    this.handleRedrawMap(this.props)
   }
 
   componentDidMount() {
@@ -99,29 +114,31 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   componentWillReceiveProps(nextProps) {
-    this.redrawMap(nextProps)
+    this.handleRedrawMap(nextProps)
   }
 
-  onZoomEnd = map => {
-    this.props.mapChange({
+  handleZoomEnd = map => {
+    const { mapChange, fetchRecommendations } = this.props
+    const { showQuest, minimized, closed } = this.state
+
+    mapChange({
       zoom: map.getZoom(),
       bounds: map.getBounds(),
     })
 
-    const { showQuest, minimized, closed } = this.state
-
     if (showQuest || minimized) {
-      this.props.fetchRecommendations()
+      fetchRecommendations()
     }
   }
 
-  onStyleLoad = map => {
-    this.props.mapChange({
+  handleStyleLoad = map => {
+    const { mapChange, fetchRecommendations } = this.props
+    mapChange({
       zoom: map.getZoom(),
       bounds: map.getBounds(),
     })
 
-    this.props.fetchRecommendations()
+    fetchRecommendations()
     this.map = map
 
     map.addSource('shapes', {
@@ -134,12 +151,13 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
       data: this.pointsGeoJSONSource,
     })
 
-    this.addShapes(map)
-    this.addCaptions(map)
+    this.handleAddShapes(map)
+    this.handleAddCaptions(map)
   }
 
-  onDragEnd = map => {
-    this.props.mapChange({
+  handleDragEnd = map => {
+    const { mapChange, fetchRecommendations } = this.props
+    mapChange({
       zoom: map.getZoom(),
       bounds: map.getBounds(),
     })
@@ -147,11 +165,11 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
     const { showQuest, minimized, closed } = this.state
 
     if (showQuest || minimized) {
-      this.props.fetchRecommendations()
+      fetchRecommendations()
     }
   }
 
-  addShapes = map => {
+  handleAddShapes = map => {
     for (let i = this.count - 1; i >= 0; i -= 1) {
       map.addLayer({
         id: `shape-fill-${i}`,
@@ -203,12 +221,12 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
 
       map.on('click', shapeFill, data => {
         const name = data.features[0].properties.name
-        this.elementClicked(name)
+        this.handleElementClick(name)
       })
     }
   }
 
-  addCaptions = map => {
+  handleAddCaptions = map => {
     for (let i = this.count - 1; i >= 0; i -= 1) {
       map.addLayer({
         id: `shape-caption-${i}`,
@@ -240,14 +258,14 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
 
       map.on('click', shapeCaption, data => {
         const name = data.features[0].properties.name
-        this.elementClicked(name)
+        this.handleElementClick(name)
       })
     }
   }
 
-  redrawMap = props => {
+  handleRedrawMap = props => {
     if (this.map) {
-      this.clearMap()
+      this.handleClearMap()
 
       props.recommendations.details.map((recommendation, index) => {
         const { display, e } = recommendation
@@ -267,8 +285,9 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
     }
   }
 
-  clearMap = () => {
-    this.props.recommendations.details.map((recommendation, index) => {
+  handleClearMap = () => {
+    const { recommendations } = this.props
+    recommendations.details.map((recommendation, index) => {
       let filter = ['==', 'e', '']
 
       this.map.setFilter(`shape-border-offset-${index}`, filter)
@@ -278,7 +297,7 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
     })
   }
 
-  mapViewPortChange = placeName => {
+  handleMapViewportChange = placeName => {
     const { places } = this.props
 
     for (let place of places) {
@@ -292,25 +311,25 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
     }
   }
 
-  elementClicked = name => {
+  handleElementClick = name => {
     browserHistory.push(`/i/${name}`)
   }
 
-  questButtonClicked = () => {
+  handleQuestButtonClick = () => {
     this.setState({
       showQuest: !this.state.showQuest,
       minimized: false,
       closed: false,
     })
 
-    this.redrawMap(this.props)
+    this.handleRedrawMap(this.props)
 
     $('.place-search').focus()
     $('.descriptive-search').focus()
     $('.type-search').focus()
   }
 
-  minimizeClicked = () => {
+  handleMimimizeClick = () => {
     this.setState({
       showQuest: false,
       minimized: true,
@@ -318,7 +337,7 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
     })
   }
 
-  closeClicked = () => {
+  handleCloseClick = () => {
     this.setState({
       showQuest: false,
       minimized: false,
@@ -326,13 +345,13 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
     })
 
     if (this.map) {
-      this.clearMap()
+      this.handleClearMap()
     }
   }
 
   render() {
     const { showQuest, minimized, closed } = this.state
-    const { brochure } = this.props.params
+    const { recommendations, params: { brochure } } = this.props
 
     const mapBlockClass = classNames({
       'map-block': true,
@@ -358,17 +377,17 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
           ]}
         />
         <Logo />
-        <LogoTab />
+        <Menu />
         <QuestButton
           className={questButtonClass}
-          onClick={this.questButtonClicked}
-          onCloseClick={this.closeClicked}
+          onClick={this.handleQuestButtonClick}
+          onCloseClick={this.handleCloseClick}
         />
         <QuestPanel
           className={questPanelClass}
-          minimizeClicked={this.minimizeClicked}
-          closeClicked={this.closeClicked}
-          mapViewPortChange={this.mapViewPortChange}
+          minimizeClicked={this.handleMimimizeClick}
+          closeClicked={this.handleCloseClick}
+          mapViewPortChange={this.handleMapViewportChange}
         />
         <MapBlock className={mapBlockClass}>
           <ReactResizeDetector handleWidth handleHeight onResize={() => { if (this.map) this.map.resize() }} />
@@ -377,14 +396,14 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
             containerStyle={this.containerStyle}
             center={this.center}
             zoom={this.zoom}
-            onZoomEnd={this.onZoomEnd}
-            onStyleLoad={this.onStyleLoad}
-            onDragEnd={this.onDragEnd}
+            onZoomEnd={this.handleZoomEnd}
+            onStyleLoad={this.handleStyleLoad}
+            onDragEnd={this.handleDragEnd}
           />
         </MapBlock>
         <ScoreBoardBlock>
           {
-            this.props.recommendations.details.map((recommendation, index) => {
+            recommendations.details.map((recommendation, index) => {
               const { name, score } = recommendation
               return <div key={index} style={{ color: this.colors[index % 5] }}>{name} : {score}</div>
             })
@@ -396,33 +415,16 @@ class QuestPage extends Component { // eslint-disable-line react/prefer-stateles
   }
 }
 
-QuestPage.propTypes = {
-  recommendations: PropTypes.object,
-  places: PropTypes.array,
-  params: PropTypes.shape({
-    brochure: PropTypes.string,
-    viewport: PropTypes.string,
-    types: PropTypes.string,
-    descriptives: PropTypes.string,
-  }),
-  mapChange: PropTypes.func,
-  fetchQuestInfo: PropTypes.func,
-  fetchRecommendations: PropTypes.func,
-  setDefaultQuest: PropTypes.func,
-}
-
 const mapStateToProps = createStructuredSelector({
   recommendations: selectRecommendations(),
   places: selectPlaces(),
 })
 
-const mapDispatchToProps = dispatch => {
-  return {
-    mapChange: mapInfo => dispatch(mapChange(mapInfo)),
-    fetchQuestInfo: () => dispatch(fetchQuestInfo()),
-    fetchRecommendations: () => dispatch(fetchRecommendations()),
-    setDefaultQuest: data => dispatch(setDefaultQuest(data)),
-  }
+const actions = {
+  mapChange,
+  fetchQuestInfo,
+  fetchRecommendations,
+  setDefaultQuest,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(QuestPage)
+export default connect(mapStateToProps, actions)(QuestPage)

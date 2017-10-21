@@ -3,8 +3,9 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import Loader from 'react-loader-advanced'
 import className from 'classnames'
+import { LOGIN_REQUEST, REGISTER_REQUEST, LOGIN_FAIL } from 'containers/App/constants'
 import { loginRequest, registerRequest } from 'containers/App/actions'
-import { selectLoginInfo, selectRegisterInfo } from 'containers/App/selectors'
+import { selectInfo } from 'containers/App/selectors'
 import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
 import LoginForm from './LoginForm'
@@ -12,6 +13,14 @@ import RegisterForm from './RegisterForm'
 import './style.scss'
 
 class AuthWrapper extends Component {
+  static propTypes = {
+    loginRequest: PropTypes.func,
+    registerRequest: PropTypes.func,
+    info: PropTypes.object,
+    onClose: PropTypes.func,
+    show: PropTypes.bool,
+  }
+
   constructor(props) {
     super(props)
 
@@ -23,9 +32,9 @@ class AuthWrapper extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { loginInfo, registerInfo } = nextProps
+    const { info: { status, error } } = nextProps
 
-    if (loginInfo.error === 'Invalid username') {
+    if (status === LOGIN_FAIL && error === 'Invalid username') {
       this.setState({
         loginError: null,
         authType: 'register',
@@ -33,8 +42,8 @@ class AuthWrapper extends Component {
     } else {
       this.setState({
         ...this.state,
-        loginError: loginInfo.error,
-        registerError: registerInfo.error,
+        loginError: error,
+        registerError: error,
       })
     }
   }
@@ -47,7 +56,9 @@ class AuthWrapper extends Component {
     })
   }
 
-  registerHandler = values => {
+  handleRegister = values => {
+    const { registerRequest } = this.props
+
     let formData = new FormData()
 
     for (let key in values) {
@@ -58,14 +69,14 @@ class AuthWrapper extends Component {
       }
     }
 
-    this.props.registerRequest(formData)
+    registerRequest(formData)
   }
 
   render() {
     const { authType, loginError, registerError } = this.state
-    const { loginInfo, registerInfo, show } = this.props
+    const { info: { status }, show, onClose, loginRequest } = this.props
 
-    const spinnerShow = loginInfo.submitting || registerInfo.submitting
+    const spinnerShow = status === LOGIN_REQUEST || status === REGISTER_REQUEST
 
     const authWrapperClass = className({
       authWrapper: true,
@@ -77,7 +88,7 @@ class AuthWrapper extends Component {
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
-        <button className="authWrapper__closeBtn" onClick={this.props.onClose}><img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/icon/close.png" role="presentation" /></button>
+        <button className="authWrapper__closeBtn" onClick={onClose}><img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/icon/close.png" role="presentation" /></button>
         <div className="authWrapper__divider">
           <span>With</span>
         </div>
@@ -88,32 +99,20 @@ class AuthWrapper extends Component {
         <div className="authWrapper__divider">
           <span>Or</span>
         </div>
-        { authType === 'login' && <LoginForm onSubmit={this.props.loginRequest} loginError={loginError} onAuthTypeChange={this.handleAuthTypeChange} /> }
-        { authType === 'register' && <RegisterForm onSubmit={this.registerHandler} registerError={registerError} onAuthTypeChange={this.handleAuthTypeChange} /> }
+        { authType === 'login' && <LoginForm onSubmit={loginRequest} loginError={loginError} onAuthTypeChange={this.handleAuthTypeChange} /> }
+        { authType === 'register' && <RegisterForm onSubmit={this.handleRegister} registerError={registerError} onAuthTypeChange={this.handleAuthTypeChange} /> }
       </div>
     )
   }
 }
 
-AuthWrapper.propTypes = {
-  loginRequest: PropTypes.func,
-  registerRequest: PropTypes.func,
-  onClose: PropTypes.func,
-  loginInfo: PropTypes.object,
-  registerInfo: PropTypes.object,
-  show: PropTypes.bool,
-}
-
 const mapStateToProps = createStructuredSelector({
-  loginInfo: selectLoginInfo(),
-  registerInfo: selectRegisterInfo(),
+  info: selectInfo(),
 })
 
-const mapDispatchToProps = dispatch => {
-  return {
-    loginRequest: payload => dispatch(loginRequest(payload)),
-    registerRequest: payload => dispatch(registerRequest(payload)),
-  }
+const actions = {
+  loginRequest,
+  registerRequest,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AuthWrapper)
+export default connect(mapStateToProps, actions)(AuthWrapper)

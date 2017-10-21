@@ -1,7 +1,10 @@
 .homepage {
   .quest {
-    margin-bottom: 8px;
     position: relative;
+
+    &__Authenticated {
+      margin-top: 8px;
+    }
 
     img {
       width: 100%;

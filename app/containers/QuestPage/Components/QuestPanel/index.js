@@ -9,29 +9,45 @@ import Quest from '../Quest'
 import './style.scss'
 
 class QuestPanel extends Component {
-  questAddHandler = () => {
-    this.props.questAdd()
+  static propTypes = {
+    minimizeClicked: PropTypes.func.isRequired,
+    closeClicked: PropTypes.func.isRequired,
+    quests: PropTypes.array,
+    currentQuestIndex: PropTypes.number,
+    className: PropTypes.string,
+    mapViewPortChange: PropTypes.func,
+    fetchRecommendations: PropTypes.func,
+    questAdd: PropTypes.func,
+    questSelect: PropTypes.func,
+    questRemove: PropTypes.func,
   }
 
-  questSelectHandler = index => {
-    this.props.questSelect(index)
-    this.props.fetchRecommendations()
+  handleQuestAdd = () => {
+    const { questAdd } = this.props
+    questAdd()
   }
 
-  questRemoveHandler = (evt, index) => {
+  handleQuestSelect = index => {
+    const { questSelect, fetchRecommendations } = this.props
+
+    questSelect(index)
+    fetchRecommendations()
+  }
+
+  handleQuestRemove = (evt, index) => {
     evt.preventDefault()
-    const { currentQuestIndex, quests } = this.props
-    if (currentQuestIndex === index || quests.length === 1) return
-    this.props.questRemove(index)
+
+    const { currentQuestIndex, quests, questRemove } = this.props
+    if (currentQuestIndex !== index && quests.length !== 1) questRemove(index)
   }
 
   render() {
-    const { quests, currentQuestIndex, className } = this.props
+    const { quests, currentQuestIndex, className, minimizeClicked, closeClicked, mapViewPortChange } = this.props
     return (
       <div className={className}>
         <div className="buttons">
-          <button className="minimize" onClick={() => { this.props.minimizeClicked() }}><img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/min.png" role="presentation" /></button>
-          <button className="close" onClick={() => { this.props.closeClicked() }}><img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close.png" role="presentation" /></button>
+          <button className="minimize" onClick={minimizeClicked}><img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/min.png" role="presentation" /></button>
+          <button className="close" onClick={closeClicked}><img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close.png" role="presentation" /></button>
         </div>
         <div className="list">
           {
@@ -44,15 +60,15 @@ class QuestPanel extends Component {
                 <button
                   className={questTabClass}
                   key={index}
-                  onClick={() => { this.questSelectHandler(index) }}
-                  onContextMenu={evt => { this.questRemoveHandler(evt, index) }}
+                  onClick={() => { this.handleQuestSelect(index) }}
+                  onContextMenu={evt => { this.handleQuestRemove(evt, index) }}
                 >
                   {index + 1}
                 </button>
               )
             })
           }
-          <button className="add-quest" onClick={this.questAddHandler}>+</button>
+          <button className="add-quest" onClick={this.handleQuestAdd}>+</button>
         </div>
         <div className="quests">
           {
@@ -62,7 +78,7 @@ class QuestPanel extends Component {
                 show: index === currentQuestIndex,
               })
               return (
-                <Quest key={index} className={questClass} mapViewPortChange={this.props.mapViewPortChange}>
+                <Quest key={index} className={questClass} mapViewPortChange={mapViewPortChange}>
                   {index}
                 </Quest>
               )
@@ -74,32 +90,17 @@ class QuestPanel extends Component {
   }
 }
 
-QuestPanel.propTypes = {
-  minimizeClicked: PropTypes.func.isRequired,
-  closeClicked: PropTypes.func.isRequired,
-  quests: PropTypes.array,
-  currentQuestIndex: PropTypes.number,
-  className: PropTypes.string,
-  mapViewPortChange: PropTypes.func,
-  fetchRecommendations: PropTypes.func,
-  questAdd: PropTypes.func,
-  questSelect: PropTypes.func,
-  questRemove: PropTypes.func,
-}
-
 const mapStateToProps = createStructuredSelector({
   quests: selectQuests(),
   currentQuestIndex: selectCurrentQuestIndex(),
 })
 
-const mapDispatchToProps = dispatch => {
-  return {
-    questAdd: () => dispatch(questAdd()),
-    questSelect: index => dispatch(questSelect(index)),
-    questRemove: index => dispatch(questRemove(index)),
-    fetchRecommendations: () => dispatch(fetchRecommendations()),
-  }
+const actions = {
+  questAdd,
+  questSelect,
+  questRemove,
+  fetchRecommendations,
 }
 
-// Wrap the component to inject dispatch and state into it
-export default connect(mapStateToProps, mapDispatchToProps)(QuestPanel)
+
+export default connect(mapStateToProps, actions)(QuestPanel)

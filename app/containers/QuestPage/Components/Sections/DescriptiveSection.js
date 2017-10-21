@@ -7,6 +7,15 @@ import { selectDescriptives, selectCurrentDescriptives } from 'containers/QuestP
 import { Button, StarButton } from '../Buttons'
 
 class DescriptiveSection extends Component {
+  static propTypes = {
+    className: PropTypes.string,
+    descriptives: PropTypes.array,
+    currentDescriptives: PropTypes.object,
+    questIndex: PropTypes.number,
+    descriptiveSelect: PropTypes.func,
+    fetchRecommendations: PropTypes.func,
+  }
+
   constructor(props) {
     super(props)
 
@@ -31,7 +40,7 @@ class DescriptiveSection extends Component {
   //       clearTimeout(this.timerID)
   //       if(!$(this).parent().hasClass('active')) {
   //         this.timerID = setTimeout(() => {
-  //           component.descriptiveClickHoldHandler(e.currentTarget.textContent)
+  //           component.handleDescriptiveClick(e.currentTarget.textContent)
   //         }, 200)
   //       }
   //     } else if (e.type == 'mouseup') {
@@ -48,7 +57,7 @@ class DescriptiveSection extends Component {
     let closable = 0
 
     const { descriptives } = nextState
-    const { className } = nextProps
+    const { className } = this.props
 
     for (let descriptive of descriptives) {
       if (descriptive.active === 1) {
@@ -57,7 +66,7 @@ class DescriptiveSection extends Component {
       }
     }
 
-    if (className !== this.props.className) {
+    if (nextProps.className !== className) {
       nextState.expanded = 1 - closable
     }
 
@@ -83,7 +92,7 @@ class DescriptiveSection extends Component {
     })
   }
 
-  expandHandler = expanded => {
+  handleExpand = expanded => {
     let descriptives = [...this.state.descriptives]
 
     this.setState({
@@ -97,13 +106,13 @@ class DescriptiveSection extends Component {
     }
   }
 
-  inputChangeHandler = text => {
+  handleInputChange = text => {
     this.setState({
       search: text,
     })
   }
 
-  anythingClickHandler = () => {
+  handleAnythingClick = () => {
     const { descriptives, anything } = this.state
     let newDescriptives = descriptives.map(descriptive => ({ c: descriptive.c, name: descriptive.name, star: anything === 1 ? 0 : descriptive.star, active: 1 - anything }))
 
@@ -116,10 +125,10 @@ class DescriptiveSection extends Component {
       stateData.expanded = 1
     }
 
-    this.setState(stateData, this.fetchRecommendations)
+    this.setState(stateData, this.handleFetchRecommendations)
   }
 
-  descriptiveClickHandler = descriptiveName => {
+  handleDescriptiveClick = descriptiveName => {
     const { descriptives } = this.state
 
     let newDescriptives = descriptives.map((descriptive, index) => {
@@ -129,10 +138,10 @@ class DescriptiveSection extends Component {
 
     this.setState({
       descriptives: newDescriptives,
-    }, this.fetchRecommendations)
+    }, this.handleFetchRecommendations)
   }
 
-  descriptiveStarClickHandler = descriptiveName => {
+  handleDescriptiveStarClick = descriptiveName => {
     const { descriptives } = this.state
 
     let newDescriptives = descriptives.map((descriptive, index) => {
@@ -146,11 +155,12 @@ class DescriptiveSection extends Component {
 
     this.setState({
       descriptives: newDescriptives,
-    }, this.fetchRecommendations)
+    }, this.handleFetchRecommendations)
   }
 
-  fetchRecommendations = () => {
+  handleFetchRecommendations = () => {
     const { descriptives, anything } = this.state
+    const { descriptiveSelect, fetchRecommendations } = this.props
 
     let star = []
     let active = []
@@ -173,31 +183,33 @@ class DescriptiveSection extends Component {
       star: star,
     }
 
-    this.props.descriptiveSelect(questDescriptives)
-    this.props.fetchRecommendations()
+    descriptiveSelect(questDescriptives)
+    fetchRecommendations()
   }
 
-  // descriptiveClickHoldHandler = descriptiveName => {
-  //   let descriptives = [...this.state.descriptives]
+  handleDescriptiveClick = descriptiveName => {
+    const { descriptiveSelect, questIndex, fetchRecommendations } = this.props
+    let descriptives = [...this.state.descriptives]
 
-  //   let newDescriptives = descriptives.map((descriptive, index) => {
-  //     const { name, star, visible, active } = descriptive
-  //     if (name === descriptiveName) {
-  //       this.props.descriptiveSelect(name, 1, 1, 1, this.props.questIndex)
-  //       return { name: name, star: 1, visible: 1, active: 1 }
-  //     }
-  //     return descriptive
-  //   })
+    let newDescriptives = descriptives.map((descriptive, index) => {
+      const { name, star, visible, active } = descriptive
+      if (name === descriptiveName) {
+        descriptiveSelect(name, 1, 1, 1, questIndex)
+        return { name: name, star: 1, visible: 1, active: 1 }
+      }
+      return descriptive
+    })
 
-  //   this.setState({
-  //     descriptives: newDescriptives,
-  //   })
+    this.setState({
+      descriptives: newDescriptives,
+    })
 
-  //   this.props.fetchRecommendations()
-  // }
+    fetchRecommendations()
+  }
 
   render() {
     const { descriptives, expanded, anything, search } = this.state
+    const { className } = this.props
 
     let searchedDescriptives = []
     if (search === '') searchedDescriptives = descriptives
@@ -243,16 +255,16 @@ class DescriptiveSection extends Component {
     })
 
     return (
-      <div className={this.props.className}>
+      <div className={className}>
         <h1>Known For</h1>
-        <img className={searchBtnClass} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/search.png" onClick={() => { this.expandHandler(1) }} role="presentation" />
-        <img className={closeBtnClass} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/back.png" onClick={() => { this.expandHandler(0) }} role="presentation" />
-        <input ref={input => { this.searchInput = input }} className={searchInputClass} value={search} onChange={evt => { this.inputChangeHandler(evt.target.value) }} />
+        <img className={searchBtnClass} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/search.png" onClick={() => { this.handleExpand(1) }} role="presentation" />
+        <img className={closeBtnClass} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/back.png" onClick={() => { this.handleExpand(0) }} role="presentation" />
+        <input ref={input => { this.searchInput = input }} className={searchInputClass} value={search} onChange={evt => { this.handleInputChange(evt.target.value) }} />
         <div className="suggestions">
           <Button
             className={anythingBtnClass}
             active={anything}
-            onClick={this.anythingClickHandler}
+            onClick={this.handleAnythingClick}
           >
             Anything
           </Button>
@@ -267,8 +279,8 @@ class DescriptiveSection extends Component {
                     <StarButton
                       active={active}
                       star={star}
-                      onMouseDown={() => { this.descriptiveClickHandler(name) }}
-                      onStarClick={() => { this.descriptiveStarClickHandler(name) }}
+                      onMouseDown={() => { this.handleDescriptiveClick(name) }}
+                      onStarClick={() => { this.handleDescriptiveStarClick(name) }}
                       key={index}
                     >
                       {name}
@@ -279,8 +291,8 @@ class DescriptiveSection extends Component {
                     <StarButton
                       active={active}
                       star={star}
-                      onMouseDown={() => { this.descriptiveClickHandler(name) }}
-                      onStarClick={() => { this.descriptiveStarClickHandler(name) }}
+                      onMouseDown={() => { this.handleDescriptiveClick(name) }}
+                      onStarClick={() => { this.handleDescriptiveStarClick(name) }}
                       key={index}
                     >
                       {name}
@@ -301,8 +313,8 @@ class DescriptiveSection extends Component {
                   <StarButton
                     active={active}
                     star={star}
-                    onMouseDown={() => { this.descriptiveClickHandler(name) }}
-                    onStarClick={() => { this.descriptiveStarClickHandler(name) }}
+                    onMouseDown={() => { this.handleDescriptiveClick(name) }}
+                    onStarClick={() => { this.handleDescriptiveStarClick(name) }}
                     key={index}
                   >
                     {name}
@@ -320,8 +332,8 @@ class DescriptiveSection extends Component {
                   <StarButton
                     active={active}
                     star={star}
-                    onMouseDown={() => { this.descriptiveClickHandler(name) }}
-                    onStarClick={() => { this.descriptiveStarClickHandler(name) }}
+                    onMouseDown={() => { this.handleDescriptiveClick(name) }}
+                    onStarClick={() => { this.handleDescriptiveStarClick(name) }}
                     key={index}
                   >
                     {name}
@@ -336,25 +348,14 @@ class DescriptiveSection extends Component {
   }
 }
 
-DescriptiveSection.propTypes = {
-  className: PropTypes.string,
-  descriptives: PropTypes.array,
-  currentDescriptives: PropTypes.object,
-  questIndex: PropTypes.number,
-  descriptiveSelect: PropTypes.func,
-  fetchRecommendations: PropTypes.func,
-}
-
 const mapStateToProps = createStructuredSelector({
   descriptives: selectDescriptives(),
   currentDescriptives: selectCurrentDescriptives(),
 })
 
-const mapDispatchToProps = dispatch => {
-  return {
-    descriptiveSelect: (descriptiveInfo) => dispatch(descriptiveSelect(descriptiveInfo)),
-    fetchRecommendations: () => dispatch(fetchRecommendations()),
-  }
+const actions = {
+  descriptiveSelect,
+  fetchRecommendations,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DescriptiveSection)
+export default connect(mapStateToProps, actions)(DescriptiveSection)

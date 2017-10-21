@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-const SvgIcon = (props) => {
+const SvgIcon = props => {
   const { children, ...other } = props
   return (
     <svg {...other}>{children}</svg>

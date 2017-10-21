@@ -1,8 +1,3 @@
-/*
- * VerifyPage
- *
- */
-
 import React, { Component, PropTypes } from 'react'
 import Helmet from 'react-helmet'
 import className from 'classnames'
@@ -13,10 +8,10 @@ import { Container, Row, Col } from 'reactstrap'
 import { verifyRequest } from 'containers/App/actions'
 import { selectAuthenticated, selectUser, selectVerifyInfo } from 'containers/App/selectors'
 import Logo from 'components/Logo'
-import LogoTab from 'components/LogoTab'
+import Menu from 'components/Menu'
 import './style.scss'
 
-class VerifyPage extends Component { // eslint-disable-line react/prefer-stateless-function
+class VerifyPage extends Component {
   constructor(props) {
     super(props)
 
@@ -38,7 +33,7 @@ class VerifyPage extends Component { // eslint-disable-line react/prefer-statele
     this.profilePicRand = Math.floor((Math.random() * 9))
   }
 
-  toggleHelp = () => {
+  handleHelpToggle = () => {
     this.setState({
       showHelp: !this.state.showHelp,
     })
@@ -75,7 +70,7 @@ class VerifyPage extends Component { // eslint-disable-line react/prefer-statele
           ]}
         />
         <Logo />
-        <LogoTab />
+        <Menu />
         <Row className="verifypage__row">
           <Col md={12} sm={12} className="verifypage__col">
             <img className="verifypage__background" src={coverImg} role="presentation" />
@@ -106,7 +101,7 @@ class VerifyPage extends Component { // eslint-disable-line react/prefer-statele
                   Having trouble? Send us a mail<br />
                   <b>m.snelder@gmail.com</b>
                 </div>
-                <button type="button" className="verifyAlert__helpButton" onClick={this.toggleHelp}>Help</button>
+                <button type="button" className="verifyAlert__helpButton" onClick={this.handleHelpToggle}>Help</button>
               </div>
             </div>
           </Col>
@@ -130,10 +125,8 @@ const mapStateToProps = createStructuredSelector({
   verify: selectVerifyInfo(),
 })
 
-const mapDispatchToProps = dispatch => {
-  return {
-    verifyRequest: (vcode) => dispatch(verifyRequest(vcode)),
-  }
+const actions = {
+  verifyRequest,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(VerifyPage)
+export default connect(mapStateToProps, actions)(VerifyPage)

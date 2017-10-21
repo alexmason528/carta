@@ -1,25 +1,16 @@
-/**
- * The global state selectors
- */
-
 import { createSelector } from 'reselect';
 
 const selectGlobal = state => state.global;
 const selectLocationState = () => state => state.route;
 
-const selectLoginInfo = () => createSelector(
-  selectGlobal,
-  substate => substate.login
-)
-
-const selectRegisterInfo = () => createSelector(
-  selectGlobal,
-  substate => substate.register
-)
-
 const selectAuthenticated = () => createSelector(
   selectGlobal,
   substate => substate.authenticated
+)
+
+const selectInfo = () => createSelector(
+  selectGlobal,
+  substate => ({ status: substate.status, error: substate.error })
 )
 
 const selectUser = () => createSelector(
@@ -27,17 +18,10 @@ const selectUser = () => createSelector(
   substate => substate.user
 )
 
-const selectVerifyInfo = () => createSelector(
-  selectGlobal,
-  substate => substate.verify
-)
-
 export {
   selectGlobal,
   selectLocationState,
-  selectLoginInfo,
-  selectRegisterInfo,
   selectAuthenticated,
+  selectInfo,
   selectUser,
-  selectVerifyInfo,
 };

@@ -1,7 +1,3 @@
-/**
- * Homepage selectors
- */
-
 import { createSelector } from 'reselect'
 
 const selectQuest = state => state.quest

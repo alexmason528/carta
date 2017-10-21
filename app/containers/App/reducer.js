@@ -19,42 +19,28 @@ import {
 const initialState = {
   user: JSON.parse(getItem('auth')) || null,
   authenticated: !!getItem('auth'),
-  login: {
-    submitting: false,
-    error: null,
-  },
-  register: {
-    submitting: false,
-    error: null,
-  },
-  verify: {
-    submitting: false,
-    error: null,
-  },
+  status: null,
+  error: null,
 }
 
-function appReducer(state = initialState, action) {
-  switch (action.type) {
+function appReducer(state = initialState, { type, payload }) {
+  switch (type) {
     case LOGIN_REQUEST:
       return {
         ...state,
         user: null,
         authenticated: false,
-        login: {
-          submitting: true,
-          error: null,
-        },
+        status: type,
+        error: null,
       }
 
     case LOGIN_SUCCESS:
       return {
         ...state,
-        user: action.payload,
+        user: payload,
         authenticated: true,
-        login: {
-          submitting: false,
-          error: null,
-        },
+        status: type,
+        error: null,
       }
 
     case LOGIN_FAIL:
@@ -62,10 +48,8 @@ function appReducer(state = initialState, action) {
         ...state,
         user: null,
         authenticated: false,
-        login: {
-          submitting: false,
-          error: action.payload,
-        },
+        status: type,
+        error: payload,
       }
 
     case LOGOUT:
@@ -74,6 +58,8 @@ function appReducer(state = initialState, action) {
         ...state,
         user: null,
         authenticated: false,
+        state: type,
+        error: null,
       }
 
     case REGISTER_REQUEST:
@@ -81,21 +67,17 @@ function appReducer(state = initialState, action) {
         ...state,
         user: null,
         authenticated: false,
-        register: {
-          submitting: true,
-          error: null,
-        },
+        status: type,
+        error: null,
       }
 
     case REGISTER_SUCCESS:
       return {
         ...state,
-        user: action.payload,
+        user: payload,
         authenticated: true,
-        register: {
-          submitting: false,
-          error: null,
-        },
+        status: type,
+        error: null,
       }
 
     case REGISTER_FAIL:
@@ -103,10 +85,8 @@ function appReducer(state = initialState, action) {
         ...state,
         user: null,
         authenticated: false,
-        register: {
-          submitting: false,
-          error: action.payload,
-        },
+        status: type,
+        error: payload,
       }
 
     case VERIFY_REQUEST:
@@ -116,21 +96,17 @@ function appReducer(state = initialState, action) {
           ...state.user,
           verified: false,
         },
-        verify: {
-          submitting: true,
-          error: null,
-        },
+        status: type,
+        error: null,
       }
 
     case VERIFY_SUCCESS:
       return {
         ...state,
-        user: action.payload,
+        user: payload,
         authenticated: true,
-        verify: {
-          submitting: false,
-          error: null,
-        },
+        status: type,
+        error: null,
       }
 
     case VERIFY_FAIL:
@@ -140,10 +116,8 @@ function appReducer(state = initialState, action) {
           ...state.user,
           verified: false,
         },
-        verify: {
-          submitting: false,
-          error: action.payload,
-        },
+        status: type,
+        error: payload,
       }
 
     default:

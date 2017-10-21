@@ -1,7 +1,3 @@
-/**
- * Gets the community info
- */
-
 import { take, call, put, select, cancel, takeLatest } from 'redux-saga/effects'
 import { LOCATION_CHANGE } from 'react-router-redux'
 

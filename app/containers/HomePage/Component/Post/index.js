@@ -8,6 +8,11 @@ import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from '
 import './style.scss'
 
 class Post extends Component {
+  static propTypes = {
+    onClose: PropTypes.func,
+    show: PropTypes.bool,
+  }
+
   constructor(props) {
     super(props)
 
@@ -35,7 +40,7 @@ class Post extends Component {
     this.mediaUploader.click()
   }
 
-  handleFiles = (evt) => {
+  handleFiles = evt => {
     this.setState({
       img: evt.target.files[0],
     })
@@ -53,7 +58,7 @@ class Post extends Component {
     })
   }
 
-  handleContentChange = (evt) => {
+  handleContentChange = evt => {
     this.setState({
       content: evt.target.value,
     })
@@ -104,7 +109,19 @@ class Post extends Component {
 
   render() {
     const { show, onClose } = this.props
-    const { img, title, content, created_at, username, editable, showDeleteConfirm, showInfo, editing, first, adding } = this.state
+    const {
+      img,
+      title,
+      content,
+      created_at,
+      username,
+      editable,
+      showDeleteConfirm,
+      showInfo,
+      editing,
+      first,
+      adding,
+    } = this.state
 
     let postType
 
@@ -197,7 +214,7 @@ class Post extends Component {
         { editable && editing &&
           <div className="postForm__buttons">
             <div className="left">
-              <input type="file" ref={(ref) => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
+              <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
               {(postType === 'textPost' || postType === 'normalPost') &&
                 <span style={{ marginRight: '8px' }}>{ content === true ? 1000 : (1000 - content.length) }</span>
               }
@@ -227,11 +244,6 @@ class Post extends Component {
       </div>
     )
   }
-}
-
-Post.propTypes = {
-  onClose: PropTypes.func,
-  show: PropTypes.bool,
 }
 
 export default Post

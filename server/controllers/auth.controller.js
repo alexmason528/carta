@@ -10,40 +10,6 @@ let transporter = nodemailer.createTransport(ses({
   region: 'eu-west-1',
 }))
 
-const verify = (req, res) => {
-  const { vcode } = req.body
-
-  let email
-  try {
-    email = cryptr.decrypt(vcode)
-  } catch (e) {
-    return res.status(400).send({
-      error: {
-        details: 'Failed to verify',
-      },
-    })
-  }
-
-  User.findOneAndUpdate({ email: email }, { $set: { verified: true } }, { new: true }, (err, element) => {
-    if (element && element.firstname) {
-      let response = {
-        firstname: element.firstname,
-        lastname: element.lastname,
-        email: element.email,
-        profile_pic: element.profile_pic,
-        cover_img: element.cover_img,
-        verified: true,
-      }
-      return res.json(response)
-    }
-
-    return res.status(400).send({
-      error: {
-        details: 'Failed to verify',
-      },
-    })
-  })
-}
 /**
  * Login
  * @param req
@@ -145,6 +111,83 @@ const register = (req, res) => {
  * @param res
  * @returns success or fail
  */
+
+const verify = (req, res) => {
+  const { vcode } = req.body
+
+  let email
+  try {
+    email = cryptr.decrypt(vcode)
+  } catch (e) {
+    return res.status(400).send({
+      error: {
+        details: 'Failed to verify',
+      },
+    })
+  }
+
+  User.findOneAndUpdate({ email: email }, { $set: { verified: true } }, { new: true }, (err, element) => {
+    if (element && element.firstname) {
+      let response = {
+        firstname: element.firstname,
+        lastname: element.lastname,
+        email: element.email,
+        profile_pic: element.profile_pic,
+        cover_img: element.cover_img,
+        verified: true,
+      }
+      return res.json(response)
+    }
+
+    return res.status(400).send({
+      error: {
+        details: 'Failed to verify',
+      },
+    })
+  })
+}
+
+/**
+ * delete
+ * @param req
+ * @param res
+ * @returns success or fail
+ */
+
+const deleteUser = (req, res) => {
+  const { vcode } = req.body
+
+  let email
+  try {
+    email = cryptr.decrypt(vcode)
+  } catch (e) {
+    return res.status(400).send({
+      error: {
+        details: 'Failed to verify',
+      },
+    })
+  }
+
+  User.findOneAndUpdate({ email: email }, { $set: { verified: true } }, { new: true }, (err, element) => {
+    if (element && element.firstname) {
+      let response = {
+        firstname: element.firstname,
+        lastname: element.lastname,
+        email: element.email,
+        profile_pic: element.profile_pic,
+        cover_img: element.cover_img,
+        verified: true,
+      }
+      return res.json(response)
+    }
+
+    return res.status(400).send({
+      error: {
+        details: 'Failed to verify',
+      },
+    })
+  })
+}
 
 module.exports.login = login
 module.exports.register = register

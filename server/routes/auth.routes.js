@@ -31,5 +31,8 @@ router.post('/register', upload.any(), AuthController.register)
 // Verify
 router.post('/verify', AuthController.verify)
 
+// Delete User
+router.post('/delete', AuthController.deleteUser)
+
 // export default router
 module.exports = router

@@ -9,15 +9,12 @@ import Helmet from 'react-helmet'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
-import Logo from 'components/Logo'
-import LogoTab from 'components/LogoTab'
-
 import { fetchBrochure } from 'containers/QuestPage/actions'
 import { selectBrochure } from 'containers/QuestPage/selectors'
 
 import './style.scss'
 
-class Brochure extends Component { // eslint-disable-line react/prefer-stateless-function
+class Brochure extends Component {
 
   constructor(props) {
     super(props)
@@ -352,10 +349,8 @@ const mapStateToProps = createStructuredSelector({
   brochure: selectBrochure(),
 })
 
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchBrochure: name => dispatch(fetchBrochure(name)),
-  }
+const actions = {
+  fetchBrochure,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Brochure)
+export default connect(mapStateToProps, actions)(Brochure)

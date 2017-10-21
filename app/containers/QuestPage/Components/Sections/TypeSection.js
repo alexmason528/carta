@@ -7,6 +7,14 @@ import { selectTypes, selectCurrentTypes } from 'containers/QuestPage/selectors'
 import { Button, StarButton } from '../Buttons'
 
 class TypeSection extends Component {
+  static propTypes = {
+    className: PropTypes.string,
+    types: PropTypes.array,
+    currentTypes: PropTypes.object,
+    typeSelect: PropTypes.func,
+    fetchRecommendations: PropTypes.func,
+  }
+
   constructor(props) {
     super(props)
 
@@ -69,7 +77,7 @@ class TypeSection extends Component {
     })
   }
 
-  expandHandler = expanded => {
+  handleExpand = expanded => {
     let types = [...this.state.types]
 
     this.setState({
@@ -83,13 +91,13 @@ class TypeSection extends Component {
     }
   }
 
-  inputChangeHandler = evt => {
+  handleInputChange = evt => {
     this.setState({
       search: evt.target.value,
     })
   }
 
-  anythingClickHandler = () => {
+  handleAnythingClick = () => {
     const { types, anything } = this.state
 
     const newTypes = types.map(type => ({ c: type.c, name: type.name, active: 1 - anything }))
@@ -103,10 +111,10 @@ class TypeSection extends Component {
       stateData.expanded = 1
     }
 
-    this.setState(stateData, this.fetchRecommendations)
+    this.setState(stateData, this.handleFetchRecommendations)
   }
 
-  typeClickHandler = typeName => {
+  handleTypeClick = typeName => {
     const { types, expanded, anything } = this.state
 
     let newTypes = types.map((type, index) => {
@@ -119,10 +127,11 @@ class TypeSection extends Component {
 
     this.setState({
       types: newTypes,
-    }, this.fetchRecommendations)
+    }, this.handleFetchRecommendations)
   }
 
-  fetchRecommendations = () => {
+  handleFetchRecommendations = () => {
+    const { typeSelect, fetchRecommendations } = this.props
     const { types, anything } = this.state
 
     let active = []
@@ -136,12 +145,13 @@ class TypeSection extends Component {
       inactive: inactive,
     }
 
-    this.props.typeSelect(questTypes)
-    this.props.fetchRecommendations()
+    typeSelect(questTypes)
+    fetchRecommendations()
   }
 
   render() {
     const { types, expanded, anything, search } = this.state
+    const { className } = this.props
 
     let searchedTypes = []
     if (search === '') searchedTypes = types
@@ -181,16 +191,16 @@ class TypeSection extends Component {
     })
 
     return (
-      <div className={this.props.className}>
+      <div className={className}>
         <h1>Show Me</h1>
-        <img className={searchBtnClass} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/search.png" onClick={() => { this.expandHandler(1) }} role="presentation" />
-        <img className={closeBtnClass} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/back.png" onClick={() => { this.expandHandler(0) }} role="presentation" />
-        <input ref={input => { this.searchInput = input }} className={searchInputClass} value={search} onChange={evt => { this.inputChangeHandler(evt) }} />
+        <img className={searchBtnClass} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/search.png" onClick={() => { this.handleExpand(1) }} role="presentation" />
+        <img className={closeBtnClass} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/back.png" onClick={() => { this.handleExpand(0) }} role="presentation" />
+        <input ref={input => { this.searchInput = input }} className={searchInputClass} value={search} onChange={evt => { this.handleInputChange(evt) }} />
         <div className="suggestion">
           <Button
             className={anythingBtnClass}
             active={anything}
-            onClick={this.anythingClickHandler}
+            onClick={this.handleAnythingClick}
           >
             Anything
           </Button>
@@ -204,7 +214,7 @@ class TypeSection extends Component {
                 button = (
                   <Button
                     active={active}
-                    onClick={() => { this.typeClickHandler(name) }}
+                    onClick={() => { this.handleTypeClick(name) }}
                     key={index}
                   >
                     {name}
@@ -214,7 +224,7 @@ class TypeSection extends Component {
                 button = (
                   <Button
                     active={active}
-                    onClick={() => { this.typeClickHandler(name) }}
+                    onClick={() => { this.handleTypeClick(name) }}
                     key={index}
                   >
                     {name}
@@ -233,7 +243,7 @@ class TypeSection extends Component {
                 return (
                   <Button
                     active={active}
-                    onClick={() => { this.typeClickHandler(name) }}
+                    onClick={() => { this.handleTypeClick(name) }}
                     key={index}
                   >
                     {name}
@@ -248,24 +258,14 @@ class TypeSection extends Component {
   }
 }
 
-TypeSection.propTypes = {
-  className: PropTypes.string,
-  types: PropTypes.array,
-  currentTypes: PropTypes.object,
-  typeSelect: PropTypes.func,
-  fetchRecommendations: PropTypes.func,
-}
-
 const mapStateToProps = createStructuredSelector({
   types: selectTypes(),
   currentTypes: selectCurrentTypes(),
 })
 
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchRecommendations: () => dispatch(fetchRecommendations()),
-    typeSelect: typeInfo => dispatch(typeSelect(typeInfo)),
-  }
+const actions = {
+  fetchRecommendations,
+  typeSelect,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TypeSection)
+export default connect(mapStateToProps, actions)(TypeSection)

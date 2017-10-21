@@ -12,5 +12,9 @@ export const VERIFY_REQUEST = 'carta/App/VERIFY_REQUEST'
 export const VERIFY_SUCCESS = 'carta/App/VERIFY_SUCCESS'
 export const VERIFY_FAIL = 'carta/App/VERIFY_FAIL'
 
+export const DELETE_USER_REQUEST = 'carta/App/DELETE_USER_REQUEST'
+export const DELETE_USER_SUCCESS = 'carta/App/DELETE_USER_SUCCESS'
+export const DELETE_USER_FAIL = 'carta/App/DELETE_USER_FAIL'
+
 export const API_BASE_URL = (process.env.NODE_ENV === 'production') ? 'https://cartamap.herokuapp.com/' : 'http://localhost:3000/'
 export const MAP_ACCESS_TOKEN = 'pk.eyJ1IjoiY2FydGFndWlkZSIsImEiOiJjajMzNG5rcjAwMDFmMnFud3hpNW8wenJpIn0.uQaLvmopUNSmyGSI1WKynw'

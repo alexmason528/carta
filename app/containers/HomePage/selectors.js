@@ -1,19 +1,15 @@
-/**
- * Homepage selectors
- */
-
 import { createSelector } from 'reselect'
 
 const selectHome = state => state.home
 
 const selectPosts = () => createSelector(
   selectHome,
-  substate => substate.community.details.posts
+  substate => substate.posts
 )
 
 const selectSuggestions = () => createSelector(
   selectHome,
-  substate => substate.community.details.suggestions
+  substate => substate.suggestions
 )
 
 export {

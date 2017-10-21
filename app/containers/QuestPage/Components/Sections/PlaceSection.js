@@ -7,6 +7,14 @@ import { selectPlaces } from 'containers/QuestPage/selectors'
 import { Button, StarButton } from '../Buttons'
 
 class PlaceSection extends Component {
+  static propTypes = {
+    className: PropTypes.string,
+    places: PropTypes.array,
+    questIndex: PropTypes.number,
+    mapViewPortChange: PropTypes.func,
+    fetchRecommendations: PropTypes.func,
+  }
+
   constructor(props) {
     super(props)
 
@@ -36,11 +44,12 @@ class PlaceSection extends Component {
     })
   }
 
-  placeClicked = placeName => {
-    this.props.mapViewPortChange(placeName)
+  handlePlaceClick = placeName => {
+    const { mapViewPortChange } = this.props
+    mapViewPortChange(placeName)
   }
 
-  inputChangeHandler = text => {
+  handleInputChange = text => {
     this.setState({
       search: text,
     })
@@ -48,39 +57,30 @@ class PlaceSection extends Component {
 
   render() {
     const { places, search } = this.state
+    const { className } = this.props
 
     let filteredPlaces
     if (search === '') filteredPlaces = places
     else filteredPlaces = places.filter(place => place.name.toLowerCase().indexOf(search) !== -1)
 
     return (
-      <div className={this.props.className}>
+      <div className={className}>
         <h1>In & around</h1>
-        <input ref={input => { this.searchInput = input }} className="search-input place-search" onChange={evt => { this.inputChangeHandler(evt.target.value) }} />
+        <input ref={input => { this.searchInput = input }} className="search-input place-search" onChange={evt => { this.handleInputChange(evt.target.value) }} />
         <div className="buttons-row">
-          { filteredPlaces.map((place, index) => <button className="place-button" key={index} onClick={() => { this.placeClicked(place.name) }}>{place.name}</button>) }
+          { filteredPlaces.map((place, index) => <button className="place-button" key={index} onClick={() => { this.handlePlaceClick(place.name) }}>{place.name}</button>) }
         </div>
       </div>
     )
   }
 }
 
-PlaceSection.propTypes = {
-  className: PropTypes.string,
-  places: PropTypes.array,
-  questIndex: PropTypes.number,
-  mapViewPortChange: PropTypes.func,
-  fetchRecommendations: PropTypes.func,
-}
-
 const mapStateToProps = createStructuredSelector({
   places: selectPlaces(),
 })
 
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchRecommendations: () => dispatch(fetchRecommendations()),
-  }
+const actions = {
+  fetchRecommendations,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PlaceSection)
+export default connect(mapStateToProps, actions)(PlaceSection)

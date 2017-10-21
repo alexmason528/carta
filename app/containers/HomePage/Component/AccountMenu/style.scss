@@ -1,0 +1,98 @@
+.accountMenu {
+  position: relative;
+  background: #fff;
+  width: 100%;
+  padding: 5px 0;
+  z-index: 20;
+  max-height: 1000px;
+  transition: all 0.1s;
+
+  &--hidden {
+    max-height: 0px;
+    padding: 0;
+
+    * {
+      display: none;
+    }
+  }
+
+  &__items {
+    margin-left: 30%;
+    padding: 0 35px;
+
+    button {
+      text-transform: uppercase;
+      opacity: 0.75;
+    }
+  }
+
+  &__content {
+    margin-left: calc(14% + 30px);
+    margin-top: 14%;
+    padding: 0 20px 0 0;
+    transition: all 0.1s;
+    max-height: 1000;
+
+    &--hidden {
+      max-height: 0;
+      padding: 0;
+      margin-top: 0;
+
+      * {
+        display: none;
+      }
+    }
+  }
+
+  &__deleteButton {
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
+    }
+  }
+
+  &__deleteForm {
+    padding: 10px 0;
+    transition: all 0.1s;
+    max-height: 1000;
+
+    &--hidden {
+      max-height: 0;
+      padding: 0;
+
+      * {
+        display: none;
+      }
+    }
+
+    input {
+      margin-top: 8px;
+      border: 1px solid #ccc;
+      padding: 5px 8px;
+      color: #333;
+      width: 100%;
+    }
+  }
+
+  &__deleteFormButtons {
+    text-align: right;
+    
+    button {
+      margin-top: 10px;
+      margin-left: 10px;
+      color: #888;
+      padding: 5px 8px;
+      text-transform: uppercase;
+      font-size: 13px;
+
+      &.active {
+        border: 1px solid #ddd;
+        background: #eee;
+      }
+    }
+  }
+}

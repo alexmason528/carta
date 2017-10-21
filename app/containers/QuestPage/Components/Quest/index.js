@@ -7,6 +7,12 @@ import { DescriptiveSection, PlaceSection, TypeSection } from '../Sections'
 import './style.scss'
 
 export default class Quest extends Component {
+  static propTypes = {
+    className: PropTypes.string,
+    mapViewPortChange: PropTypes.func,
+    updateVisibility: PropTypes.func,
+  }
+
   constructor(props) {
     super(props)
 
@@ -27,23 +33,25 @@ export default class Quest extends Component {
     if (e.altKey || e.ctrlKey || e.shiftKey || e.metaKey) return
     if (e.keyCode === 9) {
       const tab = this.state.currentTab
-      this.tabClicked((tab + 1) % 3)
+      this.handleTabClick((tab + 1) % 3)
     }
   }
 
-  tabClicked = tab => {
+  handleTabClick = tab => {
     this.setState({
       currentTab: tab,
     })
   }
 
-  nextBtnClicked = () => {
+  handleNextBtnClick = () => {
     const tab = this.state.currentTab
-    this.tabClicked((tab + 1) % 3)
+    this.handleTabClick((tab + 1) % 3)
   }
 
   render() {
     const { currentTab } = this.state
+    const { className, mapViewPortChange } = this.props
+
     const tabClass = classNames({
       tab: true,
       first: currentTab === 0,
@@ -85,28 +93,22 @@ export default class Quest extends Component {
     })
 
     return (
-      <div className={this.props.className}>
+      <div className={className}>
         <div className="tabs">
           <div className="line"></div>
-          <button className="next" onClick={this.nextBtnClicked}>Next<img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/next.png" role="presentation" /></button>
+          <button className="next" onClick={this.handleNextBtnClick}>Next<img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/next.png" role="presentation" /></button>
           <div className={tabClass}></div>
-          <img className={placesTabClass} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/quest/marker.png" role="presentation" onClick={() => { this.tabClicked(0) }} />
-          <img className={typesTabClass} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/quest/check.png" role="presentation" onClick={() => { this.tabClicked(1) }} />
-          <img className={descriptivesTabClass} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/quest/star.png" role="presentation" onClick={() => { this.tabClicked(2) }} />
+          <img className={placesTabClass} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/quest/marker.png" role="presentation" onClick={() => { this.handleTabClick(0) }} />
+          <img className={typesTabClass} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/quest/check.png" role="presentation" onClick={() => { this.handleTabClick(1) }} />
+          <img className={descriptivesTabClass} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/quest/star.png" role="presentation" onClick={() => { this.handleTabClick(2) }} />
         </div>
 
         <div className="pages">
-          <PlaceSection className={placesPageClass} mapViewPortChange={this.props.mapViewPortChange} />
+          <PlaceSection className={placesPageClass} mapViewPortChange={mapViewPortChange} />
           <TypeSection className={typesPageClass} />
           <DescriptiveSection className={descriptivesPageClass} />
         </div>
       </div>
     )
   }
-}
-
-Quest.propTypes = {
-  className: PropTypes.string,
-  mapViewPortChange: PropTypes.func,
-  updateVisibility: PropTypes.func,
 }

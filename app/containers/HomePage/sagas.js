@@ -1,22 +1,20 @@
-/**
- * Gets the community info
- */
-
 import { take, call, put, select, cancel, takeLatest } from 'redux-saga/effects'
 import { LOCATION_CHANGE } from 'react-router-redux'
 
 import request from 'utils/request'
 import { setItem, getItem, removeItem } from 'utils/localStorage'
 
-import { LOGIN_REQUEST, REGISTER_REQUEST, API_BASE_URL } from 'containers/App/constants'
+import { API_BASE_URL, LOGIN_REQUEST, REGISTER_REQUEST, DELETE_USER_REQUEST } from 'containers/App/constants'
 import {
   loginSuccess,
   loginFail,
   registerSuccess,
   registerFail,
+  deleteUserSuccess,
+  deleteUserFail,
 } from 'containers/App/actions'
 
-import { FETCH_COMMUNITYINFO_REQUEST } from './constants'
+import { DELETE_USER, FETCH_COMMUNITYINFO_REQUEST } from './constants'
 import {
   fetchCommunityInfoSuccess,
   fetchCommunityInfoFail,
@@ -43,12 +41,12 @@ export function* getCommunityInfoRequestWatcher() {
   yield cancel(watcher)
 }
 
-export function* loginRequest(action) {
+export function* loginRequest({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/auth/login`
 
   const params = {
     method: 'POST',
-    body: JSON.stringify(action.payload),
+    body: JSON.stringify(payload),
     headers: {
       'Content-Type': 'application/json',
     },
@@ -69,12 +67,12 @@ export function* loginRequestWatcher() {
   yield cancel(watcher)
 }
 
-export function* registerRequest(action) {
+export function* registerRequest({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/auth/register`
 
   const params = {
     method: 'POST',
-    body: action.payload,
+    body: payload,
   }
 
   try {
@@ -92,8 +90,31 @@ export function* registerRequestWatcher() {
   yield cancel(watcher)
 }
 
+export function* deleteUserRequest({ payload }) {
+  const request = `${API_BASE_URL}api/v1/auth/delete`
+  const params = {
+    method: 'POST',
+    body: payload,
+  }
+
+  try {
+    const res = yield call(request, requestURL, params)
+    yield call(removeItem, 'auth')
+    yield put(deleteUserSuccess())
+  } catch (err) {
+    yield put(deleteUserFail(err.details))
+  }
+}
+
+export function* deleteUserWatcher() {
+  const watcher = yield takeLatest(DELETE_USER_REQUEST, deleteUserRequest)
+  yield take(LOCATION_CHANGE)
+  yield cancel(watcher)
+}
+
 export default [
   getCommunityInfoRequestWatcher,
   loginRequestWatcher,
   registerRequestWatcher,
+  deleteUserWatcher,
 ]

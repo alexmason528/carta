@@ -1,9 +1,3 @@
-/**
- *
- * ProgressBar
- *
-*/
-
 import React, { Component, PropTypes } from 'react'
 import Wrapper from './Wrapper'
 import Percent from './Percent'
