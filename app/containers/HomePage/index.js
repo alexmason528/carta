@@ -6,24 +6,23 @@ import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
 import { Container, Row, Col } from 'reactstrap'
 import { selectAuthenticated, selectUser } from 'containers/App/selectors'
+import { logOut, verifyRequest } from 'containers/App/actions'
 import Logo from 'components/Logo'
 import Menu from 'components/Menu'
 import { AddPostButton } from 'components/Buttons'
 import { selectPosts, selectSuggestions } from './selectors'
 import { fetchCommunityInfoRequest } from './actions'
-import Suggestion from './Component/Suggestion'
-import Quest from './Component/Quest'
-import Profile from './Component/Profile'
-import AuthWrapper from './Component/AuthWrapper'
-import Post from './Component/Post'
-import AccountMenu from './Component/AccountMenu'
+import { AccountMenu, AuthWrapper, Post, Profile, Quest, Suggestion, VerifyCtrl } from './components'
 import './style.scss'
 
 class HomePage extends Component {
   static propTypes = {
     fetchCommunityInfoRequest: PropTypes.func,
-    posts: PropTypes.array,
+    verifyRequest: PropTypes.func,
+    logOut: PropTypes.func,
     user: PropTypes.object,
+    params: PropTypes.object,
+    posts: PropTypes.array,
     suggestions: PropTypes.array,
     authenticated: PropTypes.bool,
   }
@@ -38,16 +37,20 @@ class HomePage extends Component {
   }
 
   componentWillMount() {
-    const { fetchCommunityInfoRequest } = this.props
+    const { fetchCommunityInfoRequest, verifyRequest, params: { vcode } } = this.props
+
+    if (vcode) {
+      verifyRequest({ vcode })
+    }
     fetchCommunityInfoRequest()
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { user } = nextProps
-    if (user && !user.verified) {
-      browserHistory.push('/verify')
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   const { user } = nextProps
+  //   if (user && !user.verified) {
+  //     browserHistory.push('/verify')
+  //   }
+  // }
 
   googleLogin = () => {
   }
@@ -83,7 +86,7 @@ class HomePage extends Component {
 
   render() {
     const { showAuthWrapper, showAddPostForm, showAccountMenu } = this.state
-    const { posts, suggestions, authenticated, user } = this.props
+    const { posts, suggestions, authenticated, user, logOut } = this.props
 
     let addPostButtonType = 'text'
 
@@ -130,6 +133,16 @@ class HomePage extends Component {
             }
           </Col>
         </Row>
+        { user && !user.verified &&
+          <div className="verifyCtrl">
+            <div className="verifyCtrl__message">
+              {`Hey ${user.firstname} ${user.lastname}, you've got an email from us. Please open it and click on the link to verify your account`}
+            </div>
+            <div className="verifyCtrl__logOutForm">
+              Please verify your registration or <button onClick={logOut}>Log out</button>
+            </div>
+          </div>
+        }
       </Container>
     )
   }
@@ -144,6 +157,8 @@ const mapStateToProps = createStructuredSelector({
 
 const actions = {
   fetchCommunityInfoRequest,
+  verifyRequest,
+  logOut,
 }
 
 export default connect(mapStateToProps, actions)(HomePage)

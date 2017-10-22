@@ -5,13 +5,13 @@
   height: 100%;
   background: #fff;
   transition: all 0.1s;
-  z-index: 1000;
+  z-index: 200;
 
   ul {
     background: #fff;
-    z-index: 999;
     height: 100%;
     padding: 30px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 
     li {
       list-style-type: none;
@@ -33,14 +33,33 @@
     padding: 7px;
     left: 100%;
     bottom: 20%;
-    border-radius: 0 5px 5px 0;
     box-sizing: content-box;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    border: none;
     background: #fff;
-    z-index: -1;
+    cursor: pointer;
+    border-radius: 0 5px 5px 0;
+
+    &:before, &:after {
+      background: #fff;
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      content: ' ';
+      width: 100%;
+      height: 100%;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      z-index: -1;
+      border-radius: 0 5px 5px 0;
+    }
+
+    &:after {
+      box-shadow: none;
+      z-index: 2;
+    }
 
     img {
+      position: relative;
+      z-index: 3;
       height: 100%;
       width: auto;
     }

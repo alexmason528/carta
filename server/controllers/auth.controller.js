@@ -89,7 +89,7 @@ const register = (req, res) => {
         })
       }
     } else {
-      const verifyUrl = (process.env.NODE_ENV === 'development') ? 'http://localhost:3000/verify' : 'https://cartamap.herokuapp.com/verify'
+      const verifyUrl = (process.env.NODE_ENV === 'development') ? 'http://localhost:3000/home/verify' : 'https://cartamap.herokuapp.com/home/verify'
       let mailOptions = {
         from: '<no-reply@carta.guide>',
         to: data.email,
@@ -192,3 +192,5 @@ const deleteUser = (req, res) => {
 module.exports.login = login
 module.exports.register = register
 module.exports.verify = verify
+module.exports.deleteUser = deleteUser
+
