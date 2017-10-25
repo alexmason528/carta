@@ -1,9 +1,11 @@
 import React, { Component, PropTypes } from 'react'
+import ReactDOM from 'react-dom'
 import FileImage from 'react-file-image'
 import className from 'classnames'
 import CSSTransitionGroup from 'react-addons-css-transition-group'
 import { Popover, PopoverBody } from 'reactstrap'
 import { getTextFromDate } from 'utils/dateHelper'
+import ContentEditable from 'components/ContentEditable'
 import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
 import './style.scss'
 
@@ -17,23 +19,52 @@ class Post extends Component {
     super(props)
 
     this.state = {
-      img: '',
-      content: '',
-      title: '',
-      username: '',
-      editable: false,
-      created_at: null,
-      first: false,
       showDeleteConfirm: false,
       showInfo: false,
+      editable: false,
       editing: false,
+      first: false,
     }
   }
 
   componentWillMount() {
+    this.initializeState(this.props)
+  }
+
+  componentDidMount() {
+    const interval =
+    setInterval(() => {
+      const post = ReactDOM.findDOMNode(this)
+      if ($(post).width() > 0) {
+        $(post).find('.postTitle').dotdotdot({
+          watch: 'window',
+          ellipsis: ' ...',
+        })
+        this.handleResize()
+        clearInterval(interval)
+      }
+    }, 0)
+
+    window.addEventListener('resize', this.handleResize)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.initializeState(nextProps)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize)
+  }
+
+  initializeState(props) {
     this.setState({
-      ...this.props,
+      ...props,
     })
+  }
+
+  handleResize = () => {
+    const post = ReactDOM.findDOMNode(this)
+    $(post).find('.postTitle').trigger('update.dot')
   }
 
   handleAddMedia = evt => {
@@ -48,19 +79,22 @@ class Post extends Component {
 
   handleCancel = () => {
     this.setState({
+      ...this.props,
+      showDeleteConfirm: false,
+      showInfo: false,
       editing: false,
     })
   }
 
   handleAddText = () => {
     this.setState({
-      content: true,
+      content: '',
     })
   }
 
-  handleContentChange = evt => {
+  handlePostContent = value => {
     this.setState({
-      content: evt.target.value,
+      content: value.length > 0 ? value : '',
     })
   }
 
@@ -70,9 +104,7 @@ class Post extends Component {
     })
   }
 
-  handleLinkButtonClick = () => {
-
-  }
+  handlePostLinkBtn = () => {}
 
   handleDeleteConfirm = () => {
     this.setState({
@@ -83,13 +115,13 @@ class Post extends Component {
     })
   }
 
-  handleRemovePostImage = () => {
+  handlePostRemoveImage = () => {
     this.setState({
       img: null,
     })
   }
 
-  handleRemoveContent = () => {
+  handlePostRemoveContent = () => {
     this.setState({
       content: null,
     })
@@ -101,9 +133,18 @@ class Post extends Component {
     })
   }
 
-  toggleInfo = () => {
+  handleSubmit = () => {
+  }
+
+  handlePostInfoToggle = () => {
     this.setState({
       showInfo: !this.state.showInfo,
+    })
+  }
+
+  handlePostTitle = value => {
+    this.setState({
+      title: value,
     })
   }
 
@@ -125,113 +166,121 @@ class Post extends Component {
 
     let postType
 
-    if (img && content) {
+    if (img && content !== null) {
       postType = 'normalPost'
-    } else if (img && !content) {
+    } else if (img && content === null) {
       postType = 'imagePost'
-    } else if (!img && content) {
+    } else if (!img && content !== null) {
       postType = 'textPost'
     }
 
-    const postFormClass = className({
-      postForm: true,
-      first: first,
+    const postClass = className({
+      post: true,
+      firstPost: first,
+      [postType]: true,
     })
 
     const closeButtonClass = className({
-      closeButton: true,
-      'closeButton--hasContent': postType,
+      postCloseBtn: true,
+      'postCloseBtn--hasContent': postType,
     })
 
     const postInfoClass = className({
-      info: true,
-      'info--hidden': !showInfo,
+      postInfo: true,
+      'postInfo--hidden': !showInfo,
     })
 
-    return (
-      <div className={postFormClass}>
-        { postType === 'imagePost' &&
-          <div className={`postForm__${postType}`}>
-            { editable && !editing && <EditButton className="postEditBtn" image="edit-white" onClick={this.handleStartEdit} /> }
-            { img && typeof (img) === 'string' && <img className="postImage" src={img} role="presentation" />}
-            { img && typeof (img) === 'object' && <FileImage className="postImage" file={img} />}
-            { editable && editing && <RemoveButton className="removeImageButton" image="close-white-shadow" onClick={this.handleRemovePostImage} /> }
-            { editable && editing && <LinkButton className="linkButton" onClick={this.handleLinkButtonClick} />}
-            <div className="postTitle">
-              {title}
-            </div>
-            <div className={postInfoClass}>
-              {username} - Carta | {getTextFromDate(created_at)}
-            </div>
-            <InfoButton className="infoBtn" onClick={this.toggleInfo} />
-          </div>
-        }
+    const canRemove = content && img
 
+    return (
+      <div>
         { postType === 'normalPost' &&
-          <div className={`postForm__${postType}`}>
+          <div className={postClass}>
             <div className="postImage">
               { img && typeof (img) === 'string' && <img className="postImage" src={img} role="presentation" />}
               { img && typeof (img) === 'object' && <FileImage className="postImage" file={img} />}
-              { editable && editing && <RemoveButton className="removeImageButton" image="close-white-shadow" onClick={this.handleRemovePostImage} /> }
-              { editable && editing && <LinkButton className="linkButton" onClick={this.handleLinkButtonClick} /> }
-              <div className="postTitle">
-                <div>
+              { editable && editing && canRemove && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostRemoveImage} /> }
+              { editable && editing && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
+              { !editing &&
+                <div className="postTitle" title={title}>
                   {title}
                 </div>
-              </div>
+              }
+              { editing && <ContentEditable editable={editing} className="postTitleEdit" onChange={this.handlePostTitle} content={title} /> }
             </div>
             <div className="postContent">
-              { editable && editing && <RemoveButton className="removeContentButton" image="close" onClick={this.handleRemoveContent} /> }
-              <div className="postContentMeta">
+              { editable && editing && canRemove && <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostRemoveContent} /> }
+              <div className="postMeta">
                 {username} - CARTA | {getTextFromDate(created_at)}
                 { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
               </div>
-              <div className="postContentText" onChange={this.handleContentChange} value={content}>
-                {content}
-              </div>
+              <ContentEditable editable={editing} className="postText" onChange={this.handlePostContent} content={content} />
             </div>
+          </div>
+        }
+
+        { postType === 'imagePost' &&
+          <div className={postClass}>
+            <div className="postImage">
+              { editable && !editing && <EditButton className="postEditBtn" image="edit-white" onClick={this.handleStartEdit} /> }
+              { img && typeof (img) === 'string' && <img className="postImage" src={img} role="presentation" />}
+              { img && typeof (img) === 'object' && <FileImage className="postImage" file={img} />}
+              { editable && editing && canRemove && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostRemoveImage} /> }
+              { editable && editing && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} />}
+            </div>
+            { !editing &&
+              <div className="postTitle" title={title}>
+                {title}
+              </div>
+            }
+            { editing && <ContentEditable editable={editing} className="postTitleEdit" onChange={this.handlePostTitle} content={title} /> }
+            <div className={postInfoClass}>
+              {username} - Carta | {getTextFromDate(created_at)}
+            </div>
+            <InfoButton className="postInfoBtn" onClick={this.handlePostInfoToggle} />
           </div>
         }
 
         { postType === 'textPost' &&
-          <div className={`postForm__${postType}`}>
-            <div className="postTitle">
-              {title}
-            </div>
+          <div className={postClass}>
+            { !editing &&
+              <div className="postTitle" title={title}>
+                {title}
+              </div>
+            }
+            { editing && <ContentEditable editable={editing} className="postTitleEdit" onChange={this.handlePostTitle} content={title} /> }
             <div className="postContent">
-              { editable && editing && <RemoveButton className="removeContentButton" image="close" onClick={this.handleRemoveContent} /> }
-              <div className="postContentMeta">
+              { editable && editing && canRemove && <RemoveButton className="removeContentButton" image="close" onClick={this.handlePostRemoveContent} /> }
+              <div className="postMeta">
                 {username} - CARTA | {getTextFromDate(created_at)}
                 { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
               </div>
-              <div className="postContentText" onChange={this.handleContentChange}>
-                {content}
-              </div>
+              <ContentEditable editable={editing} className="postText" onChange={this.handlePostContent} content={content} />
             </div>
           </div>
         }
 
         { editable && editing &&
-          <div className="postForm__buttons">
+          <div className="postButtons">
             <div className="left">
               <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
               {(postType === 'textPost' || postType === 'normalPost') &&
                 <span style={{ marginRight: '8px' }}>{ content === true ? 1000 : (1000 - content.length) }</span>
               }
-              {(postType !== 'imagePost' && postType !== 'normalPost') && <button type="button" className="postForm__borderButton" onClick={this.handleAddMedia}>
+              {(postType !== 'imagePost' && postType !== 'normalPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddMedia}>
                 + MEDIA
               </button>}
-              {(postType !== 'textPost' && postType !== 'normalPost') && <button type="button" className="postForm__borderButton" onClick={this.handleAddText}>
+              {(postType !== 'textPost' && postType !== 'normalPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddText}>
                 + TEXT
               </button>}
             </div>
             { postType &&
               <div className="right">
-                <button type="button" className="postForm__button" onClick={this.handleCancel}>
+                <button type="button" className="postCancelBtn" onClick={this.handleCancel}>
                   CANCEL
                 </button>
-                <DeleteButton className="postForm__deleteButton" onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
-                <button type="button" className="postForm__borderButton" onClick={this.handleSubmit}>
+                <DeleteButton className="postDeleteBtn" onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
+                <button type="button" className="postBorderBtn" onClick={this.handleSubmit}>
                   SUBMIT
                 </button>
               </div>

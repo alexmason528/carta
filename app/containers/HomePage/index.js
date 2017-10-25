@@ -60,6 +60,8 @@ class HomePage extends Component {
             this.setState({
               timer: timer - 1,
             })
+          } else {
+            browserHistory.push('/home')
           }
         }, 1000)
       })
@@ -121,16 +123,23 @@ class HomePage extends Component {
 
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-sm-down">
             { !showAddPostForm && authenticated && user.verified && <AddPostButton type={addPostButtonType} show={showAddPostForm} onClick={this.toggleAddPostForm} />}
-            { authenticated && <Post onClose={this.toggleAddPostForm} /> }
+            { /* authenticated && <Post onClose={this.toggleAddPostForm} /> */ }
             <div>
               {
-                posts && posts.map(post => {
-                  const { content, img, created_at, title } = post
-                  let data = { content, img, created_at, title }
+                posts && posts.map((post, key) => {
+                  const { _id, content, created_at, img, title } = post
+                  let data = { _id, content, created_at, img, title }
 
                   data.username = `${post.author[0].firstname} ${post.author[0].lastname}`
-                  data.editable = (user && post.author[0]._id === user._id)
-                  return <Post key={post._id} {...data} />
+                  data.editable = (authenticated && post.author[0]._id === user._id)
+                  data.key = key
+                  if (content.length === 0) data.content = null
+                  if (img.length === 0) data.img = null
+
+                  if (key === 0 && authenticated) {
+                    data.first = true
+                  }
+                  return <Post {...data} />
                 })
               }
             </div>

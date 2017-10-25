@@ -33,5 +33,9 @@
       top: 0;
       left: 0;
     }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 }

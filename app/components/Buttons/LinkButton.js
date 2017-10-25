@@ -10,8 +10,8 @@ const LinkButton = ({ className, onClick }) => (
 )
 
 LinkButton.propTypes = {
-  className: PropTypes.string,
   onClick: PropTypes.func.isRequired,
+  className: PropTypes.string,
 }
 
 export default LinkButton

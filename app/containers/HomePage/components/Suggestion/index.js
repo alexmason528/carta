@@ -19,7 +19,6 @@ class Suggestion extends Component {
 
   componentDidMount() {
     const suggestion = ReactDOM.findDOMNode(this)
-    console.log(suggestion)
 
     const interval =
     setInterval(() => {

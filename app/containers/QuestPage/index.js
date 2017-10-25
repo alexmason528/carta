@@ -59,7 +59,6 @@ class QuestPage extends Component {
 
     //   if (!res.error) {
     //     setDefaultQuest(res.data)
-    //     console.log(res.data)
     //     fetchRecommendations()
     //   }
     // }

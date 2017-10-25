@@ -7,9 +7,9 @@ const EditButton = ({ className, image, onClick }) => (
 )
 
 EditButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
   className: PropTypes.string,
   image: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
 }
 
 export default EditButton

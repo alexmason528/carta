@@ -2,6 +2,10 @@ import {
   FETCH_COMMUNITYINFO_REQUEST,
   FETCH_COMMUNITYINFO_SUCCESS,
   FETCH_COMMUNITYINFO_FAIL,
+
+  UPDATE_POST_REQUEST,
+  UPDATE_POST_SUCCESS,
+  UPDATE_POST_FAIL,
 } from './constants'
 
 export function fetchCommunityInfoRequest() {
@@ -20,6 +24,27 @@ export function fetchCommunityInfoSuccess(payload) {
 export function fetchCommunityInfoFail(payload) {
   return {
     type: FETCH_COMMUNITYINFO_FAIL,
+    payload,
+  }
+}
+
+export function updatePostRequest(payload) {
+  return {
+    type: UPDATE_POST_REQUEST,
+    payload,
+  }
+}
+
+export function updatePostSuccess(payload) {
+  return {
+    type: UPDATE_POST_SUCCESS,
+    payload,
+  }
+}
+
+export function updatePostFail(payload) {
+  return {
+    type: UPDATE_POST_FAIL,
     payload,
   }
 }

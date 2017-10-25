@@ -8,10 +8,10 @@ const RemoveButton = ({ className, image, caption, onClick }) => (
 )
 
 RemoveButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
   className: PropTypes.string,
   image: PropTypes.string.isRequired,
   caption: PropTypes.string,
-  onClick: PropTypes.func.isRequired,
 }
 
 export default RemoveButton

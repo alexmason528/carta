@@ -1,4 +1,4 @@
-.postForm {
+.post {
   transition: all 0.1s;
   position: relative;
   max-height: 1000px;
@@ -6,310 +6,399 @@
   opacity: 1;
   margin-bottom: 8px;
 
-  .postImage {
-    position: relative;
-    width: 100%;
-
-    img {
-      width: 100%;
-      height: auto;
-    }
-  }
-
-  .postTitle {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    transform: translate(0, calc(-50%));
-    line-height: 1.3;
-    font-size: 2rem;
-    color: #fff;
-    text-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-    text-transform: uppercase;      
-    font-weight: 900;
-    width: 100%;
-    padding: 20px;
-  }
-
-  .postContent {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    font-size: 18px;
-  }
-
-  .postContentMeta {
-    color: gray;
-    text-transform: uppercase;
-    font-size: 14px;
-    position: relative;
-  }
-
-  .postEditBtn {
-    position: absolute;
-    line-height: 0;
-    right: 0;
-    top: 5px;
-    z-index: 30;
-
-    img {
-      width: 13px;
-      height: 13px;
-    }
-  }
-
-  .postContentText {
-    border-bottom: none;
-    resize: none;
-    margin-top: 10px;
-    width: 100%;
-
-    &:focus {
-      outline: none;
-    }
-  }
-
-  &__imagePost, &__normalPost, &__textPost {
-    position: relative;
-  }
-
-  &__imagePost {
-    overflow: hidden;
-
-    .postTitle {
-      width: 50%;
-    }
-
-    .info {
-      color: gray;
-      text-transform: uppercase;  
-      position: absolute;
-      margin-left: 0;
-      bottom: 20px;
-      background: #fff;
-      padding: 2px 10px 2px 30px;
-      transition: ease-in-out 0.1s;
-
-      &--hidden {
-        margin-left: -500px;
-      }
-    }
-
-    .infoBtn {
-      position: absolute;
-      padding: 5px;
-      background: rgba(255, 255, 255, 0.7);
-      border-radius: 20px;
-      line-height: 0;
-      box-shadow: 0 0 7px rgba(0, 0, 0, 0.4);
-      bottom: 20px;
-      right: 20px;
-      cursor: pointer;
-      transition: all 0.1s;
-
-      img {
-        width: 12px;
-        height: 12px;
-        opacity: 0.75;
-      }
-
-      &:hover {
-        background: rgba(255, 255, 255, 1);
-      }
-    }
-
-    .postEditBtn {
-      top: 20px;
-      right: 20px;
-    }
-  }
-
-  &__normalPost {
-    .postTitle {
-      bottom: 0;
-      top: inherit;
-      transform: none;
-    }
-  }
-
-  &__textPost {
-    border-top: 1px solid #ccc;
-
-    .postTitle {
-      position: relative;
-      transform: none;
-      left: inherit;
-      top: inherit;
-      padding: 20px 20px 0 20px;
-      color: #292b2c !important;
-      text-shadow: none;
-      font-size: 25px;
-      font-weight: 400;
-      width: 100%;
-    }
-
-    .postContent, .postContentText {
-      border: none;
-    }
-
-    .postContentText {
-      padding-left: 0;
-      padding-right: 0;
-    }
-  }
-
-  &__buttons {
-    display: flex;
-    padding: 10px 20px 0;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    z-index: 20;
-    background: #fff;
-
-    .left, .right {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .left button{
-      margin-right: 5px;
-    }
-
-    .right button {
-      margin-left: 5px;
-    }
-  }
-
-  &__borderButton {
-    z-index: 10;
-    font-size: 14px;
-    cursor: pointer;
-    background: #fff;
-    padding: 4px 8px;
-    border: 1px solid #ddd;
-    margin-right: 5px; 
-  }
-
-  .removeImageButton {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    line-height: 0;
-
-    img {
-      width: 20px;
-      height: 20px;
-    }
-  }
-
-  .removeContentButton {
-    position: absolute;
-    top: 25px;
-    right: 20px;
-    line-height: 0;
-    z-index: 20;
-
-    img {
-      width: 13px;
-      height: 13px;
-    }
-  }
-
-  .closeButton, &__deleteButton {
-    line-height: 0;
-    img {
-      width: 13px;
-      height: 13px;
-    }
-  }
-
-  .linkButton {
-    position: absolute;
-    left: 20px;
-    top: 20px;
-    z-index: 20;
-    display: flex;
-    align-items: center;
-
-    .btnImage {
-      background: #fff;
-      padding: 5px;
-      line-height: 0;
-      border-radius: 20px;
-      margin-right: 8px;
-
-      img {
-        width: 13px;
-        height: 13px;
-      }
-    }
-
-    .btnText {
-      color: #fff;
-      text-transform: uppercase;
-      font-weight: 600;
-      text-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-    }
-  }
-
-  .closeButton {
-    &--hasContent {
-      display: none
-    }
-  }
-
-  &__deleteButton {
-    border: none;
-    line-height: 0;
-    margin: 0 10px !important;
-    position: relative;
-    cursor: pointer;
-
-    .popOver {
-      background-color: #fff;
-      box-shadow: 0 0 5px rgba(0,0,0,0.9);
-      color: #fff;
-      font-size: 12px;
-      padding: 15px;
-      position: absolute;
-      bottom: -45px;
-      left: -28px;
-      display: none;
-
-      button {
-        color: gray;
-      }
-
-      &:after, &:before {
-        background: #fff;
-        transform: rotate(-45deg);
-        z-index: -1;
-        width: 10px;
-        height: 10px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.9);
-        content: '';
-        display: block;
-        position: absolute;
-        top: -5px;
-        left: calc(50% - 5px);
-      }
-
-      &:before {
-        box-shadow: none;
-        z-index: 1;
-      }
-    }
-  }
-
   &--hidden {
     max-height: 0px;
     margin-bottom: 0;
     padding: 0;
     opacity: 0;
     overflow: hidden;
+  }
+}
+
+.imagePost, .normalPost, .textPost {
+  position: relative;
+}
+
+.imagePost {
+  overflow: hidden;
+
+  .postTitle {
+    width: 50%;
+    height: calc(100% - 69px);
+    top: 35px;
+    overflow: hidden;
+    align-items: center;
+  }
+
+  .postTitleEdit {
+    width: 50%;
+    max-height: 5.2rem;
+    overflow: hidden;
+    top: 50%;
+    transform: translate(0, -50%)
+  }
+
+  .postInfo {
+    color: gray;
+    text-transform: uppercase;  
+    position: absolute;
+    margin-left: 0;
+    bottom: 20px;
+    background: #fff;
+    padding: 2px 10px 2px 30px;
+    transition: ease-in-out 0.1s;
+
+    &--hidden {
+      margin-left: -500px;
+    }
+  }
+
+  .postInfoBtn {
+    position: absolute;
+    padding: 5px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 20px;
+    line-height: 0;
+    box-shadow: 0 0 7px rgba(0, 0, 0, 0.4);
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+    transition: all 0.1s;
+    z-index: 40;
+
+    img {
+      width: 12px;
+      height: 12px;
+      opacity: 0.75;
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 1);
+    }
+  }
+
+  .postEditBtn {
+    top: 20px;
+    right: 20px;
+  }
+
+  &.firstPost {
+    .postLinkBtn, .postEditBtn {
+      top: 45px;
+    }
+  }
+}
+
+.normalPost {
+  .postTitle {
+    bottom: 20px;
+    width: calc(100% - 40px);
+    height: calc(100% - 40px);
+    overflow: hidden;
+    align-items: flex-end;
+  }
+
+  .postTitleEdit {
+    bottom: 20px;
+    overflow: hidden;
+    width: calc(100% - 40px);
+    max-height: 5.2rem;
+  }
+
+  &.firstPost {
+    .postLinkBtn, .postRemoveImageBtn {
+      top: 45px;
+    }
+  }
+}
+
+.textPost {
+  border-top: 1px solid #ccc;
+
+  .postTitle {
+    position: relative;
+    color: #292b2c !important;
+    text-shadow: none;
+    font-size: 25px;
+    font-weight: 400;
+    left: 0;
+    margin: 20px 0 0 20px;
+    width: calc(100% - 40px);
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .postTitleEdit {
+    position: relative;
+    color: #292b2c !important;
+    text-shadow: none;
+    font-size: 25px;
+    font-weight: 400;
+    left: 0;
+    margin: 20px 0 0 20px;
+    width: calc(100% - 40px);
+    max-height: 4rem;
+    overflow: hidden;
+  }
+
+  .postContent, .postContentText {
+    border: none;
+  }
+
+  .postContentText {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  &.firstPost {
+    margin-top: 50px;
+  }
+}
+
+.postImage {
+  position: relative;
+  width: 100%;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right:  0;
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+    z-index: 30;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+.postBorderBtn {
+  z-index: 10;
+  font-size: 14px;
+  cursor: pointer;
+  background: #fff;
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  margin-right: 5px; 
+}
+
+.postRemoveImageBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  line-height: 0;
+  z-index: 40;
+
+  img {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.postRemoveContentBtn {
+  position: absolute;
+  top: 25px;
+  right: 20px;
+  line-height: 0;
+  z-index: 40;
+
+  img {
+    width: 13px;
+    height: 13px;
+  }
+}
+
+.postCloseBtn, .postDeleteBtn {
+  line-height: 0;
+  z-index: 40;
+  
+  img {
+    width: 13px;
+    height: 13px;
+  }
+}
+
+.postLinkBtn {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+
+  .btnImage {
+    background: #fff;
+    padding: 5px;
+    line-height: 0;
+    border-radius: 20px;
+    margin-right: 8px;
+
+    img {
+      width: 13px;
+      height: 13px;
+    }
+  }
+
+  .btnText {
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.postCloseBtn {
+  &--hasContent {
+    display: none
+  }
+}
+
+.postDeleteBtn {
+  border: none;
+  line-height: 0;
+  margin: 0 10px !important;
+  position: relative;
+  cursor: pointer;
+
+  .popOver {
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0,0,0,0.9);
+    color: #fff;
+    font-size: 12px;
+    padding: 15px;
+    position: absolute;
+    bottom: -45px;
+    left: -28px;
+    display: none;
+
+    button {
+      color: gray;
+    }
+
+    &:after, &:before {
+      background: #fff;
+      transform: rotate(-45deg);
+      z-index: -1;
+      width: 10px;
+      height: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.9);
+      content: '';
+      display: block;
+      position: absolute;
+      top: -5px;
+      left: calc(50% - 5px);
+    }
+
+    &:before {
+      box-shadow: none;
+      z-index: 1;
+    }
+  }
+}
+
+.postTitle {
+  position: absolute;
+  left: 20px;
+  line-height: 1.3;
+  font-size: 2rem;
+  color: #fff;
+  text-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  text-transform: uppercase;      
+  font-weight: 900;
+  z-index: 50;
+  cursor: pointer;
+  display: flex;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.postTitleEdit {
+  position: absolute;
+  left: 20px;
+  line-height: 1.3;
+  font-size: 2rem;
+  color: #fff;
+  text-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  text-transform: uppercase;      
+  font-weight: 900;
+  z-index: 50;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+  } 
+}
+
+.postContent {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  font-size: 18px;
+}
+
+.postMeta {
+  color: gray;
+  text-transform: uppercase;
+  font-size: 14px;
+  position: relative;
+}
+
+.postEditBtn {
+  position: absolute;
+  line-height: 0;
+  right: 0;
+  top: 5px;
+  z-index: 30;
+
+  img {
+    width: 13px;
+    height: 13px;
+  }
+}
+
+.postText {
+  border-bottom: none;
+  resize: none;
+  margin-top: 10px;
+  width: 100%;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.postButtons {
+  display: flex;
+  padding: 0 20px 10px 20px;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 20;
+  background: #fff;
+
+  .left, .right {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .left button{
+    margin-right: 5px;
+  }
+
+  .right button {
+    margin-left: 5px;
   }
 
   input[type=file] {

@@ -2,6 +2,10 @@ import {
   FETCH_COMMUNITYINFO_REQUEST,
   FETCH_COMMUNITYINFO_SUCCESS,
   FETCH_COMMUNITYINFO_FAIL,
+
+  UPDATE_POST_REQUEST,
+  UPDATE_POST_SUCCESS,
+  UPDATE_POST_FAIL,
 } from './constants'
 
 const initialState = {
@@ -25,6 +29,25 @@ function homeReducer(state = initialState, { type, payload }) {
       }
 
     case FETCH_COMMUNITYINFO_FAIL:
+      return {
+        ...state,
+        status: type,
+        error: payload,
+      }
+
+    case UPDATE_POST_REQUEST:
+      return {
+        ...state,
+        status: typye,
+      }
+
+    case UPDATE_POST_SUCCESS:
+      return {
+        ...state,
+        status: type,
+      }
+
+    case UPDATE_POST_FAIL:
       return {
         ...state,
         status: type,

@@ -7,8 +7,8 @@ const UserButton = ({ className, onClick }) => (
 )
 
 UserButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
   className: PropTypes.string,
-  onClick: PropTypes.func,
 }
 
 export default UserButton

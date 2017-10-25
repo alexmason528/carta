@@ -7,8 +7,8 @@ const InfoButton = ({ className, onClick }) => (
 )
 
 InfoButton.propTypes = {
-  className: PropTypes.string,
   onClick: PropTypes.func.isRequired,
+  className: PropTypes.string,
 }
 
 export default InfoButton
