@@ -49,8 +49,8 @@ class HomePage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { user } = this.props
-    if ((!user && nextProps.user && nextProps.user.verified === true) || (user && nextProps.user && user.verified === false && nextProps.user.verified === true)) {
+    const { user, params: { vcode } } = this.props
+    if ((!user && vcode && nextProps.user && nextProps.user.verified === true) || (user && nextProps.user && user.verified === false && nextProps.user.verified === true)) {
       this.setState({
         timer: 5,
       }, () => {
@@ -64,12 +64,6 @@ class HomePage extends Component {
         }, 1000)
       })
     }
-  }
-
-  googleLogin = () => {
-  }
-
-  facebookLogin = () => {
   }
 
   handleProfileClick = () => {
@@ -126,7 +120,7 @@ class HomePage extends Component {
           </Col>
 
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-sm-down">
-            { !showAddPostForm && authenticated && <AddPostButton type={addPostButtonType} show={showAddPostForm} onClick={this.toggleAddPostForm} />}
+            { !showAddPostForm && authenticated && user.verified && <AddPostButton type={addPostButtonType} show={showAddPostForm} onClick={this.toggleAddPostForm} />}
             { authenticated && <Post onClose={this.toggleAddPostForm} /> }
             <div>
               {
