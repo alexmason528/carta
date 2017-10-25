@@ -92,10 +92,6 @@ function appReducer(state = initialState, { type, payload }) {
     case VERIFY_REQUEST:
       return {
         ...state,
-        user: {
-          ...state.user,
-          verified: false,
-        },
         status: type,
         error: null,
       }
@@ -112,10 +108,6 @@ function appReducer(state = initialState, { type, payload }) {
     case VERIFY_FAIL:
       return {
         ...state,
-        user: {
-          ...state.user,
-          verified: false,
-        },
         status: type,
         error: payload,
       }

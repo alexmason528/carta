@@ -258,7 +258,7 @@ class TypeSection extends Component {
   }
 }
 
-const mapStateToProps = createStructuredSelector({
+const selectors = createStructuredSelector({
   types: selectTypes(),
   currentTypes: selectCurrentTypes(),
 })
@@ -268,4 +268,4 @@ const actions = {
   typeSelect,
 }
 
-export default connect(mapStateToProps, actions)(TypeSection)
+export default connect(selectors, actions)(TypeSection)

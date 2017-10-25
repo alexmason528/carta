@@ -90,7 +90,7 @@ class QuestPanel extends Component {
   }
 }
 
-const mapStateToProps = createStructuredSelector({
+const selectors = createStructuredSelector({
   quests: selectQuests(),
   currentQuestIndex: selectCurrentQuestIndex(),
 })
@@ -103,4 +103,4 @@ const actions = {
 }
 
 
-export default connect(mapStateToProps, actions)(QuestPanel)
+export default connect(selectors, actions)(QuestPanel)

@@ -5,7 +5,8 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
 import { Container, Row, Col } from 'reactstrap'
-import { selectAuthenticated, selectUser } from 'containers/App/selectors'
+import { VERIFY_FAIL } from 'containers/App/constants'
+import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
 import { logOut, verifyRequest } from 'containers/App/actions'
 import Logo from 'components/Logo'
 import Menu from 'components/Menu'
@@ -21,6 +22,7 @@ class HomePage extends Component {
     verifyRequest: PropTypes.func,
     logOut: PropTypes.func,
     user: PropTypes.object,
+    info: PropTypes.object,
     params: PropTypes.object,
     posts: PropTypes.array,
     suggestions: PropTypes.array,
@@ -33,6 +35,7 @@ class HomePage extends Component {
       showAuthWrapper: false,
       showAddPostForm: false,
       showAccountMenu: false,
+      timer: 0,
     }
   }
 
@@ -45,12 +48,23 @@ class HomePage extends Component {
     fetchCommunityInfoRequest()
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   const { user } = nextProps
-  //   if (user && !user.verified) {
-  //     browserHistory.push('/verify')
-  //   }
-  // }
+  componentWillReceiveProps(nextProps) {
+    const { user } = this.props
+    if ((!user && nextProps.user && nextProps.user.verified === true) || (user && nextProps.user && user.verified === false && nextProps.user.verified === true)) {
+      this.setState({
+        timer: 5,
+      }, () => {
+        setInterval(() => {
+          const { timer } = this.state
+          if (timer !== 0) {
+            this.setState({
+              timer: timer - 1,
+            })
+          }
+        }, 1000)
+      })
+    }
+  }
 
   googleLogin = () => {
   }
@@ -85,8 +99,8 @@ class HomePage extends Component {
   }
 
   render() {
-    const { showAuthWrapper, showAddPostForm, showAccountMenu } = this.state
-    const { posts, suggestions, authenticated, user, logOut } = this.props
+    const { showAuthWrapper, showAddPostForm, showAccountMenu, timer } = this.state
+    const { posts, suggestions, authenticated, user, logOut, info: { status, error } } = this.props
 
     let addPostButtonType = 'text'
 
@@ -129,14 +143,31 @@ class HomePage extends Component {
           </Col>
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-md-down">
             {
-              suggestions && suggestions.map((suggestion, index) => (<Suggestion key={index} imageUrl={suggestion.img} title={suggestion.title} />))
+              suggestions && suggestions.map((suggestion, index) => <Suggestion key={index} imageUrl={suggestion.img} title={suggestion.title} />)
             }
           </Col>
         </Row>
-        { user && !user.verified &&
+        { user && !user.verified && (status !== VERIFY_FAIL) &&
           <div className="verifyCtrl">
             <div className="verifyCtrl__message">
               {`Hey ${user.firstname} ${user.lastname}, you've got an email from us. Please open it and click on the link to verify your account`}
+            </div>
+            <div className="verifyCtrl__logOutForm">
+              Please verify your registration or <button onClick={logOut}>Log out</button>
+            </div>
+          </div>
+        }
+        { user && (timer !== 0) &&
+          <div className="verifyCtrl">
+            <div className="verifyCtrl__message">
+              Verification Success. This message will disapper in { timer } secondes...
+            </div>
+          </div>
+        }
+        { (status === VERIFY_FAIL) && error &&
+          <div className="verifyCtrl">
+            <div className="verifyCtrl__message">
+              { 'Verification failed. Your verification code is not correct.'}
             </div>
             <div className="verifyCtrl__logOutForm">
               Please verify your registration or <button onClick={logOut}>Log out</button>
@@ -148,11 +179,12 @@ class HomePage extends Component {
   }
 }
 
-const mapStateToProps = createStructuredSelector({
+const selectors = createStructuredSelector({
   posts: selectPosts(),
   suggestions: selectSuggestions(),
   authenticated: selectAuthenticated(),
   user: selectUser(),
+  info: selectInfo(),
 })
 
 const actions = {
@@ -161,4 +193,4 @@ const actions = {
   logOut,
 }
 
-export default connect(mapStateToProps, actions)(HomePage)
+export default connect(selectors, actions)(HomePage)

@@ -348,7 +348,7 @@ class DescriptiveSection extends Component {
   }
 }
 
-const mapStateToProps = createStructuredSelector({
+const selectors = createStructuredSelector({
   descriptives: selectDescriptives(),
   currentDescriptives: selectCurrentDescriptives(),
 })
@@ -358,4 +358,4 @@ const actions = {
   fetchRecommendations,
 }
 
-export default connect(mapStateToProps, actions)(DescriptiveSection)
+export default connect(selectors, actions)(DescriptiveSection)

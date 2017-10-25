@@ -345,7 +345,7 @@ Brochure.propTypes = {
   name: PropTypes.string.isRequired,
 }
 
-const mapStateToProps = createStructuredSelector({
+const selectors = createStructuredSelector({
   brochure: selectBrochure(),
 })
 
@@ -353,4 +353,4 @@ const actions = {
   fetchBrochure,
 }
 
-export default connect(mapStateToProps, actions)(Brochure)
+export default connect(selectors, actions)(Brochure)

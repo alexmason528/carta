@@ -106,7 +106,7 @@ class AuthWrapper extends Component {
   }
 }
 
-const mapStateToProps = createStructuredSelector({
+const selectors = createStructuredSelector({
   info: selectInfo(),
 })
 
@@ -115,4 +115,4 @@ const actions = {
   registerRequest,
 }
 
-export default connect(mapStateToProps, actions)(AuthWrapper)
+export default connect(selectors, actions)(AuthWrapper)

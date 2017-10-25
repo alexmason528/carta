@@ -75,7 +75,7 @@ class PlaceSection extends Component {
   }
 }
 
-const mapStateToProps = createStructuredSelector({
+const selectors = createStructuredSelector({
   places: selectPlaces(),
 })
 
@@ -83,4 +83,4 @@ const actions = {
   fetchRecommendations,
 }
 
-export default connect(mapStateToProps, actions)(PlaceSection)
+export default connect(selectors, actions)(PlaceSection)

@@ -119,7 +119,7 @@ VerifyPage.propTypes = {
   params: PropTypes.object,
 }
 
-const mapStateToProps = createStructuredSelector({
+const selectors = createStructuredSelector({
   authenticated: selectAuthenticated(),
   user: selectUser(),
   verify: selectVerifyInfo(),
@@ -129,4 +129,4 @@ const actions = {
   verifyRequest,
 }
 
-export default connect(mapStateToProps, actions)(VerifyPage)
+export default connect(selectors, actions)(VerifyPage)

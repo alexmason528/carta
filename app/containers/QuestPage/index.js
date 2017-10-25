@@ -415,7 +415,7 @@ class QuestPage extends Component {
   }
 }
 
-const mapStateToProps = createStructuredSelector({
+const selectors = createStructuredSelector({
   recommendations: selectRecommendations(),
   places: selectPlaces(),
 })
@@ -427,4 +427,4 @@ const actions = {
   setDefaultQuest,
 }
 
-export default connect(mapStateToProps, actions)(QuestPage)
+export default connect(selectors, actions)(QuestPage)
