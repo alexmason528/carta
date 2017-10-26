@@ -35,7 +35,7 @@ class Post extends Component {
     const interval =
     setInterval(() => {
       const post = ReactDOM.findDOMNode(this)
-      if ($(post).width() > 0) {
+      if ($(post).find('.postImage').height() > 25) {
         $(post).find('.postTitle').dotdotdot({
           watch: 'window',
           ellipsis: ' ...',
@@ -133,8 +133,7 @@ class Post extends Component {
     })
   }
 
-  handleSubmit = () => {
-  }
+  handleSubmit = () => {}
 
   handlePostInfoToggle = () => {
     this.setState({
@@ -176,7 +175,7 @@ class Post extends Component {
 
     const postClass = className({
       post: true,
-      firstPost: first,
+      firstPost: first && first === true,
       [postType]: true,
     })
 
@@ -197,8 +196,8 @@ class Post extends Component {
         { postType === 'normalPost' &&
           <div className={postClass}>
             <div className="postImage">
-              { img && typeof (img) === 'string' && <img className="postImage" src={img} role="presentation" />}
-              { img && typeof (img) === 'object' && <FileImage className="postImage" file={img} />}
+              { img && typeof (img) === 'string' && <img src={img} role="presentation" />}
+              { img && typeof (img) === 'object' && <FileImage file={img} />}
               { editable && editing && canRemove && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostRemoveImage} /> }
               { editable && editing && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               { !editing &&
@@ -223,8 +222,8 @@ class Post extends Component {
           <div className={postClass}>
             <div className="postImage">
               { editable && !editing && <EditButton className="postEditBtn" image="edit-white" onClick={this.handleStartEdit} /> }
-              { img && typeof (img) === 'string' && <img className="postImage" src={img} role="presentation" />}
-              { img && typeof (img) === 'object' && <FileImage className="postImage" file={img} />}
+              { img && typeof (img) === 'string' && <img src={img} role="presentation" />}
+              { img && typeof (img) === 'object' && <FileImage file={img} />}
               { editable && editing && canRemove && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostRemoveImage} /> }
               { editable && editing && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} />}
             </div>

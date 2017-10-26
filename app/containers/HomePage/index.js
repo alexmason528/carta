@@ -133,12 +133,12 @@ class HomePage extends Component {
                   data.username = `${post.author[0].firstname} ${post.author[0].lastname}`
                   data.editable = (authenticated && post.author[0]._id === user._id)
                   data.key = key
+
                   if (content.length === 0) data.content = null
                   if (img.length === 0) data.img = null
 
-                  if (key === 0 && authenticated) {
-                    data.first = true
-                  }
+                  data.first = (key === 0 && authenticated)
+
                   return <Post {...data} />
                 })
               }
