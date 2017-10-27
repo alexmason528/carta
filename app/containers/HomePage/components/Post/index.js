@@ -72,7 +72,6 @@ class Post extends Component {
       editing: false,
       showLinkBar: false,
     })
-    this.handleResize()
   }
 
   handleResize = () => {
@@ -106,7 +105,8 @@ class Post extends Component {
     })
   }
 
-  handlePostContent = value => {
+  handlePostContent = evt => {
+    const value = evt.target.value
     this.setState({
       content: value.length > 0 ? value : '',
     })
@@ -179,9 +179,9 @@ class Post extends Component {
     })
   }
 
-  handlePostTitle = value => {
+  handlePostTitle = evt => {
     this.setState({
-      title: value,
+      title: evt.target.value,
     })
   }
 
@@ -217,7 +217,6 @@ class Post extends Component {
       showInfo,
       editing,
       first,
-      adding,
       link,
     } = this.state
 
@@ -271,12 +270,8 @@ class Post extends Component {
                   <input type="text" value={link} placeholder="PASTE OR WRITE LINK HERE" onChange={this.handlePostLinkBarChange} />
                 </div>
               }
-              { !editing &&
-                <div className="postTitle" title={title}>
-                  {title}
-                </div>
-              }
-              { editing && <ContentEditable placeholder="title" editable={editing} className="postTitleEdit" onChange={this.handlePostTitle} content={title} /> }
+              { !editing && <div className="postTitle" dangerouslySetInnerHTML={{ __html: title.replace(/\n/g, '<br />') }} /> }
+              { editing && <textarea className="postTitleEdit" placeholder="PASTE OR WRITE LINK HERE" onChange={this.handlePostTitle} value={title} /> }
             </div>
             <div className="postContent">
               { showPostRemoveContent && <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostRemoveContent} /> }
@@ -284,7 +279,7 @@ class Post extends Component {
                 {username} - CARTA | {getTextFromDate(created_at)}
                 { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
               </div>
-              <ContentEditable editable={editing} className="postText" onChange={this.handlePostContent} content={content} />
+              <textarea disabled={!editing} className="postText" onChange={this.handlePostContent} value={content} />
             </div>
           </div>
         }
@@ -303,12 +298,8 @@ class Post extends Component {
                 </div>
               }
             </div>
-            { !editing &&
-              <div className="postTitle" title={title}>
-                {title}
-              </div>
-            }
-            { editing && <ContentEditable placeholder="title" editable={editing} className="postTitleEdit" onChange={this.handlePostTitle} content={title} /> }
+            { !editing && <div className="postTitle" dangerouslySetInnerHTML={{ __html: title.replace(/\n/g, '<br />') }} /> }
+            { editing && <textarea className="postTitleEdit" onChange={this.handlePostTitle} value={title} /> }
             <div className={postInfoClass}>
               {username} - Carta | {getTextFromDate(created_at)}
             </div>
@@ -318,19 +309,15 @@ class Post extends Component {
 
         { postType === 'textPost' &&
           <div className={postClass} onClick={this.handlePostClick}>
-            { !editing &&
-              <div className="postTitle" title={title}>
-                {title}
-              </div>
-            }
-            { editing && <ContentEditable placeholder="title" editable={editing} className="postTitleEdit" onChange={this.handlePostTitle} content={title} /> }
+            { !editing && <div className="postTitle" dangerouslySetInnerHTML={{ __html: title.replace(/\n/g, '<br />') }} /> }
+            { editing && <textarea className="postTitleEdit" onChange={this.handlePostTitle} value={title} /> }
             <div className="postContent">
               { showPostRemoveContent && <RemoveButton className="removeContentButton" image="close" onClick={this.handlePostRemoveContent} /> }
               <div className="postMeta">
                 {username} - CARTA | {getTextFromDate(created_at)}
                 { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
               </div>
-              <ContentEditable editable={editing} className="postText" onChange={this.handlePostContent} content={content} />
+              <textarea disabled={!editing} className="postText" onChange={this.handlePostContent} value={content} />
             </div>
           </div>
         }

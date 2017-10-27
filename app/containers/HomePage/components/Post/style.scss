@@ -13,6 +13,10 @@
     opacity: 0;
     overflow: hidden;
   }
+
+  textarea {
+    resize: none;
+  }
 }
 
 .imagePost, .normalPost, .textPost {
@@ -24,16 +28,15 @@
 
   .postTitle {
     width: 50%;
-    top: 50%;
-    transform: translate(0, -50%);
-    overflow: hidden;
+    height: calc(100% - 100px);
+    top: 35px;
     align-items: center;
   }
 
   .postTitleEdit {
     width: 50%;
     top: 50%;
-    transform: translate(0, -50%);
+    transform: translate(0, calc(-50% - 15px));
     overflow: hidden;
     max-height: 7.8rem;
   }
@@ -97,8 +100,7 @@
   .postTitle {
     bottom: 20px;
     width: calc(100% - 40px);
-    height: calc(100% - 40px);
-    overflow: hidden;
+    height: calc(100% - 60px);
     align-items: flex-end;
   }
 
@@ -373,9 +375,11 @@
 
 .postText {
   border-bottom: none;
-  resize: none;
   margin-top: 10px;
   width: 100%;
+  height: auto;
+  color: gray;
+  font-weight: lighter;
 
   &:focus {
     outline: none;
@@ -384,7 +388,7 @@
 
 .postButtons {
   display: flex;
-  padding: 0 20px 10px 20px;
+  padding: 0 20px 8px 20px;
   justify-content: space-between;
   align-items: center;
   position: relative;
