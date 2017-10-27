@@ -127,8 +127,8 @@ class HomePage extends Component {
             <div>
               {
                 posts && posts.map((post, key) => {
-                  const { _id, content, created_at, img, title } = post
-                  let data = { _id, content, created_at, img, title }
+                  const { _id, content, created_at, img, title, link } = post
+                  let data = { _id, content, created_at, img, title, link }
 
                   data.username = `${post.author[0].firstname} ${post.author[0].lastname}`
                   data.editable = (authenticated && post.author[0]._id === user._id)

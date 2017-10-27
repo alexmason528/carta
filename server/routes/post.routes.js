@@ -3,17 +3,15 @@ const router = new express.Router()
 const crypto = require('crypto')
 const path = require('path')
 
-const AuthController = require('../controllers/auth.controller')
+const PostController = require('../controllers/post.controller')
 
-// Login
-router.post('/login', AuthController.login)
 
-// Register
+// Update Post
 
 const multer = require('multer')
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'server/public/uploads/user')
+    cb(null, 'server/public/uploads/post')
   },
   filename: (req, file, cb) => {
     crypto.pseudoRandomBytes(16, (err, raw) => {
@@ -26,13 +24,7 @@ const storage = multer.diskStorage({
 })
 const upload = multer({ storage: storage })
 
-router.post('/register', upload.any(), AuthController.register)
-
-// Verify
-router.post('/verify', AuthController.verify)
-
-// Delete User
-router.delete('/delete/:userID', AuthController.deleteUser)
+router.put('/:postID', upload.any(), PostController.updatePost)
 
 // export default router
 module.exports = router

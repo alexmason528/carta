@@ -8,6 +8,7 @@ const authRoutes = require('../routes/auth.routes')
 const communityRoutes = require('../routes/community.routes')
 const importRoutes = require('../routes/import.routes')
 const mapRoutes = require('../routes/map.routes')
+const postRoutes = require('../routes/post.routes')
 
 // Dev middleware
 const addDevMiddlewares = (app, webpackConfig) => {
@@ -28,6 +29,7 @@ const addDevMiddlewares = (app, webpackConfig) => {
   app.use('/api/v1/community', communityRoutes)
   app.use('/api/v1/import', importRoutes)
   app.use('/api/v1/map', mapRoutes)
+  app.use('/api/v1/post', postRoutes)
 
   // Since webpackDevMiddleware uses memory-fs internally to store build
   // artifacts, we use it instead
@@ -66,6 +68,7 @@ const addProdMiddlewares = (app, options) => {
   app.use('/api/v1/community', communityRoutes)
   app.use('/api/v1/import', importRoutes)
   app.use('/api/v1/map', mapRoutes)
+  app.use('/api/v1/post', postRoutes)
 
   app.get('*', (req, res) => res.sendFile(path.resolve(outputPath, 'index.html')))
 }

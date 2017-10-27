@@ -2,16 +2,24 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import FileImage from 'react-file-image'
 import className from 'classnames'
-import CSSTransitionGroup from 'react-addons-css-transition-group'
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
 import { Popover, PopoverBody } from 'reactstrap'
-import { getTextFromDate } from 'utils/dateHelper'
 import ContentEditable from 'components/ContentEditable'
+import LoadingSpinner from 'components/LoadingSpinner'
+import { QuarterSpinner } from 'components/SvgIcon'
+import { getTextFromDate } from 'utils/dateHelper'
+import { updatePostRequest } from 'containers/HomePage/actions'
+import { UPDATE_POST_REQUEST } from 'containers/HomePage/constants'
+import { selectInfo } from 'containers/HomePage/selectors'
 import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
 import './style.scss'
 
 class Post extends Component {
   static propTypes = {
     onClose: PropTypes.func,
+    updatePostRequest: PropTypes.func,
+    info: PropTypes.object,
     show: PropTypes.bool,
   }
 
@@ -20,10 +28,12 @@ class Post extends Component {
 
     this.state = {
       showDeleteConfirm: false,
+      showLinkBar: false,
       showInfo: false,
       editable: false,
       editing: false,
       first: false,
+      link: '',
     }
   }
 
@@ -59,7 +69,10 @@ class Post extends Component {
   initializeState(props) {
     this.setState({
       ...props,
+      editing: false,
+      showLinkBar: false,
     })
+    this.handleResize()
   }
 
   handleResize = () => {
@@ -81,6 +94,7 @@ class Post extends Component {
     this.setState({
       ...this.props,
       showDeleteConfirm: false,
+      showLinkBar: false,
       showInfo: false,
       editing: false,
     })
@@ -104,7 +118,12 @@ class Post extends Component {
     })
   }
 
-  handlePostLinkBtn = () => {}
+  handlePostLinkBtn = evt => {
+    evt.stopPropagation()
+    this.setState({
+      showLinkBar: !this.state.showLinkBar,
+    })
+  }
 
   handleDeleteConfirm = () => {
     this.setState({
@@ -133,7 +152,26 @@ class Post extends Component {
     })
   }
 
-  handleSubmit = () => {}
+  handleSubmit = () => {
+    const { content, img, title, link, _id } = this.state
+    const { updatePostRequest } = this.props
+
+    let data = {
+      title,
+      link,
+    }
+
+    data.img = (img !== null) ? img : ''
+    data.content = (content !== null) ? content : ''
+
+    let formData = new FormData()
+
+    for (let key in data) {
+      formData.append(key, data[key])
+    }
+
+    updatePostRequest(_id, formData)
+  }
 
   handlePostInfoToggle = () => {
     this.setState({
@@ -147,8 +185,26 @@ class Post extends Component {
     })
   }
 
+  handlePostLinkBarClick = evt => {
+    evt.stopPropagation()
+  }
+
+  handlePostLinkBarChange = evt => {
+    evt.stopPropagation()
+
+    this.setState({
+      link: evt.target.value,
+    })
+  }
+
+  handlePostClick = () => {
+    this.setState({
+      showLinkBar: false,
+    })
+  }
+
   render() {
-    const { show, onClose } = this.props
+    const { show, onClose, info: { error, status } } = this.props
     const {
       img,
       title,
@@ -157,10 +213,12 @@ class Post extends Component {
       username,
       editable,
       showDeleteConfirm,
+      showLinkBar,
       showInfo,
       editing,
       first,
       adding,
+      link,
     } = this.state
 
     let postType
@@ -190,25 +248,38 @@ class Post extends Component {
     })
 
     const canRemove = content && img
+    const showPostRemoveImage = editing && canRemove && !showLinkBar
+    const showPostRemoveContent = editable && editing && canRemove
+    const showPostLinkButton = editing && !showLinkBar
+    const showFileImage = img && (img instanceof File)
+    const spinnerShow = status === UPDATE_POST_REQUEST
 
     return (
-      <div>
+      <div style={{ position: 'relative' }}>
+        <LoadingSpinner show={spinnerShow}>
+          <QuarterSpinner width={30} height={30} />
+        </LoadingSpinner>
         { postType === 'normalPost' &&
-          <div className={postClass}>
+          <div className={postClass} onClick={this.handlePostClick}>
             <div className="postImage">
-              { img && typeof (img) === 'string' && <img src={img} role="presentation" />}
-              { img && typeof (img) === 'object' && <FileImage file={img} />}
-              { editable && editing && canRemove && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostRemoveImage} /> }
-              { editable && editing && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
+              { showFileImage ? <FileImage file={img} /> : <img src={img} role="presentation" /> }
+              { showPostRemoveImage && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostRemoveImage} /> }
+              { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
+              { showLinkBar &&
+                <div className="postLinkBar" onClick={this.handlePostLinkBarClick}>
+                  <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784802/image/icon/link.png" role="presentation" />
+                  <input type="text" value={link} placeholder="PASTE OR WRITE LINK HERE" onChange={this.handlePostLinkBarChange} />
+                </div>
+              }
               { !editing &&
                 <div className="postTitle" title={title}>
                   {title}
                 </div>
               }
-              { editing && <ContentEditable editable={editing} className="postTitleEdit" onChange={this.handlePostTitle} content={title} /> }
+              { editing && <ContentEditable placeholder="title" editable={editing} className="postTitleEdit" onChange={this.handlePostTitle} content={title} /> }
             </div>
             <div className="postContent">
-              { editable && editing && canRemove && <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostRemoveContent} /> }
+              { showPostRemoveContent && <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostRemoveContent} /> }
               <div className="postMeta">
                 {username} - CARTA | {getTextFromDate(created_at)}
                 { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
@@ -219,20 +290,25 @@ class Post extends Component {
         }
 
         { postType === 'imagePost' &&
-          <div className={postClass}>
+          <div className={postClass} onClick={this.handlePostClick}>
             <div className="postImage">
               { editable && !editing && <EditButton className="postEditBtn" image="edit-white" onClick={this.handleStartEdit} /> }
-              { img && typeof (img) === 'string' && <img src={img} role="presentation" />}
-              { img && typeof (img) === 'object' && <FileImage file={img} />}
-              { editable && editing && canRemove && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostRemoveImage} /> }
-              { editable && editing && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} />}
+              { showFileImage ? <FileImage file={img} /> : <img src={img} role="presentation" /> }
+              { showPostRemoveImage && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostRemoveImage} /> }
+              { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
+              { showLinkBar &&
+                <div className="postLinkBar" onClick={this.handlePostLinkBarClick}>
+                  <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784802/image/icon/link.png" role="presentation" />
+                  <input type="text" value={link} placeholder="PASTE OR WRITE LINK HERE" onChange={this.handlePostLinkBarChange} />
+                </div>
+              }
             </div>
             { !editing &&
               <div className="postTitle" title={title}>
                 {title}
               </div>
             }
-            { editing && <ContentEditable editable={editing} className="postTitleEdit" onChange={this.handlePostTitle} content={title} /> }
+            { editing && <ContentEditable placeholder="title" editable={editing} className="postTitleEdit" onChange={this.handlePostTitle} content={title} /> }
             <div className={postInfoClass}>
               {username} - Carta | {getTextFromDate(created_at)}
             </div>
@@ -241,15 +317,15 @@ class Post extends Component {
         }
 
         { postType === 'textPost' &&
-          <div className={postClass}>
+          <div className={postClass} onClick={this.handlePostClick}>
             { !editing &&
               <div className="postTitle" title={title}>
                 {title}
               </div>
             }
-            { editing && <ContentEditable editable={editing} className="postTitleEdit" onChange={this.handlePostTitle} content={title} /> }
+            { editing && <ContentEditable placeholder="title" editable={editing} className="postTitleEdit" onChange={this.handlePostTitle} content={title} /> }
             <div className="postContent">
-              { editable && editing && canRemove && <RemoveButton className="removeContentButton" image="close" onClick={this.handlePostRemoveContent} /> }
+              { showPostRemoveContent && <RemoveButton className="removeContentButton" image="close" onClick={this.handlePostRemoveContent} /> }
               <div className="postMeta">
                 {username} - CARTA | {getTextFromDate(created_at)}
                 { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
@@ -285,7 +361,7 @@ class Post extends Component {
               </div>
             }
             <button type="button" className={closeButtonClass} onClick={onClose}>
-              <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close.png" role="presentation" />
+              <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close.png" role="presentation" />
             </button>
           </div>
         }
@@ -294,4 +370,12 @@ class Post extends Component {
   }
 }
 
-export default Post
+const selectors = createStructuredSelector({
+  info: selectInfo(),
+})
+
+const actions = {
+  updatePostRequest,
+}
+
+export default connect(selectors, actions)(Post)

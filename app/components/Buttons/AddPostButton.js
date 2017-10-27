@@ -11,7 +11,7 @@ const AddPostButton = ({ show, type, onClick }) => {
   return (
     <button className={addPostBtnClass} onClick={onClick}>
       <div className="btnImage">
-        <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/icon/add-post.png" role="presentation" />
+        <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/icon/add-post.png" role="presentation" />
       </div>
       <div className="btnText">Post</div>
     </button>

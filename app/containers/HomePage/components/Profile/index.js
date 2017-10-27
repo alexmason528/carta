@@ -19,8 +19,8 @@ export default class Profile extends Component {
   render() {
     const { authenticated, user, onClick } = this.props
     const username = (authenticated) ? `${user.firstname} ${user.lastname}` : 'Sign in'
-    const coverImg = (authenticated && user.cover_img) ? user.cover_img : `http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/wide/${this.coverImgRand}.jpg`
-    const profileImg = (authenticated && user.profile_pic) ? user.profile_pic : `http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/profile/bag/${this.profilePicRand}.jpg`
+    const coverImg = (authenticated && user.cover_img) ? user.cover_img : `https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/wide/${this.coverImgRand}.jpg`
+    const profileImg = (authenticated && user.profile_pic) ? user.profile_pic : `https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/profile/bag/${this.profilePicRand}.jpg`
 
     return (
       <div className="profile">

@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react'
+import className from 'classnames'
 import ReactDOM from 'react-dom'
+import './style.scss'
 
 export default class ContentEditable extends Component {
   static propTypes = {
@@ -7,6 +9,11 @@ export default class ContentEditable extends Component {
     editable: PropTypes.bool,
     content: PropTypes.string,
     className: PropTypes.string,
+    placeholder: PropTypes.string,
+  }
+
+  static defaultProps = {
+    placeholder: '',
   }
 
   shouldComponentUpdate(nextProps) {
@@ -23,7 +30,7 @@ export default class ContentEditable extends Component {
 
   onChange = (evt) => {
     const component = ReactDOM.findDOMNode(this)
-    const content = component.innerHTML
+    let content = component.innerHTML
     const { onChange } = this.props
 
     if (content !== this.lastHtml) {
@@ -34,14 +41,16 @@ export default class ContentEditable extends Component {
   }
 
   render() {
-    const { className, editable, content } = this.props
+    const { className, content, editable, placeholder } = this.props
+
     return (
       <div
-        className={className}
+        className={`contentEditable ${className}`}
         onInput={this.onChange}
         onBlur={this.onChange}
         dangerouslySetInnerHTML={{ __html: content }}
         contentEditable={editable}
+        data-placeholder={placeholder}
       />
     )
   }

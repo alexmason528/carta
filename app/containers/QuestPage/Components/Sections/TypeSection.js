@@ -193,8 +193,8 @@ class TypeSection extends Component {
     return (
       <div className={className}>
         <h1>Show Me</h1>
-        <img className={searchBtnClass} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/search.png" onClick={() => { this.handleExpand(1) }} role="presentation" />
-        <img className={closeBtnClass} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/back.png" onClick={() => { this.handleExpand(0) }} role="presentation" />
+        <img className={searchBtnClass} src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/search.png" onClick={() => { this.handleExpand(1) }} role="presentation" />
+        <img className={closeBtnClass} src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/back.png" onClick={() => { this.handleExpand(0) }} role="presentation" />
         <input ref={input => { this.searchInput = input }} className={searchInputClass} value={search} onChange={evt => { this.handleInputChange(evt) }} />
         <div className="suggestion">
           <Button

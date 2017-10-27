@@ -96,11 +96,11 @@ export default class Quest extends Component {
       <div className={className}>
         <div className="tabs">
           <div className="line"></div>
-          <button className="next" onClick={this.handleNextBtnClick}>Next<img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/next.png" role="presentation" /></button>
+          <button className="next" onClick={this.handleNextBtnClick}>Next<img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/next.png" role="presentation" /></button>
           <div className={tabClass}></div>
-          <img className={placesTabClass} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/quest/marker.png" role="presentation" onClick={() => { this.handleTabClick(0) }} />
-          <img className={typesTabClass} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/quest/check.png" role="presentation" onClick={() => { this.handleTabClick(1) }} />
-          <img className={descriptivesTabClass} src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/quest/star.png" role="presentation" onClick={() => { this.handleTabClick(2) }} />
+          <img className={placesTabClass} src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/quest/marker.png" role="presentation" onClick={() => { this.handleTabClick(0) }} />
+          <img className={typesTabClass} src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/quest/check.png" role="presentation" onClick={() => { this.handleTabClick(1) }} />
+          <img className={descriptivesTabClass} src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/quest/star.png" role="presentation" onClick={() => { this.handleTabClick(2) }} />
         </div>
 
         <div className="pages">

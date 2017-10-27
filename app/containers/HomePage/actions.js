@@ -28,9 +28,10 @@ export function fetchCommunityInfoFail(payload) {
   }
 }
 
-export function updatePostRequest(payload) {
+export function updatePostRequest(id, payload) {
   return {
     type: UPDATE_POST_REQUEST,
+    id,
     payload,
   }
 }

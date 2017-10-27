@@ -155,18 +155,7 @@ const verify = (req, res) => {
  */
 
 const deleteUser = (req, res) => {
-  const { vcode } = req.body
-
-  let email
-  try {
-    email = cryptr.decrypt(vcode)
-  } catch (e) {
-    return res.status(400).send({
-      error: {
-        details: 'Failed to verify',
-      },
-    })
-  }
+  const { userID } = req.params
 
   User.findOneAndUpdate({ email: email }, { $set: { verified: true } }, { new: true }, (err, element) => {
     if (element && element.firstname) {

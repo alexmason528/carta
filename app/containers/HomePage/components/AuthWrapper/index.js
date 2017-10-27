@@ -88,13 +88,13 @@ class AuthWrapper extends Component {
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
-        <button className="authWrapper__closeBtn" onClick={onClose}><img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/icon/close.png" role="presentation" /></button>
+        <button className="authWrapper__closeBtn" onClick={onClose}><img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/icon/close.png" role="presentation" /></button>
         <div className="authWrapper__divider">
           <span>With</span>
         </div>
         <div className="authWrapper__inlineButtons">
-          <button type="button"><img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784819/image/icon/logo/google.png" role="presentation" /><span>Google</span></button>
-          <button type="button"><img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784819/image/icon/logo/facebook.png" role="presentation" /><span>Facebook</span></button>
+          <button type="button"><img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784819/image/icon/logo/google.png" role="presentation" /><span>Google</span></button>
+          <button type="button"><img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784819/image/icon/logo/facebook.png" role="presentation" /><span>Facebook</span></button>
         </div>
         <div className="authWrapper__divider">
           <span>Or</span>

@@ -44,7 +44,7 @@ class Menu extends Component {
           {authenticated && <li><button onClick={logOut}>Log out</button></li>}
         </ul>
         <div className="cartaMenu__tab" onClick={this.handleToggleMenu}>
-          <img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506785283/image/content/name-vertical.png" role="presentation" />
+          <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506785283/image/content/name-vertical.png" role="presentation" />
         </div>
       </div>
     )

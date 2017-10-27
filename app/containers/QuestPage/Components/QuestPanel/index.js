@@ -46,8 +46,8 @@ class QuestPanel extends Component {
     return (
       <div className={className}>
         <div className="buttons">
-          <button className="minimize" onClick={minimizeClicked}><img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/min.png" role="presentation" /></button>
-          <button className="close" onClick={closeClicked}><img src="http://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close.png" role="presentation" /></button>
+          <button className="minimize" onClick={minimizeClicked}><img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/min.png" role="presentation" /></button>
+          <button className="close" onClick={closeClicked}><img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close.png" role="presentation" /></button>
         </div>
         <div className="list">
           {

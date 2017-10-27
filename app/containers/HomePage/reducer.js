@@ -1,3 +1,5 @@
+import { findIndex } from 'lodash'
+
 import {
   FETCH_COMMUNITYINFO_REQUEST,
   FETCH_COMMUNITYINFO_SUCCESS,
@@ -38,12 +40,22 @@ function homeReducer(state = initialState, { type, payload }) {
     case UPDATE_POST_REQUEST:
       return {
         ...state,
-        status: typye,
+        status: type,
+        error: null,
       }
 
     case UPDATE_POST_SUCCESS:
+      const newPosts = state.posts.map(post => {
+        if (post._id !== payload._id) return post
+        return {
+          ...post,
+          ...payload,
+        }
+      })
+
       return {
         ...state,
+        posts: newPosts,
         status: type,
       }
 

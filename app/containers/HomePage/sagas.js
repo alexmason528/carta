@@ -16,10 +16,12 @@ import {
   verifyFail,
 } from 'containers/App/actions'
 
-import { DELETE_USER, FETCH_COMMUNITYINFO_REQUEST } from './constants'
+import { FETCH_COMMUNITYINFO_REQUEST, UPDATE_POST_REQUEST } from './constants'
 import {
   fetchCommunityInfoSuccess,
   fetchCommunityInfoFail,
+  updatePostSuccess,
+  updatePostFail,
 } from './actions'
 
 export function* getCommunityInfoRequest() {
@@ -114,12 +116,12 @@ export function* deleteUserWatcher() {
   yield cancel(watcher)
 }
 
-export function* verifyRequest(action) {
+export function* verifyRequest({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/auth/verify`
 
   const params = {
     method: 'POST',
-    body: JSON.stringify(action.payload),
+    body: JSON.stringify(payload),
     headers: {
       'Content-Type': 'application/json',
     },
@@ -140,10 +142,33 @@ export function* verifyRequestWatcher() {
   yield cancel(watcher)
 }
 
+export function* updatePostRequest({ id, payload }) {
+  const requestURL = `${API_BASE_URL}api/v1/post/${id}`
+
+  const params = {
+    method: 'PUT',
+    body: payload,
+  }
+
+  try {
+    const res = yield call(request, requestURL, params)
+    yield put(updatePostSuccess(res))
+  } catch (err) {
+    yield put(updatePostFail(err.details))
+  }
+}
+
+export function* updatePostWatcher() {
+  const watcher = yield takeLatest(UPDATE_POST_REQUEST, updatePostRequest)
+  yield take(LOCATION_CHANGE)
+  yield cancel(watcher)
+}
+
 export default [
   getCommunityInfoRequestWatcher,
   loginRequestWatcher,
   registerRequestWatcher,
   deleteUserWatcher,
   verifyRequestWatcher,
+  updatePostWatcher,
 ]
