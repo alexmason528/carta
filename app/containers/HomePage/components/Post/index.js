@@ -279,7 +279,8 @@ class Post extends Component {
                 {username} - CARTA | {getTextFromDate(created_at)}
                 { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
               </div>
-              <textarea disabled={!editing} className="postText" onChange={this.handlePostContent} value={content} />
+              { editing && <textarea className="postText" onChange={this.handlePostContent} value={content} /> }
+              { !editing && <div className="postText" dangerouslySetInnerHTML={{ __html: content.replace(/\n/g, '<br/>') }} />}
             </div>
           </div>
         }
@@ -317,7 +318,8 @@ class Post extends Component {
                 {username} - CARTA | {getTextFromDate(created_at)}
                 { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
               </div>
-              <textarea disabled={!editing} className="postText" onChange={this.handlePostContent} value={content} />
+              { editing && <textarea className="postText" onChange={this.handlePostContent} value={content} /> }
+              { !editing && <div className="postText" dangerouslySetInnerHTML={{ __html: content.replace(/\n/g, '<br/>') }} />}
             </div>
           </div>
         }
