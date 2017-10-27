@@ -14,7 +14,7 @@ const selectSuggestions = () => createSelector(
 
 const selectInfo = () => createSelector(
   selectHome,
-  substate => ({ status: substate.status, error: substate.error, info: substate.curPost })
+  substate => ({ status: substate.status, error: substate.error, curPost: substate.curPost })
 )
 
 export {

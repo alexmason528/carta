@@ -22,7 +22,9 @@ const initialState = {
   error: null,
 }
 
-function homeReducer(state = initialState, { type, payload }) {
+function homeReducer(state = initialState, action) {
+  const { type, payload, id } = action
+
   switch (type) {
     case FETCH_COMMUNITYINFO_REQUEST:
       return initialState
@@ -45,7 +47,7 @@ function homeReducer(state = initialState, { type, payload }) {
     case UPDATE_POST_REQUEST:
       return {
         ...state,
-        curPost: payload.id,
+        curPost: id,
         status: type,
         error: null,
       }
@@ -61,6 +63,7 @@ function homeReducer(state = initialState, { type, payload }) {
 
       return {
         ...state,
+        curPost: null,
         posts: newPosts,
         status: type,
       }
@@ -68,6 +71,7 @@ function homeReducer(state = initialState, { type, payload }) {
     case UPDATE_POST_FAIL:
       return {
         ...state,
+        curPost: null,
         status: type,
         error: payload,
       }
@@ -83,6 +87,7 @@ function homeReducer(state = initialState, { type, payload }) {
     case DELETE_POST_SUCCESS:
       return {
         ...state,
+        curPost: null,
         status: type,
         posts: state.posts.filter(post => post._id !== payload),
       }
@@ -90,6 +95,7 @@ function homeReducer(state = initialState, { type, payload }) {
     case DELETE_POST_FAIL:
       return {
         ...state,
+        curPost: null,
         status: type,
         error: payload,
       }
