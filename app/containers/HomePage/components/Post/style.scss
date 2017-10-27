@@ -2,7 +2,7 @@
   transition: all 0.1s;
   position: relative;
   max-height: 1000px;
-  z-index: 20;
+  z-index: 1;
   opacity: 1;
   margin-bottom: 8px;
 
@@ -273,6 +273,7 @@
   margin: 0 10px !important;
   position: relative;
   cursor: pointer;
+  z-index: 1000;
 
   .popOver {
     background-color: #fff;

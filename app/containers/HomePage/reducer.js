@@ -8,11 +8,16 @@ import {
   UPDATE_POST_REQUEST,
   UPDATE_POST_SUCCESS,
   UPDATE_POST_FAIL,
+
+  DELETE_POST_REQUEST,
+  DELETE_POST_SUCCESS,
+  DELETE_POST_FAIL,
 } from './constants'
 
 const initialState = {
   posts: [],
   suggestions: [],
+  curPost: null,
   status: null,
   error: null,
 }
@@ -40,6 +45,7 @@ function homeReducer(state = initialState, { type, payload }) {
     case UPDATE_POST_REQUEST:
       return {
         ...state,
+        curPost: payload.id,
         status: type,
         error: null,
       }
@@ -60,6 +66,28 @@ function homeReducer(state = initialState, { type, payload }) {
       }
 
     case UPDATE_POST_FAIL:
+      return {
+        ...state,
+        status: type,
+        error: payload,
+      }
+
+    case DELETE_POST_REQUEST:
+      return {
+        ...state,
+        curPost: payload,
+        status: type,
+        error: null,
+      }
+
+    case DELETE_POST_SUCCESS:
+      return {
+        ...state,
+        status: type,
+        posts: state.posts.filter(post => post._id !== payload),
+      }
+
+    case DELETE_POST_FAIL:
       return {
         ...state,
         status: type,

@@ -26,5 +26,7 @@ const upload = multer({ storage: storage })
 
 router.put('/:postID', upload.any(), PostController.updatePost)
 
+router.delete('/:postID', PostController.deletePost)
+
 // export default router
 module.exports = router

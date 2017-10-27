@@ -38,4 +38,27 @@ const updatePost = (req, res) => {
   })
 }
 
+/**
+ * delete post
+ * @param req
+ * @param res
+ * @returns void
+ */
+
+const deletePost = (req, res) => {
+  const { postID } = req.params
+  Post.remove({ _id: postID }, (err) => {
+    if (err) {
+      return res.status(400).send({
+        error: {
+          details: 'Wrong password',
+        },
+      })
+    } else {
+      return res.json({})
+    }
+  })
+}
+
 module.exports.updatePost = updatePost
+module.exports.deletePost = deletePost

@@ -16,12 +16,14 @@ import {
   verifyFail,
 } from 'containers/App/actions'
 
-import { FETCH_COMMUNITYINFO_REQUEST, UPDATE_POST_REQUEST } from './constants'
+import { FETCH_COMMUNITYINFO_REQUEST, UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from './constants'
 import {
   fetchCommunityInfoSuccess,
   fetchCommunityInfoFail,
   updatePostSuccess,
   updatePostFail,
+  deletePostSuccess,
+  deletePostFail,
 } from './actions'
 
 export function* getCommunityInfoRequest() {
@@ -164,6 +166,27 @@ export function* updatePostWatcher() {
   yield cancel(watcher)
 }
 
+export function* deletePostRequest({ payload }) {
+  const requestURL = `${API_BASE_URL}api/v1/post/${payload}`
+
+  const params = {
+    method: 'DELETE',
+  }
+
+  try {
+    const res = yield call(request, requestURL, params)
+    yield put(deletePostSuccess(payload))
+  } catch (err) {
+    yield put(deletePostFail(err.details))
+  }
+}
+
+export function* deletePostWatcher() {
+  const watcher = yield takeLatest(DELETE_POST_REQUEST, deletePostRequest)
+  yield take(LOCATION_CHANGE)
+  yield cancel(watcher)
+}
+
 export default [
   getCommunityInfoRequestWatcher,
   loginRequestWatcher,
@@ -171,4 +194,5 @@ export default [
   deleteUserWatcher,
   verifyRequestWatcher,
   updatePostWatcher,
+  deletePostWatcher,
 ]

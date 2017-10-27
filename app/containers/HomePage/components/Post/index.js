@@ -9,8 +9,8 @@ import ContentEditable from 'components/ContentEditable'
 import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { getTextFromDate } from 'utils/dateHelper'
-import { updatePostRequest } from 'containers/HomePage/actions'
-import { UPDATE_POST_REQUEST } from 'containers/HomePage/constants'
+import { updatePostRequest, deletePostRequest } from 'containers/HomePage/actions'
+import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/constants'
 import { selectInfo } from 'containers/HomePage/selectors'
 import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
 import './style.scss'
@@ -19,6 +19,7 @@ class Post extends Component {
   static propTypes = {
     onClose: PropTypes.func,
     updatePostRequest: PropTypes.func,
+    deletePostRequest: PropTypes.func,
     info: PropTypes.object,
     show: PropTypes.bool,
   }
@@ -126,12 +127,9 @@ class Post extends Component {
   }
 
   handleDeleteConfirm = () => {
-    this.setState({
-      img: null,
-      title: null,
-      content: null,
-      showDeleteConfirm: false,
-    })
+    const { _id } = this.state
+    const { deletePostRequest } = this.props
+    deletePostRequest(_id)
   }
 
   handlePostRemoveImage = () => {
@@ -159,6 +157,7 @@ class Post extends Component {
     let data = {
       title,
       link,
+      id: _id,
     }
 
     data.img = (img !== null) ? img : ''
@@ -173,7 +172,8 @@ class Post extends Component {
     updatePostRequest(_id, formData)
   }
 
-  handlePostInfoToggle = () => {
+  handlePostInfoToggle = evt => {
+    evt.stopPropagation()
     this.setState({
       showInfo: !this.state.showInfo,
     })
@@ -199,13 +199,16 @@ class Post extends Component {
 
   handlePostClick = () => {
     this.setState({
+      showDeleteConfirm: false,
       showLinkBar: false,
+      showInfo: false,
     })
   }
 
   render() {
-    const { show, onClose, info: { error, status } } = this.props
+    const { show, onClose, info: { error, status, curPost } } = this.props
     const {
+      _id,
       img,
       title,
       content,
@@ -251,7 +254,7 @@ class Post extends Component {
     const showPostRemoveContent = editable && editing && canRemove
     const showPostLinkButton = editing && !showLinkBar
     const showFileImage = img && (img instanceof File)
-    const spinnerShow = status === UPDATE_POST_REQUEST
+    const spinnerShow = (status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST) && (curPost === _id)
 
     return (
       <div style={{ position: 'relative' }}>
@@ -365,6 +368,7 @@ const selectors = createStructuredSelector({
 
 const actions = {
   updatePostRequest,
+  deletePostRequest,
 }
 
 export default connect(selectors, actions)(Post)
