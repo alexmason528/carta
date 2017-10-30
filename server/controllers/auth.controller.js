@@ -22,8 +22,8 @@ const login = (req, res) => {
   User.find({ email: email }, (err, element) => {
     if (element.length > 0) {
       if (element[0].password === password) {
-        const { _id, firstname, lastname, email, profile_pic, cover_img, verified } = element[0]
-        const data = { _id, firstname, lastname, email, profile_pic, cover_img, verified }
+        const { _id, fullname, email, profile_pic, cover_img, verified } = element[0]
+        const data = { _id, fullname, email, profile_pic, cover_img, verified }
         return res.json(data)
       } else {
         return res.status(400).send({
@@ -35,7 +35,7 @@ const login = (req, res) => {
     } else {
       return res.status(400).send({
         error: {
-          details: 'Invalid username',
+          details: 'Invalid email',
         },
       })
     }
@@ -50,7 +50,7 @@ const login = (req, res) => {
  * @returns userInfo
  */
 const register = (req, res) => {
-  const { firstname, lastname, email, password, confirmPassword } = req.body
+  const { fullname, email, password, confirmPassword } = req.body
 
   if (password !== confirmPassword) {
     return res.status(400).send({
@@ -61,8 +61,7 @@ const register = (req, res) => {
   }
 
   let data = {
-    firstname,
-    lastname,
+    fullname,
     email,
     password,
     profile_pic: '',
@@ -96,7 +95,7 @@ const register = (req, res) => {
         from: '<no-reply@carta.guide>',
         to: data.email,
         subject: 'Verification required',
-        text: `Hi, ${data.firstname} ${data.lastname}`,
+        text: `Hi, ${data.fullname}`,
         html: `Please verify your email by clicking <a href="${verifyUrl}/${cryptr.encrypt(data.email)}">this link</a>`,
       }
 
@@ -129,10 +128,9 @@ const verify = (req, res) => {
   }
 
   User.findOneAndUpdate({ email: email }, { $set: { verified: true } }, { new: true }, (err, element) => {
-    if (element && element.firstname) {
+    if (element && element.fullname) {
       let response = {
-        firstname: element.firstname,
-        lastname: element.lastname,
+        fullname: element.fullname,
         email: element.email,
         profile_pic: element.profile_pic,
         cover_img: element.cover_img,

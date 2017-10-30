@@ -134,9 +134,7 @@ export function* createPostRequest({ payload }) {
     let info = {
       ...res,
       author: {
-        firstname: user.firstname,
-        lastname: user.lastname,
-        _id: user._id,
+        ...user,
       },
     }
     yield put(createPostSuccess(info))
@@ -182,9 +180,7 @@ export function* updatePostRequest({ id, payload }) {
     let info = {
       ...res,
       author: {
-        firstname: user.firstname,
-        lastname: user.lastname,
-        _id: user._id,
+        ...user,
       },
     }
 

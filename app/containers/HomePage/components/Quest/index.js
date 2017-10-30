@@ -1,24 +1,64 @@
-import React, { PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import className from 'classnames'
 import './style.scss'
 
-const Quest = ({ authenticated }) => {
-  const questClass = className({
-    quest: true,
-    quest__Authenticated: authenticated,
-  })
+class Quest extends Component {
+  static propTypes = {
+    authenticated: PropTypes.bool,
+  }
 
-  return (
-    <div className={questClass}>
-      <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/quest/start/1.jpg" role="presentation" />
-      <h2>Start your personal quest</h2>
-    </div>
-  )
-}
+  constructor(props) {
+    super(props)
 
-Quest.propTypes = {
-  authenticated: PropTypes.bool,
+    this.state = {
+      initialized: false,
+    }
+  }
+
+  componentDidMount() {
+    const quest = ReactDOM.findDOMNode(this)
+
+    const interval =
+    setInterval(() => {
+      if ($(quest).height() > 100) {
+        this.setState({
+          initialized: true,
+        })
+        this.handleResize()
+        clearInterval(interval)
+      }
+    }, 0)
+
+    window.addEventListener('resize', this.handleResize)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize)
+  }
+
+  handleResize = () => {
+    const quest = ReactDOM.findDOMNode(this)
+    const width = $(quest).width()
+
+    $(quest).find('h2').css({ fontSize: `${width / 11}px` })
+  }
+
+  render() {
+    const { initialized } = this.state
+    const { authenticated } = this.props
+    const questClass = className({
+      quest: true,
+      quest__Authenticated: authenticated,
+    })
+
+    return (
+      <div className={questClass} style={{ display: initialized ? 'block' : 'none' }}>
+        <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/quest/start/1.jpg" role="presentation" />
+        <h2>Start your personal quest</h2>
+      </div>
+    )
+  }
 }
 
 export default Quest

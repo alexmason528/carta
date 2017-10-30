@@ -3,7 +3,6 @@ import AuthWrapper from './AuthWrapper'
 import Profile from './Profile'
 import Quest from './Quest'
 import Suggestion from './Suggestion'
-import VerifyCtrl from './VerifyCtrl'
 import { Post, PostCreate } from './Post'
 
 export {
@@ -14,5 +13,4 @@ export {
   Profile,
   Quest,
   Suggestion,
-  VerifyCtrl,
 }

@@ -27,16 +27,10 @@ const RegisterForm = ({ handleSubmit, registerError, onAuthTypeChange }) => (
       label="Repeat password"
     />
     <Field
-      name="firstname"
+      name="fullname"
       type="text"
       component={RenderField}
-      label="First name"
-    />
-    <Field
-      name="lastname"
-      type="text"
-      component={RenderField}
-      label="Last name"
+      label="Full name"
     />
     <div className="authWrapper__uploadButtons">
       <Field

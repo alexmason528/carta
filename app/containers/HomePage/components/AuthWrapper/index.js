@@ -26,6 +26,8 @@ class AuthWrapper extends Component {
 
     this.state = {
       authType: 'login',
+      email: '',
+      password: '',
       loginError: null,
       registerError: null,
     }
@@ -56,6 +58,16 @@ class AuthWrapper extends Component {
     })
   }
 
+  handleLogin = values => {
+    const { loginRequest } = this.props
+    this.setState({
+      email: values.email,
+      password: values.password,
+    }, () => {
+      loginRequest(values)
+    })
+  }
+
   handleRegister = values => {
     const { registerRequest } = this.props
 
@@ -73,7 +85,7 @@ class AuthWrapper extends Component {
   }
 
   render() {
-    const { authType, loginError, registerError } = this.state
+    const { authType, loginError, registerError, email, password } = this.state
     const { info: { status }, show, onClose, loginRequest } = this.props
 
     const spinnerShow = status === LOGIN_REQUEST || status === REGISTER_REQUEST
@@ -99,8 +111,8 @@ class AuthWrapper extends Component {
         <div className="authWrapper__divider">
           <span>Or</span>
         </div>
-        { authType === 'login' && <LoginForm onSubmit={loginRequest} loginError={loginError} onAuthTypeChange={this.handleAuthTypeChange} /> }
-        { authType === 'register' && <RegisterForm onSubmit={this.handleRegister} registerError={registerError} onAuthTypeChange={this.handleAuthTypeChange} /> }
+        { authType === 'login' && <LoginForm onSubmit={this.handleLogin} loginError={loginError} onAuthTypeChange={this.handleAuthTypeChange} /> }
+        { authType === 'register' && <RegisterForm onSubmit={this.handleRegister} registerError={registerError} onAuthTypeChange={this.handleAuthTypeChange} email={email} password={password} /> }
       </div>
     )
   }

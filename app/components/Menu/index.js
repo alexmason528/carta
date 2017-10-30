@@ -39,7 +39,7 @@ class Menu extends Component {
     return (
       <div className={cartaMenuClass}>
         <ul>
-          <li><button onClick={() => browserHistory.push('quest')}>Quest</button></li>
+          <li><button onClick={() => browserHistory.push('/')}>Quest</button></li>
           <li><button>About</button></li>
           {authenticated && <li><button onClick={logOut}>Log out</button></li>}
         </ul>

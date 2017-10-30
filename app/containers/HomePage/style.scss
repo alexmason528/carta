@@ -46,7 +46,6 @@
 
   .createPostBtn {
     position: absolute;
-    top: 10px;
     left: 24px;
     z-index: 50;
     display: flex;
@@ -62,8 +61,8 @@
     .btnImage {
       line-height: 0;
       border-radius: 20px;
-      margin-right: 8px;
-
+      margin-right: 5px;
+      
       img {
         width: 12px;
         height: 12px;
@@ -72,21 +71,26 @@
 
     .btnText {
       text-transform: uppercase;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     &--afterImage {
+      top: 15px;
+
       .btnImage {
         background: #fff;
         padding: 5px;
+        box-shadow: 0 0 7px rgba(0, 0, 0, 0.4);
       }
 
       .btnText {
         color: #fff;
+        text-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
       }
     }
 
     &--afterText {
+      top: 10px;
       background: #fff;
       padding: 4px 8px;
       border: 1px solid #ddd;
@@ -120,7 +124,7 @@
       word-break: break-word;
       display: flex;
       align-items: center;
-      justify-content: center;
+      text-align: center;
       font-weight: 400;
     }
 

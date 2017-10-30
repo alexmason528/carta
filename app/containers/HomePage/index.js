@@ -142,7 +142,7 @@ class HomePage extends Component {
                   const { _id, content, created_at, img, title, link } = post
                   let data = { _id, content, created_at, img, title, link }
 
-                  data.username = `${post.author.firstname} ${post.author.lastname}`
+                  data.username = post.author.fullname
                   data.editable = (authenticated && post.author._id === user._id)
                   data.key = key
 
@@ -164,7 +164,7 @@ class HomePage extends Component {
         { user && !user.verified && (status !== VERIFY_FAIL) &&
           <div className="verifyCtrl">
             <div className="verifyCtrl__message">
-              {`Hey ${user.firstname} ${user.lastname}, you've got an email from us. Please open it and click on the link to verify your account`}
+              {`Hey ${user.fullname}, you've got an email from us. Please open it and click on the link to verify your account`}
             </div>
             <div className="verifyCtrl__logOutForm">
               Please verify your registration or <button onClick={logOut}>Log out</button>

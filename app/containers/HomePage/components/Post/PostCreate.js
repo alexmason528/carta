@@ -168,7 +168,7 @@ class PostCreate extends Component {
   }
 
   render() {
-    const { show, onClose, user, info: { error, status } } = this.props
+    const { show, onClose, user: { fullname }, info: { error, status } } = this.props
     const {
       img,
       title,
@@ -209,7 +209,6 @@ class PostCreate extends Component {
     const showPostRemoveContent = canRemove
     const showPostLinkButton = !showLinkBar
     const showFileImage = img instanceof File
-    const username = `${user.firstname} ${user.lastname}`
     const spinnerShow = status === CREATE_POST_REQUEST
 
     return (
@@ -234,7 +233,7 @@ class PostCreate extends Component {
             <div className="postContent">
               <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostRemoveContent} />
               <div className="postMeta">
-                {username} - CARTA | NOW
+                {fullname} - CARTA | NOW
               </div>
               <textarea className="postText" onChange={this.handlePostContent} value={content} />
             </div>
@@ -256,7 +255,7 @@ class PostCreate extends Component {
             </div>
             <textarea className="postTitleEdit" placeholder="TITLE" onChange={this.handlePostTitle} value={title} />
             <div className={postInfoClass}>
-              {username} - Carta | NOW
+              {fullname} - Carta | NOW
             </div>
             <InfoButton className="postInfoBtn" onClick={this.handlePostInfoToggle} />
           </div>
@@ -268,7 +267,7 @@ class PostCreate extends Component {
             <div className="postContent">
               <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostRemoveContent} />
               <div className="postMeta">
-                {username} - CARTA | NOW
+                {fullname} - CARTA | NOW
               </div>
               <textarea className="postText" onChange={this.handlePostContent} value={content} />
             </div>

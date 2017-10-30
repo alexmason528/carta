@@ -34,6 +34,7 @@ class Post extends Component {
       editable: false,
       editing: false,
       first: false,
+      initialized: false,
       link: '',
     }
   }
@@ -46,7 +47,10 @@ class Post extends Component {
     const interval =
     setInterval(() => {
       const post = ReactDOM.findDOMNode(this)
-      if ($(post).find('.postImage').height() > 25) {
+      if ($(post).height() > 25) {
+        this.setState({
+          initialized: true,
+        })
         $(post).find('.postTitle').dotdotdot({
           watch: 'window',
           ellipsis: ' ...',
@@ -72,11 +76,27 @@ class Post extends Component {
       ...props,
       editing: false,
       showLinkBar: false,
+    }, () => {
+      this.handleResize()
     })
   }
 
   handleResize = () => {
-    const post = ReactDOM.findDOMNode(this)
+    const comp = ReactDOM.findDOMNode(this)
+    const post = $(comp).find('.post')
+    const width = $(post).width()
+
+    if ($(post).hasClass('textPost')) {
+      $(post).find('.postTitle').css({ fontSize: `${width / 19}px` })
+      $(post).find('.postTitleEdit').css({ fontSize: `${width / 19}px` })
+    } else {
+      $(post).find('.postTitle').css({ fontSize: `${width / 11}px` })
+      $(post).find('.postTitleEdit').css({
+        fontSize: `${width / 11}px`,
+        height: `${(width / 11) * 1.3 * 2}px`,
+      })
+    }
+
     $(post).find('.postTitle').trigger('update.dot')
   }
 
@@ -87,6 +107,8 @@ class Post extends Component {
   handleFiles = evt => {
     this.setState({
       img: evt.target.files[0],
+    }, () => {
+      this.handleResize()
     })
   }
 
@@ -97,12 +119,16 @@ class Post extends Component {
       showLinkBar: false,
       showInfo: false,
       editing: false,
+    }, () => {
+      this.handleResize()
     })
   }
 
   handleAddText = () => {
     this.setState({
       content: '',
+    }, () => {
+      this.handleResize()
     })
   }
 
@@ -116,6 +142,8 @@ class Post extends Component {
   handleDelete = () => {
     this.setState({
       showDeleteConfirm: !this.state.showDeleteConfirm,
+    }, () => {
+      this.handleResize()
     })
   }
 
@@ -135,18 +163,24 @@ class Post extends Component {
   handlePostRemoveImage = () => {
     this.setState({
       img: null,
+    }, () => {
+      this.handleResize()
     })
   }
 
   handlePostRemoveContent = () => {
     this.setState({
       content: null,
+    }, () => {
+      this.handleResize()
     })
   }
 
   handleStartEdit = () => {
     this.setState({
       editing: true,
+    }, () => {
+      this.handleResize()
     })
   }
 
@@ -221,6 +255,7 @@ class Post extends Component {
       editing,
       first,
       link,
+      initialized,
     } = this.state
 
     let postType
@@ -257,7 +292,7 @@ class Post extends Component {
     const spinnerShow = (status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST) && (curPost === _id)
 
     return (
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: 'relative', display: initialized ? 'block' : 'none' }}>
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
@@ -274,7 +309,7 @@ class Post extends Component {
                 </div>
               }
               { !editing && <div className="postTitle" dangerouslySetInnerHTML={{ __html: title ? title.replace(/\n/g, '<br />') : '' }} /> }
-              { editing && <textarea className="postTitleEdit" placeholder="PASTE OR WRITE LINK HERE" onChange={this.handlePostTitle} value={title} /> }
+              { editing && <textarea className="postTitleEdit" placeholder="TITLE" onChange={this.handlePostTitle} value={title} /> }
             </div>
             <div className="postContent">
               { showPostRemoveContent && <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostRemoveContent} /> }
@@ -303,7 +338,7 @@ class Post extends Component {
               }
             </div>
             { !editing && <div className="postTitle" dangerouslySetInnerHTML={{ __html: title ? title.replace(/\n/g, '<br />') : '' }} /> }
-            { editing && <textarea className="postTitleEdit" onChange={this.handlePostTitle} value={title} /> }
+            { editing && <textarea className="postTitleEdit" placeholder="TITLE" onChange={this.handlePostTitle} value={title} /> }
             <div className={postInfoClass}>
               {username} - Carta | {getTextFromDate(created_at)}
             </div>
@@ -314,7 +349,7 @@ class Post extends Component {
         { postType === 'textPost' &&
           <div className={postClass} onClick={this.handlePostClick}>
             { !editing && <div className="postTitle" dangerouslySetInnerHTML={{ __html: title ? title.replace(/\n/g, '<br />') : '' }} /> }
-            { editing && <textarea className="postTitleEdit" onChange={this.handlePostTitle} value={title} /> }
+            { editing && <textarea className="postTitleEdit" placeholder="TITLE" onChange={this.handlePostTitle} value={title} /> }
             <div className="postContent">
               { showPostRemoveContent && <RemoveButton className="postRemoveCOntentBtn" image="close" onClick={this.handlePostRemoveContent} /> }
               <div className="postMeta">

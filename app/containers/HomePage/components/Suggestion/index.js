@@ -26,9 +26,23 @@ class Suggestion extends Component {
         this.setState({
           initialized: true,
         })
+        this.handleResize()
         clearInterval(interval)
       }
     }, 0)
+
+    window.addEventListener('resize', this.handleResize)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize)
+  }
+
+  handleResize = () => {
+    const suggestion = ReactDOM.findDOMNode(this)
+    const width = $(suggestion).width()
+
+    $(suggestion).find('h2').css({ fontSize: `${width / 11}px` })
   }
 
   render() {
@@ -36,7 +50,7 @@ class Suggestion extends Component {
     const { initialized } = this.state
 
     return (
-      <div className="suggestion">
+      <div className="suggestion" style={{ display: initialized ? 'block' : 'none' }}>
         <img src={imageUrl} role="presentation" />
         <h2>{title}</h2>
       </div>
