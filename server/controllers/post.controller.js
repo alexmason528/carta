@@ -1,10 +1,12 @@
+const mongoose = require('mongoose')
 const Post = require('../models/post')
+const Schema = mongoose.Schema
 
 /**
  * update post
  * @param req
  * @param res
- * @returns void
+ * @returns updated post
  */
 const updatePost = (req, res) => {
   const { postID } = req.params
@@ -60,5 +62,45 @@ const deletePost = (req, res) => {
   })
 }
 
+/**
+ * create post
+ * @param req
+ * @param res
+ * @returns created post
+ */
+
+const createPost = (req, res) => {
+  const { title, content, link, author } = req.body
+  const { files } = req
+
+  let data = {
+    title,
+    content,
+    link,
+    author: mongoose.Types.ObjectId(author),
+  }
+
+  if (files.length > 0) {
+    file = files[0]
+    data.img = (process.env.NODE_ENV === 'development') ?
+    `http://localhost:3000/public/uploads/post/${file.filename}` : `https://cartamap.herokuapp.com/public/uploads/post/${file.filename}`
+  } else {
+    data.img = ''
+  }
+
+  Post.create(data, (err, element) => {
+    if (err) {
+      return res.status(400).send({
+        error: {
+          details: err,
+        },
+      })
+    } else {
+      return res.json(element)
+    }
+  })
+}
+
+module.exports.createPost = createPost
 module.exports.updatePost = updatePost
 module.exports.deletePost = deletePost

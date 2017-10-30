@@ -28,5 +28,7 @@ router.put('/:postID', upload.any(), PostController.updatePost)
 
 router.delete('/:postID', PostController.deletePost)
 
+router.post('/', upload.any(), PostController.createPost)
+
 // export default router
 module.exports = router

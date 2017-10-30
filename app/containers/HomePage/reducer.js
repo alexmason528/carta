@@ -12,6 +12,10 @@ import {
   DELETE_POST_REQUEST,
   DELETE_POST_SUCCESS,
   DELETE_POST_FAIL,
+
+  CREATE_POST_REQUEST,
+  CREATE_POST_SUCCESS,
+  CREATE_POST_FAIL,
 } from './constants'
 
 const initialState = {
@@ -96,6 +100,31 @@ function homeReducer(state = initialState, action) {
       return {
         ...state,
         curPost: null,
+        status: type,
+        error: payload,
+      }
+
+    case CREATE_POST_REQUEST:
+      return {
+        ...state,
+        status: type,
+        error: null,
+      }
+
+    case CREATE_POST_SUCCESS:
+      return {
+        ...state,
+        posts: [
+          ...state.posts,
+          payload,
+        ],
+        status: type,
+        error: payload,
+      }
+
+    case CREATE_POST_FAIL:
+      return {
+        ...state,
         status: type,
         error: payload,
       }

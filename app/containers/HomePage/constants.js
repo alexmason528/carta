@@ -9,3 +9,7 @@ export const UPDATE_POST_FAIL = 'carta/Home/UPDATE_POST_FAIL'
 export const DELETE_POST_REQUEST = 'carta/Home/DELETE_POST_REQUEST'
 export const DELETE_POST_SUCCESS = 'carta/Home/DELETE_POST_SUCCESS'
 export const DELETE_POST_FAIL = 'carta/Home/DELETE_POST_FAIL'
+
+export const CREATE_POST_REQUEST = 'carta/Home/CREATE_POST_REQUEST'
+export const CREATE_POST_SUCCESS = 'carta/Home/CREATE_POST_SUCCESS'
+export const CREATE_POST_FAIL = 'carta/Home/CREATE_POST_FAIL'

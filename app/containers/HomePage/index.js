@@ -6,14 +6,15 @@ import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
 import { Container, Row, Col } from 'reactstrap'
 import { VERIFY_FAIL } from 'containers/App/constants'
+import { CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
 import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
 import { logOut, verifyRequest } from 'containers/App/actions'
 import Logo from 'components/Logo'
 import Menu from 'components/Menu'
-import { AddPostButton } from 'components/Buttons'
-import { selectPosts, selectSuggestions } from './selectors'
+import { CreatePostButton } from 'components/Buttons'
+import { selectPosts, selectSuggestions, selectHomeInfo } from './selectors'
 import { fetchCommunityInfoRequest } from './actions'
-import { AccountMenu, AuthWrapper, Post, Profile, Quest, Suggestion, VerifyCtrl } from './components'
+import { AccountMenu, AuthWrapper, Post, PostCreate, Profile, Quest, Suggestion, VerifyCtrl } from './components'
 import './style.scss'
 
 class HomePage extends Component {
@@ -23,6 +24,7 @@ class HomePage extends Component {
     logOut: PropTypes.func,
     user: PropTypes.object,
     info: PropTypes.object,
+    homeInfo: PropTypes.object,
     params: PropTypes.object,
     posts: PropTypes.array,
     suggestions: PropTypes.array,
@@ -33,7 +35,7 @@ class HomePage extends Component {
     super(props)
     this.state = {
       showAuthWrapper: false,
-      showAddPostForm: false,
+      showCreatePostForm: false,
       showAccountMenu: false,
       timer: 0,
     }
@@ -50,6 +52,14 @@ class HomePage extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { user, params: { vcode } } = this.props
+    const { homeInfo: { status } } = nextProps
+
+    if (status === CREATE_POST_SUCCESS) {
+      this.setState({
+        showCreatePostForm: false,
+      })
+    }
+
     if ((!user && vcode && nextProps.user && nextProps.user.verified === true) || (user && nextProps.user && user.verified === false && nextProps.user.verified === true)) {
       this.setState({
         timer: 5,
@@ -82,9 +92,9 @@ class HomePage extends Component {
     }
   }
 
-  toggleAddPostForm = () => {
+  toggleCreatePostForm = () => {
     this.setState({
-      showAddPostForm: !this.state.showAddPostForm,
+      showCreatePostForm: !this.state.showCreatePostForm,
     })
   }
 
@@ -95,13 +105,13 @@ class HomePage extends Component {
   }
 
   render() {
-    const { showAuthWrapper, showAddPostForm, showAccountMenu, timer } = this.state
+    const { showAuthWrapper, showCreatePostForm, showAccountMenu, timer } = this.state
     const { posts, suggestions, authenticated, user, logOut, info: { status, error } } = this.props
 
-    let addPostButtonType = 'text'
+    let createPostButtonType = 'text'
 
     if (posts.length > 0 && posts[0].img) {
-      addPostButtonType = 'image'
+      createPostButtonType = 'image'
     }
 
     return (
@@ -122,8 +132,8 @@ class HomePage extends Component {
           </Col>
 
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-sm-down">
-            { !showAddPostForm && authenticated && user.verified && <AddPostButton type={addPostButtonType} show={showAddPostForm} onClick={this.toggleAddPostForm} />}
-            { /* authenticated && <Post onClose={this.toggleAddPostForm} /> */ }
+            { !showCreatePostForm && authenticated && user.verified && <CreatePostButton type={createPostButtonType} show={showCreatePostForm} onClick={this.toggleCreatePostForm} />}
+            { authenticated && showCreatePostForm && <PostCreate onClose={this.toggleCreatePostForm} user={user} /> }
             <div>
               {
                 posts && posts.map((post, key) => {
@@ -138,7 +148,6 @@ class HomePage extends Component {
                   if (img.length === 0) data.img = null
 
                   data.first = (key === 0 && authenticated)
-
                   return <Post {...data} />
                 })
               }
@@ -188,6 +197,7 @@ const selectors = createStructuredSelector({
   authenticated: selectAuthenticated(),
   user: selectUser(),
   info: selectInfo(),
+  homeInfo: selectHomeInfo(),
 })
 
 const actions = {

@@ -6,7 +6,7 @@ const postSchema = new Schema({
   created_at: { type: Date, default: Date.now },
   content: String,
   img: String,
-  author: Number,
+  author: Schema.Types.ObjectId,
 }, { strict: false, versionKey: false })
 
 module.exports = mongoose.model('Post', postSchema, 'post')

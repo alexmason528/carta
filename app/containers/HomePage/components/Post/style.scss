@@ -193,7 +193,6 @@
   background: #fff;
   padding: 4px 8px;
   border: 1px solid #ddd;
-  margin-left: 5px; 
 }
 
 .postRemoveImageBtn {
@@ -389,12 +388,16 @@
 
 .postButtons {
   display: flex;
-  padding: 0 20px 8px 20px;
+  padding: 0px 20px 8px 20px;
   justify-content: space-between;
   align-items: center;
   position: relative;
   z-index: 20;
   background: #fff;
+
+  &.postCreate {
+    padding-top: 8px;
+  }
 
   .left, .right {
     display: flex;

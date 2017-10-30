@@ -10,6 +10,10 @@ import {
   DELETE_POST_REQUEST,
   DELETE_POST_SUCCESS,
   DELETE_POST_FAIL,
+
+  CREATE_POST_REQUEST,
+  CREATE_POST_SUCCESS,
+  CREATE_POST_FAIL,
 } from './constants'
 
 export function fetchCommunityInfoRequest() {
@@ -71,6 +75,27 @@ export function deletePostSuccess(payload) {
 export function deletePostFail(payload) {
   return {
     type: DELETE_POST_FAIL,
+    payload,
+  }
+}
+
+export function createPostRequest(payload) {
+  return {
+    type: CREATE_POST_REQUEST,
+    payload,
+  }
+}
+
+export function createPostSuccess(payload) {
+  return {
+    type: CREATE_POST_SUCCESS,
+    payload,
+  }
+}
+
+export function createPostFail(payload) {
+  return {
+    type: CREATE_POST_FAIL,
     payload,
   }
 }

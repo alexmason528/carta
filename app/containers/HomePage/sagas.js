@@ -16,7 +16,7 @@ import {
   verifyFail,
 } from 'containers/App/actions'
 
-import { FETCH_COMMUNITYINFO_REQUEST, UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from './constants'
+import { FETCH_COMMUNITYINFO_REQUEST, UPDATE_POST_REQUEST, DELETE_POST_REQUEST, CREATE_POST_REQUEST } from './constants'
 import {
   fetchCommunityInfoSuccess,
   fetchCommunityInfoFail,
@@ -24,6 +24,8 @@ import {
   updatePostFail,
   deletePostSuccess,
   deletePostFail,
+  createPostSuccess,
+  createPostFail,
 } from './actions'
 
 export function* getCommunityInfoRequest() {
@@ -39,12 +41,6 @@ export function* getCommunityInfoRequest() {
   } catch (err) {
     yield put(fetchCommunityInfoFail(err))
   }
-}
-
-export function* getCommunityInfoRequestWatcher() {
-  const watcher = yield takeLatest(FETCH_COMMUNITYINFO_REQUEST, getCommunityInfoRequest)
-  yield take(LOCATION_CHANGE)
-  yield cancel(watcher)
 }
 
 export function* loginRequest({ payload }) {
@@ -65,12 +61,6 @@ export function* loginRequest({ payload }) {
   } catch (err) {
     yield put(loginFail(err.details))
   }
-}
-
-export function* loginRequestWatcher() {
-  const watcher = yield takeLatest(LOGIN_REQUEST, loginRequest)
-  yield take(LOCATION_CHANGE)
-  yield cancel(watcher)
 }
 
 export function* registerRequest({ payload }) {
@@ -112,12 +102,6 @@ export function* deleteUserRequest({ payload }) {
   }
 }
 
-export function* deleteUserWatcher() {
-  const watcher = yield takeLatest(DELETE_USER_REQUEST, deleteUserRequest)
-  yield take(LOCATION_CHANGE)
-  yield cancel(watcher)
-}
-
 export function* verifyRequest({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/auth/verify`
 
@@ -138,12 +122,6 @@ export function* verifyRequest({ payload }) {
   }
 }
 
-export function* verifyRequestWatcher() {
-  const watcher = yield takeLatest(VERIFY_REQUEST, verifyRequest)
-  yield take(LOCATION_CHANGE)
-  yield cancel(watcher)
-}
-
 export function* updatePostRequest({ id, payload }) {
   const requestURL = `${API_BASE_URL}api/v1/post/${id}`
 
@@ -158,12 +136,6 @@ export function* updatePostRequest({ id, payload }) {
   } catch (err) {
     yield put(updatePostFail(err.details))
   }
-}
-
-export function* updatePostWatcher() {
-  const watcher = yield takeLatest(UPDATE_POST_REQUEST, updatePostRequest)
-  yield take(LOCATION_CHANGE)
-  yield cancel(watcher)
 }
 
 export function* deletePostRequest({ payload }) {
@@ -181,8 +153,60 @@ export function* deletePostRequest({ payload }) {
   }
 }
 
+export function* createPostRequest({ payload }) {
+  const requestURL = `${API_BASE_URL}api/v1/post/`
+
+  const params = {
+    method: 'POST',
+    body: payload,
+  }
+
+  try {
+    const res = yield call(request, requestURL, params)
+    yield put(createPostSuccess(res))
+  } catch (err) {
+    yield put(createPostFail(err.details))
+  }
+}
+
+export function* getCommunityInfoRequestWatcher() {
+  const watcher = yield takeLatest(FETCH_COMMUNITYINFO_REQUEST, getCommunityInfoRequest)
+  yield take(LOCATION_CHANGE)
+  yield cancel(watcher)
+}
+
+export function* loginRequestWatcher() {
+  const watcher = yield takeLatest(LOGIN_REQUEST, loginRequest)
+  yield take(LOCATION_CHANGE)
+  yield cancel(watcher)
+}
+
+export function* deleteUserWatcher() {
+  const watcher = yield takeLatest(DELETE_USER_REQUEST, deleteUserRequest)
+  yield take(LOCATION_CHANGE)
+  yield cancel(watcher)
+}
+
+export function* verifyRequestWatcher() {
+  const watcher = yield takeLatest(VERIFY_REQUEST, verifyRequest)
+  yield take(LOCATION_CHANGE)
+  yield cancel(watcher)
+}
+
+export function* updatePostWatcher() {
+  const watcher = yield takeLatest(UPDATE_POST_REQUEST, updatePostRequest)
+  yield take(LOCATION_CHANGE)
+  yield cancel(watcher)
+}
+
 export function* deletePostWatcher() {
   const watcher = yield takeLatest(DELETE_POST_REQUEST, deletePostRequest)
+  yield take(LOCATION_CHANGE)
+  yield cancel(watcher)
+}
+
+export function* createPostWatcher() {
+  const watcher = yield takeLatest(CREATE_POST_REQUEST, createPostRequest)
   yield take(LOCATION_CHANGE)
   yield cancel(watcher)
 }
@@ -195,4 +219,5 @@ export default [
   verifyRequestWatcher,
   updatePostWatcher,
   deletePostWatcher,
+  createPostWatcher,
 ]
