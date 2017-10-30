@@ -301,7 +301,6 @@ class PostCreate extends Component {
   }
 }
 
-
 const selectors = createStructuredSelector({
   info: selectHomeInfo(),
 })

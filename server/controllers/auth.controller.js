@@ -22,7 +22,9 @@ const login = (req, res) => {
   User.find({ email: email }, (err, element) => {
     if (element.length > 0) {
       if (element[0].password === password) {
-        return res.json(element[0])
+        const { _id, firstname, lastname, email, profile_pic, cover_img, verified } = element[0]
+        const data = { _id, firstname, lastname, email, profile_pic, cover_img, verified }
+        return res.json(data)
       } else {
         return res.status(400).send({
           error: {
@@ -84,7 +86,7 @@ const register = (req, res) => {
       } else {
         return res.status(400).send({
           error: {
-            details: err,
+            details: err.toString(),
           },
         })
       }
@@ -156,25 +158,28 @@ const verify = (req, res) => {
 
 const deleteUser = (req, res) => {
   const { userID } = req.params
+  const { password } = req.body
 
-  User.findOneAndUpdate({ email: email }, { $set: { verified: true } }, { new: true }, (err, element) => {
-    if (element && element.firstname) {
-      let response = {
-        firstname: element.firstname,
-        lastname: element.lastname,
-        email: element.email,
-        profile_pic: element.profile_pic,
-        cover_img: element.cover_img,
-        verified: true,
-      }
-      return res.json(response)
+  // User.remove({ _id: userID, password: password }, (err) => {
+  //   if (err) {
+  //     return res.status(400).send({
+  //       error: {
+  //         details: err.toString(),
+  //       },
+  //     })
+  //   } else {
+  //     return res.json({})
+  //   }
+  // })
+
+  User.findOne({ _id: userID, password: password }, (err, element) => {
+    if (err) {
+      return res.status(400).send({
+        error: {
+          details: err.toString(),
+        },
+      })
     }
-
-    return res.status(400).send({
-      error: {
-        details: 'Failed to verify',
-      },
-    })
   })
 }
 
@@ -182,4 +187,3 @@ module.exports.login = login
 module.exports.register = register
 module.exports.verify = verify
 module.exports.deleteUser = deleteUser
-

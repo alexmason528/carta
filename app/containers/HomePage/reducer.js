@@ -1,9 +1,13 @@
 import { findIndex } from 'lodash'
 
 import {
-  FETCH_COMMUNITYINFO_REQUEST,
-  FETCH_COMMUNITYINFO_SUCCESS,
-  FETCH_COMMUNITYINFO_FAIL,
+  CREATE_POST_REQUEST,
+  CREATE_POST_SUCCESS,
+  CREATE_POST_FAIL,
+
+  LIST_POST_REQUEST,
+  LIST_POST_SUCCESS,
+  LIST_POST_FAIL,
 
   UPDATE_POST_REQUEST,
   UPDATE_POST_SUCCESS,
@@ -13,9 +17,9 @@ import {
   DELETE_POST_SUCCESS,
   DELETE_POST_FAIL,
 
-  CREATE_POST_REQUEST,
-  CREATE_POST_SUCCESS,
-  CREATE_POST_FAIL,
+  LIST_SUGGESTION_REQUEST,
+  LIST_SUGGESTION_SUCCESS,
+  LIST_SUGGESTION_FAIL,
 } from './constants'
 
 const initialState = {
@@ -30,18 +34,46 @@ function homeReducer(state = initialState, action) {
   const { type, payload, id } = action
 
   switch (type) {
-    case FETCH_COMMUNITYINFO_REQUEST:
-      return initialState
-
-    case FETCH_COMMUNITYINFO_SUCCESS:
+    case CREATE_POST_REQUEST:
       return {
         ...state,
-        ...payload,
         status: type,
         error: null,
       }
 
-    case FETCH_COMMUNITYINFO_FAIL:
+    case CREATE_POST_SUCCESS:
+      return {
+        ...state,
+        posts: [
+          ...state.posts,
+          payload,
+        ],
+        status: type,
+        error: payload,
+      }
+
+    case CREATE_POST_FAIL:
+      return {
+        ...state,
+        status: type,
+        error: payload,
+      }
+
+    case LIST_POST_REQUEST:
+      return {
+        ...state,
+        status: type,
+        error: null,
+      }
+
+    case LIST_POST_SUCCESS:
+      return {
+        ...state,
+        status: type,
+        posts: payload,
+      }
+
+    case LIST_POST_FAIL:
       return {
         ...state,
         status: type,
@@ -104,25 +136,21 @@ function homeReducer(state = initialState, action) {
         error: payload,
       }
 
-    case CREATE_POST_REQUEST:
+    case LIST_SUGGESTION_REQUEST:
       return {
         ...state,
         status: type,
         error: null,
       }
 
-    case CREATE_POST_SUCCESS:
+    case LIST_SUGGESTION_SUCCESS:
       return {
         ...state,
-        posts: [
-          ...state.posts,
-          payload,
-        ],
         status: type,
-        error: payload,
+        suggestions: payload,
       }
 
-    case CREATE_POST_FAIL:
+    case LIST_SUGGESTION_FAIL:
       return {
         ...state,
         status: type,

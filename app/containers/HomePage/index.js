@@ -13,13 +13,14 @@ import Logo from 'components/Logo'
 import Menu from 'components/Menu'
 import { CreatePostButton } from 'components/Buttons'
 import { selectPosts, selectSuggestions, selectHomeInfo } from './selectors'
-import { fetchCommunityInfoRequest } from './actions'
+import { listPostRequest, listSuggestionRequest } from './actions'
 import { AccountMenu, AuthWrapper, Post, PostCreate, Profile, Quest, Suggestion, VerifyCtrl } from './components'
 import './style.scss'
 
 class HomePage extends Component {
   static propTypes = {
-    fetchCommunityInfoRequest: PropTypes.func,
+    listPostRequest: PropTypes.func,
+    listSuggestionRequest: PropTypes.func,
     verifyRequest: PropTypes.func,
     logOut: PropTypes.func,
     user: PropTypes.object,
@@ -42,12 +43,13 @@ class HomePage extends Component {
   }
 
   componentWillMount() {
-    const { fetchCommunityInfoRequest, verifyRequest, params: { vcode } } = this.props
+    const { listPostRequest, listSuggestionRequest, verifyRequest, params: { vcode } } = this.props
 
     if (vcode) {
       verifyRequest({ vcode })
     }
-    fetchCommunityInfoRequest()
+    listPostRequest()
+    listSuggestionRequest()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -140,8 +142,8 @@ class HomePage extends Component {
                   const { _id, content, created_at, img, title, link } = post
                   let data = { _id, content, created_at, img, title, link }
 
-                  data.username = `${post.author[0].firstname} ${post.author[0].lastname}`
-                  data.editable = (authenticated && post.author[0]._id === user._id)
+                  data.username = `${post.author.firstname} ${post.author.lastname}`
+                  data.editable = (authenticated && post.author._id === user._id)
                   data.key = key
 
                   if (content.length === 0) data.content = null
@@ -201,7 +203,8 @@ const selectors = createStructuredSelector({
 })
 
 const actions = {
-  fetchCommunityInfoRequest,
+  listPostRequest,
+  listSuggestionRequest,
   verifyRequest,
   logOut,
 }

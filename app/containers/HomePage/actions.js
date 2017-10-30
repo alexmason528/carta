@@ -1,7 +1,11 @@
 import {
-  FETCH_COMMUNITYINFO_REQUEST,
-  FETCH_COMMUNITYINFO_SUCCESS,
-  FETCH_COMMUNITYINFO_FAIL,
+  CREATE_POST_REQUEST,
+  CREATE_POST_SUCCESS,
+  CREATE_POST_FAIL,
+
+  LIST_POST_REQUEST,
+  LIST_POST_SUCCESS,
+  LIST_POST_FAIL,
 
   UPDATE_POST_REQUEST,
   UPDATE_POST_SUCCESS,
@@ -11,27 +15,48 @@ import {
   DELETE_POST_SUCCESS,
   DELETE_POST_FAIL,
 
-  CREATE_POST_REQUEST,
-  CREATE_POST_SUCCESS,
-  CREATE_POST_FAIL,
+  LIST_SUGGESTION_REQUEST,
+  LIST_SUGGESTION_SUCCESS,
+  LIST_SUGGESTION_FAIL,
 } from './constants'
 
-export function fetchCommunityInfoRequest() {
+export function createPostRequest(payload) {
   return {
-    type: FETCH_COMMUNITYINFO_REQUEST,
-  }
-}
-
-export function fetchCommunityInfoSuccess(payload) {
-  return {
-    type: FETCH_COMMUNITYINFO_SUCCESS,
+    type: CREATE_POST_REQUEST,
     payload,
   }
 }
 
-export function fetchCommunityInfoFail(payload) {
+export function createPostSuccess(payload) {
   return {
-    type: FETCH_COMMUNITYINFO_FAIL,
+    type: CREATE_POST_SUCCESS,
+    payload,
+  }
+}
+
+export function createPostFail(payload) {
+  return {
+    type: CREATE_POST_FAIL,
+    payload,
+  }
+}
+
+export function listPostRequest() {
+  return {
+    type: LIST_POST_REQUEST,
+  }
+}
+
+export function listPostSuccess(payload) {
+  return {
+    type: LIST_POST_SUCCESS,
+    payload,
+  }
+}
+
+export function listPostFail(payload) {
+  return {
+    type: LIST_POST_FAIL,
     payload,
   }
 }
@@ -79,23 +104,22 @@ export function deletePostFail(payload) {
   }
 }
 
-export function createPostRequest(payload) {
+export function listSuggestionRequest() {
   return {
-    type: CREATE_POST_REQUEST,
+    type: LIST_SUGGESTION_REQUEST,
+  }
+}
+
+export function listSuggestionSuccess(payload) {
+  return {
+    type: LIST_SUGGESTION_SUCCESS,
     payload,
   }
 }
 
-export function createPostSuccess(payload) {
+export function listSuggestionFail(payload) {
   return {
-    type: CREATE_POST_SUCCESS,
-    payload,
-  }
-}
-
-export function createPostFail(payload) {
-  return {
-    type: CREATE_POST_FAIL,
+    type: LIST_SUGGESTION_FAIL,
     payload,
   }
 }

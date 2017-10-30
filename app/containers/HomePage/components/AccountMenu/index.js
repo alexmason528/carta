@@ -58,12 +58,12 @@ class AccountMenu extends Component {
 
   handleDeleteUser = values => {
     const { user: { _id }, deleteUserRequest } = this.props
-    const params = {
+    const payload = {
       ...values,
       id: _id,
     }
 
-    deleteUserRequest(params)
+    deleteUserRequest(payload)
   }
 
   render() {

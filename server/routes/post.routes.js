@@ -30,5 +30,7 @@ router.delete('/:postID', PostController.deletePost)
 
 router.post('/', upload.any(), PostController.createPost)
 
+router.get('/', PostController.listPost)
+
 // export default router
 module.exports = router

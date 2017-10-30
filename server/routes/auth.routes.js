@@ -2,14 +2,6 @@ const express = require('express')
 const router = new express.Router()
 const crypto = require('crypto')
 const path = require('path')
-
-const AuthController = require('../controllers/auth.controller')
-
-// Login
-router.post('/login', AuthController.login)
-
-// Register
-
 const multer = require('multer')
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -25,14 +17,19 @@ const storage = multer.diskStorage({
   },
 })
 const upload = multer({ storage: storage })
+const AuthController = require('../controllers/auth.controller')
 
+// Login
+router.post('/login', AuthController.login)
+
+// Register
 router.post('/register', upload.any(), AuthController.register)
 
 // Verify
 router.post('/verify', AuthController.verify)
 
 // Delete User
-router.delete('/delete/:userID', AuthController.deleteUser)
+router.delete('/:userID', AuthController.deleteUser)
 
 // export default router
 module.exports = router

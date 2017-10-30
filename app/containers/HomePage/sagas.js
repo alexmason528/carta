@@ -16,32 +16,25 @@ import {
   verifyFail,
 } from 'containers/App/actions'
 
-import { FETCH_COMMUNITYINFO_REQUEST, UPDATE_POST_REQUEST, DELETE_POST_REQUEST, CREATE_POST_REQUEST } from './constants'
+import { selectUser } from 'containers/App/selectors'
+
+import { CREATE_POST_REQUEST, LIST_POST_REQUEST, UPDATE_POST_REQUEST, DELETE_POST_REQUEST, LIST_SUGGESTION_REQUEST } from './constants'
 import {
-  fetchCommunityInfoSuccess,
-  fetchCommunityInfoFail,
-  updatePostSuccess,
-  updatePostFail,
-  deletePostSuccess,
-  deletePostFail,
   createPostSuccess,
   createPostFail,
+
+  listPostSuccess,
+  listPostFail,
+
+  updatePostSuccess,
+  updatePostFail,
+
+  deletePostSuccess,
+  deletePostFail,
+
+  listSuggestionSuccess,
+  listSuggestionFail,
 } from './actions'
-
-export function* getCommunityInfoRequest() {
-  const requestURL = `${API_BASE_URL}api/v1/community/info`
-
-  const params = {
-    method: 'GET',
-  }
-
-  try {
-    const res = yield call(request, requestURL, params)
-    yield put(fetchCommunityInfoSuccess(res))
-  } catch (err) {
-    yield put(fetchCommunityInfoFail(err))
-  }
-}
 
 export function* loginRequest({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/auth/login`
@@ -87,10 +80,15 @@ export function* registerRequestWatcher() {
 }
 
 export function* deleteUserRequest({ payload }) {
-  const request = `${API_BASE_URL}api/v1/auth/delete`
+  const { id, password } = payload
+  const requestURL = `${API_BASE_URL}api/v1/auth/${id}`
+
   const params = {
-    method: 'POST',
-    body: payload,
+    method: 'DELETE',
+    body: JSON.stringify({ password }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   }
 
   try {
@@ -122,6 +120,53 @@ export function* verifyRequest({ payload }) {
   }
 }
 
+export function* createPostRequest({ payload }) {
+  const requestURL = `${API_BASE_URL}api/v1/post`
+
+  const params = {
+    method: 'POST',
+    body: payload,
+  }
+
+  try {
+    const res = yield call(request, requestURL, params)
+    const user = yield select(selectUser())
+    let info = {
+      ...res,
+      author: {
+        firstname: user.firstname,
+        lastname: user.lastname,
+        _id: user._id,
+      },
+    }
+    yield put(createPostSuccess(info))
+  } catch (err) {
+    yield put(createPostFail(err.details))
+  }
+}
+
+export function* listPostRequest() {
+  const requestURL = `${API_BASE_URL}api/v1/post`
+
+  const params = {
+    method: 'GET',
+  }
+
+  try {
+    const res = yield call(request, requestURL, params)
+    const info = res.map(post => {
+      return {
+        ...post,
+        author: post.author[0],
+      }
+    })
+
+    yield put(listPostSuccess(info))
+  } catch (err) {
+    yield put(listPostFail(err.details))
+  }
+}
+
 export function* updatePostRequest({ id, payload }) {
   const requestURL = `${API_BASE_URL}api/v1/post/${id}`
 
@@ -132,7 +177,18 @@ export function* updatePostRequest({ id, payload }) {
 
   try {
     const res = yield call(request, requestURL, params)
-    yield put(updatePostSuccess(res))
+    const user = yield select(selectUser())
+
+    let info = {
+      ...res,
+      author: {
+        firstname: user.firstname,
+        lastname: user.lastname,
+        _id: user._id,
+      },
+    }
+
+    yield put(updatePostSuccess(info))
   } catch (err) {
     yield put(updatePostFail(err.details))
   }
@@ -153,27 +209,21 @@ export function* deletePostRequest({ payload }) {
   }
 }
 
-export function* createPostRequest({ payload }) {
-  const requestURL = `${API_BASE_URL}api/v1/post/`
+export function* listSuggestionRequest() {
+  const requestURL = `${API_BASE_URL}api/v1/suggestion`
 
   const params = {
-    method: 'POST',
-    body: payload,
+    method: 'GET',
   }
 
   try {
     const res = yield call(request, requestURL, params)
-    yield put(createPostSuccess(res))
+    yield put(listSuggestionSuccess(res))
   } catch (err) {
-    yield put(createPostFail(err.details))
+    yield put(listSuggestionFail(err.details))
   }
 }
 
-export function* getCommunityInfoRequestWatcher() {
-  const watcher = yield takeLatest(FETCH_COMMUNITYINFO_REQUEST, getCommunityInfoRequest)
-  yield take(LOCATION_CHANGE)
-  yield cancel(watcher)
-}
 
 export function* loginRequestWatcher() {
   const watcher = yield takeLatest(LOGIN_REQUEST, loginRequest)
@@ -193,6 +243,18 @@ export function* verifyRequestWatcher() {
   yield cancel(watcher)
 }
 
+export function* createPostWatcher() {
+  const watcher = yield takeLatest(CREATE_POST_REQUEST, createPostRequest)
+  yield take(LOCATION_CHANGE)
+  yield cancel(watcher)
+}
+
+export function* listPostWatcher() {
+  const watcher = yield takeLatest(LIST_POST_REQUEST, listPostRequest)
+  yield take(LOCATION_CHANGE)
+  yield cancel(watcher)
+}
+
 export function* updatePostWatcher() {
   const watcher = yield takeLatest(UPDATE_POST_REQUEST, updatePostRequest)
   yield take(LOCATION_CHANGE)
@@ -205,19 +267,21 @@ export function* deletePostWatcher() {
   yield cancel(watcher)
 }
 
-export function* createPostWatcher() {
-  const watcher = yield takeLatest(CREATE_POST_REQUEST, createPostRequest)
+export function* listSuggestionWatcher() {
+  const watcher = yield takeLatest(LIST_SUGGESTION_REQUEST, listSuggestionRequest)
   yield take(LOCATION_CHANGE)
   yield cancel(watcher)
 }
 
+
 export default [
-  getCommunityInfoRequestWatcher,
   loginRequestWatcher,
   registerRequestWatcher,
   deleteUserWatcher,
   verifyRequestWatcher,
+  listPostWatcher,
+  createPostWatcher,
   updatePostWatcher,
   deletePostWatcher,
-  createPostWatcher,
+  listSuggestionWatcher,
 ]

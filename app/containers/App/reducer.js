@@ -14,6 +14,10 @@ import {
   VERIFY_REQUEST,
   VERIFY_SUCCESS,
   VERIFY_FAIL,
+
+  DELETE_USER_REQUEST,
+  DELETE_USER_SUCCESS,
+  DELETE_USER_FAIL,
 } from './constants'
 
 const initialState = {
@@ -109,6 +113,27 @@ function appReducer(state = initialState, { type, payload }) {
       return {
         ...state,
         status: type,
+        error: payload,
+      }
+
+    case DELETE_USER_REQUEST:
+      return {
+        ...state,
+        status: type,
+        error: null,
+      }
+
+    case DELETE_USER_SUCCESS:
+      removeItem('auth')
+      return {
+        ...state,
+        user: null,
+        authenticated: false,
+      }
+
+    case DELETE_USER_FAIL:
+      return {
+        ...state,
         error: payload,
       }
 
