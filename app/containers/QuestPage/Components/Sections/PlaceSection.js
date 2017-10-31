@@ -32,12 +32,6 @@ class PlaceSection extends Component {
     this.initializeState(nextProps)
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    setTimeout(() => {
-      this.searchInput.focus()
-    }, 500)
-  }
-
   initializeState = props => {
     this.setState({
       places: props.places,
@@ -49,9 +43,9 @@ class PlaceSection extends Component {
     mapViewPortChange(placeName)
   }
 
-  handleInputChange = text => {
+  handleInputChange = evt => {
     this.setState({
-      search: text,
+      search: evt.target.value,
     })
   }
 
@@ -66,7 +60,7 @@ class PlaceSection extends Component {
     return (
       <div className={className}>
         <h1>In & around</h1>
-        <input ref={input => { this.searchInput = input }} className="search-input place-search" onChange={evt => { this.handleInputChange(evt.target.value) }} />
+        <input className="search-input place-search" onChange={this.handleInputChange} />
         <div className="buttons-row">
           { filteredPlaces.map((place, index) => <button className="place-button" key={index} onClick={() => { this.handlePlaceClick(place.name) }}>{place.name}</button>) }
         </div>

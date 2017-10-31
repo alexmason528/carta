@@ -31,24 +31,6 @@ class DescriptiveSection extends Component {
     this.initializeState(this.props)
   }
 
-  // componentDidMount() {
-  //   this.timerID = null
-  //   const component = this
-
-  //   $('body').delegate('.button-wrapper button', 'mousedown mouseup', function(e) {
-  //     if (e.type == 'mousedown') {
-  //       clearTimeout(this.timerID)
-  //       if(!$(this).parent().hasClass('active')) {
-  //         this.timerID = setTimeout(() => {
-  //           component.handleDescriptiveClick(e.currentTarget.textContent)
-  //         }, 200)
-  //       }
-  //     } else if (e.type == 'mouseup') {
-  //       clearTimeout(this.timerID)
-  //     }
-  //   })
-  // }
-
   componentWillReceiveProps(nextProps) {
     this.initializeState(nextProps)
   }
@@ -69,10 +51,6 @@ class DescriptiveSection extends Component {
     if (nextProps.className !== className) {
       nextState.expanded = 1 - closable
     }
-
-    setTimeout(() => {
-      this.searchInput.focus()
-    }, 500)
   }
 
   initializeState = props => {
@@ -106,9 +84,9 @@ class DescriptiveSection extends Component {
     }
   }
 
-  handleInputChange = text => {
+  handleInputChange = evt => {
     this.setState({
-      search: text,
+      search: evt.target.value,
     })
   }
 
@@ -259,7 +237,7 @@ class DescriptiveSection extends Component {
         <h1>Known For</h1>
         <img className={searchBtnClass} src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/search.png" onClick={() => { this.handleExpand(1) }} role="presentation" />
         <img className={closeBtnClass} src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/back.png" onClick={() => { this.handleExpand(0) }} role="presentation" />
-        <input ref={input => { this.searchInput = input }} className={searchInputClass} value={search} onChange={evt => { this.handleInputChange(evt.target.value) }} />
+        <input className={searchInputClass} value={search} onChange={this.handleInputChange} />
         <div className="suggestions">
           <Button
             className={anythingBtnClass}

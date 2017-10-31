@@ -106,12 +106,6 @@ class QuestPage extends Component {
     this.handleRedrawMap(this.props)
   }
 
-  componentDidMount() {
-    $('.place-search').focus()
-    $('.descriptive-search').focus()
-    $('.type-search').focus()
-  }
-
   componentWillReceiveProps(nextProps) {
     this.handleRedrawMap(nextProps)
   }
@@ -322,10 +316,6 @@ class QuestPage extends Component {
     })
 
     this.handleRedrawMap(this.props)
-
-    $('.place-search').focus()
-    $('.descriptive-search').focus()
-    $('.type-search').focus()
   }
 
   handleMimimizeClick = () => {

@@ -30,12 +30,6 @@ class TypeSection extends Component {
     this.initializeState(this.props)
   }
 
-  componentDidMount() {
-    setTimeout(() => {
-      this.searchInput.focus()
-    }, 500)
-  }
-
   componentWillReceiveProps(nextProps) {
     this.initializeState(nextProps)
   }
@@ -56,10 +50,6 @@ class TypeSection extends Component {
     if (className !== this.props.className) {
       nextState.expanded = 1 - closable
     }
-
-    setTimeout(() => {
-      this.searchInput.focus()
-    }, 500)
   }
 
   initializeState = props => {
@@ -195,7 +185,7 @@ class TypeSection extends Component {
         <h1>Show Me</h1>
         <img className={searchBtnClass} src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/search.png" onClick={() => { this.handleExpand(1) }} role="presentation" />
         <img className={closeBtnClass} src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/back.png" onClick={() => { this.handleExpand(0) }} role="presentation" />
-        <input ref={input => { this.searchInput = input }} className={searchInputClass} value={search} onChange={evt => { this.handleInputChange(evt) }} />
+        <input className={searchInputClass} value={search} onChange={this.handleInputChange} />
         <div className="suggestion">
           <Button
             className={anythingBtnClass}
