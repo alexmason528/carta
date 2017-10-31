@@ -16,6 +16,14 @@ import {
   DELETE_USER_REQUEST,
   DELETE_USER_SUCCESS,
   DELETE_USER_FAIL,
+
+  UPDATE_COVER_IMG_REQUEST,
+  UPDATE_COVER_IMG_SUCCESS,
+  UPDATE_COVER_IMG_FAIL,
+
+  UPDATE_PROFILE_PIC_REQUEST,
+  UPDATE_PROFILE_PIC_SUCCESS,
+  UPDATE_PROFILE_PIC_FAIL,
 } from './constants'
 
 export function loginRequest(payload) {
@@ -107,3 +115,44 @@ export function deleteUserFail(payload) {
   }
 }
 
+export function updateProfilePicRequest(payload) {
+  return {
+    type: UPDATE_PROFILE_PIC_REQUEST,
+    payload,
+  }
+}
+
+export function updateProfilePicSuccess(payload) {
+  return {
+    type: UPDATE_PROFILE_PIC_SUCCESS,
+    payload,
+  }
+}
+
+export function updateProfilePicFail(payload) {
+  return {
+    type: UPDATE_PROFILE_PIC_FAIL,
+    payload,
+  }
+}
+
+export function updateCoverImgRequest(payload) {
+  return {
+    type: UPDATE_COVER_IMG_REQUEST,
+    payload,
+  }
+}
+
+export function updateCoverImgSuccess(payload) {
+  return {
+    type: UPDATE_COVER_IMG_SUCCESS,
+    payload,
+  }
+}
+
+export function updateCoverImgFail(payload) {
+  return {
+    type: UPDATE_COVER_IMG_FAIL,
+    payload,
+  }
+}

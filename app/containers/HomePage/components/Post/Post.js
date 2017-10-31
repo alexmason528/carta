@@ -79,7 +79,7 @@ class Post extends Component {
         $(post).find('.postTitle').css({ fontSize: `${fontSize}px` })
         $(post).find('.postTitleEdit').css({ fontSize: `${fontSize}px` })
       } else {
-        const height = $(post).find('.postImage').height() - ($(post).hasClass('imagePost') ? 90 : 60)
+        const height = $(post).find('.postImage').height() - ($(post).hasClass('imagePost') ? 90 : 65)
         const fontSize = (width / 44) * 3
         const lines = fontSize > 0 ? Math.floor(height / (fontSize * 1.2)) : 0
 
@@ -101,7 +101,7 @@ class Post extends Component {
     }, 0)
   }
 
-  handleAddMedia = evt => {
+  handleAddMedia = () => {
     this.mediaUploader.click()
   }
 
@@ -248,6 +248,13 @@ class Post extends Component {
     })
   }
 
+  handleOpenLink = () => {
+    const { link, editing } = this.state
+    if (link && !editing) {
+      window.open(link, '_blank')
+    }
+  }
+
   render() {
     const { show, onClose, onPostEdit, info: { error, status, curPost } } = this.props
     const {
@@ -306,7 +313,7 @@ class Post extends Component {
         </LoadingSpinner>
         { postType === 'normalPost' &&
           <div className={postClass} onClick={this.handlePostClick}>
-            <div className="postImage">
+            <div className="postImage" onClick={this.handleOpenLink}>
               { showFileImage ? <FileImage file={img} /> : <img src={img} role="presentation" /> }
               { showPostRemoveImage && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostRemoveImage} /> }
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
@@ -316,7 +323,7 @@ class Post extends Component {
                   <input type="text" value={link} placeholder="PASTE OR WRITE LINK HERE" onChange={this.handlePostLinkBarChange} />
                 </div>
               }
-              { !editing && <div className="postTitle" dangerouslySetInnerHTML={{ __html: title ? title.replace(/\n/g, '<br />') : '' }} /> }
+              { !editing && <div className="postTitle" onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: title ? title.replace(/\n/g, '<br />') : '' }} /> }
               { editing && <textarea className="postTitleEdit" placeholder="TITLE" onChange={this.handlePostTitle} value={title} /> }
             </div>
             <div className="postContent">
@@ -333,7 +340,7 @@ class Post extends Component {
 
         { postType === 'imagePost' &&
           <div className={postClass} onClick={this.handlePostClick}>
-            <div className="postImage">
+            <div className="postImage" onClick={this.handleOpenLink}>
               { editable && !editing && <EditButton className="postEditBtn" image="edit-white" onClick={this.handleStartEdit} /> }
               { showFileImage ? <FileImage file={img} /> : <img src={img} role="presentation" /> }
               { showPostRemoveImage && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostRemoveImage} /> }
@@ -345,7 +352,7 @@ class Post extends Component {
                 </div>
               }
             </div>
-            { !editing && <div className="postTitle" dangerouslySetInnerHTML={{ __html: title ? title.replace(/\n/g, '<br />') : '' }} /> }
+            { !editing && <div className="postTitle" onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: title ? title.replace(/\n/g, '<br />') : '' }} /> }
             { editing && <textarea className="postTitleEdit" placeholder="TITLE" onChange={this.handlePostTitle} value={title} /> }
             <div className={postInfoClass}>
               {username} - Carta | {getTextFromDate(created_at)}
@@ -364,8 +371,8 @@ class Post extends Component {
                 {username} - CARTA | {getTextFromDate(created_at)}
                 { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
               </div>
-              { editing && <textarea className="postText" onChange={this.handlePostContent} value={content} /> }
               { !editing && <div className="postText" dangerouslySetInnerHTML={{ __html: content ? content.replace(/\n/g, '<br/>') : '' }} />}
+              { editing && <textarea className="postText" onChange={this.handlePostContent} value={content} /> }
             </div>
           </div>
         }

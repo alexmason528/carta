@@ -8,7 +8,7 @@ import { Container, Row, Col } from 'reactstrap'
 import { VERIFY_FAIL } from 'containers/App/constants'
 import { CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
 import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
-import { logOut, verifyRequest } from 'containers/App/actions'
+import { logOut, verifyRequest, updateCoverImgRequest, updateProfilePicRequest } from 'containers/App/actions'
 import Logo from 'components/Logo'
 import Menu from 'components/Menu'
 import { CreatePostButton } from 'components/Buttons'
@@ -21,6 +21,8 @@ class HomePage extends Component {
   static propTypes = {
     listPostRequest: PropTypes.func,
     listSuggestionRequest: PropTypes.func,
+    updateProfilePicRequest: PropTypes.func,
+    updateCoverImgRequest: PropTypes.func,
     verifyRequest: PropTypes.func,
     logOut: PropTypes.func,
     user: PropTypes.object,
@@ -38,6 +40,7 @@ class HomePage extends Component {
       showAuthWrapper: false,
       showCreatePostForm: false,
       showAccountMenu: false,
+      showMenu: false,
       editingPost: false,
       timer: 0,
     }
@@ -51,6 +54,10 @@ class HomePage extends Component {
     }
     listPostRequest()
     listSuggestionRequest()
+  }
+
+  componentDidMount() {
+    window.addEventListener('click', this.handleWindowClick)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -81,6 +88,16 @@ class HomePage extends Component {
     }
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('click', this.handleWindowClick)
+  }
+
+  handleWindowClick = () => {
+    this.setState({
+      showAccountMenu: false,
+    })
+  }
+
   handleProfileClick = () => {
     const { authenticated } = this.props
 
@@ -107,6 +124,12 @@ class HomePage extends Component {
     })
   }
 
+  toggleMenu = () => {
+    this.setState({
+      showMenu: !this.state.showMenu,
+    })
+  }
+
   handlePostEdit = value => {
     this.setState({
       editingPost: value,
@@ -114,8 +137,8 @@ class HomePage extends Component {
   }
 
   render() {
-    const { showAuthWrapper, showCreatePostForm, showAccountMenu, timer, editingPost } = this.state
-    const { posts, suggestions, authenticated, user, logOut, info: { status, error } } = this.props
+    const { showAuthWrapper, showCreatePostForm, showAccountMenu, showMenu, timer, editingPost } = this.state
+    const { posts, suggestions, authenticated, user, logOut, updateCoverImgRequest, updateProfilePicRequest, info: { status, error } } = this.props
 
     let createPostButtonType = 'text'
 
@@ -134,7 +157,13 @@ class HomePage extends Component {
         <Menu />
         <Row className="homepage__row">
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col">
-            <Profile onClick={this.handleProfileClick} authenticated={authenticated} user={user} />
+            <Profile
+              onClick={this.handleProfileClick}
+              onUpdateCoverImg={updateCoverImgRequest}
+              onUpdateProfilePic={updateProfilePicRequest}
+              authenticated={authenticated}
+              user={user}
+            />
             { !authenticated && <AuthWrapper show={showAuthWrapper} onClose={this.toggleAuthWrapper} /> }
             { authenticated && <AccountMenu show={showAccountMenu} /> }
             <Quest authenticated={authenticated} />
@@ -150,7 +179,7 @@ class HomePage extends Component {
                   let data = { _id, content, created_at, img, title, link }
 
                   data.username = post.author.fullname
-                  data.editable = (authenticated && post.author._id === user._id)
+                  data.editable = (authenticated && (post.author._id === user._id || user.role === 'admin'))
                   data.key = key
 
                   if (content.length === 0) data.content = null
@@ -210,6 +239,8 @@ const selectors = createStructuredSelector({
 const actions = {
   listPostRequest,
   listSuggestionRequest,
+  updateCoverImgRequest,
+  updateProfilePicRequest,
   verifyRequest,
   logOut,
 }

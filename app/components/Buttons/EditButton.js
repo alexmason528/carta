@@ -1,15 +1,23 @@
-import React, { PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react'
 
-const EditButton = ({ className, image, onClick }) => (
-  <button type="button" className={className} onClick={onClick}>
-    <img src={`https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/${image}.png`} role="presentation" />
-  </button>
-)
+export default class EditButton extends Component {
+  static propTypes = {
+    onClick: PropTypes.func.isRequired,
+    className: PropTypes.string,
+    image: PropTypes.string.isRequired,
+  }
 
-EditButton.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  className: PropTypes.string,
-  image: PropTypes.string.isRequired,
+  handleClick = evt => {
+    const { onClick } = this.props
+    evt.stopPropagation()
+    onClick()
+  }
+  render() {
+    const { className, image } = this.props
+    return (
+      <button type="button" className={className} onClick={this.handleClick}>
+        <img src={`https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/${image}.png`} role="presentation" />
+      </button>
+    )
+  }
 }
-
-export default EditButton

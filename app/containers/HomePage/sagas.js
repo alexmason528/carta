@@ -4,7 +4,7 @@ import { LOCATION_CHANGE } from 'react-router-redux'
 import request from 'utils/request'
 import { setItem, getItem, removeItem } from 'utils/localStorage'
 
-import { API_BASE_URL, LOGIN_REQUEST, REGISTER_REQUEST, DELETE_USER_REQUEST, VERIFY_REQUEST } from 'containers/App/constants'
+import { API_BASE_URL, LOGIN_REQUEST, REGISTER_REQUEST, DELETE_USER_REQUEST, VERIFY_REQUEST, UPDATE_PROFILE_PIC_REQUEST, UPDATE_COVER_IMG_REQUEST } from 'containers/App/constants'
 import {
   loginSuccess,
   loginFail,
@@ -14,6 +14,10 @@ import {
   deleteUserFail,
   verifySuccess,
   verifyFail,
+  updateProfilePicSuccess,
+  updateProfilePicFail,
+  updateCoverImgSuccess,
+  updateCoverImgFail,
 } from 'containers/App/actions'
 
 import { selectUser } from 'containers/App/selectors'
@@ -177,12 +181,8 @@ export function* updatePostRequest({ id, payload }) {
     const res = yield call(request, requestURL, params)
     const user = yield select(selectUser())
 
-    let info = {
-      ...res,
-      author: {
-        ...user,
-      },
-    }
+    const { _id, title, img, content, link, created_at } = res
+    const info = { _id, title, img, content, link, created_at }
 
     yield put(updatePostSuccess(info))
   } catch (err) {
@@ -220,6 +220,37 @@ export function* listSuggestionRequest() {
   }
 }
 
+export function* updateProfilePicRequest(payload) {
+  const user = yield select(selectUser())
+  const requestURL = `${API_BASE_URL}api/v1/auth/${user._id}`
+
+  const params = {
+    method: 'PATCH',
+  }
+
+  try {
+    const res = yield call(request, requestURL, params)
+    yield put(updateProfilePicSuccess(res))
+  } catch (err) {
+    yield put(updateProfilePicFail(err.details))
+  }
+}
+
+export function* updateCoverImgRequest(payload) {
+  const user = yield select(selectUser())
+  const requestURL = `${API_BASE_URL}api/v1/auth/${user._id}`
+
+  const params = {
+    method: 'PATCH',
+  }
+
+  try {
+    const res = yield call(request, requestURL, params)
+    yield put(updateCoverImgSuccess(res))
+  } catch (err) {
+    yield put(updateCoverImgFail(err.details))
+  }
+}
 
 export function* loginRequestWatcher() {
   const watcher = yield takeLatest(LOGIN_REQUEST, loginRequest)
@@ -269,6 +300,17 @@ export function* listSuggestionWatcher() {
   yield cancel(watcher)
 }
 
+export function* updateProfilePicWatcher() {
+  const watcher = yield takeLatest(UPDATE_PROFILE_PIC_REQUEST, updateProfilePicRequest)
+  yield take(LOCATION_CHANGE)
+  yield cancel(watcher)
+}
+
+export function* updateCoverImgWatcher() {
+  const watcher = yield takeLatest(UPDATE_COVER_IMG_REQUEST, updateCoverImgRequest)
+  yield take(LOCATION_CHANGE)
+  yield cancel(watcher)
+}
 
 export default [
   loginRequestWatcher,
@@ -280,4 +322,6 @@ export default [
   updatePostWatcher,
   deletePostWatcher,
   listSuggestionWatcher,
+  updateProfilePicWatcher,
+  updateCoverImgWatcher,
 ]

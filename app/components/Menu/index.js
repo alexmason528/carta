@@ -13,17 +13,33 @@ class Menu extends Component {
     authenticated: PropTypes.bool,
   }
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
 
     this.state = {
       showMenu: false,
     }
   }
 
-  handleToggleMenu = evt => {
-    evt.stopPropagation()
+  componentDidMount() {
+    window.addEventListener('click', this.handleWindowClick)
+  }
 
+  componentWillUnmount() {
+    window.removeEventListener('click', this.handleWindowClick)
+  }
+
+  handleWindowClick = () => {
+    this.setState({
+      showMenu: false,
+    })
+  }
+
+  handleMenuClick = evt => {
+    evt.stopPropagation()
+  }
+
+  handleToggleMenu = () => {
     this.setState({
       showMenu: !this.state.showMenu,
     })
@@ -39,7 +55,7 @@ class Menu extends Component {
     })
 
     return (
-      <div className={cartaMenuClass}>
+      <div className={cartaMenuClass} onClick={this.handleMenuClick}>
         <ul>
           <li><button onClick={() => browserHistory.push('/')}>Quest</button></li>
           <li><button>About</button></li>

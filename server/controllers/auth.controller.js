@@ -22,8 +22,8 @@ const login = (req, res) => {
   User.find({ email: email }, (err, element) => {
     if (element.length > 0) {
       if (element[0].password === password) {
-        const { _id, fullname, email, profile_pic, cover_img, verified } = element[0]
-        const data = { _id, fullname, email, profile_pic, cover_img, verified }
+        const { _id, fullname, email, role, profile_pic, cover_img, verified } = element[0]
+        const data = { _id, fullname, email, role, profile_pic, cover_img, verified }
         return res.json(data)
       } else {
         return res.status(400).send({
@@ -50,7 +50,7 @@ const login = (req, res) => {
  * @returns userInfo
  */
 const register = (req, res) => {
-  const { fullname, email, password, confirmPassword } = req.body
+  const { fullname, email, role, password, confirmPassword } = req.body
 
   if (password !== confirmPassword) {
     return res.status(400).send({
@@ -64,6 +64,7 @@ const register = (req, res) => {
     fullname,
     email,
     password,
+    role,
     profile_pic: '',
     cover_img: '',
     verified: false,
@@ -130,8 +131,10 @@ const verify = (req, res) => {
   User.findOneAndUpdate({ email: email }, { $set: { verified: true } }, { new: true }, (err, element) => {
     if (element && element.fullname) {
       let response = {
+        _id: element._id,
         fullname: element.fullname,
         email: element.email,
+        role: element.role,
         profile_pic: element.profile_pic,
         cover_img: element.cover_img,
         verified: true,
