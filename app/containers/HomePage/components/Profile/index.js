@@ -41,7 +41,7 @@ export default class Profile extends Component {
   render() {
     const { authenticated, user, onClick } = this.props
     const { initialized } = this.state
-    const username = (authenticated) ? `${user.fullname}` : 'Sign in'
+    const fullname = (authenticated) ? `${user.fullname}` : 'Sign in'
     const coverImg = (authenticated && user.cover_img) ? user.cover_img : `https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/wide/${this.coverImgRand}.jpg`
     const profileImg = (authenticated && user.profile_pic) ? user.profile_pic : `https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/profile/bag/${this.profilePicRand}.jpg`
 
@@ -51,8 +51,8 @@ export default class Profile extends Component {
         <div className="profile__pic">
           <img src={profileImg} role="presentation" />
         </div>
-        <UserButton className="profile__userButton" onClick={onClick} />
-        <h2>{username}</h2>
+        { authenticated && <UserButton className="profile__userButton" onClick={onClick} /> }
+        { !authenticated ? <h2 onClick={onClick}>{fullname}</h2> : <h2>{fullname}</h2> }
       </div>
     )
   }

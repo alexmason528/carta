@@ -36,6 +36,19 @@ class PostCreate extends Component {
     }
   }
 
+  componentDidMount() {
+    const interval =
+    setInterval(() => {
+      const post = ReactDOM.findDOMNode(this)
+      if ($(post).height() > 25) {
+        this.handleResize()
+        clearInterval(interval)
+      }
+    }, 0)
+
+    window.addEventListener('resize', this.handleResize)
+  }
+
   componentWillReceiveProps(nextProps) {
     const { info: { status } } = nextProps
     if (status === CREATE_POST_SUCCESS) {
@@ -51,6 +64,27 @@ class PostCreate extends Component {
     }
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize)
+  }
+
+  handleResize = () => {
+    const comp = ReactDOM.findDOMNode(this)
+    const post = $(comp).find('.post')
+    const width = $(post).width()
+
+    if ($(post).hasClass('textPost')) {
+      $(post).find('.postTitle').css({ fontSize: `${(width / 76) * 3}px` })
+      $(post).find('.postTitleEdit').css({ fontSize: `${(width / 76) * 3}px` })
+    } else {
+      $(post).find('.postTitle').css({ fontSize: `${(width / 44) * 3}px` })
+      $(post).find('.postTitleEdit').css({
+        fontSize: `${(width / 44) * 3}px`,
+        height: `${(width / 44) * 3 * 1.3 * 2}px`,
+      })
+    }
+  }
+
   handleAddMedia = evt => {
     this.mediaUploader.click()
   }
@@ -58,6 +92,8 @@ class PostCreate extends Component {
   handleFiles = evt => {
     this.setState({
       img: evt.target.files[0],
+    }, () => {
+      this.handleResize()
     })
   }
 
@@ -67,12 +103,16 @@ class PostCreate extends Component {
       title: null,
       content: null,
       link: null,
+    }, () => {
+      this.handleResize()
     })
   }
 
   handleAddText = () => {
     this.setState({
       content: '',
+    }, () => {
+      this.handleResize()
     })
   }
 
@@ -103,12 +143,16 @@ class PostCreate extends Component {
   handlePostRemoveImage = () => {
     this.setState({
       img: null,
+    }, () => {
+      this.handleResize()
     })
   }
 
   handlePostRemoveContent = () => {
     this.setState({
       content: null,
+    }, () => {
+      this.handleResize()
     })
   }
 

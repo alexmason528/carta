@@ -21,7 +21,9 @@ class Menu extends Component {
     }
   }
 
-  handleToggleMenu = () => {
+  handleToggleMenu = evt => {
+    evt.stopPropagation()
+
     this.setState({
       showMenu: !this.state.showMenu,
     })

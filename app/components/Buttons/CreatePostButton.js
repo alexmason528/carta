@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import className from 'classnames'
 
-const CreatePostButton = ({ show, type, onClick }) => {
+const CreatePostButton = ({ type, onClick }) => {
   const btnClass = className({
     createPostBtn: true,
     'createPostBtn--afterImage': type === 'image',
@@ -21,7 +21,6 @@ const CreatePostButton = ({ show, type, onClick }) => {
 CreatePostButton.propTypes = {
   onClick: PropTypes.func,
   type: PropTypes.string,
-  show: PropTypes.bool,
 }
 
 export default CreatePostButton

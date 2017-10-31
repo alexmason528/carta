@@ -18,6 +18,7 @@ import './style.scss'
 class Post extends Component {
   static propTypes = {
     onClose: PropTypes.func,
+    onPostEdit: PropTypes.func,
     updatePostRequest: PropTypes.func,
     deletePostRequest: PropTypes.func,
     info: PropTypes.object,
@@ -87,13 +88,13 @@ class Post extends Component {
     const width = $(post).width()
 
     if ($(post).hasClass('textPost')) {
-      $(post).find('.postTitle').css({ fontSize: `${width / 19}px` })
-      $(post).find('.postTitleEdit').css({ fontSize: `${width / 19}px` })
+      $(post).find('.postTitle').css({ fontSize: `${(width / 76) * 3}px` })
+      $(post).find('.postTitleEdit').css({ fontSize: `${(width / 76) * 3}px` })
     } else {
-      $(post).find('.postTitle').css({ fontSize: `${width / 11}px` })
+      $(post).find('.postTitle').css({ fontSize: `${(width / 44) * 3}px` })
       $(post).find('.postTitleEdit').css({
-        fontSize: `${width / 11}px`,
-        height: `${(width / 11) * 1.3 * 2}px`,
+        fontSize: `${(width / 44) * 3}px`,
+        height: `${(width / 44) * 3 * 1.3 * 2}px`,
       })
     }
 
@@ -120,7 +121,9 @@ class Post extends Component {
       showInfo: false,
       editing: false,
     }, () => {
+      const { onPostEdit } = this.props
       this.handleResize()
+      onPostEdit(false)
     })
   }
 
@@ -180,7 +183,9 @@ class Post extends Component {
     this.setState({
       editing: true,
     }, () => {
+      const { onPostEdit } = this.props
       this.handleResize()
+      onPostEdit(true)
     })
   }
 
@@ -202,6 +207,10 @@ class Post extends Component {
     for (let key in data) {
       formData.append(key, data[key])
     }
+
+    const { onPostEdit } = this.props
+    this.handleResize()
+    onPostEdit(false)
 
     updatePostRequest(_id, formData)
   }
@@ -240,7 +249,7 @@ class Post extends Component {
   }
 
   render() {
-    const { show, onClose, info: { error, status, curPost } } = this.props
+    const { show, onClose, onPostEdit, info: { error, status, curPost } } = this.props
     const {
       _id,
       img,

@@ -41,7 +41,7 @@ class Quest extends Component {
     const quest = ReactDOM.findDOMNode(this)
     const width = $(quest).width()
 
-    $(quest).find('h2').css({ fontSize: `${width / 11}px` })
+    $(quest).find('h2').css({ fontSize: `${(width / 44) * 3}px` })
   }
 
   render() {

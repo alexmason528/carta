@@ -38,6 +38,7 @@ class HomePage extends Component {
       showAuthWrapper: false,
       showCreatePostForm: false,
       showAccountMenu: false,
+      editingPost: false,
       timer: 0,
     }
   }
@@ -106,8 +107,14 @@ class HomePage extends Component {
     })
   }
 
+  handlePostEdit = value => {
+    this.setState({
+      editingPost: value,
+    })
+  }
+
   render() {
-    const { showAuthWrapper, showCreatePostForm, showAccountMenu, timer } = this.state
+    const { showAuthWrapper, showCreatePostForm, showAccountMenu, timer, editingPost } = this.state
     const { posts, suggestions, authenticated, user, logOut, info: { status, error } } = this.props
 
     let createPostButtonType = 'text'
@@ -134,7 +141,7 @@ class HomePage extends Component {
           </Col>
 
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-sm-down">
-            { !showCreatePostForm && authenticated && user.verified && <CreatePostButton type={createPostButtonType} show={showCreatePostForm} onClick={this.toggleCreatePostForm} />}
+            { authenticated && !showCreatePostForm && user.verified && !editingPost && <CreatePostButton type={createPostButtonType} onClick={this.toggleCreatePostForm} />}
             { authenticated && showCreatePostForm && <PostCreate onClose={this.toggleCreatePostForm} user={user} /> }
             <div>
               {
@@ -150,15 +157,13 @@ class HomePage extends Component {
                   if (img.length === 0) data.img = null
 
                   data.first = (key === 0 && authenticated)
-                  return <Post {...data} />
+                  return <Post {...data} onPostEdit={this.handlePostEdit} />
                 })
               }
             </div>
           </Col>
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-md-down">
-            {
-              suggestions && suggestions.map((suggestion, index) => <Suggestion key={index} imageUrl={suggestion.img} title={suggestion.title} />)
-            }
+            { suggestions && suggestions.map((suggestion, index) => <Suggestion key={index} imageUrl={suggestion.img} title={suggestion.title} />) }
           </Col>
         </Row>
         { user && !user.verified && (status !== VERIFY_FAIL) &&
