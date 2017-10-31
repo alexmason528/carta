@@ -27,16 +27,16 @@
   overflow: hidden;
 
   .postTitle {
-    width: 50%;
-    height: calc(100% - 100px);
-    top: 35px;
-    align-items: center;
+    width: calc(100% - 40px);
+    top: 50%;
+    transform: translate(0, -50%);
+    overflow: hidden;
   }
 
   .postTitleEdit {
-    width: 50%;
+    width: calc(100% - 40px);
     top: 50%;
-    transform: translate(0, calc(-50% - 15px));
+    transform: translate(0, -50%);
     overflow: hidden;
   }
 
@@ -83,17 +83,10 @@
 }
 
 .normalPost {
-  .postTitle {
+  .postTitle, .postTitleEdit {
     bottom: 20px;
     width: calc(100% - 40px);
-    height: calc(100% - 60px);
-    align-items: flex-end;
-  }
-
-  .postTitleEdit {
-    bottom: 20px;
     overflow: hidden;
-    width: calc(100% - 40px);
   }
 }
 
@@ -133,10 +126,6 @@
   .postContentText {
     padding-left: 0;
     padding-right: 0;
-  }
-
-  &.firstPost {
-    margin-top: 50px;
   }
 }
 
@@ -288,7 +277,7 @@
   }
 }
 
-.postTitle {
+.postTitle, .postTitleEdit {
   position: absolute;
   left: 20px;
   line-height: 1.2;
@@ -298,27 +287,10 @@
   font-weight: 900;
   z-index: 50;
   cursor: pointer;
-  display: flex;
 
   &:focus {
     outline: none;
   }
-}
-
-.postTitleEdit {
-  position: absolute;
-  left: 20px;
-  line-height: 1.2;
-  color: #fff;
-  text-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-  text-transform: uppercase;      
-  font-weight: 900;
-  z-index: 50;
-  cursor: pointer;
-
-  &:focus {
-    outline: none;
-  } 
 }
 
 .postContent {
@@ -422,4 +394,3 @@
     width: 100%;
   }
 }
-

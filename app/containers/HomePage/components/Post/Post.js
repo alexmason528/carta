@@ -35,7 +35,6 @@ class Post extends Component {
       editable: false,
       editing: false,
       first: false,
-      initialized: false,
       link: '',
     }
   }
@@ -45,22 +44,8 @@ class Post extends Component {
   }
 
   componentDidMount() {
-    const interval =
-    setInterval(() => {
-      const post = ReactDOM.findDOMNode(this)
-      if ($(post).height() > 25) {
-        this.setState({
-          initialized: true,
-        })
-        $(post).find('.postTitle').dotdotdot({
-          watch: 'window',
-          ellipsis: ' ...',
-        })
-        this.handleResize()
-        clearInterval(interval)
-      }
-    }, 0)
-
+    const post = ReactDOM.findDOMNode(this)
+    this.handleResize()
     window.addEventListener('resize', this.handleResize)
   }
 
@@ -83,22 +68,37 @@ class Post extends Component {
   }
 
   handleResize = () => {
-    const comp = ReactDOM.findDOMNode(this)
-    const post = $(comp).find('.post')
-    const width = $(post).width()
+    const interval =
+    setInterval(() => {
+      const comp = ReactDOM.findDOMNode(this)
+      const post = $(comp).find('.post')
+      const width = $(post).width()
+      if ($(post).hasClass('textPost')) {
+        clearInterval(interval)
+        const fontSize = (width / 76) * 3
+        $(post).find('.postTitle').css({ fontSize: `${fontSize}px` })
+        $(post).find('.postTitleEdit').css({ fontSize: `${fontSize}px` })
+      } else {
+        const height = $(post).find('.postImage').height() - ($(post).hasClass('imagePost') ? 90 : 60)
+        const fontSize = (width / 44) * 3
+        const lines = fontSize > 0 ? Math.floor(height / (fontSize * 1.2)) : 0
 
-    if ($(post).hasClass('textPost')) {
-      $(post).find('.postTitle').css({ fontSize: `${(width / 76) * 3}px` })
-      $(post).find('.postTitleEdit').css({ fontSize: `${(width / 76) * 3}px` })
-    } else {
-      $(post).find('.postTitle').css({ fontSize: `${(width / 44) * 3}px` })
-      $(post).find('.postTitleEdit').css({
-        fontSize: `${(width / 44) * 3}px`,
-        height: `${(width / 44) * 3 * 1.3 * 2}px`,
-      })
-    }
+        if (height > 0) clearInterval(interval)
 
-    $(post).find('.postTitle').trigger('update.dot')
+        $(post).find('.postTitle').css({
+          fontSize: `${fontSize}px`,
+          'max-height': `${fontSize * lines * 1.2}px`,
+          '-webkit-line-clamp': lines.toString(),
+          display: '-webkit-box',
+          '-webkit-box-orient': 'vertical',
+        })
+
+        $(post).find('.postTitleEdit').css({
+          fontSize: `${fontSize}px`,
+          height: `${fontSize * lines * 1.2}px`,
+        })
+      }
+    }, 0)
   }
 
   handleAddMedia = evt => {
@@ -159,8 +159,9 @@ class Post extends Component {
 
   handleDeleteConfirm = () => {
     const { _id } = this.state
-    const { deletePostRequest } = this.props
+    const { deletePostRequest, onPostEdit } = this.props
     deletePostRequest(_id)
+    onPostEdit(false)
   }
 
   handlePostRemoveImage = () => {
@@ -209,9 +210,8 @@ class Post extends Component {
     }
 
     const { onPostEdit } = this.props
-    this.handleResize()
     onPostEdit(false)
-
+    this.handleResize()
     updatePostRequest(_id, formData)
   }
 
@@ -264,7 +264,6 @@ class Post extends Component {
       editing,
       first,
       link,
-      initialized,
     } = this.state
 
     let postType
@@ -301,7 +300,7 @@ class Post extends Component {
     const spinnerShow = (status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST) && (curPost === _id)
 
     return (
-      <div style={{ position: 'relative', display: initialized ? 'block' : 'none' }}>
+      <div style={{ position: 'relative' }}>
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>

@@ -37,15 +37,7 @@ class PostCreate extends Component {
   }
 
   componentDidMount() {
-    const interval =
-    setInterval(() => {
-      const post = ReactDOM.findDOMNode(this)
-      if ($(post).height() > 25) {
-        this.handleResize()
-        clearInterval(interval)
-      }
-    }, 0)
-
+    this.handleResize()
     window.addEventListener('resize', this.handleResize)
   }
 
@@ -69,20 +61,29 @@ class PostCreate extends Component {
   }
 
   handleResize = () => {
-    const comp = ReactDOM.findDOMNode(this)
-    const post = $(comp).find('.post')
-    const width = $(post).width()
+    const interval =
+    setInterval(() => {
+      const comp = ReactDOM.findDOMNode(this)
+      const post = $(comp).find('.post')
+      const width = $(post).width()
 
-    if ($(post).hasClass('textPost')) {
-      $(post).find('.postTitle').css({ fontSize: `${(width / 76) * 3}px` })
-      $(post).find('.postTitleEdit').css({ fontSize: `${(width / 76) * 3}px` })
-    } else {
-      $(post).find('.postTitle').css({ fontSize: `${(width / 44) * 3}px` })
-      $(post).find('.postTitleEdit').css({
-        fontSize: `${(width / 44) * 3}px`,
-        height: `${(width / 44) * 3 * 1.3 * 2}px`,
-      })
-    }
+      if ($(post).hasClass('textPost')) {
+        const fontSize = (width / 76) * 3
+        $(post).find('.postTitleEdit').css({ fontSize: `${fontSize}px` })
+        clearInterval(interval)
+      } else {
+        const height = $(post).find('.postImage').height() - ($(post).hasClass('imagePost') ? 90 : 60)
+        const fontSize = (width / 44) * 3
+        let lines = fontSize > 0 ? Math.floor(height / (fontSize * 1.2)) : 0
+
+        if (height > 0) clearInterval(interval)
+
+        $(post).find('.postTitleEdit').css({
+          fontSize: `${fontSize}px`,
+          height: `${fontSize * lines * 1.2}px`,
+        })
+      }
+    }, 0)
   }
 
   handleAddMedia = evt => {

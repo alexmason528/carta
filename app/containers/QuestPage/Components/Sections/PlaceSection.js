@@ -60,7 +60,7 @@ class PlaceSection extends Component {
     return (
       <div className={className}>
         <h1>In & around</h1>
-        <input className="search-input place-search" onChange={this.handleInputChange} />
+        <input className="search-input place-search" value={search} onChange={this.handleInputChange} />
         <div className="buttons-row">
           { filteredPlaces.map((place, index) => <button className="place-button" key={index} onClick={() => { this.handlePlaceClick(place.name) }}>{place.name}</button>) }
         </div>

@@ -45,13 +45,10 @@
   }
 
   .createPostBtn {
-    position: absolute;
-    left: 24px;
     z-index: 50;
     display: flex;
     align-items: center;
     font-size: 14px;
-    cursor: pointer;
 
     &--hidden {
       display: none;
@@ -76,6 +73,8 @@
 
     &--afterImage {
       top: 15px;
+      position: absolute;
+      left: 24px;
 
       .btnImage {
         background: #fff;
@@ -90,10 +89,10 @@
     }
 
     &--afterText {
-      top: 10px;
       background: #fff;
       padding: 4px 8px;
       border: 1px solid #ddd;
+      margin: 8px 0 8px 20px;
 
       .btnText {
         color: #000;
