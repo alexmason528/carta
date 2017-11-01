@@ -17,7 +17,6 @@ class AuthWrapper extends Component {
     loginRequest: PropTypes.func,
     registerRequest: PropTypes.func,
     info: PropTypes.object,
-    onClose: PropTypes.func,
     show: PropTypes.bool,
   }
 
@@ -86,7 +85,7 @@ class AuthWrapper extends Component {
 
   render() {
     const { authType, loginError, registerError, email, password } = this.state
-    const { info: { status }, show, onClose, loginRequest } = this.props
+    const { info: { status }, show, loginRequest } = this.props
 
     const spinnerShow = status === LOGIN_REQUEST || status === REGISTER_REQUEST
 
@@ -96,11 +95,10 @@ class AuthWrapper extends Component {
     })
 
     return (
-      <div className={authWrapperClass}>
+      <div className={authWrapperClass} onClick={evt => evt.stopPropagation()}>
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
-        <button className="authWrapper__closeBtn" onClick={onClose}><img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/icon/close.png" role="presentation" /></button>
         <div className="authWrapper__divider">
           <span>With</span>
         </div>

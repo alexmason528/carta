@@ -73,7 +73,6 @@
       border: 1px solid transparent;
       cursor: pointer;
       width: 11px;
-      transition: ease-in-out 0.15s;
 
       &:hover {
         cursor: pointer;
@@ -101,7 +100,6 @@
   box-shadow: 0 0 7px rgba(0,0,0,0.2); 
   z-index: 20;
   left: 0;
-  transition: ease-in-out 0.1s;
 
   button {
     cursor: pointer; 
@@ -241,7 +239,6 @@
         width: 28px; 
         background: #fff;
         box-sizing: content-box;
-        transition: ease-in-out 0.15s;
 
         &.first {
           left: 0;
@@ -381,7 +378,6 @@
 
         .search {
           left: 5px;
-          transition: ease-in-out 0.1s;
 
           &.invisible {
             opacity: 0;
@@ -391,7 +387,6 @@
 
         .close {
           left: 174px;
-          transition: ease-in-out 0.1s;
 
           &.invisible {
             left: 0;
@@ -411,7 +406,6 @@
           border-bottom: 0.5px solid #ccc; 
           width: 85%; 
           outline: none;
-          transition: ease-in-out 0.1s;
 
           &.invisible {
             width: 0;

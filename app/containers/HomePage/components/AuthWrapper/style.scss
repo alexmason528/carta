@@ -4,8 +4,11 @@
   position: relative;
   max-height: 1000px;
   opacity: 1;
-  transition: all 0.3s;
   z-index: 10;
+
+  button {
+    text-transform: uppercase;
+  }
 
   &--hidden {
     max-height: 0;
@@ -71,6 +74,7 @@
     cursor: pointer;
     padding: 8px;
     border: 1px solid #ddd;
+    text-transform: uppercase;
 
     img {
       width: 20px;

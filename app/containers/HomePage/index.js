@@ -95,6 +95,7 @@ class HomePage extends Component {
   handleWindowClick = () => {
     this.setState({
       showAccountMenu: false,
+      showAuthWrapper: false,
     })
   }
 
@@ -164,8 +165,7 @@ class HomePage extends Component {
               authenticated={authenticated}
               user={user}
             />
-            { !authenticated && <AuthWrapper show={showAuthWrapper} onClose={this.toggleAuthWrapper} /> }
-            { authenticated && <AccountMenu show={showAccountMenu} /> }
+            { authenticated ? <AccountMenu show={showAccountMenu} /> : <AuthWrapper show={showAuthWrapper} /> }
             <Quest authenticated={authenticated} />
           </Col>
 
