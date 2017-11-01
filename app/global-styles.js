@@ -9,7 +9,7 @@ injectGlobal`
   }
 
   * {
-    transition: 0.1s all;
+    transition: 0.15s all;
   }
 
   #app {
