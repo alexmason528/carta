@@ -3,8 +3,10 @@
   top: 0;
   left: 0;
   z-index: 100;
+  transition: all 0.1s;
 
-  &__img {
+  img {
+    transition: all 0.1s;
     position: absolute;
     left: 10px;
     top: 10px;

@@ -75,12 +75,12 @@ class Post extends Component {
       const width = $(post).width()
       if ($(post).hasClass('textPost')) {
         clearInterval(interval)
-        const fontSize = (width / 76) * 3
+        const fontSize = (width / 76) * 3 * 1.15
         $(post).find('.postTitle').css({ fontSize: `${fontSize}px` })
         $(post).find('.postTitleEdit').css({ fontSize: `${fontSize}px` })
       } else {
         const height = $(post).find('.postImage').height() - ($(post).hasClass('imagePost') ? 90 : 65)
-        const fontSize = (width / 44) * 3
+        const fontSize = (width / 44) * 3 * 1.15
         const lines = fontSize > 0 ? Math.floor(height / (fontSize * 1.2)) : 0
 
         if (height > 0) clearInterval(interval)

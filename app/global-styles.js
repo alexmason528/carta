@@ -8,10 +8,6 @@ injectGlobal`
     width: 100%;
   }
 
-  * {
-    transition: 0.15s all;
-  }
-
   #app {
     background-color: #fafafa;
     min-height: 100%;

@@ -20,7 +20,7 @@ const LoginForm = ({ handleSubmit, loginError, onAuthTypeChange }) => (
     />
     <div className="authWrapper__buttons">
       <button className="active">
-        Login
+        Sign in
       </button>
       <button type="button" onClick={() => { onAuthTypeChange('register') }}>
         Register

@@ -68,12 +68,12 @@ class PostCreate extends Component {
       const width = $(post).width()
 
       if ($(post).hasClass('textPost')) {
-        const fontSize = (width / 76) * 3
+        const fontSize = (width / 76) * 3 * 1.15
         $(post).find('.postTitleEdit').css({ fontSize: `${fontSize}px` })
         clearInterval(interval)
       } else {
         const height = $(post).find('.postImage').height() - ($(post).hasClass('imagePost') ? 90 : 60)
-        const fontSize = (width / 44) * 3
+        const fontSize = (width / 44) * 3 * 1.15
         let lines = fontSize > 0 ? Math.floor(height / (fontSize * 1.2)) : 0
 
         if (height > 0) clearInterval(interval)

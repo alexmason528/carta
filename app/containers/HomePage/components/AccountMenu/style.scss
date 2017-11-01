@@ -5,6 +5,7 @@
   padding: 5px 0;
   z-index: 20;
   max-height: 1000px;
+  transition: all 0.1s;
 
   &--hidden {
     max-height: 0px;
@@ -29,6 +30,7 @@
     margin-left: calc(14% + 30px);
     margin-top: 14%;
     padding: 0 20px 0 0;
+    transition: all 0.1s;
     max-height: 1000;
 
     &--hidden {
@@ -51,11 +53,21 @@
       height: 20px;
       margin-right: 5px;
     }
+
+    &:hover {
+      img {
+        width: 22px;
+        height: 22px;
+        margin-left: -1px;
+        margin-top: -1px;
+      }
+    }
   }
 
   &__deleteForm {
     padding: 10px 0;
-    max-height: 1000;
+    transition: all 0.1s;
+    max-height: 1000px;
 
     &--hidden {
       max-height: 0;
@@ -68,7 +80,7 @@
 
     input {
       margin-top: 8px;
-      border: 1px solid #ccc;
+      border: 0.5px solid #ccc;
       padding: 5px 8px;
       color: #333;
       width: 100%;
@@ -87,7 +99,7 @@
       font-size: 13px;
 
       &.active {
-        border: 1px solid #ddd;
+        border: 0.5px solid #ddd;
         background: #eee;
       }
     }

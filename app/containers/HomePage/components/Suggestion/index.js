@@ -42,7 +42,7 @@ class Suggestion extends Component {
     const suggestion = ReactDOM.findDOMNode(this)
     const width = $(suggestion).width()
 
-    $(suggestion).find('h2').css({ fontSize: `${(width / 44) * 3}px` })
+    $(suggestion).find('h2').css({ fontSize: `${(width / 44) * 3 * 1.15}px` })
   }
 
   render() {

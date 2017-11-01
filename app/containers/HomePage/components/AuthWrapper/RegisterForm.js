@@ -47,11 +47,11 @@ const RegisterForm = ({ handleSubmit, registerError, onAuthTypeChange }) => (
       />
     </div>
     <div className="authWrapper__buttons">
-      <button type="button" onClick={() => { onAuthTypeChange('login') }}>
-        Login
-      </button>
       <button className="active">
         Register
+      </button>
+      <button type="button" onClick={() => { onAuthTypeChange('login') }}>
+        Sign in
       </button>
     </div>
     {registerError && <div className="error">{registerError}</div>}

@@ -39,6 +39,18 @@ export default class Profile extends Component {
         clearInterval(interval)
       }
     }, 0)
+    window.addEventListener('resize', this.handleResize)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize)
+  }
+
+  handleResize = () => {
+    const profile = ReactDOM.findDOMNode(this)
+    const width = $(profile).width()
+
+    $(profile).find('h2').css({ fontSize: `${(width / 44) * 3 * 1.15}px` })
   }
 
   handleProfileClick = (evt, imageType) => {

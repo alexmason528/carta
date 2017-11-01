@@ -34,8 +34,16 @@
       margin-right: 5px;
       
       img {
+        transition: all 0.1s;
         width: 10px;
         height: 10px;
+      }
+    }
+
+    &:hover {
+      .btnImage img{
+        width: 12px;
+        height: 12px;
       }
     }
 
@@ -64,7 +72,7 @@
     &--afterText {
       background: #fff;
       padding: 4px 8px;
-      border: 1px solid #ddd;
+      border: 0.5px solid #ddd;
       margin: 8px 0 8px 20px;
 
       .btnText {

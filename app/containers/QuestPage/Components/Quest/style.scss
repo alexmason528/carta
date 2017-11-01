@@ -32,7 +32,7 @@
   }
 
   &.active > div {
-    border: 1px solid rgb(107, 176, 210);
+    border: 0.5px solid rgb(107, 176, 210);
     
     img.active {
       display: block;
@@ -43,7 +43,7 @@
   }
 
   &.inactive > div {
-    border: 1px solid transparent;
+    border: 0.5px solid transparent;
     img.active {
       display: none;
     }
@@ -70,9 +70,10 @@
       overflow: hidden;
       font-weight: 400;
       white-space: nowrap;
-      border: 1px solid transparent;
+      border: 0.5px solid transparent;
       cursor: pointer;
       width: 11px;
+      transition: all 0.1s;
 
       &:hover {
         cursor: pointer;
@@ -100,6 +101,7 @@
   box-shadow: 0 0 7px rgba(0,0,0,0.2); 
   z-index: 20;
   left: 0;
+  transition: all 0.1s;
 
   button {
     cursor: pointer; 
@@ -156,6 +158,7 @@
         right: 35px; 
         opacity:0.45; 
         box-sizing: content-box;
+        transition: all 0.1s;
 
         &:hover {
           opacity: 1;
@@ -378,6 +381,7 @@
 
         .search {
           left: 5px;
+          transition: all 0.1s;
 
           &.invisible {
             opacity: 0;
@@ -387,6 +391,7 @@
 
         .close {
           left: 174px;
+          transition: all 0.1s;
 
           &.invisible {
             left: 0;
@@ -406,6 +411,7 @@
           border-bottom: 0.5px solid #ccc; 
           width: 85%; 
           outline: none;
+          transition: all 0.1s;
 
           &.invisible {
             width: 0;
