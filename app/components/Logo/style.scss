@@ -3,10 +3,8 @@
   top: 0;
   left: 0;
   z-index: 100;
-  transition: all 0.1s;
 
   img {
-    transition: all 0.1s;
     position: absolute;
     left: 10px;
     top: 10px;
@@ -17,15 +15,5 @@
     cursor: pointer;
     z-index: 102;
     position: relative;
-  }
-
-  &:hover {
-    top: -1px;
-    left: -1px;
-
-    img {
-      width: 34px;
-      height: 34px;
-    }
   }
 }

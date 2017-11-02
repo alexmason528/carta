@@ -49,13 +49,13 @@ class Quest extends Component {
     const { authenticated } = this.props
     const questClass = className({
       quest: true,
-      quest__Authenticated: authenticated,
+      quest__authenticated: authenticated,
     })
 
     return (
       <div className={questClass} style={{ display: initialized ? 'block' : 'none' }}>
         <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/quest/start/1.jpg" role="presentation" />
-        <h2>Start your personal quest</h2>
+        <h2>Start<br />your<br />quest</h2>
       </div>
     )
   }

@@ -2,7 +2,7 @@
   .quest {
     position: relative;
 
-    &__Authenticated {
+    &__authenticated {
       margin-top: 8px;
     }
 
@@ -32,9 +32,8 @@
       font-weight: 900;
       line-height: 1.2;
       margin-bottom: 0;
-      left: 40px;
+      left: 30px;
       top: 50%;
-      width: 70%;
       transform: translate(0, -50%);
     }
   }

@@ -66,23 +66,11 @@
     bottom: 10px;
     right: 10px;
     cursor: pointer;
-    transition: all 0.1s;
     z-index: 40;
 
     img {
-      transition: all 0.1s;
       width: 10px;
       height: 10px;
-    }
-
-    &:hover {
-      bottom: 9px;
-      right: 9px;
-
-      img {
-        width: 12px;
-        height: 12px;
-      }
     }
   }
 
@@ -210,22 +198,10 @@
   right: 10px;
   line-height: 0;
   z-index: 40;
-  transition: all 0.1s;
 
   img {
-    transition: all 0.1s;
     width: 13px;
     height: 13px;
-  }
-
-  &:hover {
-    top: 24px;
-    right: 9px;
-
-    img {
-      width: 15px;
-      height: 15px;
-    }
   }
 }
 
@@ -234,7 +210,6 @@
   z-index: 40;
   
   img {
-    transition: all 0.1s;
     width: 13px;
     height: 13px;
   }
@@ -243,7 +218,7 @@
 .postLinkBtn {
   position: absolute;
   left: 20px;
-  top: 15px;
+  top: 16px;
   z-index: 60;
   display: flex;
   align-items: center;
@@ -257,8 +232,8 @@
     box-shadow: 0 0 7px rgba(0, 0, 0, 0.4);
 
     img {
-      width: 12px;
-      height: 12px;
+      width: 10px;
+      height: 10px;
     }
   }
 
@@ -273,19 +248,9 @@
 .postCloseBtn {
   position: absolute;
   right: 10px;
-  transition: all 0.1s;
 
   &--hasContent {
     display: none
-  }
-
-  &:hover {
-    right: 9px;
-
-    img {
-      width: 15px;
-      height: 15px;
-    }
   }
 }
 
@@ -296,16 +261,6 @@
   position: relative;
   cursor: pointer;
   z-index: 1000;
-
-  &:hover {
-    margin-left: 9px;
-    margin-top: -1px;
-
-    img {
-      width: 15px;
-      height: 15px;
-    }
-  }
 
   .popOver {
     background-color: #fff;
@@ -380,22 +335,10 @@
   right: -10px;
   top: 5px;
   z-index: 30;
-  transition: all 0.1s;
 
   img {
-    transition: all 0.1s;
     width: 13px;
     height: 13px;
-  }
-
-  &:hover {
-    top: 4px;
-    right: -11px;
-
-    img {
-      width: 15px;
-      height: 15px;
-    }
   }
 }
 

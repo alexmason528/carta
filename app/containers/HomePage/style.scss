@@ -34,22 +34,15 @@
       margin-right: 5px;
       
       img {
-        transition: all 0.1s;
-        width: 10px;
-        height: 10px;
-      }
-    }
-
-    &:hover {
-      .btnImage img{
-        width: 12px;
-        height: 12px;
+        width: 13px;
+        height: 13px;
       }
     }
 
     .btnText {
       text-transform: uppercase;
       font-weight: 700;
+      font-size: 15px;
     }
 
     &--afterImage {
@@ -65,7 +58,7 @@
 
       .btnText {
         color: #fff;
-        text-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+        text-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
       }
     }
 

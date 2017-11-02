@@ -61,22 +61,10 @@
     bottom: 6px;
     right: 6px;
     z-index: 20;
-    transition: all 0.1s;
 
     img {
-      transition: all 0.1s;
       width: 30px;
       height: 30px;
-    }
-
-    &:hover {
-      bottom: 1px;
-      right: 1px;
-
-      img {
-        width: 40px;
-        height: 40px;
-      }
     }
   }
 
