@@ -101,7 +101,9 @@
     width: calc(100% - 40px);
     overflow: hidden;
   }
+}
 
+.normalPost, .textPost {
   .postEditBtn {
     img {
       width: 15px;
