@@ -1,30 +1,33 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
+import axios from 'axios'
+import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, UPDATE_USER_REQUEST } from 'containers/App/constants'
+import LoadingSpinner from 'components/LoadingSpinner'
+import { QuarterSpinner } from 'components/SvgIcon'
 import { UserButton } from 'components/Buttons'
 import './style.scss'
 
 export default class Profile extends Component {
   static propTypes = {
     onClick: PropTypes.func,
-    onUpdateCoverImg: PropTypes.func,
-    onUpdateProfilePic: PropTypes.func,
+    onUpdate: PropTypes.func,
     authenticated: PropTypes.bool,
     user: PropTypes.object,
+    info: PropTypes.object,
+    coverImg: PropTypes.string,
+    profilePic: PropTypes.string,
   }
 
   constructor(props) {
     super(props)
 
     this.state = {
-      initialized: false,
       imageType: null,
+      imageUpload: {
+        uploading: false,
+        error: null,
+      },
     }
-  }
-
-  componentWillMount() {
-    let rand = Math.floor((Math.random() * 76)) + 1
-    this.coverImgRand = (rand < 10) ? `000${rand}` : `00${rand}`;
-    this.profilePicRand = Math.floor((Math.random() * 9))
   }
 
   componentDidMount() {
@@ -33,10 +36,8 @@ export default class Profile extends Component {
     const interval =
     setInterval(() => {
       if ($(profile).height() > 100) {
-        this.setState({
-          initialized: true,
-        })
         clearInterval(interval)
+        this.handleResize()
       }
     }, 0)
     window.addEventListener('resize', this.handleResize)
@@ -53,50 +54,92 @@ export default class Profile extends Component {
     $(profile).find('h2').css({ fontSize: `${(width / 44) * 3 * 1.15}px` })
   }
 
-  handleProfileClick = (evt, imageType) => {
-    evt.stopPropagation()
-
+  handleCoverImg = () => {
     const { authenticated } = this.props
     if (authenticated) {
       this.setState({
-        imageType,
+        imageType: 'cover_img',
       })
-      // this.mediaUploader.click()
+      this.mediaUploader.click()
+    }
+  }
+
+  handleProfilePic = evt => {
+    evt.stopPropagation()
+    const { authenticated } = this.props
+    if (authenticated) {
+      this.setState({
+        imageType: 'profile_pic',
+      })
+      this.mediaUploader.click()
     }
   }
 
   handleFiles = evt => {
-    const { onUpdateCoverImg, onUpdateProfilePic } = this.props
     const { imageType } = this.state
+    const { onUpdate } = this.props
 
     if (evt.target.files.length > 0) {
-      let formData = new FormData()
-      formData.append(imageType, evt.target.files[0])
+      const img = evt.target.files[0]
 
-      // if (imageType === 'cover_img') {
-      //   onUpdateCoverImg(formData)
-      // } else if (imageType === 'profile_pic') {
-      //   onUpdateProfilePic(formData)
-      // }
+      this.setState({
+        imageUpload: {
+          uploading: true,
+          error: null,
+        },
+      })
+
+      let formData = new FormData()
+      formData.append('file', img)
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+
+      axios.post(CLOUDINARY_UPLOAD_URL, formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      }).then(res => {
+        const { data: { url } } = res
+        this.setState({
+          imageUpload: {
+            uploading: false,
+            error: null,
+          },
+        })
+
+        onUpdate({ [imageType]: url })
+      }).catch(err => {
+        this.setState({
+          imageUpload: {
+            uploading: false,
+            error: err.toString(),
+          },
+        })
+      })
     }
   }
 
   render() {
-    const { authenticated, user, onClick } = this.props
-    const { initialized } = this.state
-    const fullname = (authenticated) ? `${user.fullname}` : 'Sign in'
-    const coverImg = (authenticated && user.cover_img) ? user.cover_img : `https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/wide/${this.coverImgRand}.jpg`
-    const profileImg = (authenticated && user.profile_pic) ? user.profile_pic : `https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/profile/bag/${this.profilePicRand}.jpg`
+    const { authenticated, user, onClick, coverImg, profilePic, info: { status, error } } = this.props
+    const { imageUpload, imageType } = this.state
+    const coverImgSpinner = imageType === 'cover_img' && (imageUpload.uploading || status === UPDATE_USER_REQUEST)
+    const profilePicSpinner = imageType === 'profile_pic' && (imageUpload.uploading || status === UPDATE_USER_REQUEST)
 
     return (
-      <div className="profile" style={{ display: initialized ? 'block' : 'none' }} onClick={evt => this.handleProfileClick(evt, 'cover_img')}>
+      <div className="profile">
+        <div className="profile__handler" onClick={this.handleCoverImg} />
+        <LoadingSpinner show={coverImgSpinner}>
+          <QuarterSpinner width={30} height={30} />
+        </LoadingSpinner>
         <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
-        <img src={coverImg} role="presentation" />
-        <div className="profile__pic" onClick={evt => this.handleProfileClick(evt, 'profile_pic')}>
-          <img src={profileImg} role="presentation" />
+        <img src={authenticated && user.cover_img ? user.cover_img : coverImg} role="presentation" />
+        <div className="profile__pic" onClick={this.handleProfilePic}>
+          <LoadingSpinner show={profilePicSpinner}>
+            <QuarterSpinner width={30} height={30} />
+          </LoadingSpinner>
+          <img src={authenticated && user.profile_pic ? user.profile_pic : profilePic} role="presentation" />
         </div>
         { authenticated && <UserButton className="profile__userButton" onClick={onClick} /> }
-        { !authenticated ? <h2 onClick={onClick}>{fullname}</h2> : <h2>{fullname}</h2> }
+        { authenticated ? <h2>{user.fullname}</h2> : <h2 onClick={onClick}>Sign in</h2> }
       </div>
     )
   }

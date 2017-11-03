@@ -110,6 +110,7 @@
         "always-multiline"
       ],
       "semi": 0,
+      "camelcase": 0,
       "consistent-return": 0,
       "no-else-return": 0,
       "import/imports-first": 0,
@@ -225,6 +226,7 @@
     "testRegex": "tests/.*\\.test\\.js$"
   },
   "dependencies": {
+    "axios": "^0.17.0",
     "babel-polyfill": "6.20.0",
     "body-parser": "^1.17.2",
     "bootstrap": "^4.0.0-alpha.6",

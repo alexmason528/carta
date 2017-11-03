@@ -8,7 +8,7 @@ import { Container, Row, Col } from 'reactstrap'
 import { VERIFY_FAIL } from 'containers/App/constants'
 import { CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
 import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
-import { logOut, verifyRequest, updateCoverImgRequest, updateProfilePicRequest } from 'containers/App/actions'
+import { logOut, verifyRequest, updateUserRequest } from 'containers/App/actions'
 import Logo from 'components/Logo'
 import Menu from 'components/Menu'
 import { CreatePostButton } from 'components/Buttons'
@@ -21,8 +21,7 @@ class HomePage extends Component {
   static propTypes = {
     listPostRequest: PropTypes.func,
     listSuggestionRequest: PropTypes.func,
-    updateProfilePicRequest: PropTypes.func,
-    updateCoverImgRequest: PropTypes.func,
+    updateUserRequest: PropTypes.func,
     verifyRequest: PropTypes.func,
     logOut: PropTypes.func,
     user: PropTypes.object,
@@ -47,6 +46,13 @@ class HomePage extends Component {
   }
 
   componentWillMount() {
+    let rand = Math.floor((Math.random() * 76)) + 1
+    const coverImgRand = (rand < 10) ? `000${rand}` : `00${rand}`;
+    const profilePicRand = Math.floor((Math.random() * 9))
+
+    this.coverImg = `https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/wide/${coverImgRand}.jpg`
+    this.profilePic = `https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/profile/bag/${profilePicRand}.jpg`
+
     const { listPostRequest, listSuggestionRequest, verifyRequest, params: { vcode } } = this.props
 
     if (vcode) {
@@ -99,10 +105,11 @@ class HomePage extends Component {
     })
   }
 
-  handleProfileClick = () => {
+  handleProfileClick = evt => {
     const { authenticated } = this.props
 
     if (!authenticated) {
+      evt.stopPropagation()
       this.setState({
         showAuthWrapper: !this.state.showAuthWrapper,
       })
@@ -116,12 +123,6 @@ class HomePage extends Component {
   toggleCreatePostForm = () => {
     this.setState({
       showCreatePostForm: !this.state.showCreatePostForm,
-    })
-  }
-
-  toggleAuthWrapper = () => {
-    this.setState({
-      showAuthWrapper: !this.state.showAuthWrapper,
     })
   }
 
@@ -139,7 +140,8 @@ class HomePage extends Component {
 
   render() {
     const { showAuthWrapper, showCreatePostForm, showAccountMenu, showMenu, timer, editingPost } = this.state
-    const { posts, suggestions, authenticated, user, logOut, updateCoverImgRequest, updateProfilePicRequest, info: { status, error } } = this.props
+    const { posts, suggestions, authenticated, user, logOut, updateUserRequest, info } = this.props
+    const { status, error } = info
 
     let createPostButtonType = 'text'
 
@@ -160,12 +162,14 @@ class HomePage extends Component {
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col">
             <Profile
               onClick={this.handleProfileClick}
-              onUpdateCoverImg={updateCoverImgRequest}
-              onUpdateProfilePic={updateProfilePicRequest}
+              onUpdate={updateUserRequest}
               authenticated={authenticated}
               user={user}
+              info={info}
+              coverImg={this.coverImg}
+              profilePic={this.profilePic}
             />
-            { authenticated ? <AccountMenu show={showAccountMenu} /> : <AuthWrapper show={showAuthWrapper} /> }
+            { authenticated ? <AccountMenu show={showAccountMenu} /> : <AuthWrapper show={showAuthWrapper} coverImg={this.coverImg} profilePic={this.profilePic} /> }
             <Quest authenticated={authenticated} />
           </Col>
 
@@ -239,8 +243,7 @@ const selectors = createStructuredSelector({
 const actions = {
   listPostRequest,
   listSuggestionRequest,
-  updateCoverImgRequest,
-  updateProfilePicRequest,
+  updateUserRequest,
   verifyRequest,
   logOut,
 }

@@ -59,7 +59,7 @@ class Menu extends Component {
         <ul>
           <li><button onClick={() => browserHistory.push('/')}>Quest</button></li>
           <li><button>About</button></li>
-          {authenticated && <li><button onClick={logOut}>Log out</button></li>}
+          {authenticated && <li><button onClick={logOut}>Sign out</button></li>}
         </ul>
         <div className="cartaMenu__tab" onClick={this.handleToggleMenu}>
           <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506785283/image/content/name-vertical.png" role="presentation" />

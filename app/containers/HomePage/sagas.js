@@ -4,7 +4,7 @@ import { LOCATION_CHANGE } from 'react-router-redux'
 import request from 'utils/request'
 import { setItem, getItem, removeItem } from 'utils/localStorage'
 
-import { API_BASE_URL, LOGIN_REQUEST, REGISTER_REQUEST, DELETE_USER_REQUEST, VERIFY_REQUEST, UPDATE_PROFILE_PIC_REQUEST, UPDATE_COVER_IMG_REQUEST } from 'containers/App/constants'
+import { API_BASE_URL, LOGIN_REQUEST, REGISTER_REQUEST, DELETE_USER_REQUEST, VERIFY_REQUEST, UPDATE_USER_REQUEST } from 'containers/App/constants'
 import {
   loginSuccess,
   loginFail,
@@ -14,10 +14,8 @@ import {
   deleteUserFail,
   verifySuccess,
   verifyFail,
-  updateProfilePicSuccess,
-  updateProfilePicFail,
-  updateCoverImgSuccess,
-  updateCoverImgFail,
+  updateUserSuccess,
+  updateUserFail,
 } from 'containers/App/actions'
 
 import { selectUser } from 'containers/App/selectors'
@@ -65,7 +63,10 @@ export function* registerRequest({ payload }) {
 
   const params = {
     method: 'POST',
-    body: payload,
+    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   }
 
   try {
@@ -129,7 +130,10 @@ export function* createPostRequest({ payload }) {
 
   const params = {
     method: 'POST',
-    body: payload,
+    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   }
 
   try {
@@ -174,7 +178,10 @@ export function* updatePostRequest({ id, payload }) {
 
   const params = {
     method: 'PUT',
-    body: payload,
+    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   }
 
   try {
@@ -220,35 +227,24 @@ export function* listSuggestionRequest() {
   }
 }
 
-export function* updateProfilePicRequest(payload) {
+export function* updateUserRequest({ payload }) {
   const user = yield select(selectUser())
   const requestURL = `${API_BASE_URL}api/v1/auth/${user._id}`
 
   const params = {
     method: 'PATCH',
+    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   }
 
   try {
     const res = yield call(request, requestURL, params)
-    yield put(updateProfilePicSuccess(res))
+    yield call(setItem, 'auth', JSON.stringify(res))
+    yield put(updateUserSuccess(res))
   } catch (err) {
-    yield put(updateProfilePicFail(err.details))
-  }
-}
-
-export function* updateCoverImgRequest(payload) {
-  const user = yield select(selectUser())
-  const requestURL = `${API_BASE_URL}api/v1/auth/${user._id}`
-
-  const params = {
-    method: 'PATCH',
-  }
-
-  try {
-    const res = yield call(request, requestURL, params)
-    yield put(updateCoverImgSuccess(res))
-  } catch (err) {
-    yield put(updateCoverImgFail(err.details))
+    yield put(updateUserFail(err.details))
   }
 }
 
@@ -300,14 +296,8 @@ export function* listSuggestionWatcher() {
   yield cancel(watcher)
 }
 
-export function* updateProfilePicWatcher() {
-  const watcher = yield takeLatest(UPDATE_PROFILE_PIC_REQUEST, updateProfilePicRequest)
-  yield take(LOCATION_CHANGE)
-  yield cancel(watcher)
-}
-
-export function* updateCoverImgWatcher() {
-  const watcher = yield takeLatest(UPDATE_COVER_IMG_REQUEST, updateCoverImgRequest)
+export function* updateUserWatcher() {
+  const watcher = yield takeLatest(UPDATE_USER_REQUEST, updateUserRequest)
   yield take(LOCATION_CHANGE)
   yield cancel(watcher)
 }
@@ -322,6 +312,5 @@ export default [
   updatePostWatcher,
   deletePostWatcher,
   listSuggestionWatcher,
-  updateProfilePicWatcher,
-  updateCoverImgWatcher,
+  updateUserWatcher,
 ]

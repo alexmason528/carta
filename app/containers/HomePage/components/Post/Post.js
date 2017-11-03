@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import FileImage from 'react-file-image'
 import className from 'classnames'
+import axios from 'axios'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { Popover, PopoverBody } from 'reactstrap'
@@ -9,6 +10,7 @@ import ContentEditable from 'components/ContentEditable'
 import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { getTextFromDate } from 'utils/dateHelper'
+import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET } from 'containers/App/constants'
 import { updatePostRequest, deletePostRequest } from 'containers/HomePage/actions'
 import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/constants'
 import { selectHomeInfo } from 'containers/HomePage/selectors'
@@ -34,8 +36,11 @@ class Post extends Component {
       showInfo: false,
       editable: false,
       editing: false,
-      first: false,
       link: '',
+      imageUpload: {
+        uploading: false,
+        error: null,
+      },
     }
   }
 
@@ -197,22 +202,53 @@ class Post extends Component {
     let data = {
       title,
       link,
+      content: content !== null ? content : '',
       id: _id,
-    }
-
-    data.img = (img !== null) ? img : ''
-    data.content = (content !== null) ? content : ''
-
-    let formData = new FormData()
-
-    for (let key in data) {
-      formData.append(key, data[key])
     }
 
     const { onPostEdit } = this.props
     onPostEdit(false)
     this.handleResize()
-    updatePostRequest(_id, formData)
+
+    if (img instanceof File) {
+      this.setState({
+        imageUpload: {
+          uploading: true,
+          error: null,
+        },
+      })
+
+      let formData = new FormData()
+      formData.append('file', img)
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+
+      axios.post(CLOUDINARY_UPLOAD_URL, formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      }).then(res => {
+        const { data: { url } } = res
+        this.setState({
+          imageUpload: {
+            uploading: false,
+            error: null,
+          },
+        })
+
+        data.img = url
+        updatePostRequest(_id, data)
+      }).catch(err => {
+        this.setState({
+          imageUpload: {
+            uploading: false,
+            error: err.toString(),
+          },
+        })
+      })
+    } else {
+      data.img = img !== null ? img : ''
+      updatePostRequest(_id, data)
+    }
   }
 
   handlePostInfoToggle = evt => {
@@ -249,9 +285,13 @@ class Post extends Component {
   }
 
   handleOpenLink = () => {
-    const { link, editing } = this.state
-    if (link && !editing) {
-      window.open(link, '_blank')
+    const { link, editing, img } = this.state
+    if (!editing) {
+      if (!link) {
+        window.location.href = img
+      } else {
+        window.location.href = (link.indexOf('http:') !== -1 || link.indexOf('https:') !== -1) ? link : `http://${link}`
+      }
     }
   }
 
@@ -264,13 +304,13 @@ class Post extends Component {
       content,
       created_at,
       username,
-      editable,
       showDeleteConfirm,
       showLinkBar,
       showInfo,
+      editable,
       editing,
-      first,
       link,
+      imageUpload,
     } = this.state
 
     let postType
@@ -281,11 +321,12 @@ class Post extends Component {
       postType = 'imagePost'
     } else if (!img && content !== null) {
       postType = 'textPost'
+    } else if (title !== null) {
+      postType = 'textPost'
     }
 
     const postClass = className({
       post: true,
-      firstPost: first && first === true,
       [postType]: true,
     })
 
@@ -299,15 +340,20 @@ class Post extends Component {
       'postInfo--hidden': !showInfo,
     })
 
+    const postInfoBtnClass = className({
+      postInfoBtn: true,
+      active: showInfo,
+    })
+
     const canRemove = content && img
     const showPostRemoveImage = editing && canRemove && !showLinkBar
     const showPostRemoveContent = editable && editing && canRemove
     const showPostLinkButton = editing && !showLinkBar
     const showFileImage = img && (img instanceof File)
-    const spinnerShow = (status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST) && (curPost === _id)
+    const spinnerShow = ((status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST) && (curPost === _id)) || imageUpload.uploading
 
     return (
-      <div style={{ position: 'relative' }}>
+      <div className="postContainer">
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
@@ -341,7 +387,7 @@ class Post extends Component {
         { postType === 'imagePost' &&
           <div className={postClass} onClick={this.handlePostClick}>
             <div className="postImage" onClick={this.handleOpenLink}>
-              { editable && !editing && <EditButton className="postEditBtn" image="edit-white" onClick={this.handleStartEdit} /> }
+              { editable && !editing && <EditButton className="postEditBtn" image="edit-white-shadow" onClick={this.handleStartEdit} /> }
               { showFileImage ? <FileImage file={img} /> : <img src={img} role="presentation" /> }
               { showPostRemoveImage && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostRemoveImage} /> }
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
@@ -357,7 +403,7 @@ class Post extends Component {
             <div className={postInfoClass}>
               {username} - Carta | {getTextFromDate(created_at)}
             </div>
-            <InfoButton className="postInfoBtn" onClick={this.handlePostInfoToggle} />
+            <InfoButton className={postInfoBtnClass} onClick={this.handlePostInfoToggle} />
           </div>
         }
 
@@ -382,7 +428,7 @@ class Post extends Component {
             <div className="left">
               <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
               {(postType === 'textPost' || postType === 'normalPost') &&
-                <span style={{ marginRight: '8px' }}>{ content === true ? 1000 : (1000 - content.length) }</span>
+                <span style={{ marginRight: '8px' }}>{ content === true ? 1000 : (1000 - (content ? content.length : 0)) }</span>
               }
               {(postType !== 'imagePost' && postType !== 'normalPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddMedia}>
                 + MEDIA
@@ -393,13 +439,9 @@ class Post extends Component {
             </div>
             { postType &&
               <div className="right">
-                <button type="button" className="postCancelBtn" onClick={this.handleCancel}>
-                  CANCEL
-                </button>
+                <button type="button" className="postCancelBtn" onClick={this.handleCancel}>CANCEL</button>
                 <DeleteButton className="postDeleteBtn" onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
-                <button type="button" className="postBorderBtn" onClick={this.handleSubmit}>
-                  SUBMIT
-                </button>
+                <button type="button" className="postBorderBtn" onClick={this.handleSubmit}>SUBMIT</button>
               </div>
             }
             <button type="button" className={closeButtonClass} onClick={onClose}>

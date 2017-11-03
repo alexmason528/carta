@@ -88,7 +88,7 @@ class AccountMenu extends Component {
     return (
       <div className={menuClass} onClick={evt => evt.stopPropagation()}>
         <div className="accountMenu__items">
-          <button type="button" onClick={logOut}>Log out</button> | <button type="button" onClick={this.handleSettingClick}>Settings</button>
+          <button type="button" onClick={logOut}>Sign out</button> | <button type="button" onClick={this.handleSettingClick}>Settings</button>
         </div>
         <div className={contentClass}>
           <RemoveButton className="accountMenu__deleteButton" image="delete" onClick={this.handleDeleteAccountClick} caption="Delete Account" />

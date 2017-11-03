@@ -1,36 +1,18 @@
 const express = require('express')
 const router = new express.Router()
-const crypto = require('crypto')
-const path = require('path')
-
 const PostController = require('../controllers/post.controller')
 
+// List Post
+router.get('/', PostController.listPost)
+
+// Create Post
+router.post('/', PostController.createPost)
 
 // Update Post
+router.put('/:postID', PostController.updatePost)
 
-const multer = require('multer')
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'server/public/uploads/post')
-  },
-  filename: (req, file, cb) => {
-    crypto.pseudoRandomBytes(16, (err, raw) => {
-      if (!err) {
-        cb(null, raw.toString('hex') + path.extname(file.originalname))
-      }
-      return err
-    })
-  },
-})
-const upload = multer({ storage: storage })
-
-router.put('/:postID', upload.any(), PostController.updatePost)
-
+// Delete Post
 router.delete('/:postID', PostController.deletePost)
-
-router.post('/', upload.any(), PostController.createPost)
-
-router.get('/', PostController.listPost)
 
 // export default router
 module.exports = router

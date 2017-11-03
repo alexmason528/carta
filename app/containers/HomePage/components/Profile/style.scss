@@ -3,7 +3,7 @@
   margin-bottom: 8px;
 
   h2 {
-    padding: 20px 30px;
+    padding: 20px 34px;
     text-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
     color: #fff;
     text-transform: uppercase;
@@ -34,6 +34,14 @@
     -webkit-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
   }
 
+  &__handler {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+  }
+
   &__pic {
     position: absolute;
     width: 28%;
@@ -45,7 +53,7 @@
     bottom: 0;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
     border: 8px solid #fff;
-    z-index: 30;
+    z-index: 80;
     transform: translate(0, calc(50% + 4px));
 
     img {
@@ -53,6 +61,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      z-index: 60;
     }
   }
 
@@ -61,6 +70,7 @@
     bottom: 6px;
     right: 6px;
     z-index: 20;
+    opacity: 1;
 
     img {
       width: 30px;

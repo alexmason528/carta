@@ -58,14 +58,7 @@ const updatePost = (req, res) => {
     content,
     title,
     link,
-  }
-
-  if (files.length > 0) {
-    file = files[0]
-    data[file.fieldname] = (process.env.NODE_ENV === 'development') ?
-    `http://localhost:3000/public/uploads/post/${file.filename}` : `https://cartamap.herokuapp.com/public/uploads/post/${file.filename}`
-  } else {
-    data.img = img
+    img,
   }
 
   Post.findOneAndUpdate({ _id: postID }, { $set: data }, { new: true }, (err, element) => {
@@ -111,22 +104,15 @@ const deletePost = (req, res) => {
  */
 
 const createPost = (req, res) => {
-  const { title, content, link, author } = req.body
+  const { title, content, link, author, img } = req.body
   const { files } = req
 
   let data = {
     title,
     content,
     link,
+    img,
     author: mongoose.Types.ObjectId(author),
-  }
-
-  if (files.length > 0) {
-    file = files[0]
-    data.img = (process.env.NODE_ENV === 'development') ?
-    `http://localhost:3000/public/uploads/post/${file.filename}` : `https://cartamap.herokuapp.com/public/uploads/post/${file.filename}`
-  } else {
-    data.img = ''
   }
 
   Post.create(data, (err, element) => {

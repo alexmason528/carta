@@ -19,13 +19,9 @@ import {
   DELETE_USER_SUCCESS,
   DELETE_USER_FAIL,
 
-  UPDATE_COVER_IMG_REQUEST,
-  UPDATE_COVER_IMG_SUCCESS,
-  UPDATE_COVER_IMG_FAIL,
-
-  UPDATE_PROFILE_PIC_REQUEST,
-  UPDATE_PROFILE_PIC_SUCCESS,
-  UPDATE_PROFILE_PIC_FAIL,
+  UPDATE_USER_REQUEST,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_FAIL,
 } from './constants'
 
 const initialState = {
@@ -145,40 +141,20 @@ function appReducer(state = initialState, { type, payload }) {
         error: payload,
       }
 
-    case UPDATE_PROFILE_PIC_REQUEST:
+    case UPDATE_USER_REQUEST:
       return {
         ...state,
         status: type,
       }
 
-    case UPDATE_PROFILE_PIC_SUCCESS:
-      return {
-        ...state,
-        status: type,
-        user: payload,
-      }
-
-    case UPDATE_PROFILE_PIC_FAIL:
-      return {
-        ...state,
-        state: type,
-        error: payload,
-      }
-
-    case UPDATE_COVER_IMG_REQUEST:
-      return {
-        ...state,
-        status: type,
-      }
-
-    case UPDATE_COVER_IMG_SUCCESS:
+    case UPDATE_USER_SUCCESS:
       return {
         ...state,
         status: type,
         user: payload,
       }
 
-    case UPDATE_COVER_IMG_FAIL:
+    case UPDATE_USER_FAIL:
       return {
         ...state,
         state: type,

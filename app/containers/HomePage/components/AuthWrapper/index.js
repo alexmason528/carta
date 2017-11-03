@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import Loader from 'react-loader-advanced'
+import axios from 'axios'
 import className from 'classnames'
-import { LOGIN_REQUEST, REGISTER_REQUEST, LOGIN_FAIL } from 'containers/App/constants'
+import { LOGIN_REQUEST, REGISTER_REQUEST, LOGIN_FAIL, CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET } from 'containers/App/constants'
 import { loginRequest, registerRequest } from 'containers/App/actions'
 import { selectInfo } from 'containers/App/selectors'
 import LoadingSpinner from 'components/LoadingSpinner'
@@ -16,6 +16,8 @@ class AuthWrapper extends Component {
   static propTypes = {
     loginRequest: PropTypes.func,
     registerRequest: PropTypes.func,
+    coverImg: PropTypes.string,
+    profilePic: PropTypes.string,
     info: PropTypes.object,
     show: PropTypes.bool,
   }
@@ -29,6 +31,10 @@ class AuthWrapper extends Component {
       password: '',
       loginError: null,
       registerError: null,
+      imageUpload: {
+        uploading: false,
+        error: null,
+      },
     }
   }
 
@@ -68,26 +74,103 @@ class AuthWrapper extends Component {
   }
 
   handleRegister = values => {
-    const { registerRequest } = this.props
+    const { registerRequest, coverImg, profilePic } = this.props
+    const { email, password, confirmPassword, fullname, profile_pic, cover_img } = values
 
-    let formData = new FormData()
-
-    for (let key in values) {
-      if (key === 'profile_pic' || key === 'cover_img') {
-        formData.append(key, values[key][0])
-      } else {
-        formData.append(key, values[key])
-      }
+    let data = {
+      email,
+      password,
+      confirmPassword,
+      fullname,
+      profile_pic: profile_pic ? '' : profilePic,
+      cover_img: cover_img ? '' : coverImg,
     }
 
-    registerRequest(formData)
+    if (!profile_pic && !cover_img) {
+      registerRequest(data)
+    } else {
+      this.setState({
+        imageUpload: {
+          uploading: true,
+          error: false,
+        },
+      })
+
+      let cnt = 0
+      if (profile_pic) cnt += 1
+      if (cover_img) cnt += 1
+
+      if (profile_pic) {
+        let formData = new FormData()
+        formData.append('file', profile_pic[0])
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+        axios.post(CLOUDINARY_UPLOAD_URL, formData, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        }).then(res => {
+          const { data: { url } } = res
+          cnt -= 1
+          data.profile_pic = url
+
+          if (cnt === 0) {
+            registerRequest(data)
+            this.setState({
+              imageUpload: {
+                uploading: false,
+                error: null,
+              },
+            })
+          }
+        }).catch(err => {
+          this.setState({
+            imageUpload: {
+              uploading: false,
+              error: err.toString(),
+            },
+          })
+        })
+      }
+
+      if (cover_img) {
+        let formData = new FormData()
+        formData.append('file', cover_img[0])
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+        axios.post(CLOUDINARY_UPLOAD_URL, formData, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        }).then(res => {
+          const { data: { url } } = res
+          cnt -= 1
+          data.cover_img = url
+
+          if (cnt === 0) {
+            registerRequest(data)
+            this.setState({
+              imageUpload: {
+                uploading: false,
+                error: null,
+              },
+            })
+          }
+        }).catch(err => {
+          this.setState({
+            imageUpload: {
+              uploading: false,
+              error: err.toString(),
+            },
+          })
+        })
+      }
+    }
   }
 
   render() {
-    const { authType, loginError, registerError, email, password } = this.state
+    const { authType, loginError, registerError, email, password, imageUpload } = this.state
     const { info: { status }, show, loginRequest } = this.props
 
-    const spinnerShow = status === LOGIN_REQUEST || status === REGISTER_REQUEST
+    const spinnerShow = status === LOGIN_REQUEST || status === REGISTER_REQUEST || imageUpload.uploading
 
     const authWrapperClass = className({
       authWrapper: true,

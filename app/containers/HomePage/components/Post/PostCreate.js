@@ -2,9 +2,11 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import FileImage from 'react-file-image'
 import className from 'classnames'
+import axios from 'axios'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { Popover, PopoverBody } from 'reactstrap'
+import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET } from 'containers/App/constants'
 import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
 import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
@@ -33,6 +35,10 @@ class PostCreate extends Component {
       showDeleteConfirm: false,
       showLinkBar: false,
       showInfo: false,
+      imageUpload: {
+        uploading: false,
+        error: null,
+      },
     }
   }
 
@@ -99,6 +105,7 @@ class PostCreate extends Component {
   }
 
   handleCancel = () => {
+    const { onClose } = this.props
     this.setState({
       img: null,
       title: null,
@@ -106,6 +113,7 @@ class PostCreate extends Component {
       link: null,
     }, () => {
       this.handleResize()
+      onClose()
     })
   }
 
@@ -164,19 +172,49 @@ class PostCreate extends Component {
     let data = {
       link,
       author: user._id,
+      content: content !== null ? content : '',
+      title: title !== null ? title : '',
+      img: '',
     }
 
-    data.img = (img !== null) ? img : ''
-    data.content = (content !== null) ? content : ''
-    data.title = (title !== null) ? title : ''
+    this.setState({
+      imageUpload: {
+        uploading: true,
+        error: null,
+      },
+    })
 
-    let formData = new FormData()
+    if (img) {
+      let formData = new FormData()
+      formData.append('file', img)
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
 
-    for (let key in data) {
-      formData.append(key, data[key])
+      axios.post(CLOUDINARY_UPLOAD_URL, formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      }).then(res => {
+        const { data: { url } } = res
+        this.setState({
+          imageUpload: {
+            uploading: false,
+            error: null,
+          },
+        })
+
+        data.img = url
+        createPostRequest(data)
+      }).catch(err => {
+        this.setState({
+          imageUpload: {
+            uploading: false,
+            error: err.toString(),
+          },
+        })
+      })
+    } else {
+      createPostRequest(data)
     }
-
-    createPostRequest(formData)
   }
 
   handlePostInfoToggle = evt => {
@@ -222,6 +260,7 @@ class PostCreate extends Component {
       showDeleteConfirm,
       showLinkBar,
       showInfo,
+      imageUpload,
     } = this.state
 
     let postType
@@ -233,6 +272,11 @@ class PostCreate extends Component {
     } else if (!img && content !== null) {
       postType = 'textPost'
     }
+
+    const showPostLinkButton = !showLinkBar
+    const showFileImage = img instanceof File
+    const spinnerShow = status === CREATE_POST_REQUEST || imageUpload.uploading
+    const submittable = title || content
 
     const postClass = className({
       post: true,
@@ -249,15 +293,18 @@ class PostCreate extends Component {
       'postInfo--hidden': !showInfo,
     })
 
-    const canRemove = content && img
-    const showPostRemoveImage = canRemove && !showLinkBar
-    const showPostRemoveContent = canRemove
-    const showPostLinkButton = !showLinkBar
-    const showFileImage = img instanceof File
-    const spinnerShow = status === CREATE_POST_REQUEST
+    const submitBtnClass = className({
+      postBorderBtn: true,
+      disabled: !submittable,
+    })
+
+    const postInfoBtnClass = className({
+      postInfoBtn: true,
+      active: showInfo,
+    })
 
     return (
-      <div style={{ position: 'relative' }}>
+      <div className="postContainer">
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
@@ -302,7 +349,7 @@ class PostCreate extends Component {
             <div className={postInfoClass}>
               {fullname} - Carta | NOW
             </div>
-            <InfoButton className="postInfoBtn" onClick={this.handlePostInfoToggle} />
+            <InfoButton className={postInfoBtnClass} onClick={this.handlePostInfoToggle} />
           </div>
         }
 
@@ -331,7 +378,7 @@ class PostCreate extends Component {
                 CANCEL
               </button>
               <DeleteButton className="postDeleteBtn" onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
-              <button type="button" className="postBorderBtn" onClick={this.handleSubmit}>
+              <button type="button" className={submitBtnClass} disabled={!submittable} onClick={this.handleSubmit}>
                 SUBMIT
               </button>
             </div>

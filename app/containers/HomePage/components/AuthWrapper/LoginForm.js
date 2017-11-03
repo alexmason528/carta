@@ -19,12 +19,8 @@ const LoginForm = ({ handleSubmit, loginError, onAuthTypeChange }) => (
       label="Password"
     />
     <div className="authWrapper__buttons">
-      <button className="active">
-        Sign in
-      </button>
-      <button type="button" onClick={() => { onAuthTypeChange('register') }}>
-        Register
-      </button>
+      <button className="active">Sign in</button>
+      <button className="inactive" type="button" onClick={() => { onAuthTypeChange('register') }}>Register</button>
     </div>
     {loginError && <div className="error">{loginError}</div>}
   </form>

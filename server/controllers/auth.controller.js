@@ -50,7 +50,7 @@ const login = (req, res) => {
  * @returns userInfo
  */
 const register = (req, res) => {
-  const { fullname, email, role, password, confirmPassword } = req.body
+  const { fullname, email, role, profile_pic, cover_img, password, confirmPassword } = req.body
 
   if (password !== confirmPassword) {
     return res.status(400).send({
@@ -65,15 +65,11 @@ const register = (req, res) => {
     email,
     password,
     role,
-    profile_pic: '',
-    cover_img: '',
+    profile_pic,
+    cover_img,
     verified: false,
   }
 
-  for (let file of req.files) {
-    data[file.fieldname] = (process.env.NODE_ENV === 'development') ?
-    `http://localhost:3000/public/uploads/user/${file.filename}` : `https://cartamap.herokuapp.com/public/uploads/user/${file.filename}`
-  }
 
   User.create(data, (err, element) => {
     if (err) {
@@ -104,6 +100,38 @@ const register = (req, res) => {
         return res.send(data)
       })
     }
+  })
+}
+
+/**
+ * update
+ * @param req
+ * @param res
+ * @returns success or fail
+ */
+
+const updateUser = (req, res) => {
+  const { userID } = req.params
+
+  User.findOneAndUpdate({ _id: userID }, { $set: req.body }, { new: true }, (err, element) => {
+    if (element && element.fullname) {
+      let response = {
+        _id: element._id,
+        fullname: element.fullname,
+        email: element.email,
+        role: element.role,
+        profile_pic: element.profile_pic,
+        cover_img: element.cover_img,
+        verified: element.verified,
+      }
+      return res.json(response)
+    }
+
+    return res.status(400).send({
+      error: {
+        details: 'Failed to update',
+      },
+    })
   })
 }
 
@@ -187,4 +215,5 @@ const deleteUser = (req, res) => {
 module.exports.login = login
 module.exports.register = register
 module.exports.verify = verify
+module.exports.updateUser = updateUser
 module.exports.deleteUser = deleteUser

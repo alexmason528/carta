@@ -1,6 +1,6 @@
 .authWrapper {
-  margin: 50px 30px 20px 50px;
-  padding: 100px 30px 20px 70px;
+  margin: 8px 0;
+  padding: 12% 30px 20px 50px;
   position: relative;
   max-height: 1000px;
   opacity: 1;
@@ -8,15 +8,9 @@
   z-index: 10;
 
   button {
-    text-transform: uppercase;
     font-size: 13px;
     background: #f7f7f7;
-    color: #666;
-    opacity: 0.8;
-
-    &:hover {
-      opacity: 1;
-    }
+    font-weight: 300;
   }
 
   &--hidden {
@@ -54,8 +48,6 @@
     button {
       width: calc(50% - 5px);
       border: 0.5px solid #ddd;
-      background: #eee;
-      color: #888;
       padding: 8px 0 8px 8px;
       cursor: pointer;
       display: flex;
@@ -75,6 +67,7 @@
     justify-content: space-between;
     margin-top: 10px;
     margin-bottom: 10px;
+    font-size: 13px;
 
     & > div {
       width: calc(50% - 4px);
@@ -84,34 +77,40 @@
   &__uploadButton {
     position: relative;
     overflow: hidden;
-    background: #eee;
-    color: #888;
     cursor: pointer;
     padding: 8px;
     border: 0.5px solid #ddd;
     text-transform: uppercase;
+    background: #f7f7f7;
 
     img {
-      width: 20px;
-      height: 20px;
+      width: 13px;
+      height: 13px;
       position: absolute;
       right: 5px;
       top: calc(50% - 10px);
+      margin: 3px 5px;
     }
   }
 
   &__buttons {
     margin-top: 20px;
+    display: flex;
+    align-items: center;
     
     button {
-      color: #444;
       padding: 8px;
       cursor: pointer;
       margin-right: 10px;
+      border: 0.5px solid #ddd;
 
       &.active {
-        border: 0.5px solid #ddd;
-        background: #eee;  
+        font-weight: 600;
+      }
+
+      &.inactive {
+        border: none;
+        background: #eee;
       }
     }
   }

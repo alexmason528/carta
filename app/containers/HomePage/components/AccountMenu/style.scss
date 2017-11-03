@@ -19,11 +19,6 @@
   &__items {
     margin-left: 30%;
     padding: 0 35px;
-
-    button {
-      text-transform: uppercase;
-      opacity: 0.75;
-    }
   }
 
   &__content {
@@ -86,7 +81,6 @@
       margin-left: 10px;
       color: #888;
       padding: 5px 8px;
-      text-transform: uppercase;
       font-size: 13px;
 
       &.active {

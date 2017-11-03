@@ -41,8 +41,6 @@
 
     .btnText {
       text-transform: uppercase;
-      font-weight: 700;
-      font-size: 15px;
     }
 
     &--afterImage {
@@ -58,18 +56,24 @@
 
       .btnText {
         color: #fff;
+        font-weight: 700;
+        font-size: 15px;
         text-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
       }
     }
 
     &--afterText {
-      background: #fff;
+      background: #f7f7f7;
       padding: 4px 8px;
       border: 0.5px solid #ddd;
       margin: 8px 0 8px 20px;
 
       .btnText {
-        color: #000;
+        color: rgba(0, 0, 0, 0.8);
+      }
+
+      &:hover .btnText {
+        color: rgba(0, 0, 0, 1);
       }
     }
   }

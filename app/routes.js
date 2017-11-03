@@ -23,7 +23,7 @@ export default function createRoutes(store) {
 
   return [
     {
-      path: '/(i/:brochure)(p/:viewport/:types/:descriptives)',
+      path: '/quest(/i/:brochure)(p/:viewport/:types/:descriptives)',
       name: 'questPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
@@ -44,7 +44,7 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading)
       },
     }, {
-      path: '/home(/verify/:vcode)',
+      path: '/(verify/:vcode)',
       name: 'homePage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
