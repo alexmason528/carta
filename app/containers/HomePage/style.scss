@@ -69,11 +69,21 @@
       margin: 8px 0 8px 20px;
 
       .btnText {
-        color: rgba(0, 0, 0, 0.8);
+        color: rgba(0, 0, 0, 0.7);
+        font-size: 13px;
       }
 
-      &:hover .btnText {
-        color: rgba(0, 0, 0, 1);
+      .btnImage {
+        opacity: 0.7;
+      }
+
+      &:hover {
+        .btnText {
+          color: rgba(0, 0, 0, 1);
+        }
+        .btnImage {
+          opacity: 1;
+        }
       }
     }
   }
@@ -113,12 +123,46 @@
       background: #fff;
       padding: 15px 25px;
       font-weight: 400;
-
-      button {
-        text-transform: uppercase;
-        color: #0069d9;
-      }
     }
   }
-}
 
+  button {
+    text-transform: uppercase;
+    font-size: 13px;
+    cursor: pointer;
+
+    color: rgba(0, 0, 0, 0.7);
+
+    &:hover {
+      color: rgba(0, 0, 0, 1);
+    }
+  }
+
+  img {
+    cursor: pointer;
+  }
+
+  input, textarea {
+    cursor: text;
+    color: #000;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #aaa;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus
+  input:-webkit-autofill, 
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover
+  textarea:-webkit-autofill:focus,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus {
+    -webkit-background-color: #fff;
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+  }
+}

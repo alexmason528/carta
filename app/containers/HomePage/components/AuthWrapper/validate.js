@@ -9,6 +9,7 @@ const schema = {
     },
   },
   confirmPassword: {
+    presence: true,
     equality: 'password',
   },
   fullname: { presence: true },

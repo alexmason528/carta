@@ -18,16 +18,16 @@
     overflow: hidden;
   }
 
+  &--editing {
+    margin-bottom: 0;
+  }
+
   textarea {
     resize: none;
   }
 }
 
-.imagePost, .normalPost, .textPost {
-  position: relative;
-}
-
-.imagePost {
+.mediaPost {
   overflow: hidden;
 
   .postTitle {
@@ -35,6 +35,7 @@
     top: 50%;
     transform: translate(0, -50%);
     overflow: hidden;
+    cursor: text;
   }
 
   .postTitleEdit {
@@ -42,6 +43,7 @@
     top: 50%;
     transform: translate(0, -50%);
     overflow: hidden;
+    color: #fff;
   }
 
   .postInfo {
@@ -69,7 +71,6 @@
     box-shadow: 0 0 7px rgba(0, 0, 0, 0.4);
     bottom: 10px;
     right: 10px;
-    cursor: pointer;
     z-index: 40;
     opacity: 1;
     transition: all 0.2s;
@@ -91,29 +92,40 @@
 
   .postEditBtn {
     top: 13px;
-    right: 2px;
+    right: 4px;
   }
 }
 
-.normalPost {
+.mixedPost {
   .postTitle, .postTitleEdit {
     bottom: 20px;
     width: calc(100% - 40px);
     overflow: hidden;
+    cursor: text;
+  }
+
+  .postTitleEdit {
+    color: #fff;
   }
 }
 
-.normalPost, .textPost {
+.mixedPost, .textPost {
   .postEditBtn {
+    opacity: 0.7;
+
     img {
-      width: 15px;
-      height: 15px;
+      width: 14px;
+      height: 14px;
+    }
+
+    &:hover {
+      opacity: 1;
     }
   }
 }
 
 .textPost {
-  border-top: 1px solid #ccc;
+  border-top: 0.5px solid #ccc;
 
   .postTitle {
     position: relative;
@@ -154,7 +166,6 @@
 .postImage {
   position: relative;
   width: 100%;
-  cursor: pointer;
 
   &:before {
     content: '';
@@ -178,7 +189,6 @@
 .postBorderBtn {
   z-index: 10;
   font-size: 14px;
-  cursor: pointer;
   background: #f7f7f7;
   padding: 4px 8px;
   border: 0.5px solid #ddd;
@@ -188,6 +198,10 @@
   &.disabled {
     color: #bbb;
     cursor: default;
+
+    &:hover {
+      color: #bbb;
+    }
   }
 }
 
@@ -261,10 +275,15 @@
 
 .postCloseBtn {
   position: absolute;
-  right: 10px;
+  right: 13px;
+  opacity: 0.7;
 
   &--hasContent {
     display: none
+  }
+
+  &:hover {
+    opacity: 1;
   }
 }
 
@@ -273,42 +292,11 @@
   line-height: 0;
   margin: 0 10px;
   position: relative;
-  cursor: pointer;
   z-index: 1000;
+  opacity: 0.7;
 
-  .popOver {
-    background-color: #fff;
-    box-shadow: 0 0 5px rgba(0,0,0,0.9);
-    color: #fff;
-    font-size: 12px;
-    padding: 15px;
-    position: absolute;
-    bottom: -45px;
-    left: -28px;
-    display: none;
-
-    button {
-      color: gray;
-    }
-
-    &:after, &:before {
-      background: #fff;
-      transform: rotate(-45deg);
-      z-index: -1;
-      width: 10px;
-      height: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.9);
-      content: '';
-      display: block;
-      position: absolute;
-      top: -5px;
-      left: calc(50% - 5px);
-    }
-
-    &:before {
-      box-shadow: none;
-      z-index: 1;
-    }
+  &:hover {
+    opacity: 1;
   }
 }
 
@@ -321,7 +309,6 @@
   text-transform: uppercase;      
   font-weight: 900;
   z-index: 50;
-  cursor: pointer;
 
   &:focus {
     outline: none;
@@ -329,7 +316,7 @@
 }
 
 .postContent {
-  padding: 20px;
+  padding: 15px 20px 20px 20px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -346,10 +333,9 @@
 .postEditBtn {
   position: absolute;
   line-height: 0;
-  right: -10px;
+  right: -8px;
   top: 5px;
   z-index: 30;
-  opacity: 1;
 
   img {
     width: 30px;
@@ -362,7 +348,6 @@
   margin-top: 10px;
   width: 100%;
   height: auto;
-  color: #292b2c;
   font-weight: lighter;
   font-size: 14.5px;
 
@@ -373,7 +358,7 @@
 
 .postButtons {
   display: flex;
-  padding: 0 14px 8px;
+  padding: 0 20px 8px;
   justify-content: space-between;
   align-items: center;
   position: relative;
@@ -395,7 +380,7 @@
   }
 
   .right button {
-    margin-left: 5px;
+    margin-left: 2px;
   }
 
   input[type=file] {
@@ -409,34 +394,24 @@
   top: 0;
   z-index: 60;
   color: black;
-  font-weight: 400;
-  font-size: 13px;
-  background: rgba(255, 255, 255, 0.8);
+  font-weight: 300;
+  font-size: 12px;
+  background: #fff;
   display: flex;
   align-items: center;
   width: calc(100% - 22px);
-  margin: 12px 11px;
-  padding: 10px 14px;
+  margin: 10px 11px;
+  padding: 7px 14px;
   border-radius: 2px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 
   img {
-    width: 13px;
-    height: 13px;
-    opacity: 0.7;
+    width: 10px;
+    height: 10px;
   }
 
   input[type=text] {
-    margin-left: 12px;
+    margin-left: 10px;
     width: 100%;
-  }
-}
-
-button {
-  text-transform: uppercase;
-
-  color: rgba(0, 0, 0, 0.8);
-
-  &:hover {
-    color: rgba(0, 0, 0, 1);
   }
 }

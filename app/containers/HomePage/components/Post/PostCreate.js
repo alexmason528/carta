@@ -32,7 +32,6 @@ class PostCreate extends Component {
       content: null,
       title: '',
       link: '',
-      showDeleteConfirm: false,
       showLinkBar: false,
       showInfo: false,
       imageUpload: {
@@ -55,7 +54,6 @@ class PostCreate extends Component {
         content: null,
         title: '',
         link: '',
-        showDeleteConfirm: false,
         showLinkBar: false,
         showInfo: false,
       })
@@ -78,7 +76,7 @@ class PostCreate extends Component {
         $(post).find('.postTitleEdit').css({ fontSize: `${fontSize}px` })
         clearInterval(interval)
       } else {
-        const height = $(post).find('.postImage').height() - ($(post).hasClass('imagePost') ? 90 : 60)
+        const height = $(post).find('.postImage').height() - ($(post).hasClass('mediaPost') ? 90 : 60)
         const fontSize = (width / 44) * 3 * 1.15
         let lines = fontSize > 0 ? Math.floor(height / (fontSize * 1.2)) : 0
 
@@ -96,11 +94,23 @@ class PostCreate extends Component {
     this.mediaUploader.click()
   }
 
+  handleAddText = () => {
+    this.setState({
+      content: '',
+    }, () => {
+      this.handleResize()
+      const comp = ReactDOM.findDOMNode(this)
+      $(comp).find('.postText').focus()
+    })
+  }
+
   handleFiles = evt => {
     this.setState({
       img: evt.target.files[0],
     }, () => {
       this.handleResize()
+      const comp = ReactDOM.findDOMNode(this)
+      $(comp).find('.postTitleEdit').focus()
     })
   }
 
@@ -117,14 +127,6 @@ class PostCreate extends Component {
     })
   }
 
-  handleAddText = () => {
-    this.setState({
-      content: '',
-    }, () => {
-      this.handleResize()
-    })
-  }
-
   handlePostContent = evt => {
     const value = evt.target.value
     this.setState({
@@ -133,9 +135,7 @@ class PostCreate extends Component {
   }
 
   handleDelete = () => {
-    this.setState({
-      showDeleteConfirm: !this.state.showDeleteConfirm,
-    })
+    this.handleCancel()
   }
 
   handlePostLinkBtn = evt => {
@@ -145,23 +145,23 @@ class PostCreate extends Component {
     })
   }
 
-  handleDeleteConfirm = () => {
-    this.handleCancel()
-  }
-
-  handlePostRemoveImage = () => {
+  handlePostImageRemove = () => {
     this.setState({
       img: null,
     }, () => {
       this.handleResize()
+      const comp = ReactDOM.findDOMNode(this)
+      $(comp).find('.postText').focus()
     })
   }
 
-  handlePostRemoveContent = () => {
+  handlePostContentRemove = () => {
     this.setState({
       content: null,
     }, () => {
       this.handleResize()
+      const comp = ReactDOM.findDOMNode(this)
+      $(comp).find('.postTitleEdit').focus()
     })
   }
 
@@ -244,7 +244,6 @@ class PostCreate extends Component {
 
   handlePostClick = () => {
     this.setState({
-      showDeleteConfirm: false,
       showLinkBar: false,
       showInfo: false,
     })
@@ -257,7 +256,6 @@ class PostCreate extends Component {
       title,
       content,
       link,
-      showDeleteConfirm,
       showLinkBar,
       showInfo,
       imageUpload,
@@ -266,9 +264,9 @@ class PostCreate extends Component {
     let postType
 
     if (img && content !== null) {
-      postType = 'normalPost'
+      postType = 'mixedPost'
     } else if (img && content === null) {
-      postType = 'imagePost'
+      postType = 'mediaPost'
     } else if (!img && content !== null) {
       postType = 'textPost'
     }
@@ -276,7 +274,7 @@ class PostCreate extends Component {
     const showPostLinkButton = !showLinkBar
     const showFileImage = img instanceof File
     const spinnerShow = status === CREATE_POST_REQUEST || imageUpload.uploading
-    const submittable = title || content
+    const submittable = postType === 'textPost' ? (title && content) : (title || content)
 
     const postClass = className({
       post: true,
@@ -308,11 +306,11 @@ class PostCreate extends Component {
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
-        { postType === 'normalPost' &&
+        { postType === 'mixedPost' &&
           <div className={postClass} onClick={this.handlePostClick}>
             <div className="postImage">
               { showFileImage && <FileImage file={img} /> }
-              <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostRemoveImage} />
+              <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostImageRemove} />
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               { showLinkBar &&
                 <div className="postLinkBar" onClick={this.handlePostLinkBarClick}>
@@ -323,20 +321,20 @@ class PostCreate extends Component {
               <textarea className="postTitleEdit" placeholder="TITLE" onChange={this.handlePostTitle} value={title} />
             </div>
             <div className="postContent">
-              <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostRemoveContent} />
+              <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostContentRemove} />
               <div className="postMeta">
                 {fullname} - CARTA | NOW
               </div>
-              <textarea className="postText" onChange={this.handlePostContent} value={content} />
+              <textarea className="postText" placeholder="Your text here..." onChange={this.handlePostContent} value={content} />
             </div>
           </div>
         }
 
-        { postType === 'imagePost' &&
+        { postType === 'mediaPost' &&
           <div className={postClass} onClick={this.handlePostClick}>
             <div className="postImage">
               { showFileImage ? <FileImage file={img} /> : <img src={img} role="presentation" /> }
-              <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostRemoveImage} />
+              <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostImageRemove} />
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               { showLinkBar &&
                 <div className="postLinkBar" onClick={this.handlePostLinkBarClick}>
@@ -357,11 +355,11 @@ class PostCreate extends Component {
           <div className={postClass} onClick={this.handlePostClick}>
             <textarea className="postTitleEdit" placeholder="TITLE" onChange={this.handlePostTitle} value={title} />
             <div className="postContent">
-              <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostRemoveContent} />
+              <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostContentRemove} />
               <div className="postMeta">
                 {fullname} - CARTA | NOW
               </div>
-              <textarea className="postText" onChange={this.handlePostContent} value={content} />
+              <textarea className="postText" placeholder="Your text here..." onChange={this.handlePostContent} value={content} />
             </div>
           </div>
         }
@@ -369,15 +367,15 @@ class PostCreate extends Component {
         <div className="postButtons postCreate">
           <div className="left">
             <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
-            <button type="button" className="postBorderBtn" onClick={this.handleAddMedia}>+ MEDIA</button>
-            <button type="button" className="postBorderBtn" onClick={this.handleAddText}>+ TEXT</button>
+            { (postType !== 'mediaPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddMedia}>+ MEDIA</button> }
+            { (postType !== 'textPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddText}>+ TEXT</button> }
           </div>
           { postType &&
             <div className="right">
               <button type="button" className="postCancelBtn" onClick={this.handleCancel}>
                 CANCEL
               </button>
-              <DeleteButton className="postDeleteBtn" onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
+              <DeleteButton className="postDeleteBtn" onClick={this.handleDelete} />
               <button type="button" className={submitBtnClass} disabled={!submittable} onClick={this.handleSubmit}>
                 SUBMIT
               </button>

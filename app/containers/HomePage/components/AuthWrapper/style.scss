@@ -30,7 +30,6 @@
     position: absolute;
     right: 30px;
     top: 10px;
-    cursor: pointer;
 
     img {
       width: 15px;
@@ -49,7 +48,6 @@
       width: calc(50% - 5px);
       border: 0.5px solid #ddd;
       padding: 8px 0 8px 8px;
-      cursor: pointer;
       display: flex;
       align-items: center;
 
@@ -70,7 +68,12 @@
     font-size: 13px;
 
     & > div {
+      color: rgba(0, 0, 0, 0.7);
       width: calc(50% - 4px);
+    }
+
+    & > div:hover {
+      color: rgba(0, 0, 0, 1);
     }
   }
 
@@ -100,7 +103,6 @@
     
     button {
       padding: 8px;
-      cursor: pointer;
       margin-right: 10px;
       border: 0.5px solid #ddd;
 
@@ -110,7 +112,7 @@
 
       &.inactive {
         border: none;
-        background: #eee;
+        background: none;
       }
     }
   }

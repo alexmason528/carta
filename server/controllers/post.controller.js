@@ -28,6 +28,11 @@ const listPost = (req, res) => {
         'author.verified': 0,
       },
     },
+    {
+      $sort: {
+        created_at: -1,
+      },
+    },
   ]
 
   Post.aggregate(pipeline, (err, elements) => {

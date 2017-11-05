@@ -126,7 +126,7 @@ export default class Profile extends Component {
 
     return (
       <div className="profile">
-        <div className="profile__handler" onClick={this.handleCoverImg} />
+        <div className="profile__handler" onClick={authenticated ? this.handleCoverImg : onClick} />
         <LoadingSpinner show={coverImgSpinner}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>

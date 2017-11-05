@@ -45,8 +45,8 @@ function homeReducer(state = initialState, action) {
       return {
         ...state,
         posts: [
-          ...state.posts,
           payload,
+          ...state.posts,
         ],
         status: type,
         error: payload,
