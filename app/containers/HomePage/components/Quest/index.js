@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import className from 'classnames'
+import { CLOUDINARY_COVER_URL } from 'containers/App/constants'
 import './style.scss'
 
 class Quest extends Component {
@@ -54,7 +55,7 @@ class Quest extends Component {
 
     return (
       <div className={questClass} style={{ display: initialized ? 'block' : 'none' }}>
-        <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/quest/start/1.jpg" role="presentation" />
+        <img src={`${CLOUDINARY_COVER_URL}/quest.jpg`} role="presentation" />
         <h2>Start<br />your<br />personal<br />quest</h2>
       </div>
     )

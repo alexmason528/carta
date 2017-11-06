@@ -23,8 +23,8 @@ const listPost = (req, res) => {
       $project: {
         'author.password': 0,
         'author.email': 0,
-        'author.profile_pic': 0,
-        'author.cover_img': 0,
+        'author.profilePic': 0,
+        'author.coverPic': 0,
         'author.verified': 0,
       },
     },

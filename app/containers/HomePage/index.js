@@ -5,13 +5,12 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
 import { Container, Row, Col } from 'reactstrap'
-import { VERIFY_FAIL } from 'containers/App/constants'
-import { CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
+import { VERIFY_FAIL, CLOUDINARY_COVER_URL, CLOUDINARY_PROFILE_URL } from 'containers/App/constants'
 import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
 import { logOut, verifyRequest, updateUserRequest } from 'containers/App/actions'
-import Logo from 'components/Logo'
-import Menu from 'components/Menu'
+import { CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
 import { CreatePostButton } from 'components/Buttons'
+import Menu from 'components/Menu'
 import { selectPosts, selectSuggestions, selectHomeInfo } from './selectors'
 import { listPostRequest, listSuggestionRequest } from './actions'
 import { AccountMenu, AuthWrapper, Post, PostCreate, Profile, Quest, Suggestion, VerifyCtrl } from './components'
@@ -47,11 +46,11 @@ class HomePage extends Component {
 
   componentWillMount() {
     let rand = Math.floor((Math.random() * 76)) + 1
-    const coverImgRand = (rand < 10) ? `000${rand}` : `00${rand}`;
+    const coverPicRand = (rand < 10) ? `000${rand}` : `00${rand}`;
     const profilePicRand = Math.floor((Math.random() * 9))
 
-    this.coverImg = `https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/wide/${coverImgRand}.jpg`
-    this.profilePic = `https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/profile/bag/${profilePicRand}.jpg`
+    this.coverPic = `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`
+    this.profilePic = `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`
 
     const { listPostRequest, listSuggestionRequest, verifyRequest, params: { vcode } } = this.props
 
@@ -156,7 +155,6 @@ class HomePage extends Component {
             { name: 'description', content: 'Carta' },
           ]}
         />
-        <Logo />
         <Menu />
         <Row className="homepage__row">
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col">
@@ -166,10 +164,10 @@ class HomePage extends Component {
               authenticated={authenticated}
               user={user}
               info={info}
-              coverImg={this.coverImg}
+              coverPic={this.coverPic}
               profilePic={this.profilePic}
             />
-            { authenticated ? <AccountMenu show={showAccountMenu} /> : <AuthWrapper show={showAuthWrapper} coverImg={this.coverImg} profilePic={this.profilePic} /> }
+            { authenticated ? <AccountMenu show={showAccountMenu} /> : <AuthWrapper show={showAuthWrapper} coverPic={this.coverPic} profilePic={this.profilePic} /> }
             <Quest authenticated={authenticated} />
           </Col>
 

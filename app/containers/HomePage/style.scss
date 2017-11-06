@@ -63,10 +63,9 @@
     }
 
     &--afterText {
-      background: #f7f7f7;
       padding: 4px 8px;
       border: 0.5px solid #ddd;
-      margin: 8px 0 8px 20px;
+      margin: 9px 0 8px 14px;
 
       .btnText {
         color: rgba(0, 0, 0, 0.7);
@@ -126,18 +125,6 @@
     }
   }
 
-  button {
-    text-transform: uppercase;
-    font-size: 13px;
-    cursor: pointer;
-
-    color: rgba(0, 0, 0, 0.7);
-
-    &:hover {
-      color: rgba(0, 0, 0, 1);
-    }
-  }
-
   img {
     cursor: pointer;
   }
@@ -149,7 +136,8 @@
 
   input::placeholder,
   textarea::placeholder {
-    color: #aaa;
+    color: #bbb;
+    opacity: 1;
   }
 
   input:-webkit-autofill,

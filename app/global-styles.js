@@ -54,9 +54,17 @@ injectGlobal`
       font-size: calc(12px + 0.4vh);
     }
   }
-  
+
   button {
+    text-transform: uppercase;
+    font-size: 13px;
     cursor: pointer;
+
+    color: rgba(0, 0, 0, 0.7);
+
+    &:hover {
+      color: rgba(0, 0, 0, 1);
+    }
   }
 
   button:focus, input:focus {

@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import Dropzone from 'react-dropzone'
 
 const RenderDropZone = ({ input, name, className, label, meta: { touched, error, warning } }) => {
@@ -14,7 +15,7 @@ const RenderDropZone = ({ input, name, className, label, meta: { touched, error,
         multiple={false}
       >
         <div>{label}</div>
-        { files.length > 0 && <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/check-green.png" role="presentation" />}
+        { files.length > 0 && <img src={`${CLOUDINARY_ICON_URL}/check-green.png`} role="presentation" />}
       </Dropzone>
       {touched && error && <span className="error">{error}</span>}
     </div>

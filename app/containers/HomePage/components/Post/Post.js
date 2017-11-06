@@ -10,7 +10,7 @@ import ContentEditable from 'components/ContentEditable'
 import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { getTextFromDate } from 'utils/dateHelper'
-import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET } from 'containers/App/constants'
+import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { updatePostRequest, deletePostRequest } from 'containers/HomePage/actions'
 import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/constants'
 import { selectHomeInfo } from 'containers/HomePage/selectors'
@@ -138,7 +138,11 @@ class Post extends Component {
     }, () => {
       this.handleResize()
       const comp = ReactDOM.findDOMNode(this)
-      $(comp).find('.postText').focus()
+      if ($(comp).find('.postImage').length > 0) {
+        $(comp).find('.postText').focus()
+      } else {
+        $(comp).find('.postTitleEdit').focus()
+      }
     })
   }
 
@@ -326,6 +330,7 @@ class Post extends Component {
 
     const postClass = className({
       post: true,
+      'post--editing': editing,
       [postType]: true,
     })
 
@@ -364,7 +369,7 @@ class Post extends Component {
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               { showLinkBar &&
                 <div className="postLinkBar" onClick={this.handlePostLinkBarClick}>
-                  <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784802/image/icon/link.png" role="presentation" />
+                  <img src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
                   <input type="text" value={link} placeholder="PASTE OR WRITE LINK HERE" onChange={this.handlePostLinkBarChange} />
                 </div>
               }
@@ -380,7 +385,7 @@ class Post extends Component {
                 { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
               </div>
               { editing
-                ? <textarea className="postText" placeholder="Your text here..." onChange={this.handlePostContent} value={content} />
+                ? <textarea className="postText" placeholder="Write here..." onChange={this.handlePostContent} value={content} />
                 : <div className="postText" dangerouslySetInnerHTML={{ __html: content ? content.replace(/\n/g, '<br/>') : '' }} />
               }
             </div>
@@ -396,7 +401,7 @@ class Post extends Component {
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               { showLinkBar &&
                 <div className="postLinkBar" onClick={this.handlePostLinkBarClick}>
-                  <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784802/image/icon/link.png" role="presentation" />
+                  <img src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
                   <input type="text" value={link} placeholder="PASTE OR WRITE LINK HERE" onChange={this.handlePostLinkBarChange} />
                 </div>
               }
@@ -419,13 +424,13 @@ class Post extends Component {
               : <div className="postTitle" dangerouslySetInnerHTML={{ __html: title ? title.replace(/\n/g, '<br />') : '' }} />
             }
             <div className="postContent">
-              { showPostRemoveContent && <RemoveButton className="postRemoveCOntentBtn" image="close" onClick={this.handlePostContentRemove} /> }
+              { showPostRemoveContent && <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostContentRemove} /> }
               <div className="postMeta">
                 {username} - CARTA | {getTextFromDate(created_at)}
                 { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
               </div>
               { editing
-                ? <textarea className="postText" placeholder="Your text here..." onChange={this.handlePostContent} value={content} />
+                ? <textarea className="postText" placeholder="Write here..." onChange={this.handlePostContent} value={content} />
                 : <div className="postText" dangerouslySetInnerHTML={{ __html: content ? content.replace(/\n/g, '<br/>') : '' }} />
               }
             </div>
@@ -440,7 +445,7 @@ class Post extends Component {
                 <span style={{ marginRight: '8px' }}>{ content === true ? 1000 : (1000 - (content ? content.length : 0)) }</span>
               }
               {(postType !== 'mediaPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddMedia}>
-                + MEDIA
+                + Picture
               </button>}
               {(postType !== 'textPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddText}>
                 + TEXT
@@ -454,7 +459,7 @@ class Post extends Component {
               </div>
             }
             <button type="button" className={closeButtonClass} onClick={onClose}>
-              <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close.png" role="presentation" />
+              <img src={`${CLOUDINARY_ICON_URL}/close.png`} role="presentation" />
             </button>
           </div>
         }

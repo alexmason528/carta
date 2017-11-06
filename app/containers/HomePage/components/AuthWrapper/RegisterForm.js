@@ -35,14 +35,14 @@ const RegisterForm = ({ handleSubmit, registerError, onAuthTypeChange }) => (
     <div className="authWrapper__uploadButtons">
       <Field
         className="authWrapper__uploadButton"
-        name="profile_pic"
+        name="profilePic"
         label="Profile Pic"
         component={RenderDropzone}
       />
       <Field
         className="authWrapper__uploadButton"
-        name="cover_img"
-        label="Cover Img"
+        name="coverPic"
+        label="Cover Pic"
         component={RenderDropzone}
       />
     </div>

@@ -6,7 +6,7 @@ import axios from 'axios'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { Popover, PopoverBody } from 'reactstrap'
-import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET } from 'containers/App/constants'
+import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
 import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
@@ -100,7 +100,11 @@ class PostCreate extends Component {
     }, () => {
       this.handleResize()
       const comp = ReactDOM.findDOMNode(this)
-      $(comp).find('.postText').focus()
+      if ($(comp).find('.postImage').length > 0) {
+        $(comp).find('.postText').focus()
+      } else {
+        $(comp).find('.postTitleEdit').focus()
+      }
     })
   }
 
@@ -314,7 +318,7 @@ class PostCreate extends Component {
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               { showLinkBar &&
                 <div className="postLinkBar" onClick={this.handlePostLinkBarClick}>
-                  <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784802/image/icon/link.png" role="presentation" />
+                  <img src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
                   <input type="text" value={link} placeholder="PASTE OR WRITE LINK HERE" onChange={this.handlePostLinkBarChange} />
                 </div>
               }
@@ -325,7 +329,7 @@ class PostCreate extends Component {
               <div className="postMeta">
                 {fullname} - CARTA | NOW
               </div>
-              <textarea className="postText" placeholder="Your text here..." onChange={this.handlePostContent} value={content} />
+              <textarea className="postText" placeholder="Write here..." onChange={this.handlePostContent} value={content} />
             </div>
           </div>
         }
@@ -338,7 +342,7 @@ class PostCreate extends Component {
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               { showLinkBar &&
                 <div className="postLinkBar" onClick={this.handlePostLinkBarClick}>
-                  <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784802/image/icon/link.png" role="presentation" />
+                  <img src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
                   <input type="text" value={link} placeholder="PASTE OR WRITE LINK HERE" onChange={this.handlePostLinkBarChange} />
                 </div>
               }
@@ -359,7 +363,7 @@ class PostCreate extends Component {
               <div className="postMeta">
                 {fullname} - CARTA | NOW
               </div>
-              <textarea className="postText" placeholder="Your text here..." onChange={this.handlePostContent} value={content} />
+              <textarea className="postText" placeholder="Write here..." onChange={this.handlePostContent} value={content} />
             </div>
           </div>
         }
@@ -367,7 +371,8 @@ class PostCreate extends Component {
         <div className="postButtons postCreate">
           <div className="left">
             <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
-            { (postType !== 'mediaPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddMedia}>+ MEDIA</button> }
+            { (postType === 'textPost' || postType === 'mixedPost') && <span style={{ marginRight: '8px' }}>{ content === true ? 1000 : (1000 - (content ? content.length : 0)) }</span>}
+            { (postType !== 'mediaPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddMedia}>+ Picture</button> }
             { (postType !== 'textPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddText}>+ TEXT</button> }
           </div>
           { postType &&
@@ -382,7 +387,7 @@ class PostCreate extends Component {
             </div>
           }
           <button type="button" className={closeButtonClass} onClick={onClose}>
-            <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close.png" role="presentation" />
+            <img src={`${CLOUDINARY_ICON_URL}/close.png`} role="presentation" />
           </button>
         </div>
       </div>

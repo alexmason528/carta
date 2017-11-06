@@ -2,6 +2,7 @@ import React, { Component, PropTypes, Children } from 'react'
 import classNames from 'classnames'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
+import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { fetchRecommendations, typeSelect } from 'containers/QuestPage/actions'
 import { selectTypes, selectCurrentTypes } from 'containers/QuestPage/selectors'
 import { Button, StarButton } from '../Buttons'
@@ -183,8 +184,8 @@ class TypeSection extends Component {
     return (
       <div className={className}>
         <h1>Show Me</h1>
-        <img className={searchBtnClass} src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/search.png" onClick={() => { this.handleExpand(1) }} role="presentation" />
-        <img className={closeBtnClass} src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/back.png" onClick={() => { this.handleExpand(0) }} role="presentation" />
+        <img className={searchBtnClass} src={`${CLOUDINARY_ICON_URL}/search.png`} onClick={() => { this.handleExpand(1) }} role="presentation" />
+        <img className={closeBtnClass} src={`${CLOUDINARY_ICON_URL}/back.png`} onClick={() => { this.handleExpand(0) }} role="presentation" />
         <input className={searchInputClass} value={search} onChange={this.handleInputChange} />
         <div className="suggestion">
           <Button

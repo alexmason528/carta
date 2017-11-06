@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 
 export default class EditButton extends Component {
   static propTypes = {
@@ -12,11 +13,12 @@ export default class EditButton extends Component {
     evt.stopPropagation()
     onClick()
   }
+
   render() {
     const { className, image } = this.props
     return (
       <button type="button" className={className} onClick={this.handleClick}>
-        <img src={`https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/${image}.png`} role="presentation" />
+        <img src={`${CLOUDINARY_ICON_URL}/${image}.png`} role="presentation" />
       </button>
     )
   }

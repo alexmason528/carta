@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react'
+import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 
 const RemoveButton = ({ className, image, caption, onClick }) => (
   <button type="button" className={className} onClick={onClick}>
-    <img src={`https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/${image}.png`} role="presentation" />
+    <img src={`${CLOUDINARY_ICON_URL}/${image}.png`} role="presentation" />
     { caption && <span>{caption}</span>}
   </button>
 )

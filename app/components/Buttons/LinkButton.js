@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react'
+import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 
 const LinkButton = ({ className, onClick }) => (
   <button type="button" className={className} onClick={onClick}>
     <div className="btnImage">
-      <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784802/image/icon/link.png" role="presentation" />
+      <img src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
     </div>
     <div className="btnText">Link</div>
   </button>

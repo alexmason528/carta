@@ -1,3 +1,23 @@
+.logo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  cursor: pointer;
+
+  img {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    width: 32px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 20px;
+    height: auto;
+    z-index: 102;
+    position: relative;
+  }
+}
+
 .cartaMenu {
   position: fixed;
   left: 0;

@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components'
 import classNames from 'classnames'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
+import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { fetchRecommendations, questAdd, questSelect, questRemove } from 'containers/QuestPage/actions'
 import { selectQuests, selectCurrentQuestIndex } from 'containers/QuestPage/selectors'
 import Quest from '../Quest'
@@ -46,8 +47,12 @@ class QuestPanel extends Component {
     return (
       <div className={className}>
         <div className="buttons">
-          <button className="minimize" onClick={minimizeClicked}><img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/min.png" role="presentation" /></button>
-          <button className="close" onClick={closeClicked}><img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close.png" role="presentation" /></button>
+          <button className="minimize" onClick={minimizeClicked}>
+            <img src={`${CLOUDINARY_ICON_URL}/min.png`} role="presentation" />
+          </button>
+          <button className="close" onClick={closeClicked}>
+            <img src={`${CLOUDINARY_ICON_URL}/close.png`} role="presentation" />
+          </button>
         </div>
         <div className="list">
           {

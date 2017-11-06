@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import axios from 'axios'
 import className from 'classnames'
-import { LOGIN_REQUEST, REGISTER_REQUEST, LOGIN_FAIL, CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET } from 'containers/App/constants'
+import { LOGIN_REQUEST, REGISTER_REQUEST, LOGIN_FAIL, CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { loginRequest, registerRequest } from 'containers/App/actions'
 import { selectInfo } from 'containers/App/selectors'
 import LoadingSpinner from 'components/LoadingSpinner'
@@ -16,7 +16,7 @@ class AuthWrapper extends Component {
   static propTypes = {
     loginRequest: PropTypes.func,
     registerRequest: PropTypes.func,
-    coverImg: PropTypes.string,
+    coverPic: PropTypes.string,
     profilePic: PropTypes.string,
     info: PropTypes.object,
     show: PropTypes.bool,
@@ -74,19 +74,19 @@ class AuthWrapper extends Component {
   }
 
   handleRegister = values => {
-    const { registerRequest, coverImg, profilePic } = this.props
-    const { email, password, confirmPassword, fullname, profile_pic, cover_img } = values
+    const { registerRequest } = this.props
+    const { email, password, confirmPassword, fullname, profilePic, coverPic } = values
 
     let data = {
       email,
       password,
       confirmPassword,
       fullname,
-      profile_pic: profile_pic ? '' : profilePic,
-      cover_img: cover_img ? '' : coverImg,
+      profilePic: profilePic ? '' : this.props.profilePic,
+      coverPic: coverPic ? '' : this.props.coverPic,
     }
 
-    if (!profile_pic && !cover_img) {
+    if (!profilePic && !coverPic) {
       registerRequest(data)
     } else {
       this.setState({
@@ -97,12 +97,12 @@ class AuthWrapper extends Component {
       })
 
       let cnt = 0
-      if (profile_pic) cnt += 1
-      if (cover_img) cnt += 1
+      if (profilePic) cnt += 1
+      if (coverPic) cnt += 1
 
-      if (profile_pic) {
+      if (profilePic) {
         let formData = new FormData()
-        formData.append('file', profile_pic[0])
+        formData.append('file', profilePic[0])
         formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
         axios.post(CLOUDINARY_UPLOAD_URL, formData, {
           headers: {
@@ -111,7 +111,7 @@ class AuthWrapper extends Component {
         }).then(res => {
           const { data: { url } } = res
           cnt -= 1
-          data.profile_pic = url
+          data.profilePic = url
 
           if (cnt === 0) {
             registerRequest(data)
@@ -132,9 +132,9 @@ class AuthWrapper extends Component {
         })
       }
 
-      if (cover_img) {
+      if (coverPic) {
         let formData = new FormData()
-        formData.append('file', cover_img[0])
+        formData.append('file', coverPic[0])
         formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
         axios.post(CLOUDINARY_UPLOAD_URL, formData, {
           headers: {
@@ -143,7 +143,7 @@ class AuthWrapper extends Component {
         }).then(res => {
           const { data: { url } } = res
           cnt -= 1
-          data.cover_img = url
+          data.coverPic = url
 
           if (cnt === 0) {
             registerRequest(data)
@@ -186,8 +186,8 @@ class AuthWrapper extends Component {
           <span>With</span>
         </div>
         <div className="authWrapper__inlineButtons">
-          <button type="button"><img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784819/image/icon/logo/google.png" role="presentation" /><span>Google</span></button>
-          <button type="button"><img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784819/image/icon/logo/facebook.png" role="presentation" /><span>Facebook</span></button>
+          <button type="button"><img src={`${CLOUDINARY_ICON_URL}/google.png`} role="presentation" /><span>Google</span></button>
+          <button type="button"><img src={`${CLOUDINARY_ICON_URL}/facebook.png`} role="presentation" /><span>Facebook</span></button>
         </div>
         <div className="authWrapper__divider">
           <span>Or</span>

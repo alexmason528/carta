@@ -1,7 +1,3 @@
-/*
- * QuestPage
- */
-
 import React, { Component, PropTypes } from 'react'
 import Helmet from 'react-helmet'
 import ReactMapboxGl from 'react-mapbox-gl'
@@ -11,9 +7,8 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
 import { Container } from 'reactstrap'
-import { MAP_ACCESS_TOKEN } from 'containers/App/constants'
-import Logo from 'components/Logo'
 import Menu from 'components/Menu'
+import { MAP_ACCESS_TOKEN, CLOUDINARY_DATA_URL } from 'containers/App/constants'
 import URLParser from 'utils/questURLparser'
 import { mapChange, fetchQuestInfo, fetchRecommendations, setDefaultQuest } from './actions'
 import { selectRecommendations, selectPlaces } from './selectors'
@@ -82,8 +77,6 @@ class QuestPage extends Component {
       glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
     }
 
-    // this.mapStyle = 'mapbox://styles/cartaguide/cj3d35ump00032rqm1j6xlaij'
-
     this.containerStyle = {
       width: '100%',
       height: '100%',
@@ -96,8 +89,8 @@ class QuestPage extends Component {
 
     this.colors = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379']
 
-    this.shapesGeoJSONSource = 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506359935/shapes.geojson'
-    this.pointsGeoJSONSource = 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506359923/points.geojson'
+    this.shapesGeoJSONSource = `${CLOUDINARY_DATA_URL}/shapes.png`
+    this.shapesGeoJSONSource = `${CLOUDINARY_DATA_URL}/points.png`
 
     this.map = ''
 
@@ -365,7 +358,6 @@ class QuestPage extends Component {
             { name: 'description', content: 'Carta' },
           ]}
         />
-        <Logo />
         <Menu />
         <QuestButton
           className={questButtonClass}

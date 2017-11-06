@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import className from 'classnames'
 import { browserHistory } from 'react-router'
 import { createStructuredSelector } from 'reselect'
+import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { logOut } from 'containers/App/actions'
 import { selectAuthenticated } from 'containers/App/selectors'
 import './style.scss'
@@ -39,7 +40,8 @@ class Menu extends Component {
     evt.stopPropagation()
   }
 
-  handleToggleMenu = () => {
+  handleToggleMenu = evt => {
+    evt.stopPropagation()
     this.setState({
       showMenu: !this.state.showMenu,
     })
@@ -55,14 +57,19 @@ class Menu extends Component {
     })
 
     return (
-      <div className={cartaMenuClass} onClick={this.handleMenuClick}>
-        <ul>
-          <li><button onClick={() => browserHistory.push('/')}>Quest</button></li>
-          <li><button>About</button></li>
-          {authenticated && <li><button onClick={logOut}>Sign out</button></li>}
-        </ul>
-        <div className="cartaMenu__tab" onClick={this.handleToggleMenu}>
-          <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506785283/image/content/name-vertical.png" role="presentation" />
+      <div>
+        <div className="logo" onClick={this.handleToggleMenu}>
+          <img src={`${CLOUDINARY_ICON_URL}/logo-100.png`} role="presentation" />
+        </div>
+        <div className={cartaMenuClass} onClick={this.handleMenuClick}>
+          <ul>
+            <li><button onClick={() => browserHistory.push('/quest')}>Quest</button></li>
+            <li><button onClick={() => { window.location.href = 'http://carta.guide' }}>About</button></li>
+            {authenticated && <li><button onClick={logOut}>Sign out</button></li>}
+          </ul>
+          <div className="cartaMenu__tab" onClick={this.handleToggleMenu}>
+            <img src={`${CLOUDINARY_ICON_URL}/name-vertical.png`} role="presentation" />
+          </div>
         </div>
       </div>
     )

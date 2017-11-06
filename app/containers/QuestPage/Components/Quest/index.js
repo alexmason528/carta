@@ -1,6 +1,7 @@
 import React, { Component, PropTypes, Children } from 'react'
 import styled, { css } from 'styled-components'
 import classNames from 'classnames'
+import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 
 import { DescriptiveSection, PlaceSection, TypeSection } from '../Sections'
 
@@ -96,11 +97,13 @@ export default class Quest extends Component {
       <div className={className}>
         <div className="tabs">
           <div className="line"></div>
-          <button className="next" onClick={this.handleNextBtnClick}>Next<img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/next.png" role="presentation" /></button>
+          <button className="next" onClick={this.handleNextBtnClick}>Next
+            <img src={`${CLOUDINARY_ICON_URL}/next.png`} role="presentation" />
+          </button>
           <div className={tabClass}></div>
-          <img className={placesTabClass} src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/quest/marker.png" role="presentation" onClick={() => { this.handleTabClick(0) }} />
-          <img className={typesTabClass} src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/quest/check.png" role="presentation" onClick={() => { this.handleTabClick(1) }} />
-          <img className={descriptivesTabClass} src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/quest/star.png" role="presentation" onClick={() => { this.handleTabClick(2) }} />
+          <img className={placesTabClass} src={`${CLOUDINARY_ICON_URL}/marker.png`} role="presentation" onClick={() => { this.handleTabClick(0) }} />
+          <img className={typesTabClass} src={`${CLOUDINARY_ICON_URL}/check.png`} role="presentation" onClick={() => { this.handleTabClick(1) }} />
+          <img className={descriptivesTabClass} src={`${CLOUDINARY_ICON_URL}/star.png`} role="presentation" onClick={() => { this.handleTabClick(2) }} />
         </div>
 
         <div className="pages">

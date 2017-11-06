@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import className from 'classnames'
 
 const CreatePostButton = ({ type, onClick }) => {
@@ -11,7 +12,7 @@ const CreatePostButton = ({ type, onClick }) => {
   return (
     <button className={btnClass} onClick={onClick}>
       <div className="btnImage">
-        <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784213/image/icon/add-post.png" role="presentation" />
+        <img src={`${CLOUDINARY_ICON_URL}/add-post.png`} role="presentation" />
       </div>
       <div className="btnText">Post</div>
     </button>

@@ -1,5 +1,6 @@
 import React, { PropTypes, Children } from 'react'
 import classNames from 'classnames'
+import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 
 const Button = props => {
   let btnClass = classNames({
@@ -28,7 +29,7 @@ const StarButton = props => {
   return (
     <div className={btnClass}>
       <button onMouseDown={props.onMouseDown}>{Children.toArray(props.children)}</button>
-      <img className="star" src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/quest/star-green.png" onClick={props.onStarClick} role="presentation" />
+      <img className="star" src={`${CLOUDINARY_ICON_URL}/star-green.png`} onClick={props.onStarClick} role="presentation" />
     </div>
   )
 }
@@ -37,10 +38,12 @@ const QuestButton = props => {
   return (
     <div className={props.className}>
       <div onClick={props.onClick}>
-        <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/search.png" className="inactive" role="presentation" />
-        <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/search-blue.png" className="active" role="presentation" />
+        <img src={`${CLOUDINARY_ICON_URL}/search.png`} className="inactive" role="presentation" />
+        <img src={`${CLOUDINARY_ICON_URL}/search-blue.png`} className="active" role="presentation" />
       </div>
-      <span onClick={props.onCloseClick}><img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/close.png" role="presentation" /></span>
+      <span onClick={props.onCloseClick}>
+        <img src={`${CLOUDINARY_ICON_URL}/close.png`} role="presentation" />
+      </span>
     </div>
   )
 }

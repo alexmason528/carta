@@ -14,7 +14,7 @@ export default class Profile extends Component {
     authenticated: PropTypes.bool,
     user: PropTypes.object,
     info: PropTypes.object,
-    coverImg: PropTypes.string,
+    coverPic: PropTypes.string,
     profilePic: PropTypes.string,
   }
 
@@ -58,7 +58,7 @@ export default class Profile extends Component {
     const { authenticated } = this.props
     if (authenticated) {
       this.setState({
-        imageType: 'cover_img',
+        imageType: 'coverPic',
       })
       this.mediaUploader.click()
     }
@@ -69,7 +69,7 @@ export default class Profile extends Component {
     const { authenticated } = this.props
     if (authenticated) {
       this.setState({
-        imageType: 'profile_pic',
+        imageType: 'profilePic',
       })
       this.mediaUploader.click()
     }
@@ -119,24 +119,24 @@ export default class Profile extends Component {
   }
 
   render() {
-    const { authenticated, user, onClick, coverImg, profilePic, info: { status, error } } = this.props
+    const { authenticated, user, onClick, coverPic, profilePic, info: { status, error } } = this.props
     const { imageUpload, imageType } = this.state
-    const coverImgSpinner = imageType === 'cover_img' && (imageUpload.uploading || status === UPDATE_USER_REQUEST)
-    const profilePicSpinner = imageType === 'profile_pic' && (imageUpload.uploading || status === UPDATE_USER_REQUEST)
+    const coverPicSpinner = imageType === 'coverPic' && (imageUpload.uploading || status === UPDATE_USER_REQUEST)
+    const profilePicSpinner = imageType === 'profilePic' && (imageUpload.uploading || status === UPDATE_USER_REQUEST)
 
     return (
       <div className="profile">
         <div className="profile__handler" onClick={authenticated ? this.handleCoverImg : onClick} />
-        <LoadingSpinner show={coverImgSpinner}>
+        <LoadingSpinner show={coverPicSpinner}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
         <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
-        <img src={authenticated && user.cover_img ? user.cover_img : coverImg} role="presentation" />
-        <div className="profile__pic" onClick={this.handleProfilePic}>
+        <img src={authenticated && user.coverPic ? user.coverPic : coverPic} role="presentation" />
+        <div className="profile__pic" onClick={authenticated ? this.handleProfilePic : onClick}>
           <LoadingSpinner show={profilePicSpinner}>
             <QuarterSpinner width={30} height={30} />
           </LoadingSpinner>
-          <img src={authenticated && user.profile_pic ? user.profile_pic : profilePic} role="presentation" />
+          <img src={authenticated && user.profilePic ? user.profilePic : profilePic} role="presentation" />
         </div>
         { authenticated && <UserButton className="profile__userButton" onClick={onClick} /> }
         { authenticated ? <h2>{user.fullname}</h2> : <h2 onClick={onClick}>Sign in</h2> }

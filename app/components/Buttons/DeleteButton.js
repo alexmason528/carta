@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react'
+import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 
 const DeleteButton = ({ className, onClick }) => (
   <div className={className} onClick={onClick}>
-    <img src="https://res.cloudinary.com/hyvpvyohj/raw/upload/v1506784801/image/icon/trash.png" role="presentation" />
+    <img src={`${CLOUDINARY_ICON_URL}/delete.png`} role="presentation" />
   </div>
 )
 

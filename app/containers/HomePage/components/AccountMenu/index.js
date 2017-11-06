@@ -29,6 +29,12 @@ class AccountMenu extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      showContent: false,
+    })
+  }
+
   handleSettingClick = () => {
     const { showContent } = this.state
 
@@ -91,7 +97,7 @@ class AccountMenu extends Component {
           <button type="button" onClick={logOut}>Sign out</button> | <button type="button" onClick={this.handleSettingClick}>Settings</button>
         </div>
         <div className={contentClass}>
-          <RemoveButton className="accountMenu__deleteButton" image="delete" onClick={this.handleDeleteAccountClick} caption="Delete Account" />
+          <RemoveButton className="accountMenu__deleteButton" image="delete-red" onClick={this.handleDeleteAccountClick} caption="Delete Account" />
           <Form className={formClass} onSubmit={handleSubmit(this.handleDeleteUser)}>
             <Field
               name="password"
