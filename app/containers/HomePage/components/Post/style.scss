@@ -31,7 +31,7 @@
   overflow: hidden;
 
   .postTitle {
-    width: calc(100% - 40px);
+    max-width: calc(100% - 40px);
     top: 50%;
     transform: translate(0, -50%);
     overflow: hidden;
@@ -39,7 +39,7 @@
   }
 
   .postTitleEdit {
-    width: calc(100% - 40px);
+    max-width: calc(100% - 40px);
     top: 50%;
     transform: translate(0, -50%);
     overflow: hidden;
@@ -108,7 +108,7 @@
 .mixedPost {
   .postTitle, .postTitleEdit {
     bottom: 20px;
-    width: calc(100% - 40px);
+    max-width: calc(100% - 40px);
     overflow: hidden;
     cursor: text;
   }
@@ -128,7 +128,7 @@
     font-weight: 400;
     left: 0;
     margin: 20px 0 0 20px;
-    width: calc(100% - 40px);
+    max-width: calc(100% - 40px);
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -143,7 +143,7 @@
     font-weight: 400;
     left: 0;
     margin: 20px 0 0 20px;
-    width: calc(100% - 40px);
+    max-width: calc(100% - 40px);
     overflow: hidden;
   }
 
@@ -160,6 +160,7 @@
 .postImage {
   position: relative;
   width: 100%;
+  cursor: pointer;
 
   &:before {
     content: '';

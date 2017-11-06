@@ -429,7 +429,7 @@ class Post extends Component {
         { postType === 'textPost' &&
           <div className={postClass} onClick={this.handlePostClick}>
             { editing
-              ? <textarea className="postTitleEdit" placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
+              ? <textarea className="postTitleEdit" tabIndex="0" placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
               : <div className="postTitle" dangerouslySetInnerHTML={{ __html: title ? title.replace(/\n/g, '<br />') : '' }} />
             }
             <div className="postContent">
@@ -439,7 +439,7 @@ class Post extends Component {
                 { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
               </div>
               { editing
-                ? <textarea className="postText" placeholder="Write here..." onChange={this.handlePostContent} value={content} />
+                ? <textarea className="postText" tabIndex="0" placeholder="Write here..." onChange={this.handlePostContent} value={content} />
                 : <div className="postText" dangerouslySetInnerHTML={{ __html: content ? content.replace(/\n/g, '<br/>') : '' }} />
               }
             </div>
@@ -457,7 +457,7 @@ class Post extends Component {
                 + Picture
               </button>}
               {(postType !== 'textPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddText}>
-                + TEXT
+                + Text
               </button>}
             </div>
             { postType &&

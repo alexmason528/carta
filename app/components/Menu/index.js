@@ -22,20 +22,6 @@ class Menu extends Component {
     }
   }
 
-  componentDidMount() {
-    window.addEventListener('click', this.handleWindowClick)
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('click', this.handleWindowClick)
-  }
-
-  handleWindowClick = () => {
-    this.setState({
-      showMenu: false,
-    })
-  }
-
   handleMenuClick = evt => {
     evt.stopPropagation()
   }
@@ -56,8 +42,12 @@ class Menu extends Component {
       'cartaMenu--hidden': !showMenu,
     })
 
+    const wrapperClass = className({
+      menuWrapper: showMenu,
+    })
+
     return (
-      <div>
+      <div className={wrapperClass} onClick={this.handleToggleMenu}>
         <div className="logo" onClick={this.handleToggleMenu}>
           <img src={`${CLOUDINARY_ICON_URL}/logo-100.png`} role="presentation" />
         </div>

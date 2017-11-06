@@ -38,7 +38,6 @@ class HomePage extends Component {
       showAuthWrapper: false,
       showCreatePostForm: false,
       showAccountMenu: false,
-      showMenu: false,
       editingPost: false,
       timer: 0,
     }
@@ -125,12 +124,6 @@ class HomePage extends Component {
     })
   }
 
-  toggleMenu = () => {
-    this.setState({
-      showMenu: !this.state.showMenu,
-    })
-  }
-
   handlePostEdit = value => {
     this.setState({
       editingPost: value,
@@ -138,7 +131,7 @@ class HomePage extends Component {
   }
 
   render() {
-    const { showAuthWrapper, showCreatePostForm, showAccountMenu, showMenu, timer, editingPost } = this.state
+    const { showAuthWrapper, showCreatePostForm, showAccountMenu, timer, editingPost } = this.state
     const { posts, suggestions, authenticated, user, logOut, updateUserRequest, info } = this.props
     const { status, error } = info
 
