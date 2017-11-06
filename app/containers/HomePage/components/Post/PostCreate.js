@@ -8,6 +8,7 @@ import { createStructuredSelector } from 'reselect'
 import { Popover, PopoverBody } from 'reactstrap'
 import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
+import ContentEditable from 'components/ContentEditable'
 import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { createPostRequest } from 'containers/HomePage/actions'
@@ -84,7 +85,7 @@ class PostCreate extends Component {
 
         $(post).find('.postTitleEdit').css({
           fontSize: `${fontSize}px`,
-          height: `${fontSize * lines * 1.2}px`,
+          'max-height': `${fontSize * lines * 1.2}px`,
         })
       }
     }, 0)
@@ -177,7 +178,7 @@ class PostCreate extends Component {
       link,
       author: user._id,
       content: content !== null ? content : '',
-      title: title !== null ? title : '',
+      title: title !== null ? title.replace(new RegExp('<div>', 'g'), '\n').replace(new RegExp('</div>', 'g'), '') : '',
       img: '',
     }
 
@@ -228,9 +229,9 @@ class PostCreate extends Component {
     })
   }
 
-  handlePostTitle = evt => {
+  handlePostTitle = value => {
     this.setState({
-      title: evt.target.value,
+      title: value,
     })
   }
 
@@ -251,6 +252,14 @@ class PostCreate extends Component {
       showLinkBar: false,
       showInfo: false,
     })
+  }
+
+  handleEnterKey = evt => {
+    if (evt.keyCode === 13) {
+      this.setState({
+        showLinkBar: false,
+      })
+    }
   }
 
   render() {
@@ -305,6 +314,11 @@ class PostCreate extends Component {
       active: showInfo,
     })
 
+    const postLinkBarClass = className({
+      postLinkBar: true,
+      'postLinkBar--hidden': !showLinkBar,
+    })
+
     return (
       <div className="postContainer">
         <LoadingSpinner show={spinnerShow}>
@@ -316,13 +330,11 @@ class PostCreate extends Component {
               { showFileImage && <FileImage file={img} /> }
               <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostImageRemove} />
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
-              { showLinkBar &&
-                <div className="postLinkBar" onClick={this.handlePostLinkBarClick}>
-                  <img src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
-                  <input type="text" value={link} placeholder="PASTE OR WRITE LINK HERE" onChange={this.handlePostLinkBarChange} />
-                </div>
-              }
-              <textarea className="postTitleEdit" placeholder="TITLE" onChange={this.handlePostTitle} value={title} />
+              <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>
+                <img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
+                <input type="text" value={link} placeholder="Paste or write link here" onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
+              </div>
+              <ContentEditable className="postTitleEdit" placeholder="Title" onChange={this.handlePostTitle} value={title} />
             </div>
             <div className="postContent">
               <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostContentRemove} />
@@ -340,14 +352,12 @@ class PostCreate extends Component {
               { showFileImage ? <FileImage file={img} /> : <img src={img} role="presentation" /> }
               <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostImageRemove} />
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
-              { showLinkBar &&
-                <div className="postLinkBar" onClick={this.handlePostLinkBarClick}>
-                  <img src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
-                  <input type="text" value={link} placeholder="PASTE OR WRITE LINK HERE" onChange={this.handlePostLinkBarChange} />
-                </div>
-              }
+              <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>
+                <img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
+                <input type="text" value={link} placeholder="Paste or write link here" onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
+              </div>
             </div>
-            <textarea className="postTitleEdit" placeholder="TITLE" onChange={this.handlePostTitle} value={title} />
+            <ContentEditable className="postTitleEdit" placeholder="Title" onChange={this.handlePostTitle} value={title} />
             <div className={postInfoClass}>
               {fullname} - Carta | NOW
             </div>
@@ -357,7 +367,7 @@ class PostCreate extends Component {
 
         { postType === 'textPost' &&
           <div className={postClass} onClick={this.handlePostClick}>
-            <textarea className="postTitleEdit" placeholder="TITLE" onChange={this.handlePostTitle} value={title} />
+            <ContentEditable className="postTitleEdit" placeholder="Title" onChange={this.handlePostTitle} value={title} />
             <div className="postContent">
               <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostContentRemove} />
               <div className="postMeta">

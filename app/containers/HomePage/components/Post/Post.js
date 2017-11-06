@@ -99,7 +99,7 @@ class Post extends Component {
 
         $(post).find('.postTitleEdit').css({
           fontSize: `${fontSize}px`,
-          height: `${fontSize * lines * 1.2}px`,
+          'max-height': `${fontSize * lines * 1.2}px`,
         })
       }
     }, 0)
@@ -205,7 +205,7 @@ class Post extends Component {
     const { updatePostRequest } = this.props
 
     let data = {
-      title,
+      title: title.replace(new RegExp('<div>', 'g'), '\n').replace(new RegExp('</div>', 'g'), ''),
       link,
       content: content !== null ? content : '',
       id: _id,
@@ -263,9 +263,9 @@ class Post extends Component {
     })
   }
 
-  handlePostTitle = evt => {
+  handlePostTitle = value => {
     this.setState({
-      title: evt.target.value,
+      title: value,
     })
   }
 
@@ -296,6 +296,14 @@ class Post extends Component {
       } else {
         window.location.href = (link.indexOf('http:') !== -1 || link.indexOf('https:') !== -1) ? link : `http://${link}`
       }
+    }
+  }
+
+  handleEnterKey = evt => {
+    if (evt.keyCode === 13) {
+      this.setState({
+        showLinkBar: false,
+      })
     }
   }
 
@@ -330,7 +338,6 @@ class Post extends Component {
 
     const postClass = className({
       post: true,
-      'post--editing': editing,
       [postType]: true,
     })
 
@@ -349,12 +356,18 @@ class Post extends Component {
       active: showInfo,
     })
 
+    const postLinkBarClass = className({
+      postLinkBar: true,
+      'postLinkBar--hidden': !showLinkBar,
+    })
+
     const canRemove = content && img
     const showPostRemoveImage = editing && canRemove
     const showPostRemoveContent = editable && editing && canRemove
     const showPostLinkButton = editing && !showLinkBar
     const showFileImage = img && (img instanceof File)
     const spinnerShow = ((status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST) && (curPost === _id)) || imageUpload.uploading
+    let parsedTitle = title ? title.replace(/\n/g, '</div><div>') : ''
 
     return (
       <div className="postContainer">
@@ -367,14 +380,12 @@ class Post extends Component {
               { showFileImage ? <FileImage file={img} /> : <img src={img} role="presentation" /> }
               { showPostRemoveImage && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostImageRemove} /> }
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
-              { showLinkBar &&
-                <div className="postLinkBar" onClick={this.handlePostLinkBarClick}>
-                  <img src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
-                  <input type="text" value={link} placeholder="PASTE OR WRITE LINK HERE" onChange={this.handlePostLinkBarChange} />
-                </div>
-              }
+              <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>
+                <img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
+                <input type="text" value={link} placeholder="Paste or write link here" onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
+              </div>
               { editing
-                ? <textarea className="postTitleEdit" placeholder="TITLE" onChange={this.handlePostTitle} value={title} />
+                ? <ContentEditable className="postTitleEdit" placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
                 : <div className="postTitle" onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: title ? title.replace(/\n/g, '<br />') : '' }} />
               }
             </div>
@@ -399,15 +410,13 @@ class Post extends Component {
               { showFileImage ? <FileImage file={img} /> : <img src={img} role="presentation" /> }
               { showPostRemoveImage && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostImageRemove} /> }
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
-              { showLinkBar &&
-                <div className="postLinkBar" onClick={this.handlePostLinkBarClick}>
-                  <img src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
-                  <input type="text" value={link} placeholder="PASTE OR WRITE LINK HERE" onChange={this.handlePostLinkBarChange} />
-                </div>
-              }
+              <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>
+                <img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
+                <input type="text" value={link} placeholder="Paste or write link here" onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
+              </div>
             </div>
             { editing
-              ? <textarea className="postTitleEdit" placeholder="TITLE" onChange={this.handlePostTitle} value={title} />
+              ? <ContentEditable className="postTitleEdit" placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
               : <div className="postTitle" onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: title ? title.replace(/\n/g, '<br />') : '' }} />
             }
             <div className={postInfoClass}>
@@ -420,7 +429,7 @@ class Post extends Component {
         { postType === 'textPost' &&
           <div className={postClass} onClick={this.handlePostClick}>
             { editing
-              ? <textarea className="postTitleEdit" placeholder="TITLE" onChange={this.handlePostTitle} value={title} />
+              ? <textarea className="postTitleEdit" placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
               : <div className="postTitle" dangerouslySetInnerHTML={{ __html: title ? title.replace(/\n/g, '<br />') : '' }} />
             }
             <div className="postContent">
