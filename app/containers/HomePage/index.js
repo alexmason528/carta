@@ -46,15 +46,6 @@ class HomePage extends Component {
   }
 
   componentWillMount() {
-    let rand = Math.floor((Math.random() * 76)) + 1
-    const coverPicRand = (rand < 10) ? `000${rand}` : `00${rand}`;
-    const profilePicRand = Math.floor((Math.random() * 9))
-
-    this.setState({
-      coverPic: `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`,
-      profilePic: `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`,
-    })
-
     const { listPostRequest, listSuggestionRequest, verifyRequest, params: { vcode } } = this.props
 
     if (vcode) {
@@ -62,6 +53,8 @@ class HomePage extends Component {
     }
     listPostRequest()
     listSuggestionRequest()
+
+    this.initializeState(this.props)
   }
 
   componentDidMount() {
@@ -69,7 +62,7 @@ class HomePage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { user, params: { vcode } } = this.props
+    const { authenticated, user, params: { vcode } } = this.props
     const { homeInfo: { status } } = nextProps
 
     if (status === CREATE_POST_SUCCESS) {
@@ -94,10 +87,32 @@ class HomePage extends Component {
         }, 1000)
       })
     }
+
+    this.initializeState(nextProps)
   }
 
   componentWillUnmount() {
     window.removeEventListener('click', this.handleWindowClick)
+  }
+
+  initializeState = props => {
+    const { authenticated, user } = props
+
+    const rand = Math.floor((Math.random() * 76)) + 1
+    const coverPicRand = (rand < 10) ? `000${rand}` : `00${rand}`;
+    const profilePicRand = Math.floor((Math.random() * 9))
+
+    if (!authenticated) {
+      this.setState({
+        coverPic: `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`,
+        profilePic: `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`,
+      })
+    } else {
+      this.setState({
+        coverPic: user.coverPic ? user.coverPic : `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`,
+        profilePic: user.profilePic ? user.profilePic : `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`,
+      })
+    }
   }
 
   handleWindowClick = () => {

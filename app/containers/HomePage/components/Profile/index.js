@@ -162,7 +162,7 @@ export default class Profile extends Component {
         { coverPic &&
             (coverPic instanceof File)
             ? <FileImage ref={ref => { this.coverPicObj = ref }} file={coverPic} />
-            : <img src={authenticated && user.coverPic ? user.coverPic : coverPic} role="presentation" />
+            : <img src={coverPic} role="presentation" />
         }
         <div className="profile__pic" onClick={authenticated ? this.handleProfilePic : onClick}>
           <LoadingSpinner show={profilePicSpinner}>
@@ -171,7 +171,7 @@ export default class Profile extends Component {
           { profilePic &&
               (profilePic instanceof File)
               ? <FileImage ref={ref => { this.profilePicObj = ref }}file={profilePic} />
-              : <img src={authenticated && user.profilePic ? user.profilePic : profilePic} role="presentation" />
+              : <img src={profilePic} role="presentation" />
           }
         </div>
         { authenticated && <UserButton className="profile__userButton" onClick={onClick} /> }
