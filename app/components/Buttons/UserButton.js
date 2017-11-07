@@ -18,6 +18,7 @@ export default class UserButton extends Component {
     return (
       <button className={className} onClick={this.handleClick}>
         <img src={`${CLOUDINARY_ICON_URL}/user-white-shadow.png`} role="presentation" />
+        <img className="hover" src={`${CLOUDINARY_ICON_URL}/user-white-shadow.png`} role="presentation" />
       </button>
     )
   }

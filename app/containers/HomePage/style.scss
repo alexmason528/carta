@@ -51,7 +51,8 @@
       .btnImage {
         background: #fff;
         padding: 5px;
-        box-shadow: 0 0 7px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
+        transition: all 0.1s;
       }
 
       .btnText {
@@ -59,6 +60,17 @@
         font-weight: 700;
         font-size: 15px;
         text-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
+        transition: all 0.1s;
+      }
+
+      &:hover {
+        .btnImage {
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+        }
+
+        .btnText {
+          text-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+        }
       }
     }
 

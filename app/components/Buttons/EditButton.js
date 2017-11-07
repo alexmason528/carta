@@ -6,6 +6,7 @@ export default class EditButton extends Component {
     onClick: PropTypes.func.isRequired,
     className: PropTypes.string,
     image: PropTypes.string.isRequired,
+    hover: PropTypes.bool,
   }
 
   handleClick = evt => {
@@ -15,10 +16,11 @@ export default class EditButton extends Component {
   }
 
   render() {
-    const { className, image } = this.props
+    const { className, image, hover } = this.props
     return (
       <button type="button" className={className} onClick={this.handleClick}>
         <img src={`${CLOUDINARY_ICON_URL}/${image}.png`} role="presentation" />
+        { hover && <img className="hover" src={`${CLOUDINARY_ICON_URL}/${image}.png`} role="presentation" />}
       </button>
     )
   }

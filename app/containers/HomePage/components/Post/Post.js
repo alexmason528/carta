@@ -378,7 +378,7 @@ class Post extends Component {
           <div className={postClass} onClick={this.handlePostClick}>
             <div className="postImage" onClick={this.handleOpenLink}>
               { showFileImage ? <FileImage file={img} /> : <img src={img} role="presentation" /> }
-              { showPostRemoveImage && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostImageRemove} /> }
+              { showPostRemoveImage && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostImageRemove} /> }
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>
                 <img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
@@ -406,7 +406,7 @@ class Post extends Component {
         { postType === 'mediaPost' &&
           <div className={postClass} onClick={this.handlePostClick}>
             <div className="postImage" onClick={this.handleOpenLink}>
-              { editable && !editing && <EditButton className="postEditBtn" image="edit-white-shadow" onClick={this.handleStartEdit} /> }
+              { editable && !editing && <EditButton className="postEditBtn" image="edit-white-shadow" hover onClick={this.handleStartEdit} /> }
               { showFileImage ? <FileImage file={img} /> : <img src={img} role="presentation" /> }
               { showPostRemoveImage && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostImageRemove} /> }
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
