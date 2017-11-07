@@ -429,7 +429,7 @@ class Post extends Component {
         { postType === 'textPost' &&
           <div className={postClass} onClick={this.handlePostClick}>
             { editing
-              ? <textarea className="postTitleEdit" tabIndex="0" placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
+              ? <ContentEditable className="postTitleEdit" tabIndex="0" placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
               : <div className="postTitle" dangerouslySetInnerHTML={{ __html: title ? title.replace(/\n/g, '<br />') : '' }} />
             }
             <div className="postContent">
