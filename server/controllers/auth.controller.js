@@ -1,7 +1,7 @@
 const User = require('../models/user')
 const nodemailer = require('nodemailer')
 const Cryptr = require('cryptr')
-const cryptr = new Cryptr('carta')
+const cryptr = new Cryptr('carta', 'aes256')
 const ses = require('nodemailer-ses-transport')
 
 let transporter = nodemailer.createTransport(ses({
@@ -21,7 +21,7 @@ const login = (req, res) => {
 
   User.find({ email: email }, (err, element) => {
     if (element.length > 0) {
-      if (element[0].password === password) {
+      if (element[0].password === cryptr.encrypt(password)) {
         const { _id, fullname, email, role, profilePic, coverPic, verified } = element[0]
         const data = { _id, fullname, email, role, profilePic, coverPic, verified }
         return res.json(data)
@@ -63,7 +63,7 @@ const register = (req, res) => {
   let data = {
     fullname,
     email,
-    password,
+    password: cryptr.encrypt(password),
     role,
     profilePic,
     coverPic,

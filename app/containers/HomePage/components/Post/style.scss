@@ -10,6 +10,10 @@
   margin-bottom: 8px;
   transition: all 0.1s;
 
+  &.postCreate {
+    margin-bottom: 0;
+  }
+
   &--hidden {
     max-height: 0px;
     margin-bottom: 0;

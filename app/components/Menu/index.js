@@ -11,6 +11,7 @@ import './style.scss'
 class Menu extends Component {
   static propTypes = {
     logOut: PropTypes.func,
+    currentPage: PropTypes.string,
     authenticated: PropTypes.bool,
   }
 
@@ -35,7 +36,7 @@ class Menu extends Component {
 
   render() {
     const { showMenu } = this.state
-    const { authenticated, logOut } = this.props
+    const { authenticated, logOut, currentPage } = this.props
 
     const cartaMenuClass = className({
       cartaMenu: true,
@@ -53,7 +54,8 @@ class Menu extends Component {
         </div>
         <div className={cartaMenuClass} onClick={this.handleMenuClick}>
           <ul>
-            <li><button onClick={() => browserHistory.push('/quest')}>Quest</button></li>
+            { currentPage !== 'Home' && <li><button onClick={() => browserHistory.push('/')}>Home</button></li>}
+            { currentPage !== 'Quest' && <li><button onClick={() => browserHistory.push('/quest')}>Quest</button></li>}
             <li><button onClick={() => { window.location.href = 'http://carta.guide' }}>About</button></li>
             {authenticated && <li><button onClick={logOut}>Sign out</button></li>}
           </ul>

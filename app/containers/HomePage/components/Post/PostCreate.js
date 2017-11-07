@@ -291,6 +291,7 @@ class PostCreate extends Component {
 
     const postClass = className({
       post: true,
+      postCreate: true,
       [postType]: true,
     })
 

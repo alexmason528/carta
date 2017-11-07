@@ -183,7 +183,7 @@ class HomePage extends Component {
             { name: 'description', content: 'Carta' },
           ]}
         />
-        <Menu />
+        <Menu currentPage="Home" />
         <Row className="homepage__row">
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col">
             <Profile

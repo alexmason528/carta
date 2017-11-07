@@ -358,7 +358,7 @@ class QuestPage extends Component {
             { name: 'description', content: 'Carta' },
           ]}
         />
-        <Menu />
+        <Menu currentPage="Quest" />
         <QuestButton
           className={questButtonClass}
           onClick={this.handleQuestButtonClick}
