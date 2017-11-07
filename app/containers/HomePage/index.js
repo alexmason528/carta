@@ -82,7 +82,7 @@ class HomePage extends Component {
               timer: timer - 1,
             })
           } else {
-            browserHistory.push('/home')
+            browserHistory.push('/')
           }
         }, 1000)
       })
