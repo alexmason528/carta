@@ -16,8 +16,16 @@ class AuthWrapper extends Component {
   static propTypes = {
     loginRequest: PropTypes.func,
     registerRequest: PropTypes.func,
-    coverPic: PropTypes.string,
-    profilePic: PropTypes.string,
+    onCoverPicChange: PropTypes.func,
+    onProfilePicChange: PropTypes.func,
+    coverPic: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object,
+    ]),
+    profilePic: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object,
+    ]),
     info: PropTypes.object,
     show: PropTypes.bool,
   }
@@ -168,7 +176,7 @@ class AuthWrapper extends Component {
 
   render() {
     const { authType, loginError, registerError, email, password, imageUpload } = this.state
-    const { info: { status }, show, loginRequest } = this.props
+    const { info: { status }, show, loginRequest, onCoverPicChange, onProfilePicChange } = this.props
 
     const spinnerShow = status === LOGIN_REQUEST || status === REGISTER_REQUEST || imageUpload.uploading
 
@@ -193,7 +201,7 @@ class AuthWrapper extends Component {
           <span>Or</span>
         </div>
         { authType === 'login' && <LoginForm onSubmit={this.handleLogin} loginError={loginError} onAuthTypeChange={this.handleAuthTypeChange} /> }
-        { authType === 'register' && <RegisterForm onSubmit={this.handleRegister} registerError={registerError} onAuthTypeChange={this.handleAuthTypeChange} email={email} password={password} /> }
+        { authType === 'register' && <RegisterForm onSubmit={this.handleRegister} registerError={registerError} onAuthTypeChange={this.handleAuthTypeChange} email={email} password={password} onCoverPicChange={onCoverPicChange} onProfilePicChange={onProfilePicChange} /> }
       </div>
     )
   }

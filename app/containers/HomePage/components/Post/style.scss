@@ -30,7 +30,7 @@
 .mediaPost {
   overflow: hidden;
 
-  .postTitle {
+  .postTitle, .postTitleEdit {
     max-width: calc(100% - 40px);
     top: 50%;
     transform: translate(0, -50%);
@@ -39,10 +39,6 @@
   }
 
   .postTitleEdit {
-    max-width: calc(100% - 40px);
-    top: 50%;
-    transform: translate(0, -50%);
-    overflow: hidden;
     color: #fff;
   }
 
@@ -269,7 +265,7 @@
     line-height: 0;
     border-radius: 20px;
     margin-right: 5px;
-    box-shadow: 0 0 7px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
 
     img {
       width: 10px;
@@ -281,7 +277,17 @@
     color: #fff;
     text-transform: uppercase;
     font-weight: 700;
-    text-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
+  }
+
+  &:hover {
+    .btnImage {
+      box-shadow: 0 0 7px rgba(0, 0, 0, 0.6);
+    }
+
+    .btnText {
+      text-shadow: 0 0 7px rgba(0, 0, 0, 0.6);
+    }
   }
 }
 

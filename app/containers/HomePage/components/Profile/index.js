@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
+import FileImage from 'react-file-image'
 import axios from 'axios'
 import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, UPDATE_USER_REQUEST } from 'containers/App/constants'
 import LoadingSpinner from 'components/LoadingSpinner'
@@ -14,20 +15,32 @@ export default class Profile extends Component {
     authenticated: PropTypes.bool,
     user: PropTypes.object,
     info: PropTypes.object,
-    coverPic: PropTypes.string,
-    profilePic: PropTypes.string,
+    coverPic: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object,
+    ]),
+    profilePic: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object,
+    ]),
   }
 
   constructor(props) {
     super(props)
 
     this.state = {
+      profilePic: null,
+      coverPic: null,
       imageType: null,
       imageUpload: {
         uploading: false,
         error: null,
       },
     }
+  }
+  componentWillMount() {
+    const { profilePic, coverPic } = this.props
+    this.setState({ profilePic, coverPic })
   }
 
   componentDidMount() {
@@ -41,6 +54,21 @@ export default class Profile extends Component {
       }
     }, 0)
     window.addEventListener('resize', this.handleResize)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { profilePic, coverPic } = this.props
+    if (profilePic !== nextProps.profilePic) {
+      this.setState({ profilePic: null }, () => {
+        this.setState({ profilePic: nextProps.profilePic })
+      })
+    }
+
+    if (coverPic !== nextProps.coverPic) {
+      this.setState({ coverPic: null }, () => {
+        this.setState({ coverPic: nextProps.coverPic })
+      })
+    }
   }
 
   componentWillUnmount() {
@@ -119,8 +147,8 @@ export default class Profile extends Component {
   }
 
   render() {
-    const { authenticated, user, onClick, coverPic, profilePic, info: { status, error } } = this.props
-    const { imageUpload, imageType } = this.state
+    const { authenticated, user, onClick, info: { status, error } } = this.props
+    const { coverPic, profilePic, imageUpload, imageType } = this.state
     const coverPicSpinner = imageType === 'coverPic' && (imageUpload.uploading || status === UPDATE_USER_REQUEST)
     const profilePicSpinner = imageType === 'profilePic' && (imageUpload.uploading || status === UPDATE_USER_REQUEST)
 
@@ -131,12 +159,20 @@ export default class Profile extends Component {
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
         <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
-        <img src={authenticated && user.coverPic ? user.coverPic : coverPic} role="presentation" />
+        { coverPic &&
+            (coverPic instanceof File)
+            ? <FileImage ref={ref => { this.coverPicObj = ref }} file={coverPic} />
+            : <img src={authenticated && user.coverPic ? user.coverPic : coverPic} role="presentation" />
+        }
         <div className="profile__pic" onClick={authenticated ? this.handleProfilePic : onClick}>
           <LoadingSpinner show={profilePicSpinner}>
             <QuarterSpinner width={30} height={30} />
           </LoadingSpinner>
-          <img src={authenticated && user.profilePic ? user.profilePic : profilePic} role="presentation" />
+          { profilePic &&
+              (profilePic instanceof File)
+              ? <FileImage ref={ref => { this.profilePicObj = ref }}file={profilePic} />
+              : <img src={authenticated && user.profilePic ? user.profilePic : profilePic} role="presentation" />
+          }
         </div>
         { authenticated && <UserButton className="profile__userButton" onClick={onClick} /> }
         { authenticated ? <h2>{user.fullname}</h2> : <h2 onClick={onClick}>Sign in</h2> }

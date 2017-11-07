@@ -6,7 +6,13 @@ import RenderDropzone from './RenderDropzone'
 import registerFormValidator from './validate'
 import './style.scss'
 
-const RegisterForm = ({ handleSubmit, registerError, onAuthTypeChange }) => (
+const RegisterForm = ({
+  handleSubmit,
+  registerError,
+  onAuthTypeChange,
+  onCoverPicChange,
+  onProfilePicChange,
+}) => (
   <form onSubmit={handleSubmit}>
     <Field
       name="email"
@@ -37,12 +43,14 @@ const RegisterForm = ({ handleSubmit, registerError, onAuthTypeChange }) => (
         className="authWrapper__uploadButton"
         name="profilePic"
         label="Profile Pic"
+        onChange={onProfilePicChange}
         component={RenderDropzone}
       />
       <Field
         className="authWrapper__uploadButton"
         name="coverPic"
         label="Cover Pic"
+        onChange={onCoverPicChange}
         component={RenderDropzone}
       />
     </div>
@@ -56,6 +64,8 @@ const RegisterForm = ({ handleSubmit, registerError, onAuthTypeChange }) => (
 
 RegisterForm.propTypes = {
   handleSubmit: PropTypes.func,
+  onProfilePicChange: PropTypes.func,
+  onCoverPicChange: PropTypes.func,
   onAuthTypeChange: PropTypes.func,
   registerError: PropTypes.string,
 }

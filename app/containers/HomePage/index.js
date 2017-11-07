@@ -39,6 +39,8 @@ class HomePage extends Component {
       showCreatePostForm: false,
       showAccountMenu: false,
       editingPost: false,
+      coverPic: null,
+      profilePic: null,
       timer: 0,
     }
   }
@@ -48,8 +50,10 @@ class HomePage extends Component {
     const coverPicRand = (rand < 10) ? `000${rand}` : `00${rand}`;
     const profilePicRand = Math.floor((Math.random() * 9))
 
-    this.coverPic = `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`
-    this.profilePic = `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`
+    this.setState({
+      coverPic: `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`,
+      profilePic: `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`,
+    })
 
     const { listPostRequest, listSuggestionRequest, verifyRequest, params: { vcode } } = this.props
 
@@ -130,8 +134,24 @@ class HomePage extends Component {
     })
   }
 
+  handleProfilePic = (evt, newVal, prevVal) => {
+    if (newVal && newVal.length > 0) {
+      this.setState({
+        profilePic: newVal[0],
+      })
+    }
+  }
+
+  handleCoverPic = (evt, newVal, prevVal) => {
+    if (newVal && newVal.length > 0) {
+      this.setState({
+        coverPic: newVal[0],
+      })
+    }
+  }
+
   render() {
-    const { showAuthWrapper, showCreatePostForm, showAccountMenu, timer, editingPost } = this.state
+    const { showAuthWrapper, showCreatePostForm, showAccountMenu, timer, editingPost, coverPic, profilePic } = this.state
     const { posts, suggestions, authenticated, user, logOut, updateUserRequest, info } = this.props
     const { status, error } = info
 
@@ -157,10 +177,19 @@ class HomePage extends Component {
               authenticated={authenticated}
               user={user}
               info={info}
-              coverPic={this.coverPic}
-              profilePic={this.profilePic}
+              coverPic={coverPic}
+              profilePic={profilePic}
             />
-            { authenticated ? <AccountMenu show={showAccountMenu} /> : <AuthWrapper show={showAuthWrapper} coverPic={this.coverPic} profilePic={this.profilePic} /> }
+            { authenticated ?
+              <AccountMenu show={showAccountMenu} /> :
+              <AuthWrapper
+                show={showAuthWrapper}
+                onCoverPicChange={this.handleCoverPic}
+                onProfilePicChange={this.handleProfilePic}
+                coverPic={coverPic}
+                profilePic={profilePic}
+              />
+            }
             <Quest authenticated={authenticated} />
           </Col>
 
