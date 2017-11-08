@@ -67,7 +67,6 @@ class HomePage extends Component {
         profilePic: `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`,
       })
     }
-    console.log(authenticated)
   }
 
   componentDidMount() {
@@ -101,14 +100,12 @@ class HomePage extends Component {
       })
     }
 
-    // console.log(nextProps.authenticated)
-
-    // if (!authenticated && nextProps.authenticated) {
-    //   this.setState({
-    //     coverPic: nextProps.user.coverPic,
-    //     profilePic: nextProps.user.profilePic,
-    //   })
-    // }
+    if (!authenticated && nextProps.authenticated) {
+      this.setState({
+        coverPic: nextProps.user.coverPic,
+        profilePic: nextProps.user.profilePic,
+      })
+    }
   }
 
   componentWillUnmount() {
