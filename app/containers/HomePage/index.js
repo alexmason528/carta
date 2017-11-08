@@ -46,7 +46,7 @@ class HomePage extends Component {
   }
 
   componentWillMount() {
-    const { listPostRequest, listSuggestionRequest, verifyRequest, params: { vcode } } = this.props
+    const { listPostRequest, listSuggestionRequest, verifyRequest, params: { vcode }, authenticated, user } = this.props
 
     if (vcode) {
       verifyRequest({ vcode })
@@ -54,7 +54,19 @@ class HomePage extends Component {
     listPostRequest()
     listSuggestionRequest()
 
-    this.initializeState(this.props)
+    const rand = Math.floor((Math.random() * 76)) + 1
+    const coverPicRand = (rand < 10) ? `000${rand}` : `00${rand}`;
+    const profilePicRand = Math.floor((Math.random() * 9))
+
+    if (authenticated) {
+      const { coverPic, profilePic } = user
+      this.setState({ coverPic, profilePic })
+    } else {
+      this.setState({
+        coverPic: `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`,
+        profilePic: `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`,
+      })
+    }
   }
 
   componentDidMount() {
@@ -88,36 +100,16 @@ class HomePage extends Component {
       })
     }
 
-    this.initializeState(nextProps)
+    if (nextProps.authenticated) {
+      this.setState({
+        coverPic: nextProps.user.coverPic,
+        profilePic: nextProps.user.profilePic,
+      })
+    }
   }
 
   componentWillUnmount() {
     window.removeEventListener('click', this.handleWindowClick)
-  }
-
-  initializeState = props => {
-    const { authenticated, user } = props
-
-    const rand = Math.floor((Math.random() * 76)) + 1
-    const coverPicRand = (rand < 10) ? `000${rand}` : `00${rand}`;
-    const profilePicRand = Math.floor((Math.random() * 9))
-
-    if (!authenticated) {
-      const { coverPic, profilePic } = this.state
-      let data = Object.assign({},
-        !coverPic && { coverPic: `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg` },
-        !profilePic && { profilePic: `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg` },
-      )
-      if (Object.keys(data).length > 0) {
-        console.log('set')
-        this.setState(data)
-      }
-    } else {
-      this.setState({
-        coverPic: user.coverPic || `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`,
-        profilePic: user.profilePic || `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`,
-      })
-    }
   }
 
   handleWindowClick = () => {
