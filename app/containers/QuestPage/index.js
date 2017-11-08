@@ -8,7 +8,7 @@ import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
 import { Container } from 'reactstrap'
 import Menu from 'components/Menu'
-import { MAP_ACCESS_TOKEN, CLOUDINARY_DATA_URL } from 'containers/App/constants'
+import { MAP_ACCESS_TOKEN, CLOUDINARY_POINTS_URL, CLOUDINARY_SHAPES_URL } from 'containers/App/constants'
 import URLParser from 'utils/questURLparser'
 import { mapChange, fetchQuestInfo, fetchRecommendations, setDefaultQuest } from './actions'
 import { selectRecommendations, selectPlaces } from './selectors'
@@ -88,8 +88,8 @@ class QuestPage extends Component {
 
     this.colors = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379']
 
-    this.shapesGeoJSONSource = `${CLOUDINARY_DATA_URL}/shapes.png`
-    this.shapesGeoJSONSource = `${CLOUDINARY_DATA_URL}/points.png`
+    this.shapesGeoJSONSource = `${CLOUDINARY_SHAPES_URL}/shapes.geojson`
+    this.pointsGeoJSONSource = `${CLOUDINARY_POINTS_URL}/points.geojson`
 
     this.map = ''
 
@@ -163,7 +163,7 @@ class QuestPage extends Component {
         layout: {},
         paint: {
           'fill-color': this.colors[i],
-          'fill-opacity': 0.1,
+          'fill-opacity': 0,
         },
         filter: ['==', 'e', ''],
       })
@@ -297,7 +297,7 @@ class QuestPage extends Component {
   }
 
   handleElementClick = name => {
-    browserHistory.push(`/i/${name}`)
+    browserHistory.push(`/quest/i/${name}`)
   }
 
   handleQuestButtonClick = () => {

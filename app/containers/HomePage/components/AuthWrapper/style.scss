@@ -1,6 +1,6 @@
 .authWrapper {
   margin: 8px 0;
-  padding: 12% 30px 20px 50px;
+  padding: 12% 30px 30px 50px;
   position: relative;
   max-height: 1000px;
   opacity: 1;
@@ -134,5 +134,14 @@
     padding: 8px;
     color: #333;
     font-weight: 300;
+  }
+
+  .error {
+    color: #e80303;
+    position: absolute;
+    bottom: 0;
+    background: #fff;
+    font-weight: 400;
+    width: calc(100% - 80px);
   }
 }

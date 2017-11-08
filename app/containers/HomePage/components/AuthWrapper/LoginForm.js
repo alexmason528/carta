@@ -11,12 +11,14 @@ const LoginForm = ({ handleSubmit, loginError, onAuthTypeChange }) => (
       type="email"
       component={RenderField}
       label="Email"
+      order={1}
     />
     <Field
       name="password"
       type="password"
       component={RenderField}
       label="Password"
+      order={2}
     />
     <div className="authWrapper__buttons">
       <button className="active">Sign in</button>

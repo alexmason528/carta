@@ -19,24 +19,28 @@ const RegisterForm = ({
       type="email"
       component={RenderField}
       label="Email"
+      order={0}
     />
     <Field
       name="password"
       type="password"
       component={RenderField}
       label="Password"
+      order={1}
     />
     <Field
       name="confirmPassword"
       type="password"
       component={RenderField}
       label="Repeat password"
+      order={2}
     />
     <Field
       name="fullname"
       type="text"
       component={RenderField}
       label="Full name"
+      order={3}
     />
     <div className="authWrapper__uploadButtons">
       <Field

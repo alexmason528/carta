@@ -1,6 +1,4 @@
-.postContainer {
-  position: relative;
-}
+.postContainer { position: relative }
 
 .post {
   position: relative;
@@ -315,9 +313,7 @@
   &:focus { outline: none }
 }
 
-.postTitleEdit {
-  cursor: text;
-}
+.postTitleEdit { cursor: text }
 
 .postContent {
   padding: 15px 20px 20px 20px;

@@ -27,9 +27,7 @@
     position: relative;
     transition: all 0.1s;
 
-    &:hover {
-      box-shadow: 0 0 7px rgba(0, 0, 0, 0.6);
-    }
+    &:hover { box-shadow: 0 0 7px rgba(0, 0, 0, 0.6) }
   }
 }
 
@@ -51,15 +49,11 @@
     li {
       list-style-type: none;
 
-      button {
-        margin-bottom: 20px;
-      }
+      button { margin-bottom: 20px }
     }
   }
 
-  &--hidden {
-    transform: translate(-100%, 0);
-  }
+  &--hidden { transform: translate(-100%, 0) }
 
   &__tab {
     position: absolute;
@@ -74,9 +68,7 @@
     transition: all 0.1s;
 
     &:hover{
-      &:before {
-        box-shadow: 0 0 7px rgba(0, 0, 0, 0.6);
-      }
+      &:before { box-shadow: 0 0 7px rgba(0, 0, 0, 0.6) }
     }
 
     &:before, &:after {
@@ -94,10 +86,7 @@
       border-radius: 0 5px 5px 0;
     }
 
-    &:after {
-      box-shadow: none;
-      z-index: 2;
-    }
+    &:after { box-shadow: none; z-index: 2 }
 
     img {
       position: relative;
