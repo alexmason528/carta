@@ -103,12 +103,12 @@ class HomePage extends Component {
 
     // console.log(nextProps.authenticated)
 
-    if (!authenticated && nextProps.authenticated) {
-      this.setState({
-        coverPic: nextProps.user.coverPic,
-        profilePic: nextProps.user.profilePic,
-      })
-    }
+    // if (!authenticated && nextProps.authenticated) {
+    //   this.setState({
+    //     coverPic: nextProps.user.coverPic,
+    //     profilePic: nextProps.user.profilePic,
+    //   })
+    // }
   }
 
   componentWillUnmount() {
