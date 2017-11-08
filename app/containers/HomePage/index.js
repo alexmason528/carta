@@ -58,15 +58,15 @@ class HomePage extends Component {
     const coverPicRand = (rand < 10) ? `000${rand}` : `00${rand}`;
     const profilePicRand = Math.floor((Math.random() * 9))
 
-    if (authenticated) {
-      const { coverPic, profilePic } = user
-      this.setState({ coverPic, profilePic })
-    } else {
+    // if (authenticated) {
+    //   const { coverPic, profilePic } = user
+    //   this.setState({ coverPic, profilePic })
+    // } else {
       this.setState({
         coverPic: `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`,
         profilePic: `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`,
       })
-    }
+    // }
   }
 
   componentDidMount() {
