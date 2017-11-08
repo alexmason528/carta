@@ -22,19 +22,18 @@ injectGlobal`
     -webkit-text-size-adjust: 100%; 
     overflow-x: hidden; 
     font-weight: 300; 
-    width: calc(100% + 20px); 
     position: relative;
 
-    &::-webkit-scrollbar {
-      width: 10px;
-      * {
-        background:transparent;
-      }
-    }
+    // &::-webkit-scrollbar {
+    //   width: 10px;
+    //   * {
+    //     background:transparent;
+    //   }
+    // }
 
-    &::-webkit-scrollbar-thumb {
-      background: rgba(200, 200, 200, 0.7) !important;
-    }
+    // &::-webkit-scrollbar-thumb {
+    //   background: rgba(200, 200, 200, 0.7) !important;
+    // }
   }
 
   * {

@@ -9,12 +9,14 @@ import { Popover, PopoverBody } from 'reactstrap'
 import ContentEditable from 'components/ContentEditable'
 import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
-import { getTextFromDate } from 'utils/dateHelper'
+import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
 import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { updatePostRequest, deletePostRequest } from 'containers/HomePage/actions'
 import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/constants'
 import { selectHomeInfo } from 'containers/HomePage/selectors'
-import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
+import { getTextFromDate } from 'utils/dateHelper'
+import { elemToText, textToElem, getPostType } from 'utils/stringHelper'
+
 import './style.scss'
 
 class Post extends Component {
@@ -31,8 +33,9 @@ class Post extends Component {
     super(props)
 
     this.state = {
-      showLinkBar: false,
+      showDeleteConfirm: false,
       showInfo: false,
+      showLinkBar: false,
       editable: false,
       editing: false,
       link: '',
@@ -146,19 +149,25 @@ class Post extends Component {
     })
   }
 
-  handlePostContent = evt => {
-    const value = evt.target.value
+  handlePostContent = value => {
     this.setState({
-      content: value.length > 0 ? value : '',
+      content: value,
     })
   }
 
   handleDelete = () => {
+    this.setState({
+      showDeleteConfirm: !this.state.showDeleteConfirm,
+    }, () => {
+      this.handleResize()
+    })
+  }
+
+  handleDeleteConfirm = () => {
     const { _id } = this.state
     const { deletePostRequest, onPostEdit } = this.props
     deletePostRequest(_id)
     onPostEdit(false)
-    this.handleResize()
   }
 
   handlePostLinkBtn = evt => {
@@ -205,10 +214,10 @@ class Post extends Component {
     const { updatePostRequest } = this.props
 
     let data = {
-      title: title.replace(new RegExp('<div>', 'g'), '\n').replace(new RegExp('</div>', 'g'), ''),
       link,
-      content: content !== null ? content : '',
       id: _id,
+      title: elemToText(title),
+      content: elemToText(content),
     }
 
     const { onPostEdit } = this.props
@@ -283,6 +292,7 @@ class Post extends Component {
 
   handlePostClick = () => {
     this.setState({
+      showDeleteConfirm: false,
       showLinkBar: false,
       showInfo: false,
     })
@@ -316,6 +326,7 @@ class Post extends Component {
       content,
       created_at,
       username,
+      showDeleteConfirm,
       showLinkBar,
       showInfo,
       editable,
@@ -324,17 +335,14 @@ class Post extends Component {
       imageUpload,
     } = this.state
 
-    let postType
+    let postType = getPostType(img, content)
 
-    if (img && content !== null) {
-      postType = 'mixedPost'
-    } else if (img && content === null) {
-      postType = 'mediaPost'
-    } else if (!img && content !== null) {
-      postType = 'textPost'
-    } else if (title !== null) {
-      postType = 'textPost'
-    }
+    const showPostLinkButton = editing && !showLinkBar
+    const showFileImage = img && (img instanceof File)
+    const spinnerShow = ((status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST) && (curPost === _id)) || imageUpload.uploading
+    const submittable = title && (img || content)
+    let parsedTitle = title ? title.replace(/\n/g, '</div><div>') : ''
+
 
     const postClass = className({
       post: true,
@@ -361,13 +369,10 @@ class Post extends Component {
       'postLinkBar--hidden': !showLinkBar,
     })
 
-    const canRemove = content && img
-    const showPostRemoveImage = editing && canRemove
-    const showPostRemoveContent = editable && editing && canRemove
-    const showPostLinkButton = editing && !showLinkBar
-    const showFileImage = img && (img instanceof File)
-    const spinnerShow = ((status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST) && (curPost === _id)) || imageUpload.uploading
-    let parsedTitle = title ? title.replace(/\n/g, '</div><div>') : ''
+    const submitBtnClass = className({
+      postBorderBtn: true,
+      disabled: !submittable,
+    })
 
     return (
       <div className="postContainer">
@@ -378,7 +383,7 @@ class Post extends Component {
           <div className={postClass} onClick={this.handlePostClick}>
             <div className="postImage" onClick={this.handleOpenLink}>
               { showFileImage ? <FileImage file={img} /> : <img src={img} role="presentation" /> }
-              { showPostRemoveImage && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostImageRemove} /> }
+              { editing && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostImageRemove} /> }
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>
                 <img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
@@ -386,18 +391,18 @@ class Post extends Component {
               </div>
               { editing
                 ? <ContentEditable className="postTitleEdit" placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
-                : <div className="postTitle" onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: title ? title.replace(/\n/g, '<br />') : '' }} />
+                : <div className="postTitle" onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
               }
             </div>
             <div className="postContent">
-              { showPostRemoveContent && <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostContentRemove} /> }
+              { editing && <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostContentRemove} /> }
               <div className="postMeta">
                 {username} - CARTA | {getTextFromDate(created_at)}
                 { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
               </div>
               { editing
-                ? <textarea className="postText" placeholder="Write here..." onChange={this.handlePostContent} value={content} />
-                : <div className="postText" dangerouslySetInnerHTML={{ __html: content ? content.replace(/\n/g, '<br/>') : '' }} />
+                ? <ContentEditable className="postText" placeholder="Write here..." onChange={this.handlePostContent} value={textToElem(content)} />
+                : <div className="postText" dangerouslySetInnerHTML={{ __html: textToElem(content) }} />
               }
             </div>
           </div>
@@ -408,7 +413,7 @@ class Post extends Component {
             <div className="postImage" onClick={this.handleOpenLink}>
               { editable && !editing && <EditButton className="postEditBtn" image="edit-white-shadow" hover onClick={this.handleStartEdit} /> }
               { showFileImage ? <FileImage file={img} /> : <img src={img} role="presentation" /> }
-              { showPostRemoveImage && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostImageRemove} /> }
+              { editing && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostImageRemove} /> }
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>
                 <img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
@@ -417,7 +422,7 @@ class Post extends Component {
             </div>
             { editing
               ? <ContentEditable className="postTitleEdit" placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
-              : <div className="postTitle" onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: title ? title.replace(/\n/g, '<br />') : '' }} />
+              : <div className="postTitle" onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
             }
             <div className={postInfoClass}>
               {username} - Carta | {getTextFromDate(created_at)}
@@ -430,17 +435,17 @@ class Post extends Component {
           <div className={postClass} onClick={this.handlePostClick}>
             { editing
               ? <ContentEditable className="postTitleEdit" tabIndex="0" placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
-              : <div className="postTitle" dangerouslySetInnerHTML={{ __html: title ? title.replace(/\n/g, '<br />') : '' }} />
+              : <div className="postTitle" dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
             }
             <div className="postContent">
-              { showPostRemoveContent && <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostContentRemove} /> }
+              { editing && <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostContentRemove} /> }
               <div className="postMeta">
                 {username} - CARTA | {getTextFromDate(created_at)}
                 { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
               </div>
               { editing
-                ? <textarea className="postText" tabIndex="0" placeholder="Write here..." onChange={this.handlePostContent} value={content} />
-                : <div className="postText" dangerouslySetInnerHTML={{ __html: content ? content.replace(/\n/g, '<br/>') : '' }} />
+                ? <ContentEditable className="postText" placeholder="Write here..." onChange={this.handlePostContent} value={textToElem(content)} />
+                : <div className="postText" dangerouslySetInnerHTML={{ __html: textToElem(content) }} />
               }
             </div>
           </div>
@@ -463,8 +468,8 @@ class Post extends Component {
             { postType &&
               <div className="right">
                 <button type="button" className="postCancelBtn" onClick={this.handleCancel}>CANCEL</button>
-                <DeleteButton className="postDeleteBtn" onClick={this.handleDelete} />
-                <button type="button" className="postBorderBtn" onClick={this.handleSubmit}>SUBMIT</button>
+                <DeleteButton className="postDeleteBtn" onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
+                <button type="button" className={submitBtnClass} disabled={!submittable} onClick={this.handleSubmit}>SUBMIT</button>
               </div>
             }
             <button type="button" className={closeButtonClass} onClick={onClose}>

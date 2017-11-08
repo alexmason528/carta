@@ -14,6 +14,7 @@ import { QuarterSpinner } from 'components/SvgIcon'
 import { createPostRequest } from 'containers/HomePage/actions'
 import { CREATE_POST_REQUEST, CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
 import { selectHomeInfo } from 'containers/HomePage/selectors'
+import { elemToText, textToElem, getPostType } from 'utils/stringHelper'
 import './style.scss'
 
 class PostCreate extends Component {
@@ -33,8 +34,9 @@ class PostCreate extends Component {
       content: null,
       title: '',
       link: '',
-      showLinkBar: false,
       showInfo: false,
+      showLinkBar: false,
+      showDeleteConfirm: false,
       imageUpload: {
         uploading: false,
         error: null,
@@ -55,8 +57,9 @@ class PostCreate extends Component {
         content: null,
         title: '',
         link: '',
-        showLinkBar: false,
         showInfo: false,
+        showLinkBar: false,
+        showDeleteConfirm: false,
       })
     }
   }
@@ -132,14 +135,19 @@ class PostCreate extends Component {
     })
   }
 
-  handlePostContent = evt => {
-    const value = evt.target.value
+  handlePostContent = value => {
     this.setState({
-      content: value.length > 0 ? value : '',
+      content: value,
     })
   }
 
   handleDelete = () => {
+    this.setState({
+      showDeleteConfirm: !this.state.showDeleteConfirm,
+    })
+  }
+
+  handleDeleteConfirm = () => {
     this.handleCancel()
   }
 
@@ -177,8 +185,8 @@ class PostCreate extends Component {
     let data = {
       link,
       author: user._id,
-      content: content !== null ? content : '',
-      title: title !== null ? title.replace(new RegExp('<div>', 'g'), '\n').replace(new RegExp('</div>', 'g'), '') : '',
+      content: elemToText(content),
+      title: elemToText(title),
       img: '',
     }
 
@@ -249,8 +257,9 @@ class PostCreate extends Component {
 
   handlePostClick = () => {
     this.setState({
-      showLinkBar: false,
       showInfo: false,
+      showLinkBar: false,
+      showDeleteConfirm: false,
     })
   }
 
@@ -269,25 +278,18 @@ class PostCreate extends Component {
       title,
       content,
       link,
-      showLinkBar,
       showInfo,
+      showLinkBar,
+      showDeleteConfirm,
       imageUpload,
     } = this.state
 
-    let postType
-
-    if (img && content !== null) {
-      postType = 'mixedPost'
-    } else if (img && content === null) {
-      postType = 'mediaPost'
-    } else if (!img && content !== null) {
-      postType = 'textPost'
-    }
+    let postType = getPostType(img, content)
 
     const showPostLinkButton = !showLinkBar
     const showFileImage = img instanceof File
     const spinnerShow = status === CREATE_POST_REQUEST || imageUpload.uploading
-    const submittable = postType === 'textPost' ? (title && content) : (title || content)
+    const submittable = title && (img || content)
 
     const postClass = className({
       post: true,
@@ -342,7 +344,7 @@ class PostCreate extends Component {
               <div className="postMeta">
                 {fullname} - CARTA | NOW
               </div>
-              <textarea className="postText" placeholder="Write here..." onChange={this.handlePostContent} value={content} />
+              <ContentEditable className="postText" placeholder="Write here..." onChange={this.handlePostContent} value={content} />
             </div>
           </div>
         }
@@ -374,7 +376,7 @@ class PostCreate extends Component {
               <div className="postMeta">
                 {fullname} - CARTA | NOW
               </div>
-              <textarea className="postText" placeholder="Write here..." onChange={this.handlePostContent} value={content} />
+              <ContentEditable className="postText" placeholder="Write here..." onChange={this.handlePostContent} value={content} />
             </div>
           </div>
         }
@@ -391,7 +393,7 @@ class PostCreate extends Component {
               <button type="button" className="postCancelBtn" onClick={this.handleCancel}>
                 CANCEL
               </button>
-              <DeleteButton className="postDeleteBtn" onClick={this.handleDelete} />
+              <DeleteButton className="postDeleteBtn" onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
               <button type="button" className={submitBtnClass} disabled={!submittable} onClick={this.handleSubmit}>
                 SUBMIT
               </button>

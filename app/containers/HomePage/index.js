@@ -103,14 +103,15 @@ class HomePage extends Component {
     const profilePicRand = Math.floor((Math.random() * 9))
 
     if (!authenticated) {
+      const { coverPic, profilePic } = this.state
       this.setState({
-        coverPic: `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`,
-        profilePic: `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`,
+        coverPic: coverPic || `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`,
+        profilePic: profilePic || `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`,
       })
     } else {
       this.setState({
-        coverPic: user.coverPic ? user.coverPic : `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`,
-        profilePic: user.profilePic ? user.profilePic : `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`,
+        coverPic: user.coverPic || `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`,
+        profilePic: user.profilePic || `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`,
       })
     }
   }

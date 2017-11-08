@@ -26,18 +26,6 @@
     }
   }
 
-  &__closeBtn {
-    position: absolute;
-    right: 30px;
-    top: 10px;
-
-    img {
-      width: 15px;
-      height: 15px;
-      filter: grayscale(100%);
-    }
-  }
-
   &__inlineButtons {
     display: flex;
     justify-content: space-between;
@@ -52,8 +40,6 @@
       align-items: center;
 
       img {
-        width: 20px;
-        height: 20px;
         margin-top: -1px;
         margin-right: 8px;
       }
@@ -88,8 +74,6 @@
     background: #fbfbfb;
 
     img {
-      width: 13px;
-      height: 13px;
       position: absolute;
       right: 5px;
       top: calc(50% - 10px);

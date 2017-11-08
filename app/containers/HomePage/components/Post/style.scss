@@ -10,9 +10,7 @@
   margin-bottom: 8px;
   transition: all 0.1s;
 
-  &.postCreate {
-    margin-bottom: 0;
-  }
+  &.postCreate, &--editing { margin-bottom: 0 }
 
   &--hidden {
     max-height: 0px;
@@ -20,14 +18,6 @@
     padding: 0;
     opacity: 0;
     overflow: hidden;
-  }
-
-  &--editing {
-    margin-bottom: 0;
-  }
-
-  textarea {
-    resize: none;
   }
 }
 
@@ -39,14 +29,10 @@
     top: 50%;
     transform: translate(0, -50%);
     overflow: hidden;
-    cursor: text;
+    cursor: pointer;
   }
 
-  .postTitleEdit {
-    cursor: default;
-    color: #fff;
-  }
-
+  .postTitleEdit { color: #fff; cursor: text }
   .postInfo {
     color: gray;
     text-transform: uppercase;  
@@ -58,9 +44,7 @@
     transition: all 0.2s;
     font-size: 12px;
 
-    &--hidden {
-      margin-left: -500px;
-    }
+    &--hidden { margin-left: -500px }
   }
 
   .postInfoBtn {
@@ -74,24 +58,19 @@
     right: 10px;
     z-index: 40;
     transition: all 0.2s;
+    opacity: 0.7;
 
     img {
-      opacity: 0.7;
       width: 10px;
       height: 10px;
     }
 
     &.active {
       background: rgba(255, 255, 255, 1);
-
-      img {
-        opacity: 1;
-      }
+      opacity: 1;
     }
 
-    &:hover {
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-    }
+    &:hover { box-shadow: 0 0 10px rgba(0, 0, 0, 0.6) }
   }
 
   .postEditBtn {
@@ -110,12 +89,10 @@
     bottom: 20px;
     max-width: calc(100% - 40px);
     overflow: hidden;
-    cursor: text;
+    cursor: pointer;
   }
 
-  .postTitleEdit {
-    color: #fff;
-  }
+  .postTitleEdit { color: #fff; cursor: text }
 }
 
 .textPost {
@@ -147,9 +124,7 @@
     overflow: hidden;
   }
 
-  .postContent, .postContentText {
-    border: none;
-  }
+  .postContent, .postContentText { border: none }
 
   .postContentText {
     padding-left: 0;
@@ -160,9 +135,7 @@
     opacity: 0.7;
     transition: all 0.1s;
 
-    &:hover {
-      opacity: 1;
-    }
+    &:hover { opacity: 1 }
   }
 }
 
@@ -203,9 +176,7 @@
     color: #bbb;
     cursor: default;
 
-    &:hover {
-      color: #bbb;
-    }
+    &:hover { color: #bbb }
   }
 }
 
@@ -229,9 +200,7 @@
   }
 
   &:hover {
-    .hover {
-      opacity: 1;
-    }
+    .hover { opacity: 1 }
   }
 }
 
@@ -248,9 +217,7 @@
     height: 13px;
   }
 
-  &:hover {
-    opacity: 1;
-  }
+  &:hover { opacity: 1 }
 }
 
 .postCloseBtn, .postDeleteBtn {
@@ -295,13 +262,8 @@
   }
 
   &:hover {
-    .btnImage {
-      box-shadow: 0 0 7px rgba(0, 0, 0, 0.6);
-    }
-
-    .btnText {
-      text-shadow: 0 0 7px rgba(0, 0, 0, 0.6);
-    }
+    .btnImage { box-shadow: 0 0 7px rgba(0, 0, 0, 0.6) }
+    .btnText { text-shadow: 0 0 7px rgba(0, 0, 0, 0.6) }
   }
 }
 
@@ -313,10 +275,7 @@
   &--hasContent {
     display: none
   }
-
-  &:hover {
-    opacity: 1;
-  }
+  &:hover { opacity: 1 }
 }
 
 .postDeleteBtn {
@@ -325,10 +284,41 @@
   margin: 0 10px;
   position: relative;
   z-index: 1000;
-  opacity: 0.7;
 
-  &:hover {
-    opacity: 1;
+  img { opacity: 0.7 }
+  &:hover img { opacity: 1 }
+
+  .popOver {
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0,0,0,0.9);
+    color: #fff;
+    font-size: 12px;
+    padding: 15px;
+    position: absolute;
+    bottom: -45px;
+    left: -28px;
+    display: none;
+
+    button { color: gray }
+
+    &:after, &:before {
+      background: #fff;
+      transform: rotate(-45deg);
+      z-index: -1;
+      width: 10px;
+      height: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.9);
+      content: '';
+      display: block;
+      position: absolute;
+      top: -5px;
+      left: calc(50% - 5px);
+    }
+
+    &:before {
+      box-shadow: none;
+      z-index: 1;
+    }
   }
 }
 
@@ -342,9 +332,7 @@
   font-weight: 900;
   z-index: 50;
 
-  &:focus {
-    outline: none;
-  }
+  &:focus { outline: none }
 }
 
 .postContent {
@@ -382,9 +370,7 @@
   }
 
   &:hover {
-    .hover {
-      opacity: 1;
-    }
+    .hover { opacity: 1 }
   }
 
 }
@@ -397,9 +383,7 @@
   font-weight: lighter;
   font-size: 14.5px;
 
-  &:focus {
-    outline: none;
-  }
+  &:focus { outline: none }
 }
 
 .postButtons {
@@ -411,9 +395,7 @@
   z-index: 20;
   background: #fff;
 
-  &.postCreate {
-    padding-top: 8px;
-  }
+  &.postCreate { padding-top: 8px }
 
   .left, .right {
     display: flex;
@@ -421,13 +403,8 @@
     align-items: center;
   }
 
-  .left button{
-    margin-right: 5px;
-  }
-
-  .right button {
-    margin-left: 2px;
-  }
+  .left button{ margin-right: 5px }
+  .right button { margin-left: 2px }
 
   input[type=file] {
     display: none;

@@ -16,7 +16,6 @@ import { MapBlock, ScoreBoardBlock } from './Components/Blocks'
 import QuestPanel from './Components/QuestPanel'
 import Brochure from './Components/Brochure'
 import { Button, QuestButton } from './Components/Buttons'
-import './style.scss'
 
 const Map = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN })
 

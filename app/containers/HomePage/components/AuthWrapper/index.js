@@ -194,8 +194,8 @@ class AuthWrapper extends Component {
           <span>With</span>
         </div>
         <div className="authWrapper__inlineButtons">
-          <button type="button"><img src={`${CLOUDINARY_ICON_URL}/google.png`} role="presentation" /><span>Google</span></button>
-          <button type="button"><img src={`${CLOUDINARY_ICON_URL}/facebook.png`} role="presentation" /><span>Facebook</span></button>
+          <button type="button"><img className="img20" src={`${CLOUDINARY_ICON_URL}/google.png`} role="presentation" /><span>Google</span></button>
+          <button type="button"><img className="img20" src={`${CLOUDINARY_ICON_URL}/facebook.png`} role="presentation" /><span>Facebook</span></button>
         </div>
         <div className="authWrapper__divider">
           <span>Or</span>

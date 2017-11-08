@@ -2,6 +2,7 @@
   background: #fff;
   padding: 0;
   margin: 0;
+  overflow-x: hidden;
   
   &__row {
     margin: 0 -4px;
@@ -144,6 +145,7 @@
   input, textarea {
     cursor: text;
     color: #000;
+    resize: none;
   }
 
   input::placeholder,
@@ -165,4 +167,13 @@
     -webkit-background-color: #fff;
     -webkit-box-shadow: 0 0 0px 1000px white inset;
   }
+
+  .img10 { width: 10px; height: 10px }
+  .img11 { width: 11px; height: 11px }
+  .img12 { width: 12px; height: 12px }
+  .img13 { width: 13px; height: 13px }
+  .img14 { width: 14px; height: 14px }
+  .img15 { width: 15px; height: 15px }
+  .img20 { width: 20px; height: 20px }
+  .img30 { width: 30px; height: 30px }
 }

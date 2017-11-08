@@ -32,9 +32,9 @@ class RenderDropZone extends Component {
           multiple={false}
         >
           <div>{label}</div>
-          { files.length > 0 && <img src={`${CLOUDINARY_ICON_URL}/check-green.png`} role="presentation" />}
+          { files.length > 0 && <img className="img13" src={`${CLOUDINARY_ICON_URL}/check-green.png`} role="presentation" /> }
         </Dropzone>
-        {touched && error && <span className="error">{error}</span>}
+        { touched && error && <span className="error">{error}</span> }
       </div>
     )
   }
