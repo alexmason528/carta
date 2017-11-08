@@ -102,16 +102,21 @@ class HomePage extends Component {
     const coverPicRand = (rand < 10) ? `000${rand}` : `00${rand}`;
     const profilePicRand = Math.floor((Math.random() * 9))
 
+    let data
+
     if (!authenticated) {
       const { coverPic, profilePic } = this.state
-      this.setState({
-        coverPic: coverPic ? coverPic : `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`,
-        profilePic: profilePic ? profilePic : `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`,
-      })
+      data = Object.assign({},
+        !coverPic && { coverPic: `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg` },
+        !profilePic && { profilePic: `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg` },
+      )
+      if (Object.keys(data).length > 0) {
+        this.setState(data)
+      }
     } else {
       this.setState({
-        coverPic: user.coverPic ? user.coverPic : `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`,
-        profilePic: user.profilePic ? user.profilePic : `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`,
+        coverPic: user.coverPic || `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`,
+        profilePic: user.profilePic || `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`,
       })
     }
   }
