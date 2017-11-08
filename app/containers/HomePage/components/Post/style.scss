@@ -10,7 +10,7 @@
   margin-bottom: 8px;
   transition: all 0.1s;
 
-  &.postCreate, &--editing { margin-bottom: 0 }
+  &.postCreate { margin-bottom: 0 }
 
   &--hidden {
     max-height: 0px;
@@ -25,14 +25,14 @@
   overflow: hidden;
 
   .postTitle, .postTitleEdit {
-    max-width: calc(100% - 40px);
     top: 50%;
     transform: translate(0, -50%);
-    overflow: hidden;
+  }
+
+  .postTitle {
     cursor: pointer;
   }
 
-  .postTitleEdit { color: #fff; cursor: text }
   .postInfo {
     color: gray;
     text-transform: uppercase;  
@@ -60,15 +60,9 @@
     transition: all 0.2s;
     opacity: 0.7;
 
-    img {
-      width: 10px;
-      height: 10px;
-    }
+    img { width: 10px; height: 10px }
 
-    &.active {
-      background: rgba(255, 255, 255, 1);
-      opacity: 1;
-    }
+    &.active { background: rgba(255, 255, 255, 1); opacity: 1 }
 
     &:hover { box-shadow: 0 0 10px rgba(0, 0, 0, 0.6) }
   }
@@ -77,10 +71,7 @@
     top: 13px;
     right: 4px;
 
-    img {
-      width: 30px;
-      height: 30px;
-    }
+    img { width: 30px; height: 30px }
   }
 }
 
@@ -91,8 +82,6 @@
     overflow: hidden;
     cursor: pointer;
   }
-
-  .postTitleEdit { color: #fff; cursor: text }
 }
 
 .textPost {
@@ -107,6 +96,8 @@
     margin: 20px 0 0 20px;
     max-width: calc(100% - 40px);
     overflow: hidden;
+    user-select: auto;
+    cursor: text;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -126,10 +117,7 @@
 
   .postContent, .postContentText { border: none }
 
-  .postContentText {
-    padding-left: 0;
-    padding-right: 0;
-  }
+  .postContentText { padding-left: 0; padding-right: 0 }
 
   .postEditBtn {
     opacity: 0.7;
@@ -157,10 +145,7 @@
     z-index: 30;
   }
 
-  img {
-    width: 100%;
-    height: auto;
-  }
+  img { width: 100%; height: auto }
 }
 
 .postBorderBtn {
@@ -187,10 +172,7 @@
   line-height: 0;
   z-index: 40;
 
-  img {
-    width: 30px;
-    height: 30px;
-  }
+  img { width: 30px; height: 30px }
 
   .hover {
     position: absolute;
@@ -212,10 +194,7 @@
   z-index: 40;
   opacity: 0.7;
 
-  img {
-    width: 13px;
-    height: 13px;
-  }
+  img { width: 13px; height: 13px }
 
   &:hover { opacity: 1 }
 }
@@ -225,10 +204,7 @@
   z-index: 40;
   opacity: 1;
   
-  img {
-    width: 15px;
-    height: 15px;
-  }
+  img { width: 15px; height: 15px }
 }
 
 .postLinkBtn {
@@ -248,10 +224,7 @@
     margin-right: 5px;
     box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
 
-    img {
-      width: 10px;
-      height: 10px;
-    }
+    img { width: 10px; height: 10px }
   }
 
   .btnText {
@@ -275,6 +248,7 @@
   &--hasContent {
     display: none
   }
+
   &:hover { opacity: 1 }
 }
 
@@ -286,6 +260,7 @@
   z-index: 1000;
 
   img { opacity: 0.7 }
+
   &:hover img { opacity: 1 }
 
   .popOver {
@@ -315,10 +290,14 @@
       left: calc(50% - 5px);
     }
 
-    &:before {
-      box-shadow: none;
-      z-index: 1;
-    }
+    &:before { box-shadow: none; z-index: 1 }
+  }
+}
+
+.mixedPost, .textPost {
+  .postMeta {
+    cursor: text;
+    user-select: auto;
   }
 }
 
@@ -331,8 +310,13 @@
   text-transform: uppercase;      
   font-weight: 900;
   z-index: 50;
+  overflow: hidden;
 
   &:focus { outline: none }
+}
+
+.postTitleEdit {
+  cursor: text;
 }
 
 .postContent {
@@ -357,10 +341,7 @@
   top: 5px;
   z-index: 30;
 
-  img {
-    width: 14px;
-    height: 14px;
-  }
+  img { width: 14px; height: 14px }
 
   .hover {
     position: absolute;
@@ -382,6 +363,8 @@
   height: auto;
   font-weight: lighter;
   font-size: 14.5px;
+  cursor: text;
+  user-select: auto;
 
   &:focus { outline: none }
 }
@@ -406,9 +389,7 @@
   .left button{ margin-right: 5px }
   .right button { margin-left: 2px }
 
-  input[type=file] {
-    display: none;
-  }
+  input[type=file] { display: none }
 }
 
 .postLinkBar {
@@ -429,10 +410,7 @@
   opacity: 1;
   transition: all 0.1s;
 
-  img {
-    width: 10px;
-    height: 10px;
-  }
+  img { width: 10px; height: 10px }
 
   input[type=text] {
     margin-left: 10px;
@@ -441,8 +419,5 @@
     font-weight: 300;
   }
 
-  &--hidden {
-    opacity: 0;
-    z-index: 1;
-  }
+  &--hidden { opacity: 0; z-index: 1 }
 }

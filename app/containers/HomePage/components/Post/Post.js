@@ -391,7 +391,7 @@ class Post extends Component {
               </div>
               { editing
                 ? <ContentEditable className="postTitleEdit" placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
-                : <div className="postTitle" onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
+                : <div className="postTitle" onClick={this.handleOpenLink}title={elemToText(title)} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
               }
             </div>
             <div className="postContent">
@@ -422,7 +422,7 @@ class Post extends Component {
             </div>
             { editing
               ? <ContentEditable className="postTitleEdit" placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
-              : <div className="postTitle" onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
+              : <div className="postTitle" title={elemToText(title)} onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
             }
             <div className={postInfoClass}>
               {username} - Carta | {getTextFromDate(created_at)}
@@ -435,7 +435,7 @@ class Post extends Component {
           <div className={postClass} onClick={this.handlePostClick}>
             { editing
               ? <ContentEditable className="postTitleEdit" tabIndex="0" placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
-              : <div className="postTitle" dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
+              : <div className="postTitle" title={elemToText(title)} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
             }
             <div className="postContent">
               { editing && <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostContentRemove} /> }
