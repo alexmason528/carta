@@ -58,15 +58,15 @@ class HomePage extends Component {
     const coverPicRand = (rand < 10) ? `000${rand}` : `00${rand}`;
     const profilePicRand = Math.floor((Math.random() * 9))
 
-    // if (authenticated) {
-    //   const { coverPic, profilePic } = user
-    //   this.setState({ coverPic, profilePic })
-    // } else {
+    if (authenticated) {
+      const { coverPic, profilePic } = user
+      this.setState({ coverPic, profilePic })
+    } else {
       this.setState({
         coverPic: `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`,
         profilePic: `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`,
       })
-    // }
+    }
   }
 
   componentDidMount() {
@@ -100,7 +100,7 @@ class HomePage extends Component {
       })
     }
 
-    if (nextProps.authenticated) {
+    if ((authenticated != nextProps.authenticated) && nextProps.authenticated) {
       this.setState({
         coverPic: nextProps.user.coverPic,
         profilePic: nextProps.user.profilePic,
