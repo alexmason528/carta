@@ -105,13 +105,13 @@ class HomePage extends Component {
     if (!authenticated) {
       const { coverPic, profilePic } = this.state
       this.setState({
-        coverPic: coverPic || `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`,
-        profilePic: profilePic || `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`,
+        coverPic: coverPic ? coverPic : `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`,
+        profilePic: profilePic ? profilePic : `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`,
       })
     } else {
       this.setState({
-        coverPic: user.coverPic || `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`,
-        profilePic: user.profilePic || `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`,
+        coverPic: user.coverPic ? user.coverPic : `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`,
+        profilePic: user.profilePic ? user.profilePic : `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`,
       })
     }
   }
