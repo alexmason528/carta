@@ -92,7 +92,7 @@ const deletePost = (req, res) => {
     if (err) {
       return res.status(400).send({
         error: {
-          details: err,
+          details: err.toString(),
         },
       })
     } else {

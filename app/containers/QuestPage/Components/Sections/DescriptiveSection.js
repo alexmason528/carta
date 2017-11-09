@@ -22,8 +22,8 @@ class DescriptiveSection extends Component {
 
     this.state = {
       descriptives: [],
-      expanded: 1,
-      anything: 0,
+      expanded: true,
+      anything: false,
       search: '',
     }
   }
@@ -37,33 +37,32 @@ class DescriptiveSection extends Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    let closable = 0
+    let closable = false
 
     const { descriptives } = nextState
     const { className } = this.props
 
     for (let descriptive of descriptives) {
-      if (descriptive.active === 1) {
-        closable = 1
+      if (descriptive.active) {
+        closable = true
         break
       }
     }
 
     if (nextProps.className !== className) {
-      nextState.expanded = 1 - closable
+      nextState.expanded = !closable
     }
   }
 
   initializeState = props => {
-    const { descriptives, currentDescriptives } = props
+    const { descriptives, currentDescriptives: { star, active } } = props
 
     const newDescriptives = descriptives.map(descriptive => {
-      if (currentDescriptives.star.indexOf(descriptive.c) !== -1) {
-        return { c: descriptive.c, name: descriptive.name, star: 1, active: 1 }
-      } else if (currentDescriptives.active.indexOf(descriptive.c) !== -1) {
-        return { c: descriptive.c, name: descriptive.name, star: 0, active: 1 }
-      }
-      return { c: descriptive.c, name: descriptive.name, star: 0, active: 0 }
+      const { c } = descriptive
+      const isStar = star.indexOf(c) !== -1
+      const isActive = active.indexOf(c) !== -1
+
+      return { ...descriptive, star: isStar, active: isStar || isActive }
     })
 
     this.setState({
@@ -72,68 +71,48 @@ class DescriptiveSection extends Component {
   }
 
   handleExpand = expanded => {
-    let descriptives = [...this.state.descriptives]
+    const data = Object.assign(
+      this.state,
+      { expanded },
+      !expanded && { search: '' }
+    )
 
-    this.setState({
-      expanded: expanded,
-    })
-
-    if (expanded === 0) {
-      this.setState({
-        search: '',
-      })
-    }
+    this.setState(data)
   }
 
   handleInputChange = evt => {
-    this.setState({
-      search: evt.target.value,
-    })
+    this.setState({ search: evt.target.value })
   }
 
   handleAnythingClick = () => {
     const { descriptives, anything } = this.state
-    let newDescriptives = descriptives.map(descriptive => ({ c: descriptive.c, name: descriptive.name, star: anything === 1 ? 0 : descriptive.star, active: 1 - anything }))
+    let newDescriptives = descriptives.map(descriptive => ({ ...descriptive, star: anything ? false : descriptive.star, active: !anything, visible: !anything }))
 
     let stateData = {
-      anything: 1 - anything,
+      anything: !anything,
       descriptives: newDescriptives,
     }
 
-    if (anything === 1) {
-      stateData.expanded = 1
+    if (anything) {
+      stateData.expanded = true
     }
 
     this.setState(stateData, this.handleFetchRecommendations)
   }
 
-  handleDescriptiveClick = descriptiveName => {
+  handleDescriptiveClick = name => {
     const { descriptives } = this.state
 
-    let newDescriptives = descriptives.map((descriptive, index) => {
-      const { c, name, star, active } = descriptive
-      return (name === descriptiveName) ? { c, name, star: 0, active: 1 - active } : descriptive
-    })
-
     this.setState({
-      descriptives: newDescriptives,
+      descriptives: descriptives.map(descriptive => (descriptive.name === name) ? { ...descriptive, star: false, active: !descriptive.active } : descriptive),
     }, this.handleFetchRecommendations)
   }
 
-  handleDescriptiveStarClick = descriptiveName => {
+  handleDescriptiveStarClick = name => {
     const { descriptives } = this.state
 
-    let newDescriptives = descriptives.map((descriptive, index) => {
-      const { c, name, star, active } = descriptive
-      if (name === descriptiveName) {
-        const newStar = 1 - star
-        return { c, name, star: 1 - star, active }
-      }
-      return descriptive
-    })
-
     this.setState({
-      descriptives: newDescriptives,
+      descriptives: descriptives.map(descriptive => (descriptive.name === name) ? { ...descriptive, star: !descriptive.star } : descriptive),
     }, this.handleFetchRecommendations)
   }
 
@@ -146,155 +125,119 @@ class DescriptiveSection extends Component {
     let inactive = []
 
     descriptives.forEach(descriptive => {
-      if (descriptive.star === 1) {
+      if (descriptive.star) {
         star.push(descriptive.c)
-      } else if (descriptive.active === 1) {
+      } else if (descriptive.active) {
         active.push(descriptive.c)
       } else {
         inactive.push(descriptive.c)
       }
     })
 
-    let questDescriptives = {
-      anything: anything,
-      active: active,
-      inactive: inactive,
-      star: star,
-    }
+    let questDescriptives = { anything, active, inactive, star }
 
     descriptiveSelect(questDescriptives)
     fetchRecommendations()
   }
 
-  handleDescriptiveClick = descriptiveName => {
-    const { descriptiveSelect, questIndex, fetchRecommendations } = this.props
-    let descriptives = [...this.state.descriptives]
+  // handleDescriptiveClick = descriptiveName => {
+  //   const { descriptiveSelect, questIndex, fetchRecommendations } = this.props
+  //   let descriptives = [...this.state.descriptives]
 
-    let newDescriptives = descriptives.map((descriptive, index) => {
-      const { name, star, visible, active } = descriptive
-      if (name === descriptiveName) {
-        descriptiveSelect(name, 1, 1, 1, questIndex)
-        return { name: name, star: 1, visible: 1, active: 1 }
-      }
-      return descriptive
-    })
+  //   let newDescriptives = descriptives.map((descriptive, index) => {
+  //     const { name, star, visible, active } = descriptive
+  //     if (name === descriptiveName) {
+  //       descriptiveSelect(name, 1, 1, 1, questIndex)
+  //       return { name: name, star: 1, visible: 1, active: 1 }
+  //     }
+  //     return descriptive
+  //   })
 
-    this.setState({
-      descriptives: newDescriptives,
-    })
-
-    fetchRecommendations()
-  }
+  //   this.setState({
+  //     descriptives: newDescriptives,
+  //   }, () => { fetchRecommendations() })
+  // }
 
   render() {
     const { descriptives, expanded, anything, search } = this.state
     const { className } = this.props
 
-    let searchedDescriptives = []
-    if (search === '') searchedDescriptives = descriptives
-    else searchedDescriptives = descriptives.filter(descriptive => (descriptive.name.toLowerCase().indexOf(search) !== -1))
+    let searchedDescriptives = (search === '') ? descriptives : descriptives.filter(descriptive => (descriptive.name.toLowerCase().indexOf(search) !== -1))
 
-    let excludedDescriptives = descriptives.filter(descriptive => descriptive.active === 0)
-    let staredDescriptives = descriptives.filter(descriptive => descriptive.star === 1)
-    let activeDescriptives = descriptives.filter(descriptive => descriptive.active === 1)
+    let excludedDescriptives = descriptives.filter(descriptive => !descriptive.active)
+    let staredDescriptives = descriptives.filter(descriptive => descriptive.star)
+    let activeDescriptives = descriptives.filter(descriptive => descriptive.active)
 
     const searchBtnClass = classNames({
       search: true,
-      invisible: expanded === 1,
+      invisible: expanded,
     })
 
     const closeBtnClass = classNames({
       close: true,
-      invisible: expanded === 0 || (anything === 0 && staredDescriptives.length === 0 && activeDescriptives.length === 0),
+      invisible: !expanded || (!anything && staredDescriptives.length === 0 && activeDescriptives.length === 0),
     })
 
     const anythingBtnClass = classNames({
-      hidden: (expanded === 0 && anything === 0) || ('anything'.indexOf(search.toLowerCase()) === -1),
+      hidden: (!expanded && !anything) || ('anything'.indexOf(search.toLowerCase()) === -1),
     })
 
     const searchInputClass = classNames({
       'search-input': true,
       'descriptive-search': true,
-      invisible: expanded === 0,
+      invisible: !expanded,
     })
 
     const filteredClass = classNames({
       filtered: true,
-      show: expanded === 1 || (expanded === 0 && anything === 0),
+      show: expanded || (!expanded && !anything),
     })
 
     const excludedClass = classNames({
       excluded: true,
-      show: anything === 1 && expanded === 0 && excludedDescriptives.length > 0 && excludedDescriptives.length !== descriptives.length,
+      show: anything && !expanded && excludedDescriptives.length > 0 && excludedDescriptives.length !== descriptives.length,
     })
 
     const staredClass = classNames({
       stared: true,
-      show: anything === 1 && staredDescriptives.length > 0,
+      show: anything && staredDescriptives.length > 0,
     })
 
     return (
       <div className={className}>
         <h1>Known For</h1>
-        <img className={searchBtnClass} src={`${CLOUDINARY_ICON_URL}/search.png`} onClick={() => { this.handleExpand(1) }} role="presentation" />
-        <img className={closeBtnClass} src={`${CLOUDINARY_ICON_URL}/back.png`} onClick={() => { this.handleExpand(0) }} role="presentation" />
+        <img className={searchBtnClass} src={`${CLOUDINARY_ICON_URL}/search.png`} onClick={() => { this.handleExpand(true) }} role="presentation" />
+        <img className={closeBtnClass} src={`${CLOUDINARY_ICON_URL}/back.png`} onClick={() => { this.handleExpand(false) }} role="presentation" />
         <input className={searchInputClass} value={search} onChange={this.handleInputChange} />
         <div className="suggestions">
-          <Button
-            className={anythingBtnClass}
-            active={anything}
-            onClick={this.handleAnythingClick}
-          >
-            Anything
-          </Button>
+          <Button className={anythingBtnClass} active={anything} onClick={this.handleAnythingClick}>Anything</Button>
           <div className={filteredClass}>
             {
-              searchedDescriptives.map((descriptive, index) => {
-                const { name, star, active } = descriptive
-                let starButton
-
-                if (expanded === 1) {
-                  starButton = (
-                    <StarButton
-                      active={active}
-                      star={star}
-                      onMouseDown={() => { this.handleDescriptiveClick(name) }}
-                      onStarClick={() => { this.handleDescriptiveStarClick(name) }}
-                      key={index}
-                    >
-                      {name}
-                    </StarButton>
-                  )
-                } else if (star === 1 || active === 1) {
-                  starButton = (
-                    <StarButton
-                      active={active}
-                      star={star}
-                      onMouseDown={() => { this.handleDescriptiveClick(name) }}
-                      onStarClick={() => { this.handleDescriptiveStarClick(name) }}
-                      key={index}
-                    >
-                      {name}
-                    </StarButton>
-                  )
-                }
-
-                return starButton
-              })
-          }
+            searchedDescriptives.map((descriptive, index) => {
+              const { name, star, active } = descriptive
+              return (expanded || (star || active)) ? (
+                <StarButton
+                  key={index}
+                  {...descriptive}
+                  onMouseDown={() => { this.handleDescriptiveClick(name) }}
+                  onStarClick={() => { this.handleDescriptiveStarClick(name) }}
+                >
+                  {name}
+                </StarButton>) : null
+            })
+            }
           </div>
           <div className={staredClass}>
             <div className="notable">NOTABLY</div>
             {
               staredDescriptives.map((descriptive, index) => {
-                const { name, star, active } = descriptive
+                const { name } = descriptive
                 return (
                   <StarButton
-                    active={active}
-                    star={star}
+                    key={index}
+                    {...descriptive}
                     onMouseDown={() => { this.handleDescriptiveClick(name) }}
                     onStarClick={() => { this.handleDescriptiveStarClick(name) }}
-                    key={index}
                   >
                     {name}
                   </StarButton>
@@ -306,14 +249,13 @@ class DescriptiveSection extends Component {
             <div className="except">ONLY IGNORING</div>
             {
               excludedDescriptives.map((descriptive, index) => {
-                const { name, star, active } = descriptive
+                const { name } = descriptive
                 return (
                   <StarButton
-                    active={active}
-                    star={star}
+                    key={index}
+                    {...descriptives}
                     onMouseDown={() => { this.handleDescriptiveClick(name) }}
                     onStarClick={() => { this.handleDescriptiveStarClick(name) }}
-                    key={index}
                   >
                     {name}
                   </StarButton>

@@ -39,9 +39,7 @@ export default class Quest extends Component {
   }
 
   handleTabClick = tab => {
-    this.setState({
-      currentTab: tab,
-    })
+    this.setState({ currentTab: tab })
   }
 
   handleNextBtnClick = () => {

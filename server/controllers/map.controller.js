@@ -83,11 +83,11 @@ const getRecommendations = (req, res) => {
     sum: 1,
   }
 
-  types.active.map((type) => {
+  types.active.map(type => {
     typeProject[type] = 1
   })
 
-  types.inactive.map((type) => {
+  types.inactive.map(type => {
     typeProject[type] = 1
   })
 
@@ -95,11 +95,11 @@ const getRecommendations = (req, res) => {
     sum: 1,
   }
 
-  descriptives.interests.map((interest) => {
+  descriptives.interests.map(interest => {
     descriptiveProject[interest] = 1
   })
 
-  descriptives.stars.map((star) => {
+  descriptives.stars.map(star => {
     descriptiveProject[star] = 1
   })
 
@@ -160,7 +160,7 @@ const getRecommendations = (req, res) => {
       let dScore = 0
       let tScore = 0
 
-      if (descriptivesAll === 0) {
+      if (!descriptivesAll) {
         descriptives.interests.map((interest) => {
           if (element.descriptive[interest] !== '') {
             dScore += parseFloat(element.descriptive[interest]) * 0.3
@@ -172,7 +172,7 @@ const getRecommendations = (req, res) => {
             dScore += parseFloat(element.descriptive[star]) * 1
           }
         })
-      } else if (descriptivesAll === 1) {
+      } else {
         if (element.descriptive.sum !== '') {
           dScore += parseFloat(element.descriptive.sum) * 0.3
         }
@@ -190,13 +190,13 @@ const getRecommendations = (req, res) => {
         })
       }
 
-      if (typesAll === 0) {
+      if (!typesAll) {
         types.active.map((type) => {
           if (element.type[type] !== '') {
             tScore += parseFloat(element.type[type])
           }
         })
-      } else if (typesAll === 1) {
+      } else {
         if (element.type.sum !== '') {
           tScore += parseFloat(element.type.sum)
         }

@@ -30,7 +30,7 @@ export function* getRecommendations() {
 
   let descriptives
 
-  if (curDescriptives.anything === 1) {
+  if (curDescriptives.anything) {
     descriptives = {
       stars: curDescriptives.star,
       interests: curDescriptives.inactive,
@@ -60,20 +60,20 @@ export function* getRecommendations() {
   }
 
   let sendRequest = false
-  if ((data.typesAll === 1 || data.types.active.length > 0) && (data.descriptivesAll === 1 || data.descriptives.stars.length > 0 || data.descriptives.interests.length > 0)) {
+  if ((data.typesAll || data.types.active.length > 0) && (data.descriptivesAll || data.descriptives.stars.length > 0 || data.descriptives.interests.length > 0)) {
     sendRequest = true
   }
 
-  let recommendations = []
+  let res = []
 
   try {
     if (sendRequest) {
-      recommendations = yield call(request, requestURL, params)
+      res = yield call(request, requestURL, params)
     }
 
-    yield put(fetchRecommendationsSuccess(recommendations))
+    yield put(fetchRecommendationsSuccess(res))
   } catch (err) {
-    yield put(fetchRecommendationsFail(recommendations))
+    yield put(fetchRecommendationsFail(err.toString()))
   }
 }
 
@@ -83,8 +83,6 @@ export function* getQuestInfo() {
   const params = {
     method: 'GET',
   }
-
-  let questInfo
 
   const places = [
     { name: 'Netherlands', x: 5.291266, y: 52.132633, zoom: 6.3 },
@@ -108,17 +106,17 @@ export function* getQuestInfo() {
   ]
 
   try {
-    questInfo = yield call(request, requestURL, params)
+    const res = yield call(request, requestURL, params)
 
     const payload = {
       places: places,
-      types: questInfo.types.map(type => { return { c: type.c, name: type.name } }),
-      descriptives: questInfo.descriptives.map(descriptive => { return { c: descriptive.c, name: descriptive.name } }),
+      types: res.types.map(type => ({ c: type.c, name: type.name })),
+      descriptives: res.descriptives.map(descriptive => ({ c: descriptive.c, name: descriptive.name })),
     }
 
     yield put(fetchQuestInfoSuccess(payload))
   } catch (err) {
-    yield put(fetchQuestInfoFail(questInfo))
+    yield put(fetchQuestInfoFail(err.toString()))
   }
 }
 
@@ -137,12 +135,11 @@ export function* getBrochureInformation(payload) {
     },
   }
 
-  let response
   try {
-    response = yield call(request, requestURL, params)
-    yield put(fetchBrochureSuccess(response))
+    const res = yield call(request, requestURL, params)
+    yield put(fetchBrochureSuccess(res.info))
   } catch (err) {
-    yield put(fetchBrochureFail(response))
+    yield put(fetchBrochureFail(err.toString()))
   }
 }
 

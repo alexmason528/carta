@@ -13,14 +13,14 @@ class QuestPanel extends Component {
   static propTypes = {
     minimizeClicked: PropTypes.func.isRequired,
     closeClicked: PropTypes.func.isRequired,
-    quests: PropTypes.array,
-    currentQuestIndex: PropTypes.number,
-    className: PropTypes.string,
     mapViewPortChange: PropTypes.func,
     fetchRecommendations: PropTypes.func,
     questAdd: PropTypes.func,
     questSelect: PropTypes.func,
     questRemove: PropTypes.func,
+    quests: PropTypes.array,
+    currentQuestIndex: PropTypes.number,
+    className: PropTypes.string,
   }
 
   handleQuestAdd = () => {

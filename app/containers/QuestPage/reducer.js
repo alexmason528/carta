@@ -25,8 +25,6 @@ import {
 
 const initialState = {
   questInfo: {
-    fetching: false,
-    error: null,
     categories: {
       places: [],
       types: [],
@@ -39,12 +37,12 @@ const initialState = {
         zoomlevel: 0,
       },
       types: {
-        anything: 0,
+        anything: false,
         active: [],
         inactive: [],
       },
       descriptives: {
-        anything: 0,
+        anything: false,
         star: [],
         active: [],
         inactive: [],
@@ -52,11 +50,7 @@ const initialState = {
     }],
     currentQuestIndex: 0,
   },
-  recommendations: {
-    fetching: false,
-    error: null,
-    details: [],
-  },
+  recommendations: [],
 
   viewport: {
     zoom: 7,
@@ -64,15 +58,13 @@ const initialState = {
     southwest: {},
   },
 
-  brochure: {
-    fetching: false,
-    error: null,
-    details: {},
-  },
+  brochure: {},
+  status: null,
+  error: null,
 }
 
 
-function questReducer(state = initialState, action) {
+function questReducer(state = initialState, { type, payload }) {
   let questInfo
   let recommendations
   let currentQuestIndex
@@ -81,20 +73,21 @@ function questReducer(state = initialState, action) {
   let quests
   let brochure
 
-  switch (action.type) {
+  switch (type) {
 
     case MAP_CHANGE:
       return {
         ...state,
+        status: type,
         viewport: {
-          zoom: action.payload.zoom,
+          zoom: payload.zoom,
           northeast: {
-            x: action.payload.bounds._ne.lng,
-            y: action.payload.bounds._ne.lat,
+            x: payload.bounds._ne.lng,
+            y: payload.bounds._ne.lat,
           },
           southwest: {
-            x: action.payload.bounds._sw.lng,
-            y: action.payload.bounds._sw.lat,
+            x: payload.bounds._sw.lng,
+            y: payload.bounds._sw.lat,
           },
         },
       }
@@ -102,10 +95,11 @@ function questReducer(state = initialState, action) {
     case PLACE_SELECT:
       currentQuestIndex = state.questInfo.currentQuestIndex
       quests = state.questInfo.quests
-      quests[currentQuestIndex].place = action.payload
+      quests[currentQuestIndex].place = payload
 
       return {
         ...state,
+        status: type,
         questInfo: {
           ...state.questInfo,
           quests,
@@ -115,10 +109,10 @@ function questReducer(state = initialState, action) {
     case TYPE_SELECT:
       currentQuestIndex = state.questInfo.currentQuestIndex
       quests = state.questInfo.quests
-      quests[currentQuestIndex].types = action.payload
-
+      quests[currentQuestIndex].types = payload
       return {
         ...state,
+        status: type,
         questInfo: {
           ...state.questInfo,
           quests,
@@ -128,10 +122,11 @@ function questReducer(state = initialState, action) {
     case DESCRIPTIVE_SELECT:
       currentQuestIndex = state.questInfo.currentQuestIndex
       quests = state.questInfo.quests
-      quests[currentQuestIndex].descriptives = action.payload
+      quests[currentQuestIndex].descriptives = payload
 
       return {
         ...state,
+        status: type,
         questInfo: {
           ...state.questInfo,
           quests,
@@ -146,12 +141,12 @@ function questReducer(state = initialState, action) {
           zoomlevel: 0,
         },
         types: {
-          anything: 0,
+          anything: false,
           active: [],
           inactive: [],
         },
         descriptives: {
-          anything: 0,
+          anything: false,
           star: [],
           active: [],
           inactive: [],
@@ -160,6 +155,7 @@ function questReducer(state = initialState, action) {
 
       const newState = {
         ...state,
+        status: type,
         questInfo: {
           ...state.questInfo,
           quests: [
@@ -174,20 +170,22 @@ function questReducer(state = initialState, action) {
     case QUEST_SELECT:
       return {
         ...state,
+        status: type,
         questInfo: {
           ...state.questInfo,
-          currentQuestIndex: action.payload,
+          currentQuestIndex: payload,
         },
       }
 
     case QUEST_REMOVE:
       currentQuestIndex = state.questInfo.currentQuestIndex
       let newQuests = [...state.questInfo.quests]
-      newQuests.splice(action.payload, 1)
+      newQuests.splice(payload, 1)
 
-      if (action.payload < currentQuestIndex) {
+      if (payload < currentQuestIndex) {
         return {
           ...state,
+          status: type,
           questInfo: {
             ...state.questInfo,
             quests: newQuests,
@@ -198,6 +196,7 @@ function questReducer(state = initialState, action) {
 
       return {
         ...state,
+        status: type,
         questInfo: {
           ...state.questInfo,
           quests: newQuests,
@@ -209,8 +208,6 @@ function questReducer(state = initialState, action) {
 
     case FETCH_QUESTINFO:
       questInfo = {
-        fetching: true,
-        error: null,
         categories: {
           places: [],
           types: [],
@@ -222,27 +219,27 @@ function questReducer(state = initialState, action) {
 
       return {
         ...state,
+        status: type,
+        error: null,
         questInfo,
       }
 
     case FETCH_QUESTINFO_SUCCESS:
       questInfo = {
-        fetching: false,
-        error: null,
-        categories: action.payload,
+        categories: payload,
         quests: initialState.questInfo.quests,
         currentQuestIndex: 0,
       }
 
       return {
         ...state,
+        status: type,
+        error: null,
         questInfo,
       }
 
     case FETCH_QUESTINFO_FAIL:
       questInfo = {
-        fetching: false,
-        error: action.payload,
         categories: {
           places: [],
           types: [],
@@ -254,67 +251,53 @@ function questReducer(state = initialState, action) {
 
       return {
         ...state,
+        status: type,
+        error: payload,
         questInfo,
       }
 
     case FETCH_RECOMMENDATIONS:
       return {
         ...state,
-        recommendations: {
-          ...state.recommendations,
-          fetching: true,
-          error: null,
-        },
+        status: type,
+        error: null,
       }
 
     case FETCH_RECOMMENDATIONS_SUCCESS:
       return {
         ...state,
-        recommendations: {
-          fetching: false,
-          error: null,
-          details: action.payload,
-        },
+        status: type,
+        recommendations: payload,
       }
 
     case FETCH_RECOMMENDATIONS_FAIL:
       return {
         ...state,
-        recommendations: {
-          fetching: false,
-          error: action.payload,
-          details: [],
-        },
+        status: type,
+        error: payload,
+        recommendations: [],
       }
 
     case FETCH_BROCHURE:
       return {
         ...state,
-        brochure: {
-          fetching: true,
-          error: null,
-          details: {},
-        },
+        status: type,
+        error: null,
+        brochure: {},
       }
 
     case FETCH_BROCHURE_SUCCESS:
       return {
         ...state,
-        brochure: {
-          fetching: false,
-          error: null,
-          details: action.payload,
-        },
+        status: type,
+        brochure: payload,
       }
 
     case FETCH_BROCHURE_FAIL:
       return {
         ...state,
-        brochure: {
-          fetching: false,
-          error: action.payload,
-          details: {},
-        },
+        error: payload,
+        brochure: {},
       }
 
     default:

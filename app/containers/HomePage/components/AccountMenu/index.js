@@ -6,8 +6,9 @@ import { reduxForm, Field, Form } from 'redux-form'
 import { createStructuredSelector } from 'reselect'
 import { RemoveButton } from 'components/Buttons'
 import RenderField from 'components/RenderField'
+import { DELETE_USER_FAIL } from 'containers/App/constants'
 import { logOut, deleteUserRequest } from 'containers/App/actions'
-import { selectUser } from 'containers/App/selectors'
+import { selectUser, selectInfo } from 'containers/App/selectors'
 import deleteAccountFormValidator from './validate'
 import './style.scss'
 
@@ -17,6 +18,7 @@ class AccountMenu extends Component {
     logOut: PropTypes.func,
     deleteUserRequest: PropTypes.func,
     user: PropTypes.object,
+    info: PropTypes.object,
     show: PropTypes.bool,
   }
 
@@ -30,9 +32,13 @@ class AccountMenu extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      showContent: false,
-    })
+    const { show } = this.props
+
+    if (show !== nextProps.show) {
+      this.setState({
+        showContent: false,
+      })
+    }
   }
 
   handleSettingClick = () => {
@@ -73,7 +79,7 @@ class AccountMenu extends Component {
   }
 
   render() {
-    const { handleSubmit, logOut, show } = this.props
+    const { handleSubmit, logOut, show, info: { error, status } } = this.props
     const { showContent, showForm } = this.state
 
     const menuClass = className({
@@ -104,11 +110,13 @@ class AccountMenu extends Component {
               type="password"
               component={RenderField}
               label="Password"
+              order={1}
             />
             <div className="accountMenu__deleteFormButtons">
               <button type="button" onClick={this.handleCancelClick}>Cancel</button>
               <button className="active">Confirm</button>
             </div>
+            { status === DELETE_USER_FAIL && error && <div className="error">{error}</div> }
           </Form>
         </div>
       </div>
@@ -118,6 +126,7 @@ class AccountMenu extends Component {
 
 const selectors = createStructuredSelector({
   user: selectUser(),
+  info: selectInfo(),
 })
 
 const actions = {

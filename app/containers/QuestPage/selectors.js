@@ -44,11 +44,7 @@ const selectTypes = () => createSelector(
 
 const selectCurrentTypes = () => createSelector(
   selectQuest,
-  substate => {
-    const currentIndex = substate.questInfo.currentQuestIndex
-    const quests = substate.questInfo.quests
-    return quests[currentIndex].types
-  }
+  substate => substate.questInfo.quests[substate.questInfo.currentQuestIndex].types
 )
 
 const selectDescriptives = () => createSelector(
@@ -58,16 +54,17 @@ const selectDescriptives = () => createSelector(
 
 const selectCurrentDescriptives = () => createSelector(
   selectQuest,
-  substate => {
-    const currentIndex = substate.questInfo.currentQuestIndex
-    const quests = substate.questInfo.quests
-    return quests[currentIndex].descriptives
-  }
+  substate => substate.questInfo.quests[substate.questInfo.currentQuestIndex].descriptives
 )
 
 const selectBrochure = () => createSelector(
   selectQuest,
   substate => substate.brochure
+)
+
+const selectInfo = () => createSelector(
+  selectQuest,
+  substate => ({ status: substate.status, error: substate.error })
 )
 
 export {
@@ -84,4 +81,5 @@ export {
   selectDescriptives,
   selectCurrentDescriptives,
   selectBrochure,
+  selectInfo,
 }

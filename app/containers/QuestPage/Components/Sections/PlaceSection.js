@@ -33,9 +33,8 @@ class PlaceSection extends Component {
   }
 
   initializeState = props => {
-    this.setState({
-      places: props.places,
-    })
+    const { places } = props
+    this.setState({ places })
   }
 
   handlePlaceClick = placeName => {
@@ -44,18 +43,14 @@ class PlaceSection extends Component {
   }
 
   handleInputChange = evt => {
-    this.setState({
-      search: evt.target.value,
-    })
+    this.setState({ search: evt.target.value })
   }
 
   render() {
     const { places, search } = this.state
     const { className } = this.props
 
-    let filteredPlaces
-    if (search === '') filteredPlaces = places
-    else filteredPlaces = places.filter(place => place.name.toLowerCase().indexOf(search) !== -1)
+    let filteredPlaces = (search === '') ? places : places.filter(place => place.name.toLowerCase().indexOf(search) !== -1)
 
     return (
       <div className={className}>

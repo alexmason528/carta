@@ -72,7 +72,7 @@
 
     &--afterText {
       padding: 4px 8px;
-      border: 0.5px solid #ddd;
+      border: 0.5px solid #fff;
       margin: 9px 0 8px 14px;
 
       .btnText {
@@ -171,4 +171,13 @@
   .img15 { width: 15px; height: 15px }
   .img20 { width: 20px; height: 20px }
   .img30 { width: 30px; height: 30px }
+
+  .error {
+    position: absolute;
+    color: #e80303;
+    bottom: 0;
+    background: #fff;
+    font-weight: 300;
+    width: calc(100% - 80px);
+  }
 }

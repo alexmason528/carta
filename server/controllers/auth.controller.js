@@ -35,7 +35,7 @@ const login = (req, res) => {
     } else {
       return res.status(400).send({
         error: {
-          details: 'Invalid email',
+          details: 'Please enter a valid email address',
         },
       })
     }
@@ -55,7 +55,7 @@ const register = (req, res) => {
   if (password !== confirmPassword) {
     return res.status(400).send({
       error: {
-        details: 'Confirm password is not correct',
+        details: 'These passwords are not identical',
       },
     })
   }
@@ -76,7 +76,7 @@ const register = (req, res) => {
       if (err.name === 'MongoError' && err.code === 11000) {
         res.status(400).send({
           error: {
-            details: 'Email is already taken by other user',
+            details: 'You are already registered. Please sign in.',
           },
         })
       } else {
@@ -189,19 +189,7 @@ const deleteUser = (req, res) => {
   const { userID } = req.params
   const { password } = req.body
 
-  // User.remove({ _id: userID, password: password }, (err) => {
-  //   if (err) {
-  //     return res.status(400).send({
-  //       error: {
-  //         details: err.toString(),
-  //       },
-  //     })
-  //   } else {
-  //     return res.json({})
-  //   }
-  // })
-
-  User.findOne({ _id: userID, password: password }, (err, element) => {
+  User.findOne({ _id: userID, password: cryptr.encrypt(password) }, (err, element) => {
     if (err) {
       return res.status(400).send({
         error: {
@@ -209,6 +197,26 @@ const deleteUser = (req, res) => {
         },
       })
     }
+
+    if (!element) {
+      return res.status(400).send({
+        error: {
+          details: 'Password is not correct',
+        },
+      })
+    }
+
+    User.remove({ _id: userID }, (err) => {
+      if (err) {
+        return res.status(400).send({
+          error: {
+            details: err.toString(),
+          },
+        })
+      } else {
+        return res.json({})
+      }
+    })
   })
 }
 

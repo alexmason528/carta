@@ -21,7 +21,7 @@ const Map = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN })
 
 class QuestPage extends Component {
   static propTypes = {
-    recommendations: PropTypes.object,
+    recommendations: PropTypes.array,
     places: PropTypes.array,
     params: PropTypes.shape({
       brochure: PropTypes.string,
@@ -252,7 +252,7 @@ class QuestPage extends Component {
     if (this.map) {
       this.handleClearMap()
 
-      props.recommendations.details.map((recommendation, index) => {
+      props.recommendations.map((recommendation, index) => {
         const { display, e } = recommendation
         let filter = ['==', 'e', e]
 
@@ -272,7 +272,7 @@ class QuestPage extends Component {
 
   handleClearMap = () => {
     const { recommendations } = this.props
-    recommendations.details.map((recommendation, index) => {
+    recommendations.map((recommendation, index) => {
       let filter = ['==', 'e', '']
 
       this.map.setFilter(`shape-border-offset-${index}`, filter)
@@ -383,7 +383,7 @@ class QuestPage extends Component {
         </MapBlock>
         <ScoreBoardBlock>
           {
-            recommendations.details.map((recommendation, index) => {
+            recommendations.map((recommendation, index) => {
               const { name, score } = recommendation
               return <div key={index} style={{ color: this.colors[index % 5] }}>{name} : {score}</div>
             })

@@ -14,7 +14,7 @@ import { QuarterSpinner } from 'components/SvgIcon'
 import { createPostRequest } from 'containers/HomePage/actions'
 import { CREATE_POST_REQUEST, CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
 import { selectHomeInfo } from 'containers/HomePage/selectors'
-import { elemToText, textToElem, getPostType } from 'utils/stringHelper'
+import { elemToText, textToElem } from 'utils/stringHelper'
 import './style.scss'
 
 class PostCreate extends Component {
@@ -284,7 +284,15 @@ class PostCreate extends Component {
       imageUpload,
     } = this.state
 
-    let postType = getPostType(img, content)
+    let postType
+
+    if (img && content !== null) {
+      postType = 'mixedPost'
+    } else if (img && content === null) {
+      postType = 'mediaPost'
+    } else if (!img && content !== null) {
+      postType = 'textPost'
+    }
 
     const showPostLinkButton = !showLinkBar
     const showFileImage = img instanceof File
@@ -324,6 +332,7 @@ class PostCreate extends Component {
 
     return (
       <div className="postContainer">
+        { (showLinkBar || showInfo || showDeleteConfirm) && <div className="backLayer" onClick={this.handlePostClick} /> }
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>

@@ -100,13 +100,13 @@ export function deleteUserRequest(payload) {
 
 export function deleteUserSuccess() {
   return {
-    type: DELETE_USER_REQUEST,
+    type: DELETE_USER_SUCCESS,
   }
 }
 
 export function deleteUserFail(payload) {
   return {
-    type: DELETE_USER_REQUEST,
+    type: DELETE_USER_FAIL,
     payload,
   }
 }

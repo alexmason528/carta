@@ -3,17 +3,19 @@ import classNames from 'classnames'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
+import { FETCH_QUESTINFO_SUCCESS, FETCH_QUESTINFO_FAIL, QUEST_ADD } from 'containers/QuestPage/constants'
 import { fetchRecommendations, typeSelect } from 'containers/QuestPage/actions'
-import { selectTypes, selectCurrentTypes } from 'containers/QuestPage/selectors'
+import { selectInfo, selectTypes, selectCurrentTypes } from 'containers/QuestPage/selectors'
 import { Button, StarButton } from '../Buttons'
 
 class TypeSection extends Component {
   static propTypes = {
+    typeSelect: PropTypes.func,
+    fetchRecommendations: PropTypes.func,
     className: PropTypes.string,
     types: PropTypes.array,
     currentTypes: PropTypes.object,
-    typeSelect: PropTypes.func,
-    fetchRecommendations: PropTypes.func,
+    info: PropTypes.object,
   }
 
   constructor(props) {
@@ -21,8 +23,8 @@ class TypeSection extends Component {
 
     this.state = {
       types: [],
-      expanded: 1,
-      anything: 0,
+      expanded: true,
+      anything: false,
       search: '',
     }
   }
@@ -36,88 +38,66 @@ class TypeSection extends Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    let closable = 0
+    let closable = false
 
     const { types } = nextState
-    const { className } = nextProps
+    const { className } = this.props
 
     for (let tp of types) {
-      if (tp.active === 1) {
-        closable = 1
+      if (tp.active) {
+        closable = true
         break
       }
     }
 
-    if (className !== this.props.className) {
-      nextState.expanded = 1 - closable
+    if (className !== nextProps.className) {
+      nextState.expanded = !closable
     }
   }
 
   initializeState = props => {
-    const { types, currentTypes } = props
+    const { info: { status }, types, currentTypes } = props
 
-    const newTypes = types.map(type => {
-      if (currentTypes.active.indexOf(type.c) !== -1) {
-        return { c: type.c, name: type.name, active: 1 }
-      }
-      return { c: type.c, name: type.name, active: 0 }
-    })
-
-    this.setState({
-      types: newTypes,
-    })
-  }
-
-  handleExpand = expanded => {
-    let types = [...this.state.types]
-
-    this.setState({
-      expanded: expanded,
-    })
-
-    if (expanded === 0) {
+    if (status === FETCH_QUESTINFO_SUCCESS || status === FETCH_QUESTINFO_FAIL || status === QUEST_ADD) {
       this.setState({
-        search: '',
+        types: types.map(type => ({ ...type, visible: false, active: currentTypes.active.indexOf(type.c) !== -1 })),
       })
     }
   }
 
+  handleExpand = expanded => {
+    const data = Object.assign(
+      this.state,
+      { expanded },
+      !expanded && { search: '' }
+    )
+
+    this.setState(data)
+  }
+
   handleInputChange = evt => {
-    this.setState({
-      search: evt.target.value,
-    })
+    this.setState({ search: evt.target.value })
   }
 
   handleAnythingClick = () => {
     const { types, anything } = this.state
 
-    const newTypes = types.map(type => ({ c: type.c, name: type.name, active: 1 - anything }))
-
     let stateData = {
-      anything: 1 - anything,
-      types: newTypes,
+      anything: !anything,
+      types: types.map(type => ({ ...type, active: !anything })),
     }
 
-    if (anything === 1) {
-      stateData.expanded = 1
+    if (anything) {
+      stateData.expanded = true
     }
 
     this.setState(stateData, this.handleFetchRecommendations)
   }
 
-  handleTypeClick = typeName => {
-    const { types, expanded, anything } = this.state
-
-    let newTypes = types.map((type, index) => {
-      const { name, active } = type
-      if (name === typeName) {
-        return { c: type.c, name: name, active: 1 - active }
-      }
-      return type
-    })
-
+  handleTypeClick = name => {
+    const { types } = this.state
     this.setState({
-      types: newTypes,
+      types: types.map(type => (type.name === name) ? { ...type, active: !type.active } : type),
     }, this.handleFetchRecommendations)
   }
 
@@ -128,13 +108,9 @@ class TypeSection extends Component {
     let active = []
     let inactive = []
 
-    types.forEach(type => (type.active === 1) ? active.push(type.c) : inactive.push(type.c))
+    types.forEach(type => type.active ? active.push(type.c) : inactive.push(type.c))
 
-    let questTypes = {
-      anything: anything,
-      active: active,
-      inactive: inactive,
-    }
+    let questTypes = { anything, active, inactive }
 
     typeSelect(questTypes)
     fetchRecommendations()
@@ -144,48 +120,45 @@ class TypeSection extends Component {
     const { types, expanded, anything, search } = this.state
     const { className } = this.props
 
-    let searchedTypes = []
-    if (search === '') searchedTypes = types
-    else searchedTypes = types.filter(type => type.name.toLowerCase().indexOf(search.toLowerCase()) !== -1)
-
-    let excludedTypes = types.filter(type => type.active === 0)
-    let activeTypes = types.filter(type => type.active === 1)
+    let searchedTypes = (search === '') ? types : types.filter(type => type.name.toLowerCase().indexOf(search.toLowerCase()) !== -1)
+    let excludedTypes = types.filter(type => !type.active)
+    let activeTypes = types.filter(type => type.active)
 
     const searchBtnClass = classNames({
       search: true,
-      invisible: expanded === 1,
+      invisible: expanded,
     })
 
     const closeBtnClass = classNames({
       close: true,
-      invisible: expanded === 0 || (anything === 0 && activeTypes.length === 0),
+      invisible: !expanded || (!anything && activeTypes.length === 0),
     })
 
     const anythingBtnClass = classNames({
-      hidden: (expanded === 0 && anything === 0) || ('anything'.indexOf(search.toLowerCase()) === -1),
+      hidden: (!expanded && !anything) || ('anything'.indexOf(search.toLowerCase()) === -1),
     })
 
     const searchInputClass = classNames({
       'search-input': true,
       'type-search': true,
-      invisible: expanded === 0,
+      invisible: !expanded,
     })
 
     const filteredClass = classNames({
       filtered: true,
-      show: expanded === 1 || (expanded === 0 && anything === 0),
+      show: expanded || (!expanded && !anything),
     })
 
     const excludedClass = classNames({
       excluded: true,
-      show: anything === 1 && expanded === 0 && excludedTypes.length > 0 && excludedTypes.length !== types.length,
+      show: anything && !expanded && excludedTypes.length > 0 && excludedTypes.length !== types.length,
     })
 
     return (
       <div className={className}>
         <h1>Show Me</h1>
-        <img className={searchBtnClass} src={`${CLOUDINARY_ICON_URL}/search.png`} onClick={() => { this.handleExpand(1) }} role="presentation" />
-        <img className={closeBtnClass} src={`${CLOUDINARY_ICON_URL}/back.png`} onClick={() => { this.handleExpand(0) }} role="presentation" />
+        <img className={searchBtnClass} src={`${CLOUDINARY_ICON_URL}/search.png`} onClick={() => { this.handleExpand(true) }} role="presentation" />
+        <img className={closeBtnClass} src={`${CLOUDINARY_ICON_URL}/back.png`} onClick={() => { this.handleExpand(false) }} role="presentation" />
         <input className={searchInputClass} value={search} onChange={this.handleInputChange} />
         <div className="suggestion">
           <Button
@@ -197,51 +170,14 @@ class TypeSection extends Component {
           </Button>
           <div className={filteredClass}>
             {
-            searchedTypes.map((type, index) => {
-              const { name, active } = type
-              let button
-
-              if (expanded === 1) {
-                button = (
-                  <Button
-                    active={active}
-                    onClick={() => { this.handleTypeClick(name) }}
-                    key={index}
-                  >
-                    {name}
-                  </Button>
-                )
-              } else if (active === 1) {
-                button = (
-                  <Button
-                    active={active}
-                    onClick={() => { this.handleTypeClick(name) }}
-                    key={index}
-                  >
-                    {name}
-                  </Button>
-                )
-              }
-              return button
-            })
-          }
+            searchedTypes.map((type, index) =>
+              (expanded || type.active) ? <Button active={type.active} onClick={() => { this.handleTypeClick(type.name) }} key={index}>{type.name}</Button> : null
+            )
+            }
           </div>
           <div className={excludedClass}>
             <div className="except">ONLY IGNORING</div>
-            {
-              excludedTypes.map((type, index) => {
-                const { name, active } = type
-                return (
-                  <Button
-                    active={active}
-                    onClick={() => { this.handleTypeClick(name) }}
-                    key={index}
-                  >
-                    {name}
-                  </Button>
-                )
-              })
-            }
+            { excludedTypes.map((type, index) => <Button key={index} active={type.active} onClick={() => { this.handleTypeClick(type.name) }}>{type.name}</Button>) }
           </div>
         </div>
       </div>
@@ -251,6 +187,7 @@ class TypeSection extends Component {
 
 const selectors = createStructuredSelector({
   types: selectTypes(),
+  info: selectInfo(),
   currentTypes: selectCurrentTypes(),
 })
 

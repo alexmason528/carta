@@ -3,55 +3,55 @@ import classNames from 'classnames'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 
 const Button = props => {
+  const { active, className, children, onClick } = props
   let btnClass = classNames({
     'button-wrapper': true,
-    active: props.active === 1,
+    active,
   })
 
-  if (props.className) btnClass = `${btnClass} ${props.className}`
+  if (className) btnClass = `${btnClass} ${className}`
 
   return (
     <div className={btnClass}>
-      <button onClick={props.onClick}>{Children.toArray(props.children)}</button>
+      <button onClick={onClick}>{Children.toArray(children)}</button>
     </div>
   )
 }
 
 const StarButton = props => {
+  const { star, active, className, children, onStarClick, onMouseDown } = props
   let btnClass = classNames({
     'button-wrapper': true,
-    star: props.star === 1,
-    active: props.active === 1,
+    star,
+    active,
   })
 
-  if (props.className) btnClass = `${btnClass} ${props.className}`
+  if (className) btnClass = `${btnClass} ${className}`
 
   return (
     <div className={btnClass}>
-      <button onMouseDown={props.onMouseDown}>{Children.toArray(props.children)}</button>
-      <img className="star" src={`${CLOUDINARY_ICON_URL}/star-green.png`} onClick={props.onStarClick} role="presentation" />
+      <button onMouseDown={onMouseDown}>{Children.toArray(children)}</button>
+      <img className="star" src={`${CLOUDINARY_ICON_URL}/star-green.png`} onClick={onStarClick} role="presentation" />
     </div>
   )
 }
 
-const QuestButton = props => {
-  return (
-    <div className={props.className}>
-      <div onClick={props.onClick}>
-        <img src={`${CLOUDINARY_ICON_URL}/search.png`} className="inactive" role="presentation" />
-        <img src={`${CLOUDINARY_ICON_URL}/search-blue.png`} className="active" role="presentation" />
-      </div>
-      <span onClick={props.onCloseClick}>
-        <img src={`${CLOUDINARY_ICON_URL}/close.png`} role="presentation" />
-      </span>
+const QuestButton = ({ className, onClick, onCloseClick }) => (
+  <div className={className}>
+    <div onClick={onClick}>
+      <img src={`${CLOUDINARY_ICON_URL}/search.png`} className="inactive" role="presentation" />
+      <img src={`${CLOUDINARY_ICON_URL}/search-blue.png`} className="active" role="presentation" />
     </div>
-  )
-}
+    <span onClick={onCloseClick}>
+      <img src={`${CLOUDINARY_ICON_URL}/close.png`} role="presentation" />
+    </span>
+  </div>
+)
 
 Button.propTypes = {
   onClick: PropTypes.func,
   children: PropTypes.node.isRequired,
-  active: PropTypes.number,
+  active: PropTypes.bool,
   className: PropTypes.string,
 }
 
@@ -59,8 +59,8 @@ StarButton.propTypes = {
   onMouseDown: PropTypes.func,
   onStarClick: PropTypes.func,
   children: PropTypes.node.isRequired,
-  active: PropTypes.number,
-  star: PropTypes.number,
+  active: PropTypes.bool,
+  star: PropTypes.bool,
   className: PropTypes.string,
 }
 

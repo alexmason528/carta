@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import className from 'classnames'
+import { browserHistory } from 'react-router'
 import { CLOUDINARY_COVER_URL } from 'containers/App/constants'
 import './style.scss'
 
@@ -54,7 +55,7 @@ class Quest extends Component {
     })
 
     return (
-      <div className={questClass} style={{ display: initialized ? 'block' : 'none' }}>
+      <div className={questClass} style={{ display: initialized ? 'block' : 'none' }} onClick={() => browserHistory.push('/quest')}>
         <img src={`${CLOUDINARY_COVER_URL}/quest.jpg`} role="presentation" />
         <h2>Start<br />your<br />personal<br />quest</h2>
       </div>

@@ -66,7 +66,7 @@ function appReducer(state = initialState, { type, payload }) {
         ...state,
         user: null,
         authenticated: false,
-        state: type,
+        status: type,
         error: null,
       }
 
@@ -132,12 +132,14 @@ function appReducer(state = initialState, { type, payload }) {
       return {
         ...state,
         user: null,
+        status: type,
         authenticated: false,
       }
 
     case DELETE_USER_FAIL:
       return {
         ...state,
+        status: type,
         error: payload,
       }
 
@@ -157,7 +159,7 @@ function appReducer(state = initialState, { type, payload }) {
     case UPDATE_USER_FAIL:
       return {
         ...state,
-        state: type,
+        status: type,
         error: payload,
       }
 

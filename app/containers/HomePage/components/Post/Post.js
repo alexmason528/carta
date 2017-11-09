@@ -15,7 +15,7 @@ import { updatePostRequest, deletePostRequest } from 'containers/HomePage/action
 import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/constants'
 import { selectHomeInfo } from 'containers/HomePage/selectors'
 import { getTextFromDate } from 'utils/dateHelper'
-import { elemToText, textToElem, getPostType } from 'utils/stringHelper'
+import { elemToText, textToElem } from 'utils/stringHelper'
 
 import './style.scss'
 
@@ -335,7 +335,18 @@ class Post extends Component {
       imageUpload,
     } = this.state
 
-    let postType = getPostType(img, content)
+    let postType
+
+    if (img && content !== null) {
+      postType = 'mixedPost'
+    } else if (img && content === null) {
+      postType = 'mediaPost'
+    } else if (!img && content !== null) {
+      postType = 'textPost'
+    } else if (title !== null) {
+      postType = 'textPost'
+    }
+
 
     const showPostLinkButton = editing && !showLinkBar
     const showFileImage = img && (img instanceof File)
@@ -376,11 +387,12 @@ class Post extends Component {
 
     return (
       <div className="postContainer">
+        { (showLinkBar || showInfo || showDeleteConfirm) && <div className="backLayer" onClick={this.handlePostClick} /> }
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
         { postType === 'mixedPost' &&
-          <div className={postClass} onClick={this.handlePostClick}>
+          <div className={postClass}>
             <div className="postImage" onClick={this.handleOpenLink}>
               { showFileImage ? <FileImage file={img} /> : <img src={img} role="presentation" /> }
               { editing && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostImageRemove} /> }
@@ -413,7 +425,7 @@ class Post extends Component {
             <div className="postImage" onClick={this.handleOpenLink}>
               { editable && !editing && <EditButton className="postEditBtn" image="edit-white-shadow" hover onClick={this.handleStartEdit} /> }
               { showFileImage ? <FileImage file={img} /> : <img src={img} role="presentation" /> }
-              { editing && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" onClick={this.handlePostImageRemove} /> }
+              { editing && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostImageRemove} /> }
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>
                 <img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />

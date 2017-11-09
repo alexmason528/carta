@@ -25,7 +25,8 @@ class Brochure extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchBrochure(this.props.name)
+    const { fetchBrochure, name } = this.props
+    fetchBrochure(name)
 
     const interval =
     setInterval(() => {
@@ -256,14 +257,11 @@ class Brochure extends Component {
   }
 
   render() {
-    if (!this.props.brochure.details.info) return null
-    let info = this.props.brochure.details.info
+    const { brochure } = this.props
+    if (!brochure) return null
 
+    const { mainPoster, description, tiles } = brochure
     const { initialized } = this.state
-
-    let mainPoster = info.main_poster
-    let description = info.description
-    let tiles = info.tiles
 
     return (
       <div className="brochure" style={{ visibility: initialized ? 'visible' : 'hidden' }}>
@@ -275,62 +273,60 @@ class Brochure extends Component {
 
         <div className="brochure-container">
           <div className="dividers"></div>
-          <div className="tile main-poster">
-            <img src={mainPoster.url} role="presentation" />
-            <h1>{mainPoster.title}</h1>
-          </div>
-          <div className="description">
-            <div className="tile text-tile">
-              <div className="content">
-                <p>
-                  {description.text.content}
-                  <a className="arrow more">
-                    <em className="blue"></em>
-                  </a>
-                </p>
-                <a className="arrow less">
-                  <em className="blue"></em>
-                </a>
-              </div>
+          { mainPoster &&
+            <div className="tile main-poster">
+              <img src={mainPoster.url} role="presentation" />
+              <h1>{mainPoster.title}</h1>
             </div>
-            <div className="tile image-tile">
-              <img src={description.poster.url} role="presentation" />
-              <h2>{description.poster.title}</h2>
-            </div>
-          </div>
-
-          { tiles.map((value, index) => {
-            let tile
-            if (value.type === 'text') {
-              const { content, title, type } = value
-              tile = (
-                <div className="tile text-tile" key={index}>
-                  <div className="content">
-                    <div className="heading">
-                      <h2>{title}</h2>
-                    </div>
-                    <p>
-                      {content}
-                      <a className="arrow more">
-                        <em className="blue"></em>
-                      </a>
-                    </p>
-                    <a className="arrow less">
+          }
+          { description &&
+            <div className="description">
+              <div className="tile text-tile">
+                <div className="content">
+                  <p>
+                    {description.text.content}
+                    <a className="arrow more">
                       <em className="blue"></em>
                     </a>
-                  </div>
+                  </p>
+                  <a className="arrow less">
+                    <em className="blue"></em>
+                  </a>
                 </div>
-              )
-            } else {
-              const { url, title, type } = value
-              tile = (
+              </div>
+              <div className="tile image-tile">
+                <img src={description.poster.url} role="presentation" />
+                <h2>{description.poster.title}</h2>
+              </div>
+            </div>
+          }
+
+          { tiles && tiles.map((value, index) => {
+            let tile
+            const { content, title, type, url } = value
+            return (value.type === 'text') ? (
+              <div className="tile text-tile" key={index}>
+                <div className="content">
+                  <div className="heading">
+                    <h2>{title}</h2>
+                  </div>
+                  <p>
+                    {content}
+                    <a className="arrow more">
+                      <em className="blue"></em>
+                    </a>
+                  </p>
+                  <a className="arrow less">
+                    <em className="blue"></em>
+                  </a>
+                </div>
+              </div>
+              ) : (
                 <div className="tile image-tile" key={index}>
                   <img src={url} role="presentation" />
                   <h2 dangerouslySetInnerHTML={{ __html: title }} />
                 </div>
               )
-            }
-            return tile
           })
           }
         </div>

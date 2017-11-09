@@ -1,6 +1,6 @@
 .authWrapper {
   margin: 8px 0;
-  padding: 12% 30px 30px 50px;
+  padding: 12% 30px 70px 50px;
   position: relative;
   max-height: 1000px;
   opacity: 1;
@@ -23,6 +23,10 @@
 
     .authWrapper__divider {
       margin-top: 0;
+    }
+
+    .error {
+      display: none;
     }
   }
 
@@ -85,11 +89,12 @@
     margin-top: 20px;
     display: flex;
     align-items: center;
-    
+
     button {
       padding: 8px;
       margin-right: 10px;
       border: 0.5px solid #ddd;
+      z-index: 100;
 
       &.active {
         font-weight: 600;
@@ -137,11 +142,6 @@
   }
 
   .error {
-    color: #e80303;
-    position: absolute;
-    bottom: 0;
-    background: #fff;
-    font-weight: 400;
-    width: calc(100% - 80px);
+    padding: 24px 8px;
   }
 }
