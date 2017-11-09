@@ -99,7 +99,7 @@ class Brochure extends Component {
           initialized: true,
         })
       }
-    })
+    }, 0)
 
     $('body').click(() => {
       $('.to-below')
@@ -264,7 +264,7 @@ class Brochure extends Component {
     const { initialized } = this.state
 
     return (
-      <div className="brochure" style={{ visibility: initialized ? 'visible' : 'hidden' }}>
+      <div className="brochure" style={{ display: initialized ? 'block' : 'none' }}>
         <Helmet
           meta={[
             { name: 'description', content: 'Carta' },
