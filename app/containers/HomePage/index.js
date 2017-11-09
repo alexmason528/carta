@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
 import { Container, Row, Col } from 'reactstrap'
-import { VERIFY_FAIL, CLOUDINARY_COVER_URL, CLOUDINARY_PROFILE_URL } from 'containers/App/constants'
+import { UPDATE_USER_SUCCESS, VERIFY_FAIL, CLOUDINARY_COVER_URL, CLOUDINARY_PROFILE_URL } from 'containers/App/constants'
 import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
 import { logOut, verifyRequest, updateUserRequest } from 'containers/App/actions'
 import { CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
@@ -75,9 +75,9 @@ class HomePage extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { authenticated, user, params: { vcode } } = this.props
-    const { homeInfo: { status } } = nextProps
+    const { homeInfo, info } = nextProps
 
-    if (status === CREATE_POST_SUCCESS) {
+    if (homeInfo.status === CREATE_POST_SUCCESS) {
       this.setState({
         showCreatePostForm: false,
       })
@@ -100,7 +100,7 @@ class HomePage extends Component {
       })
     }
 
-    if (!authenticated && nextProps.authenticated) {
+    if ((!authenticated && nextProps.authenticated) || (info.status === UPDATE_USER_SUCCESS)) {
       this.setState({
         coverPic: nextProps.user.coverPic,
         profilePic: nextProps.user.profilePic,
