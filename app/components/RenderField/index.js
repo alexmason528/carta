@@ -6,7 +6,7 @@ const RenderField = ({ input, label, type, order, meta: { touched, error, warnin
     <input {...input} placeholder={label} type={type} />
     {
       touched && error &&
-      <div className="error" style={{ zIndex: 100 - order || 0 }}>{error}</div>
+      <div className="error" style={{ zIndex: 50 - order || 0 }}>{error}</div>
     }
   </div>
 )

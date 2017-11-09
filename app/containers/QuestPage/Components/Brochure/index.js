@@ -1,12 +1,7 @@
-/*
- * Brochure
- *
- */
-
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import Helmet from 'react-helmet'
-
+import className from 'classnames'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
@@ -21,7 +16,7 @@ class Brochure extends Component {
     super(props)
 
     this.state = {
-      initialized: false,
+      imageLoaded: false,
     }
   }
 
@@ -29,78 +24,67 @@ class Brochure extends Component {
     const { fetchBrochure, name } = this.props
     fetchBrochure(name)
 
-    const interval =
-    setInterval(() => {
-      if ($('.brochure-container').height() > 0) {
-        clearInterval(interval)
-        this.handleResize()
-        $('p').dotdotdot({
-          watch: 'window',
-          after: '.more',
-          ellipsis: ' ...',
-        })
+    $('p').dotdotdot({
+      watch: 'window',
+      after: '.more',
+      ellipsis: ' ...',
+    })
 
-        $('body').delegate('.more', 'click', function moreClicked(evt) {
-          evt.stopPropagation()
-          let tileWidth
+    $('body').delegate('.more', 'click', function moreClicked(evt) {
+      evt.stopPropagation()
+      let tileWidth
 
-          if ($('.brochure-container').width() < 550) {
-            tileWidth = $('.brochure-container').width()
-          } else if ($('.brochure-container').width() < 1000) {
-            tileWidth = $('.brochure-container').width() / 2
-          } else {
-            tileWidth = $('.brochure-container').width() / 3
-          }
-
-          const bottom = $('.brochure-container').height() - $(this).offset().top
-
-          if (bottom > 50) {
-            $(this).closest('.tile').css({ 'z-index': '40' })
-            $(this)
-            .closest('.content')
-            .addClass('expanded to-below')
-            .animate({ height: tileWidth * 2 }, 150, function tileOpen() { $(this).find('p').trigger('update.dot') })
-          } else {
-            const right = $('.brochure-container').width() - $(this).offset().left
-            if (right > 50) {
-              $(this).closest('.tile').css({ 'z-index': '40' })
-              $(this)
-              .closest('.content')
-              .addClass('expanded to-right')
-              .animate({ width: tileWidth * 2 }, 150, function tileOpen() { $(this).find('p').trigger('update.dot') })
-            } else {
-              $(this)
-              .closest('.content')
-              .addClass('expanded to-left')
-              .animate({ width: tileWidth * 2, left: -tileWidth }, 150, function tileOpen() { $(this).find('p').trigger('update.dot') })
-            }
-          }
-
-          $(this).closest('.tile').find('.less').fadeIn(150)
-        })
-
-        $('body').delegate('.less', 'click', () => {
-          $('.to-below')
-          .removeClass('expanded to-below')
-          .animate({ height: '100%' }, 150, function tileClose() { $(this).find('p').trigger('update.dot') })
-          $('.to-right')
-          .removeClass('expanded to-right')
-          .animate({ width: '100%' }, 150, function tileClose() { $(this).find('p').trigger('update.dot') })
-          $('.to-left')
-          .removeClass('expanded to-left')
-          .animate({ width: '100%', left: 0 }, 150, function tileClose() { $(this).find('p').trigger('update.dot') })
-          $('.less').fadeOut(150)
-        })
-
-        $('body').delegate('.expanded', 'click', (evt) => {
-          evt.stopPropagation()
-        })
-
-        this.setState({
-          initialized: true,
-        })
+      if ($('.brochure-container').width() < 550) {
+        tileWidth = $('.brochure-container').width()
+      } else if ($('.brochure-container').width() < 1000) {
+        tileWidth = $('.brochure-container').width() / 2
+      } else {
+        tileWidth = $('.brochure-container').width() / 3
       }
-    }, 0)
+
+      const bottom = $('.brochure-container').height() - $(this).offset().top
+
+      if (bottom > 50) {
+        $(this).closest('.tile').css({ 'z-index': '40' })
+        $(this)
+        .closest('.content')
+        .addClass('expanded to-below')
+        .animate({ height: tileWidth * 2 }, 150, function tileOpen() { $(this).find('p').trigger('update.dot') })
+      } else {
+        const right = $('.brochure-container').width() - $(this).offset().left
+        if (right > 50) {
+          $(this).closest('.tile').css({ 'z-index': '40' })
+          $(this)
+          .closest('.content')
+          .addClass('expanded to-right')
+          .animate({ width: tileWidth * 2 }, 150, function tileOpen() { $(this).find('p').trigger('update.dot') })
+        } else {
+          $(this)
+          .closest('.content')
+          .addClass('expanded to-left')
+          .animate({ width: tileWidth * 2, left: -tileWidth }, 150, function tileOpen() { $(this).find('p').trigger('update.dot') })
+        }
+      }
+
+      $(this).closest('.tile').find('.less').fadeIn(150)
+    })
+
+    $('body').delegate('.less', 'click', () => {
+      $('.to-below')
+      .removeClass('expanded to-below')
+      .animate({ height: '100%' }, 150, function tileClose() { $(this).find('p').trigger('update.dot') })
+      $('.to-right')
+      .removeClass('expanded to-right')
+      .animate({ width: '100%' }, 150, function tileClose() { $(this).find('p').trigger('update.dot') })
+      $('.to-left')
+      .removeClass('expanded to-left')
+      .animate({ width: '100%', left: 0 }, 150, function tileClose() { $(this).find('p').trigger('update.dot') })
+      $('.less').fadeOut(150)
+    })
+
+    $('body').delegate('.expanded', 'click', (evt) => {
+      evt.stopPropagation()
+    })
 
     $('body').click(() => {
       $('.to-below')
@@ -257,15 +241,20 @@ class Brochure extends Component {
     })
   }
 
-  render() {
-    const { brochure } = this.props
-    if (!brochure) return null
+  handleLoaded = () => {
+    this.setState({ imageLoaded: true }, this.handleResize)
+  }
 
-    const { mainPoster, description, tiles } = brochure
-    const { initialized } = this.state
+  render() {
+    const { brochure: { mainPoster, description, tiles } } = this.props
+    const { imageLoaded } = this.state
+    const brochureClass = className({
+      brochure: true,
+      hidden: !imageLoaded,
+    })
 
     return (
-      <div className="brochure" style={{ visibility: initialized ? 'visible' : 'hidden' }}>
+      <div className={brochureClass}>
         <Helmet
           meta={[
             { name: 'description', content: 'Carta' },
@@ -276,7 +265,7 @@ class Brochure extends Component {
           <div className="dividers"></div>
           { mainPoster &&
             <div className="tile main-poster">
-              <img src={mainPoster.url} role="presentation" />
+              <img onLoad={this.handleLoaded} src={mainPoster.url} role="presentation" />
               <h1>{mainPoster.title}</h1>
             </div>
           }

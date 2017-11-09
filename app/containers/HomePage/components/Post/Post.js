@@ -32,6 +32,20 @@ class Post extends Component {
   constructor(props) {
     super(props)
 
+    const { img, content } = props
+
+    let postType
+
+    if (img && content !== null) {
+      postType = 'mixedPost'
+    } else if (img && content === null) {
+      postType = 'mediaPost'
+    } else if (!img && content !== null) {
+      postType = 'textPost'
+    } else if (title !== null) {
+      postType = 'textPost'
+    }
+
     this.state = {
       showDeleteConfirm: false,
       showInfo: false,
@@ -39,6 +53,7 @@ class Post extends Component {
       editable: false,
       editing: false,
       link: '',
+      imageLoaded: postType === 'textPost',
       imageUpload: {
         uploading: false,
         error: null,
@@ -51,8 +66,6 @@ class Post extends Component {
   }
 
   componentDidMount() {
-    const post = ReactDOM.findDOMNode(this)
-    this.handleResize()
     window.addEventListener('resize', this.handleResize)
   }
 
@@ -69,43 +82,35 @@ class Post extends Component {
       ...props,
       editing: false,
       showLinkBar: false,
-    }, () => {
-      this.handleResize()
-    })
+    }, this.handleResize)
   }
 
   handleResize = () => {
-    const interval =
-    setInterval(() => {
-      const comp = ReactDOM.findDOMNode(this)
-      const post = $(comp).find('.post')
-      const width = $(post).width()
-      if ($(post).hasClass('textPost')) {
-        clearInterval(interval)
-        const fontSize = (width / 76) * 3 * 1.15
-        $(post).find('.postTitle').css({ fontSize: `${fontSize}px` })
-        $(post).find('.postTitleEdit').css({ fontSize: `${fontSize}px` })
-      } else {
-        const height = $(post).find('.postImage').height() - ($(post).hasClass('mediaPost') ? 90 : 65)
-        const fontSize = (width / 44) * 3 * 1.15
-        const lines = fontSize > 0 ? Math.floor(height / (fontSize * 1.2)) : 0
+    const comp = ReactDOM.findDOMNode(this)
+    const post = $(comp).find('.post')
+    const width = $(post).width()
+    if ($(post).hasClass('textPost')) {
+      const fontSize = (width / 76) * 3 * 1.15
+      $(post).find('.postTitle').css({ fontSize: `${fontSize}px` })
+      $(post).find('.postTitleEdit').css({ fontSize: `${fontSize}px` })
+    } else {
+      const height = $(post).find('.postImage').height() - ($(post).hasClass('mediaPost') ? 90 : 65)
+      const fontSize = (width / 44) * 3 * 1.15
+      const lines = fontSize > 0 ? Math.floor(height / (fontSize * 1.2)) : 0
 
-        if (height > 0) clearInterval(interval)
+      $(post).find('.postTitle').css({
+        fontSize: `${fontSize}px`,
+        'max-height': `${fontSize * lines * 1.2}px`,
+        '-webkit-line-clamp': lines.toString(),
+        display: '-webkit-box',
+        '-webkit-box-orient': 'vertical',
+      })
 
-        $(post).find('.postTitle').css({
-          fontSize: `${fontSize}px`,
-          'max-height': `${fontSize * lines * 1.2}px`,
-          '-webkit-line-clamp': lines.toString(),
-          display: '-webkit-box',
-          '-webkit-box-orient': 'vertical',
-        })
-
-        $(post).find('.postTitleEdit').css({
-          fontSize: `${fontSize}px`,
-          'max-height': `${fontSize * lines * 1.2}px`,
-        })
-      }
-    }, 0)
+      $(post).find('.postTitleEdit').css({
+        fontSize: `${fontSize}px`,
+        'max-height': `${fontSize * lines * 1.2}px`,
+      })
+    }
   }
 
   handleAddMedia = () => {
@@ -317,6 +322,10 @@ class Post extends Component {
     }
   }
 
+  handleLoaded = () => {
+    this.setState({ imageLoaded: true }, this.handleResize)
+  }
+
   render() {
     const { show, onClose, onPostEdit, info: { error, status, curPost } } = this.props
     const {
@@ -333,6 +342,7 @@ class Post extends Component {
       editing,
       link,
       imageUpload,
+      imageLoaded,
     } = this.state
 
     let postType
@@ -347,13 +357,11 @@ class Post extends Component {
       postType = 'textPost'
     }
 
-
     const showPostLinkButton = editing && !showLinkBar
     const showFileImage = img && (img instanceof File)
     const spinnerShow = ((status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST) && (curPost === _id)) || imageUpload.uploading
     const submittable = title && (img || content)
     let parsedTitle = title ? title.replace(/\n/g, '</div><div>') : ''
-
 
     const postClass = className({
       post: true,
@@ -385,8 +393,13 @@ class Post extends Component {
       disabled: !submittable,
     })
 
+    const postContainerClass = className({
+      postContainer: true,
+      hidden: !imageLoaded,
+    })
+
     return (
-      <div className="postContainer">
+      <div className={postContainerClass}>
         { (showLinkBar || showInfo || showDeleteConfirm) && <div className="backLayer" onClick={this.handlePostClick} /> }
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
@@ -394,7 +407,7 @@ class Post extends Component {
         { postType === 'mixedPost' &&
           <div className={postClass}>
             <div className="postImage" onClick={this.handleOpenLink}>
-              { showFileImage ? <FileImage file={img} /> : <img src={img} role="presentation" /> }
+              { showFileImage ? <FileImage file={img} /> : <img onLoad={this.handleLoaded} src={img} role="presentation" /> }
               { editing && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostImageRemove} /> }
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>
@@ -424,7 +437,7 @@ class Post extends Component {
           <div className={postClass} onClick={this.handlePostClick}>
             <div className="postImage" onClick={this.handleOpenLink}>
               { editable && !editing && <EditButton className="postEditBtn" image="edit-white-shadow" hover onClick={this.handleStartEdit} /> }
-              { showFileImage ? <FileImage file={img} /> : <img src={img} role="presentation" /> }
+              { showFileImage ? <FileImage file={img} /> : <img onLoad={this.handleLoaded} src={img} role="presentation" /> }
               { editing && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostImageRemove} /> }
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>

@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import className from 'classnames'
 import ReactDOM from 'react-dom'
 
 import './style.scss'
@@ -13,24 +14,11 @@ class Suggestion extends Component {
     super(props)
 
     this.state = {
-      initialized: false,
+      imageLoaded: false,
     }
   }
 
   componentDidMount() {
-    const suggestion = ReactDOM.findDOMNode(this)
-
-    const interval =
-    setInterval(() => {
-      if ($(suggestion).height() > 100) {
-        this.setState({
-          initialized: true,
-        })
-        this.handleResize()
-        clearInterval(interval)
-      }
-    }, 0)
-
     window.addEventListener('resize', this.handleResize)
   }
 
@@ -45,13 +33,21 @@ class Suggestion extends Component {
     $(suggestion).find('h2').css({ fontSize: `${(width / 44) * 3 * 1.15}px` })
   }
 
+  handleLoaded = () => {
+    this.setState({ imageLoaded: true }, this.handleResize)
+  }
+
   render() {
     const { imageUrl, title } = this.props
-    const { initialized } = this.state
+    const { imageLoaded } = this.state
+    const suggestionClass = className({
+      suggestion: true,
+      hidden: !imageLoaded,
+    })
 
     return (
-      <div className="suggestion" style={{ display: initialized ? 'block' : 'none' }}>
-        <img src={imageUrl} role="presentation" />
+      <div className={suggestionClass}>
+        <img onLoad={this.handleLoaded} src={imageUrl} role="presentation" />
         <h2>{title}</h2>
       </div>
     )

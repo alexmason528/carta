@@ -14,24 +14,11 @@ class Quest extends Component {
     super(props)
 
     this.state = {
-      initialized: false,
+      imageLoaded: false,
     }
   }
 
   componentDidMount() {
-    const quest = ReactDOM.findDOMNode(this)
-
-    const interval =
-    setInterval(() => {
-      if ($(quest).height() > 100) {
-        this.setState({
-          initialized: true,
-        })
-        this.handleResize()
-        clearInterval(interval)
-      }
-    }, 0)
-
     window.addEventListener('resize', this.handleResize)
   }
 
@@ -46,17 +33,22 @@ class Quest extends Component {
     $(quest).find('h2').css({ fontSize: `${(width / 44) * 3 * 1.15}px` })
   }
 
+  handleLoaded = (evt) => {
+    this.setState({ imageLoaded: true }, this.handleResize)
+  }
+
   render() {
-    const { initialized } = this.state
+    const { imageLoaded } = this.state
     const { authenticated } = this.props
     const questClass = className({
       quest: true,
       quest__authenticated: authenticated,
+      hidden: !imageLoaded,
     })
 
     return (
-      <div className={questClass} style={{ display: initialized ? 'block' : 'none' }} onClick={() => browserHistory.push('/quest')}>
-        <img src={`${CLOUDINARY_COVER_URL}/quest.jpg`} role="presentation" />
+      <div className={questClass} onClick={() => browserHistory.push('/quest')}>
+        <img onLoad={this.handleLoaded} src={`${CLOUDINARY_COVER_URL}/quest.jpg`} role="presentation" />
         <h2>Start<br />your<br />personal<br />quest</h2>
       </div>
     )

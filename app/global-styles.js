@@ -69,4 +69,16 @@ injectGlobal`
   button:focus, input:focus {
     outline: none;
   }
+
+  .hidden {
+    display: none !important;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-botttom: 0;
+  }
+
+  .show {
+    display: block !important;
+  }
 `

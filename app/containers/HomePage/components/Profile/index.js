@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import FileImage from 'react-file-image'
+import className from 'classnames'
 import axios from 'axios'
 import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, UPDATE_USER_REQUEST } from 'containers/App/constants'
 import LoadingSpinner from 'components/LoadingSpinner'
@@ -32,6 +33,7 @@ export default class Profile extends Component {
       profilePic: null,
       coverPic: null,
       imageType: null,
+      imageLoaded: false,
       imageUpload: {
         uploading: false,
         error: null,
@@ -44,15 +46,6 @@ export default class Profile extends Component {
   }
 
   componentDidMount() {
-    const profile = ReactDOM.findDOMNode(this)
-
-    const interval =
-    setInterval(() => {
-      if ($(profile).height() > 100) {
-        clearInterval(interval)
-        this.handleResize()
-      }
-    }, 0)
     window.addEventListener('resize', this.handleResize)
   }
 
@@ -80,6 +73,10 @@ export default class Profile extends Component {
     const width = $(profile).width()
 
     $(profile).find('h2').css({ fontSize: `${(width / 44) * 3 * 1.15}px` })
+  }
+
+  handleLoaded = () => {
+    this.setState({ imageLoaded: true }, this.handleResize)
   }
 
   handleCoverImg = () => {
@@ -148,12 +145,16 @@ export default class Profile extends Component {
 
   render() {
     const { authenticated, user, onClick, info: { status, error } } = this.props
-    const { coverPic, profilePic, imageUpload, imageType } = this.state
+    const { coverPic, profilePic, imageUpload, imageType, imageLoaded } = this.state
     const coverPicSpinner = imageType === 'coverPic' && (imageUpload.uploading || status === UPDATE_USER_REQUEST)
     const profilePicSpinner = imageType === 'profilePic' && (imageUpload.uploading || status === UPDATE_USER_REQUEST)
+    const profileClass = className({
+      profile: true,
+      hidden: !imageLoaded,
+    })
 
     return (
-      <div className="profile">
+      <div className={profileClass}>
         <div className="profile__handler" onClick={authenticated ? this.handleCoverImg : onClick} />
         <LoadingSpinner show={coverPicSpinner}>
           <QuarterSpinner width={30} height={30} />
@@ -162,7 +163,7 @@ export default class Profile extends Component {
         { coverPic &&
             (coverPic instanceof File)
             ? <FileImage ref={ref => { this.coverPicObj = ref }} file={coverPic} />
-            : <img src={coverPic} role="presentation" />
+            : <img onLoad={this.handleLoaded} src={coverPic} role="presentation" />
         }
         <div className="profile__pic" onClick={authenticated ? this.handleProfilePic : onClick}>
           <LoadingSpinner show={profilePicSpinner}>
