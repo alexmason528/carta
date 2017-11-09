@@ -4,6 +4,7 @@
  */
 
 import React, { Component, PropTypes } from 'react'
+import ReactDOM from 'react-dom'
 import Helmet from 'react-helmet'
 
 import { connect } from 'react-redux'
@@ -30,7 +31,8 @@ class Brochure extends Component {
 
     const interval =
     setInterval(() => {
-      if ($('.brochure-container').width() > 0) {
+      const comp = ReactDOM.findDOMNode(this)
+      if ($(comp).find('.brochure-container').width() > 0) {
         clearInterval(interval)
         this.handleResize()
         $('p').dotdotdot({
@@ -264,7 +266,7 @@ class Brochure extends Component {
     const { initialized } = this.state
 
     return (
-      <div className="brochure" style={{ display: initialized ? 'block' : 'none' }}>
+      <div className="brochure" style={{ visibility: initialized ? 'visible' : 'hidden' }}>
         <Helmet
           meta={[
             { name: 'description', content: 'Carta' },
