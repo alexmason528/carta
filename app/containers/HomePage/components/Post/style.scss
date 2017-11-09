@@ -9,6 +9,7 @@
   right: 0;
   bottom: 0;
   background: rgba(255, 255, 255, 0);
+  cursor: pointer;
   z-index: 101;
 }
 
@@ -115,8 +116,8 @@
     -webkit-box-orient: vertical;
   }
 
+  .postTitleEdit { padding: 0 10px }
   .postContent, .postContentText { border: none }
-
   .postContentText { padding-left: 0; padding-right: 0 }
 
   .postEditBtn {

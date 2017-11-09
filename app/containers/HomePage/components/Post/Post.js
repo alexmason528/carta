@@ -27,6 +27,8 @@ class Post extends Component {
     deletePostRequest: PropTypes.func,
     info: PropTypes.object,
     show: PropTypes.bool,
+    content: PropTypes.string,
+    img: PropTypes.string,
   }
 
   constructor(props) {
