@@ -32,7 +32,7 @@ class Brochure extends Component {
     const interval =
     setInterval(() => {
       const comp = ReactDOM.findDOMNode(this)
-      if ($(comp).find('.brochure-container').width() > 0) {
+      if ($(comp).find('.brochure-container').height() > 100) {
         clearInterval(interval)
         this.handleResize()
         $('p').dotdotdot({
