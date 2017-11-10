@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import FileImage from 'react-file-image'
 import className from 'classnames'
 import axios from 'axios'
 import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, UPDATE_USER_REQUEST } from 'containers/App/constants'
 import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { UserButton } from 'components/Buttons'
+import { getCroppedImage } from 'utils/imageHelper'
 import './style.scss'
 
 export default class Profile extends Component {
@@ -101,46 +101,49 @@ export default class Profile extends Component {
   }
 
   handleFiles = evt => {
+    const file = evt.target.files[0]
+    const { imageType } = this.state
+
+    getCroppedImage(file, this.handleImage, (imageType === 'profilePic') ? 'portrait' : 'landscape')
+  }
+
+  handleImage = (img, type) => {
     const { imageType } = this.state
     const { onUpdate } = this.props
 
-    if (evt.target.files.length > 0) {
-      const img = evt.target.files[0]
+    this.setState({
+      imageUpload: {
+        uploading: true,
+        error: null,
+      },
+    })
 
+    let formData = new FormData()
+    formData.append('file', img)
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+
+    axios.post(CLOUDINARY_UPLOAD_URL, formData, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    }).then(res => {
+      const { data: { url } } = res
       this.setState({
         imageUpload: {
-          uploading: true,
+          uploading: false,
           error: null,
         },
       })
 
-      let formData = new FormData()
-      formData.append('file', img)
-      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
-
-      axios.post(CLOUDINARY_UPLOAD_URL, formData, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+      onUpdate({ [imageType]: url })
+    }).catch(err => {
+      this.setState({
+        imageUpload: {
+          uploading: false,
+          error: err.toString(),
         },
-      }).then(res => {
-        const { data: { url } } = res
-        this.setState({
-          imageUpload: {
-            uploading: false,
-            error: null,
-          },
-        })
-
-        onUpdate({ [imageType]: url })
-      }).catch(err => {
-        this.setState({
-          imageUpload: {
-            uploading: false,
-            error: err.toString(),
-          },
-        })
       })
-    }
+    })
   }
 
   render() {
@@ -160,20 +163,12 @@ export default class Profile extends Component {
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
         <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
-        { coverPic &&
-            (coverPic instanceof File)
-            ? <FileImage ref={ref => { this.coverPicObj = ref }} file={coverPic} />
-            : <img onLoad={this.handleLoaded} src={coverPic} role="presentation" />
-        }
+        { coverPic && <img onLoad={this.handleLoaded} src={coverPic} role="presentation" /> }
         <div className="profile__pic" onClick={authenticated ? this.handleProfilePic : onClick}>
           <LoadingSpinner show={profilePicSpinner}>
             <QuarterSpinner width={30} height={30} />
           </LoadingSpinner>
-          { profilePic &&
-              (profilePic instanceof File)
-              ? <FileImage ref={ref => { this.profilePicObj = ref }}file={profilePic} />
-              : <img src={profilePic} role="presentation" />
-          }
+          { profilePic && <img src={profilePic} role="presentation" /> }
         </div>
         { authenticated && <UserButton className="profile__userButton" onClick={onClick} /> }
         { authenticated ? <h2>{user.fullname}</h2> : <h2 onClick={onClick}>Sign in</h2> }

@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import FileImage from 'react-file-image'
 import className from 'classnames'
 import axios from 'axios'
 import { connect } from 'react-redux'
@@ -15,6 +14,7 @@ import { createPostRequest } from 'containers/HomePage/actions'
 import { CREATE_POST_REQUEST, CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
 import { selectHomeInfo } from 'containers/HomePage/selectors'
 import { elemToText, textToElem } from 'utils/stringHelper'
+import { getCroppedImage } from 'utils/imageHelper'
 import './style.scss'
 
 class PostCreate extends Component {
@@ -113,9 +113,12 @@ class PostCreate extends Component {
   }
 
   handleFiles = evt => {
-    this.setState({
-      img: evt.target.files[0],
-    }, () => {
+    const file = evt.target.files[0]
+    getCroppedImage(file, this.handleImage, 'landscape')
+  }
+
+  handleImage = (img, type) => {
+    this.setState({ img }, () => {
       this.handleResize()
       const comp = ReactDOM.findDOMNode(this)
       $(comp).find('.postTitleEdit').focus()
@@ -295,7 +298,7 @@ class PostCreate extends Component {
     }
 
     const showPostLinkButton = !showLinkBar
-    const showFileImage = img instanceof File
+    const showImage = status !== CREATE_POST_REQUEST
     const spinnerShow = status === CREATE_POST_REQUEST || imageUpload.uploading
     const remainCharCnts = !content ? 1000 : 1000 - content.length
     const submittable = title && (img || content) && (remainCharCnts >= 0)
@@ -350,7 +353,7 @@ class PostCreate extends Component {
         { postType === 'mixedPost' &&
           <div className={postClass} onClick={this.handlePostClick}>
             <div className="postImage">
-              { showFileImage && <FileImage file={img} /> }
+              { showImage && <img src={img} role="presentation" /> }
               <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostImageRemove} />
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>
@@ -372,7 +375,7 @@ class PostCreate extends Component {
         { postType === 'mediaPost' &&
           <div className={postClass} onClick={this.handlePostClick}>
             <div className="postImage">
-              { showFileImage ? <FileImage file={img} /> : <img src={img} role="presentation" /> }
+              { showImage && <img src={img} role="presentation" /> }
               <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostImageRemove} />
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>

@@ -49,6 +49,7 @@ const RegisterForm = ({
         label="Profile Pic"
         onChange={onProfilePicChange}
         component={RenderDropzone}
+        crop="portrait"
       />
       <Field
         className="authWrapper__uploadButton"
@@ -56,6 +57,7 @@ const RegisterForm = ({
         label="Cover Pic"
         onChange={onCoverPicChange}
         component={RenderDropzone}
+        crop="landscape"
       />
     </div>
     <div className="authWrapper__buttons">

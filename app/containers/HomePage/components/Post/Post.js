@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import FileImage from 'react-file-image'
 import className from 'classnames'
 import axios from 'axios'
 import { connect } from 'react-redux'
@@ -16,6 +15,7 @@ import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/co
 import { selectHomeInfo } from 'containers/HomePage/selectors'
 import { getTextFromDate } from 'utils/dateHelper'
 import { elemToText, textToElem } from 'utils/stringHelper'
+import { getCroppedImage } from 'utils/imageHelper'
 
 import './style.scss'
 
@@ -120,9 +120,12 @@ class Post extends Component {
   }
 
   handleFiles = evt => {
-    this.setState({
-      img: evt.target.files[0],
-    }, () => {
+    const file = evt.target.files[0]
+    getCroppedImage(file, this.handleImage, 'landscape')
+  }
+
+  handleImage = (img, type) => {
+    this.setState({ img }, () => {
       this.handleResize()
       const comp = ReactDOM.findDOMNode(this)
       $(comp).find('.postTitleEdit').focus()
@@ -231,7 +234,7 @@ class Post extends Component {
     onPostEdit(false)
     this.handleResize()
 
-    if (img instanceof File) {
+    if (img && img.indexOf('data:image') !== -1) {
       this.setState({
         imageUpload: {
           uploading: true,
@@ -360,7 +363,7 @@ class Post extends Component {
     }
 
     const showPostLinkButton = editing && !showLinkBar
-    const showFileImage = img && (img instanceof File)
+    const showImage = status !== UPDATE_POST_REQUEST
     const spinnerShow = ((status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST) && (curPost === _id)) || imageUpload.uploading
     const remainCharCnts = !content ? 1000 : 1000 - content.length
     const submittable = title && (img || content) && (remainCharCnts >= 0)
@@ -421,7 +424,7 @@ class Post extends Component {
         { postType === 'mixedPost' &&
           <div className={postClass}>
             <div className="postImage" onClick={this.handleOpenLink}>
-              { showFileImage ? <FileImage file={img} /> : <img onLoad={this.handleLoaded} src={img} role="presentation" /> }
+              { showImage && <img onLoad={this.handleLoaded} src={img} role="presentation" /> }
               { editing && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostImageRemove} /> }
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>
@@ -451,7 +454,7 @@ class Post extends Component {
           <div className={postClass} onClick={this.handlePostClick}>
             <div className="postImage" onClick={this.handleOpenLink}>
               { editable && !editing && <EditButton className="postEditBtn" image="edit-white-shadow" hover onClick={this.handleStartEdit} /> }
-              { showFileImage ? <FileImage file={img} /> : <img onLoad={this.handleLoaded} src={img} role="presentation" /> }
+              { showImage && <img onLoad={this.handleLoaded} src={img} role="presentation" /> }
               { editing && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostImageRemove} /> }
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>

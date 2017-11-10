@@ -1,20 +1,33 @@
 import React, { Component, PropTypes } from 'react'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import Dropzone from 'react-dropzone'
+import { getCroppedImage } from 'utils/imageHelper'
 
 class RenderDropZone extends Component {
   static propTypes = {
     onChange: PropTypes.func,
     input: PropTypes.object,
+    meta: PropTypes.object,
     name: PropTypes.string,
     className: PropTypes.string,
     label: PropTypes.string,
-    meta: PropTypes.object,
+    crop: PropTypes.string,
   }
 
   handleDrop = (filesToUpload, e) => {
+    const img = filesToUpload[0]
+    const { crop } = this.props
+
+    if (!crop) {
+      input.onChange(img)
+    } else {
+      getCroppedImage(img, this.handleImage, crop)
+    }
+  }
+
+  handleImage = (img, type) => {
     const { input } = this.props
-    input.onChange(filesToUpload)
+    input.onChange(img)
   }
 
   render() {

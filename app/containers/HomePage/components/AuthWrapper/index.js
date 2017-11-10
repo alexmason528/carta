@@ -110,7 +110,7 @@ class AuthWrapper extends Component {
 
       if (profilePic) {
         let formData = new FormData()
-        formData.append('file', profilePic[0])
+        formData.append('file', profilePic)
         formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
         axios.post(CLOUDINARY_UPLOAD_URL, formData, {
           headers: {
@@ -142,7 +142,7 @@ class AuthWrapper extends Component {
 
       if (coverPic) {
         let formData = new FormData()
-        formData.append('file', coverPic[0])
+        formData.append('file', coverPic)
         formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
         axios.post(CLOUDINARY_UPLOAD_URL, formData, {
           headers: {

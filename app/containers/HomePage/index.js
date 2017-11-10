@@ -11,6 +11,7 @@ import { logOut, verifyRequest, updateUserRequest } from 'containers/App/actions
 import { CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
 import { CreatePostButton } from 'components/Buttons'
 import Menu from 'components/Menu'
+import { getCroppedImage } from 'utils/imageHelper'
 import { selectPosts, selectSuggestions, selectHomeInfo } from './selectors'
 import { listPostRequest, listSuggestionRequest } from './actions'
 import { AccountMenu, AuthWrapper, Post, PostCreate, Profile, Quest, Suggestion, VerifyCtrl } from './components'
@@ -147,19 +148,11 @@ class HomePage extends Component {
   }
 
   handleProfilePic = (evt, newVal, prevVal) => {
-    if (newVal && newVal.length > 0) {
-      this.setState({
-        profilePic: newVal[0],
-      })
-    }
+    this.setState({ profilePic: newVal })
   }
 
   handleCoverPic = (evt, newVal, prevVal) => {
-    if (newVal && newVal.length > 0) {
-      this.setState({
-        coverPic: newVal[0],
-      })
-    }
+    this.setState({ coverPic: newVal })
   }
 
   render() {
