@@ -18,6 +18,8 @@ import {
   LIST_SUGGESTION_REQUEST,
   LIST_SUGGESTION_SUCCESS,
   LIST_SUGGESTION_FAIL,
+
+  DELETE_USER_POSTS,
 } from './constants'
 
 export function createPostRequest(payload) {
@@ -120,6 +122,13 @@ export function listSuggestionSuccess(payload) {
 export function listSuggestionFail(payload) {
   return {
     type: LIST_SUGGESTION_FAIL,
+    payload,
+  }
+}
+
+export function deleteUserPosts(payload) {
+  return {
+    type: DELETE_USER_POSTS,
     payload,
   }
 }

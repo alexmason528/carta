@@ -112,6 +112,9 @@ class AccountMenu extends Component {
               label="Password"
               order={1}
             />
+            <div className="accountMenu__warning">
+              This action deletes all your posts and content from Carta. Are you sure you want to continue?
+            </div>
             <div className="accountMenu__deleteFormButtons">
               <button type="button" onClick={this.handleCancelClick}>Cancel</button>
               <button className="active">Confirm</button>

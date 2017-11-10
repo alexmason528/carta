@@ -91,6 +91,7 @@
       color: #000; 
       font-size: 1.5em; 
       position: relative;
+      text-shadow: none;
     }
   }
 
@@ -109,19 +110,18 @@
     position: absolute; 
     margin: 0; 
     text-transform: uppercase; 
+    text-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
   }
 
   h1 {
     padding: 30px 50px; 
     font-size: 5em; 
     line-height: 125%;
-    text-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
   }
 
   h2 {
     padding: 19px 30px; 
     font-size: 2.5em;
-    text-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
   }
 
   p {

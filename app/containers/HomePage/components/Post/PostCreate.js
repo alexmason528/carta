@@ -297,7 +297,18 @@ class PostCreate extends Component {
     const showPostLinkButton = !showLinkBar
     const showFileImage = img instanceof File
     const spinnerShow = status === CREATE_POST_REQUEST || imageUpload.uploading
-    const submittable = title && (img || content)
+    const remainCharCnts = !content ? 1000 : 1000 - content.length
+    const submittable = title && (img || content) && (remainCharCnts >= 0)
+
+    let submitErrorTxt = ''
+
+    if (!title) {
+      submitErrorTxt = 'Please add a title'
+    } else if (!img && !content) {
+      submitErrorTxt = 'Please add text or an image'
+    } else if (remainCharCnts < 0) {
+      submitErrorTxt = 'Please post a text less than 1000 characters'
+    }
 
     const postClass = className({
       post: true,
@@ -393,19 +404,15 @@ class PostCreate extends Component {
         <div className="postButtons postCreate">
           <div className="left">
             <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
-            { (postType === 'textPost' || postType === 'mixedPost') && <span style={{ marginRight: '8px' }}>{ content === true ? 1000 : (1000 - (content ? content.length : 0)) }</span>}
+            { (postType === 'textPost' || postType === 'mixedPost') && <span style={{ marginRight: '8px' }}>{ remainCharCnts >= 0 ? remainCharCnts : 0 }</span> }
             { (postType !== 'mediaPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddMedia}>+ Picture</button> }
             { (postType !== 'textPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddText}>+ TEXT</button> }
           </div>
           { postType &&
             <div className="right">
-              <button type="button" className="postCancelBtn" onClick={this.handleCancel}>
-                CANCEL
-              </button>
+              <button type="button" className="postCancelBtn" onClick={this.handleCancel}>CANCEL</button>
               <DeleteButton className="postDeleteBtn" onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
-              <button type="button" className={submitBtnClass} disabled={!submittable} onClick={this.handleSubmit}>
-                SUBMIT
-              </button>
+              <button type="button" title={submitErrorTxt} className={submitBtnClass} disabled={!submittable} onClick={this.handleSubmit}>SUBMIT</button>
             </div>
           }
           <button type="button" className={closeButtonClass} onClick={onClose}>

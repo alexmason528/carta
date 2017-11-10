@@ -20,6 +20,8 @@ import {
   LIST_SUGGESTION_REQUEST,
   LIST_SUGGESTION_SUCCESS,
   LIST_SUGGESTION_FAIL,
+
+  DELETE_USER_POSTS,
 } from './constants'
 
 const initialState = {
@@ -155,6 +157,14 @@ function homeReducer(state = initialState, action) {
         ...state,
         status: type,
         error: payload,
+      }
+
+    case DELETE_USER_POSTS:
+      return {
+        ...state,
+        status: type,
+        error: null,
+        posts: state.posts.filter(post => post.author._id !== payload),
       }
 
     default:

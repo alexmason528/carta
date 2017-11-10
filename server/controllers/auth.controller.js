@@ -1,8 +1,10 @@
-const User = require('../models/user')
+const mongoose = require('mongoose')
 const nodemailer = require('nodemailer')
 const Cryptr = require('cryptr')
 const cryptr = new Cryptr('carta', 'aes256')
 const ses = require('nodemailer-ses-transport')
+const Post = require('../models/post')
+const User = require('../models/user')
 
 let transporter = nodemailer.createTransport(ses({
   accessKeyId: 'AKIAILWMKMTWHAJBH5HQ',
@@ -214,7 +216,17 @@ const deleteUser = (req, res) => {
           },
         })
       } else {
-        return res.json({})
+        Post.remove({ author: mongoose.Types.ObjectId(userID) }, (err) => {
+          if (err) {
+            return res.status(400).send({
+              error: {
+                details: err.toString(),
+              },
+            })
+          } else {
+            return res.json({})
+          }
+        })
       }
     })
   })

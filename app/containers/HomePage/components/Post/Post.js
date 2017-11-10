@@ -362,7 +362,19 @@ class Post extends Component {
     const showPostLinkButton = editing && !showLinkBar
     const showFileImage = img && (img instanceof File)
     const spinnerShow = ((status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST) && (curPost === _id)) || imageUpload.uploading
-    const submittable = title && (img || content)
+    const remainCharCnts = !content ? 1000 : 1000 - content.length
+    const submittable = title && (img || content) && (remainCharCnts >= 0)
+
+    let submitErrorTxt = ''
+
+    if (!title) {
+      submitErrorTxt = 'Please add a title'
+    } else if (!img && !content) {
+      submitErrorTxt = 'Please add text or an image'
+    } else if (remainCharCnts < 0) {
+      submitErrorTxt = 'Please post a text less than 1000 characters'
+    }
+
     let parsedTitle = title ? title.replace(/\n/g, '</div><div>') : ''
 
     const postClass = className({
@@ -418,7 +430,7 @@ class Post extends Component {
               </div>
               { editing
                 ? <ContentEditable className="postTitleEdit" placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
-                : <div className="postTitle" onClick={this.handleOpenLink}title={elemToText(title)} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
+                : <div className="postTitle" onClick={this.handleOpenLink} title={elemToText(title)} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
               }
             </div>
             <div className="postContent">
@@ -482,21 +494,15 @@ class Post extends Component {
           <div className="postButtons">
             <div className="left">
               <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
-              {(postType === 'textPost' || postType === 'mixedPost') &&
-                <span style={{ marginRight: '8px' }}>{ content === true ? 1000 : (1000 - (content ? content.length : 0)) }</span>
-              }
-              {(postType !== 'mediaPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddMedia}>
-                + Picture
-              </button>}
-              {(postType !== 'textPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddText}>
-                + Text
-              </button>}
+              { (postType === 'textPost' || postType === 'mixedPost') && <span style={{ marginRight: '8px' }}>{ remainCharCnts >= 0 ? remainCharCnts : 0 }</span> }
+              { (postType !== 'mediaPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddMedia}>+ Picture</button> }
+              { (postType !== 'textPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddText}>+ Text</button> }
             </div>
             { postType &&
               <div className="right">
                 <button type="button" className="postCancelBtn" onClick={this.handleCancel}>CANCEL</button>
                 <DeleteButton className="postDeleteBtn" onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
-                <button type="button" className={submitBtnClass} disabled={!submittable} onClick={this.handleSubmit}>SUBMIT</button>
+                <button type="button" title={submitErrorTxt} className={submitBtnClass} disabled={!submittable} onClick={this.handleSubmit}>SUBMIT</button>
               </div>
             }
             <button type="button" className={closeButtonClass} onClick={onClose}>

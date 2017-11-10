@@ -36,6 +36,8 @@ import {
 
   listSuggestionSuccess,
   listSuggestionFail,
+
+  deleteUserPosts,
 } from './actions'
 
 export function* loginRequest({ payload }) {
@@ -100,6 +102,7 @@ export function* deleteUserRequest({ payload }) {
     const res = yield call(request, requestURL, params)
     yield call(removeItem, 'auth')
     yield put(deleteUserSuccess())
+    yield put(deleteUserPosts(id))
   } catch (err) {
     yield put(deleteUserFail(err.details))
   }

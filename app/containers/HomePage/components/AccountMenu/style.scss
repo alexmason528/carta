@@ -15,6 +15,10 @@
     }
   }
 
+  &__warning {
+    margin: 8px;
+  }
+
   &__items {
     margin-left: 30%;
     padding: 0 35px;
@@ -68,6 +72,7 @@
       padding: 5px 8px;
       color: #333;
       width: 100%;
+      font-weight: 300;
     }
   }
 
@@ -75,7 +80,6 @@
     text-align: right;
     
     button {
-      margin-top: 10px;
       margin-left: 10px;
       color: #888;
       padding: 5px 8px;
@@ -90,5 +94,7 @@
 
   .error {
     padding: 0 0 8px 8px;
+    color:#e80303;
+    margin:8px; 
   }
 }
