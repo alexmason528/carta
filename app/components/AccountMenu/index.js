@@ -42,12 +42,11 @@ class AccountMenu extends Component {
   handleSettingClick = () => {
     const { showContent } = this.state
 
-    let data = Object.assign({},
-      { showContent },
-      showContent && { showForm: false },
-    )
-
-    this.setState(data)
+    if (showContent) {
+      this.setState({ showContent: false, showForm: false })
+    } else {
+      this.setState({ showContent: true })
+    }
   }
 
   handleDeleteAccountClick = () => {
