@@ -6,7 +6,7 @@ import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { FETCH_QUESTINFO_SUCCESS, FETCH_QUESTINFO_FAIL, QUEST_ADD } from 'containers/QuestPage/constants'
 import { fetchRecommendations, typeSelect } from 'containers/QuestPage/actions'
 import { selectInfo, selectTypes, selectCurrentTypes } from 'containers/QuestPage/selectors'
-import { Button, StarButton } from '../Buttons'
+import { Button, StarButton } from 'components/Buttons'
 
 class TypeSection extends Component {
   static propTypes = {

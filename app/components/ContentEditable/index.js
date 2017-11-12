@@ -9,6 +9,7 @@ export default class ContentEditable extends Component {
     value: PropTypes.string,
     className: PropTypes.string,
     placeholder: PropTypes.string,
+    tabIndex: PropTypes.number,
   }
 
   static defaultProps = {
@@ -21,13 +22,14 @@ export default class ContentEditable extends Component {
   }
 
   componentDidUpdate() {
+    const { value } = this.props
     const component = ReactDOM.findDOMNode(this)
-    if (this.props.value !== component.innerHTML) {
-      component.innerHTML = this.props.value
+    if (value !== component.innerHTML) {
+      component.innerHTML = value
     }
   }
 
-  onChange = (evt) => {
+  onChange = evt => {
     const component = ReactDOM.findDOMNode(this)
     let content = component.innerHTML
     const { onChange } = this.props
@@ -40,7 +42,7 @@ export default class ContentEditable extends Component {
   }
 
   render() {
-    const { className, value, placeholder } = this.props
+    const { className, value, placeholder, tabIndex } = this.props
 
     return (
       <div
@@ -49,6 +51,7 @@ export default class ContentEditable extends Component {
         onBlur={this.onChange}
         dangerouslySetInnerHTML={{ __html: value }}
         contentEditable
+        tabIndex={tabIndex}
         data-placeholder={placeholder}
       />
     )

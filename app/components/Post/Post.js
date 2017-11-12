@@ -16,7 +16,6 @@ import { selectHomeInfo } from 'containers/HomePage/selectors'
 import { getTextFromDate } from 'utils/dateHelper'
 import { elemToText, textToElem } from 'utils/stringHelper'
 import { getCroppedImage } from 'utils/imageHelper'
-
 import './style.scss'
 
 class Post extends Component {
@@ -199,7 +198,7 @@ class Post extends Component {
 
   handlePostContentRemove = () => {
     this.setState({
-      content: null,
+      content: '',
     }, () => {
       this.handleResize()
       const comp = ReactDOM.findDOMNode(this)
@@ -277,15 +276,11 @@ class Post extends Component {
 
   handlePostInfoToggle = evt => {
     evt.stopPropagation()
-    this.setState({
-      showInfo: !this.state.showInfo,
-    })
+    this.setState({ showInfo: !this.state.showInfo })
   }
 
   handlePostTitle = value => {
-    this.setState({
-      title: value,
-    })
+    this.setState({ title: value })
   }
 
   handlePostLinkBarClick = evt => {
@@ -295,9 +290,7 @@ class Post extends Component {
   handlePostLinkBarChange = evt => {
     evt.stopPropagation()
 
-    this.setState({
-      link: evt.target.value,
-    })
+    this.setState({ link: evt.target.value })
   }
 
   handlePostClick = () => {
@@ -321,9 +314,7 @@ class Post extends Component {
 
   handleEnterKey = evt => {
     if (evt.keyCode === 13) {
-      this.setState({
-        showLinkBar: false,
-      })
+      this.setState({ showLinkBar: false })
     }
   }
 
@@ -432,7 +423,7 @@ class Post extends Component {
                 <input type="text" value={link} placeholder="Paste or write link here" onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
               </div>
               { editing
-                ? <ContentEditable className="postTitleEdit" placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
+                ? <ContentEditable className="postTitleEdit" tabIndex={-1} placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
                 : <div className="postTitle" onClick={this.handleOpenLink} title={elemToText(title)} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
               }
             </div>
@@ -443,7 +434,7 @@ class Post extends Component {
                 { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
               </div>
               { editing
-                ? <ContentEditable className="postText" placeholder="Write here..." onChange={this.handlePostContent} value={textToElem(content)} />
+                ? <ContentEditable className="postText" tabIndex={-2} placeholder="Write here..." onChange={this.handlePostContent} value={textToElem(content)} />
                 : <div className="postText" dangerouslySetInnerHTML={{ __html: textToElem(content) }} />
               }
             </div>
@@ -476,7 +467,7 @@ class Post extends Component {
         { postType === 'textPost' &&
           <div className={postClass} onClick={this.handlePostClick}>
             { editing
-              ? <ContentEditable className="postTitleEdit" tabIndex="0" placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
+              ? <ContentEditable className="postTitleEdit" tabIndex={1} placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
               : <div className="postTitle" title={elemToText(title)} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
             }
             <div className="postContent">
@@ -486,7 +477,7 @@ class Post extends Component {
                 { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
               </div>
               { editing
-                ? <ContentEditable className="postText" placeholder="Write here..." onChange={this.handlePostContent} value={textToElem(content)} />
+                ? <ContentEditable className="postText" tabIndex={2} placeholder="Write here..." onChange={this.handlePostContent} value={textToElem(content)} />
                 : <div className="postText" dangerouslySetInnerHTML={{ __html: textToElem(content) }} />
               }
             </div>

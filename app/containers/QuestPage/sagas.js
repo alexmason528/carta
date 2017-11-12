@@ -120,11 +120,11 @@ export function* getQuestInfo() {
   }
 }
 
-export function* getBrochureInformation(payload) {
+export function* getBrochureInformation({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/map/place/`
 
   const data = {
-    name: payload.name,
+    name: payload,
   }
 
   const params = {

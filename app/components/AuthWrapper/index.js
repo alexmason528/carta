@@ -200,7 +200,7 @@ class AuthWrapper extends Component {
         <div className="authWrapper__divider">
           <span>Or</span>
         </div>
-        { authType === 'login' && <LoginForm onSubmit={this.handleLogin} loginError={loginError} onAuthTypeChange={this.handleAuthTypeChange} /> }
+        { <LoginForm onSubmit={this.handleLogin} loginError={loginError} onAuthTypeChange={this.handleAuthTypeChange} /> }
         { authType === 'register' && <RegisterForm onSubmit={this.handleRegister} registerError={registerError} onAuthTypeChange={this.handleAuthTypeChange} email={email} password={password} onCoverPicChange={onCoverPicChange} onProfilePicChange={onProfilePicChange} /> }
       </div>
     )

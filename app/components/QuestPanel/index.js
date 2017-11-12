@@ -107,5 +107,4 @@ const actions = {
   fetchRecommendations,
 }
 
-
 export default connect(selectors, actions)(QuestPanel)

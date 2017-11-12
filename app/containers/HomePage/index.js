@@ -11,10 +11,15 @@ import { logOut, verifyRequest, updateUserRequest } from 'containers/App/actions
 import { CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
 import { CreatePostButton } from 'components/Buttons'
 import Menu from 'components/Menu'
+import AccountMenu from 'components/AccountMenu'
+import AuthWrapper from 'components/AuthWrapper'
+import { Post, PostCreate } from 'components/Post'
+import Profile from 'components/Profile'
+import StartQuest from 'components/StartQuest'
+import Suggestion from 'components/Suggestion'
 import { getCroppedImage } from 'utils/imageHelper'
 import { selectPosts, selectSuggestions, selectHomeInfo } from './selectors'
 import { listPostRequest, listSuggestionRequest } from './actions'
-import { AccountMenu, AuthWrapper, Post, PostCreate, Profile, Quest, Suggestion, VerifyCtrl } from './components'
 import './style.scss'
 
 class HomePage extends Component {
@@ -160,6 +165,38 @@ class HomePage extends Component {
     const { posts, suggestions, authenticated, user, logOut, updateUserRequest, info } = this.props
     const { status, error } = info
 
+    const lefts = [{
+      title: 'Ook linksonder de pagina komen de posters',
+      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0076.jpg',
+    }, {
+      title: 'Daarboven zaken met betrekking tot jouw profiel',
+      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0077.jpg',
+    }, {
+      title: 'Denk aan reisalbums',
+      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0069.jpg',
+    }, {
+      title: 'Maar dat is nog even toekomstmuziek',
+      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0072.jpg',
+    }, {
+      title: 'Je kunt wel al een profiel maken!',
+      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0075.jpg',
+    }, {
+      title: 'Dus registreer je alvast!',
+      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0066.jpg',
+    }, {
+      title: "En wees een early adopter in z'n puurste vorm",
+      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0055.jpg',
+    }, {
+      title: 'Mocht je het willen weten',
+      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0068.jpg',
+    }, {
+      title: 'Via het menu kom je bij de Quest pagina',
+      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0033.jpg',
+    }, {
+      title: 'Die open je via het Carta logo links',
+      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0032.jpg',
+    }]
+
     let createPostButtonType = 'text'
 
     if (posts.length > 0 && posts[0].img) {
@@ -195,7 +232,8 @@ class HomePage extends Component {
                 profilePic={profilePic}
               />
             }
-            <Quest authenticated={authenticated} />
+            <StartQuest authenticated={authenticated} />
+            { lefts && lefts.map((suggestion, index) => <Suggestion key={index} {...suggestion} />)}
           </Col>
 
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-sm-down">
@@ -221,7 +259,7 @@ class HomePage extends Component {
             </div>
           </Col>
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-md-down">
-            { suggestions && suggestions.map((suggestion, index) => <Suggestion key={index} imageUrl={suggestion.img} title={suggestion.title} />) }
+            { suggestions && suggestions.map((suggestion, index) => <Suggestion key={index} {...suggestion} />) }
           </Col>
         </Row>
         { user && !user.verified && (status !== VERIFY_FAIL) &&

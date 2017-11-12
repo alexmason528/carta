@@ -49,9 +49,7 @@ class ProgressBar extends Component {
     let { percent } = this.state
     percent += ((Math.random() + 1) - Math.random())
     percent = percent < 99 ? percent : 99
-    this.setState({
-      percent,
-    })
+    this.setState({ percent })
   }
 
   handleProps = props => {
@@ -70,9 +68,7 @@ class ProgressBar extends Component {
         }, 300)
       })
     } else {
-      this.setState({
-        percent: props.percent,
-      })
+      this.setState({ percent: props.percent })
     }
   }
 

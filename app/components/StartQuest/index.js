@@ -5,7 +5,7 @@ import { browserHistory } from 'react-router'
 import { CLOUDINARY_COVER_URL } from 'containers/App/constants'
 import './style.scss'
 
-class Quest extends Component {
+class StartQuest extends Component {
   static propTypes = {
     authenticated: PropTypes.bool,
   }
@@ -55,4 +55,4 @@ class Quest extends Component {
   }
 }
 
-export default Quest
+export default StartQuest

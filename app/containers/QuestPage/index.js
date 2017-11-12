@@ -9,13 +9,14 @@ import { browserHistory } from 'react-router'
 import { Container } from 'reactstrap'
 import Menu from 'components/Menu'
 import { MAP_ACCESS_TOKEN, CLOUDINARY_POINTS_URL, CLOUDINARY_SHAPES_URL } from 'containers/App/constants'
+import { MapBlock, ScoreBoardBlock } from 'components/Blocks'
+import QuestPanel from 'components/QuestPanel'
+import Brochure from 'components/Brochure'
+import { Button, QuestButton } from 'components/Buttons'
 import URLParser from 'utils/questURLparser'
 import { mapChange, fetchQuestInfo, fetchRecommendations, setDefaultQuest } from './actions'
 import { selectRecommendations, selectPlaces } from './selectors'
-import { MapBlock, ScoreBoardBlock } from './Components/Blocks'
-import QuestPanel from './Components/QuestPanel'
-import Brochure from './Components/Brochure'
-import { Button, QuestButton } from './Components/Buttons'
+
 
 const Map = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN })
 
@@ -57,6 +58,8 @@ class QuestPage extends Component {
     //   }
     // }
 
+    const { fetchQuestInfo } = this.props
+
     this.mapStyle = {
       version: 8,
       sources: {
@@ -84,7 +87,7 @@ class QuestPage extends Component {
     this.center = [5.822, 52.142]
     this.zoom = [6]
 
-    this.props.fetchQuestInfo()
+    fetchQuestInfo()
 
     this.colors = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379']
 

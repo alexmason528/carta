@@ -70,7 +70,7 @@ class PostCreate extends Component {
 
   handleResize = () => {
     const interval =
-    setInterval(() => {
+    setTimeout(() => {
       const comp = ReactDOM.findDOMNode(this)
       const post = $(comp).find('.post')
       const width = $(post).width()
@@ -91,7 +91,7 @@ class PostCreate extends Component {
           'max-height': `${fontSize * lines * 1.2}px`,
         })
       }
-    }, 0)
+    }, 100)
   }
 
   handleAddMedia = evt => {
@@ -139,15 +139,11 @@ class PostCreate extends Component {
   }
 
   handlePostContent = value => {
-    this.setState({
-      content: value,
-    })
+    this.setState({ content: value })
   }
 
   handleDelete = () => {
-    this.setState({
-      showDeleteConfirm: !this.state.showDeleteConfirm,
-    })
+    this.setState({ showDeleteConfirm: !this.state.showDeleteConfirm })
   }
 
   handleDeleteConfirm = () => {
@@ -156,9 +152,7 @@ class PostCreate extends Component {
 
   handlePostLinkBtn = evt => {
     evt.stopPropagation()
-    this.setState({
-      showLinkBar: !this.state.showLinkBar,
-    })
+    this.setState({ showLinkBar: !this.state.showLinkBar })
   }
 
   handlePostImageRemove = () => {
@@ -235,15 +229,11 @@ class PostCreate extends Component {
 
   handlePostInfoToggle = evt => {
     evt.stopPropagation()
-    this.setState({
-      showInfo: !this.state.showInfo,
-    })
+    this.setState({ showInfo: !this.state.showInfo })
   }
 
   handlePostTitle = value => {
-    this.setState({
-      title: value,
-    })
+    this.setState({ title: value })
   }
 
   handlePostLinkBarClick = evt => {
@@ -252,10 +242,7 @@ class PostCreate extends Component {
 
   handlePostLinkBarChange = evt => {
     evt.stopPropagation()
-
-    this.setState({
-      link: evt.target.value,
-    })
+    this.setState({ link: evt.target.value })
   }
 
   handlePostClick = () => {
@@ -268,9 +255,7 @@ class PostCreate extends Component {
 
   handleEnterKey = evt => {
     if (evt.keyCode === 13) {
-      this.setState({
-        showLinkBar: false,
-      })
+      this.setState({ showLinkBar: false })
     }
   }
 
@@ -360,14 +345,14 @@ class PostCreate extends Component {
                 <img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
                 <input type="text" value={link} placeholder="Paste or write link here" onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
               </div>
-              <ContentEditable className="postTitleEdit" placeholder="Title" onChange={this.handlePostTitle} value={title} />
+              <ContentEditable className="postTitleEdit" tabIndex={1} placeholder="Title" onChange={this.handlePostTitle} value={title} />
             </div>
             <div className="postContent">
               <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostContentRemove} />
               <div className="postMeta">
                 {fullname} - CARTA | NOW
               </div>
-              <ContentEditable className="postText" placeholder="Write here..." onChange={this.handlePostContent} value={content} />
+              <ContentEditable className="postText" tabIndex={2} placeholder="Write here..." onChange={this.handlePostContent} value={content} />
             </div>
           </div>
         }
@@ -393,13 +378,13 @@ class PostCreate extends Component {
 
         { postType === 'textPost' &&
           <div className={postClass} onClick={this.handlePostClick}>
-            <ContentEditable className="postTitleEdit" placeholder="Title" onChange={this.handlePostTitle} value={title} />
+            <ContentEditable className="postTitleEdit" tabIndex={1} placeholder="Title" onChange={this.handlePostTitle} value={title} />
             <div className="postContent">
               <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostContentRemove} />
               <div className="postMeta">
                 {fullname} - CARTA | NOW
               </div>
-              <ContentEditable className="postText" placeholder="Write here..." onChange={this.handlePostContent} value={content} />
+              <ContentEditable className="postText" tabIndex={2} placeholder="Write here..." onChange={this.handlePostContent} value={content} />
             </div>
           </div>
         }

@@ -5,7 +5,7 @@ import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { fetchRecommendations, descriptiveSelect } from 'containers/QuestPage/actions'
 import { selectDescriptives, selectCurrentDescriptives } from 'containers/QuestPage/selectors'
-import { Button, StarButton } from '../Buttons'
+import { Button, StarButton } from 'components/Buttons'
 
 class DescriptiveSection extends Component {
   static propTypes = {

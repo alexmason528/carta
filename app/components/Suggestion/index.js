@@ -6,7 +6,7 @@ import './style.scss'
 
 class Suggestion extends Component {
   static propTypes = {
-    imageUrl: PropTypes.string,
+    img: PropTypes.string,
     title: PropTypes.string,
   }
 
@@ -38,7 +38,7 @@ class Suggestion extends Component {
   }
 
   render() {
-    const { imageUrl, title } = this.props
+    const { img, title } = this.props
     const { imageLoaded } = this.state
     const suggestionClass = className({
       suggestion: true,
@@ -47,7 +47,7 @@ class Suggestion extends Component {
 
     return (
       <div className={suggestionClass}>
-        <img onLoad={this.handleLoaded} src={imageUrl} role="presentation" />
+        <img onLoad={this.handleLoaded} src={img} role="presentation" />
         <h2>{title}</h2>
       </div>
     )

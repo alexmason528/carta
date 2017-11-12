@@ -35,37 +35,27 @@ class AccountMenu extends Component {
     const { show } = this.props
 
     if (show !== nextProps.show) {
-      this.setState({
-        showContent: false,
-      })
+      this.setState({ showContent: false })
     }
   }
 
   handleSettingClick = () => {
     const { showContent } = this.state
 
-    if (showContent) {
-      this.setState({
-        showContent: false,
-        showForm: false,
-      })
-    } else {
-      this.setState({
-        showContent: true,
-      })
-    }
+    let data = Object.assign({},
+      { showContent },
+      showContent && { showForm: false },
+    )
+
+    this.setState(data)
   }
 
   handleDeleteAccountClick = () => {
-    this.setState({
-      showForm: true,
-    })
+    this.setState({ showForm: true })
   }
 
   handleCancelClick = () => {
-    this.setState({
-      showForm: false,
-    })
+    this.setState({ showForm: false })
   }
 
   handleDeleteUser = values => {

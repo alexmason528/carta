@@ -13,7 +13,8 @@ function withProgressBar(WrappedComponent) {
     }
 
     componentWillMount() {
-      this.unsubscribeHistory = this.props.router && this.props.router.listenBefore(location => {
+      const { router } = this.props
+      this.unsubscribeHistory = router && router.listenBefore(location => {
         if (this.state.loadedRoutes.indexOf(location.pathname) === -1) {
           this.updateProgress(0)
         }
@@ -26,9 +27,7 @@ function withProgressBar(WrappedComponent) {
 
       if (loadedRoutes.indexOf(pathname) === -1 && progress !== -1 && newState.progress < 100) {
         this.updateProgress(100)
-        this.setState({
-          loadedRoutes: loadedRoutes.concat([pathname]),
-        })
+        this.setState({ loadedRoutes: loadedRoutes.concat([pathname]) })
       }
     }
 

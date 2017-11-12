@@ -117,10 +117,10 @@ export function fetchRecommendationsFail(payload) {
   }
 }
 
-export function fetchBrochure(name) {
+export function fetchBrochure(payload) {
   return {
     type: FETCH_BROCHURE,
-    name,
+    payload,
   }
 }
 

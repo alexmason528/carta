@@ -82,9 +82,7 @@ export default class Profile extends Component {
   handleCoverImg = () => {
     const { authenticated } = this.props
     if (authenticated) {
-      this.setState({
-        imageType: 'coverPic',
-      })
+      this.setState({ imageType: 'coverPic' })
       this.mediaUploader.click()
     }
   }
@@ -93,9 +91,7 @@ export default class Profile extends Component {
     evt.stopPropagation()
     const { authenticated } = this.props
     if (authenticated) {
-      this.setState({
-        imageType: 'profilePic',
-      })
+      this.setState({ imageType: 'profilePic' })
       this.mediaUploader.click()
     }
   }

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { fetchRecommendations, placeSelect } from 'containers/QuestPage/actions'
 import { selectPlaces } from 'containers/QuestPage/selectors'
-import { Button, StarButton } from '../Buttons'
+import { Button, StarButton } from 'components/Buttons'
 
 class PlaceSection extends Component {
   static propTypes = {
