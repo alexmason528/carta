@@ -233,7 +233,9 @@ class HomePage extends Component {
               />
             }
             <StartQuest authenticated={authenticated} />
-            { lefts && lefts.map((suggestion, index) => <Suggestion key={index} {...suggestion} />)}
+            <div className="leftColumn">
+              { lefts && lefts.map((suggestion, index) => <Suggestion key={index} {...suggestion} />) }
+            </div>
           </Col>
 
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-sm-down">
