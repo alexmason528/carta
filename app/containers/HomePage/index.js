@@ -12,7 +12,7 @@ import { CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
 import { CreatePostButton } from 'components/Buttons'
 import Menu from 'components/Menu'
 import AccountMenu from 'components/AccountMenu'
-import AuthWrapper from 'components/AuthWrapper'
+import AuthForm from 'components/AuthForm'
 import { Post, PostCreate } from 'components/Post'
 import Profile from 'components/Profile'
 import StartQuest from 'components/StartQuest'
@@ -41,7 +41,7 @@ class HomePage extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      showAuthWrapper: false,
+      showAuthForm: false,
       showCreatePostForm: false,
       showAccountMenu: false,
       editingPost: false,
@@ -121,7 +121,7 @@ class HomePage extends Component {
   handleWindowClick = () => {
     this.setState({
       showAccountMenu: false,
-      showAuthWrapper: false,
+      showAuthForm: false,
     })
   }
 
@@ -131,7 +131,7 @@ class HomePage extends Component {
     if (!authenticated) {
       evt.stopPropagation()
       this.setState({
-        showAuthWrapper: !this.state.showAuthWrapper,
+        showAuthForm: !this.state.showAuthForm,
       })
     } else {
       this.setState({
@@ -161,7 +161,7 @@ class HomePage extends Component {
   }
 
   render() {
-    const { showAuthWrapper, showCreatePostForm, showAccountMenu, timer, editingPost, coverPic, profilePic } = this.state
+    const { showAuthForm, showCreatePostForm, showAccountMenu, timer, editingPost, coverPic, profilePic } = this.state
     const { posts, suggestions, authenticated, user, logOut, updateUserRequest, info } = this.props
     const { status, error } = info
 
@@ -185,7 +185,7 @@ class HomePage extends Component {
       img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0066.jpg',
     }, {
       title: "En wees een early adopter in z'n puurste vorm",
-      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0055.jpg',
+      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0056.jpg',
     }, {
       title: 'Mocht je het willen weten',
       img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0068.jpg',
@@ -224,8 +224,8 @@ class HomePage extends Component {
             />
             { authenticated ?
               <AccountMenu show={showAccountMenu} /> :
-              <AuthWrapper
-                show={showAuthWrapper}
+              <AuthForm
+                show={showAuthForm}
                 onCoverPicChange={this.handleCoverPic}
                 onProfilePicChange={this.handleProfilePic}
                 coverPic={coverPic}

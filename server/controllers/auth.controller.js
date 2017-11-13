@@ -37,7 +37,7 @@ const login = (req, res) => {
     } else {
       return res.status(400).send({
         error: {
-          details: 'Please enter a valid email address',
+          details: 'Invalid email',
         },
       })
     }

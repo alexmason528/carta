@@ -423,7 +423,7 @@ class Post extends Component {
                 <input type="text" value={link} placeholder="Paste or write link here" onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
               </div>
               { editing
-                ? <ContentEditable className="postTitleEdit" tabIndex={-1} placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
+                ? <ContentEditable className="postTitleEdit" tabIndex={1} placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
                 : <div className="postTitle" onClick={this.handleOpenLink} title={elemToText(title)} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
               }
             </div>
@@ -434,7 +434,7 @@ class Post extends Component {
                 { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
               </div>
               { editing
-                ? <ContentEditable className="postText" tabIndex={-2} placeholder="Write here..." onChange={this.handlePostContent} value={textToElem(content)} />
+                ? <ContentEditable className="postText" tabIndex={2} placeholder="Write here..." onChange={this.handlePostContent} value={textToElem(content)} />
                 : <div className="postText" dangerouslySetInnerHTML={{ __html: textToElem(content) }} />
               }
             </div>

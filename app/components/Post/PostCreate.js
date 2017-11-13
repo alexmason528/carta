@@ -45,7 +45,6 @@ class PostCreate extends Component {
   }
 
   componentDidMount() {
-    this.handleResize()
     window.addEventListener('resize', this.handleResize)
   }
 
@@ -69,29 +68,23 @@ class PostCreate extends Component {
   }
 
   handleResize = () => {
-    const interval =
-    setTimeout(() => {
-      const comp = ReactDOM.findDOMNode(this)
-      const post = $(comp).find('.post')
-      const width = $(post).width()
+    const comp = ReactDOM.findDOMNode(this)
+    const post = $(comp).find('.post')
+    const width = $(post).width()
 
-      if ($(post).hasClass('textPost')) {
-        const fontSize = (width / 76) * 3 * 1.15
-        $(post).find('.postTitleEdit').css({ fontSize: `${fontSize}px` })
-        clearInterval(interval)
-      } else {
-        const height = $(post).find('.postImage').height() - ($(post).hasClass('mediaPost') ? 90 : 60)
-        const fontSize = (width / 44) * 3 * 1.15
-        let lines = fontSize > 0 ? Math.floor(height / (fontSize * 1.2)) : 0
+    if ($(post).hasClass('textPost')) {
+      const fontSize = (width / 76) * 3 * 1.15
+      $(post).find('.postTitleEdit').css({ fontSize: `${fontSize}px` })
+    } else {
+      const height = $(post).find('.postImage').height() - ($(post).hasClass('mediaPost') ? 90 : 60)
+      const fontSize = (width / 44) * 3 * 1.15
+      let lines = fontSize > 0 ? Math.floor(height / (fontSize * 1.2)) : 0
 
-        if (height > 0) clearInterval(interval)
-
-        $(post).find('.postTitleEdit').css({
-          fontSize: `${fontSize}px`,
-          'max-height': `${fontSize * lines * 1.2}px`,
-        })
-      }
-    }, 100)
+      $(post).find('.postTitleEdit').css({
+        fontSize: `${fontSize}px`,
+        'max-height': `${fontSize * lines * 1.2}px`,
+      })
+    }
   }
 
   handleAddMedia = evt => {

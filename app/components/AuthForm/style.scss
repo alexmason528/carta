@@ -1,4 +1,4 @@
-.authWrapper {
+.authForm {
   margin: 8px 0;
   padding: 12% 30px 70px 50px;
   position: relative;
@@ -13,6 +13,10 @@
     font-weight: 400;
   }
 
+  .error {
+    padding: 24px 8px;
+  }
+
   &--hidden {
     max-height: 0;
     padding-top: 0;
@@ -21,7 +25,7 @@
     margin-top: 0;
     margin-bottom: 0;
 
-    .authWrapper__divider {
+    .authForm__divider {
       margin-top: 0;
     }
 
@@ -30,7 +34,7 @@
     }
   }
 
-  &__inlineButtons {
+  &__socialButtons {
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
@@ -85,25 +89,25 @@
     }
   }
 
-  &__buttons {
+  &__authButtons {
     margin-top: 20px;
     display: flex;
     align-items: center;
+  }
 
-    button {
-      padding: 8px;
-      margin-right: 10px;
-      border: 0.5px solid #ddd;
-      z-index: 60;
+  &__authButton {
+    padding: 8px;
+    margin-right: 10px;
+    border: 0.5px solid #ddd;
+    z-index: 60;
 
-      &.active {
-        font-weight: 600;
-      }
+    &--active {
+      font-weight: 600 !important;
+    }
 
-      &.inactive {
-        border: none;
-        background: none;
-      }
+    &--inactive {
+      border: none;
+      background: none !important;
     }
   }
 
@@ -139,9 +143,5 @@
     padding: 8px;
     color: #333;
     font-weight: 300;
-  }
-
-  .error {
-    padding: 24px 8px;
   }
 }

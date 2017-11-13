@@ -3,21 +3,25 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import axios from 'axios'
 import className from 'classnames'
-import { LOGIN_REQUEST, REGISTER_REQUEST, LOGIN_FAIL, CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_ICON_URL } from 'containers/App/constants'
+import { compose } from 'redux'
+import { reduxForm, Field } from 'redux-form'
+import RenderField from 'components/RenderField'
+import RenderDropzone from 'components/RenderDropzone'
+import { LOGIN_REQUEST, REGISTER_REQUEST, LOGIN_FAIL, REGISTER_FAIL, CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { loginRequest, registerRequest } from 'containers/App/actions'
 import { selectInfo } from 'containers/App/selectors'
 import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
-import LoginForm from './LoginForm'
-import RegisterForm from './RegisterForm'
+import authFormValidator from './validate'
 import './style.scss'
 
-class AuthWrapper extends Component {
+class AuthForm extends Component {
   static propTypes = {
     loginRequest: PropTypes.func,
     registerRequest: PropTypes.func,
     onCoverPicChange: PropTypes.func,
     onProfilePicChange: PropTypes.func,
+    handleSubmit: PropTypes.func,
     coverPic: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.object,
@@ -37,8 +41,7 @@ class AuthWrapper extends Component {
       authType: 'login',
       email: '',
       password: '',
-      loginError: null,
-      registerError: null,
+      error: null,
       imageUpload: {
         uploading: false,
         error: null,
@@ -49,16 +52,13 @@ class AuthWrapper extends Component {
   componentWillReceiveProps(nextProps) {
     const { info: { status, error } } = nextProps
 
-    if (status === LOGIN_FAIL && error === 'Invalid username') {
+    if (status === LOGIN_FAIL && error === 'Invalid email') {
       this.setState({
-        loginError: null,
         authType: 'register',
       })
-    } else {
+    } else if (status === REGISTER_FAIL && error === 'You are already registered. Please sign in.') {
       this.setState({
-        ...this.state,
-        loginError: error,
-        registerError: error,
+        authType: 'login',
       })
     }
   }
@@ -69,6 +69,15 @@ class AuthWrapper extends Component {
       loginError: null,
       registerError: null,
     })
+  }
+
+  handleSubmit = values => {
+    const { authType } = this.state
+    if (authType === 'login') {
+      this.handleLogin(values)
+    } else if (authType === 'register') {
+      this.handleRegister(values)
+    }
   }
 
   handleLogin = values => {
@@ -175,33 +184,92 @@ class AuthWrapper extends Component {
   }
 
   render() {
-    const { authType, loginError, registerError, email, password, imageUpload } = this.state
-    const { info: { status }, show, loginRequest, onCoverPicChange, onProfilePicChange } = this.props
+    const { authType, email, password, imageUpload } = this.state
+    const { info: { status, error }, show, loginRequest, onCoverPicChange, onProfilePicChange, handleSubmit } = this.props
 
     const spinnerShow = status === LOGIN_REQUEST || status === REGISTER_REQUEST || imageUpload.uploading
 
-    const authWrapperClass = className({
-      authWrapper: true,
-      'authWrapper--hidden': !show,
+    const authFormClass = className({
+      authForm: true,
+      'authForm--hidden': !show,
     })
 
     return (
-      <div className={authWrapperClass} onClick={evt => evt.stopPropagation()}>
+      <div className={authFormClass} onClick={evt => evt.stopPropagation()}>
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
-        <div className="authWrapper__divider">
+        <div className="authForm__divider">
           <span>With</span>
         </div>
-        <div className="authWrapper__inlineButtons">
+        <div className="authForm__socialButtons">
           <button type="button"><img className="img20" src={`${CLOUDINARY_ICON_URL}/google.png`} role="presentation" /><span>Google</span></button>
           <button type="button"><img className="img20" src={`${CLOUDINARY_ICON_URL}/facebook.png`} role="presentation" /><span>Facebook</span></button>
         </div>
-        <div className="authWrapper__divider">
+        <div className="authForm__divider">
           <span>Or</span>
         </div>
-        { <LoginForm onSubmit={this.handleLogin} loginError={loginError} onAuthTypeChange={this.handleAuthTypeChange} /> }
-        { authType === 'register' && <RegisterForm onSubmit={this.handleRegister} registerError={registerError} onAuthTypeChange={this.handleAuthTypeChange} email={email} password={password} onCoverPicChange={onCoverPicChange} onProfilePicChange={onProfilePicChange} /> }
+        <form onSubmit={handleSubmit(this.handleSubmit)}>
+          <Field
+            name="email"
+            type="email"
+            component={RenderField}
+            label="Email"
+            order={1}
+          />
+          <Field
+            name="password"
+            type="password"
+            component={RenderField}
+            label="Password"
+            order={2}
+          />
+          { authType === 'register' && <div>
+            <Field
+              name="confirmPassword"
+              type="password"
+              component={RenderField}
+              label="Repeat password"
+              order={2}
+            />
+            <Field
+              name="fullname"
+              type="text"
+              component={RenderField}
+              label="Full name"
+              order={3}
+            />
+            <div className="authForm__uploadButtons">
+              <Field
+                className="authForm__uploadButton"
+                name="profilePic"
+                label="Profile Pic"
+                onChange={onProfilePicChange}
+                component={RenderDropzone}
+                crop="portrait"
+              />
+              <Field
+                className="authForm__uploadButton"
+                name="coverPic"
+                label="Cover Pic"
+                onChange={onCoverPicChange}
+                component={RenderDropzone}
+                crop="landscape"
+              />
+            </div>
+          </div> }
+          { authType === 'login'
+            ? <div className="authForm__authButtons">
+              <button className="authForm__authButton authForm__authButton--active">Sign in</button>
+              <button className="authForm__authButton authForm__authButton--inactive" type="button" onClick={() => { this.handleAuthTypeChange('register') }}>Register</button>
+            </div>
+            : <div className="authForm__authButtons">
+              <button className="authForm__authButton authForm__authButton--active">Register</button>
+              <button className="authForm__authButton authForm__authButton--inactive" type="button" onClick={() => { this.handleAuthTypeChange('login') }}>Sign in</button>
+            </div>
+          }
+          { error && <div className="error">{error}</div> }
+        </form>
       </div>
     )
   }
@@ -216,4 +284,10 @@ const actions = {
   registerRequest,
 }
 
-export default connect(selectors, actions)(AuthWrapper)
+export default compose(
+  connect(selectors, actions),
+  reduxForm({
+    form: 'authForm',
+    validate: authFormValidator,
+  }),
+)(AuthForm)

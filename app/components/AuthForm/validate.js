@@ -17,7 +17,6 @@ const schema = {
     },
   },
   confirmPassword: {
-    presence: true,
     equality: {
       attribute: 'password',
       message: '^These passwords are not identical',
