@@ -24,12 +24,6 @@ class Brochure extends Component {
     const { fetchBrochure, name } = this.props
     fetchBrochure(name)
 
-    $('p').dotdotdot({
-      watch: 'window',
-      after: '.more',
-      ellipsis: ' ...',
-    })
-
     $('body').delegate('.more', 'click', function moreClicked(evt) {
       evt.stopPropagation()
       let tileWidth
@@ -242,11 +236,21 @@ class Brochure extends Component {
   }
 
   handleLoaded = () => {
-    this.setState({ imageLoaded: true }, this.handleResize)
+    this.setState({ imageLoaded: true }, () => {
+      this.handleResize()
+      $('p').dotdotdot({
+        watch: 'window',
+        after: '.more',
+        ellipsis: ' ...',
+      })
+    })
   }
 
   render() {
-    const { brochure: { mainPoster, description, tiles } } = this.props
+    const { brochure } = this.props
+    if (!brochure) return null
+
+    const { mainPoster, description, tiles } = brochure
     const { imageLoaded } = this.state
     const brochureClass = className({
       brochure: true,

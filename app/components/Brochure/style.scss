@@ -41,11 +41,24 @@
     vertical-align: top; 
     position: relative; 
     cursor: default;
+  }
+
+  .image-tile, .main-poster {
+    overflow: hidden;
+    cursor: pointer;
 
     img {
-      height: 100%;
       width: 100%;
+      height: 100%;
       position: absolute;
+      transition: all 1s;
+    }
+
+    &:hover img {
+      width: 104%;
+      height: 104%;
+      margin-left: -2%;
+      margin-top: -2%;
     }
   }
 

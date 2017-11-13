@@ -47,7 +47,8 @@ class Suggestion extends Component {
 
     return (
       <div className={suggestionClass}>
-        <img onLoad={this.handleLoaded} src={img} role="presentation" />
+        <img className="suggestion__hoverImg" onLoad={this.handleLoaded} src={img} role="presentation" />
+        <img src={img} role="presentation" />
         <h2>{title}</h2>
       </div>
     )
