@@ -165,38 +165,6 @@ class HomePage extends Component {
     const { posts, suggestions, authenticated, user, logOut, updateUserRequest, info } = this.props
     const { status, error } = info
 
-    const lefts = [{
-      title: 'Ook linksonder de pagina komen de posters',
-      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0076.jpg',
-    }, {
-      title: 'Daarboven zaken met betrekking tot jouw profiel',
-      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0077.jpg',
-    }, {
-      title: 'Denk aan reisalbums',
-      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0069.jpg',
-    }, {
-      title: 'Maar dat is nog even toekomstmuziek',
-      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0072.jpg',
-    }, {
-      title: 'Je kunt wel al een profiel maken!',
-      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0075.jpg',
-    }, {
-      title: 'Dus registreer je alvast!',
-      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0066.jpg',
-    }, {
-      title: "En wees een early adopter in z'n puurste vorm",
-      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0056.jpg',
-    }, {
-      title: 'Mocht je het willen weten',
-      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0068.jpg',
-    }, {
-      title: 'Via het menu kom je bij de Quest pagina',
-      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0033.jpg',
-    }, {
-      title: 'Die open je via het Carta logo links',
-      img: 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510071795/image/big/0032.jpg',
-    }]
-
     let createPostButtonType = 'text'
 
     if (posts.length > 0 && posts[0].img) {
@@ -233,9 +201,6 @@ class HomePage extends Component {
               />
             }
             <StartQuest authenticated={authenticated} />
-            <div className="leftColumn">
-              { lefts && lefts.map((suggestion, index) => <Suggestion key={index} {...suggestion} />) }
-            </div>
           </Col>
 
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-sm-down">

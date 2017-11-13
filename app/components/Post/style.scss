@@ -109,7 +109,7 @@
   .postTitle {
     padding: 0;
     margin: 30px 0 0 30px;
-    user-select: auto;
+    user-select: text;
     cursor: text;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -298,7 +298,7 @@
 .mixedPost, .textPost {
   .postMeta {
     cursor: text;
-    user-select: auto;
+    user-select: text;
   }
 }
 
@@ -362,7 +362,7 @@
   font-weight: lighter;
   font-size: 14.5px;
   cursor: text;
-  user-select: auto;
+  user-select: text;
 
   &:focus { outline: none }
 }

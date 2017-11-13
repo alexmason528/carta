@@ -42,7 +42,7 @@ const getImagePortion = (imgObj, type) => {
     }
   }
 
-  return tnCanvas.toDataURL()
+  return tnCanvas.toDataURL('image/jpeg', 0.5)
 }
 
 export const getCroppedImage = (file, handler, type) => {
