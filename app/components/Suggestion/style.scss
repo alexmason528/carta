@@ -1,62 +1,60 @@
-.homepage {
-  .suggestion {
+.suggestion {
+  position: relative;
+  margin-bottom: 8px;
+  cursor: pointer;
+  overflow: hidden;
+
+  img {
+    width: 100%;
     position: relative;
-    margin-bottom: 8px;
-    cursor: pointer;
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      position: relative;
-      z-index: 1;
-    }
-
-    &__hoverImg {
-      position: absolute !important;
-      width: 100%;
-      height: 100%;
-      left: 0;
-      top: 0;
-      z-index: 2 !important;
-      transition: ease-in-out 0.5s;
-    }
-
-    &:hover {
-      .suggestion__hoverImg {
-        width: 104%;
-        height: 104%;
-        left: -2%;
-        top: -2%;
-      }
-    }
-
-    &:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right:  0;
-      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
-      -moz-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
-      -webkit-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
-      z-index: 3;
-    }
-
-    h2 {
-      padding: 19px 30px;
-      text-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
-      color: #fff;
-      text-transform: uppercase;
-      position: absolute;
-      font-weight: 900;
-      line-height: 1.2;
-      margin-bottom: 0;
-      top: 0;
-      left: 0;
-      z-index: 4;
-    }
-
-    &:last-child { margin-bottom: 0 }
+    z-index: 1;
   }
+
+  &__hoverImg {
+    position: absolute !important;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 2 !important;
+    transition: all 1s;
+  }
+
+  &:hover {
+    .suggestion__hoverImg {
+      width: 104%;
+      height: 104%;
+      left: -2%;
+      top: -2%;
+    }
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right:  0;
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+    z-index: 3;
+  }
+
+  h2 {
+    padding: 19px 30px;
+    text-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
+    color: #fff;
+    text-transform: uppercase;
+    position: absolute;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 0;
+    top: 0;
+    left: 0;
+    z-index: 4;
+  }
+
+  &:last-child { margin-bottom: 0 }
 }

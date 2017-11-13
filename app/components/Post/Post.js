@@ -415,7 +415,12 @@ class Post extends Component {
         { postType === 'mixedPost' &&
           <div className={postClass}>
             <div className="postImage" onClick={this.handleOpenLink}>
-              { showImage && <img onLoad={this.handleLoaded} src={img} role="presentation" /> }
+              { showImage &&
+                <div>
+                  <img className="postImage__hoverImg" onLoad={this.handleLoaded} src={img} role="presentation" />
+                  <img src={img} role="presentation" />
+                </div>
+              }
               { editing && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostImageRemove} /> }
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>
@@ -445,7 +450,12 @@ class Post extends Component {
           <div className={postClass} onClick={this.handlePostClick}>
             <div className="postImage" onClick={this.handleOpenLink}>
               { editable && !editing && <EditButton className="postEditBtn" image="edit-white-shadow" hover onClick={this.handleStartEdit} /> }
-              { showImage && <img onLoad={this.handleLoaded} src={img} role="presentation" /> }
+              { showImage &&
+                <div>
+                  <img className="postImage__hoverImg" onLoad={this.handleLoaded} src={img} role="presentation" />
+                  <img src={img} role="presentation" />
+                </div>
+              }
               { editing && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostImageRemove} /> }
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>

@@ -41,14 +41,15 @@ class StartQuest extends Component {
     const { imageLoaded } = this.state
     const { authenticated } = this.props
     const questClass = className({
-      quest: true,
-      quest__authenticated: authenticated,
+      startQuest: true,
+      startQuest__authenticated: authenticated,
       hidden: !imageLoaded,
     })
 
     return (
       <div className={questClass} onClick={() => browserHistory.push('/quest')}>
-        <img onLoad={this.handleLoaded} src={`${CLOUDINARY_COVER_URL}/quest.jpg`} role="presentation" />
+        <img className="startQuest__hoverImg" onLoad={this.handleLoaded} src={`${CLOUDINARY_COVER_URL}/quest.jpg`} role="presentation" />
+        <img src={`${CLOUDINARY_COVER_URL}/quest.jpg`} role="presentation" />
         <h2>Start<br />your<br />personal<br />quest</h2>
       </div>
     )

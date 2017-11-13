@@ -154,20 +154,27 @@ export default class Profile extends Component {
 
     return (
       <div className={profileClass}>
-        <div className="profile__handler" onClick={authenticated ? this.handleCoverImg : onClick} />
-        <LoadingSpinner show={coverPicSpinner}>
-          <QuarterSpinner width={30} height={30} />
-        </LoadingSpinner>
-        <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
-        { coverPic && <img onLoad={this.handleLoaded} src={coverPic} role="presentation" /> }
-        <div className="profile__pic" onClick={authenticated ? this.handleProfilePic : onClick}>
-          <LoadingSpinner show={profilePicSpinner}>
-            <QuarterSpinner width={30} height={30} />
-          </LoadingSpinner>
-          { profilePic && <img src={profilePic} role="presentation" /> }
-        </div>
-        { authenticated && <UserButton className="profile__userButton" onClick={onClick} /> }
-        { authenticated ? <h2>{user.fullname}</h2> : <h2 onClick={onClick}>Sign in</h2> }
+        { coverPic &&
+          <div className="coverPic" onClick={authenticated ? this.handleCoverImg : onClick}>
+            <LoadingSpinner show={coverPicSpinner}>
+              <QuarterSpinner width={30} height={30} />
+            </LoadingSpinner>
+            <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
+            <img className="coverPic__hoverImg" onLoad={this.handleLoaded} src={coverPic} role="presentation" />
+            <img src={coverPic} role="presentation" />
+            { authenticated ? <h2>{user.fullname}</h2> : <h2 onClick={onClick}>Sign in</h2> }
+            { authenticated && <UserButton className="profile__userButton" onClick={onClick} /> }
+          </div>
+        }
+        { profilePic &&
+          <div className="profilePic" onClick={authenticated ? this.handleProfilePic : onClick}>
+            <LoadingSpinner show={profilePicSpinner}>
+              <QuarterSpinner width={30} height={30} />
+            </LoadingSpinner>
+            <img className="profilePic__hoverImg" src={profilePic} role="presentation" />
+            <img src={profilePic} role="presentation" />
+          </div>
+        }
       </div>
     )
   }

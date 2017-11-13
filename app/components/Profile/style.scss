@@ -2,47 +2,67 @@
   position: relative;
   margin-bottom: 8px;
 
-  h2 {
-    padding: 20px 34px;
-    text-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
-    color: #fff;
-    text-transform: uppercase;
-    position: absolute;
-    font-weight: 900;
-    line-height: 1.3;
-    margin-bottom: 0;
-    left: 30%;
-    bottom: 0;
+  .coverPic {
+    overflow: hidden;
     cursor: pointer;
+    position: relative;
+    z-index: 70;
+
+    img {
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right:  0;
+      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+      -moz-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+      -webkit-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+      z-index: 3;
+    }
+
+    &__hoverImg {
+      position: absolute !important;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      z-index: 2 !important;
+      transition: all 1s;
+    }
+
+    &:hover {
+      .coverPic__hoverImg {
+        width: 104%;
+        height: 104%;
+        left: -2%;
+        top: -2%;
+      }
+    }
+
+    h2 {
+      padding: 20px 34px;
+      text-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
+      color: #fff;
+      text-transform: uppercase;
+      position: absolute;
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 0;
+      left: 30%;
+      bottom: 0;
+      cursor: pointer;
+      z-index: 4;
+    }
   }
 
-  img {
-    width: 100%;
-    height: auto;
-  }
-
-  &:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right:  0;
-    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
-    -moz-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
-    -webkit-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
-  }
-
-  &__handler {
-    position: absolute;
-    cursor: pointer;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-  }
-
-  &__pic {
+  .profilePic {
     position: absolute;
     width: 28%;
     padding-top: calc(28% - 16px);
@@ -60,7 +80,26 @@
       position: absolute;
       top: 50%;
       left: 50%;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
       transform: translate(-50%, -50%);
+    }
+
+    &__hoverImg {
+      position: absolute !important;
+      z-index: 2 !important;
+      transition: all 0.2s;
+    }
+
+    &:hover {
+      .profilePic__hoverImg {
+        width: 104%;
+        height: 104%;
+        left: 48%;
+        top: 48%;
+        transform: translate(-48%, -48%);
+      }
     }
   }
 
@@ -68,17 +107,18 @@
     position: absolute;
     bottom: 6px;
     right: 6px;
-    z-index: 1;
+    z-index: 4;
     opacity: 1;
 
     img {
-      width: 30px;
-      height: 30px;
+      position: relative !important;
+      width: 30px !important;
+      height: 30px !important;
     }
 
     .hover {
       opacity: 0;
-      position: absolute;
+      position: absolute !important;
       right: 0;
       transition: all 0.1s;
     }
