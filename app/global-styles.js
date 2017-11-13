@@ -12,9 +12,7 @@ injectGlobal`
     background-color: #fafafa;
     min-height: 100%;
     min-width: 100%;
-  }
 
-  body {
     font-family: 'Open Sans', sans-serif; 
     font-size: 14.5px; 
     margin: 0; 
@@ -23,17 +21,21 @@ injectGlobal`
     overflow-x: hidden; 
     font-weight: 300; 
     position: relative;
+    overflow-y: overlay !important;
 
-    // &::-webkit-scrollbar {
-    //   width: 10px;
-    //   * {
-    //     background:transparent;
-    //   }
-    // }
+    &::-webkit-scrollbar {
+      width: 10px;
+      background: transparent;
+    }
 
-    // &::-webkit-scrollbar-thumb {
-    //   background: rgba(200, 200, 200, 0.7) !important;
-    // }
+    &::-webkit-scrollbar-thumb {
+      background: rgba(200, 200, 200, 0.7) !important;
+    }
+
+    &::-webkit-scrollbar-button,
+    &::-webkit-scrollbar-track-piece,
+    &::-webkit-scrollbar-corner,
+    &::-webkit-resizer { display: none; }
   }
 
   * {
