@@ -11,6 +11,12 @@
   &__col {
     padding: 0 4px;
     position: relative;
+
+    &:first-child .post {
+      .postTitle, .postTitleEdit, .postContent {
+        padding-left: 60px;
+      }
+    }
   }
 
   .createPostBtn {
