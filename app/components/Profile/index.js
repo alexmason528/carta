@@ -171,7 +171,6 @@ export default class Profile extends Component {
             <LoadingSpinner show={profilePicSpinner}>
               <QuarterSpinner width={30} height={30} />
             </LoadingSpinner>
-            <img className="profilePic__hoverImg" src={profilePic} role="presentation" />
             <img src={profilePic} role="presentation" />
           </div>
         }

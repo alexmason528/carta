@@ -25,12 +25,10 @@
     margin-top: 0;
     margin-bottom: 0;
 
-    .authForm__divider {
-      margin-top: 0;
-    }
-
-    .error {
-      display: none;
+    * {
+      display: none !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
     }
   }
 

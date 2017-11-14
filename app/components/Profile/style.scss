@@ -85,22 +85,6 @@
       z-index: 1;
       transform: translate(-50%, -50%);
     }
-
-    &__hoverImg {
-      position: absolute !important;
-      z-index: 2 !important;
-      transition: all 0.2s;
-    }
-
-    &:hover {
-      .profilePic__hoverImg {
-        width: 104%;
-        height: 104%;
-        left: 48%;
-        top: 48%;
-        transform: translate(-48%, -48%);
-      }
-    }
   }
 
   &__userButton {

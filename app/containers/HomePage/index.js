@@ -16,16 +16,14 @@ import AuthForm from 'components/AuthForm'
 import { Post, PostCreate } from 'components/Post'
 import Profile from 'components/Profile'
 import StartQuest from 'components/StartQuest'
-import Suggestion from 'components/Suggestion'
 import { getCroppedImage } from 'utils/imageHelper'
-import { selectPosts, selectSuggestions, selectHomeInfo } from './selectors'
-import { listPostRequest, listSuggestionRequest } from './actions'
+import { selectPosts, selectHomeInfo } from './selectors'
+import { listPostRequest } from './actions'
 import './style.scss'
 
 class HomePage extends Component {
   static propTypes = {
     listPostRequest: PropTypes.func,
-    listSuggestionRequest: PropTypes.func,
     updateUserRequest: PropTypes.func,
     verifyRequest: PropTypes.func,
     logOut: PropTypes.func,
@@ -34,7 +32,6 @@ class HomePage extends Component {
     homeInfo: PropTypes.object,
     params: PropTypes.object,
     posts: PropTypes.array,
-    suggestions: PropTypes.array,
     authenticated: PropTypes.bool,
   }
 
@@ -52,13 +49,12 @@ class HomePage extends Component {
   }
 
   componentWillMount() {
-    const { listPostRequest, listSuggestionRequest, verifyRequest, params: { vcode }, authenticated, user } = this.props
+    const { listPostRequest, verifyRequest, params: { vcode }, authenticated, user } = this.props
 
     if (vcode) {
       verifyRequest({ vcode })
     }
     listPostRequest()
-    listSuggestionRequest()
 
     const rand = Math.floor((Math.random() * 76)) + 1
     const coverPicRand = (rand < 10) ? `000${rand}` : `00${rand}`;
@@ -162,7 +158,7 @@ class HomePage extends Component {
 
   render() {
     const { showAuthForm, showCreatePostForm, showAccountMenu, timer, editingPost, coverPic, profilePic } = this.state
-    const { posts, suggestions, authenticated, user, logOut, updateUserRequest, info } = this.props
+    const { posts, authenticated, user, logOut, updateUserRequest, info } = this.props
     const { status, error } = info
 
     let createPostButtonType = 'text'
@@ -201,6 +197,27 @@ class HomePage extends Component {
               />
             }
             <StartQuest authenticated={authenticated} />
+            {
+              posts && posts.map((post, key) => {
+                const { _id, content, created_at, img, title, link } = post
+
+                let data = {
+                  _id,
+                  created_at,
+                  title,
+                  link,
+                  key,
+                  content: content.length === 0 ? null : content,
+                  img: img.length === 0 ? null : img,
+                  username: post.author.fullname,
+                  editable: (authenticated && (post.author._id === user._id || user.role === 'admin')),
+                  first: (key === 0 && authenticated),
+                  onPostEdit: this.handlePostEdit,
+                }
+
+                return (key === 6 || key === 8) ? <Post {...data} /> : null
+              })
+            }
           </Col>
 
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-sm-down">
@@ -210,23 +227,46 @@ class HomePage extends Component {
               {
                 posts && posts.map((post, key) => {
                   const { _id, content, created_at, img, title, link } = post
-                  let data = { _id, content, created_at, img, title, link }
 
-                  data.username = post.author.fullname
-                  data.editable = (authenticated && (post.author._id === user._id || user.role === 'admin'))
-                  data.key = key
-
-                  if (content.length === 0) data.content = null
-                  if (img.length === 0) data.img = null
-
-                  data.first = (key === 0 && authenticated)
-                  return <Post {...data} onPostEdit={this.handlePostEdit} />
+                  let data = {
+                    _id,
+                    created_at,
+                    title,
+                    link,
+                    key,
+                    content: content.length === 0 ? null : content,
+                    img: img.length === 0 ? null : img,
+                    username: post.author.fullname,
+                    editable: (authenticated && (post.author._id === user._id || user.role === 'admin')),
+                    first: (key === 0 && authenticated),
+                    onPostEdit: this.handlePostEdit,
+                  }
+                  return (key === 0 || key === 1 || key === 4 || key === 7) ? <Post {...data} /> : null
                 })
               }
             </div>
           </Col>
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-md-down">
-            { suggestions && suggestions.map((suggestion, index) => <Suggestion key={index} {...suggestion} />) }
+            {
+              posts && posts.map((post, key) => {
+                const { _id, content, created_at, img, title, link } = post
+
+                let data = {
+                  _id,
+                  created_at,
+                  title,
+                  link,
+                  key,
+                  content: content.length === 0 ? null : content,
+                  img: img.length === 0 ? null : img,
+                  username: post.author.fullname,
+                  editable: (authenticated && (post.author._id === user._id || user.role === 'admin')),
+                  first: (key === 0 && authenticated),
+                  onPostEdit: this.handlePostEdit,
+                }
+                return (key === 2 || key === 3 || key === 5) ? <Post {...data} /> : null
+              })
+            }
           </Col>
         </Row>
         { user && !user.verified && (status !== VERIFY_FAIL) &&
@@ -263,7 +303,6 @@ class HomePage extends Component {
 
 const selectors = createStructuredSelector({
   posts: selectPosts(),
-  suggestions: selectSuggestions(),
   authenticated: selectAuthenticated(),
   user: selectUser(),
   info: selectInfo(),
@@ -272,7 +311,6 @@ const selectors = createStructuredSelector({
 
 const actions = {
   listPostRequest,
-  listSuggestionRequest,
   updateUserRequest,
   verifyRequest,
   logOut,
