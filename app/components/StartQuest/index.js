@@ -50,7 +50,7 @@ class StartQuest extends Component {
       <div className={questClass} onClick={() => browserHistory.push('/quest')}>
         <img className="startQuest__hoverImg" onLoad={this.handleLoaded} src={`${CLOUDINARY_COVER_URL}/quest.jpg`} role="presentation" />
         <img src={`${CLOUDINARY_COVER_URL}/quest.jpg`} role="presentation" />
-        <h2>Start<br />your<br />personal<br />quest</h2>
+        <h2>Begin je<br/>persoonlijke <br/>zoektocht</h2>
       </div>
     )
   }
