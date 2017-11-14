@@ -5,6 +5,8 @@ import axios from 'axios'
 import className from 'classnames'
 import { compose } from 'redux'
 import { reduxForm, Field } from 'redux-form'
+import GoogleLogin from 'react-google-login'
+import FacebookLogin from 'react-facebook-login'
 import RenderField from 'components/RenderField'
 import RenderDropzone from 'components/RenderDropzone'
 import { LOGIN_REQUEST, REGISTER_REQUEST, LOGIN_FAIL, REGISTER_FAIL, CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_ICON_URL } from 'containers/App/constants'
@@ -183,6 +185,15 @@ class AuthForm extends Component {
     }
   }
 
+  handleGoogleLoginSuccess = res => {
+  }
+
+  handleGoogleLoginFail = err => {
+  }
+
+  handleFacebookLogin = res => {
+  }
+
   render() {
     const { authType, email, password, imageUpload } = this.state
     const { info: { status, error }, show, loginRequest, onCoverPicChange, onProfilePicChange, handleSubmit } = this.props
@@ -203,8 +214,24 @@ class AuthForm extends Component {
           <span>With</span>
         </div>
         <div className="authForm__socialButtons">
-          <button type="button"><img className="img20" src={`${CLOUDINARY_ICON_URL}/google.png`} role="presentation" /><span>Google</span></button>
-          <button type="button"><img className="img20" src={`${CLOUDINARY_ICON_URL}/facebook.png`} role="presentation" /><span>Facebook</span></button>
+          <GoogleLogin
+            clientId={'658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com'}
+            onSuccess={this.handleGoogleLoginSuccess}
+            onFailure={this.handleGoogleLoginFail}
+            className="button"
+            style={{}}
+          >
+            <img className="img20" src={`${CLOUDINARY_ICON_URL}/google.png`} role="presentation" /><span>Google</span>
+          </GoogleLogin>
+          <FacebookLogin
+            appId="1088597931155576"
+            fields="name,email,picture"
+            callback={this.handleFacebookLogin}
+            textButton="Facebook"
+            autoLoad
+          >
+            <img className="img20" src={`${CLOUDINARY_ICON_URL}/facebook.png`} role="presentation" /><span>Facebook</span>
+          </FacebookLogin>
         </div>
         <div className="authForm__divider">
           <span>Or</span>

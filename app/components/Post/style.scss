@@ -132,6 +132,7 @@
   width: 100%;
   cursor: pointer;
   overflow: hidden;
+  display: block;
 
   &:before {
     content: '';

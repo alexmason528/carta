@@ -301,17 +301,6 @@ class Post extends Component {
     })
   }
 
-  handleOpenLink = () => {
-    const { link, editing, img } = this.state
-    if (!editing) {
-      if (!link) {
-        window.location.href = img
-      } else {
-        window.location.href = (link.indexOf('http:') !== -1 || link.indexOf('https:') !== -1) ? link : `http://${link}`
-      }
-    }
-  }
-
   handleEnterKey = evt => {
     if (evt.keyCode === 13) {
       this.setState({ showLinkBar: false })
@@ -359,8 +348,16 @@ class Post extends Component {
     const remainCharCnts = !content ? 1000 : 1000 - content.length
     const submittable = title && (img || content) && (remainCharCnts >= 0)
 
-    let submitErrorTxt = ''
+    let postLink
+    if (editing) {
+      postLink = '#'
+    } else if (link) {
+      postLink = (link.indexOf('http:') !== -1 || link.indexOf('https:') !== -1) ? link : `http://${link}`
+    } else {
+      postLink = img
+    }
 
+    let submitErrorTxt = ''
     if (!title) {
       submitErrorTxt = 'Please add a title'
     } else if (!img && !content) {
@@ -414,7 +411,7 @@ class Post extends Component {
         </LoadingSpinner>
         { postType === 'mixedPost' &&
           <div className={postClass}>
-            <div className="postImage" onClick={this.handleOpenLink}>
+            <a className="postImage" href={postLink}>
               { showImage &&
                 <div>
                   <img className="postImage__hoverImg" onLoad={this.handleLoaded} src={img} role="presentation" />
@@ -431,7 +428,7 @@ class Post extends Component {
                 ? <ContentEditable className="postTitleEdit" tabIndex={1} placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
                 : <div className="postTitle" onClick={this.handleOpenLink} title={elemToText(title)} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
               }
-            </div>
+            </a>
             <div className="postContent">
               { editing && <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostContentRemove} /> }
               <div className="postMeta">
@@ -448,7 +445,7 @@ class Post extends Component {
 
         { postType === 'mediaPost' &&
           <div className={postClass} onClick={this.handlePostClick}>
-            <div className="postImage" onClick={this.handleOpenLink}>
+            <a className="postImage" href={postLink}>
               { editable && !editing && <EditButton className="postEditBtn" image="edit-white-shadow" hover onClick={this.handleStartEdit} /> }
               { showImage &&
                 <div>
@@ -462,7 +459,7 @@ class Post extends Component {
                 <img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
                 <input type="text" value={link} placeholder="Paste or write link here" onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
               </div>
-            </div>
+            </a>
             { editing
               ? <ContentEditable className="postTitleEdit" placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
               : <div className="postTitle" title={elemToText(title)} onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
