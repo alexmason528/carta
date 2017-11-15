@@ -10,6 +10,7 @@ import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from '
 import ContentEditable from 'components/ContentEditable'
 import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
+import Resizable from 'components/Resizable'
 import { createPostRequest } from 'containers/HomePage/actions'
 import { CREATE_POST_REQUEST, CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
 import { selectHomeInfo } from 'containers/HomePage/selectors'
@@ -343,7 +344,7 @@ class PostCreate extends Component {
                 <img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
                 <input type="text" value={link} placeholder="Paste or write link here" onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
               </div>
-              <ContentEditable className="postTitleEdit" tabIndex={1} placeholder="Title" onChange={this.handlePostTitle} value={title} />
+              <Resizable className="postTitleEdit" tabIndex={1} placeholder="Title" onChange={this.handlePostTitle} value={title} />
             </div>
             <div className="postContent">
               <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostContentRemove} />
@@ -371,7 +372,7 @@ class PostCreate extends Component {
                 <input type="text" value={link} placeholder="Paste or write link here" onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
               </div>
             </div>
-            <ContentEditable className="postTitleEdit" placeholder="Title" onChange={this.handlePostTitle} value={title} />
+            <Resizable className="postTitleEdit" placeholder="Title" onChange={this.handlePostTitle} value={title} />
             <div className={postInfoClass}>
               {fullname} - Carta | NOW
             </div>
@@ -381,13 +382,13 @@ class PostCreate extends Component {
 
         { postType === 'textPost' &&
           <div className={postClass} onClick={this.handlePostClick}>
-            <ContentEditable className="postTitleEdit" tabIndex={1} placeholder="Title" onChange={this.handlePostTitle} value={title} />
+            <Resizable className="postTitleEdit" tabIndex={1} placeholder="Title" onChange={this.handlePostTitle} value={title} />
             <div className="postContent">
               <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostContentRemove} />
               <div className="postMeta">
                 {fullname} - CARTA | NOW
               </div>
-              <ContentEditable className="postText" tabIndex={2} placeholder="Write here..." onChange={this.handlePostContent} value={content} />
+              <Resizable className="postText" tabIndex={2} placeholder="Write here..." onChange={this.handlePostContent} value={content} />
             </div>
           </div>
         }

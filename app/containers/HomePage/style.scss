@@ -145,13 +145,11 @@
 
   input, textarea {
     cursor: text;
-    color: #000;
     resize: none;
   }
 
   input::placeholder,
   textarea::placeholder {
-    color: #bbb;
     opacity: 1;
   }
 

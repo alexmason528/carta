@@ -5,7 +5,6 @@ import axios from 'axios'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { Popover, PopoverBody } from 'reactstrap'
-import ContentEditable from 'components/ContentEditable'
 import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
@@ -16,6 +15,7 @@ import { selectHomeInfo } from 'containers/HomePage/selectors'
 import { getTextFromDate } from 'utils/dateHelper'
 import { elemToText, textToElem } from 'utils/stringHelper'
 import { getCroppedImage } from 'utils/imageHelper'
+import Resizable from 'components/Resizable'
 import './style.scss'
 
 class Post extends Component {
@@ -92,8 +92,14 @@ class Post extends Component {
     const width = $(post).width()
     if ($(post).hasClass('textPost')) {
       const fontSize = (width / 76) * 3 * 1.15
-      $(post).find('.postTitle').css({ fontSize: `${fontSize}px` })
       $(post).find('.postTitleEdit').css({ fontSize: `${fontSize}px` })
+      $(post).find('.postTitle').css({
+        fontSize: `${fontSize}px`,
+        'max-height': `${fontSize * 2 * 1.2}px`,
+        '-webkit-line-clamp': '2',
+        display: '-webkit-box',
+        '-webkit-box-orient': 'vertical',
+      })
     } else {
       const height = $(post).find('.postImage').height() - ($(post).hasClass('mediaPost') ? 90 : 65)
       const fontSize = (width / 44) * 3 * 1.15
@@ -421,7 +427,7 @@ class Post extends Component {
                 <input type="text" value={link} placeholder="Paste or write link here" onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
               </div>
               { editing
-                ? <ContentEditable className="postTitleEdit" tabIndex={1} placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
+                ? <Resizable className="postTitleEdit" tabIndex={1} placeholder="Title" onChange={this.handlePostTitle} value={title} />
                 : <div className="postTitle" onClick={this.handleOpenLink} title={elemToText(title)} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
               }
             </a>
@@ -432,7 +438,7 @@ class Post extends Component {
                 { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
               </div>
               { editing
-                ? <ContentEditable className="postText" tabIndex={2} placeholder="Write here..." onChange={this.handlePostContent} value={textToElem(content)} />
+                ? <Resizable className="postText" tabIndex={2} placeholder="Write here..." onChange={this.handlePostContent} value={content} />
                 : <div className="postText" dangerouslySetInnerHTML={{ __html: textToElem(content) }} />
               }
             </div>
@@ -457,7 +463,7 @@ class Post extends Component {
               </div>
             </a>
             { editing
-              ? <ContentEditable className="postTitleEdit" placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
+              ? <Resizable className="postTitleEdit" placeholder="Title" onChange={this.handlePostTitle} value={title} />
               : <div className="postTitle" title={elemToText(title)} onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
             }
             <div className={postInfoClass}>
@@ -470,7 +476,7 @@ class Post extends Component {
         { postType === 'textPost' &&
           <div className={postClass} onClick={this.handlePostClick}>
             { editing
-              ? <ContentEditable className="postTitleEdit" tabIndex={1} placeholder="Title" onChange={this.handlePostTitle} value={parsedTitle} />
+              ? <Resizable className="postTitleEdit" tabIndex={1} placeholder="Title" onChange={this.handlePostTitle} value={title} />
               : <div className="postTitle" title={elemToText(title)} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
             }
             <div className="postContent">
@@ -480,7 +486,7 @@ class Post extends Component {
                 { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
               </div>
               { editing
-                ? <ContentEditable className="postText" tabIndex={2} placeholder="Write here..." onChange={this.handlePostContent} value={textToElem(content)} />
+                ? <Resizable className="postText" tabIndex={2} placeholder="Write here..." onChange={this.handlePostContent} value={content} />
                 : <div className="postText" dangerouslySetInnerHTML={{ __html: textToElem(content) }} />
               }
             </div>
