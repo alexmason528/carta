@@ -187,7 +187,7 @@ class HomePage extends Component {
               profilePic={profilePic}
             />
             { authenticated ?
-              <AccountMenu show={showAccountMenu} /> :
+              <AccountMenu show={showAccountMenu} onClick={this.handleProfileClick} /> :
               <AuthForm
                 show={showAuthForm}
                 onCoverPicChange={this.handleCoverPic}

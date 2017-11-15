@@ -17,6 +17,7 @@ class AccountMenu extends Component {
     handleSubmit: PropTypes.func,
     logOut: PropTypes.func,
     deleteUserRequest: PropTypes.func,
+    onClick: PropTypes.func,
     user: PropTypes.object,
     info: PropTypes.object,
     show: PropTypes.bool,
@@ -68,7 +69,7 @@ class AccountMenu extends Component {
   }
 
   render() {
-    const { handleSubmit, logOut, show, info: { error, status } } = this.props
+    const { handleSubmit, logOut, show, info: { error, status }, onClick } = this.props
     const { showContent, showForm } = this.state
 
     const menuClass = className({
@@ -88,6 +89,7 @@ class AccountMenu extends Component {
 
     return (
       <div className={menuClass} onClick={evt => evt.stopPropagation()}>
+        {<div className="backLayer" onClick={onClick} /> }
         <div className="accountMenu__items">
           <button type="button" onClick={logOut}>Sign out</button> | <button type="button" onClick={this.handleSettingClick}>Settings</button>
         </div>

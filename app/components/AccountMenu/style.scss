@@ -22,12 +22,16 @@
   &__items {
     margin-left: 30%;
     padding: 0 35px;
+    position: relative;
+    z-index: 102;
   }
 
   &__content {
     padding: 12% 30px 20px 50px;
     transition: all 0.1s;
     max-height: 1000;
+    position: relative;
+    z-index: 102;
 
     &--hidden {
       max-height: 0;
