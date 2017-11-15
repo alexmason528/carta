@@ -207,7 +207,7 @@ class AuthForm extends Component {
 
     return (
       <div className={authFormClass} onClick={evt => evt.stopPropagation()}>
-        <LoadingSpinner show>
+        <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
         <div className="authForm__divider">
