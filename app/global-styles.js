@@ -21,7 +21,7 @@ injectGlobal`
     margin: 0; 
     -webkit-tap-highlight-color: rgba(0,0,0,0);
     -webkit-text-size-adjust: 100%; 
-    overflow-x: hidden; 
+    overflow-x: hidden;
     font-weight: 300; 
     position: relative;
 
