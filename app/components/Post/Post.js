@@ -159,9 +159,7 @@ class Post extends Component {
   }
 
   handlePostContent = value => {
-    this.setState({
-      content: value,
-    })
+    this.setState({ content: value })
   }
 
   handleDelete = () => {
@@ -302,9 +300,7 @@ class Post extends Component {
   }
 
   handleEnterKey = evt => {
-    if (evt.keyCode === 13) {
-      this.setState({ showLinkBar: false })
-    }
+    if (evt.keyCode === 13) { this.setState({ showLinkBar: false }) }
   }
 
   handleLoaded = () => {

@@ -12,10 +12,7 @@ class StartQuest extends Component {
 
   constructor(props) {
     super(props)
-
-    this.state = {
-      imageLoaded: false,
-    }
+    this.state = { imageLoaded: false }
   }
 
   componentDidMount() {

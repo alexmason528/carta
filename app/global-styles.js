@@ -9,8 +9,8 @@ injectGlobal`
 
   #app {
     background-color: #fafafa;
-    height: 100%;
-    width: 100%;
+    max-height: 100%;
+    max-width: 100%;
   }
 
   body {
@@ -79,5 +79,13 @@ injectGlobal`
 
   .show {
     display: block !important;
+  }
+
+  textarea, input {
+    -khtml-user-select: text;
+    -o-user-select: text;
+    -moz-user-select: text;
+    -webkit-user-select: text;
+    user-select: text;
   }
 `
