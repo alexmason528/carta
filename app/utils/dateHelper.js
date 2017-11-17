@@ -1,12 +1,17 @@
 import moment from 'moment'
+import enTranslationMessages from 'translations/en.json'
+import nlTranslationMessages from 'translations/nl.json'
 
-export const getTextFromDate = createdAt => {
+export const getTextFromDate = (createdAt, locale = 'en') => {
+  moment.locale(locale)
+  const today = (locale === 'en') ? enTranslationMessages['carta.today'] : nlTranslationMessages['carta.today']
+  const yesterday = (locale === 'en') ? enTranslationMessages['carta.yesterday'] : nlTranslationMessages['carta.yesterday']
   if (moment().startOf('day').toString() === moment(createdAt).startOf('day').toString()) {
-    return `TODAY ${moment(createdAt).format('H:MM')}`
+    return `${today} ${moment(createdAt).format('H:MM').replace('.', '')}`
   } else if (moment().subtract(1, 'day').startOf('day').toString() === moment(createdAt).startOf('day').toString()) {
-    return `YESTERDAY ${moment(createdAt).format('H:MM')}`
+    return `${yesterday} ${moment(createdAt).format('H:MM').replace('.', '')}`
   } else if (moment().year() === moment(createdAt).year()) {
-    return moment(createdAt).format('D MMM H:MM')
+    return moment(createdAt).format('D MMM H:MM').replace('.', '')
   }
-  return moment(createdAt).format('D MMM YYYY H:MM')
+  return moment(createdAt).format('D MMM YYYY H:MM').replace('.', '')
 }

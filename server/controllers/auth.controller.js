@@ -37,7 +37,7 @@ const login = (req, res) => {
     } else {
       return res.status(400).send({
         error: {
-          details: 'Invalid email',
+          details: 'Change email or register at Carta',
         },
       })
     }

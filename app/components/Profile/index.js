@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
+import { injectIntl, intlShape } from 'react-intl'
 import className from 'classnames'
 import axios from 'axios'
 import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, UPDATE_USER_REQUEST } from 'containers/App/constants'
@@ -7,9 +8,10 @@ import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { UserButton } from 'components/Buttons'
 import { getCroppedImage } from 'utils/imageHelper'
+import messages from 'containers/HomePage/messages'
 import './style.scss'
 
-export default class Profile extends Component {
+class Profile extends Component {
   static propTypes = {
     onClick: PropTypes.func,
     onUpdate: PropTypes.func,
@@ -24,6 +26,7 @@ export default class Profile extends Component {
       PropTypes.string,
       PropTypes.object,
     ]),
+    intl: intlShape.isRequired,
   }
 
   constructor(props) {
@@ -143,13 +146,13 @@ export default class Profile extends Component {
   }
 
   render() {
-    const { authenticated, user, onClick, info: { status, error } } = this.props
+    const { authenticated, user, onClick, info: { status, error }, intl: { formatMessage } } = this.props
     const { coverPic, profilePic, imageUpload, imageType, imageLoaded } = this.state
     const coverPicSpinner = imageType === 'coverPic' && (imageUpload.uploading || status === UPDATE_USER_REQUEST)
     const profilePicSpinner = imageType === 'profilePic' && (imageUpload.uploading || status === UPDATE_USER_REQUEST)
     const profileClass = className({
       profile: true,
-      hidden: !imageLoaded,
+      // hidden: !imageLoaded,
     })
 
     return (
@@ -162,7 +165,7 @@ export default class Profile extends Component {
             <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
             <img className="coverPic__hoverImg" onLoad={this.handleLoaded} src={coverPic} role="presentation" />
             <img src={coverPic} role="presentation" />
-            { authenticated ? <h2>{user.fullname}</h2> : <h2 onClick={onClick}>Sign in</h2> }
+            { authenticated ? <h2>{user.fullname}</h2> : <h2 onClick={onClick}>{formatMessage(messages.signIn)}</h2> }
             { authenticated && <UserButton className="profile__userButton" onClick={onClick} /> }
           </div>
         }
@@ -178,3 +181,5 @@ export default class Profile extends Component {
     )
   }
 }
+
+export default injectIntl(Profile)

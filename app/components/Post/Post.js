@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import className from 'classnames'
 import axios from 'axios'
 import { connect } from 'react-redux'
+import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import { Popover, PopoverBody } from 'reactstrap'
 import LoadingSpinner from 'components/LoadingSpinner'
@@ -12,6 +13,8 @@ import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_ICON_URL } 
 import { updatePostRequest, deletePostRequest } from 'containers/HomePage/actions'
 import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/constants'
 import { selectHomeInfo } from 'containers/HomePage/selectors'
+import { selectLocale } from 'containers/LanguageProvider/selectors'
+import messages from 'containers/HomePage/messages'
 import { getTextFromDate } from 'utils/dateHelper'
 import { elemToText, textToElem } from 'utils/stringHelper'
 import { getCroppedImage } from 'utils/imageHelper'
@@ -28,6 +31,8 @@ class Post extends Component {
     show: PropTypes.bool,
     content: PropTypes.string,
     img: PropTypes.string,
+    locale: PropTypes.string,
+    intl: intlShape.isRequired,
   }
 
   constructor(props) {
@@ -314,7 +319,7 @@ class Post extends Component {
   }
 
   render() {
-    const { show, onClose, onPostEdit, info: { error, status, curPost } } = this.props
+    const { show, onClose, onPostEdit, info: { error, status, curPost }, intl: { formatMessage }, locale } = this.props
     const {
       _id,
       img,
@@ -360,12 +365,13 @@ class Post extends Component {
     }
 
     let submitErrorTxt = ''
+
     if (!title) {
-      submitErrorTxt = 'Please add a title'
+      submitErrorTxt = formatMessage(messages.requireTitle)
     } else if (!img && !content) {
-      submitErrorTxt = 'Please add text or an image'
+      submitErrorTxt = formatMessage(messages.requireContent)
     } else if (remainCharCnts < 0) {
-      submitErrorTxt = 'Please post a text less than 1000 characters'
+      submitErrorTxt = formatMessage(messages.limitExceeded)
     }
 
     let parsedTitle = title ? title.replace(/\n/g, '</div><div>') : ''
@@ -424,7 +430,7 @@ class Post extends Component {
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>
                 <img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
-                <input type="text" value={link} placeholder="Paste or write link here" onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
+                <input type="text" value={link} placeholder={formatMessage(messages.linkMessage)} onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
               </div>
               { editing
                 ? <Resizable className="postTitleEdit" tabIndex={1} placeholder="Title" onChange={this.handlePostTitle} value={title} />
@@ -434,11 +440,11 @@ class Post extends Component {
             <div className="postContent">
               { editing && <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostContentRemove} /> }
               <div className="postMeta">
-                {username} - CARTA | {getTextFromDate(created_at)}
+                {username} - CARTA | {getTextFromDate(created_at, locale)}
                 { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
               </div>
               { editing
-                ? <Resizable className="postText" tabIndex={2} placeholder="Write here..." onChange={this.handlePostContent} value={content} />
+                ? <Resizable className="postText" tabIndex={2} placeholder={formatMessage(messages.writeHere)} onChange={this.handlePostContent} value={content} />
                 : <div className="postText" dangerouslySetInnerHTML={{ __html: textToElem(content) }} />
               }
             </div>
@@ -459,7 +465,7 @@ class Post extends Component {
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>
                 <img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
-                <input type="text" value={link} placeholder="Paste or write link here" onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
+                <input type="text" value={link} placeholder={formatMessage(messages.linkMessage)} onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
               </div>
             </a>
             { editing
@@ -467,7 +473,7 @@ class Post extends Component {
               : <div className="postTitle" title={elemToText(title)} onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
             }
             <div className={postInfoClass}>
-              {username} - Carta | {getTextFromDate(created_at)}
+              {username} - Carta | {getTextFromDate(created_at, locale)}
             </div>
             <InfoButton className={postInfoBtnClass} onClick={this.handlePostInfoToggle} />
           </div>
@@ -482,11 +488,11 @@ class Post extends Component {
             <div className="postContent">
               { editing && <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostContentRemove} /> }
               <div className="postMeta">
-                {username} - CARTA | {getTextFromDate(created_at)}
+                {username} - CARTA | {getTextFromDate(created_at, locale)}
                 { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
               </div>
               { editing
-                ? <Resizable className="postText" tabIndex={2} placeholder="Write here..." onChange={this.handlePostContent} value={content} />
+                ? <Resizable className="postText" tabIndex={2} placeholder={formatMessage(messages.writeHere)} onChange={this.handlePostContent} value={content} />
                 : <div className="postText" dangerouslySetInnerHTML={{ __html: textToElem(content) }} />
               }
             </div>
@@ -498,14 +504,14 @@ class Post extends Component {
             <div className="left">
               <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
               { (postType === 'textPost' || postType === 'mixedPost') && <span style={{ marginRight: '8px' }}>{ remainCharCnts >= 0 ? remainCharCnts : 0 }</span> }
-              { (postType !== 'mediaPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddMedia}>+ Picture</button> }
-              { (postType !== 'textPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddText}>+ Text</button> }
+              { (postType !== 'mediaPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddMedia}>+ {formatMessage(messages.picture)}</button> }
+              { (postType !== 'textPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddText}>+ {formatMessage(messages.text)}</button> }
             </div>
             { postType &&
               <div className="right">
-                <button type="button" className="postCancelBtn" onClick={this.handleCancel}>CANCEL</button>
+                <button type="button" className="postCancelBtn" onClick={this.handleCancel}>{formatMessage(messages.cancel)}</button>
                 <DeleteButton className="postDeleteBtn" onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
-                <button type="button" title={submitErrorTxt} className={submitBtnClass} disabled={!submittable} onClick={this.handleSubmit}>SUBMIT</button>
+                <button type="button" title={submitErrorTxt} className={submitBtnClass} disabled={!submittable} onClick={this.handleSubmit}>{formatMessage(messages.submit)}</button>
               </div>
             }
             <button type="button" className={closeButtonClass} onClick={onClose}>
@@ -520,6 +526,7 @@ class Post extends Component {
 
 const selectors = createStructuredSelector({
   info: selectHomeInfo(),
+  locale: selectLocale(),
 })
 
 const actions = {
@@ -527,4 +534,4 @@ const actions = {
   deletePostRequest,
 }
 
-export default connect(selectors, actions)(Post)
+export default injectIntl(connect(selectors, actions)(Post))

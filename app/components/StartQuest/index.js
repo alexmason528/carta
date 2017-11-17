@@ -4,7 +4,7 @@ import className from 'classnames'
 import { browserHistory } from 'react-router'
 import { CLOUDINARY_COVER_URL } from 'containers/App/constants'
 import { injectIntl, intlShape } from 'react-intl'
-import messages from './messages'
+import messages from 'containers/HomePage/messages'
 import './style.scss'
 
 class StartQuest extends Component {
@@ -50,7 +50,7 @@ class StartQuest extends Component {
       <div className={questClass} onClick={() => browserHistory.push('/quest')}>
         <img className="startQuest__hoverImg" onLoad={this.handleLoaded} src={`${CLOUDINARY_COVER_URL}/quest.jpg`} role="presentation" />
         <img src={`${CLOUDINARY_COVER_URL}/quest.jpg`} role="presentation" />
-        <h2>{formatMessage(messages.startQuestMessage)}</h2>
+        <h2 dangerouslySetInnerHTML={{ __html: formatMessage(messages.startQuest).replace(/\n/g, '<br/>') }} />
       </div>
     )
   }

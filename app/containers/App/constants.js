@@ -32,4 +32,4 @@ export const CLOUDINARY_PROFILE_URL = 'https://res.cloudinary.com/hyvpvyohj/raw/
 export const CLOUDINARY_POINTS_URL = 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510139598/data'
 export const CLOUDINARY_SHAPES_URL = 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510139627/data'
 
-export const DEFAULT_LOCALE = 'nl'
+export const DEFAULT_LOCALE = 'en'

@@ -1,8 +1,148 @@
 import { defineMessages } from 'react-intl'
 
 export default defineMessages({
-  startQuestMessage: {
-    id: 'carta.containers.HomePage.startQuest',
-    defaultMessage: 'Start your personal quest',
+  startQuest: {
+    id: 'carta.startQuest',
+    defaultMessage: 'Start<br/>your<br/>personal<br/>quest',
+  },
+  signIn: {
+    id: 'carta.signIn',
+    defaultMessage: 'Sign in',
+  },
+  with: {
+    id: 'carta.with',
+    defaultMessage: 'With',
+  },
+  or: {
+    id: 'carta.or',
+    defaultMessage: 'Or',
+  },
+  email: {
+    id: 'carta.email',
+    defaultMessage: 'Email',
+  },
+  password: {
+    id: 'carta.password',
+    defaultMessage: 'Password',
+  },
+  register: {
+    id: 'carta.register',
+    defaultMessage: 'Register',
+  },
+  repeatPassword: {
+    id: 'carta.repeatPassword',
+    defaultMessage: 'Repeat password',
+  },
+  fullname: {
+    id: 'carta.fullname',
+    defaultMessage: 'Fullname',
+  },
+  profilePic: {
+    id: 'carta.profilePic',
+    defaultMessage: 'Profile Pic',
+  },
+  coverPic: {
+    id: 'carta.coverPic',
+    defaultMessage: 'Cover Pic',
+  },
+  post: {
+    id: 'carta.post',
+    defaultMessage: 'Post',
+  },
+  picture: {
+    id: 'carta.picture',
+    defaultMessage: 'Picture',
+  },
+  text: {
+    id: 'carta.text',
+    defaultMessage: 'Text',
+  },
+  cancel: {
+    id: 'carta.cancel',
+    defaultMessage: 'Cancel',
+  },
+  submit: {
+    id: 'carta.submit',
+    defaultMessage: 'Submit',
+  },
+  title: {
+    id: 'carta.title',
+    defaultMessage: 'Title',
+  },
+  quest: {
+    id: 'carta.quest',
+    defaultMessage: 'Quest',
+  },
+  about: {
+    id: 'carta.about',
+    defaultMessage: 'About',
+  },
+  signOut: {
+    id: 'carta.signOut',
+    defaultMessage: 'Sign out',
+  },
+  home: {
+    id: 'carta.home',
+    defaultMessage: 'Home',
+  },
+  settings: {
+    id: 'carta.settings',
+    defaultMessage: 'Settings',
+  },
+  deleteAccount: {
+    id: 'carta.deleteAccount',
+    defaultMessage: 'Delete account',
+  },
+  deleteConfirm: {
+    id: 'carta.deleteConfirm',
+    defaultMessage: 'This action deletes all your posts and content from Carta. Are you sure you want to continue?',
+  },
+  confirm: {
+    id: 'carta.confirm',
+    defaultMessage: 'Confirm',
+  },
+  sure: {
+    id: 'carta.sure',
+    defaultMessage: 'Sure?',
+  },
+  link: {
+    id: 'carta.link',
+    defaultMessage: 'Link',
+  },
+  writeHere: {
+    id: 'carta.writeHere',
+    defaultMessage: 'Write here...',
+  },
+  linkMessage: {
+    id: 'carta.linkMessage',
+    defaultMessage: 'Paste or write link here',
+  },
+  requireTitle: {
+    id: 'carta.requireTitle',
+    defaultMessage: 'Please add a title',
+  },
+  requireContent: {
+    id: 'carta.requireContent',
+    defaultMessage: 'Please add text or an image',
+  },
+  limitExceeded: {
+    id: 'carta.limitExceeded',
+    defaultMessage: 'Please post a text with less than 1000 characters',
+  },
+  verificationEmail: {
+    id: 'carta.verificationEmail',
+    defaultMessage: "Hey {name}, you've received an email from us. Please open it and click on the link to verify your account",
+  },
+  verificationSuccess: {
+    id: 'carta.verificationSuccess',
+    defaultMessage: 'Verification success!',
+  },
+  verificationRequired: {
+    id: 'carta.verificationRequired',
+    defaultMessage: 'Please verify your registration or',
+  },
+  now: {
+    id: 'carta.now',
+    defaultMessage: 'Now',
   },
 })

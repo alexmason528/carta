@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import className from 'classnames'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
+import { injectIntl, intlShape } from 'react-intl'
 import { reduxForm, Field, Form } from 'redux-form'
 import { createStructuredSelector } from 'reselect'
 import { RemoveButton } from 'components/Buttons'
@@ -9,6 +10,7 @@ import RenderField from 'components/RenderField'
 import { DELETE_USER_FAIL } from 'containers/App/constants'
 import { logOut, deleteUserRequest } from 'containers/App/actions'
 import { selectUser, selectInfo } from 'containers/App/selectors'
+import messages from 'containers/HomePage/messages'
 import deleteAccountFormValidator from './validate'
 import './style.scss'
 
@@ -21,6 +23,7 @@ class AccountMenu extends Component {
     user: PropTypes.object,
     info: PropTypes.object,
     show: PropTypes.bool,
+    intl: intlShape.isRequired,
   }
 
   constructor(props) {
@@ -69,7 +72,7 @@ class AccountMenu extends Component {
   }
 
   render() {
-    const { handleSubmit, logOut, show, info: { error, status }, onClick } = this.props
+    const { handleSubmit, logOut, show, info: { error, status }, onClick, intl: { formatMessage } } = this.props
     const { showContent, showForm } = this.state
 
     const menuClass = className({
@@ -89,26 +92,28 @@ class AccountMenu extends Component {
 
     return (
       <div className={menuClass} onClick={evt => evt.stopPropagation()}>
-        {<div className="backLayer" onClick={onClick} /> }
+        { /* <div className="backLayer" onClick={onClick} /> */ }
         <div className="accountMenu__items">
-          <button type="button" onClick={logOut}>Sign out</button> | <button type="button" onClick={this.handleSettingClick}>Settings</button>
+          <button type="button" onClick={logOut}>{formatMessage(messages.signOut)}</button> | <button type="button" onClick={this.handleSettingClick}>{formatMessage(messages.settings)}</button>
         </div>
         <div className={contentClass}>
-          <RemoveButton className="accountMenu__deleteButton" image="delete-red" onClick={this.handleDeleteAccountClick} caption="Delete Account" />
+          <RemoveButton className="accountMenu__deleteButton" image="delete-red" onClick={this.handleDeleteAccountClick}>
+            <span>{formatMessage(messages.deleteAccount)}</span>
+          </RemoveButton>
           <Form className={formClass} onSubmit={handleSubmit(this.handleDeleteUser)}>
             <Field
               name="password"
               type="password"
               component={RenderField}
-              label="Password"
+              label={formatMessage(messages.password)}
               order={1}
             />
             <div className="accountMenu__warning">
-              This action deletes all your posts and content from Carta. Are you sure you want to continue?
+              { formatMessage(messages.deleteConfirm) }
             </div>
             <div className="accountMenu__deleteFormButtons">
-              <button type="button" onClick={this.handleCancelClick}>Cancel</button>
-              <button className="active">Confirm</button>
+              <button type="button" onClick={this.handleCancelClick}>{formatMessage(messages.cancel)}</button>
+              <button className="active">{formatMessage(messages.confirm)}</button>
             </div>
             { status === DELETE_USER_FAIL && error && <div className="error">{error}</div> }
           </Form>
@@ -128,10 +133,10 @@ const actions = {
   deleteUserRequest,
 }
 
-export default compose(
+export default injectIntl(compose(
   connect(selectors, actions),
   reduxForm({
     form: 'deleteAccountForm',
     validate: deleteAccountFormValidator,
   }),
-)(AccountMenu)
+)(AccountMenu))

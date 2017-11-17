@@ -31,7 +31,7 @@
     transition: all 0.1s;
     max-height: 1000;
     position: relative;
-    z-index: 102;
+    // z-index: 101;
 
     &--hidden {
       max-height: 0;

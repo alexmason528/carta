@@ -1,8 +1,10 @@
 import React, { Component, PropTypes } from 'react'
+import { injectIntl, intlShape } from 'react-intl'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
+import messages from 'containers/HomePage/messages'
 import className from 'classnames'
 
-const CreatePostButton = ({ type, onClick }) => {
+const CreatePostButton = ({ type, onClick, intl: { formatMessage } }) => {
   const btnClass = className({
     createPostBtn: true,
     'createPostBtn--afterImage': type === 'image',
@@ -14,7 +16,7 @@ const CreatePostButton = ({ type, onClick }) => {
       <div className="btnImage">
         <img src={`${CLOUDINARY_ICON_URL}/add-post.png`} role="presentation" />
       </div>
-      <div className="btnText">Post</div>
+      <div className="btnText">{formatMessage(messages.post)}</div>
     </button>
   )
 }
@@ -22,6 +24,7 @@ const CreatePostButton = ({ type, onClick }) => {
 CreatePostButton.propTypes = {
   onClick: PropTypes.func,
   type: PropTypes.string,
+  intl: intlShape.isRequired,
 }
 
-export default CreatePostButton
+export default injectIntl(CreatePostButton)

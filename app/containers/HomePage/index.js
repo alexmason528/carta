@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import Helmet from 'react-helmet'
 import className from 'classnames'
 import { connect } from 'react-redux'
+import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
 import { Container, Row, Col } from 'reactstrap'
@@ -19,6 +20,7 @@ import StartQuest from 'components/StartQuest'
 import { getCroppedImage } from 'utils/imageHelper'
 import { selectPosts, selectHomeInfo } from './selectors'
 import { listPostRequest } from './actions'
+import messages from './messages'
 import './style.scss'
 
 class HomePage extends Component {
@@ -33,6 +35,7 @@ class HomePage extends Component {
     params: PropTypes.object,
     posts: PropTypes.array,
     authenticated: PropTypes.bool,
+    intl: intlShape.isRequired,
   }
 
   constructor(props) {
@@ -158,7 +161,7 @@ class HomePage extends Component {
 
   render() {
     const { showAuthForm, showCreatePostForm, showAccountMenu, timer, editingPost, coverPic, profilePic } = this.state
-    const { posts, authenticated, user, logOut, updateUserRequest, info } = this.props
+    const { posts, authenticated, user, logOut, updateUserRequest, info, intl: { formatMessage } } = this.props
     const { status, error } = info
 
     let createPostButtonType = 'text'
@@ -272,17 +275,17 @@ class HomePage extends Component {
         { user && !user.verified && (status !== VERIFY_FAIL) &&
           <div className="verifyCtrl">
             <div className="verifyCtrl__message">
-              {`Hey ${user.fullname}, you've got an email from us. Please open it and click on the link to verify your account`}
+              { formatMessage(messages.verificationEmail, user.fullname) }
             </div>
             <div className="verifyCtrl__logOutForm">
-              Please verify your registration or <button onClick={logOut}>Log out</button>
+              { formatMessage(messages.verificationRequired) } <button onClick={logOut}>{ formatMessage(messages.signOut) }</button>
             </div>
           </div>
         }
         { user && (timer !== 0) &&
           <div className="verifyCtrl">
             <div className="verifyCtrl__message">
-              Verification Success. This message will disapper in { timer } secondes...
+              { formatMessage(messages.verificationSuccess) }
             </div>
           </div>
         }
@@ -292,7 +295,7 @@ class HomePage extends Component {
               { 'Verification failed. Your verification code is not correct.'}
             </div>
             <div className="verifyCtrl__logOutForm">
-              Please verify your registration or <button onClick={logOut}>Log out</button>
+              { formatMessage(messages.verificationRequired) } <button onClick={logOut}>{ formatMessage(messages.signOut) }</button>
             </div>
           </div>
         }
@@ -316,4 +319,4 @@ const actions = {
   logOut,
 }
 
-export default connect(selectors, actions)(HomePage)
+export default injectIntl(connect(selectors, actions)(HomePage))
