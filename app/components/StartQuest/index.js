@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom'
 import className from 'classnames'
 import { browserHistory } from 'react-router'
 import { CLOUDINARY_COVER_URL } from 'containers/App/constants'
+import { injectIntl, intlShape } from 'react-intl'
+import messages from './messages'
 import './style.scss'
 
 class StartQuest extends Component {
   static propTypes = {
     authenticated: PropTypes.bool,
+    intl: intlShape.isRequired,
   }
 
   constructor(props) {
@@ -36,7 +39,7 @@ class StartQuest extends Component {
 
   render() {
     const { imageLoaded } = this.state
-    const { authenticated } = this.props
+    const { authenticated, intl: { formatMessage } } = this.props
     const questClass = className({
       startQuest: true,
       startQuest__authenticated: authenticated,
@@ -47,10 +50,10 @@ class StartQuest extends Component {
       <div className={questClass} onClick={() => browserHistory.push('/quest')}>
         <img className="startQuest__hoverImg" onLoad={this.handleLoaded} src={`${CLOUDINARY_COVER_URL}/quest.jpg`} role="presentation" />
         <img src={`${CLOUDINARY_COVER_URL}/quest.jpg`} role="presentation" />
-        <h2>Begin je<br />persoonlijke <br />zoektocht</h2>
+        <h2>{formatMessage(messages.startQuestMessage)}</h2>
       </div>
     )
   }
 }
 
-export default StartQuest
+export default injectIntl(StartQuest)

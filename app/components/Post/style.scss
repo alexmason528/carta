@@ -115,13 +115,6 @@
   .postTitleEdit { padding: 0 10px }
   .postContent, .postContentText { border: none }
   .postContentText { padding-left: 0; padding-right: 0 }
-
-  .postEditBtn {
-    opacity: 0.7;
-    transition: all 0.1s;
-
-    &:hover { opacity: 1 }
-  }
 }
 
 .postImage {
@@ -320,6 +313,13 @@
   .postMeta {
     cursor: text;
     user-select: text;
+  }
+
+  .postEditBtn {
+    opacity: 0.7;
+    transition: all 0.1s;
+
+    &:hover { opacity: 1 }
   }
 }
 

@@ -220,7 +220,7 @@ class HomePage extends Component {
             }
           </Col>
 
-          <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-sm-down">
+          <Col lg={4} md={6} sm={12} xs={12} className="homepage__col">
             { authenticated && !showCreatePostForm && user.verified && !editingPost && <CreatePostButton type={createPostButtonType} onClick={this.toggleCreatePostForm} />}
             { authenticated && showCreatePostForm && <PostCreate onClose={this.toggleCreatePostForm} user={user} /> }
             <div>
@@ -246,7 +246,7 @@ class HomePage extends Component {
               }
             </div>
           </Col>
-          <Col lg={4} md={6} sm={12} xs={12} className="homepage__col hidden-md-down">
+          <Col lg={4} md={6} sm={12} xs={12} className="homepage__col">
             {
               posts && posts.map((post, key) => {
                 const { _id, content, created_at, img, title, link } = post

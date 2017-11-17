@@ -25,6 +25,9 @@ import App from 'containers/App'
 // Import selector for `syncHistoryWithStore`
 import { selectLocationState } from 'containers/App/selectors'
 
+// Import Language Provider
+import LanguageProvider from 'containers/LanguageProvider'
+
 // Load the favicon, the manifest.json file and the .htaccess file
 /* eslint-disable import/no-webpack-loader-syntax */
 import '!file-loader?name=[name].[ext]!./favicon.ico'
@@ -33,6 +36,9 @@ import 'file-loader?name=[name].[ext]!./.htaccess' // eslint-disable-line import
 /* eslint-enable import/no-webpack-loader-syntax */
 
 import configureStore from './store'
+
+// Import i18n messages
+import { translationMessages } from './i18n'
 
 // Import CSS reset and Global Styles
 import './global-styles'
@@ -71,26 +77,51 @@ const rootRoute = {
   childRoutes: createRoutes(store),
 }
 
-const render = () => {
+const render = (messages) => {
   ReactDOM.render(
     <Provider store={store}>
-      <Router
-        history={history}
-        routes={rootRoute}
-        render={
-          // Scroll to top when going to a new page, imitating default browser
-          // behaviour
-          applyRouterMiddleware(useScroll())
-        }
-      />
+      <LanguageProvider messages={messages}>
+        <Router
+          history={history}
+          routes={rootRoute}
+          render={
+            // Scroll to top when going to a new page, imitating default browser
+            // behaviour
+            applyRouterMiddleware(useScroll())
+          }
+        />
+      </LanguageProvider>
     </Provider>,
     document.getElementById('app')
   )
 }
 
+// Hot reloadable translation json files
+if (module.hot) {
+  // modules.hot.accept does not accept dynamic dependencies,
+  // have to be constants at compile-time
+  module.hot.accept('./i18n', () => {
+    render(translationMessages)
+  })
+}
 
 // Chunked polyfill for browsers without Intl support
-render()
+if (!window.Intl) {
+  (new Promise((resolve) => {
+    resolve(import('intl'))
+  }))
+    .then(() => Promise.all([
+      import('intl/locale-data/jsonp/en.js'),
+      import('intl/locale-data/jsonp/nl.js'),
+    ]))
+    .then(() => render(translationMessages))
+    .catch((err) => {
+      throw err
+    })
+} else {
+  render(translationMessages)
+}
+
 // Install ServiceWorker and AppCache in the end since
 // it's not most important operation and if main code fails,
 // we do not want it installed
