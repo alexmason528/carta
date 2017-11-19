@@ -263,7 +263,7 @@ class HomePage extends Component {
         { user && !user.verified && (status !== VERIFY_FAIL) &&
           <div className="verifyCtrl">
             <div className="verifyCtrl__message">
-              { formatMessage(messages.verificationEmail, user.fullname) }
+              { formatMessage(messages.verificationEmail, { name: user.fullname }) }
             </div>
             <div className="verifyCtrl__logOutForm">
               { formatMessage(messages.verificationRequired) } <button onClick={logOut}>{ formatMessage(messages.signOut) }</button>

@@ -235,7 +235,7 @@ class AuthForm extends Component {
             className="button"
             style={{}}
           >
-            <img className="img20" src={`${CLOUDINARY_ICON_URL}/google.png`} role="presentation" /><span>Google</span>
+            <img src={`${CLOUDINARY_ICON_URL}/google.png`} role="presentation" /><span>Google</span>
           </GoogleLogin>
           <FacebookLogin
             appId="1088597931155576"
@@ -244,7 +244,7 @@ class AuthForm extends Component {
             textButton="Facebook"
             autoLoad
           >
-            <img className="img20" src={`${CLOUDINARY_ICON_URL}/facebook.png`} role="presentation" /><span>Facebook</span>
+            <img src={`${CLOUDINARY_ICON_URL}/facebook.png`} role="presentation" /><span>Facebook</span>
           </FacebookLogin>
         </div>
         <div className="authForm__divider">

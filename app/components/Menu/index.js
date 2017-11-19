@@ -63,7 +63,7 @@ class Menu extends Component {
             {authenticated && <li><button onClick={logOut}>{formatMessage(messages.signOut)}</button></li>}
             <li><hr /></li>
             <li className={locale === 'en' ? 'activeLang' : ''}><button onClick={() => changeLocale('en')}>English</button></li>
-            <li className={locale === 'nl' ? 'activeLang' : ''}><button onClick={() => changeLocale('nl')}>Netherlands</button></li>
+            <li className={locale === 'nl' ? 'activeLang' : ''}><button onClick={() => changeLocale('nl')}>Nederlands</button></li>
           </ul>
           <div className="cartaMenu__tab" onClick={this.handleToggleMenu}>
             <img src={`${CLOUDINARY_ICON_URL}/name-vertical.png`} role="presentation" />
