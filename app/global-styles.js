@@ -57,6 +57,7 @@ injectGlobal`
     text-transform: uppercase;
     font-size: 13px;
     cursor: pointer;
+    border-radius: 0;
 
     color: rgba(0, 0, 0, 0.7);
 

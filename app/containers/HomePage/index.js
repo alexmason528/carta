@@ -11,9 +11,9 @@ import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/sele
 import { logOut, verifyRequest, updateUserRequest } from 'containers/App/actions'
 import { CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
 import { CreatePostButton } from 'components/Buttons'
-import Menu from 'components/Menu'
 import AccountMenu from 'components/AccountMenu'
 import AuthForm from 'components/AuthForm'
+import Menu from 'components/Menu'
 import { Post, PostCreate } from 'components/Post'
 import Profile from 'components/Profile'
 import StartQuest from 'components/StartQuest'
@@ -83,9 +83,7 @@ class HomePage extends Component {
     const { homeInfo, info } = nextProps
 
     if (homeInfo.status === CREATE_POST_SUCCESS) {
-      this.setState({
-        showCreatePostForm: false,
-      })
+      this.setState({ showCreatePostForm: false })
     }
 
     if ((!user && vcode && nextProps.user && nextProps.user.verified === true) || (user && nextProps.user && user.verified === false && nextProps.user.verified === true)) {
@@ -95,9 +93,7 @@ class HomePage extends Component {
         setInterval(() => {
           const { timer } = this.state
           if (timer !== 0) {
-            this.setState({
-              timer: timer - 1,
-            })
+            this.setState({ timer: timer - 1 })
           } else {
             browserHistory.push('/')
           }
@@ -129,26 +125,18 @@ class HomePage extends Component {
 
     if (!authenticated) {
       evt.stopPropagation()
-      this.setState({
-        showAuthForm: !this.state.showAuthForm,
-      })
+      this.setState({ showAuthForm: !this.state.showAuthForm })
     } else {
-      this.setState({
-        showAccountMenu: !this.state.showAccountMenu,
-      })
+      this.setState({ showAccountMenu: !this.state.showAccountMenu })
     }
   }
 
   toggleCreatePostForm = () => {
-    this.setState({
-      showCreatePostForm: !this.state.showCreatePostForm,
-    })
+    this.setState({ showCreatePostForm: !this.state.showCreatePostForm })
   }
 
   handlePostEdit = value => {
-    this.setState({
-      editingPost: value,
-    })
+    this.setState({ editingPost: value })
   }
 
   handleProfilePic = (evt, newVal, prevVal) => {

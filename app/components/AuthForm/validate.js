@@ -12,8 +12,8 @@ const schema = {
       message: '^Please enter a password',
     },
     length: {
-      minimum: 6,
-      message: '^Your password must be 6 characters or longer',
+      minimum: 3,
+      message: '^Your password must be 3 characters or longer',
     },
   },
   confirmPassword: {

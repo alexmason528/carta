@@ -16,7 +16,9 @@
   }
 
   &__warning {
-    margin: 8px;
+    margin: 15px 8px;
+    user-select: text;
+    cursor: text;
   }
 
   &__items {
@@ -73,7 +75,7 @@
     input {
       margin-top: 8px;
       border: 0.5px solid #ccc;
-      padding: 5px 8px;
+      padding: 3px 8px;
       color: #333;
       width: 100%;
       font-weight: 300;
@@ -85,20 +87,26 @@
     
     button {
       margin-left: 10px;
-      color: #888;
+      color: rgba(0, 0, 0, 0.7);
       padding: 5px 8px;
       font-size: 13px;
+      font-weight: 400;
 
       &.active {
         border: 0.5px solid #ddd;
         background: #eee;
+        font-weight: 600;
+      }
+
+      &:hover {
+        color: rgba(0, 0, 0, 1);
       }
     }
   }
 
   .error {
-    padding: 0 0 8px 8px;
+    padding: 0;
     color:#e80303;
-    margin:8px; 
+    margin: 8px; 
   }
 }

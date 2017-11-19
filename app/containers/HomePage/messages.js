@@ -51,7 +51,7 @@ export default defineMessages({
   },
   picture: {
     id: 'carta.picture',
-    defaultMessage: 'Picture',
+    defaultMessage: 'Pic',
   },
   text: {
     id: 'carta.text',
