@@ -179,7 +179,7 @@ class TypeSection extends Component {
             }
           </div>
           <div className={excludedClass}>
-            <div className="except">{ formatMessage(messages.onlyignornin) }</div>
+            <div className="except">{ formatMessage(messages.onlyignoring) }</div>
             { excludedTypes.map((type, index) => <Button key={index} active={type.active} onClick={() => { this.handleTypeClick(type.name) }}>{type.name}</Button>) }
           </div>
         </div>

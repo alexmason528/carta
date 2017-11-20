@@ -1,7 +1,7 @@
 import React, { Component, PropTypes, Children } from 'react'
 import classNames from 'classnames'
 import { connect } from 'react-redux'
-import { injectIntl, intlShape, FormattedMessage } from 'react-intl'
+import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { fetchRecommendations, descriptiveSelect } from 'containers/QuestPage/actions'
@@ -231,7 +231,7 @@ class DescriptiveSection extends Component {
             }
           </div>
           <div className={staredClass}>
-            <div className="notable">{ formattedMessage(messages.notably) }</div>
+            <div className="notable">{ formatMessage(messages.notably) }</div>
             {
               staredDescriptives.map((descriptive, index) => {
                 const { name } = descriptive

@@ -17,4 +17,12 @@ export default defineMessages({
     id: 'carta.next',
     defaultMessage: 'Next',
   },
+  onlyignoring: {
+    id: 'carta.onlyignoring',
+    defaultMessage: 'Only Ignoring',
+  },
+  notably: {
+    id: 'carta.notably',
+    defaultMessage: 'Notably',
+  },
 })
