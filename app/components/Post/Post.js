@@ -411,6 +411,11 @@ class Post extends Component {
       hidden: !imageLoaded,
     })
 
+    const postImageClass = className({
+      postImage: true,
+      noLink: !link,
+    })
+
     return (
       <div className={postContainerClass}>
         { (showLinkBar || showInfo || showDeleteConfirm) && <div className="backLayer" onClick={this.handlePostClick} /> }
@@ -419,7 +424,7 @@ class Post extends Component {
         </LoadingSpinner>
         { postType === 'mixedPost' &&
           <div className={postClass}>
-            <a className="postImage" href={postLink}>
+            <a className={postImageClass} href={postLink}>
               { showImage &&
                 <div>
                   <img className="postImage__hoverImg" onLoad={this.handleLoaded} src={img} role="presentation" />
@@ -453,7 +458,7 @@ class Post extends Component {
 
         { postType === 'mediaPost' &&
           <div className={postClass} onClick={this.handlePostClick}>
-            <a className="postImage" href={postLink}>
+            <a className={postImageClass} href={postLink}>
               { editable && !editing && <EditButton className="postEditBtn" image="edit-white-shadow" hover onClick={this.handleStartEdit} /> }
               { showImage &&
                 <div>

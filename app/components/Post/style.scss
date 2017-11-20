@@ -161,10 +161,13 @@
       top: -2%;
     }
   }
+
+  &.noLink {
+    cursor: zoom-in;
+  }
 }
 
 .postBorderBtn {
-  font-size: 14px;
   background: #fbfbfb;
   padding: 4px 8px;
   border: 0.5px solid #ddd;
@@ -333,7 +336,7 @@
   font-weight: 900;
   overflow: hidden;
   z-index: 4;
-  width: 100%;
+  max-width: 100%;
   word-break: break-word;
 
   &:focus { outline: none }
