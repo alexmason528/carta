@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import className from 'classnames'
+import cx from 'classnames'
 import ReactDOM from 'react-dom'
 
 import './style.scss'
@@ -40,13 +40,9 @@ class Suggestion extends Component {
   render() {
     const { img, title } = this.props
     const { imageLoaded } = this.state
-    const suggestionClass = className({
-      suggestion: true,
-      hidden: !imageLoaded,
-    })
 
     return (
-      <div className={suggestionClass}>
+      <div className={cx({ suggestion: true, hidden: !imageLoaded })}>
         <img className="suggestion__hoverImg" onLoad={this.handleLoaded} src={img} role="presentation" />
         <img src={img} role="presentation" />
         <h2>{title}</h2>

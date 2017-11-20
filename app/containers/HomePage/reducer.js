@@ -22,12 +22,21 @@ import {
   LIST_SUGGESTION_FAIL,
 
   DELETE_USER_POSTS,
+
+  POST_EDIT_START,
+  POST_EDIT_END,
+  POST_TITLE_CHANGE,
+  POST_CONTENT_CHANGE,
+  POST_IMAGE_CHANGE,
+  POST_LINK_CHANGE,
+  POST_SHOW_LINK_BAR,
+  POST_SHOW_DELETE_CONFIRM,
 } from './constants'
 
 const initialState = {
   posts: [],
   suggestions: [],
-  curPost: null,
+  editingPost: null,
   status: null,
   error: null,
 }
@@ -85,7 +94,6 @@ function homeReducer(state = initialState, action) {
     case UPDATE_POST_REQUEST:
       return {
         ...state,
-        curPost: id,
         status: type,
         error: null,
       }
@@ -101,7 +109,7 @@ function homeReducer(state = initialState, action) {
 
       return {
         ...state,
-        curPost: null,
+        editingPost: null,
         posts: newPosts,
         status: type,
       }
@@ -109,7 +117,7 @@ function homeReducer(state = initialState, action) {
     case UPDATE_POST_FAIL:
       return {
         ...state,
-        curPost: null,
+        editingPost: null,
         status: type,
         error: payload,
       }
@@ -117,7 +125,6 @@ function homeReducer(state = initialState, action) {
     case DELETE_POST_REQUEST:
       return {
         ...state,
-        curPost: payload,
         status: type,
         error: null,
       }
@@ -125,7 +132,7 @@ function homeReducer(state = initialState, action) {
     case DELETE_POST_SUCCESS:
       return {
         ...state,
-        curPost: null,
+        editingPost: null,
         status: type,
         posts: state.posts.filter(post => post._id !== payload),
       }
@@ -133,7 +140,7 @@ function homeReducer(state = initialState, action) {
     case DELETE_POST_FAIL:
       return {
         ...state,
-        curPost: null,
+        editingPost: null,
         status: type,
         error: payload,
       }
@@ -165,6 +172,72 @@ function homeReducer(state = initialState, action) {
         status: type,
         error: null,
         posts: state.posts.filter(post => post.author._id !== payload),
+      }
+
+    case POST_EDIT_START:
+      return {
+        ...state,
+        editingPost: payload,
+      }
+
+    case POST_EDIT_END:
+      return {
+        ...state,
+        editingPost: null,
+      }
+
+    case POST_TITLE_CHANGE:
+      return {
+        ...state,
+        editingPost: {
+          ...state.editingPost,
+          title: payload,
+        },
+      }
+
+    case POST_CONTENT_CHANGE:
+      return {
+        ...state,
+        editingPost: {
+          ...state.editingPost,
+          content: payload,
+        },
+      }
+
+    case POST_IMAGE_CHANGE:
+      return {
+        ...state,
+        editingPost: {
+          ...state.editingPost,
+          img: payload,
+        },
+      }
+
+    case POST_LINK_CHANGE:
+      return {
+        ...state,
+        editingPost: {
+          ...state.editingPost,
+          link: payload,
+        },
+      }
+
+    case POST_SHOW_LINK_BAR:
+      return {
+        ...state,
+        editingPost: {
+          ...state.editingPost,
+          showLinkBar: payload,
+        },
+      }
+
+    case POST_SHOW_DELETE_CONFIRM:
+      return {
+        ...state,
+        editingPost: {
+          ...state.editingPost,
+          showDeleteConfirm: payload,
+        },
       }
 
     default:

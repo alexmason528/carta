@@ -20,6 +20,14 @@ import {
   LIST_SUGGESTION_FAIL,
 
   DELETE_USER_POSTS,
+  POST_EDIT_START,
+  POST_EDIT_END,
+  POST_TITLE_CHANGE,
+  POST_CONTENT_CHANGE,
+  POST_IMAGE_CHANGE,
+  POST_LINK_CHANGE,
+  POST_SHOW_LINK_BAR,
+  POST_SHOW_DELETE_CONFIRM,
 } from './constants'
 
 export function createPostRequest(payload) {
@@ -63,11 +71,9 @@ export function listPostFail(payload) {
   }
 }
 
-export function updatePostRequest(id, payload) {
+export function updatePostRequest() {
   return {
     type: UPDATE_POST_REQUEST,
-    id,
-    payload,
   }
 }
 
@@ -129,6 +135,61 @@ export function listSuggestionFail(payload) {
 export function deleteUserPosts(payload) {
   return {
     type: DELETE_USER_POSTS,
+    payload,
+  }
+}
+
+export function postEditStart(payload) {
+  return {
+    type: POST_EDIT_START,
+    payload,
+  }
+}
+
+export function postEditEnd() {
+  return {
+    type: POST_EDIT_END,
+  }
+}
+
+export function postTitleChange(payload) {
+  return {
+    type: POST_TITLE_CHANGE,
+    payload,
+  }
+}
+
+export function postContentChange(payload) {
+  return {
+    type: POST_CONTENT_CHANGE,
+    payload,
+  }
+}
+
+export function postImageChange(payload) {
+  return {
+    type: POST_IMAGE_CHANGE,
+    payload,
+  }
+}
+
+export function postLinkChange(payload) {
+  return {
+    type: POST_LINK_CHANGE,
+    payload,
+  }
+}
+
+export function postShowLinkBar(payload) {
+  return {
+    type: POST_SHOW_LINK_BAR,
+    payload,
+  }
+}
+
+export function postShowDeleteConfirm(payload) {
+  return {
+    type: POST_SHOW_DELETE_CONFIRM,
     payload,
   }
 }

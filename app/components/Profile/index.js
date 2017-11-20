@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import { injectIntl, intlShape } from 'react-intl'
-import className from 'classnames'
 import axios from 'axios'
 import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, UPDATE_USER_REQUEST } from 'containers/App/constants'
 import LoadingSpinner from 'components/LoadingSpinner'
@@ -102,7 +101,6 @@ class Profile extends Component {
   handleFiles = evt => {
     const file = evt.target.files[0]
     const { imageType } = this.state
-
     getCroppedImage(file, this.handleImage, (imageType === 'profilePic') ? 'portrait' : 'landscape')
   }
 
@@ -110,38 +108,20 @@ class Profile extends Component {
     const { imageType } = this.state
     const { onUpdate } = this.props
 
-    this.setState({
-      imageUpload: {
-        uploading: true,
-        error: null,
-      },
-    })
+    this.setState({ imageUpload: { uploading: true, error: null } })
 
     let formData = new FormData()
     formData.append('file', img)
     formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
 
     axios.post(CLOUDINARY_UPLOAD_URL, formData, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     }).then(res => {
       const { data: { url } } = res
-      this.setState({
-        imageUpload: {
-          uploading: false,
-          error: null,
-        },
-      })
-
+      this.setState({ imageUpload: { uploading: false, error: null } })
       onUpdate({ [imageType]: url })
     }).catch(err => {
-      this.setState({
-        imageUpload: {
-          uploading: false,
-          error: err.toString(),
-        },
-      })
+      this.setState({ imageUpload: { uploading: false, error: err.toString() } })
     })
   }
 
@@ -150,13 +130,9 @@ class Profile extends Component {
     const { coverPic, profilePic, imageUpload, imageType, imageLoaded } = this.state
     const coverPicSpinner = imageType === 'coverPic' && (imageUpload.uploading || status === UPDATE_USER_REQUEST)
     const profilePicSpinner = imageType === 'profilePic' && (imageUpload.uploading || status === UPDATE_USER_REQUEST)
-    const profileClass = className({
-      profile: true,
-      // hidden: !imageLoaded,
-    })
 
     return (
-      <div className={profileClass}>
+      <div className="profile">
         { coverPic &&
           <div className="coverPic" onClick={authenticated ? this.handleCoverImg : onClick}>
             <LoadingSpinner show={coverPicSpinner}>

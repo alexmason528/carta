@@ -18,7 +18,7 @@ import { Post, PostCreate } from 'components/Post'
 import Profile from 'components/Profile'
 import StartQuest from 'components/StartQuest'
 import { getCroppedImage } from 'utils/imageHelper'
-import { selectPosts, selectHomeInfo } from './selectors'
+import { selectPosts, selectHomeInfo, selectEditingPost } from './selectors'
 import { listPostRequest } from './actions'
 import messages from './messages'
 import './style.scss'
@@ -33,6 +33,7 @@ class HomePage extends Component {
     info: PropTypes.object,
     homeInfo: PropTypes.object,
     params: PropTypes.object,
+    editingPost: PropTypes.object,
     posts: PropTypes.array,
     authenticated: PropTypes.bool,
     intl: intlShape.isRequired,
@@ -44,7 +45,6 @@ class HomePage extends Component {
       showAuthForm: false,
       showCreatePostForm: false,
       showAccountMenu: false,
-      editingPost: false,
       coverPic: null,
       profilePic: null,
       timer: 0,
@@ -135,10 +135,6 @@ class HomePage extends Component {
     this.setState({ showCreatePostForm: !this.state.showCreatePostForm })
   }
 
-  handlePostEdit = value => {
-    this.setState({ editingPost: value })
-  }
-
   handleProfilePic = (evt, newVal, prevVal) => {
     this.setState({ profilePic: newVal })
   }
@@ -148,8 +144,8 @@ class HomePage extends Component {
   }
 
   render() {
-    const { showAuthForm, showCreatePostForm, showAccountMenu, timer, editingPost, coverPic, profilePic } = this.state
-    const { posts, authenticated, user, logOut, updateUserRequest, info, intl: { formatMessage } } = this.props
+    const { showAuthForm, showCreatePostForm, showAccountMenu, timer, coverPic, profilePic } = this.state
+    const { posts, authenticated, user, logOut, updateUserRequest, info, intl: { formatMessage }, editingPost } = this.props
     const { status, error } = info
 
     let createPostButtonType = 'text'
@@ -188,27 +184,6 @@ class HomePage extends Component {
               />
             }
             <StartQuest authenticated={authenticated} />
-            {
-              posts && posts.map((post, key) => {
-                const { _id, content, created_at, img, title, link } = post
-
-                let data = {
-                  _id,
-                  created_at,
-                  title,
-                  link,
-                  key,
-                  content: content.length === 0 ? null : content,
-                  img: img.length === 0 ? null : img,
-                  username: post.author.fullname,
-                  editable: (authenticated && (post.author._id === user._id || user.role === 'admin')),
-                  first: (key === 0 && authenticated),
-                  onPostEdit: this.handlePostEdit,
-                }
-
-                return (key === 6 || key === 8) ? <Post {...data} /> : null
-              })
-            }
           </Col>
 
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col">
@@ -228,36 +203,15 @@ class HomePage extends Component {
                     content: content.length === 0 ? null : content,
                     img: img.length === 0 ? null : img,
                     username: post.author.fullname,
-                    editable: (authenticated && (post.author._id === user._id || user.role === 'admin')),
+                    editable: (authenticated && (post.author._id === user._id || user.role === 'admin')) && !editingPost,
                     first: (key === 0 && authenticated),
-                    onPostEdit: this.handlePostEdit,
                   }
-                  return (key === 0 || key === 1 || key === 4 || key === 7) ? <Post {...data} /> : null
+                  return <Post {...data} />
                 })
               }
             </div>
           </Col>
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col">
-            {
-              posts && posts.map((post, key) => {
-                const { _id, content, created_at, img, title, link } = post
-
-                let data = {
-                  _id,
-                  created_at,
-                  title,
-                  link,
-                  key,
-                  content: content.length === 0 ? null : content,
-                  img: img.length === 0 ? null : img,
-                  username: post.author.fullname,
-                  editable: (authenticated && (post.author._id === user._id || user.role === 'admin')),
-                  first: (key === 0 && authenticated),
-                  onPostEdit: this.handlePostEdit,
-                }
-                return (key === 2 || key === 3 || key === 5) ? <Post {...data} /> : null
-              })
-            }
           </Col>
         </Row>
         { user && !user.verified && (status !== VERIFY_FAIL) &&
@@ -293,6 +247,7 @@ class HomePage extends Component {
 }
 
 const selectors = createStructuredSelector({
+  editingPost: selectEditingPost(),
   posts: selectPosts(),
   authenticated: selectAuthenticated(),
   user: selectUser(),

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import className from 'classnames'
+import cx from 'classnames'
 import { browserHistory } from 'react-router'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
@@ -24,12 +24,7 @@ class Menu extends Component {
 
   constructor(props) {
     super(props)
-
     this.state = { showMenu: false }
-  }
-
-  handleMenuClick = evt => {
-    evt.stopPropagation()
   }
 
   handleToggleMenu = evt => {
@@ -41,21 +36,12 @@ class Menu extends Component {
     const { showMenu } = this.state
     const { authenticated, logOut, currentPage, locale, changeLocale, intl: { formatMessage } } = this.props
 
-    const cartaMenuClass = className({
-      cartaMenu: true,
-      'cartaMenu--hidden': !showMenu,
-    })
-
-    const wrapperClass = className({
-      menuWrapper: showMenu,
-    })
-
     return (
-      <div className={wrapperClass} onClick={this.handleToggleMenu}>
+      <div className={cx({ menuWrapper: showMenu })} onClick={this.handleToggleMenu}>
         <div className="logo" onClick={this.handleToggleMenu}>
           <img src={`${CLOUDINARY_ICON_URL}/logo-100.png`} role="presentation" />
         </div>
-        <div className={cartaMenuClass} onClick={this.handleMenuClick}>
+        <div className={cx({ cartaMenu: true, 'cartaMenu--hidden': !showMenu })} onClick={evt => { evt.stopPropagation() }}>
           <ul>
             { currentPage !== 'Home' && <li><button onClick={() => browserHistory.push('/')}>{formatMessage(messages.home)}</button></li>}
             { currentPage !== 'Quest' && <li><button onClick={() => browserHistory.push('/quest')}>{formatMessage(messages.quest)}</button></li>}

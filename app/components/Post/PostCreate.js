@@ -6,11 +6,10 @@ import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import { Popover, PopoverBody } from 'reactstrap'
-import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_ICON_URL } from 'containers/App/constants'
-import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
-import ContentEditable from 'components/ContentEditable'
 import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
+import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
+import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import Resizable from 'components/Resizable'
 import { createPostRequest } from 'containers/HomePage/actions'
 import messages from 'containers/HomePage/messages'
@@ -295,37 +294,6 @@ class PostCreate extends Component {
       submitErrorTxt = formatMessage(messages.limitExceeded)
     }
 
-    const postClass = className({
-      post: true,
-      postCreate: true,
-      [postType]: true,
-    })
-
-    const closeButtonClass = className({
-      postCloseBtn: true,
-      'postCloseBtn--hasContent': postType,
-    })
-
-    const postInfoClass = className({
-      postInfo: true,
-      'postInfo--hidden': !showInfo,
-    })
-
-    const submitBtnClass = className({
-      postBorderBtn: true,
-      disabled: !submittable,
-    })
-
-    const postInfoBtnClass = className({
-      postInfoBtn: true,
-      active: showInfo,
-    })
-
-    const postLinkBarClass = className({
-      postLinkBar: true,
-      'postLinkBar--hidden': !showLinkBar,
-    })
-
     return (
       <div className="postContainer">
         { (showLinkBar || showInfo || showDeleteConfirm) && <div className="backLayer" onClick={this.handlePostClick} /> }
@@ -333,7 +301,7 @@ class PostCreate extends Component {
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
         { postType === 'mixedPost' &&
-          <div className={postClass} onClick={this.handlePostClick}>
+          <div className={cx({ post: true, postCreate: true, [postType]: true })} onClick={this.handlePostClick}>
             <div className="postImage">
               { showImage &&
                 <div>
@@ -343,7 +311,7 @@ class PostCreate extends Component {
               }
               <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostImageRemove} />
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
-              <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>
+              <div className={cx({ postLinkBar: true, 'postLinkBar--hidden': !showLinkBar })} onClick={this.handlePostLinkBarClick}>
                 <img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
                 <input type="text" value={link} placeholder={formatMessage(messages.linkMessage)} onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
               </div>
@@ -354,13 +322,13 @@ class PostCreate extends Component {
               <div className="postMeta">
                 {fullname} - CARTA | {formatMessage(messages.now)}
               </div>
-              <ContentEditable className="postText" tabIndex={2} placeholder={formatMessage(messages.writeHere)} onChange={this.handlePostContent} value={content} />
+              <Resizable className="postText" tabIndex={2} placeholder={formatMessage(messages.writeHere)} onChange={this.handlePostContent} value={content} />
             </div>
           </div>
         }
 
         { postType === 'mediaPost' &&
-          <div className={postClass} onClick={this.handlePostClick}>
+          <div className={cx({ post: true, postCreate: true, [postType]: true })} onClick={this.handlePostClick}>
             <div className="postImage">
               { showImage &&
                 <div>
@@ -370,21 +338,21 @@ class PostCreate extends Component {
               }
               <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostImageRemove} />
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
-              <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>
+              <div className={cx({ postLinkBar: true, 'postLinkBar--hidden': !showLinkBar })} onClick={this.handlePostLinkBarClick}>
                 <img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
                 <input type="text" value={link} placeholder={formatMessage(messages.linkMessage)} onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
               </div>
             </div>
             <Resizable className="postTitleEdit" placeholder={formatMessage(messages.title)} onChange={this.handlePostTitle} value={title} />
-            <div className={postInfoClass}>
+            <div className={cx({ postInfo: true, 'postInfo--hidden': !showInfo })}>
               {fullname} - Carta | {formatMessage(messages.now)}
             </div>
-            <InfoButton className={postInfoBtnClass} onClick={this.handlePostInfoToggle} />
+            <InfoButton className={cx({ postInfoBtn: true, active: showInfo })} onClick={this.handlePostInfoToggle} />
           </div>
         }
 
         { postType === 'textPost' &&
-          <div className={postClass} onClick={this.handlePostClick}>
+          <div className={cx({ post: true, postCreate: true, [postType]: true })} onClick={this.handlePostClick}>
             <Resizable className="postTitleEdit" tabIndex={1} placeholder={formatMessage(messages.title)} onChange={this.handlePostTitle} value={title} />
             <div className="postContent">
               <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostContentRemove} />
@@ -407,10 +375,10 @@ class PostCreate extends Component {
             <div className="right">
               <button type="button" className="postCancelBtn" onClick={this.handleCancel}>{formatMessage(messages.cancel)}</button>
               <DeleteButton className="postDeleteBtn" onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
-              <button type="button" title={submitErrorTxt} className={submitBtnClass} disabled={!submittable} onClick={this.handleSubmit}>{formatMessage(messages.submit)}</button>
+              <button type="button" title={submitErrorTxt} className={cx({ postBorderBtn: true, disabled: !submittable })} disabled={!submittable} onClick={this.handleSubmit}>{formatMessage(messages.submit)}</button>
             </div>
           }
-          <button type="button" className={closeButtonClass} onClick={onClose}>
+          <button type="button" className={cx({ postCloseBtn: true, 'postCloseBtn--hasContent': postType })} onClick={onClose}>
             <img src={`${CLOUDINARY_ICON_URL}/close.png`} role="presentation" />
           </button>
         </div>

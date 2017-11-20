@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import className from 'classnames'
+import cx from 'classnames'
 import axios from 'axios'
 import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
@@ -10,9 +10,20 @@ import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
 import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_ICON_URL } from 'containers/App/constants'
-import { updatePostRequest, deletePostRequest } from 'containers/HomePage/actions'
+import {
+  updatePostRequest,
+  deletePostRequest,
+  postEditStart,
+  postEditEnd,
+  postTitleChange,
+  postContentChange,
+  postImageChange,
+  postLinkChange,
+  postShowLinkBar,
+  postShowDeleteConfirm,
+} from 'containers/HomePage/actions'
 import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/constants'
-import { selectHomeInfo } from 'containers/HomePage/selectors'
+import { selectHomeInfo, selectEditingPost } from 'containers/HomePage/selectors'
 import { selectLocale } from 'containers/LanguageProvider/selectors'
 import messages from 'containers/HomePage/messages'
 import { getTextFromDate } from 'utils/dateHelper'
@@ -23,72 +34,48 @@ import './style.scss'
 
 class Post extends Component {
   static propTypes = {
-    onClose: PropTypes.func,
-    onPostEdit: PropTypes.func,
     updatePostRequest: PropTypes.func,
     deletePostRequest: PropTypes.func,
+    postImageChange: PropTypes.func,
+    postEditStart: PropTypes.func,
+    postShowDeleteConfirm: PropTypes.func,
+    postShowLinkBar: PropTypes.func,
+    postTitleChange: PropTypes.func,
+    postLinkChange: PropTypes.func,
+    postEditEnd: PropTypes.func,
+    postContentChange: PropTypes.func,
     info: PropTypes.object,
-    show: PropTypes.bool,
+    editingPost: PropTypes.object,
     content: PropTypes.string,
     img: PropTypes.string,
     locale: PropTypes.string,
+    _id: PropTypes.string,
+    title: PropTypes.string,
+    link: PropTypes.string,
+    username: PropTypes.string,
+    created_at: PropTypes.string,
+    editable: PropTypes.bool,
     intl: intlShape.isRequired,
   }
 
   constructor(props) {
     super(props)
 
-    const { img, content } = props
-
-    let postType
-
-    if (img && content !== null) {
-      postType = 'mixedPost'
-    } else if (img && content === null) {
-      postType = 'mediaPost'
-    } else if (!img && content !== null) {
-      postType = 'textPost'
-    } else if (title !== null) {
-      postType = 'textPost'
-    }
-
     this.state = {
-      showDeleteConfirm: false,
       showInfo: false,
-      showLinkBar: false,
-      editable: false,
-      editing: false,
-      link: '',
-      imageLoaded: postType === 'textPost',
       imageUpload: {
         uploading: false,
-        error: null,
+        error: false,
       },
     }
-  }
-
-  componentWillMount() {
-    this.initializeState(this.props)
   }
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize)
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.initializeState(nextProps)
-  }
-
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize)
-  }
-
-  initializeState(props) {
-    this.setState({
-      ...props,
-      editing: false,
-      showLinkBar: false,
-    }, this.handleResize)
   }
 
   handleResize = () => {
@@ -109,7 +96,6 @@ class Post extends Component {
       const height = $(post).find('.postImage').height() - ($(post).hasClass('mediaPost') ? 90 : 65)
       const fontSize = (width / 44) * 3 * 1.15
       const lines = fontSize > 0 ? Math.floor(height / (fontSize * 1.2)) : 0
-
       $(post).find('.postTitle').css({
         fontSize: `${fontSize}px`,
         'max-height': `${fontSize * lines * 1.2}px`,
@@ -117,16 +103,11 @@ class Post extends Component {
         display: '-webkit-box',
         '-webkit-box-orient': 'vertical',
       })
-
       $(post).find('.postTitleEdit').css({
         fontSize: `${fontSize}px`,
         'max-height': `${fontSize * lines * 1.2}px`,
       })
     }
-  }
-
-  handleAddMedia = () => {
-    this.mediaUploader.click()
   }
 
   handleFiles = evt => {
@@ -135,151 +116,47 @@ class Post extends Component {
   }
 
   handleImage = (img, type) => {
-    this.setState({ img }, () => {
-      this.handleResize()
-      const comp = ReactDOM.findDOMNode(this)
-      $(comp).find('.postTitleEdit').focus()
-    })
+    const { postImageChange } = this.props
+    postImageChange(img)
   }
 
-  handleCancel = () => {
-    this.setState({
-      ...this.props,
+  handleEditStart = () => {
+    const { _id, title, content, img, link, postEditStart } = this.props
+    const data = {
+      _id,
+      title,
+      content,
+      img,
+      link,
+      showDeleteConfirm: false,
       showLinkBar: false,
-      showInfo: false,
-      editing: false,
-    }, () => {
-      const { onPostEdit } = this.props
-      this.handleResize()
-      onPostEdit(false)
-    })
-  }
-
-  handleAddText = () => {
-    this.setState({
-      content: '',
-    }, () => {
-      this.handleResize()
-      const comp = ReactDOM.findDOMNode(this)
-      if ($(comp).find('.postImage').length > 0) {
-        $(comp).find('.postText').focus()
-      } else {
-        $(comp).find('.postTitleEdit').focus()
-      }
-    })
-  }
-
-  handlePostContent = value => {
-    this.setState({ content: value })
-  }
-
-  handleDelete = () => {
-    this.setState({
-      showDeleteConfirm: !this.state.showDeleteConfirm,
-    }, () => {
-      this.handleResize()
-    })
-  }
-
-  handleDeleteConfirm = () => {
-    const { _id } = this.state
-    const { deletePostRequest, onPostEdit } = this.props
-    deletePostRequest(_id)
-    onPostEdit(false)
-  }
-
-  handlePostLinkBtn = evt => {
-    evt.stopPropagation()
-    this.setState({
-      showLinkBar: !this.state.showLinkBar,
-    })
-  }
-
-  handlePostImageRemove = () => {
-    this.setState({
-      img: null,
-    }, () => {
-      this.handleResize()
-      const comp = ReactDOM.findDOMNode(this)
-      $(comp).find('.postText').focus()
-    })
-  }
-
-  handlePostContentRemove = () => {
-    this.setState({
-      content: '',
-    }, () => {
-      this.handleResize()
-      const comp = ReactDOM.findDOMNode(this)
-      $(comp).find('.postTitleEdit').focus()
-    })
-  }
-
-  handleStartEdit = () => {
-    this.setState({
-      editing: true,
-    }, () => {
-      const { onPostEdit } = this.props
-      this.handleResize()
-      const comp = ReactDOM.findDOMNode(this)
-      $(comp).find('.postTitleEdit').focus()
-      onPostEdit(true)
-    })
+    }
+    postEditStart(data)
+    this.handleResize()
   }
 
   handleSubmit = () => {
-    const { content, img, title, link, _id } = this.state
-    const { updatePostRequest } = this.props
+    const { editingPost, updatePostRequest, postImageChange } = this.props
 
-    let data = {
-      link,
-      id: _id,
-      title: elemToText(title),
-      content: elemToText(content),
-    }
-
-    const { onPostEdit } = this.props
-    onPostEdit(false)
-    this.handleResize()
-
-    if (img && img.indexOf('data:image') !== -1) {
-      this.setState({
-        imageUpload: {
-          uploading: true,
-          error: null,
-        },
-      })
+    if (editingPost && editingPost.img && editingPost.img.indexOf('data:image') !== -1) {
+      this.setState({ imageUpload: { uploading: true, error: null } })
 
       let formData = new FormData()
-      formData.append('file', img)
+      formData.append('file', editingPost.img)
       formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
 
       axios.post(CLOUDINARY_UPLOAD_URL, formData, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       }).then(res => {
         const { data: { url } } = res
-        this.setState({
-          imageUpload: {
-            uploading: false,
-            error: null,
-          },
-        })
-
-        data.img = url
-        updatePostRequest(_id, data)
+        this.setState({ imageUpload: { uploading: false, error: null } })
+        postImageChange(url)
+        updatePostRequest()
       }).catch(err => {
-        this.setState({
-          imageUpload: {
-            uploading: false,
-            error: err.toString(),
-          },
-        })
+        this.setState({ imageUpload: { uploading: false, error: null } })
       })
     } else {
-      data.img = img !== null ? img : ''
-      updatePostRequest(_id, data)
+      updatePostRequest()
     }
   }
 
@@ -288,54 +165,48 @@ class Post extends Component {
     this.setState({ showInfo: !this.state.showInfo })
   }
 
-  handlePostTitle = value => {
-    this.setState({ title: value })
-  }
-
-  handlePostLinkBarClick = evt => {
-    evt.stopPropagation()
-  }
-
-  handlePostLinkBarChange = evt => {
-    evt.stopPropagation()
-
-    this.setState({ link: evt.target.value })
-  }
-
   handlePostClick = () => {
-    this.setState({
-      showDeleteConfirm: false,
-      showLinkBar: false,
-      showInfo: false,
-    })
-  }
-
-  handleEnterKey = evt => {
-    if (evt.keyCode === 13) { this.setState({ showLinkBar: false }) }
-  }
-
-  handleLoaded = () => {
-    this.setState({ imageLoaded: true }, this.handleResize)
+    const { postShowDeleteConfirm, postShowLinkBar } = this.props
+    postShowDeleteConfirm(false)
+    postShowLinkBar(false)
+    this.setState({ showInfo: false })
   }
 
   render() {
-    const { show, onClose, onPostEdit, info: { error, status, curPost }, intl: { formatMessage }, locale } = this.props
     const {
-      _id,
-      img,
-      title,
-      content,
-      created_at,
       username,
-      showDeleteConfirm,
-      showLinkBar,
-      showInfo,
+      created_at,
       editable,
-      editing,
-      link,
-      imageUpload,
-      imageLoaded,
-    } = this.state
+      editingPost,
+      locale,
+      info: { error, status },
+      intl: { formatMessage },
+      postTitleChange,
+      postShowLinkBar,
+      postLinkChange,
+      postEditEnd,
+      postContentChange,
+      postShowDeleteConfirm,
+      postImageChange,
+      deletePostRequest,
+    } = this.props
+
+    const { showInfo, imageUpload } = this.state
+
+    const editing = editingPost && (editingPost._id === this.props._id)
+    const _id = editing ? editingPost._id : this.props._id
+    const img = editing ? editingPost.img : this.props.img
+    const title = editing ? editingPost.title : this.props.title
+    const content = editing ? editingPost.content : this.props.content
+    const link = editing ? editingPost.link : this.props.link
+    const showLinkBar = editing && editingPost.showLinkBar
+    const showDeleteConfirm = editing && editingPost.showDeleteConfirm
+
+    const showPostLinkButton = editing && !showLinkBar
+    const showImage = status !== UPDATE_POST_REQUEST
+    const spinnerShow = editing && (status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST || imageUpload.uploading)
+    const remainCharCnts = !content ? 1000 : 1000 - content.length
+    const submittable = title && (img || content) && (remainCharCnts >= 0)
 
     let postType
 
@@ -348,12 +219,6 @@ class Post extends Component {
     } else if (title !== null) {
       postType = 'textPost'
     }
-
-    const showPostLinkButton = editing && !showLinkBar
-    const showImage = status !== UPDATE_POST_REQUEST
-    const spinnerShow = ((status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST) && (curPost === _id)) || imageUpload.uploading
-    const remainCharCnts = !content ? 1000 : 1000 - content.length
-    const submittable = title && (img || content) && (remainCharCnts >= 0)
 
     let postLink
     if (editing) {
@@ -374,82 +239,77 @@ class Post extends Component {
       submitErrorTxt = formatMessage(messages.limitExceeded)
     }
 
-    let parsedTitle = title ? title.replace(/\n/g, '</div><div>') : ''
-
-    const postClass = className({
-      post: true,
-      [postType]: true,
-    })
-
-    const closeButtonClass = className({
-      postCloseBtn: true,
-      'postCloseBtn--hasContent': postType,
-    })
-
-    const postInfoClass = className({
-      postInfo: true,
-      'postInfo--hidden': !showInfo,
-    })
-
-    const postInfoBtnClass = className({
-      postInfoBtn: true,
-      active: showInfo,
-    })
-
-    const postLinkBarClass = className({
-      postLinkBar: true,
-      'postLinkBar--hidden': !showLinkBar,
-    })
-
-    const submitBtnClass = className({
-      postBorderBtn: true,
-      disabled: !submittable,
-    })
-
-    const postContainerClass = className({
-      postContainer: true,
-      hidden: !imageLoaded,
-    })
-
-    const postImageClass = className({
-      postImage: true,
-      noLink: !link,
-    })
-
     return (
-      <div className={postContainerClass}>
+      <div className="postContainer">
         { (showLinkBar || showInfo || showDeleteConfirm) && <div className="backLayer" onClick={this.handlePostClick} /> }
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
         { postType === 'mixedPost' &&
-          <div className={postClass}>
-            <a className={postImageClass} href={postLink}>
+          <div className={cx({ post: true, [postType]: true })}>
+            <a className={cx({ postImage: true, noLink: !link })} href={postLink}>
               { showImage &&
                 <div>
-                  <img className="postImage__hoverImg" onLoad={this.handleLoaded} src={img} role="presentation" />
+                  <img className="postImage__hoverImg" onLoad={this.handleResize} src={img} role="presentation" />
                   <img src={img} role="presentation" />
                 </div>
               }
-              { editing && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostImageRemove} /> }
-              { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
-              <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>
-                <img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
-                <input type="text" value={link} placeholder={formatMessage(messages.linkMessage)} onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
+              { editing &&
+                <RemoveButton
+                  className="postRemoveImageBtn"
+                  image="close-white-shadow"
+                  hover
+                  onClick={() => {
+                    postImageChange(null)
+                    postContentChange(content || '')
+                  }}
+                />
+              }
+              { showPostLinkButton &&
+                <LinkButton
+                  className="postLinkBtn"
+                  onClick={evt => {
+                    evt.stopPropagation()
+                    postShowLinkBar(!editingPost.showLinkBar)
+                  }}
+                />
+              }
+              <div className={cx({ postLinkBar: true, 'postLinkBar--hidden': !showLinkBar })} onClick={evt => { evt.stopPropagation() }}>
+                <img
+                  onClick={evt => {
+                    evt.stopPropagation()
+                    postShowLinkBar(!editingPost.showLinkBar)
+                  }}
+                  src={`${CLOUDINARY_ICON_URL}/link.png`}
+                  role="presentation"
+                />
+                <input
+                  type="text"
+                  value={link}
+                  placeholder={formatMessage(messages.linkMessage)}
+                  onKeyDown={evt => {
+                    if (evt.keyCode === 13) { postShowLinkBar(false) }
+                  }}
+                  onChange={evt => {
+                    evt.stopPropagation()
+                    postLinkChange(evt.target.value)
+                  }}
+                />
+
               </div>
               { editing
-                ? <Resizable className="postTitleEdit" tabIndex={1} placeholder="Title" onChange={this.handlePostTitle} value={title} />
+                ? <Resizable className="postTitleEdit" tabIndex={1} placeholder="Title" onChange={value => { postTitleChange(value) }} value={editingPost.title} />
                 : <div className="postTitle" onClick={this.handleOpenLink} title={elemToText(title)} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
               }
             </a>
             <div className="postContent">
-              { editing && <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostContentRemove} /> }
+              { editing && <RemoveButton className="postRemoveContentBtn" image="close" onClick={() => { postContentChange('') }} /> }
               <div className="postMeta">
                 {username} - CARTA | {getTextFromDate(created_at, locale)}
-                { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
+                { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleEditStart} /> }
               </div>
               { editing
-                ? <Resizable className="postText" tabIndex={2} placeholder={formatMessage(messages.writeHere)} onChange={this.handlePostContent} value={content} />
+                ? <Resizable className="postText" tabIndex={2} placeholder={formatMessage(messages.writeHere)} onChange={value => { postContentChange(value) }} value={editingPost.content} />
                 : <div className="postText" dangerouslySetInnerHTML={{ __html: textToElem(content) }} />
               }
             </div>
@@ -457,71 +317,102 @@ class Post extends Component {
         }
 
         { postType === 'mediaPost' &&
-          <div className={postClass} onClick={this.handlePostClick}>
-            <a className={postImageClass} href={postLink}>
-              { editable && !editing && <EditButton className="postEditBtn" image="edit-white-shadow" hover onClick={this.handleStartEdit} /> }
+          <div className={cx({ post: true, [postType]: true })} onClick={this.handlePostClick}>
+            <a className={cx({ postImage: true, noLink: !link })} href={postLink}>
+              { editable && !editing && <EditButton className="postEditBtn" image="edit-white-shadow" hover onClick={this.handleEditStart} /> }
               { showImage &&
                 <div>
-                  <img className="postImage__hoverImg" onLoad={this.handleLoaded} src={img} role="presentation" />
+                  <img className="postImage__hoverImg" onLoad={this.handleResize} src={img} role="presentation" />
                   <img src={img} role="presentation" />
                 </div>
               }
-              { editing && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostImageRemove} /> }
-              { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
-              <div className={postLinkBarClass} onClick={this.handlePostLinkBarClick}>
-                <img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
-                <input type="text" value={link} placeholder={formatMessage(messages.linkMessage)} onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
+              { editing &&
+                <RemoveButton
+                  className="postRemoveImageBtn"
+                  image="close-white-shadow"
+                  hover
+                  onClick={() => {
+                    postImageChange(null)
+                    postContentChange(content || '')
+                  }}
+                />
+              }
+              { showPostLinkButton &&
+                <LinkButton
+                  className="postLinkBtn"
+                  onClick={evt => {
+                    evt.stopPropagation()
+                    postShowLinkBar(!editingPost.showLinkBar)
+                  }}
+                />
+              }
+              <div className={cx({ postLinkBar: true, 'postLinkBar--hidden': !showLinkBar })} onClick={evt => { evt.stopPropagation() }}>
+                <img
+                  onClick={evt => {
+                    evt.stopPropagation()
+                    postShowLinkBar(!editingPost.showLinkBar)
+                  }}
+                  src={`${CLOUDINARY_ICON_URL}/link.png`}
+                  role="presentation"
+                />
+                <input
+                  type="text"
+                  value={link}
+                  placeholder={formatMessage(messages.linkMessage)}
+                  onKeyDown={evt => { if (evt.keyCode === 13) { postShowLinkBar(false) } }}
+                  onChange={evt => {
+                    evt.stopPropagation()
+                    postLinkChange(evt.target.value)
+                  }}
+                />
               </div>
             </a>
             { editing
-              ? <Resizable className="postTitleEdit" placeholder="Title" onChange={this.handlePostTitle} value={title} />
+              ? <Resizable className="postTitleEdit" placeholder="Title" onChange={value => { postTitleChange(value) }} value={editingPost.title} />
               : <div className="postTitle" title={elemToText(title)} onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
             }
-            <div className={postInfoClass}>
+            <div className={cx({ postInfo: true, 'postInfo--hidden': !showInfo })}>
               {username} - Carta | {getTextFromDate(created_at, locale)}
             </div>
-            <InfoButton className={postInfoBtnClass} onClick={this.handlePostInfoToggle} />
+            <InfoButton className={cx({ postInfoBtn: true, active: showInfo })} onClick={this.handlePostInfoToggle} />
           </div>
         }
 
         { postType === 'textPost' &&
-          <div className={postClass} onClick={this.handlePostClick}>
+          <div className={cx({ post: true, [postType]: true })} onClick={this.handlePostClick}>
             { editing
-              ? <Resizable className="postTitleEdit" tabIndex={1} placeholder="Title" onChange={this.handlePostTitle} value={title} />
+              ? <Resizable className="postTitleEdit" tabIndex={1} placeholder="Title" onChange={value => { postTitleChange(value) }} value={editingPost.title} />
               : <div className="postTitle" title={elemToText(title)} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
             }
             <div className="postContent">
-              { editing && <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostContentRemove} /> }
+              { editing && <RemoveButton className="postRemoveContentBtn" image="close" onClick={() => { postContentChange('') }} /> }
               <div className="postMeta">
                 {username} - CARTA | {getTextFromDate(created_at, locale)}
-                { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleStartEdit} /> }
+                { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleEditStart} /> }
               </div>
               { editing
-                ? <Resizable className="postText" tabIndex={2} placeholder={formatMessage(messages.writeHere)} onChange={this.handlePostContent} value={content} />
+                ? <Resizable className="postText" tabIndex={2} placeholder={formatMessage(messages.writeHere)} onChange={value => { postContentChange(value) }} value={editingPost.content} />
                 : <div className="postText" dangerouslySetInnerHTML={{ __html: textToElem(content) }} />
               }
             </div>
           </div>
         }
 
-        { editable && editing &&
+        { editing &&
           <div className="postButtons">
             <div className="left">
               <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
               { (postType === 'textPost' || postType === 'mixedPost') && <span style={{ marginRight: '8px' }}>{ remainCharCnts >= 0 ? remainCharCnts : 0 }</span> }
-              { (postType !== 'mediaPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddMedia}>+ {formatMessage(messages.picture)}</button> }
-              { (postType !== 'textPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddText}>+ {formatMessage(messages.text)}</button> }
+              { (postType !== 'mediaPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={() => { this.mediaUploader.click() }}>+ {formatMessage(messages.picture)}</button> }
+              { (postType !== 'textPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={() => { postContentChange('') }}>+ {formatMessage(messages.text)}</button> }
             </div>
             { postType &&
               <div className="right">
-                <button type="button" className="postCancelBtn" onClick={this.handleCancel}>{formatMessage(messages.cancel)}</button>
-                <DeleteButton className="postDeleteBtn" onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
-                <button type="button" title={submitErrorTxt} className={submitBtnClass} disabled={!submittable} onClick={this.handleSubmit}>{formatMessage(messages.submit)}</button>
+                <button type="button" className="postCancelBtn" onClick={postEditEnd}>{formatMessage(messages.cancel)}</button>
+                <DeleteButton className="postDeleteBtn" onClick={() => { postShowDeleteConfirm(!editingPost.showDeleteConfirm) }} onConfirm={() => { deletePostRequest(_id) }} showConfirm={showDeleteConfirm} />
+                <button type="button" title={submitErrorTxt} className={cx({ postBorderBtn: true, disabled: !submittable })} disabled={!submittable} onClick={this.handleSubmit}>{formatMessage(messages.submit)}</button>
               </div>
             }
-            <button type="button" className={closeButtonClass} onClick={onClose}>
-              <img src={`${CLOUDINARY_ICON_URL}/close.png`} role="presentation" />
-            </button>
           </div>
         }
       </div>
@@ -530,6 +421,7 @@ class Post extends Component {
 }
 
 const selectors = createStructuredSelector({
+  editingPost: selectEditingPost(),
   info: selectHomeInfo(),
   locale: selectLocale(),
 })
@@ -537,6 +429,14 @@ const selectors = createStructuredSelector({
 const actions = {
   updatePostRequest,
   deletePostRequest,
+  postEditStart,
+  postEditEnd,
+  postTitleChange,
+  postContentChange,
+  postImageChange,
+  postLinkChange,
+  postShowLinkBar,
+  postShowDeleteConfirm,
 }
 
 export default injectIntl(connect(selectors, actions)(Post))

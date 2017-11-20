@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import Helmet from 'react-helmet'
-import className from 'classnames'
+import cx from 'classnames'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
@@ -252,13 +252,9 @@ class Brochure extends Component {
 
     const { mainPoster, description, tiles } = brochure
     const { imageLoaded } = this.state
-    const brochureClass = className({
-      brochure: true,
-      hidden: !imageLoaded,
-    })
 
     return (
-      <div className={brochureClass}>
+      <div className={cx({ brochure: true, hidden: !imageLoaded })}>
         <Helmet
           meta={[
             { name: 'description', content: 'Carta' },

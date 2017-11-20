@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import className from 'classnames'
+import cx from 'classnames'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
@@ -75,32 +75,17 @@ class AccountMenu extends Component {
     const { handleSubmit, logOut, show, info: { error, status }, onClick, intl: { formatMessage } } = this.props
     const { showContent, showForm } = this.state
 
-    const menuClass = className({
-      accountMenu: true,
-      'accountMenu--hidden': !show,
-    })
-
-    const contentClass = className({
-      accountMenu__content: true,
-      'accountMenu__content--hidden': !showContent,
-    })
-
-    const formClass = className({
-      accountMenu__deleteForm: true,
-      'accountMenu__deleteForm--hidden': !showForm,
-    })
-
     return (
-      <div className={menuClass} onClick={evt => evt.stopPropagation()}>
+      <div className={cx({ accountMenu: true, 'accountMenu--hidden': !show })} onClick={evt => evt.stopPropagation()}>
         { /* <div className="backLayer" onClick={onClick} /> */ }
         <div className="accountMenu__items">
           <button type="button" onClick={logOut}>{formatMessage(messages.signOut)}</button> | <button type="button" onClick={this.handleSettingClick}>{formatMessage(messages.settings)}</button>
         </div>
-        <div className={contentClass}>
+        <div className={cx({ accountMenu__content: true, 'accountMenu__content--hidden': !showContent })}>
           <RemoveButton className="accountMenu__deleteButton" image="delete-red" onClick={this.handleDeleteAccountClick}>
             <span>{formatMessage(messages.deleteAccount)}</span>
           </RemoveButton>
-          <Form className={formClass} onSubmit={handleSubmit(this.handleDeleteUser)}>
+          <Form className={cx({ accountMenu__deleteForm: true, 'accountMenu__deleteForm--hidden': !showForm })} onSubmit={handleSubmit(this.handleDeleteUser)}>
             <Field
               name="password"
               type="password"

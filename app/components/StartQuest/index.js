@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import className from 'classnames'
+import cx from 'classnames'
 import { browserHistory } from 'react-router'
 import { CLOUDINARY_COVER_URL } from 'containers/App/constants'
 import { injectIntl, intlShape } from 'react-intl'
@@ -40,14 +40,9 @@ class StartQuest extends Component {
   render() {
     const { imageLoaded } = this.state
     const { authenticated, intl: { formatMessage } } = this.props
-    const questClass = className({
-      startQuest: true,
-      startQuest__authenticated: authenticated,
-      hidden: !imageLoaded,
-    })
 
     return (
-      <div className={questClass} onClick={() => browserHistory.push('/quest')}>
+      <div className={cx({ startQuest: true, startQuest__authenticated: authenticated, hidden: !imageLoaded })} onClick={() => browserHistory.push('/quest')}>
         <img className="startQuest__hoverImg" onLoad={this.handleLoaded} src={`${CLOUDINARY_COVER_URL}/quest.jpg`} role="presentation" />
         <img src={`${CLOUDINARY_COVER_URL}/quest.jpg`} role="presentation" />
         <h2 dangerouslySetInnerHTML={{ __html: formatMessage(messages.startQuest).replace(/\n/g, '<br/>') }} />

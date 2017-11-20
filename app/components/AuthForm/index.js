@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import axios from 'axios'
-import className from 'classnames'
+import cx from 'classnames'
 import { compose } from 'redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { reduxForm, Field } from 'redux-form'
@@ -212,15 +212,10 @@ class AuthForm extends Component {
 
     const spinnerShow = status === LOGIN_REQUEST || status === REGISTER_REQUEST || imageUpload.uploading
 
-    const authFormClass = className({
-      authForm: true,
-      'authForm--hidden': !show,
-    })
-
     const param = authType === 'login' ? 'register' : 'login'
 
     return (
-      <div className={authFormClass} onClick={evt => evt.stopPropagation()}>
+      <div className={cx({ authForm: true, 'authForm--hidden': !show })} onClick={evt => evt.stopPropagation()}>
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
@@ -244,7 +239,6 @@ class AuthForm extends Component {
             textButton="Facebook"
             autoLoad
           >
-            <img src={`${CLOUDINARY_ICON_URL}/facebook.png`} role="presentation" /><span>Facebook</span>
           </FacebookLogin>
         </div>
         <div className="authForm__divider">
