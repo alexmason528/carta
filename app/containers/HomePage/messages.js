@@ -137,6 +137,10 @@ export default defineMessages({
     id: 'carta.verificationSuccess',
     defaultMessage: 'Verification success!',
   },
+  verificationFail: {
+    id: 'carta.verificationFail',
+    defaultMessage: 'Verification failed. Your verification code is not correct.',
+  },
   verificationRequired: {
     id: 'carta.verificationRequired',
     defaultMessage: 'Please verify your registration or',

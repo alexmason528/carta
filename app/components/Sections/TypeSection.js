@@ -1,10 +1,12 @@
 import React, { Component, PropTypes, Children } from 'react'
 import classNames from 'classnames'
 import { connect } from 'react-redux'
+import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { FETCH_QUESTINFO_SUCCESS, FETCH_QUESTINFO_FAIL, QUEST_ADD } from 'containers/QuestPage/constants'
 import { fetchRecommendations, typeSelect } from 'containers/QuestPage/actions'
+import messages from 'containers/QuestPage/messages'
 import { selectInfo, selectTypes, selectCurrentTypes } from 'containers/QuestPage/selectors'
 import { Button, StarButton } from 'components/Buttons'
 
@@ -16,6 +18,7 @@ class TypeSection extends Component {
     types: PropTypes.array,
     currentTypes: PropTypes.object,
     info: PropTypes.object,
+    intl: intlShape.isRequired,
   }
 
   constructor(props) {
@@ -118,7 +121,7 @@ class TypeSection extends Component {
 
   render() {
     const { types, expanded, anything, search } = this.state
-    const { className } = this.props
+    const { className, intl: { formatMessage } } = this.props
 
     let searchedTypes = (search === '') ? types : types.filter(type => type.name.toLowerCase().indexOf(search.toLowerCase()) !== -1)
     let excludedTypes = types.filter(type => !type.active)
@@ -156,7 +159,7 @@ class TypeSection extends Component {
 
     return (
       <div className={className}>
-        <h1>Show Me</h1>
+        <h1>{ formatMessage(messages.showme) }</h1>
         <img className={searchBtnClass} src={`${CLOUDINARY_ICON_URL}/search.png`} onClick={() => { this.handleExpand(true) }} role="presentation" />
         <img className={closeBtnClass} src={`${CLOUDINARY_ICON_URL}/back.png`} onClick={() => { this.handleExpand(false) }} role="presentation" />
         <input className={searchInputClass} value={search} onChange={this.handleInputChange} />
@@ -176,7 +179,7 @@ class TypeSection extends Component {
             }
           </div>
           <div className={excludedClass}>
-            <div className="except">ONLY IGNORING</div>
+            <div className="except">{ formatMessage(messages.onlyignornin) }</div>
             { excludedTypes.map((type, index) => <Button key={index} active={type.active} onClick={() => { this.handleTypeClick(type.name) }}>{type.name}</Button>) }
           </div>
         </div>
@@ -196,4 +199,4 @@ const actions = {
   typeSelect,
 }
 
-export default connect(selectors, actions)(TypeSection)
+export default injectIntl(connect(selectors, actions)(TypeSection))

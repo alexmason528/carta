@@ -280,7 +280,7 @@ class HomePage extends Component {
         { (status === VERIFY_FAIL) && error &&
           <div className="verifyCtrl">
             <div className="verifyCtrl__message">
-              { 'Verification failed. Your verification code is not correct.'}
+              { formatMessage(messages.verificationFail) }
             </div>
             <div className="verifyCtrl__logOutForm">
               { formatMessage(messages.verificationRequired) } <button onClick={logOut}>{ formatMessage(messages.signOut) }</button>

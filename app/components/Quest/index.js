@@ -1,25 +1,23 @@
 import React, { Component, PropTypes, Children } from 'react'
-import styled, { css } from 'styled-components'
+import { injectIntl, intlShape } from 'react-intl'
 import classNames from 'classnames'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
-
+import messages from 'containers/QuestPage/messages'
 import { DescriptiveSection, PlaceSection, TypeSection } from '../Sections'
-
 import './style.scss'
 
-export default class Quest extends Component {
+class Quest extends Component {
   static propTypes = {
     className: PropTypes.string,
     mapViewPortChange: PropTypes.func,
     updateVisibility: PropTypes.func,
+    intl: intlShape.isRequired,
   }
 
   constructor(props) {
     super(props)
 
-    this.state = {
-      currentTab: 0,
-    }
+    this.state = { currentTab: 0 }
   }
 
   componentDidMount() {
@@ -49,7 +47,7 @@ export default class Quest extends Component {
 
   render() {
     const { currentTab } = this.state
-    const { className, mapViewPortChange } = this.props
+    const { className, mapViewPortChange, intl: { formatMessage } } = this.props
 
     const tabClass = classNames({
       tab: true,
@@ -95,7 +93,7 @@ export default class Quest extends Component {
       <div className={className}>
         <div className="tabs">
           <div className="line"></div>
-          <button className="next" onClick={this.handleNextBtnClick}>Next
+          <button className="next" onClick={this.handleNextBtnClick}>{ formatMessage(messages.next) }
             <img src={`${CLOUDINARY_ICON_URL}/next.png`} role="presentation" />
           </button>
           <div className={tabClass}></div>
@@ -113,3 +111,5 @@ export default class Quest extends Component {
     )
   }
 }
+
+export default injectIntl(Quest)

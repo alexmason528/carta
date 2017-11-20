@@ -1,9 +1,11 @@
 import React, { Component, PropTypes, Children } from 'react'
 import classNames from 'classnames'
 import { connect } from 'react-redux'
+import { injectIntl, intlShape, FormattedMessage } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { fetchRecommendations, descriptiveSelect } from 'containers/QuestPage/actions'
+import messages from 'containers/QuestPage/messages'
 import { selectDescriptives, selectCurrentDescriptives } from 'containers/QuestPage/selectors'
 import { Button, StarButton } from 'components/Buttons'
 
@@ -15,6 +17,7 @@ class DescriptiveSection extends Component {
     questIndex: PropTypes.number,
     descriptiveSelect: PropTypes.func,
     fetchRecommendations: PropTypes.func,
+    intl: intlShape.isRequired,
   }
 
   constructor(props) {
@@ -160,7 +163,7 @@ class DescriptiveSection extends Component {
 
   render() {
     const { descriptives, expanded, anything, search } = this.state
-    const { className } = this.props
+    const { className, intl: { formatMessage } } = this.props
 
     let searchedDescriptives = (search === '') ? descriptives : descriptives.filter(descriptive => (descriptive.name.toLowerCase().indexOf(search) !== -1))
 
@@ -205,7 +208,7 @@ class DescriptiveSection extends Component {
 
     return (
       <div className={className}>
-        <h1>Known For</h1>
+        <h1>{ formatMessage(messages.knownfor) }</h1>
         <img className={searchBtnClass} src={`${CLOUDINARY_ICON_URL}/search.png`} onClick={() => { this.handleExpand(true) }} role="presentation" />
         <img className={closeBtnClass} src={`${CLOUDINARY_ICON_URL}/back.png`} onClick={() => { this.handleExpand(false) }} role="presentation" />
         <input className={searchInputClass} value={search} onChange={this.handleInputChange} />
@@ -228,7 +231,7 @@ class DescriptiveSection extends Component {
             }
           </div>
           <div className={staredClass}>
-            <div className="notable">NOTABLY</div>
+            <div className="notable">{ formattedMessage(messages.notably) }</div>
             {
               staredDescriptives.map((descriptive, index) => {
                 const { name } = descriptive
@@ -246,7 +249,7 @@ class DescriptiveSection extends Component {
             }
           </div>
           <div className={excludedClass}>
-            <div className="except">ONLY IGNORING</div>
+            <div className="except">{ formatMessage(messages.onlyignoring) }</div>
             {
               excludedDescriptives.map((descriptive, index) => {
                 const { name } = descriptive
@@ -279,4 +282,4 @@ const actions = {
   fetchRecommendations,
 }
 
-export default connect(selectors, actions)(DescriptiveSection)
+export default injectIntl(connect(selectors, actions)(DescriptiveSection))

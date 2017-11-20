@@ -33,8 +33,15 @@
   "carta.limitExceeded": "Please post a text with less than 1000 characters",
   "carta.verificationEmail": "Hey {name}, you've received an email from us. Please open it and click on the link to verify your account",
   "carta.verificationSuccess": "Verification success!",
+  "carta.verificationFail": "Verification failed. Your verification code is not correct.",
   "carta.verificationRequired": "Please verify your registration or",
   "carta.now": "Now",
   "carta.today": "Today",
-  "carta.yesterday": "Yesterday"
+  "carta.yesterday": "Yesterday",
+  "carta.inaround": "In & around",
+  "carta.showme": "Show Me",
+  "carta.knownfor": "Known For",
+  "carta.next": "Next",
+  "carta.onlyignoring": "Only Ignoring",
+  "carta.notably": "Notably"
 }

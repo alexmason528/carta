@@ -10,7 +10,7 @@
   "carta.fullname": "Volledige naam",
   "carta.profilePic": "Profielfoto",
   "carta.coverPic": "Omslagfoto",
-  "carta.post": "Plaats",
+  "carta.post": "Bericht",
   "carta.picture": "Foto",
   "carta.text": "Tekst",
   "carta.cancel": "Annuleer",
@@ -33,8 +33,15 @@
   "carta.limitExceeded": "Een tekst kan maximaal 1000 tekens bevatten",
   "carta.verificationEmail": "Hey {name}, Je hebt een email van ons ontvangen. Open het en klik op de link om je account te verifiëren",
   "carta.verificationSuccess": "Verificatie gelukt!",
+  "carta.verificationFail": "Verificatie mislukt. Onjuiste verificatiecode.",
   "carta.verificationRequired": "Verifiëer je registratie eerst of",
   "carta.now": "Nu",
   "carta.today": "Vandaag",
-  "carta.yesterday": "Gisteren"
+  "carta.yesterday": "Gisteren",
+  "carta.inaround": "In & om",
+  "carta.showme": "Toon me",
+  "carta.knownfor": "Bekend om",
+  "carta.next": "Verder",
+  "carta.onlyignoring": "Negeer alleen",
+  "carta.notably": "In het bijzonder"
 }
