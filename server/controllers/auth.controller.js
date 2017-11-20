@@ -91,9 +91,9 @@ const register = (req, res) => {
     } else {
       const verifyUrl = (process.env.NODE_ENV === 'development') ? 'http://localhost:3000/verify' : 'https://cartamap.herokuapp.com/verify'
       let mailOptions = {
-        from: '<no-reply@carta.guide>',
+        from: '<Carta@carta.guide>',
         to: data.email,
-        subject: 'Verification required',
+        subject: 'Verify your email',
         text: `Hi, ${data.fullname}`,
         html: `Please verify your email by clicking <a href="${verifyUrl}/${cryptr.encrypt(data.email)}">this link</a>`,
       }

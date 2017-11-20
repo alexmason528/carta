@@ -334,6 +334,7 @@
   overflow: hidden;
   z-index: 4;
   width: 100%;
+  word-break: break-word;
 
   &:focus { outline: none }
 }
@@ -424,7 +425,7 @@
   align-items: center;
   width: calc(100% - 22px);
   margin: 10px 11px;
-  padding: 7px 14px;
+  padding: 0 14px;
   border-radius: 2px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
   opacity: 1;
