@@ -58,9 +58,9 @@ class AuthForm extends Component {
   componentWillReceiveProps(nextProps) {
     const { info: { status, error } } = nextProps
 
-    if (status === SIGNIN_FAIL && error === 'Change email or register at Carta') {
+    if (status === SIGNIN_FAIL && error === 'carta.incorrectEmail') {
       this.setState({ authType: 'register' })
-    } else if (status === REGISTER_FAIL && error === 'You are already registered. Please sign in.') {
+    } else if (status === REGISTER_FAIL && error === 'carta.alreadyRegistered') {
       this.setState({ authType: 'signIn' })
     }
   }
@@ -116,11 +116,8 @@ class AuthForm extends Component {
         let formData = new FormData()
         formData.append('file', profilePic)
         formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
-        axios.post(CLOUDINARY_UPLOAD_URL, formData, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        }).then(res => {
+        axios.post(CLOUDINARY_UPLOAD_URL, formData, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
+        .then(res => {
           const { data: { url } } = res
           cnt -= 1
           data.profilePic = url
@@ -198,9 +195,9 @@ class AuthForm extends Component {
             fields="name,email,picture"
             callback={this.handleFacebookLogin}
             textButton="Facebook"
+            icon={<img src={`${CLOUDINARY_ICON_URL}/facebook.png`} role="presentation" />}
             autoLoad
-          >
-          </FacebookLogin>
+          />
         </div>
         <div className="authForm__divider">
           <span>{formatMessage(messages.or)}</span>
@@ -262,7 +259,7 @@ class AuthForm extends Component {
               { authType !== 'signIn' ? formatMessage(messages.signIn) : formatMessage(messages.register) }
             </button>
           </div>
-          { error && <div className="error">{error}</div> }
+          { error && <div className="error">{formatMessage({ id: error })}</div> }
         </form>
       </div>
     )

@@ -43,5 +43,14 @@
   "carta.knownfor": "Known For",
   "carta.next": "Next",
   "carta.onlyignoring": "Only Ignoring",
-  "carta.notably": "Notably"
+  "carta.notably": "Notably",
+  "carta.requireEmail": "Please fill in your email address",
+  "carta.validEmail": "Please enter a valid email address",
+  "carta.requirePassword": "Please enter a password",
+  "carta.requireName": "Please enter your name",
+  "carta.passwordLength": "Your password must be 6 characters or longer",
+  "carta.passwordNotEqual": "These passwords are not identical",
+  "carta.incorrectPassword": "Incorrect password",
+  "carta.incorrectEmail": "We don't know this email. Register if you like!",
+  "carta.alreadyRegistered": "You are already registered. Please sign in"
 }

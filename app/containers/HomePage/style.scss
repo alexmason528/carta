@@ -128,8 +128,9 @@
   input, textarea {
     cursor: text;
     resize: none;
-    overflow-y: hidden;
   }
+
+  textarea { overflow-y: hidden }
 
   input::placeholder,
   textarea::placeholder {

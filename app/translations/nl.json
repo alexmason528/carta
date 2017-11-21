@@ -43,5 +43,14 @@
   "carta.knownfor": "Bekend om",
   "carta.next": "Verder",
   "carta.onlyignoring": "Negeer alleen",
-  "carta.notably": "In het bijzonder"
+  "carta.notably": "In het bijzonder",
+  "carta.requireEmail": "Wat is je emailadres?",
+  "carta.validEmail": "Vul een valide emailadres in",
+  "carta.requirePassword": "Vul een wachtwoord in",
+  "carta.requireName": "Vergeet je naam niet",
+  "carta.passwordLength": "Je wachtwoord moet 6 tekens of langer zijn",
+  "carta.passwordNotEqual": "Deze wachtwoorden zijn niet identiek",
+  "carta.incorrectPassword": "Wachtwoord onjuist",
+  "carta.incorrectEmail": "Verander je email of registreer bij Carta!",
+  "carta.alreadyRegistered": "Je bent al ingeschreven. Je kunt inloggen"
 }

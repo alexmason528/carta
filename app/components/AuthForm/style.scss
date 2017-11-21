@@ -38,21 +38,20 @@
     margin-top: 10px;
     margin-bottom: 10px;
 
-    .button {
+    button {
       width: calc(50% - 5px);
       border: 0.5px solid #ddd;
       padding: 8px 0 8px 8px;
       display: flex;
       align-items: center;
-
-      img {
-        margin-top: -1px;
-        margin-right: 8px;
-        width: 20px;
-        height: 20px;
-      }
-
       span { width: auto }
+    }
+
+    img {
+      margin-top: -1px;
+      margin-right: 8px;
+      width: 20px;
+      height: 20px;
     }
 
     span {
@@ -161,7 +160,7 @@
     margin-top: 10px;
     width: 100%;
     border: 0.5px solid #ddd;
-    padding: 3px 8px;
+    padding: 8px;
     color: #333;
     font-weight: 300;
   }

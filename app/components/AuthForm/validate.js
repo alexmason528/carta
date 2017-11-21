@@ -2,29 +2,31 @@ import { validatorFactory } from 'utils/reduxForm'
 
 const schema = {
   email: {
-    presence: true,
+    presence: {
+      message: '^carta.requireEmail',
+    },
     email: {
-      message: '^Please enter a valid email address',
+      message: '^carta.validEmail',
     },
   },
   password: {
     presence: {
-      message: '^Please enter a password',
+      message: '^carta.requirePassword',
     },
     length: {
       minimum: 6,
-      message: '^Your password must be 6 characters or longer',
+      message: '^carta.passwordLength',
     },
   },
   confirmPassword: {
     equality: {
       attribute: 'password',
-      message: '^These passwords are not identical',
+      message: '^carta.passwordNotEqual',
     },
   },
   fullname: {
     presence: {
-      message: '^Please enter your name',
+      message: '^carta.requireName',
     },
   },
 }

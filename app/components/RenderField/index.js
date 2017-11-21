@@ -1,15 +1,15 @@
 import React, { Component, PropTypes } from 'react'
+import { injectIntl, intlShape } from 'react-intl'
 import { Alert } from 'reactstrap'
 
-const RenderField = ({ input, label, type, order, meta: { touched, error, warning } }) => (
-  <div>
-    <input {...input} placeholder={label} type={type} />
-    {
-      touched && error &&
-      <div className="error" style={{ zIndex: 50 - order || 0 }}>{error}</div>
-    }
-  </div>
-)
+const RenderField = ({ input, label, type, order, meta: { touched, error, warning }, intl: { formatMessage } }) => {
+  return (
+    <div>
+      <input {...input} placeholder={label} type={type} />
+      { touched && error && <div className="error" style={{ zIndex: 50 - order || 0 }}>{formatMessage({ id: error })}</div> }
+    </div>
+  )
+}
 
 RenderField.propTypes = {
   input: PropTypes.object,
@@ -17,6 +17,7 @@ RenderField.propTypes = {
   label: PropTypes.string,
   type: PropTypes.string,
   order: PropTypes.number,
+  intl: intlShape.isRequired,
 }
 
-export default RenderField
+export default injectIntl(RenderField)

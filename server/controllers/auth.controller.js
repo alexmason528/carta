@@ -30,15 +30,13 @@ const signIn = (req, res) => {
       } else {
         return res.status(400).send({
           error: {
-            details: 'Wrong password',
+            details: 'carta.incorrectPassword',
           },
         })
       }
     } else {
       return res.status(400).send({
-        error: {
-          details: 'Change email or register at Carta',
-        },
+        error: { details: 'carta.incorrectEmail' },
       })
     }
   })
@@ -57,7 +55,7 @@ const register = (req, res) => {
   if (password !== confirmPassword) {
     return res.status(400).send({
       error: {
-        details: 'These passwords are not identical',
+        details: 'carta.passwordNotEqual',
       },
     })
   }
@@ -72,13 +70,12 @@ const register = (req, res) => {
     verified: false,
   }
 
-
   User.create(data, (err, element) => {
     if (err) {
       if (err.name === 'MongoError' && err.code === 11000) {
         res.status(400).send({
           error: {
-            details: 'You are already registered. Please sign in.',
+            details: 'carta.alreadyRegistered',
           },
         })
       } else {
