@@ -6,7 +6,7 @@ import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
 import { Container, Row, Col } from 'reactstrap'
-import { UPDATE_USER_SUCCESS, VERIFY_FAIL, CLOUDINARY_COVER_URL, CLOUDINARY_PROFILE_URL } from 'containers/App/constants'
+import { UPDATE_USER_SUCCESS, VERIFY_FAIL, CLOUDINARY_COVER_URL, CLOUDINARY_PROFILE_URL, SIGNOUT } from 'containers/App/constants'
 import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
 import { signOut, verifyRequest, updateUserRequest } from 'containers/App/actions'
 import { CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
@@ -17,7 +17,7 @@ import Menu from 'components/Menu'
 import { Post, PostCreate } from 'components/Post'
 import Profile from 'components/Profile'
 import StartQuest from 'components/StartQuest'
-import { getCroppedImage } from 'utils/imageHelper'
+import { getCroppedImage, getCoverProfilePic } from 'utils/imageHelper'
 import { getFirstname } from 'utils/stringHelper'
 import { selectPosts, selectHomeInfo, selectEditingPost } from './selectors'
 import { listPostRequest } from './actions'
@@ -55,23 +55,15 @@ class HomePage extends Component {
   componentWillMount() {
     const { listPostRequest, verifyRequest, params: { vcode }, authenticated, user } = this.props
 
-    if (vcode) {
-      verifyRequest({ vcode })
-    }
+    if (vcode) { verifyRequest({ vcode }) }
     listPostRequest()
-
-    const rand = Math.floor((Math.random() * 76)) + 1
-    const coverPicRand = (rand < 10) ? `000${rand}` : `00${rand}`;
-    const profilePicRand = Math.floor((Math.random() * 9))
 
     if (authenticated) {
       const { coverPic, profilePic } = user
       this.setState({ coverPic, profilePic })
     } else {
-      this.setState({
-        coverPic: `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`,
-        profilePic: `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg`,
-      })
+      const { coverPic, profilePic } = getCoverProfilePic()
+      this.setState({ coverPic, profilePic })
     }
   }
 
@@ -81,9 +73,9 @@ class HomePage extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { authenticated, user, params: { vcode } } = this.props
-    const { homeInfo, info } = nextProps
+    const { homeInfo, info: { status } } = nextProps
 
-    if (homeInfo.status === CREATE_POST_SUCCESS) {
+    if (status === CREATE_POST_SUCCESS) {
       this.setState({ showCreatePostForm: false })
     }
 
@@ -102,11 +94,14 @@ class HomePage extends Component {
       })
     }
 
-    if ((!authenticated && nextProps.authenticated) || (info.status === UPDATE_USER_SUCCESS)) {
+    if ((!authenticated && nextProps.authenticated) || (status === UPDATE_USER_SUCCESS)) {
       this.setState({
         coverPic: nextProps.user.coverPic,
         profilePic: nextProps.user.profilePic,
       })
+    } else if (status === SIGNOUT) {
+      const { coverPic, profilePic } = getCoverProfilePic()
+      this.setState({ coverPic, profilePic })
     }
   }
 

@@ -12,10 +12,7 @@ class Suggestion extends Component {
 
   constructor(props) {
     super(props)
-
-    this.state = {
-      imageLoaded: false,
-    }
+    this.state = { imageLoaded: false }
   }
 
   componentDidMount() {
@@ -29,7 +26,6 @@ class Suggestion extends Component {
   handleResize = () => {
     const suggestion = ReactDOM.findDOMNode(this)
     const width = $(suggestion).width()
-
     $(suggestion).find('h2').css({ fontSize: `${(width / 44) * 3 * 1.15}px` })
   }
 

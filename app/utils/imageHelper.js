@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET } from 'containers/App/constants'
+import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_COVER_URL, CLOUDINARY_PROFILE_URL } from 'containers/App/constants'
 
 const getImagePortion = (imgObj, type) => {
   let tnCanvas = document.createElement('canvas')
@@ -66,4 +66,11 @@ export const uploadImage = (img, successCallback, failCallback) => {
   axios.post(CLOUDINARY_UPLOAD_URL, formData, {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
   }).then(successCallback).catch(failCallback)
+}
+
+export const getCoverProfilePic = () => {
+  const rand = Math.floor((Math.random() * 76)) + 1
+  const coverPicRand = (rand < 10) ? `000${rand}` : `00${rand}`
+  const profilePicRand = Math.floor((Math.random() * 9))
+  return { coverPic: `${CLOUDINARY_COVER_URL}/${coverPicRand}.jpg`, profilePic: `${CLOUDINARY_PROFILE_URL}/${profilePicRand}.jpg` }
 }
