@@ -10,15 +10,7 @@ import GoogleLogin from 'react-google-login'
 import FacebookLogin from 'react-facebook-login'
 import RenderField from 'components/RenderField'
 import RenderDropzone from 'components/RenderDropzone'
-import {
-  SIGNIN_REQUEST,
-  SIGNIN_FAIL,
-  REGISTER_REQUEST,
-  REGISTER_FAIL,
-  CLOUDINARY_UPLOAD_URL,
-  CLOUDINARY_UPLOAD_PRESET,
-  CLOUDINARY_ICON_URL,
-} from 'containers/App/constants'
+import { SIGNIN_REQUEST, SIGNIN_FAIL, REGISTER_REQUEST, REGISTER_FAIL, CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { signInRequest, registerRequest } from 'containers/App/actions'
 import { selectInfo } from 'containers/App/selectors'
 import messages from 'containers/HomePage/messages'
@@ -67,13 +59,9 @@ class AuthForm extends Component {
     const { info: { status, error } } = nextProps
 
     if (status === SIGNIN_FAIL && error === 'Change email or register at Carta') {
-      this.setState({
-        authType: 'register',
-      })
+      this.setState({ authType: 'register' })
     } else if (status === REGISTER_FAIL && error === 'You are already registered. Please sign in.') {
-      this.setState({
-        authType: 'signIn',
-      })
+      this.setState({ authType: 'signIn' })
     }
   }
 
@@ -99,9 +87,7 @@ class AuthForm extends Component {
     this.setState({
       email: values.email,
       password: values.password,
-    }, () => {
-      signInRequest(values)
-    })
+    }, () => { signInRequest(values) })
   }
 
   handleRegister = values => {
@@ -299,4 +285,3 @@ export default injectIntl(compose(
     validate: authFormValidator,
   }),
 )(AuthForm))
-

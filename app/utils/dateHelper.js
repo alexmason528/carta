@@ -7,11 +7,11 @@ export const getTextFromDate = (createdAt, locale = 'en') => {
   const today = (locale === 'en') ? enTranslationMessages['carta.today'] : nlTranslationMessages['carta.today']
   const yesterday = (locale === 'en') ? enTranslationMessages['carta.yesterday'] : nlTranslationMessages['carta.yesterday']
   if (moment().startOf('day').toString() === moment(createdAt).startOf('day').toString()) {
-    return `${today} ${moment(createdAt).format('H:MM').replace('.', '')}`
+    return `${today} ${moment(createdAt).format('H:mm').replace('.', '')}`
   } else if (moment().subtract(1, 'day').startOf('day').toString() === moment(createdAt).startOf('day').toString()) {
-    return `${yesterday} ${moment(createdAt).format('H:MM').replace('.', '')}`
+    return `${yesterday} ${moment(createdAt).format('H:mm').replace('.', '')}`
   } else if (moment().year() === moment(createdAt).year()) {
-    return moment(createdAt).format('D MMM H:MM').replace('.', '')
+    return moment(createdAt).format('D MMM H:mm').replace('.', '')
   }
-  return moment(createdAt).format('D MMM YYYY H:MM').replace('.', '')
+  return moment(createdAt).format('D MMM YYYY H:mm').replace('.', '')
 }

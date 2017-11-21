@@ -28,11 +28,7 @@ class AccountMenu extends Component {
 
   constructor(props) {
     super(props)
-
-    this.state = {
-      showContent: false,
-      showForm: false,
-    }
+    this.state = { showContent: false, showForm: false }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -67,7 +63,6 @@ class AccountMenu extends Component {
       ...values,
       id: _id,
     }
-
     deleteUserRequest(payload)
   }
 
