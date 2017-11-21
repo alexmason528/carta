@@ -4,9 +4,8 @@ import className from 'classnames'
 import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
-import { browserHistory } from 'react-router'
 import { Container, Row, Col } from 'reactstrap'
-import { UPDATE_USER_SUCCESS, VERIFY_FAIL, CLOUDINARY_COVER_URL, CLOUDINARY_PROFILE_URL, SIGNOUT } from 'containers/App/constants'
+import { UPDATE_USER_SUCCESS, CLOUDINARY_COVER_URL, CLOUDINARY_PROFILE_URL, SIGNOUT } from 'containers/App/constants'
 import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
 import { signOut, verifyRequest, updateUserRequest } from 'containers/App/actions'
 import { CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
@@ -14,6 +13,7 @@ import { CreatePostButton } from 'components/Buttons'
 import AccountMenu from 'components/AccountMenu'
 import AuthForm from 'components/AuthForm'
 import Menu from 'components/Menu'
+import Verify from 'components/Verify'
 import { Post, PostCreate } from 'components/Post'
 import Profile from 'components/Profile'
 import StartQuest from 'components/StartQuest'
@@ -55,7 +55,9 @@ class HomePage extends Component {
   componentWillMount() {
     const { listPostRequest, verifyRequest, params: { vcode }, authenticated, user } = this.props
 
-    if (vcode) { verifyRequest({ vcode }) }
+    if (vcode && (!user || !user.verified)) {
+      verifyRequest({ vcode })
+    }
     listPostRequest()
 
     if (authenticated) {
@@ -77,21 +79,6 @@ class HomePage extends Component {
 
     if (status === CREATE_POST_SUCCESS) {
       this.setState({ showCreatePostForm: false })
-    }
-
-    if ((!user && vcode && nextProps.user && nextProps.user.verified === true) || (user && nextProps.user && user.verified === false && nextProps.user.verified === true)) {
-      this.setState({
-        timer: 5,
-      }, () => {
-        setInterval(() => {
-          const { timer } = this.state
-          if (timer !== 0) {
-            this.setState({ timer: timer - 1 })
-          } else {
-            browserHistory.push('/')
-          }
-        }, 1000)
-      })
     }
 
     if ((!authenticated && nextProps.authenticated) || (status === UPDATE_USER_SUCCESS)) {
@@ -116,7 +103,6 @@ class HomePage extends Component {
 
   handleProfileClick = evt => {
     const { authenticated } = this.props
-
     if (!authenticated) {
       evt.stopPropagation()
       this.setState({ showAuthForm: !this.state.showAuthForm })
@@ -249,33 +235,7 @@ class HomePage extends Component {
             }
           </Col>
         </Row>
-        { user && !user.verified && (status !== VERIFY_FAIL) &&
-          <div className="verifyCtrl">
-            <div className="verifyCtrl__message">
-              { formatMessage(messages.verificationEmail, { name: getFirstname(user.fullname) }) }
-            </div>
-            <div className="verifyCtrl__signOutForm">
-              { formatMessage(messages.verificationRequired) } <button onClick={signOut}>{ formatMessage(messages.signOut) }</button>
-            </div>
-          </div>
-        }
-        { user && (timer !== 0) &&
-          <div className="verifyCtrl">
-            <div className="verifyCtrl__message">
-              { formatMessage(messages.verificationSuccess) }
-            </div>
-          </div>
-        }
-        { (status === VERIFY_FAIL) && error &&
-          <div className="verifyCtrl">
-            <div className="verifyCtrl__message">
-              { formatMessage(messages.verificationFail) }
-            </div>
-            <div className="verifyCtrl__signOutForm">
-              { formatMessage(messages.verificationRequired) } <button onClick={signOut}>{ formatMessage(messages.signOut) }</button>
-            </div>
-          </div>
-        }
+        <Verify user={user} status={status} signOut={signOut} />
       </Container>
     )
   }

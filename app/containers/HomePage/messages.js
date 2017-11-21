@@ -135,7 +135,7 @@ export default defineMessages({
   },
   verificationSuccess: {
     id: 'carta.verificationSuccess',
-    defaultMessage: 'Verification success!',
+    defaultMessage: 'Verification success! You will be redirected in {timer} seconds',
   },
   verificationFail: {
     id: 'carta.verificationFail',

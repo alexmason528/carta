@@ -32,7 +32,7 @@
   "carta.requireContent": "Voeg een tekst of foto toe",
   "carta.limitExceeded": "Een tekst kan maximaal 1000 tekens bevatten",
   "carta.verificationEmail": "Hey {name}, Je hebt een email van ons ontvangen. Open het en klik op de link om je account te verifiëren",
-  "carta.verificationSuccess": "Verificatie gelukt!",
+  "carta.verificationSuccess": "Verificatie gelukt! Dit bericht verdwijnt over {timer} seconden",
   "carta.verificationFail": "Verificatie mislukt. Onjuiste verificatiecode.",
   "carta.verificationRequired": "Verifiëer je registratie eerst of",
   "carta.now": "Nu",
