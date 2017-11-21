@@ -185,6 +185,26 @@ class HomePage extends Component {
               />
             }
             <StartQuest authenticated={authenticated} />
+            {
+              posts && posts.map((post, key) => {
+                const { _id, content, created_at, img, title, link } = post
+
+                let data = {
+                  _id,
+                  created_at,
+                  title,
+                  key,
+                  link: link !== null ? link : '',
+                  content: content.length === 0 ? null : content,
+                  img: img.length === 0 ? null : img,
+                  firstname: getFirstname(post.author.fullname),
+                  editable: (authenticated && (post.author._id === user._id || user.role === 'admin')) && !editingPost && !showCreatePostForm,
+                  first: (key === 0 && authenticated),
+                }
+
+                return (key === 6 || key === 8) ? <Post {...data} /> : null
+              })
+            }
           </Col>
 
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col">
@@ -207,12 +227,33 @@ class HomePage extends Component {
                     editable: (authenticated && (post.author._id === user._id || user.role === 'admin')) && !editingPost && !showCreatePostForm,
                     first: (key === 0 && authenticated),
                   }
-                  return <Post {...data} />
+
+                  return (key === 0 || key === 1 || key === 4 || key === 7) ? <Post {...data} /> : null
                 })
               }
             </div>
           </Col>
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col">
+            {
+              posts && posts.map((post, key) => {
+                const { _id, content, created_at, img, title, link } = post
+
+                let data = {
+                  _id,
+                  created_at,
+                  title,
+                  key,
+                  link: link !== null ? link : '',
+                  content: content.length === 0 ? null : content,
+                  img: img.length === 0 ? null : img,
+                  firstname: getFirstname(post.author.fullname),
+                  editable: (authenticated && (post.author._id === user._id || user.role === 'admin')) && !editingPost && !showCreatePostForm,
+                  first: (key === 0 && authenticated),
+                }
+
+                return (key === 2 || key === 3 || key === 5) ? <Post {...data} /> : null
+              })
+            }
           </Col>
         </Row>
         { user && !user.verified && (status !== VERIFY_FAIL) &&
