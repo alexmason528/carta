@@ -1,3 +1,6 @@
+import axios from 'axios'
+import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET } from 'containers/App/constants'
+
 const getImagePortion = (imgObj, type) => {
   let tnCanvas = document.createElement('canvas')
   let tnCanvasContext = tnCanvas.getContext('2d')
@@ -53,4 +56,14 @@ export const getCroppedImage = (file, handler, type) => {
   img.onload = () => {
     handler(getImagePortion(img, type), type)
   }
+}
+
+export const uploadImage = (img, successCallback, failCallback) => {
+  let formData = new FormData()
+  formData.append('file', img)
+  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+
+  axios.post(CLOUDINARY_UPLOAD_URL, formData, {
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  }).then(successCallback).catch(failCallback)
 }

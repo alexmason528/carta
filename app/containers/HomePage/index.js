@@ -8,7 +8,7 @@ import { browserHistory } from 'react-router'
 import { Container, Row, Col } from 'reactstrap'
 import { UPDATE_USER_SUCCESS, VERIFY_FAIL, CLOUDINARY_COVER_URL, CLOUDINARY_PROFILE_URL } from 'containers/App/constants'
 import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
-import { logOut, verifyRequest, updateUserRequest } from 'containers/App/actions'
+import { signOut, verifyRequest, updateUserRequest } from 'containers/App/actions'
 import { CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
 import { CreatePostButton } from 'components/Buttons'
 import AccountMenu from 'components/AccountMenu'
@@ -18,6 +18,7 @@ import { Post, PostCreate } from 'components/Post'
 import Profile from 'components/Profile'
 import StartQuest from 'components/StartQuest'
 import { getCroppedImage } from 'utils/imageHelper'
+import { getFirstname } from 'utils/stringHelper'
 import { selectPosts, selectHomeInfo, selectEditingPost } from './selectors'
 import { listPostRequest } from './actions'
 import messages from './messages'
@@ -28,7 +29,7 @@ class HomePage extends Component {
     listPostRequest: PropTypes.func,
     updateUserRequest: PropTypes.func,
     verifyRequest: PropTypes.func,
-    logOut: PropTypes.func,
+    signOut: PropTypes.func,
     user: PropTypes.object,
     info: PropTypes.object,
     homeInfo: PropTypes.object,
@@ -145,7 +146,7 @@ class HomePage extends Component {
 
   render() {
     const { showAuthForm, showCreatePostForm, showAccountMenu, timer, coverPic, profilePic } = this.state
-    const { posts, authenticated, user, logOut, updateUserRequest, info, intl: { formatMessage }, editingPost } = this.props
+    const { posts, authenticated, user, signOut, updateUserRequest, info, intl: { formatMessage }, editingPost } = this.props
     const { status, error } = info
 
     let createPostButtonType = 'text'
@@ -198,12 +199,12 @@ class HomePage extends Component {
                     _id,
                     created_at,
                     title,
-                    link,
                     key,
+                    link: link !== null ? link : '',
                     content: content.length === 0 ? null : content,
                     img: img.length === 0 ? null : img,
-                    username: post.author.fullname,
-                    editable: (authenticated && (post.author._id === user._id || user.role === 'admin')) && !editingPost,
+                    firstname: getFirstname(post.author.fullname),
+                    editable: (authenticated && (post.author._id === user._id || user.role === 'admin')) && !editingPost && !showCreatePostForm,
                     first: (key === 0 && authenticated),
                   }
                   return <Post {...data} />
@@ -217,10 +218,10 @@ class HomePage extends Component {
         { user && !user.verified && (status !== VERIFY_FAIL) &&
           <div className="verifyCtrl">
             <div className="verifyCtrl__message">
-              { formatMessage(messages.verificationEmail, { name: user.fullname }) }
+              { formatMessage(messages.verificationEmail, { name: getFirstname(user.fullname) }) }
             </div>
-            <div className="verifyCtrl__logOutForm">
-              { formatMessage(messages.verificationRequired) } <button onClick={logOut}>{ formatMessage(messages.signOut) }</button>
+            <div className="verifyCtrl__signOutForm">
+              { formatMessage(messages.verificationRequired) } <button onClick={signOut}>{ formatMessage(messages.signOut) }</button>
             </div>
           </div>
         }
@@ -236,8 +237,8 @@ class HomePage extends Component {
             <div className="verifyCtrl__message">
               { formatMessage(messages.verificationFail) }
             </div>
-            <div className="verifyCtrl__logOutForm">
-              { formatMessage(messages.verificationRequired) } <button onClick={logOut}>{ formatMessage(messages.signOut) }</button>
+            <div className="verifyCtrl__signOutForm">
+              { formatMessage(messages.verificationRequired) } <button onClick={signOut}>{ formatMessage(messages.signOut) }</button>
             </div>
           </div>
         }
@@ -259,7 +260,7 @@ const actions = {
   listPostRequest,
   updateUserRequest,
   verifyRequest,
-  logOut,
+  signOut,
 }
 
 export default injectIntl(connect(selectors, actions)(HomePage))

@@ -6,4 +6,7 @@ export const elemToText = elem =>
   .replace(new RegExp('<br>', 'g'), '\n')
   .replace(new RegExp('&nbsp;', 'g'), ' ')
   : ''
+
 export const textToElem = text => text ? text.replace(/\n/g, '<br />') : ''
+
+export const getFirstname = fullname => fullname ? fullname.split(' ')[0] : ''

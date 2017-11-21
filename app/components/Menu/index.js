@@ -5,7 +5,7 @@ import { browserHistory } from 'react-router'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
-import { logOut } from 'containers/App/actions'
+import { signOut } from 'containers/App/actions'
 import { selectAuthenticated } from 'containers/App/selectors'
 import { selectLocale } from 'containers/LanguageProvider/selectors'
 import { changeLocale } from 'containers/LanguageProvider/actions'
@@ -14,7 +14,7 @@ import './style.scss'
 
 class Menu extends Component {
   static propTypes = {
-    logOut: PropTypes.func,
+    signOut: PropTypes.func,
     changeLocale: PropTypes.func,
     locale: PropTypes.string,
     currentPage: PropTypes.string,
@@ -34,7 +34,7 @@ class Menu extends Component {
 
   render() {
     const { showMenu } = this.state
-    const { authenticated, logOut, currentPage, locale, changeLocale, intl: { formatMessage } } = this.props
+    const { authenticated, signOut, currentPage, locale, changeLocale, intl: { formatMessage } } = this.props
 
     return (
       <div className={cx({ menuWrapper: showMenu })} onClick={this.handleToggleMenu}>
@@ -46,7 +46,7 @@ class Menu extends Component {
             { currentPage !== 'Home' && <li><button onClick={() => browserHistory.push('/')}>{formatMessage(messages.home)}</button></li>}
             { currentPage !== 'Quest' && <li><button onClick={() => browserHistory.push('/quest')}>{formatMessage(messages.quest)}</button></li>}
             <li><button onClick={() => { window.location.href = 'http://carta.guide' }}>{formatMessage(messages.about)}</button></li>
-            {authenticated && <li><button onClick={logOut}>{formatMessage(messages.signOut)}</button></li>}
+            {authenticated && <li><button onClick={signOut}>{formatMessage(messages.signOut)}</button></li>}
             <li><hr /></li>
             <li className={locale === 'en' ? 'activeLang' : ''}><button onClick={() => changeLocale('en')}>English</button></li>
             <li className={locale === 'nl' ? 'activeLang' : ''}><button onClick={() => changeLocale('nl')}>Nederlands</button></li>
@@ -66,7 +66,7 @@ const selectors = createStructuredSelector({
 })
 
 const actions = {
-  logOut,
+  signOut,
   changeLocale,
 }
 

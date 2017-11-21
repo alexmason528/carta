@@ -8,7 +8,7 @@ import { createStructuredSelector } from 'reselect'
 import { RemoveButton } from 'components/Buttons'
 import RenderField from 'components/RenderField'
 import { DELETE_USER_FAIL } from 'containers/App/constants'
-import { logOut, deleteUserRequest } from 'containers/App/actions'
+import { signOut, deleteUserRequest } from 'containers/App/actions'
 import { selectUser, selectInfo } from 'containers/App/selectors'
 import messages from 'containers/HomePage/messages'
 import deleteAccountFormValidator from './validate'
@@ -17,7 +17,7 @@ import './style.scss'
 class AccountMenu extends Component {
   static propTypes = {
     handleSubmit: PropTypes.func,
-    logOut: PropTypes.func,
+    signOut: PropTypes.func,
     deleteUserRequest: PropTypes.func,
     onClick: PropTypes.func,
     user: PropTypes.object,
@@ -72,14 +72,14 @@ class AccountMenu extends Component {
   }
 
   render() {
-    const { handleSubmit, logOut, show, info: { error, status }, onClick, intl: { formatMessage } } = this.props
+    const { handleSubmit, signOut, show, info: { error, status }, onClick, intl: { formatMessage } } = this.props
     const { showContent, showForm } = this.state
 
     return (
       <div className={cx({ accountMenu: true, 'accountMenu--hidden': !show })} onClick={evt => evt.stopPropagation()}>
         { /* <div className="backLayer" onClick={onClick} /> */ }
         <div className="accountMenu__items">
-          <button type="button" onClick={logOut}>{formatMessage(messages.signOut)}</button> | <button type="button" onClick={this.handleSettingClick}>{formatMessage(messages.settings)}</button>
+          <button type="button" onClick={signOut}>{formatMessage(messages.signOut)}</button> | <button type="button" onClick={this.handleSettingClick}>{formatMessage(messages.settings)}</button>
         </div>
         <div className={cx({ accountMenu__content: true, 'accountMenu__content--hidden': !showContent })}>
           <RemoveButton className="accountMenu__deleteButton" image="delete-red" onClick={this.handleDeleteAccountClick}>
@@ -114,7 +114,7 @@ const selectors = createStructuredSelector({
 })
 
 const actions = {
-  logOut,
+  signOut,
   deleteUserRequest,
 }
 

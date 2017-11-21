@@ -5,10 +5,10 @@ import request from 'utils/request'
 import { elemToText } from 'utils/stringHelper'
 import { setItem, getItem, removeItem } from 'utils/localStorage'
 
-import { API_BASE_URL, LOGIN_REQUEST, REGISTER_REQUEST, DELETE_USER_REQUEST, VERIFY_REQUEST, UPDATE_USER_REQUEST } from 'containers/App/constants'
+import { API_BASE_URL, SIGNIN_REQUEST, REGISTER_REQUEST, DELETE_USER_REQUEST, VERIFY_REQUEST, UPDATE_USER_REQUEST } from 'containers/App/constants'
 import {
-  loginSuccess,
-  loginFail,
+  signInSuccess,
+  signInFail,
   registerSuccess,
   registerFail,
   deleteUserSuccess,
@@ -42,8 +42,8 @@ import {
   deleteUserPosts,
 } from './actions'
 
-export function* loginRequest({ payload }) {
-  const requestURL = `${API_BASE_URL}api/v1/auth/login`
+export function* signInRequest({ payload }) {
+  const requestURL = `${API_BASE_URL}api/v1/auth/signIn`
 
   const params = {
     method: 'POST',
@@ -56,9 +56,9 @@ export function* loginRequest({ payload }) {
   try {
     const res = yield call(request, requestURL, params)
     yield call(setItem, 'auth', JSON.stringify(res))
-    yield put(loginSuccess(res))
+    yield put(signInSuccess(res))
   } catch (err) {
-    yield put(loginFail(err.details))
+    yield put(signInFail(err.details))
   }
 }
 
@@ -186,10 +186,9 @@ export function* updatePostRequest() {
   const payload = {
     title: elemToText(title),
     content: elemToText(content),
-    link,
-    img: img !== null ? img : '',
+    link: link || '',
+    img: img || '',
   }
-
 
   const params = {
     method: 'PUT',
@@ -263,8 +262,8 @@ export function* updateUserRequest({ payload }) {
   }
 }
 
-export function* loginRequestWatcher() {
-  const watcher = yield takeLatest(LOGIN_REQUEST, loginRequest)
+export function* signInRequestWatcher() {
+  const watcher = yield takeLatest(SIGNIN_REQUEST, signInRequest)
   yield take(LOCATION_CHANGE)
   yield cancel(watcher)
 }
@@ -318,7 +317,7 @@ export function* updateUserWatcher() {
 }
 
 export default [
-  loginRequestWatcher,
+  signInRequestWatcher,
   registerRequestWatcher,
   deleteUserWatcher,
   verifyRequestWatcher,

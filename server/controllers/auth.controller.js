@@ -13,12 +13,12 @@ let transporter = nodemailer.createTransport(ses({
 }))
 
 /**
- * Login
+ * SignIn
  * @param req
  * @param res
  * @returns userInfo
  */
-const login = (req, res) => {
+const signIn = (req, res) => {
   const { email, password } = req.body
 
   User.find({ email: email }, (err, element) => {
@@ -232,7 +232,7 @@ const deleteUser = (req, res) => {
   })
 }
 
-module.exports.login = login
+module.exports.signIn = signIn
 module.exports.register = register
 module.exports.verify = verify
 module.exports.updateUser = updateUser

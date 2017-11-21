@@ -1,9 +1,9 @@
 import {
-  LOGIN_REQUEST,
-  LOGIN_SUCCESS,
-  LOGIN_FAIL,
+  SIGNIN_REQUEST,
+  SIGNIN_SUCCESS,
+  SIGNIN_FAIL,
 
-  LOGOUT,
+  SIGNOUT,
 
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
@@ -22,30 +22,30 @@ import {
   UPDATE_USER_FAIL,
 } from './constants'
 
-export function loginRequest(payload) {
+export function signInRequest(payload) {
   return {
-    type: LOGIN_REQUEST,
+    type: SIGNIN_REQUEST,
     payload,
   }
 }
 
-export function loginSuccess(payload) {
+export function signInSuccess(payload) {
   return {
-    type: LOGIN_SUCCESS,
+    type: SIGNIN_SUCCESS,
     payload,
   }
 }
 
-export function loginFail(payload) {
+export function signInFail(payload) {
   return {
-    type: LOGIN_FAIL,
+    type: SIGNIN_FAIL,
     payload,
   }
 }
 
-export function logOut() {
+export function signOut() {
   return {
-    type: LOGOUT,
+    type: SIGNOUT,
   }
 }
 

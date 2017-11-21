@@ -5,6 +5,7 @@
   padding: 5px 0;
   max-height: 1000px;
   transition: all 0.1s;
+  cursor: default;
 
   &--hidden {
     max-height: 0px;

@@ -1,8 +1,8 @@
-export const LOGIN_REQUEST = 'carta/App/LOGIN_REQUEST'
-export const LOGIN_SUCCESS = 'carta/App/LOGIN_SUCCESS'
-export const LOGIN_FAIL = 'carta/App/LOGIN_FAIL'
+export const SIGNIN_REQUEST = 'carta/App/SIGNIN_REQUEST'
+export const SIGNIN_SUCCESS = 'carta/App/SIGNIN_SUCCESS'
+export const SIGNIN_FAIL = 'carta/App/SIGNIN_FAIL'
 
-export const LOGOUT = 'carta/App/LOGOUT'
+export const SIGNOUT = 'carta/App/SIGNOUT'
 
 export const REGISTER_REQUEST = 'carta/App/REGISTER_REQUEST'
 export const REGISTER_SUCCESS = 'carta/App/REGISTER_SUCCESS'

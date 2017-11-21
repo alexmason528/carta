@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import className from 'classnames'
+import cx from 'classnames'
 import axios from 'axios'
 import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'

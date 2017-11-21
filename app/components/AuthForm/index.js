@@ -11,15 +11,15 @@ import FacebookLogin from 'react-facebook-login'
 import RenderField from 'components/RenderField'
 import RenderDropzone from 'components/RenderDropzone'
 import {
-  LOGIN_REQUEST,
-  LOGIN_FAIL,
+  SIGNIN_REQUEST,
+  SIGNIN_FAIL,
   REGISTER_REQUEST,
   REGISTER_FAIL,
   CLOUDINARY_UPLOAD_URL,
   CLOUDINARY_UPLOAD_PRESET,
   CLOUDINARY_ICON_URL,
 } from 'containers/App/constants'
-import { loginRequest, registerRequest } from 'containers/App/actions'
+import { signInRequest, registerRequest } from 'containers/App/actions'
 import { selectInfo } from 'containers/App/selectors'
 import messages from 'containers/HomePage/messages'
 import LoadingSpinner from 'components/LoadingSpinner'
@@ -30,7 +30,7 @@ import './style.scss'
 
 class AuthForm extends Component {
   static propTypes = {
-    loginRequest: PropTypes.func,
+    signInRequest: PropTypes.func,
     registerRequest: PropTypes.func,
     onCoverPicChange: PropTypes.func,
     onProfilePicChange: PropTypes.func,
@@ -52,7 +52,7 @@ class AuthForm extends Component {
     super(props)
 
     this.state = {
-      authType: 'login',
+      authType: 'signIn',
       email: '',
       password: '',
       error: null,
@@ -66,13 +66,13 @@ class AuthForm extends Component {
   componentWillReceiveProps(nextProps) {
     const { info: { status, error } } = nextProps
 
-    if (status === LOGIN_FAIL && error === 'Change email or register at Carta') {
+    if (status === SIGNIN_FAIL && error === 'Change email or register at Carta') {
       this.setState({
         authType: 'register',
       })
     } else if (status === REGISTER_FAIL && error === 'You are already registered. Please sign in.') {
       this.setState({
-        authType: 'login',
+        authType: 'signIn',
       })
     }
   }
@@ -80,27 +80,27 @@ class AuthForm extends Component {
   handleAuthTypeChange = authType => {
     this.setState({
       authType,
-      loginError: null,
+      signInError: null,
       registerError: null,
     })
   }
 
   handleSubmit = values => {
     const { authType } = this.state
-    if (authType === 'login') {
-      this.handleLogin(values)
+    if (authType === 'signIn') {
+      this.handleSignIn(values)
     } else if (authType === 'register') {
       this.handleRegister(values)
     }
   }
 
-  handleLogin = values => {
-    const { loginRequest } = this.props
+  handleSignIn = values => {
+    const { signInRequest } = this.props
     this.setState({
       email: values.email,
       password: values.password,
     }, () => {
-      loginRequest(values)
+      signInRequest(values)
     })
   }
 
@@ -120,12 +120,7 @@ class AuthForm extends Component {
     if (!profilePic && !coverPic) {
       registerRequest(data)
     } else {
-      this.setState({
-        imageUpload: {
-          uploading: true,
-          error: false,
-        },
-      })
+      this.setState({ imageUpload: { uploading: true, error: false } })
 
       let cnt = 0
       if (profilePic) cnt += 1
@@ -146,20 +141,10 @@ class AuthForm extends Component {
 
           if (cnt === 0) {
             registerRequest(data)
-            this.setState({
-              imageUpload: {
-                uploading: false,
-                error: null,
-              },
-            })
+            this.setState({ imageUpload: { uploading: false, error: null } })
           }
         }).catch(err => {
-          this.setState({
-            imageUpload: {
-              uploading: false,
-              error: err.toString(),
-            },
-          })
+          this.setState({ imageUpload: { uploading: false, error: err.toString() } })
         })
       }
 
@@ -178,20 +163,10 @@ class AuthForm extends Component {
 
           if (cnt === 0) {
             registerRequest(data)
-            this.setState({
-              imageUpload: {
-                uploading: false,
-                error: null,
-              },
-            })
+            this.setState({ imageUpload: { uploading: false, error: null } })
           }
         }).catch(err => {
-          this.setState({
-            imageUpload: {
-              uploading: false,
-              error: err.toString(),
-            },
-          })
+          this.setState({ imageUpload: { uploading: false, error: err.toString() } })
         })
       }
     }
@@ -208,11 +183,11 @@ class AuthForm extends Component {
 
   render() {
     const { authType, email, password, imageUpload } = this.state
-    const { info: { status, error }, show, loginRequest, onCoverPicChange, onProfilePicChange, handleSubmit, intl: { formatMessage } } = this.props
+    const { info: { status, error }, show, signInRequest, onCoverPicChange, onProfilePicChange, handleSubmit, intl: { formatMessage } } = this.props
 
-    const spinnerShow = status === LOGIN_REQUEST || status === REGISTER_REQUEST || imageUpload.uploading
+    const spinnerShow = status === SIGNIN_REQUEST || status === REGISTER_REQUEST || imageUpload.uploading
 
-    const param = authType === 'login' ? 'register' : 'login'
+    const param = authType === 'signIn' ? 'register' : 'signIn'
 
     return (
       <div className={cx({ authForm: true, 'authForm--hidden': !show })} onClick={evt => evt.stopPropagation()}>
@@ -295,10 +270,10 @@ class AuthForm extends Component {
           </div> }
           <div className="authForm__authButtons">
             <button className="authForm__authButton authForm__authButton--active">
-              { authType === 'login' ? formatMessage(messages.signIn) : formatMessage(messages.register) }
+              { authType === 'signIn' ? formatMessage(messages.signIn) : formatMessage(messages.register) }
             </button>
             <button className="authForm__authButton authForm__authButton--inactive" type="button" onClick={() => { this.handleAuthTypeChange(param) }}>
-              { authType !== 'login' ? formatMessage(messages.signIn) : formatMessage(messages.register) }
+              { authType !== 'signIn' ? formatMessage(messages.signIn) : formatMessage(messages.register) }
             </button>
           </div>
           { error && <div className="error">{error}</div> }
@@ -313,7 +288,7 @@ const selectors = createStructuredSelector({
 })
 
 const actions = {
-  loginRequest,
+  signInRequest,
   registerRequest,
 }
 

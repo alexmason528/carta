@@ -1,11 +1,11 @@
 import { getItem, removeItem } from 'utils/localStorage'
 
 import {
-  LOGIN_REQUEST,
-  LOGIN_SUCCESS,
-  LOGIN_FAIL,
+  SIGNIN_REQUEST,
+  SIGNIN_SUCCESS,
+  SIGNIN_FAIL,
 
-  LOGOUT,
+  SIGNOUT,
 
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
@@ -33,7 +33,7 @@ const initialState = {
 
 function appReducer(state = initialState, { type, payload }) {
   switch (type) {
-    case LOGIN_REQUEST:
+    case SIGNIN_REQUEST:
       return {
         ...state,
         user: null,
@@ -42,7 +42,7 @@ function appReducer(state = initialState, { type, payload }) {
         error: null,
       }
 
-    case LOGIN_SUCCESS:
+    case SIGNIN_SUCCESS:
       return {
         ...state,
         user: payload,
@@ -51,7 +51,7 @@ function appReducer(state = initialState, { type, payload }) {
         error: null,
       }
 
-    case LOGIN_FAIL:
+    case SIGNIN_FAIL:
       return {
         ...state,
         user: null,
@@ -60,7 +60,7 @@ function appReducer(state = initialState, { type, payload }) {
         error: payload,
       }
 
-    case LOGOUT:
+    case SIGNOUT:
       removeItem('auth')
       return {
         ...state,
