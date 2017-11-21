@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import { injectIntl, intlShape } from 'react-intl'
-import { showSnack, dismissSnack } from 'react-redux-snackbar'
 import { browserHistory } from 'react-router'
 import { dispatch } from 'react-redux'
 import { signOut } from 'containers/App/actions'
