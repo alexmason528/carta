@@ -95,10 +95,8 @@ class HomePage extends Component {
     }
 
     if ((!authenticated && nextProps.authenticated) || (status === UPDATE_USER_SUCCESS)) {
-      this.setState({
-        coverPic: nextProps.user.coverPic,
-        profilePic: nextProps.user.profilePic,
-      })
+      const { coverPic, profilePic } = nextProps.user
+      this.setState({ coverPic, profilePic })
     } else if (status === SIGNOUT) {
       const { coverPic, profilePic } = getCoverProfilePic()
       this.setState({ coverPic, profilePic })
