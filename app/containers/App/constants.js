@@ -33,3 +33,10 @@ export const CLOUDINARY_POINTS_URL = 'https://res.cloudinary.com/hyvpvyohj/raw/u
 export const CLOUDINARY_SHAPES_URL = 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510139627/data'
 
 export const DEFAULT_LOCALE = 'en'
+export const LANGUAGES = [{
+  countryCode: 'en',
+  name: 'English',
+}, {
+  countryCode: 'nl',
+  name: 'Nederlands',
+}]

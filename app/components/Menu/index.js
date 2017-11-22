@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react'
+import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import cx from 'classnames'
-import { browserHistory } from 'react-router'
+import { Link } from 'react-router'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
-import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
+import { CLOUDINARY_ICON_URL, LANGUAGES } from 'containers/App/constants'
 import { signOut } from 'containers/App/actions'
 import { selectAuthenticated } from 'containers/App/selectors'
 import { selectLocale } from 'containers/LanguageProvider/selectors'
@@ -32,26 +33,45 @@ class Menu extends Component {
     this.setState({ showMenu: !this.state.showMenu })
   }
 
+  handleLanguageClick = evt => {
+    if (!evt.metaKey) {
+      evt.preventDefault()
+    }
+    const { changeLocale } = this.props
+    changeLocale(evt.target.dataset.locale)
+  }
+
+  handleSignOut = evt => {
+    if (!evt.metaKey) {
+      evt.preventDefault()
+    }
+    const { signOut } = this.props
+    signOut()
+  }
+
   render() {
     const { showMenu } = this.state
     const { authenticated, signOut, currentPage, locale, changeLocale, intl: { formatMessage } } = this.props
 
     return (
-      <div className={cx({ menuWrapper: showMenu })} onClick={this.handleToggleMenu}>
+      <div className={cx({ menu: true, menu__opened: showMenu })} onClick={this.handleToggleMenu}>
         <div className="logo" onClick={this.handleToggleMenu}>
           <img src={`${CLOUDINARY_ICON_URL}/logo-100.png`} role="presentation" />
         </div>
-        <div className={cx({ cartaMenu: true, 'cartaMenu--hidden': !showMenu })} onClick={evt => { evt.stopPropagation() }}>
+        <div className={cx({ menu__content: true, 'menu__content--hidden': !showMenu })} onClick={evt => { evt.stopPropagation() }}>
           <ul>
-            { currentPage !== 'Home' && <li><button onClick={() => browserHistory.push('/')}>{formatMessage(messages.home)}</button></li>}
-            { currentPage !== 'Quest' && <li><button onClick={() => browserHistory.push('/quest')}>{formatMessage(messages.quest)}</button></li>}
-            <li><button onClick={() => { window.location.href = 'http://carta.guide' }}>{formatMessage(messages.about)}</button></li>
-            {authenticated && <li><button onClick={signOut}>{formatMessage(messages.signOut)}</button></li>}
-            <li><hr /></li>
-            <li className={locale === 'en' ? 'activeLang' : ''}><button onClick={() => changeLocale('en')}>English</button></li>
-            <li className={locale === 'nl' ? 'activeLang' : ''}><button onClick={() => changeLocale('nl')}>Nederlands</button></li>
+            { currentPage !== 'Home' && <li><Link to="/">{formatMessage(messages.home)}</Link></li> }
+            { currentPage !== 'Quest' && <li><Link to="/quest">{formatMessage(messages.quest)}</Link></li> }
+            <li><a href="http://carta.guide">{formatMessage(messages.about)}</a></li>
+            { authenticated && <li><a href="/" onClick={this.handleSignOut}>{formatMessage(messages.signOut)}</a></li> }
+            <hr />
+            { LANGUAGES.map(lang => (
+              <li className={cx({ active: locale === lang.countryCode })}>
+                <a href="/" onClick={this.handleLanguageClick} data-locale={lang.countryCode}>{lang.name}</a>
+              </li>
+            ))}
           </ul>
-          <div className="cartaMenu__tab" onClick={this.handleToggleMenu}>
+          <div className="menu__tab" onClick={this.handleToggleMenu}>
             <img src={`${CLOUDINARY_ICON_URL}/name-vertical.png`} role="presentation" />
           </div>
         </div>

@@ -1,57 +1,73 @@
-.menuWrapper {
-  position: fixed;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0);
-  z-index: 102;
-}
+.menu {
+  a {
+    text-decoration: none !important;
+    color: inherit !important;
+  }
 
-.logo {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100;
-  cursor: pointer;
-
-  img {
-    left: 10px;
-    top: 10px;
-    width: 32px;
-    box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
-    border-radius: 20px;
-    height: auto;
+  &__opened {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0);
     z-index: 102;
-    position: relative;
-    transition: all 0.1s;
   }
 
-  &:hover img { box-shadow: 0 0 7px rgba(0, 0, 0, 0.6) }
-}
+  .logo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    cursor: pointer;
 
-.cartaMenu {
-  position: fixed;
-  left: 0;
-  top: 0;
-  height: 100%;
-  background: #fff;
-  transition: all 0.1s;
-  z-index: 200;
-
-  ul {
-    background: #fff;
-    height: 100%;
-    padding: 20px 30px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-
-    li {
-      list-style-type: none;
-      button { margin: 10px 0 }
+    img {
+      left: 10px;
+      top: 10px;
+      width: 32px;
+      box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
+      border-radius: 20px;
+      height: auto;
+      z-index: 102;
+      position: relative;
+      transition: all 0.1s;
     }
+
+    &:hover img { box-shadow: 0 0 7px rgba(0, 0, 0, 0.6) }
   }
 
-  &--hidden { transform: translate(-100%, 0) }
+  &__content {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: #fff;
+    transition: all 0.1s;
+    z-index: 200;
+
+    ul {
+      background: #fff;
+      height: 100%;
+      padding: 20px 30px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+
+      li {
+        list-style-type: none;
+        padding: 10px 0;
+
+        a {
+          font-size: 13px;
+          cursor: pointer;
+          border-radius: 0;
+          color: rgba(0, 0, 0, 0.7);
+          text-transform: uppercase;
+        }
+      }
+    }
+
+    &--hidden { transform: translate(-100%, 0) }
+  }
+
 
   &__tab {
     position: absolute;
