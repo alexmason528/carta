@@ -13,9 +13,7 @@
     font-weight: 400;
   }
 
-  .error {
-    padding: 24px 8px;
-  }
+  .error { padding: 24px 8px }
 
   &--hidden {
     max-height: 0;
@@ -44,7 +42,12 @@
       padding: 8px 0 8px 8px;
       display: flex;
       align-items: center;
+      color: rgba(0, 0, 0, 0.7);
       span { width: auto }
+
+      &:hover {
+        color: rgba(0, 0, 0, 1);
+      }
     }
 
     img {
@@ -62,12 +65,7 @@
         width: 100%;
         border: 0.5px solid #ddd;
         padding: 8px 0 8px 8px !important;
-        color: rgba(0, 0, 0, 0.7);
         text-align: left;
-
-        &:hover {
-          color: rgba(0, 0, 0, 1);
-        }
       }
     }
   }
@@ -85,9 +83,7 @@
       width: calc(50% - 4px);
     }
 
-    & > div:hover {
-      color: rgba(0, 0, 0, 1);
-    }
+    & > div:hover { color: rgba(0, 0, 0, 1) }
   }
 
   &__uploadButton {
@@ -121,10 +117,7 @@
     border: 0.5px solid #ddd;
     z-index: 60;
 
-    &--active {
-      font-weight: 600 !important;
-    }
-
+    &--active { font-weight: 600 !important }
     &--inactive {
       border: none;
       background: none !important;

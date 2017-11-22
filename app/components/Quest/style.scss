@@ -25,31 +25,21 @@
 
     &:hover {
       cursor: pointer;
-      img {
-        opacity: 1;
-      }
+      img { opacity: 1; }
     }
   }
 
   &.active > div {
     border: 0.5px solid rgb(107, 176, 210);
     
-    img.active {
-      display: block;
-    }
-    img.inactive {
-      display: none;
-    }
+    img.active { display: block; }
+    img.inactive { display: none; }
   }
 
   &.inactive > div {
     border: 0.5px solid transparent;
-    img.active {
-      display: none;
-    }
-    img.inactive {
-      display: block;
-    }
+    img.active { display: none; }
+    img.inactive { display: block; }
   }
 
   &.active, &.inactive{
@@ -97,7 +87,7 @@
   height: 100vh; 
   padding: 0 0 0 56px; 
   box-sizing: border-box; 
-  box-shadow: 0 0 7px rgba(0,0,0,0.2); 
+  box-shadow: 0 0 7px rgba(0, 0, 0, 0.2); 
   z-index: 20;
   left: 0;
   transition: all 0.1s;
@@ -125,7 +115,6 @@
     button {
       font-size: 13px; 
       font-weight: 600; 
-      opacity: 0.7; 
       width: 25px; 
       height: 25px; 
       margin: 10px; 
@@ -134,15 +123,10 @@
       cursor: pointer;  
       vertical-align: center;
       font-weight: 600;
-
-      &:hover {
-        opacity:1;
-      }
     }
 
     .item {opacity:0.2; color:#000;}
     .on {opacity:0.7; color:#000;}
-    
     .add-quest {opacity:0.6; font-size:19px;}
   }
 
@@ -155,7 +139,7 @@
 
       &.minimize {
         right: 35px; 
-        opacity:0.45; 
+        opacity: 0.7; 
         box-sizing: content-box;
         transition: all 0.1s;
 
@@ -171,7 +155,7 @@
 
       &.close {
         right:0; 
-        opacity:0.75;
+        opacity:0.7;
 
         &:hover {
           opacity: 1;
@@ -200,13 +184,11 @@
         width: 13px; 
         display: inline-block; 
         position: relative; 
-        opacity: 0.6; 
+        opacity: 0.7; 
         cursor: pointer; 
         box-sizing: content-box;
 
-        &.active, &:hover {
-          opacity: 1;
-        }
+        &.active, &:hover { opacity: 1 }
       }
 
       .next {
@@ -217,18 +199,19 @@
         text-transform: uppercase;
         z-index: 10;
         opacity: 0.75;
-        color: #006ca1;
+        color: rgba(0, 108, 161, 0.7);
         font-weight: 700;
 
         img {
           padding: 0;
           margin: -2px 0 0 4px;
           width: 14px;
-          opacity: 0.9;
+          opacity: 0.7;
         }
 
         &:hover {
-          opacity: 1;
+          color: rgba(0, 108, 161, 1);
+          img { opacity: 1 }
         }
       }
 
@@ -242,17 +225,9 @@
         background: #fff;
         box-sizing: content-box;
 
-        &.first {
-          left: 0;
-        }
-
-        &.second {
-          left: 29px;
-        }
-
-        &.third {
-          left: 58px;
-        }
+        &.first { left: 0 }
+        &.second { left: 29px }
+        &.third { left: 58px }
       }
 
       .line {
@@ -269,19 +244,15 @@
         position: relative;
 
         &.types-page {
-          .button-wrapper.active button {
-            background: #007ec6;
-          }
+          .button-wrapper.active button { background: #007ec6; }
         }
 
         &.descriptives-page {
-          .button-wrapper.active button{
-            background: #00bb76;
-          }
+          .button-wrapper.active button{ background: #00bb76; }
         }
 
         .buttons-row, .suggestions {
-          height: calc(100vh - 184px);
+          height: calc(100vh - 200px);
           overflow: hidden;
         }
 
@@ -307,21 +278,14 @@
             top: -1px;
             margin-left: 3px;
             filter: grayscale(100%);
-            opacity: 0.3;
+            color: rgba(0, 0, 0, 0.3);
 
-            &:hover {
-              opacity: 1;
-            }
+            &:hover { color: rgba(0, 0, 0, 1) }
           }
 
           button {
             padding: 3px 5px;
             display: inline-block;
-            opacity: 0.7;
-
-            &:hover {
-              opacity: 1;
-            }
           }
 
           &.active {
@@ -330,9 +294,7 @@
               color: #fff;
             }
 
-           .star {
-              display: inline-block;
-            }
+           .star { display: inline-block }
           }
 
           &.star {
@@ -433,17 +395,10 @@
           text-transform:uppercase; 
           font-weight:400; 
           font-size:12px;
-          opacity: 0.7;
-
-          &:hover {
-            opacity: 1;
-          }
         }
       }
     }
   }
 }
 
-.quest-hide {
-  left: -256px;
-}
+.quest-hide { left: -256px }

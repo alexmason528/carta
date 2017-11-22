@@ -44,13 +44,11 @@ injectGlobal`
     -o-user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
-    user-select: none;  
+    user-select: none;
   }
 
   @media screen and (orientation:portrait) {
-    body {
-      font-size: calc(12px + 0.4vh);
-    }
+    body { font-size: calc(12px + 0.4vh) }
   }
 
   button {
@@ -58,17 +56,12 @@ injectGlobal`
     font-size: 13px;
     cursor: pointer;
     border-radius: 0;
-
     color: rgba(0, 0, 0, 0.7);
 
-    &:hover {
-      color: rgba(0, 0, 0, 1);
-    }
+    &:hover { color: rgba(0, 0, 0, 1) }
   }
 
-  button:focus, input:focus {
-    outline: none;
-  }
+  button:focus, input:focus { outline: none }
 
   .hidden {
     display: none !important;
@@ -78,9 +71,7 @@ injectGlobal`
     padding-botttom: 0;
   }
 
-  .show {
-    display: block !important;
-  }
+  .show { display: block !important }
 
   textarea, input {
     -khtml-user-select: text;

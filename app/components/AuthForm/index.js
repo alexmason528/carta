@@ -17,7 +17,6 @@ import messages from 'containers/HomePage/messages'
 import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
 import authFormValidator from './validate'
-
 import './style.scss'
 
 class AuthForm extends Component {
@@ -169,7 +168,6 @@ class AuthForm extends Component {
     const { info: { status, error }, show, signInRequest, onCoverPicChange, onProfilePicChange, handleSubmit, intl: { formatMessage } } = this.props
 
     const spinnerShow = status === SIGNIN_REQUEST || status === REGISTER_REQUEST || imageUpload.uploading
-
     const param = authType === 'signIn' ? 'register' : 'signIn'
 
     return (
@@ -203,54 +201,18 @@ class AuthForm extends Component {
           <span>{formatMessage(messages.or)}</span>
         </div>
         <form onSubmit={handleSubmit(this.handleSubmit)}>
-          <Field
-            name="email"
-            type="email"
-            component={RenderField}
-            label={formatMessage(messages.email)}
-            order={1}
-          />
-          <Field
-            name="password"
-            type="password"
-            component={RenderField}
-            label={formatMessage(messages.password)}
-            order={2}
-          />
-          { authType === 'register' && <div>
-            <Field
-              name="confirmPassword"
-              type="password"
-              component={RenderField}
-              label={formatMessage(messages.repeatPassword)}
-              order={2}
-            />
-            <Field
-              name="fullname"
-              type="text"
-              component={RenderField}
-              label={formatMessage(messages.fullname)}
-              order={3}
-            />
-            <div className="authForm__uploadButtons">
-              <Field
-                className="authForm__uploadButton"
-                name="profilePic"
-                label={formatMessage(messages.profilePic)}
-                onChange={onProfilePicChange}
-                component={RenderDropzone}
-                crop="portrait"
-              />
-              <Field
-                className="authForm__uploadButton"
-                name="coverPic"
-                label={formatMessage(messages.coverPic)}
-                onChange={onCoverPicChange}
-                component={RenderDropzone}
-                crop="landscape"
-              />
+          <Field name="email" type="email" component={RenderField} label={formatMessage(messages.email)} order={1} />
+          <Field name="password" type="password" component={RenderField} label={formatMessage(messages.password)} order={2} />
+          { authType === 'register' &&
+            <div>
+              <Field name="confirmPassword" type="password" component={RenderField} label={formatMessage(messages.repeatPassword)} order={2} />
+              <Field name="fullname" type="text" component={RenderField} label={formatMessage(messages.fullname)} order={3} />
+              <div className="authForm__uploadButtons">
+                <Field className="authForm__uploadButton" name="profilePic" label={formatMessage(messages.profilePic)} onChange={onProfilePicChange} component={RenderDropzone} crop="portrait" />
+                <Field className="authForm__uploadButton" name="coverPic" label={formatMessage(messages.coverPic)} onChange={onCoverPicChange} component={RenderDropzone} crop="landscape" />
+              </div>
             </div>
-          </div> }
+          }
           <div className="authForm__authButtons">
             <button className="authForm__authButton authForm__authButton--active">
               { authType === 'signIn' ? formatMessage(messages.signIn) : formatMessage(messages.register) }

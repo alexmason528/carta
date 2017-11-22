@@ -12,25 +12,14 @@ const Category = require('../models/category')
  */
 const getQuestInfo = (req, res) => {
   let questInfo = {
-//    places: [],
     descriptives: [],
     types: [],
   }
 
   let getQuest = {
-//    places: false,
     descriptives: false,
     types: false,
   }
-
-  // Element.find({}, {_id: 0, name: 1, x: 1, y: 1, zoom: 1}, (err, elements) => {
-  //   questInfo.places = elements
-  //   getQuest.places = true
-
-  //   if (getQuest.places && getQuest.descriptives && getQuest.types) {
-  //     res.json(questInfo)
-  //   }
-  // })
 
   Descriptive.findOne({ }, { _id: 0, name: 0, e: 0, sum: 0 }, (descriptiveError, element) => {
     const descriptives = Object.keys(element._doc)
@@ -66,22 +55,17 @@ const getQuestInfo = (req, res) => {
  * @returns void
  */
 const getRecommendations = (req, res) => {
-  let columns = []
-
   const { count, descriptivesAll, descriptives, typesAll, types, viewport } = req.body
-
+  let columns = []
   let typeMatch = []
 
   types.active.map((type) => {
     let typeSearch = {}
     typeSearch[`type.${type}`] = '1'
-
     typeMatch.push(typeSearch)
   })
 
-  let typeProject = {
-    sum: 1,
-  }
+  let typeProject = { sum: 1 }
 
   types.active.map(type => {
     typeProject[type] = 1
@@ -91,9 +75,7 @@ const getRecommendations = (req, res) => {
     typeProject[type] = 1
   })
 
-  let descriptiveProject = {
-    sum: 1,
-  }
+  let descriptiveProject = { sum: 1 }
 
   descriptives.interests.map(interest => {
     descriptiveProject[interest] = 1
@@ -250,12 +232,7 @@ const getPlace = (req, res) => {
 
   Place.findOne({ name: name }, { _id: 0, e: 0, name: 0 }, (err, place) => {
     if (err) throw err
-
-    if (place) {
-      return res.json(place)
-    } else {
-      return res.json({})
-    }
+    return res.json(place || {})
   })
 }
 

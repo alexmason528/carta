@@ -74,7 +74,6 @@
     img { width: 10px; height: 10px }
 
     &.active { background: rgba(255, 255, 255, 1); opacity: 1 }
-
     &:hover { box-shadow: 0 0 10px rgba(0, 0, 0, 0.6) }
   }
 
@@ -289,13 +288,7 @@
     left: -28px;
     display: none;
 
-    button { 
-      color: rgba(0, 0, 0, 0.7);
-      &:hover { color: rgba(0, 0, 0, 1) }
-    }
-
     &:after, &:before {
-      background: #fff;
       transform: rotate(-45deg);
       z-index: -1;
       width: 10px;
@@ -306,6 +299,7 @@
       position: absolute;
       top: -5px;
       left: calc(50% - 5px);
+      background: #fff;
     }
 
     &:before { box-shadow: none; z-index: 1; }

@@ -10,10 +10,7 @@
   &--hidden {
     max-height: 0px;
     padding: 0;
-
-    * {
-      display: none;
-    }
+    * { display: none }
   }
 
   &__warning {
@@ -25,7 +22,6 @@
   &__items {
     margin-left: 30%;
     padding: 0 35px;
-    position: relative;
     z-index: 102;
   }
 
@@ -33,7 +29,6 @@
     padding: 12% 30px 20px 50px;
     transition: all 0.1s;
     max-height: 1000;
-    position: relative;
     // z-index: 101;
 
     &--hidden {
@@ -41,10 +36,7 @@
       padding-top: 0;
       padding-bottom: 0;
       margin-top: 0;
-
-      * {
-        display: none;
-      }
+      * { display: none }
     }
   }
 
@@ -67,10 +59,7 @@
     &--hidden {
       max-height: 0;
       padding: 0;
-
-      * {
-        display: none;
-      }
+      * { display: none }
     }
 
     input {
@@ -88,7 +77,6 @@
     
     button {
       margin-left: 10px;
-      color: rgba(0, 0, 0, 0.7);
       padding: 5px 8px;
       font-size: 13px;
       font-weight: 400;
@@ -97,10 +85,6 @@
         border: 0.5px solid #ddd;
         background: #fbfbfb;
         font-weight: 600;
-      }
-
-      &:hover {
-        color: rgba(0, 0, 0, 1);
       }
     }
   }
