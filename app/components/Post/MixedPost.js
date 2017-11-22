@@ -128,12 +128,7 @@ class MixedPost extends Component {
         </LoadingSpinner>
         <div className="post mixedPost">
           <a className={cx({ postImage: true, noLink: !link })} href={postLink}>
-            { showImage &&
-              <div>
-                <img className="postImage__hoverImg" onLoad={this.handleResize} src={img} role="presentation" />
-                <img src={img} role="presentation" />
-              </div>
-            }
+            { showImage && <img onLoad={this.handleResize} src={img} role="presentation" /> }
             { editing && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={() => { postImageChange(null); postContentChange(content || '') }} /> }
             { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={evt => { evt.stopPropagation(); postShowLinkBar(!showLinkBar) }} /> }
             <div className={cx({ postLinkBar: true, 'postLinkBar--hidden': !showLinkBar })} onClick={evt => { evt.stopPropagation() }}>

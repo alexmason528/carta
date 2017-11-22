@@ -42,8 +42,7 @@ class StartQuest extends Component {
 
     return (
       <div className={cx({ startQuest: true, startQuest__authenticated: authenticated, hidden: !imageLoaded })} onClick={() => browserHistory.push('/quest')}>
-        <img className="startQuest__hoverImg" onLoad={this.handleLoaded} src={`${CLOUDINARY_COVER_URL}/quest.jpg`} role="presentation" />
-        <img src={`${CLOUDINARY_COVER_URL}/quest.jpg`} role="presentation" />
+        <img onLoad={this.handleLoaded} src={`${CLOUDINARY_COVER_URL}/quest.jpg`} role="presentation" />
         <h2 dangerouslySetInnerHTML={{ __html: formatMessage(messages.startQuest).replace(/\n/g, '<br/>') }} />
       </div>
     )

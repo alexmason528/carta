@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 
-const selectGlobal = state => state.global;
-const selectLocationState = () => state => state.route;
+const selectGlobal = state => state.global
+const selectLocationState = () => state => state.route
 
 const selectAuthenticated = () => createSelector(
   selectGlobal,

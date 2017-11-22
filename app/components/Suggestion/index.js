@@ -39,8 +39,7 @@ class Suggestion extends Component {
 
     return (
       <div className={cx({ suggestion: true, hidden: !imageLoaded })}>
-        <img className="suggestion__hoverImg" onLoad={this.handleLoaded} src={img} role="presentation" />
-        <img src={img} role="presentation" />
+        <img onLoad={this.handleLoaded} src={img} role="presentation" />
         <h2>{title}</h2>
       </div>
     )

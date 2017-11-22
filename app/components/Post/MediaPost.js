@@ -113,12 +113,7 @@ class MediaPost extends Component {
         <div className="post mediaPost" onClick={this.handlePostClick}>
           <a className={cx({ postImage: true, noLink: !link })} href={postLink}>
             { editable && !editing && <EditButton className="postEditBtn" image="edit-white-shadow" hover onClick={this.handleEditStart} /> }
-            { showImage &&
-              <div>
-                <img className="postImage__hoverImg" onLoad={this.handleResize} src={img} role="presentation" />
-                <img src={img} role="presentation" />
-              </div>
-            }
+            { showImage && <img onLoad={this.handleResize} src={img} role="presentation" /> }
             { editing && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={() => { postImageChange(null); postContentChange(content || '') }} /> }
             { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={evt => { evt.stopPropagation(); postShowLinkBar(!showLinkBar) }} /> }
             <div className={cx({ postLinkBar: true, 'postLinkBar--hidden': !showLinkBar })} onClick={evt => { evt.stopPropagation() }}>

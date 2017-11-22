@@ -66,7 +66,7 @@ class Menu extends Component {
             { authenticated && <li><a href="/" onClick={this.handleSignOut}>{formatMessage(messages.signOut)}</a></li> }
             <hr />
             { LANGUAGES.map(lang => (
-              <li className={cx({ active: locale === lang.countryCode })}>
+              <li key={lang.countryCode} className={cx({ active: locale === lang.countryCode })}>
                 <a href="/" onClick={this.handleLanguageClick} data-locale={lang.countryCode}>{lang.name}</a>
               </li>
             ))}

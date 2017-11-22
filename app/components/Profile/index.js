@@ -139,8 +139,7 @@ class Profile extends Component {
               <QuarterSpinner width={30} height={30} />
             </LoadingSpinner>
             <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
-            <img className="coverPic__hoverImg" onLoad={this.handleLoaded} src={coverPic} role="presentation" />
-            <img src={coverPic} role="presentation" />
+            <img onLoad={this.handleLoaded} src={coverPic} role="presentation" />
             { authenticated ? <h2>{user.fullname}</h2> : <h2 onClick={onClick}>{formatMessage(messages.signIn)}</h2> }
             { authenticated && <UserButton className="profile__userButton" onClick={onClick} /> }
           </div>

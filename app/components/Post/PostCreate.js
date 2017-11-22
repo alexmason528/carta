@@ -303,12 +303,7 @@ class PostCreate extends Component {
         { postType === 'mixedPost' &&
           <div className={cx({ post: true, postCreate: true, [postType]: true })} onClick={this.handlePostClick}>
             <div className="postImage">
-              { showImage &&
-                <div>
-                  <img className="postImage__hoverImg" src={img} role="presentation" />
-                  <img src={img} role="presentation" />
-                </div>
-              }
+              { showImage && <img src={img} role="presentation" /> }
               <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostImageRemove} />
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               <div className={cx({ postLinkBar: true, 'postLinkBar--hidden': !showLinkBar })} onClick={this.handlePostLinkBarClick}>
@@ -330,12 +325,7 @@ class PostCreate extends Component {
         { postType === 'mediaPost' &&
           <div className={cx({ post: true, postCreate: true, [postType]: true })} onClick={this.handlePostClick}>
             <div className="postImage">
-              { showImage &&
-                <div>
-                  <img className="postImage__hoverImg" src={img} role="presentation" />
-                  <img src={img} role="presentation" />
-                </div>
-              }
+              { showImage && <img src={img} role="presentation" /> }
               <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostImageRemove} />
               { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
               <div className={cx({ postLinkBar: true, 'postLinkBar--hidden': !showLinkBar })} onClick={this.handlePostLinkBarClick}>
