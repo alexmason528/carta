@@ -65,11 +65,19 @@ class Menu extends Component {
             <li><a href="http://carta.guide">{formatMessage(messages.about)}</a></li>
             { authenticated && <li><a href="/" onClick={this.handleSignOut}>{formatMessage(messages.signOut)}</a></li> }
             <hr />
-            { LANGUAGES.map(lang => (
-              <li key={lang.countryCode} className={cx({ active: locale === lang.countryCode })}>
-                <a href="/" onClick={this.handleLanguageClick} data-locale={lang.countryCode}>{lang.name}</a>
-              </li>
-            ))}
+            {
+              LANGUAGES.map(lang => {
+                const { countryCode, name } = lang
+                return (
+                  <li
+                    key={countryCode}
+                    className={cx({ menu__language: true, 'menu__language--active': locale === countryCode })}
+                  >
+                    <a href="/" onClick={this.handleLanguageClick} data-locale={countryCode}>{name}</a>
+                  </li>
+                )
+              })
+            }
           </ul>
           <div className="menu__tab" onClick={this.handleToggleMenu}>
             <img src={`${CLOUDINARY_ICON_URL}/name-vertical.png`} role="presentation" />
