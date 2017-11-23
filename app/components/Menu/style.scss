@@ -14,9 +14,9 @@
   }
 
   hr {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border: 0.5px solid #ccc;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    border: 0.8px solid #ccc;
   }
 
   &__opened {
@@ -63,7 +63,7 @@
     ul {
       background: #fff;
       height: 100%;
-      padding: 25px 25px 25px 30px;
+      padding: 12px 25px 12px 30px;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 
       li {
