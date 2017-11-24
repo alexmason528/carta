@@ -63,7 +63,12 @@ class Menu extends Component {
             { currentPage !== 'Home' && <li><Link to="/">{formatMessage(messages.home)}</Link></li> }
             { currentPage !== 'Quest' && <li><Link to="/quest">{formatMessage(messages.quest)}</Link></li> }
             <li><a href="http://carta.guide">{formatMessage(messages.about)}</a></li>
-            { authenticated && <li><a href="/" onClick={this.handleSignOut}>{formatMessage(messages.signOut)}</a></li> }
+            { authenticated &&
+              <div>
+                <li><a href="/" onClick={this.handleSignOut}>{formatMessage(messages.settings)}</a></li>
+                <li><a href="/" onClick={this.handleSignOut}>{formatMessage(messages.signOut)}</a></li>
+              </div>
+            }
             <hr />
             {
               LANGUAGES.map(lang => {
