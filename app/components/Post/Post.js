@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
+import { updatePostRequest, deletePostRequest, postEditStart, postEditEnd, postTitleChange, postContentChange, postImageChange, postLinkChange, postShowLinkBar, postShowDeleteConfirm } from 'containers/HomePage/actions'
 import { selectEditingPost, selectHomeInfo } from 'containers/HomePage/selectors'
 import MixedPost from './MixedPost'
 import MediaPost from './MediaPost'
@@ -63,25 +64,22 @@ class Post extends Component {
   }
 
   render() {
-    const { editingPost, _id, firstname, info, editable } = this.props
+    const { editingPost, _id } = this.props
 
     let data
     if (editingPost && editingPost._id === _id) {
-      data = { ...editingPost, editable, firstname, info, editing: true }
+      data = { ...this.props, ...this.props.editingPost, editing: true }
     } else {
-      data = { ...this.props, editable, info, editing: false }
+      data = { ...this.props, editing: false }
     }
 
     const { img, content, title } = data
-
     let component
     if (img && content !== null) {
       component = <MixedPost {...data} />
     } else if (img && content === null) {
       component = <MediaPost {...data} />
-    } else if (!img && content !== null) {
-      component = <TextPost {...data} />
-    } else if (title !== null) {
+    } else if ((!img && content !== null) || (title !== null)) {
       component = <TextPost {...data} />
     }
 
@@ -94,4 +92,17 @@ const selectors = createStructuredSelector({
   info: selectHomeInfo(),
 })
 
-export default connect(selectors)(Post)
+const actions = {
+  updatePostRequest,
+  deletePostRequest,
+  postEditStart,
+  postEditEnd,
+  postTitleChange,
+  postContentChange,
+  postImageChange,
+  postLinkChange,
+  postShowLinkBar,
+  postShowDeleteConfirm,
+}
+
+export default connect(selectors, actions)(Post)

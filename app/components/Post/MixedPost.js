@@ -1,15 +1,12 @@
 import React, { Component, PropTypes } from 'react'
-import ReactDOM from 'react-dom'
-import { connect } from 'react-redux'
 import cx from 'classnames'
 import axios from 'axios'
-import { injectIntl, intlShape, FormattedDate } from 'react-intl'
+import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { DeleteButton, EditButton, LinkButton, RemoveButton } from 'components/Buttons'
 import { CLOUDINARY_ICON_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_UPLOAD_URL } from 'containers/App/constants'
-import { updatePostRequest, deletePostRequest, postEditStart, postEditEnd, postTitleChange, postContentChange, postImageChange, postLinkChange, postShowLinkBar, postShowDeleteConfirm } from 'containers/HomePage/actions'
 import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/constants'
 import messages from 'containers/HomePage/messages'
 import { getTextFromDate } from 'utils/dateHelper'
@@ -71,17 +68,18 @@ class MixedPost extends Component {
     if (img.indexOf('data:image') !== -1) {
       this.setState({ imageUpload: { uploading: true, error: null } })
       let formData = new FormData()
-      formData.append('file', img)
-      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
-
-      axios.post(CLOUDINARY_UPLOAD_URL, formData, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      }).then(res => {
+      formData.append({
+        file: img,
+        upload_preset: CLOUDINARY_UPLOAD_PRESET,
+      })
+      axios.post(CLOUDINARY_UPLOAD_URL, formData, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
+      .then(res => {
         const { data: { url } } = res
         this.setState({ imageUpload: { uploading: false, error: null } })
         this.props.postImageChange(url)
         this.props.updatePostRequest()
-      }).catch(err => {
+      })
+      .catch(err => {
         this.setState({ imageUpload: { uploading: false, error: null } })
       })
     } else {
@@ -131,8 +129,24 @@ class MixedPost extends Component {
   }
 
   render() {
-    const { img, title, content, link, firstname, created_at, editing, editable, showLinkBar, showDeleteConfirm, info: { error, status }, intl: { formatMessage, locale } } = this.props
-    const { postShowLinkBar, postLinkChange, postEditEnd } = this.props
+    const {
+      img,
+      title,
+      content,
+      link,
+      firstname,
+      created_at,
+      editing,
+      editable,
+      showLinkBar,
+      showDeleteConfirm,
+      info: { error, status },
+      intl: { formatMessage, locale },
+      postShowLinkBar,
+      postLinkChange,
+      postEditEnd,
+    } = this.props
+
     const { showInfo, imageUpload } = this.state
     const showPostLinkButton = editing && !showLinkBar
     const showImage = status !== UPDATE_POST_REQUEST
@@ -192,17 +206,4 @@ class MixedPost extends Component {
   }
 }
 
-const actions = {
-  updatePostRequest,
-  deletePostRequest,
-  postEditStart,
-  postEditEnd,
-  postTitleChange,
-  postContentChange,
-  postImageChange,
-  postLinkChange,
-  postShowLinkBar,
-  postShowDeleteConfirm,
-}
-
-export default injectIntl(connect(null, actions)(MixedPost))
+export default injectIntl(MixedPost)

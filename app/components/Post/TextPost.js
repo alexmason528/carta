@@ -1,10 +1,6 @@
 import React, { Component, PropTypes } from 'react'
-import ReactDOM, { createPortal } from 'react-dom'
-import cx from 'classnames'
-import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
-import { updatePostRequest, deletePostRequest, postEditStart, postEditEnd, postTitleChange, postImageChange, postContentChange, postShowDeleteConfirm } from 'containers/HomePage/actions'
 import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/constants'
 import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
@@ -83,10 +79,21 @@ class TextPost extends Component {
   }
 
   render() {
-    const { _id, title, img, content, firstname, created_at, editing, showDeleteConfirm, info, intl, editable } = this.props
-    const { postEditEnd, updatePostRequest } = this.props
-    const { status, error } = info
-    const { formatMessage, locale } = intl
+    const {
+      _id,
+      title,
+      img,
+      content,
+      firstname,
+      created_at,
+      editing,
+      editable,
+      showDeleteConfirm,
+      info: { status, error },
+      intl: { formatMessage, locale },
+      postEditEnd,
+      updatePostRequest,
+    } = this.props
 
     const spinnerShow = editing && (status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST)
     const remainCharCnts = !content ? 1000 : 1000 - content.length
@@ -138,15 +145,4 @@ class TextPost extends Component {
   }
 }
 
-const actions = {
-  updatePostRequest,
-  deletePostRequest,
-  postEditStart,
-  postEditEnd,
-  postTitleChange,
-  postContentChange,
-  postShowDeleteConfirm,
-  postImageChange,
-}
-
-export default injectIntl(connect(null, actions)(TextPost))
+export default injectIntl(TextPost)

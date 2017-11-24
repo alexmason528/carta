@@ -16,7 +16,7 @@ import { createPostRequest } from 'containers/HomePage/actions'
 import messages from 'containers/HomePage/messages'
 import { CREATE_POST_REQUEST, CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
 import { selectHomeInfo } from 'containers/HomePage/selectors'
-import { elemToText, textToElem } from 'utils/stringHelper'
+import { elemToText, textToElem, getSubmitError } from 'utils/stringHelper'
 import { getCroppedImage } from 'utils/imageHelper'
 import './style.scss'
 
@@ -153,9 +153,7 @@ class PostCreate extends Component {
   }
 
   handlePostImageRemove = () => {
-    this.setState({
-      img: null,
-    }, () => {
+    this.setState({ img: null }, () => {
       this.handleResize()
       const comp = ReactDOM.findDOMNode(this)
       $(comp).find('.postText').focus()
@@ -163,9 +161,7 @@ class PostCreate extends Component {
   }
 
   handlePostContentRemove = () => {
-    this.setState({
-      content: null,
-    }, () => {
+    this.setState({ content: null }, () => {
       this.handleResize()
       const comp = ReactDOM.findDOMNode(this)
       $(comp).find('.postTitleEdit').focus()
@@ -184,40 +180,25 @@ class PostCreate extends Component {
       img: '',
     }
 
-    this.setState({
-      imageUpload: {
-        uploading: true,
-        error: null,
-      },
-    })
+    this.setState({ imageUpload: { uploading: true, error: null }})
 
     if (img) {
       let formData = new FormData()
-      formData.append('file', img)
-      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+      formData.append({
+        file: img,
+        upload_preset: CLOUDINARY_UPLOAD_PRESET,
+      })
 
-      axios.post(CLOUDINARY_UPLOAD_URL, formData, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      }).then(res => {
+      axios
+      .post(CLOUDINARY_UPLOAD_URL, formData, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
+      .then(res => {
         const { data: { url } } = res
-        this.setState({
-          imageUpload: {
-            uploading: false,
-            error: null,
-          },
-        })
-
+        this.setState({ imageUpload: { uploading: false, error: null } })
         data.img = url
         createPostRequest(data)
-      }).catch(err => {
-        this.setState({
-          imageUpload: {
-            uploading: false,
-            error: err.toString(),
-          },
-        })
+      })
+      .catch(err => {
+        this.setState({ imageUpload: { uploading: false, error: err.toString() } })
       })
     } else {
       createPostRequest(data)

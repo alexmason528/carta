@@ -1,21 +1,18 @@
 import React, { Component, PropTypes } from 'react'
-import ReactDOM from 'react-dom'
 import cx from 'classnames'
-import { connect } from 'react-redux'
-import { injectIntl, intlShape, FormattedDate } from 'react-intl'
+import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
-import LoadingSpinner from 'components/LoadingSpinner'
-import { QuarterSpinner } from 'components/SvgIcon'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
-import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
-import { updatePostRequest, deletePostRequest, postEditStart, postEditEnd, postTitleChange, postContentChange, postImageChange, postLinkChange, postShowLinkBar, postShowDeleteConfirm } from 'containers/HomePage/actions'
 import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/constants'
 import messages from 'containers/HomePage/messages'
-import { getTextFromDate } from 'utils/dateHelper'
-import { elemToText, textToElem, getPostLink, getSubmitError } from 'utils/stringHelper'
-import { getCroppedImage } from 'utils/imageHelper'
-import Resizable from 'components/Resizable'
+import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
 import Img from 'components/Img'
+import LoadingSpinner from 'components/LoadingSpinner'
+import Resizable from 'components/Resizable'
+import { QuarterSpinner } from 'components/SvgIcon'
+import { getTextFromDate } from 'utils/dateHelper'
+import { getCroppedImage } from 'utils/imageHelper'
+import { elemToText, textToElem, getPostLink, getSubmitError } from 'utils/stringHelper'
 import LinkBar from './LinkBar'
 import './style.scss'
 
@@ -105,8 +102,25 @@ class MediaPost extends Component {
   }
 
   render() {
-    const { img, title, content, link, firstname, created_at, editing, editable, showLinkBar, showDeleteConfirm, info: { error, status }, intl: { formatMessage, locale } } = this.props
-    const { postShowLinkBar, postLinkChange, postEditEnd, deletePostRequest, updatePostRequest } = this.props
+    const {
+      img,
+      title,
+      content,
+      link,
+      firstname,
+      created_at,
+      editing,
+      editable,
+      showLinkBar,
+      showDeleteConfirm,
+      info: { error, status },
+      intl: { formatMessage, locale },
+      postShowLinkBar,
+      postLinkChange,
+      postEditEnd,
+      deletePostRequest,
+      updatePostRequest,
+    } = this.props
 
     const { showInfo } = this.state
 
@@ -162,17 +176,4 @@ class MediaPost extends Component {
   }
 }
 
-const actions = {
-  updatePostRequest,
-  deletePostRequest,
-  postEditStart,
-  postEditEnd,
-  postTitleChange,
-  postContentChange,
-  postImageChange,
-  postLinkChange,
-  postShowLinkBar,
-  postShowDeleteConfirm,
-}
-
-export default injectIntl(connect(null, actions)(MediaPost))
+export default injectIntl(MediaPost)
