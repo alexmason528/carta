@@ -1,15 +1,16 @@
 import React, { PropTypes, Children } from 'react'
 import classNames from 'classnames'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
+import Img from 'components/Img'
 
 const QuestButton = ({ className, onClick, onCloseClick }) => (
   <div className={className}>
     <div onClick={onClick}>
-      <img src={`${CLOUDINARY_ICON_URL}/search.png`} className="inactive" role="presentation" />
-      <img src={`${CLOUDINARY_ICON_URL}/search-blue.png`} className="active" role="presentation" />
+      <Img src={`${CLOUDINARY_ICON_URL}/search.png`} className="inactive" />
+      <Img src={`${CLOUDINARY_ICON_URL}/search-blue.png`} className="active" />
     </div>
     <span onClick={onCloseClick}>
-      <img src={`${CLOUDINARY_ICON_URL}/close.png`} role="presentation" />
+      <Img src={`${CLOUDINARY_ICON_URL}/close.png`} />
     </span>
   </div>
 )

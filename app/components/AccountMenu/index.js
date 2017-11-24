@@ -95,7 +95,9 @@ class AccountMenu extends Component {
               <button type="button" onClick={this.handleCancelClick}>{formatMessage(messages.cancel)}</button>
               <button className="active">{formatMessage(messages.confirm)}</button>
             </div>
-            { status === DELETE_USER_FAIL && error && <div className="error">{error}</div> }
+            { status === DELETE_USER_FAIL && error &&
+              <div className="error">{error}</div>
+            }
           </Form>
         </div>
       </div>

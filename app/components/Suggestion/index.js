@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
-import cx from 'classnames'
 import ReactDOM from 'react-dom'
+import cx from 'classnames'
+import Img from 'components/Img'
 
 import './style.scss'
 
@@ -39,7 +40,7 @@ class Suggestion extends Component {
 
     return (
       <div className={cx({ suggestion: true, hidden: !imageLoaded })}>
-        <img onLoad={this.handleLoaded} src={img} role="presentation" />
+        <Img onLoad={this.handleLoaded} src={img} />
         <h2>{title}</h2>
       </div>
     )

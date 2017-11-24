@@ -3,6 +3,7 @@ import { injectIntl, intlShape } from 'react-intl'
 import cx from 'classnames'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import messages from 'containers/HomePage/messages'
+import Img from 'components/Img'
 
 const CreatePostButton = ({ type, onClick, intl: { formatMessage } }) => (
   <button
@@ -10,7 +11,7 @@ const CreatePostButton = ({ type, onClick, intl: { formatMessage } }) => (
     onClick={onClick}
   >
     <div className="btnImage">
-      <img src={`${CLOUDINARY_ICON_URL}/add-post.png`} role="presentation" />
+      <Img src={`${CLOUDINARY_ICON_URL}/add-post.png`} />
     </div>
     <div className="btnText">{formatMessage(messages.post)}</div>
   </button>

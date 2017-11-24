@@ -156,10 +156,9 @@
   display: flex;
   align-items: center;
 
-  &.disabled {
+  &[disabled] {
     color: #bbb;
     cursor: default;
-
     &:hover { color: #bbb }
   }
 }
@@ -440,8 +439,8 @@
   display: flex;
   align-items: center;
   width: calc(100% - 22px);
-  margin: 10px 11px;
-  padding: 0 14px;
+  margin: 10px;
+  padding: 7px;
   border-radius: 2px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
   opacity: 1;

@@ -3,6 +3,7 @@ import { injectIntl, intlShape } from 'react-intl'
 import classNames from 'classnames'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import messages from 'containers/QuestPage/messages'
+import Img from 'components/Img'
 import { DescriptiveSection, PlaceSection, TypeSection } from '../Sections'
 import './style.scss'
 
@@ -94,12 +95,12 @@ class Quest extends Component {
         <div className="tabs">
           <div className="line"></div>
           <button className="next" onClick={this.handleNextBtnClick}>{ formatMessage(messages.next) }
-            <img src={`${CLOUDINARY_ICON_URL}/next.png`} role="presentation" />
+            <Img src={`${CLOUDINARY_ICON_URL}/next.png`} />
           </button>
           <div className={tabClass}></div>
-          <img className={placesTabClass} src={`${CLOUDINARY_ICON_URL}/marker.png`} role="presentation" onClick={() => { this.handleTabClick(0) }} />
-          <img className={typesTabClass} src={`${CLOUDINARY_ICON_URL}/check.png`} role="presentation" onClick={() => { this.handleTabClick(1) }} />
-          <img className={descriptivesTabClass} src={`${CLOUDINARY_ICON_URL}/star.png`} role="presentation" onClick={() => { this.handleTabClick(2) }} />
+          <Img className={placesTabClass} src={`${CLOUDINARY_ICON_URL}/marker.png`} onClick={() => { this.handleTabClick(0) }} />
+          <Img className={typesTabClass} src={`${CLOUDINARY_ICON_URL}/check.png`} onClick={() => { this.handleTabClick(1) }} />
+          <Img className={descriptivesTabClass} src={`${CLOUDINARY_ICON_URL}/star.png`} onClick={() => { this.handleTabClick(2) }} />
         </div>
 
         <div className="pages">

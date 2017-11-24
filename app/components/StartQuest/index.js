@@ -5,6 +5,7 @@ import { browserHistory } from 'react-router'
 import { CLOUDINARY_COVER_URL } from 'containers/App/constants'
 import { injectIntl, intlShape } from 'react-intl'
 import messages from 'containers/HomePage/messages'
+import Img from 'components/Img'
 import './style.scss'
 
 class StartQuest extends Component {
@@ -42,7 +43,7 @@ class StartQuest extends Component {
 
     return (
       <div className={cx({ startQuest: true, startQuest__authenticated: authenticated, hidden: !imageLoaded })} onClick={() => browserHistory.push('/quest')}>
-        <img onLoad={this.handleLoaded} src={`${CLOUDINARY_COVER_URL}/quest.jpg`} role="presentation" />
+        <Img onLoad={this.handleLoaded} src={`${CLOUDINARY_COVER_URL}/quest.jpg`} />
         <h2 dangerouslySetInnerHTML={{ __html: formatMessage(messages.startQuest).replace(/\n/g, '<br/>') }} />
       </div>
     )

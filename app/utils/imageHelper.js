@@ -58,16 +58,6 @@ export const getCroppedImage = (file, handler, type) => {
   }
 }
 
-export const uploadImage = (img, successCallback, failCallback) => {
-  let formData = new FormData()
-  formData.append('file', img)
-  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
-
-  axios.post(CLOUDINARY_UPLOAD_URL, formData, {
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-  }).then(successCallback).catch(failCallback)
-}
-
 export const getCoverProfilePic = () => {
   const rand = Math.floor((Math.random() * 76)) + 1
   const coverPicRand = (rand < 10) ? `000${rand}` : `00${rand}`

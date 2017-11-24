@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
+import Img from 'components/Img'
 
 export default class UserButton extends Component {
   static propTypes = {
@@ -17,8 +18,8 @@ export default class UserButton extends Component {
     const { className } = this.props
     return (
       <button className={className} onClick={this.handleClick}>
-        <img src={`${CLOUDINARY_ICON_URL}/user-white-shadow.png`} role="presentation" />
-        <img className="hover" src={`${CLOUDINARY_ICON_URL}/user-white-shadow.png`} role="presentation" />
+        <Img src={`${CLOUDINARY_ICON_URL}/user-white-shadow.png`} />
+        <Img className="hover" src={`${CLOUDINARY_ICON_URL}/user-white-shadow.png`} />
       </button>
     )
   }

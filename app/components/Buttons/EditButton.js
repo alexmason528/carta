@@ -1,26 +1,22 @@
 import React, { Component, PropTypes } from 'react'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
+import Img from 'components/Img'
 
-export default class EditButton extends Component {
+export default class EditButton extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     onClick: PropTypes.func.isRequired,
-    className: PropTypes.string,
-    image: PropTypes.string.isRequired,
     hover: PropTypes.bool,
-  }
-
-  handleClick = evt => {
-    const { onClick } = this.props
-    evt.stopPropagation()
-    onClick()
+    white: PropTypes.bool,
   }
 
   render() {
-    const { className, image, hover } = this.props
+    const { white, onClick } = this.props
+    const image = white ? 'edit-white-shadow' : 'edit'
+
     return (
-      <button type="button" className={className} onClick={this.handleClick}>
-        <img src={`${CLOUDINARY_ICON_URL}/${image}.png`} role="presentation" />
-        { hover && <img className="hover" src={`${CLOUDINARY_ICON_URL}/${image}.png`} role="presentation" />}
+      <button type="button" className="postEditBtn" onClick={evt => { evt.stopPropagation(); onClick() }}>
+        <Img src={`${CLOUDINARY_ICON_URL}/${image}.png`} />
+        { white && <Img className="hover" src={`${CLOUDINARY_ICON_URL}/${image}.png`} />}
       </button>
     )
   }

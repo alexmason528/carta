@@ -1,20 +1,23 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import cx from 'classnames'
 import { connect } from 'react-redux'
-import { injectIntl, intlShape } from 'react-intl'
+import cx from 'classnames'
+import axios from 'axios'
+import { injectIntl, intlShape, FormattedDate } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { DeleteButton, EditButton, LinkButton, RemoveButton } from 'components/Buttons'
-import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
+import { CLOUDINARY_ICON_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_UPLOAD_URL } from 'containers/App/constants'
 import { updatePostRequest, deletePostRequest, postEditStart, postEditEnd, postTitleChange, postContentChange, postImageChange, postLinkChange, postShowLinkBar, postShowDeleteConfirm } from 'containers/HomePage/actions'
 import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/constants'
 import messages from 'containers/HomePage/messages'
 import { getTextFromDate } from 'utils/dateHelper'
 import { elemToText, textToElem } from 'utils/stringHelper'
-import { getCroppedImage, uploadImage } from 'utils/imageHelper'
+import { getCroppedImage } from 'utils/imageHelper'
 import Resizable from 'components/Resizable'
+import Img from 'components/Img'
+import LinkBar from './LinkBar'
 import './style.scss'
 
 class MixedPost extends Component {
@@ -58,41 +61,68 @@ class MixedPost extends Component {
   }
 
   handleEditStart = () => {
-    const { _id, title, content, img, link, postEditStart } = this.props
+    const { _id, title, content, img, link } = this.props
     const data = { _id, title, content, img, link, showDeleteConfirm: false, showLinkBar: false }
-    postEditStart(data)
+    this.props.postEditStart(data)
   }
 
   handleSubmit = () => {
-    const { img, updatePostRequest, postImageChange } = this.props
+    const { img } = this.props
     if (img.indexOf('data:image') !== -1) {
       this.setState({ imageUpload: { uploading: true, error: null } })
-      uploadImage(img, this.handlePostImageUploadSuccess, this.handlePostImageUploadFail)
+      let formData = new FormData()
+      formData.append('file', img)
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+
+      axios.post(CLOUDINARY_UPLOAD_URL, formData, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      }).then(res => {
+        const { data: { url } } = res
+        this.setState({ imageUpload: { uploading: false, error: null } })
+        this.props.postImageChange(url)
+        this.props.updatePostRequest()
+      }).catch(err => {
+        this.setState({ imageUpload: { uploading: false, error: null } })
+      })
     } else {
-      updatePostRequest()
+      this.props.updatePostRequest()
     }
   }
 
-  handlePostImageUploadSuccess(res) {
-    const { data: { url } } = res
-    this.setState({ imageUpload: { uploading: false, error: null } })
-    postImageChange(url)
-    updatePostRequest()
-  }
-
-  handlePostImageUploadFail(err) {
-    this.setState({ imageUpload: { uploading: false, error: null } })
-  }
-
   handlePostClick = () => {
-    const { postShowDeleteConfirm, postShowLinkBar, showLinkBar, showDeleteConfirm } = this.props
-    if (showDeleteConfirm) { postShowDeleteConfirm(false) }
-    if (showLinkBar) { postShowLinkBar(false) }
+    if (this.props.showDeleteConfirm) { this.props.postShowDeleteConfirm(false) }
+    if (this.props.showLinkBar) { this.props.postShowLinkBar(false) }
+  }
+
+  handleLinkButtonClick = evt => {
+    evt.stopPropagation()
+    this.props.postShowLinkBar(!this.props.showLinkBar)
+  }
+
+  handleDelete = () => {
+    this.props.postShowDeleteConfirm(!this.props.showDeleteConfirm)
+  }
+
+  handleDeleteConfirm = () => {
+    this.props.deletePostRequest(this.props._id)
+  }
+
+  handlePostRemoveImage = () => {
+    this.props.postImageChange(null)
+    this.props.postContentChange(this.props.content || '')
+  }
+
+  handlePostTitleChange = value => {
+    this.props.postTitleChange(value)
+  }
+
+  handlePostRemoveContent = () => {
+    this.props.postContentChange('')
   }
 
   render() {
     const { _id, img, title, content, link, firstname, created_at, locale, info, intl, editing, editable, showLinkBar, showDeleteConfirm } = this.props
-    const { postTitleChange, postShowLinkBar, postLinkChange, postEditEnd, postContentChange, postShowDeleteConfirm, postImageChange, deletePostRequest } = this.props
+    const { postTitleChange, postShowLinkBar, postLinkChange, postEditEnd, postContentChange, postShowDeleteConfirm, postImageChange } = this.props
     const { error, status } = info
     const { formatMessage } = intl
     const { showInfo, imageUpload } = this.state
@@ -120,6 +150,8 @@ class MixedPost extends Component {
       submitErrorTxt = formatMessage(messages.limitExceeded)
     }
 
+    const linkBarProps = { link, showLinkBar, postShowLinkBar, postLinkChange }
+
     return (
       <div className="postContainer">
         { (showLinkBar || showInfo || showDeleteConfirm) && <div className="backLayer" onClick={this.handlePostClick} /> }
@@ -128,23 +160,20 @@ class MixedPost extends Component {
         </LoadingSpinner>
         <div className="post mixedPost">
           <a className={cx({ postImage: true, noLink: !link })} href={postLink}>
-            { showImage && <img onLoad={this.handleResize} src={img} role="presentation" /> }
-            { editing && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={() => { postImageChange(null); postContentChange(content || '') }} /> }
-            { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={evt => { evt.stopPropagation(); postShowLinkBar(!showLinkBar) }} /> }
-            <div className={cx({ postLinkBar: true, 'postLinkBar--hidden': !showLinkBar })} onClick={evt => { evt.stopPropagation() }}>
-              <img onClick={evt => { evt.stopPropagation(); postShowLinkBar(!showLinkBar) }} src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
-              <input type="text" value={link} placeholder={formatMessage(messages.linkMessage)} onKeyDown={evt => { if (evt.keyCode === 13) { postShowLinkBar(false) } }} onChange={evt => { evt.stopPropagation(); postLinkChange(evt.target.value) }} />
-            </div>
+            { showImage && <Img onLoad={this.handleResize} src={img} /> }
+            { editing && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostRemoveImage} /> }
+            { showPostLinkButton && <LinkButton onClick={this.handleLinkButtonClick} /> }
+            <LinkBar {...linkBarProps} />
             { editing
-              ? <Resizable className="postTitleEdit" tabIndex={1} placeholder="Title" onChange={value => { postTitleChange(value) }} value={title} />
+              ? <Resizable className="postTitleEdit" tabIndex={1} placeholder={formatMessage(messages.title)} onChange={this.handlePostTitleChange} value={title} />
               : <div className="postTitle" onClick={this.handleOpenLink} title={elemToText(title)} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
             }
           </a>
           <div className="postContent">
-            { editing && <RemoveButton className="postRemoveContentBtn" image="close" onClick={() => { postContentChange('') }} /> }
+            { editing && <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostRemoveContent} /> }
             <div className="postMeta">
               { firstname } - CARTA | {getTextFromDate(created_at, locale)}
-              { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleEditStart} /> }
+              { editable && !editing && <EditButton onClick={this.handleEditStart} /> }
             </div>
             { editing
               ? <Resizable className="postText" tabIndex={2} placeholder={formatMessage(messages.writeHere)} onChange={value => { postContentChange(value) }} value={content} />
@@ -160,8 +189,8 @@ class MixedPost extends Component {
             </div>
             <div className="right">
               <button type="button" className="postCancelBtn" onClick={postEditEnd}>{formatMessage(messages.cancel)}</button>
-              <DeleteButton className="postDeleteBtn" onClick={() => { postShowDeleteConfirm(!showDeleteConfirm) }} onConfirm={() => { deletePostRequest(_id) }} showConfirm={showDeleteConfirm} />
-              <button type="button" title={submitErrorTxt} className={cx({ postBorderBtn: true, disabled: !submittable })} disabled={!submittable} onClick={this.handleSubmit}>{formatMessage(messages.submit)}</button>
+              <DeleteButton onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
+              <button type="button" className="postBorderBtn" title={submitErrorTxt} disabled={!submittable} onClick={this.handleSubmit}>{formatMessage(messages.submit)}</button>
             </div>
           </div>
         }

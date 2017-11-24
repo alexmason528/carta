@@ -11,6 +11,7 @@ import { QuarterSpinner } from 'components/SvgIcon'
 import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
 import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_ICON_URL, LANGUAGES } from 'containers/App/constants'
 import Resizable from 'components/Resizable'
+import Img from 'components/Img'
 import { createPostRequest } from 'containers/HomePage/actions'
 import messages from 'containers/HomePage/messages'
 import { CREATE_POST_REQUEST, CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
@@ -303,11 +304,11 @@ class PostCreate extends Component {
         { postType === 'mixedPost' &&
           <div className={cx({ post: true, postCreate: true, [postType]: true })} onClick={this.handlePostClick}>
             <div className="postImage">
-              { showImage && <img src={img} role="presentation" /> }
+              { showImage && <Img src={img} /> }
               <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostImageRemove} />
-              { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
+              { showPostLinkButton && <LinkButton onClick={this.handlePostLinkBtn} /> }
               <div className={cx({ postLinkBar: true, 'postLinkBar--hidden': !showLinkBar })} onClick={this.handlePostLinkBarClick}>
-                <img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
+                <Img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} />
                 <input type="text" value={link} placeholder={formatMessage(messages.linkMessage)} onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
               </div>
               <Resizable className="postTitleEdit" tabIndex={1} placeholder={formatMessage(messages.title)} onChange={this.handlePostTitle} value={title} />
@@ -325,11 +326,11 @@ class PostCreate extends Component {
         { postType === 'mediaPost' &&
           <div className={cx({ post: true, postCreate: true, [postType]: true })} onClick={this.handlePostClick}>
             <div className="postImage">
-              { showImage && <img src={img} role="presentation" /> }
+              { showImage && <Img src={img} /> }
               <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostImageRemove} />
-              { showPostLinkButton && <LinkButton className="postLinkBtn" onClick={this.handlePostLinkBtn} /> }
+              { showPostLinkButton && <LinkButton onClick={this.handlePostLinkBtn} /> }
               <div className={cx({ postLinkBar: true, 'postLinkBar--hidden': !showLinkBar })} onClick={this.handlePostLinkBarClick}>
-                <img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} role="presentation" />
+                <Img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} />
                 <input type="text" value={link} placeholder={formatMessage(messages.linkMessage)} onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
               </div>
             </div>
@@ -371,12 +372,12 @@ class PostCreate extends Component {
           { postType &&
             <div className="right">
               <button type="button" className="postCancelBtn" onClick={this.handleCancel}>{formatMessage(messages.cancel)}</button>
-              <DeleteButton className="postDeleteBtn" onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
+              <DeleteButton onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
               <button type="button" title={submitErrorTxt} className={cx({ postBorderBtn: true, disabled: !submittable })} disabled={!submittable} onClick={this.handleSubmit}>{formatMessage(messages.submit)}</button>
             </div>
           }
           <button type="button" className={cx({ postCloseBtn: true, 'postCloseBtn--hasContent': postType })} onClick={onClose}>
-            <img src={`${CLOUDINARY_ICON_URL}/close.png`} role="presentation" />
+            <Img src={`${CLOUDINARY_ICON_URL}/close.png`} />
           </button>
         </div>
       </div>

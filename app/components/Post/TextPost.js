@@ -41,25 +41,51 @@ class TextPost extends Component {
     showDeleteConfirm: PropTypes.bool,
   }
 
-  handleImage = (img, type) => {
-    const { postImageChange } = this.props
-    postImageChange(img)
-  }
-
   handleEditStart = () => {
-    const { _id, title, img, link, content, postEditStart } = this.props
+    const { _id, title, img, link, content } = this.props
     const data = { _id, title, img, link, content, showDeleteConfirm: false, showLinkBar: false }
-    postEditStart(data)
+    this.props.postEditStart(data)
   }
 
   handlePostClick = () => {
-    const { postShowDeleteConfirm, showDeleteConfirm } = this.props
-    if (showDeleteConfirm) { postShowDeleteConfirm(false) }
+    if (this.props.showDeleteConfirm) { this.props.postShowDeleteConfirm(false) }
+  }
+
+  handleDelete = () => {
+    this.props.postShowDeleteConfirm(!this.props.showDeleteConfirm)
+  }
+
+  handleDeleteConfirm = () => {
+    this.props.deletePostRequest(this.props._id)
+  }
+
+  handlePostContentChange = value => {
+    this.props.postContentChange(value)
+  }
+
+  handlePostTitleChange = value => {
+    this.props.postTitleChange(value)
+  }
+
+  handlePostRemoveContent = () => {
+    this.props.postContentChange('')
+  }
+
+  handleAddMedia = () => {
+    this.mediaUploader.click()
+  }
+
+  handleFiles = evt => {
+    getCroppedImage(evt.target.files[0], this.handleImage, 'landscape')
+  }
+
+  handleImage = (img, type) => {
+    this.props.postImageChange(img)
   }
 
   render() {
     const { _id, title, content, firstname, created_at, locale, editing, showDeleteConfirm, info, intl, editable } = this.props
-    const { postTitleChange, postEditEnd, postContentChange, postShowDeleteConfirm, deletePostRequest, updatePostRequest } = this.props
+    const { postEditEnd, updatePostRequest } = this.props
     const { status, error } = info
     const { formatMessage } = intl
 
@@ -86,17 +112,17 @@ class TextPost extends Component {
 
         <div className="post textPost" onClick={this.handlePostClick}>
           { editing
-            ? <Resizable className="postTitleEdit" tabIndex={1} placeholder="Title" onChange={value => { postTitleChange(value) }} value={title} />
+            ? <Resizable className="postTitleEdit" tabIndex={1} placeholder={formatMessage(messages.title)} onChange={this.handlePostTitleChange} value={title} />
             : <div className="postTitle" title={elemToText(title)} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
           }
           <div className="postContent">
-            { editing && <RemoveButton className="postRemoveContentBtn" image="close" onClick={() => { postContentChange('') }} /> }
+            { editing && <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostRemoveContent} /> }
             <div className="postMeta">
               { firstname } - CARTA | {getTextFromDate(created_at, locale)}
-              { editable && !editing && <EditButton className="postEditBtn" image="edit" onClick={this.handleEditStart} /> }
+              { editable && !editing && <EditButton onClick={this.handleEditStart} /> }
             </div>
             { editing
-              ? <Resizable className="postText" tabIndex={2} placeholder={formatMessage(messages.writeHere)} onChange={value => { postContentChange(value) }} value={content} />
+              ? <Resizable className="postText" tabIndex={2} placeholder={formatMessage(messages.writeHere)} onChange={this.handlePostContentChange} value={content} />
               : <div className="postText" dangerouslySetInnerHTML={{ __html: textToElem(content) }} />
             }
           </div>
@@ -105,14 +131,14 @@ class TextPost extends Component {
         { editing &&
           <div className="postButtons">
             <div className="left">
-              <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={evt => { getCroppedImage(evt.target.files[0], this.handleImage, 'landscape') }} />
+              <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
               <span style={{ marginRight: '8px' }}>{ remainCharCnts >= 0 ? remainCharCnts : 0 }</span>
-              <button type="button" className="postBorderBtn" onClick={() => { this.mediaUploader.click() }}>+ {formatMessage(messages.picture)}</button>
+              <button type="button" className="postBorderBtn" onClick={this.handleAddMedia}>+ {formatMessage(messages.picture)}</button>
             </div>
             <div className="right">
               <button type="button" className="postCancelBtn" onClick={postEditEnd}>{formatMessage(messages.cancel)}</button>
-              <DeleteButton className="postDeleteBtn" onClick={() => { postShowDeleteConfirm(!showDeleteConfirm) }} onConfirm={() => { deletePostRequest(_id) }} showConfirm={showDeleteConfirm} />
-              <button type="button" title={submitErrorTxt} className={cx({ postBorderBtn: true, disabled: !submittable })} disabled={!submittable} onClick={updatePostRequest}>{formatMessage(messages.submit)}</button>
+              <DeleteButton onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
+              <button type="button" className="postBorderBtn" title={submitErrorTxt} disabled={!submittable} onClick={updatePostRequest}>{formatMessage(messages.submit)}</button>
             </div>
           </div>
         }

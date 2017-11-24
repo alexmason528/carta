@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
+import Img from 'components/Img'
 
 const RemoveButton = ({ className, image, children, hover, onClick }) => (
   <button type="button" className={className} onClick={onClick}>
-    <img src={`${CLOUDINARY_ICON_URL}/${image}.png`} role="presentation" />
-    { hover && <img className="hover" src={`${CLOUDINARY_ICON_URL}/${image}.png`} role="presentation" /> }
+    <Img src={`${CLOUDINARY_ICON_URL}/${image}.png`} />
+    { hover && <Img className="hover" src={`${CLOUDINARY_ICON_URL}/${image}.png`} /> }
     { children }
   </button>
 )

@@ -9,6 +9,7 @@ import { fetchRecommendations, typeSelect } from 'containers/QuestPage/actions'
 import messages from 'containers/QuestPage/messages'
 import { selectInfo, selectTypes, selectCurrentTypes } from 'containers/QuestPage/selectors'
 import { Button, StarButton } from 'components/Buttons'
+import Img from 'components/Img'
 
 class TypeSection extends Component {
   static propTypes = {
@@ -160,8 +161,8 @@ class TypeSection extends Component {
     return (
       <div className={className}>
         <h1>{ formatMessage(messages.showme) }</h1>
-        <img className={searchBtnClass} src={`${CLOUDINARY_ICON_URL}/search.png`} onClick={() => { this.handleExpand(true) }} role="presentation" />
-        <img className={closeBtnClass} src={`${CLOUDINARY_ICON_URL}/back.png`} onClick={() => { this.handleExpand(false) }} role="presentation" />
+        <Img className={searchBtnClass} src={`${CLOUDINARY_ICON_URL}/search.png`} onClick={() => { this.handleExpand(true) }} />
+        <Img className={closeBtnClass} src={`${CLOUDINARY_ICON_URL}/back.png`} onClick={() => { this.handleExpand(false) }} />
         <input className={searchInputClass} value={search} onChange={this.handleInputChange} />
         <div className="suggestion">
           <Button

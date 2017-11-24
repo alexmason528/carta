@@ -11,6 +11,7 @@ import { selectAuthenticated } from 'containers/App/selectors'
 import { selectLocale } from 'containers/LanguageProvider/selectors'
 import { changeLocale } from 'containers/LanguageProvider/actions'
 import messages from 'containers/HomePage/messages'
+import Img from 'components/Img'
 import './style.scss'
 
 class Menu extends Component {
@@ -56,7 +57,7 @@ class Menu extends Component {
     return (
       <div className={cx({ menu: true, menu__opened: showMenu })} onClick={this.handleToggleMenu}>
         <div className="logo" onClick={this.handleToggleMenu}>
-          <img src={`${CLOUDINARY_ICON_URL}/logo-100.png`} role="presentation" />
+          <Img src={`${CLOUDINARY_ICON_URL}/logo-100.png`} />
         </div>
         <div className={cx({ menu__content: true, 'menu__content--hidden': !showMenu })} onClick={evt => { evt.stopPropagation() }}>
           <ul>
@@ -85,7 +86,7 @@ class Menu extends Component {
             }
           </ul>
           <div className="menu__tab" onClick={this.handleToggleMenu}>
-            <img src={`${CLOUDINARY_ICON_URL}/name-vertical.png`} role="presentation" />
+            <Img src={`${CLOUDINARY_ICON_URL}/name-vertical.png`} />
           </div>
         </div>
       </div>

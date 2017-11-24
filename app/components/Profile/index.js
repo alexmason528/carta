@@ -8,6 +8,7 @@ import { QuarterSpinner } from 'components/SvgIcon'
 import { UserButton } from 'components/Buttons'
 import { getCroppedImage } from 'utils/imageHelper'
 import messages from 'containers/HomePage/messages'
+import Img from 'components/Img'
 import './style.scss'
 
 class Profile extends Component {
@@ -139,7 +140,7 @@ class Profile extends Component {
               <QuarterSpinner width={30} height={30} />
             </LoadingSpinner>
             <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
-            <img onLoad={this.handleLoaded} src={coverPic} role="presentation" />
+            <Img onLoad={this.handleLoaded} src={coverPic} />
             { authenticated ? <h2>{user.fullname}</h2> : <h2 onClick={onClick}>{formatMessage(messages.signIn)}</h2> }
             { authenticated && <UserButton className="profile__userButton" onClick={onClick} /> }
           </div>
@@ -149,7 +150,7 @@ class Profile extends Component {
             <LoadingSpinner show={profilePicSpinner}>
               <QuarterSpinner width={30} height={30} />
             </LoadingSpinner>
-            <img src={profilePic} role="presentation" />
+            <Img src={profilePic} />
           </div>
         }
       </div>

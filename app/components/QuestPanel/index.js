@@ -6,6 +6,7 @@ import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { fetchRecommendations, questAdd, questSelect, questRemove } from 'containers/QuestPage/actions'
 import { selectQuests, selectCurrentQuestIndex } from 'containers/QuestPage/selectors'
+import Img from 'components/Img'
 import Quest from '../Quest'
 import './style.scss'
 
@@ -48,10 +49,10 @@ class QuestPanel extends Component {
       <div className={className}>
         <div className="buttons">
           <button className="minimize" onClick={minimizeClicked}>
-            <img src={`${CLOUDINARY_ICON_URL}/min.png`} role="presentation" />
+            <Img src={`${CLOUDINARY_ICON_URL}/min.png`} />
           </button>
           <button className="close" onClick={closeClicked}>
-            <img src={`${CLOUDINARY_ICON_URL}/close.png`} role="presentation" />
+            <Img src={`${CLOUDINARY_ICON_URL}/close.png`} />
           </button>
         </div>
         <div className="list">

@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
+import Img from 'components/Img'
 
 const InfoButton = ({ className, onClick }) => (
   <button className={className} onClick={onClick}>
-    <img src={`${CLOUDINARY_ICON_URL}/info.png`} role="presentation" />
+    <Img src={`${CLOUDINARY_ICON_URL}/info.png`} />
   </button>
 )
 

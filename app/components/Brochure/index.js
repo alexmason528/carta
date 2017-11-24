@@ -7,7 +7,7 @@ import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
 import { fetchBrochure } from 'containers/QuestPage/actions'
 import { selectBrochure } from 'containers/QuestPage/selectors'
-
+import Img from 'components/Img'
 import './style.scss'
 
 class Brochure extends Component {
@@ -265,7 +265,7 @@ class Brochure extends Component {
           <div className="dividers"></div>
           { mainPoster &&
             <div className="tile main-poster">
-              <img onLoad={this.handleLoaded} src={mainPoster.url} role="presentation" />
+              <Img onLoad={this.handleLoaded} src={mainPoster.url} />
               <h1>{mainPoster.title}</h1>
             </div>
           }
@@ -285,7 +285,7 @@ class Brochure extends Component {
                 </div>
               </div>
               <div className="tile image-tile">
-                <img src={description.poster.url} role="presentation" />
+                <Img src={description.poster.url} />
                 <h2>{description.poster.title}</h2>
               </div>
             </div>
@@ -313,7 +313,7 @@ class Brochure extends Component {
               </div>
               ) : (
                 <div className="tile image-tile" key={index}>
-                  <img src={url} role="presentation" />
+                  <Img src={url} />
                   <h2 dangerouslySetInnerHTML={{ __html: title }} />
                 </div>
               )

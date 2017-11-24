@@ -15,6 +15,7 @@ import { signInRequest, registerRequest } from 'containers/App/actions'
 import { selectInfo } from 'containers/App/selectors'
 import messages from 'containers/HomePage/messages'
 import LoadingSpinner from 'components/LoadingSpinner'
+import Img from 'components/Img'
 import { QuarterSpinner } from 'components/SvgIcon'
 import authFormValidator from './validate'
 import './style.scss'
@@ -186,14 +187,14 @@ class AuthForm extends Component {
             className="button"
             style={{}}
           >
-            <img src={`${CLOUDINARY_ICON_URL}/google.png`} role="presentation" /><span>Google</span>
+            <Img src={`${CLOUDINARY_ICON_URL}/google.png`} /><span>Google</span>
           </GoogleLogin>
           <FacebookLogin
             appId="1088597931155576"
             fields="name,email,picture"
             callback={this.handleFacebookLogin}
             textButton="Facebook"
-            icon={<img src={`${CLOUDINARY_ICON_URL}/facebook.png`} role="presentation" />}
+            icon={<Img src={`${CLOUDINARY_ICON_URL}/facebook.png`} />}
             autoLoad
           />
         </div>

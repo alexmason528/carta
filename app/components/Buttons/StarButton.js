@@ -1,6 +1,7 @@
 import React, { PropTypes, Children } from 'react'
 import classNames from 'classnames'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
+import Img from 'components/Img'
 
 const StarButton = props => {
   const { star, active, className, children, onStarClick, onMouseDown } = props
@@ -15,7 +16,7 @@ const StarButton = props => {
   return (
     <div className={btnClass}>
       <button onMouseDown={onMouseDown}>{Children.toArray(children)}</button>
-      <img className="star" src={`${CLOUDINARY_ICON_URL}/star-green.png`} onClick={onStarClick} role="presentation" />
+      <Img className="star" src={`${CLOUDINARY_ICON_URL}/star-green.png`} onClick={onStarClick} />
     </div>
   )
 }
