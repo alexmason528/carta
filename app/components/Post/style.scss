@@ -90,6 +90,8 @@
     bottom: 20px;
     max-width: calc(100% - 40px);
   }
+
+  .postTitle { cursor: pointer }
 }
 
 .textPost {
@@ -144,9 +146,7 @@
 
   &:hover img { transform: scale(1.04) }
 
-  &.noLink {
-    cursor: zoom-in;
-  }
+  &.noLink { cursor: zoom-in }
 }
 
 .postBorderBtn {
@@ -440,7 +440,7 @@
   align-items: center;
   width: calc(100% - 22px);
   margin: 10px;
-  padding: 7px;
+  padding: 7px 7px 7px 15px;
   border-radius: 2px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
   opacity: 1;

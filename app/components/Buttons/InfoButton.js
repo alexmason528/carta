@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react'
+import cx from 'classnames'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import Img from 'components/Img'
 
-const InfoButton = ({ className, onClick }) => (
-  <button className={className} onClick={onClick}>
+const InfoButton = ({ className, active, onClick }) => (
+  <button className={cx({ postInfoBtn: true, [className]: className, active })} onClick={onClick}>
     <Img src={`${CLOUDINARY_ICON_URL}/info.png`} />
   </button>
 )
@@ -11,6 +12,7 @@ const InfoButton = ({ className, onClick }) => (
 InfoButton.propTypes = {
   onClick: PropTypes.func.isRequired,
   className: PropTypes.string,
+  active: PropTypes.bool,
 }
 
 export default InfoButton

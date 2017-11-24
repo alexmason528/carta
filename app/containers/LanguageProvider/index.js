@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { IntlProvider } from 'react-intl'
-
 import { selectLocale } from './selectors'
 
 export class LanguageProvider extends Component { // eslint-disable-line react/prefer-stateless-function

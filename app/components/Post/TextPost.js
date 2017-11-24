@@ -11,7 +11,7 @@ import { QuarterSpinner } from 'components/SvgIcon'
 import { DeleteButton, EditButton, RemoveButton } from 'components/Buttons'
 import messages from 'containers/HomePage/messages'
 import { getTextFromDate } from 'utils/dateHelper'
-import { elemToText, textToElem } from 'utils/stringHelper'
+import { elemToText, textToElem, getSubmitError } from 'utils/stringHelper'
 import { getCroppedImage } from 'utils/imageHelper'
 import Resizable from 'components/Resizable'
 import './style.scss'
@@ -35,7 +35,6 @@ class TextPost extends Component {
     link: PropTypes.string,
     firstname: PropTypes.string,
     created_at: PropTypes.string,
-    locale: PropTypes.string,
     editing: PropTypes.bool,
     editable: PropTypes.bool,
     showDeleteConfirm: PropTypes.bool,
@@ -84,24 +83,16 @@ class TextPost extends Component {
   }
 
   render() {
-    const { _id, title, content, firstname, created_at, locale, editing, showDeleteConfirm, info, intl, editable } = this.props
+    const { _id, title, img, content, firstname, created_at, editing, showDeleteConfirm, info, intl, editable } = this.props
     const { postEditEnd, updatePostRequest } = this.props
     const { status, error } = info
-    const { formatMessage } = intl
+    const { formatMessage, locale } = intl
 
     const spinnerShow = editing && (status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST)
     const remainCharCnts = !content ? 1000 : 1000 - content.length
     const submittable = title && content && (remainCharCnts >= 0)
 
-    let submitErrorTxt = ''
-
-    if (!title) {
-      submitErrorTxt = formatMessage(messages.requireTitle)
-    } else if (!content) {
-      submitErrorTxt = formatMessage(messages.requireContent)
-    } else if (remainCharCnts < 0) {
-      submitErrorTxt = formatMessage(messages.limitExceeded)
-    }
+    let submitError = getSubmitError(img, title, content, formatMessage)
 
     return (
       <div className="postContainer">
@@ -138,7 +129,7 @@ class TextPost extends Component {
             <div className="right">
               <button type="button" className="postCancelBtn" onClick={postEditEnd}>{formatMessage(messages.cancel)}</button>
               <DeleteButton onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
-              <button type="button" className="postBorderBtn" title={submitErrorTxt} disabled={!submittable} onClick={updatePostRequest}>{formatMessage(messages.submit)}</button>
+              <button type="button" className="postBorderBtn" title={submitError} disabled={!submittable} onClick={updatePostRequest}>{formatMessage(messages.submit)}</button>
             </div>
           </div>
         }

@@ -12,7 +12,7 @@ import { updatePostRequest, deletePostRequest, postEditStart, postEditEnd, postT
 import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/constants'
 import messages from 'containers/HomePage/messages'
 import { getTextFromDate } from 'utils/dateHelper'
-import { elemToText, textToElem } from 'utils/stringHelper'
+import { elemToText, textToElem, getPostLink, getSubmitError } from 'utils/stringHelper'
 import { getCroppedImage } from 'utils/imageHelper'
 import Resizable from 'components/Resizable'
 import Img from 'components/Img'
@@ -38,7 +38,6 @@ class MediaPost extends Component {
     img: PropTypes.string,
     content: PropTypes.string,
     link: PropTypes.string,
-    locale: PropTypes.string,
     firstname: PropTypes.string,
     created_at: PropTypes.string,
     editing: PropTypes.bool,
@@ -52,7 +51,8 @@ class MediaPost extends Component {
     this.state = { showInfo: false }
   }
 
-  handleEditStart = () => {
+  handleEditStart = evt => {
+    evt.stopPropagation()
     const { _id, title, content, img, link } = this.props
     const data = { _id, title, content, img, link, showDeleteConfirm: false, showLinkBar: false }
     this.props.postEditStart(data)
@@ -63,7 +63,7 @@ class MediaPost extends Component {
     this.setState({ showInfo: !this.state.showInfo })
   }
 
-  handlePostClick = () => {
+  handleBackLayerClick = () => {
     if (this.props.showDeleteConfirm) {
       this.props.postShowDeleteConfirm(false)
     }
@@ -98,8 +98,14 @@ class MediaPost extends Component {
     this.props.postTitleChange(value)
   }
 
+  handlePostImageClick = evt => {
+    const { editing, link, img } = this.props
+    let postLink = getPostLink(editing, link, img)
+    if (postLink === '#') { evt.preventDefault() }
+  }
+
   render() {
-    const { img, title, content, link, firstname, created_at, locale, editing, editable, showLinkBar, showDeleteConfirm, info: { error, status }, intl: { formatMessage } } = this.props
+    const { img, title, content, link, firstname, created_at, editing, editable, showLinkBar, showDeleteConfirm, info: { error, status }, intl: { formatMessage, locale } } = this.props
     const { postShowLinkBar, postLinkChange, postEditEnd, deletePostRequest, updatePostRequest } = this.props
 
     const { showInfo } = this.state
@@ -110,48 +116,33 @@ class MediaPost extends Component {
     const remainCharCnts = !content ? 1000 : 1000 - content.length
     const submittable = title && (img || content) && (remainCharCnts >= 0)
 
-    let postLink
-    if (editing) {
-      postLink = '#'
-    } else if (link) {
-      postLink = (link.indexOf('http:') !== -1 || link.indexOf('https:') !== -1) ? link : `http://${link}`
-    } else {
-      postLink = img
-    }
-
-    let submitErrorTxt = ''
-    if (!title) {
-      submitErrorTxt = formatMessage(messages.requireTitle)
-    } else if (!img && !content) {
-      submitErrorTxt = formatMessage(messages.requireContent)
-    } else if (remainCharCnts < 0) {
-      submitErrorTxt = formatMessage(messages.limitExceeded)
-    }
+    let postLink = getPostLink(editing, link, img)
+    let submitError = getSubmitError(img, title, content, formatMessage)
 
     const linkBarProps = { link, showLinkBar, postShowLinkBar, postLinkChange }
 
     return (
       <div className="postContainer">
-        { (showLinkBar || showInfo || showDeleteConfirm) && <div className="backLayer" onClick={this.handlePostClick} /> }
+        { (showLinkBar || showInfo || showDeleteConfirm) && <div className="backLayer" onClick={this.handleBackLayerClick} /> }
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
-        <div className="post mediaPost" onClick={this.handlePostClick}>
-          <a className={cx({ postImage: true, noLink: !link })} href={postLink}>
-            { editable && !editing && <EditButton white onClick={this.handleEditStart} /> }
+        <div className="post mediaPost">
+          <a className={cx({ postImage: true, noLink: !link })} href={postLink} onClick={this.handlePostImageClick}>
             { showImage && <Img onLoad={this.handleResize} src={img} /> }
-            { editing && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostRemoveImage} /> }
-            { showPostLinkButton && <LinkButton onClick={this.handleLinkButtonClick} /> }
-            <LinkBar {...linkBarProps} />
+            { editing
+              ? <Resizable className="postTitleEdit" placeholder={formatMessage(messages.title)} onChange={this.handleTitleChange} value={title} />
+              : <div className="postTitle" title={elemToText(title)} onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
+            }
           </a>
-          { editing
-            ? <Resizable className="postTitleEdit" placeholder={formatMessage(messages.title)} onChange={this.handleTitleChange} value={title} />
-            : <div className="postTitle" title={elemToText(title)} onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
-          }
           <div className={cx({ postInfo: true, 'postInfo--hidden': !showInfo })}>
             { firstname } - Carta | {getTextFromDate(created_at, locale)}
           </div>
-          <InfoButton className={cx({ postInfoBtn: true, active: showInfo })} onClick={this.handlePostInfoToggle} />
+          <LinkBar {...linkBarProps} />
+          { editable && !editing && <EditButton white onClick={this.handleEditStart} /> }
+          { editing && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostRemoveImage} /> }
+          { showPostLinkButton && <LinkButton onClick={this.handleLinkButtonClick} /> }
+          <InfoButton active={showInfo} onClick={this.handlePostInfoToggle} />
         </div>
 
         { editing &&
@@ -162,7 +153,7 @@ class MediaPost extends Component {
             <div className="right">
               <button type="button" className="postCancelBtn" onClick={postEditEnd}>{formatMessage(messages.cancel)}</button>
               <DeleteButton onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
-              <button type="button" className="postBorderBtn" title={submitErrorTxt} disabled={!submittable} onClick={updatePostRequest}>{formatMessage(messages.submit)}</button>
+              <button type="button" className="postBorderBtn" title={submitError} disabled={!submittable} onClick={updatePostRequest}>{formatMessage(messages.submit)}</button>
             </div>
           </div>
         }

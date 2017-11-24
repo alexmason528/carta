@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { selectEditingPost, selectHomeInfo } from 'containers/HomePage/selectors'
-import { selectLocale } from 'containers/LanguageProvider/selectors'
 import MixedPost from './MixedPost'
 import MediaPost from './MediaPost'
 import TextPost from './TextPost'
@@ -14,7 +13,6 @@ class Post extends Component {
     info: PropTypes.object,
     _id: PropTypes.string,
     firstname: PropTypes.string,
-    locale: PropTypes.string,
     editable: PropTypes.bool,
   }
 
@@ -65,13 +63,13 @@ class Post extends Component {
   }
 
   render() {
-    const { editingPost, _id, firstname, info, locale, editable } = this.props
+    const { editingPost, _id, firstname, info, editable } = this.props
 
     let data
     if (editingPost && editingPost._id === _id) {
-      data = { ...editingPost, editable, firstname, info, locale, editing: true }
+      data = { ...editingPost, editable, firstname, info, editing: true }
     } else {
-      data = { ...this.props, editable, info, locale, editing: false }
+      data = { ...this.props, editable, info, editing: false }
     }
 
     const { img, content, title } = data
@@ -94,7 +92,6 @@ class Post extends Component {
 const selectors = createStructuredSelector({
   editingPost: selectEditingPost(),
   info: selectHomeInfo(),
-  locale: selectLocale(),
 })
 
 export default connect(selectors)(Post)

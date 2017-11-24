@@ -8,7 +8,6 @@ import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL, LANGUAGES } from 'containers/App/constants'
 import { signOut } from 'containers/App/actions'
 import { selectAuthenticated } from 'containers/App/selectors'
-import { selectLocale } from 'containers/LanguageProvider/selectors'
 import { changeLocale } from 'containers/LanguageProvider/actions'
 import messages from 'containers/HomePage/messages'
 import Img from 'components/Img'
@@ -18,7 +17,6 @@ class Menu extends Component {
   static propTypes = {
     signOut: PropTypes.func,
     changeLocale: PropTypes.func,
-    locale: PropTypes.string,
     currentPage: PropTypes.string,
     authenticated: PropTypes.bool,
     intl: intlShape.isRequired,
@@ -52,7 +50,7 @@ class Menu extends Component {
 
   render() {
     const { showMenu } = this.state
-    const { authenticated, signOut, currentPage, locale, changeLocale, intl: { formatMessage } } = this.props
+    const { authenticated, signOut, currentPage, changeLocale, intl: { formatMessage, locale } } = this.props
 
     return (
       <div className={cx({ menu: true, menu__opened: showMenu })} onClick={this.handleToggleMenu}>
@@ -96,7 +94,6 @@ class Menu extends Component {
 
 const selectors = createStructuredSelector({
   authenticated: selectAuthenticated(),
-  locale: selectLocale(),
 })
 
 const actions = {

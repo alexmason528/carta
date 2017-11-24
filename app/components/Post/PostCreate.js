@@ -338,7 +338,7 @@ class PostCreate extends Component {
             <div className={cx({ postInfo: true, 'postInfo--hidden': !showInfo })}>
               {fullname} - Carta | {formatMessage(messages.now)}
             </div>
-            <InfoButton className={cx({ postInfoBtn: true, active: showInfo })} onClick={this.handlePostInfoToggle} />
+            <InfoButton active={showInfo} onClick={this.handlePostInfoToggle} />
           </div>
         }
 
