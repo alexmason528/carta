@@ -94,6 +94,13 @@
   .postTitle { cursor: pointer }
 }
 
+.mediaPost, .mixedPost {
+  .postTitleEdit::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+    opacity: 1;
+  }
+}
+
 .textPost {
   border-top: 0.5px solid #ccc;
 
