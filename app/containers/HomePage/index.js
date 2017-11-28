@@ -127,6 +127,7 @@ class HomePage extends Component {
     const { showAuthForm, showCreatePostForm, showAccountMenu, timer, coverPic, profilePic } = this.state
     const { posts, authenticated, user, signOut, updateUserRequest, info, intl: { locale, formatMessage }, editingPost } = this.props
     const { status, error } = info
+    const filteredPosts = posts.filter(post => post.title[locale] !== '')
 
     let createPostButtonType = 'text'
 
@@ -165,10 +166,8 @@ class HomePage extends Component {
             }
             <StartQuest authenticated={authenticated} />
             {
-              posts && posts.map((post, key) => {
+              filteredPosts && filteredPosts.map((post, key) => {
                 const { _id, content, created_at, img, title, link } = post
-
-                if (title[locale].length === 0) return null
 
                 let data = {
                   ...post,
@@ -177,7 +176,6 @@ class HomePage extends Component {
                   editable: (authenticated && (post.author._id === user._id || user.role === 'admin')) && !editingPost && !showCreatePostForm,
                   first: (key === 0 && authenticated),
                 }
-
                 return (key === 6 || key === 8) ? <Post {...data} /> : null
               })
             }
@@ -187,10 +185,8 @@ class HomePage extends Component {
             { authenticated && showCreatePostForm && <PostCreate onClose={this.toggleCreatePostForm} user={user} /> }
             <div>
               {
-                posts && posts.map((post, key) => {
+                filteredPosts && filteredPosts.map((post, key) => {
                   const { _id, content, created_at, img, title, link } = post
-
-                  if (title[locale].length === 0) return null
 
                   let data = {
                     ...post,
@@ -207,10 +203,8 @@ class HomePage extends Component {
           </Col>
           <Col lg={4} md={6} sm={12} xs={12} className="homepage__col">
             {
-              posts && posts.map((post, key) => {
+              filteredPosts && filteredPosts.map((post, key) => {
                 const { _id, content, created_at, img, title, link } = post
-
-                if (title[locale].length === 0) return null
 
                 let data = {
                   ...post,
