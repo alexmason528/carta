@@ -131,7 +131,7 @@ class HomePage extends Component {
 
     let createPostButtonType = 'text'
 
-    if (posts.length > 0 && posts[0].img) {
+    if (filteredPosts.length > 0 && filteredPosts[0].img) {
       createPostButtonType = 'image'
     }
 
