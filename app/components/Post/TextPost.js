@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { injectIntl, intlShape } from 'react-intl'
+import cx from 'classnames'
 import { createStructuredSelector } from 'reselect'
+import { LANGUAGES } from 'containers/App/constants'
 import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/constants'
 import messages from 'containers/HomePage/messages'
 import { DeleteButton, EditButton, RemoveButton } from 'components/Buttons'
@@ -9,7 +11,7 @@ import Resizable from 'components/Resizable'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { getTextFromDate } from 'utils/dateHelper'
 import { getCroppedImage } from 'utils/imageHelper'
-import { getSubmitError } from 'utils/stringHelper'
+import { getDefaultTexts, getSubmitInfo, isLanguageSelectable } from 'utils/stringHelper'
 import './style.scss'
 
 class TextPost extends Component {
@@ -36,10 +38,20 @@ class TextPost extends Component {
     showDeleteConfirm: PropTypes.bool,
   }
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      locale: props.intl.locale,
+      showError: false,
+    }
+  }
+
   handleEditStart = () => {
     const { _id, title, img, link, content } = this.props
     const data = { _id, title, img, link, content, showDeleteConfirm: false, showLinkBar: false }
     this.props.postEditStart(data)
+    this.setState({ showError: false })
   }
 
   handlePostClick = () => {
@@ -48,6 +60,7 @@ class TextPost extends Component {
 
   handleDelete = () => {
     this.props.postShowDeleteConfirm(!this.props.showDeleteConfirm)
+    this.setState({ showError: false })
   }
 
   handleDeleteConfirm = () => {
@@ -55,15 +68,34 @@ class TextPost extends Component {
   }
 
   handlePostContentChange = value => {
-    this.props.postContentChange(value)
+    const { content } = this.props
+    const { locale } = this.state
+    this.props.postContentChange({
+      ...content,
+      [locale]: value,
+    })
+    this.setState({ showError: false })
   }
 
   handlePostTitleChange = value => {
-    this.props.postTitleChange(value)
+    const { title } = this.props
+    const { locale } = this.state
+    this.props.postTitleChange({
+      ...title,
+      [locale]: value,
+    })
+    this.setState({ showError: false })
   }
 
   handlePostRemoveContent = () => {
-    this.props.postContentChange('')
+    const { content } = this.props
+    const { locale } = this.state
+
+    this.props.postContentChange({
+      ...content,
+      [locale]: '',
+    })
+    this.setState({ showError: false })
   }
 
   handleAddMedia = () => {
@@ -76,6 +108,23 @@ class TextPost extends Component {
 
   handleImage = (img, type) => {
     this.props.postImageChange(img)
+    this.setState({ showError: false })
+  }
+
+  handlePostLanguageChange = evt => {
+    this.setState({
+      locale: evt.target.value,
+      showError: false,
+    })
+  }
+
+  handleSubmit = submitError => {
+    if (submitError) {
+      this.setState({ showError: true })
+      return
+    }
+    this.setState({ showError: false })
+    this.props.updatePostRequest()
   }
 
   render() {
@@ -90,16 +139,17 @@ class TextPost extends Component {
       editable,
       showDeleteConfirm,
       info: { status, error },
-      intl: { formatMessage, locale },
+      intl: { formatMessage },
       postEditEnd,
       updatePostRequest,
     } = this.props
 
-    const spinnerShow = editing && (status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST)
-    const remainCharCnts = !content ? 1000 : 1000 - content.length
-    const submittable = title && content && (remainCharCnts >= 0)
+    const { locale, showError } = this.state
 
-    let submitError = getSubmitError(img, title, content, formatMessage)
+    const defaultTexts = getDefaultTexts(locale, this.props.intl.locale)
+    const spinnerShow = editing && (status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST)
+    const dropdownDisabled = !isLanguageSelectable(title, img, content, this.props.intl.locale)
+    const { postType, remainCharCnts, submitError } = getSubmitInfo(title, img, content, this.props.intl.locale, locale, formatMessage)
 
     return (
       <div className="postContainer">
@@ -110,17 +160,17 @@ class TextPost extends Component {
 
         <div className="post textPost" onClick={this.handlePostClick}>
           { editing
-            ? <Resizable className="postTitleEdit" tabIndex={1} placeholder={formatMessage(messages.title)} onChange={this.handlePostTitleChange} value={title} />
-            : <div className="postTitle" title={title} dangerouslySetInnerHTML={{ __html: title[locale] }} />
+            ? <Resizable className="postTitleEdit" tabIndex={1} placeholder={defaultTexts.title} onChange={this.handlePostTitleChange} value={title[locale]} />
+            : <div className="postTitle" title={title[locale]} dangerouslySetInnerHTML={{ __html: title[locale] }} />
           }
           <div className="postContent">
             { editing && <RemoveButton type="content" onClick={this.handlePostRemoveContent} /> }
             <div className="postMeta">
-              { firstname } - CARTA | {getTextFromDate(created_at, locale)}
+              { firstname } - CARTA | {getTextFromDate(created_at, this.props.intl.locale)}
               { editable && !editing && <EditButton onClick={this.handleEditStart} /> }
             </div>
             { editing
-              ? <Resizable className="postText" tabIndex={2} placeholder={formatMessage(messages.writeHere)} onChange={this.handlePostContentChange} value={content} />
+              ? <Resizable className="postText" tabIndex={2} placeholder={defaultTexts.content} onChange={this.handlePostContentChange} value={content[locale]} />
               : <div className="postText" dangerouslySetInnerHTML={{ __html: content[locale] }} />
             }
           </div>
@@ -132,14 +182,20 @@ class TextPost extends Component {
               <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
               <span style={{ marginRight: '8px' }}>{ remainCharCnts >= 0 ? remainCharCnts : 0 }</span>
               <button type="button" className="postBorderBtn" onClick={this.handleAddMedia}>+ {formatMessage(messages.picture)}</button>
+              <div className={cx({ postLang: true, disabled: dropdownDisabled })}>
+                <select onChange={this.handlePostLanguageChange} disabled={dropdownDisabled} value={locale}>
+                  { LANGUAGES.map(lang => <option key={lang.countryCode} value={lang.countryCode}>{lang.countryCode}</option>)}
+                </select>
+              </div>
             </div>
             <div className="right">
               <button type="button" className="postCancelBtn" onClick={postEditEnd}>{formatMessage(messages.cancel)}</button>
               <DeleteButton onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
-              <button type="button" className="postBorderBtn" title={submitError} disabled={!submittable} onClick={updatePostRequest}>{formatMessage(messages.submit)}</button>
+              <button type="button" className={cx({ postBorderBtn: true, disabled: submitError })} title={submitError} onClick={() => { this.handleSubmit(submitError) }}>{formatMessage(messages.submit)}</button>
             </div>
           </div>
         }
+        { showError && submitError && <div className="error">{submitError}</div>}
       </div>
     )
   }

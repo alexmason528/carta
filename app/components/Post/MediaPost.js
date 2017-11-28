@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import cx from 'classnames'
-import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
+import { CLOUDINARY_ICON_URL, LANGUAGES } from 'containers/App/constants'
 import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/constants'
 import messages from 'containers/HomePage/messages'
 import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
@@ -12,7 +12,7 @@ import Resizable from 'components/Resizable'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { getTextFromDate } from 'utils/dateHelper'
 import { getCroppedImage } from 'utils/imageHelper'
-import { getPostLink, getSubmitError } from 'utils/stringHelper'
+import { getDefaultTexts, getPostLink, getSubmitInfo, isLanguageSelectable } from 'utils/stringHelper'
 import LinkBar from './LinkBar'
 import './style.scss'
 
@@ -45,7 +45,11 @@ class MediaPost extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { showInfo: false }
+    this.state = {
+      showError: false,
+      showInfo: false,
+      locale: props.intl.locale,
+    }
   }
 
   handleEditStart = evt => {
@@ -53,11 +57,15 @@ class MediaPost extends Component {
     const { _id, title, content, img, link } = this.props
     const data = { _id, title, content, img, link, showDeleteConfirm: false, showLinkBar: false }
     this.props.postEditStart(data)
+    this.setState({ showError: false })
   }
 
   handlePostInfoToggle = evt => {
     evt.stopPropagation()
-    this.setState({ showInfo: !this.state.showInfo })
+    this.setState({
+      showError: false,
+      showInfo: !this.state.showInfo,
+    })
   }
 
   handleBackLayerClick = () => {
@@ -67,24 +75,35 @@ class MediaPost extends Component {
     if (this.props.showLinkBar) {
       this.props.postShowLinkBar(false)
     }
-    this.setState({ showInfo: false })
+    this.setState({
+      showError: false,
+      showInfo: false,
+    })
   }
 
   handleLinkButtonClick = evt => {
     this.props.postShowLinkBar(!this.props.showLinkBar)
+    this.setState({ showError: false })
   }
 
   handleAddText = () => {
-    this.props.postContentChange('')
+    this.props.postContentChange({
+      content: '',
+      locale: this.state.locale,
+    })
   }
 
   handlePostRemoveImage = () => {
     this.props.postImageChange(null)
-    this.props.postContentChange(this.props.content || '')
+    this.props.postContentChange({
+      en: '',
+      nl: '',
+    })
   }
 
   handleDelete = () => {
     this.props.postShowDeleteConfirm(!this.props.showDeleteConfirm)
+    this.setState({ showError: false })
   }
 
   handleDeleteConfirm = () => {
@@ -92,13 +111,34 @@ class MediaPost extends Component {
   }
 
   handleTitleChange = value => {
-    this.props.postTitleChange(value)
+    const { title } = this.props
+    const { locale } = this.state
+    this.props.postTitleChange({
+      ...title,
+      [locale]: value,
+    })
   }
 
   handlePostImageClick = evt => {
     const { editing, link, img } = this.props
     let postLink = getPostLink(editing, link, img)
     if (postLink === '#') { evt.preventDefault() }
+  }
+
+  handlePostLanguageChange = evt => {
+    this.setState({
+      locale: evt.target.value,
+      showError: false,
+    })
+  }
+
+  handleSubmit = submitError => {
+    if (submitError) {
+      this.setState({ showError: true })
+      return
+    }
+    this.setState({ showError: false })
+    this.props.updatePostRequest()
   }
 
   render() {
@@ -114,7 +154,7 @@ class MediaPost extends Component {
       showLinkBar,
       showDeleteConfirm,
       info: { error, status },
-      intl: { formatMessage, locale },
+      intl: { formatMessage },
       postShowLinkBar,
       postLinkChange,
       postEditEnd,
@@ -122,16 +162,16 @@ class MediaPost extends Component {
       updatePostRequest,
     } = this.props
 
-    const { showInfo } = this.state
+    const { showError, showInfo, locale } = this.state
 
     const showPostLinkButton = editing && !showLinkBar
     const showImage = status !== UPDATE_POST_REQUEST
     const spinnerShow = editing && (status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST)
-    const remainCharCnts = !content ? 1000 : 1000 - content.length
-    const submittable = title && (img || content) && (remainCharCnts >= 0)
+    const defaultTexts = getDefaultTexts(locale, this.props.intl.locale)
+    const dropdownDisabled = !isLanguageSelectable(title, img, content, this.props.intl.locale)
+    const { postType, remainCharCnts, submitError } = getSubmitInfo(title, img, content, this.props.intl.locale, locale, formatMessage)
 
     let postLink = getPostLink(editing, link, img)
-    let submitError = getSubmitError(img, title, content, formatMessage)
 
     const linkBarProps = { link, showLinkBar, postShowLinkBar, postLinkChange }
 
@@ -145,7 +185,7 @@ class MediaPost extends Component {
           <a className={cx({ postImage: true, noLink: !link })} href={postLink} onClick={this.handlePostImageClick}>
             { showImage && <Img onLoad={this.handleResize} src={img} /> }
             { editing
-              ? <Resizable className="postTitleEdit" placeholder={formatMessage(messages.title)} onChange={this.handleTitleChange} value={title[locale]} />
+              ? <Resizable className="postTitleEdit" placeholder={defaultTexts.title} onChange={this.handleTitleChange} value={title[locale]} />
               : <div className="postTitle" title={title[locale]} onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: title[locale] }} />
             }
           </a>
@@ -154,7 +194,7 @@ class MediaPost extends Component {
           </div>
           <LinkBar {...linkBarProps} />
           { editable && !editing && <EditButton white onClick={this.handleEditStart} /> }
-          { editing && <RemoveButton onClick={this.handlePostRemoveImage} /> }
+          { editing && <RemoveButton type="image" onClick={this.handlePostRemoveImage} /> }
           { showPostLinkButton && <LinkButton onClick={this.handleLinkButtonClick} /> }
           <InfoButton active={showInfo} onClick={this.handlePostInfoToggle} />
         </div>
@@ -163,14 +203,20 @@ class MediaPost extends Component {
           <div className="postButtons">
             <div className="left">
               <button type="button" className="postBorderBtn" onClick={this.handleAddText}>+ {formatMessage(messages.text)}</button>
+              <div className={cx({ postLang: true, disabled: dropdownDisabled })}>
+                <select onChange={this.handlePostLanguageChange} disabled={dropdownDisabled} value={locale}>
+                  { LANGUAGES.map(lang => <option key={lang.countryCode} value={lang.countryCode}>{lang.countryCode}</option>)}
+                </select>
+              </div>
             </div>
             <div className="right">
               <button type="button" className="postCancelBtn" onClick={postEditEnd}>{formatMessage(messages.cancel)}</button>
               <DeleteButton onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
-              <button type="button" className="postBorderBtn" title={submitError} disabled={!submittable} onClick={updatePostRequest}>{formatMessage(messages.submit)}</button>
+              <button type="button" className={cx({ postBorderBtn: true, disabled: submitError })} title={submitError} onClick={() => { this.handleSubmit(submitError) }}>{formatMessage(messages.submit)}</button>
             </div>
           </div>
         }
+        { showError && submitError && <div className="error">{submitError}</div>}
       </div>
     )
   }

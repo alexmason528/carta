@@ -190,9 +190,9 @@ class PostCreate extends Component {
     if (submitError) {
       this.setState({ showError: true })
       return
-    } else {
-      this.setState({ showError: false })
     }
+
+    this.setState({ showError: false })
 
     const { content, img, title, link } = this.state
     const { createPostRequest, user } = this.props
