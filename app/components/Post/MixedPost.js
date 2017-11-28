@@ -3,16 +3,16 @@ import { injectIntl, intlShape } from 'react-intl'
 import axios from 'axios'
 import cx from 'classnames'
 import { createStructuredSelector } from 'reselect'
-import { CLOUDINARY_ICON_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_UPLOAD_URL } from 'containers/App/constants'
+import { CLOUDINARY_ICON_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_UPLOAD_URL, LANGUAGES } from 'containers/App/constants'
 import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/constants'
 import messages from 'containers/HomePage/messages'
 import { DeleteButton, EditButton, LinkButton, RemoveButton } from 'components/Buttons'
 import Img from 'components/Img'
 import LoadingSpinner from 'components/LoadingSpinner'
-import Resizable from 'components/Resizable'
+import ContentEditable from 'components/ContentEditable'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { getTextFromDate } from 'utils/dateHelper'
-import { getPostLink, getSubmitError } from 'utils/stringHelper'
+import { getDefaultTexts, getPostLink, getSubmitInfo, isLanguageSelectable } from 'utils/stringHelper'
 import { getCroppedImage } from 'utils/imageHelper'
 import LinkBar from './LinkBar'
 import './style.scss'
@@ -49,10 +49,12 @@ class MixedPost extends Component {
 
     this.state = {
       showInfo: false,
+      showError: false,
       imageUpload: {
         uploading: false,
         error: false,
       },
+      locale: props.intl.locale,
     }
   }
 
@@ -61,9 +63,16 @@ class MixedPost extends Component {
     const { _id, title, content, img, link } = this.props
     const data = { _id, title, content, img, link, showDeleteConfirm: false, showLinkBar: false }
     this.props.postEditStart(data)
+    this.setState({ showError: false })
   }
 
-  handleSubmit = () => {
+  handleSubmit = submitError => {
+    if (submitError) {
+      this.setState({ showError: true })
+      return
+    }
+    this.setState({ showError: false })
+
     const { img } = this.props
     if (img.indexOf('data:image') !== -1) {
       this.setState({ imageUpload: { uploading: true, error: null } })
@@ -98,6 +107,7 @@ class MixedPost extends Component {
 
   handleDelete = () => {
     this.props.postShowDeleteConfirm(!this.props.showDeleteConfirm)
+    this.setState({ showError: false })
   }
 
   handleDeleteConfirm = () => {
@@ -106,25 +116,45 @@ class MixedPost extends Component {
 
   handlePostRemoveImage = () => {
     this.props.postImageChange(null)
-    this.props.postContentChange(this.props.content || '')
+    this.setState({ showError: false })
   }
 
   handlePostTitleChange = value => {
-    this.props.postTitleChange(value)
+    const { title } = this.props
+    const { locale } = this.state
+    this.props.postTitleChange({
+      ...title,
+      [locale]: value,
+    })
+    this.setState({ showError: false })
   }
 
   handlePostContentChange = value => {
-    this.props.postContentChange(value)
+    const { content } = this.props
+    const { locale } = this.state
+    this.props.postContentChange({
+      ...content,
+      [locale]: value,
+    })
+    this.setState({ showError: false })
   }
 
   handlePostRemoveContent = () => {
-    this.props.postContentChange('')
+    this.props.postContentChange(null)
+    this.setState({ showError: false })
   }
 
   handlePostImageClick = evt => {
     const { editing, link, img } = this.props
     let postLink = getPostLink(editing, link, img)
     if (postLink === '#') { evt.preventDefault() }
+  }
+
+  handlePostLanguageChange = evt => {
+    this.setState({
+      locale: evt.target.value,
+      showError: false,
+    })
   }
 
   render() {
@@ -140,21 +170,21 @@ class MixedPost extends Component {
       showLinkBar,
       showDeleteConfirm,
       info: { error, status },
-      intl: { formatMessage, locale },
+      intl: { formatMessage },
       postShowLinkBar,
       postLinkChange,
       postEditEnd,
     } = this.props
 
-    const { showInfo, imageUpload } = this.state
+    const { showInfo, showError, imageUpload, locale } = this.state
     const showPostLinkButton = editing && !showLinkBar
     const showImage = status !== UPDATE_POST_REQUEST
     const spinnerShow = editing && (status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST || imageUpload.uploading)
-    const remainCharCnts = !content ? 1000 : 1000 - content.length
-    const submittable = title && (img || content) && (remainCharCnts >= 0)
+    const defaultTexts = getDefaultTexts(locale, this.props.intl.locale)
+    const dropdownDisabled = !isLanguageSelectable(title, img, content, this.props.intl.locale)
+    const { postType, remainCharCnts, submitError } = getSubmitInfo(title, img, content, this.props.intl.locale, locale, formatMessage)
 
     let postLink = getPostLink(editing, link, img)
-    let submitError = getSubmitError(img, title, content, formatMessage)
 
     const linkBarProps = { link, showLinkBar, postShowLinkBar, postLinkChange }
 
@@ -168,7 +198,7 @@ class MixedPost extends Component {
           <a className={cx({ postImage: true, noLink: !link })} href={postLink} onClick={this.handlePostImageClick}>
             { showImage && <Img onLoad={this.handleResize} src={img} /> }
             { editing
-              ? <Resizable className="postTitleEdit" tabIndex={1} placeholder={formatMessage(messages.title)} onChange={this.handlePostTitleChange} value={title[locale]} />
+              ? <ContentEditable className="postTitleEdit" tabIndex={1} placeholder={defaultTexts.title} onChange={this.handlePostTitleChange} value={title[locale]} />
               : <div className="postTitle" onClick={this.handleOpenLink} title={title[locale]} dangerouslySetInnerHTML={{ __html: title[locale] }} />
             }
           </a>
@@ -179,7 +209,7 @@ class MixedPost extends Component {
               { editable && !editing && <EditButton onClick={this.handleEditStart} /> }
             </div>
             { editing
-              ? <Resizable className="postText" tabIndex={2} placeholder={formatMessage(messages.writeHere)} onChange={this.handlePostContentChange} value={content} />
+              ? <ContentEditable className="postText" tabIndex={2} placeholder={defaultTexts.content} onChange={this.handlePostContentChange} value={content[locale]} />
               : <div className="postText" dangerouslySetInnerHTML={{ __html: content[locale] }} />
             }
           </div>
@@ -191,15 +221,21 @@ class MixedPost extends Component {
         { editing &&
           <div className="postButtons">
             <div className="left">
-              <span style={{ marginRight: '8px' }}>{ remainCharCnts >= 0 ? remainCharCnts : 0 }</span>
+              <span style={{ marginRight: '4px' }}>{ remainCharCnts }</span>
+              <div className={cx({ postLang: true, disabled: dropdownDisabled })}>
+                <select onChange={this.handlePostLanguageChange} disabled={dropdownDisabled} value={locale}>
+                  { LANGUAGES.map(lang => <option key={lang.countryCode} value={lang.countryCode}>{lang.countryCode}</option>)}
+                </select>
+              </div>
             </div>
             <div className="right">
               <button type="button" className="postCancelBtn" onClick={postEditEnd}>{formatMessage(messages.cancel)}</button>
               <DeleteButton onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
-              <button type="button" className="postBorderBtn" title={submitError} disabled={!submittable} onClick={this.handleSubmit}>{formatMessage(messages.submit)}</button>
+              <button type="button" className={cx({ postBorderBtn: true, disabled: submitError })} title={submitError} onClick={() => { this.handleSubmit(submitError) }}>{formatMessage(messages.submit)}</button>
             </div>
           </div>
         }
+        { showError && submitError && <div className="error">{submitError}</div> }
       </div>
     )
   }
