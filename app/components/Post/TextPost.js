@@ -7,7 +7,7 @@ import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/co
 import messages from 'containers/HomePage/messages'
 import { DeleteButton, EditButton, RemoveButton } from 'components/Buttons'
 import LoadingSpinner from 'components/LoadingSpinner'
-import ContentEditable from 'components/ContentEditable'
+import Resizable from 'components/Resizable'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { getTextFromDate } from 'utils/dateHelper'
 import { getCroppedImage } from 'utils/imageHelper'
@@ -160,7 +160,7 @@ class TextPost extends Component {
 
         <div className="post textPost" onClick={this.handlePostClick}>
           { editing
-            ? <ContentEditable className="postTitleEdit" tabIndex={1} placeholder={defaultTexts.title} onChange={this.handlePostTitleChange} value={title[locale]} />
+            ? <Resizable className="postTitleEdit" tabIndex={1} placeholder={defaultTexts.title} onChange={this.handlePostTitleChange} value={title[locale]} />
             : <div className="postTitle" title={title[locale]} dangerouslySetInnerHTML={{ __html: title[locale] }} />
           }
           <div className="postContent">
@@ -170,7 +170,7 @@ class TextPost extends Component {
               { editable && !editing && <EditButton onClick={this.handleEditStart} /> }
             </div>
             { editing
-              ? <ContentEditable className="postText" tabIndex={2} placeholder={defaultTexts.content} onChange={this.handlePostContentChange} value={content[locale]} />
+              ? <Resizable className="postText" tabIndex={2} placeholder={defaultTexts.content} onChange={this.handlePostContentChange} value={content[locale]} />
               : <div className="postText" dangerouslySetInnerHTML={{ __html: content[locale] }} />
             }
           </div>

@@ -8,7 +8,7 @@ import messages from 'containers/HomePage/messages'
 import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
 import Img from 'components/Img'
 import LoadingSpinner from 'components/LoadingSpinner'
-import ContentEditable from 'components/ContentEditable'
+import Resizable from 'components/Resizable'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { getTextFromDate } from 'utils/dateHelper'
 import { getCroppedImage } from 'utils/imageHelper'
@@ -185,7 +185,7 @@ class MediaPost extends Component {
           <a className={cx({ postImage: true, noLink: !link })} href={postLink} onClick={this.handlePostImageClick}>
             { showImage && <Img onLoad={this.handleResize} src={img} /> }
             { editing
-              ? <ContentEditable className="postTitleEdit" placeholder={defaultTexts.title} onChange={this.handleTitleChange} value={title[locale]} />
+              ? <Resizable className="postTitleEdit" placeholder={defaultTexts.title} onChange={this.handleTitleChange} value={title[locale]} />
               : <div className="postTitle" title={title[locale]} onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: title[locale] }} />
             }
           </a>

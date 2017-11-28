@@ -14,7 +14,7 @@ import { selectHomeInfo } from 'containers/HomePage/selectors'
 import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
 import Img from 'components/Img'
 import LoadingSpinner from 'components/LoadingSpinner'
-import ContentEditable from 'components/ContentEditable'
+import Resizable from 'components/Resizable'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { getCroppedImage } from 'utils/imageHelper'
 import { getDefaultTexts, getPostType, getSubmitInfo, isLanguageSelectable } from 'utils/stringHelper'
@@ -320,14 +320,14 @@ class PostCreate extends Component {
                 <Img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} />
                 <input type="text" value={link} placeholder={formatMessage(messages.linkMessage)} onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
               </div>
-              <ContentEditable className="postTitleEdit" tabIndex={1} placeholder={defaultTexts.title} onChange={this.handlePostTitle} value={title[locale]} />
+              <Resizable className="postTitleEdit" tabIndex={1} placeholder={defaultTexts.title} onChange={this.handlePostTitle} value={title[locale]} />
             </div>
             <div className="postContent">
               <RemoveButton type="content" onClick={this.handlePostContentRemove} />
               <div className="postMeta">
                 {fullname} - CARTA | {formatMessage(messages.now)}
               </div>
-              <ContentEditable className="postText" tabIndex={2} placeholder={defaultTexts.content} onChange={this.handlePostContent} value={content[locale]} />
+              <Resizable className="postText" tabIndex={2} placeholder={defaultTexts.content} onChange={this.handlePostContent} value={content[locale]} />
             </div>
             <RemoveButton type="image" onClick={this.handlePostImageRemove} />
             { showPostLinkButton && <LinkButton onClick={this.handlePostLinkBtn} /> }
@@ -345,7 +345,7 @@ class PostCreate extends Component {
                 <input type="text" value={link} placeholder={formatMessage(messages.linkMessage)} onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
               </div>
             </div>
-            <ContentEditable className="postTitleEdit" placeholder={defaultTexts.title} onChange={this.handlePostTitle} value={title[locale]} />
+            <Resizable className="postTitleEdit" placeholder={defaultTexts.title} onChange={this.handlePostTitle} value={title[locale]} />
             <div className={cx({ postInfo: true, 'postInfo--hidden': !showInfo })}>
               {fullname} - Carta | {formatMessage(messages.now)}
             </div>
@@ -355,13 +355,13 @@ class PostCreate extends Component {
 
         { postType === 'textPost' &&
           <div className={cx({ post: true, postCreate: true, [postType]: true })} onClick={this.handlePostClick}>
-            <ContentEditable className="postTitleEdit" tabIndex={1} placeholder={defaultTexts.title} onChange={this.handlePostTitle} value={title[locale]} />
+            <Resizable className="postTitleEdit" tabIndex={1} placeholder={defaultTexts.title} onChange={this.handlePostTitle} value={title[locale]} />
             <div className="postContent">
               <RemoveButton type="content" onClick={this.handlePostContentRemove} />
               <div className="postMeta">
                 {fullname} - CARTA | {formatMessage(messages.now)}
               </div>
-              <ContentEditable className="postText" tabIndex={2} placeholder={defaultTexts.content} onChange={this.handlePostContent} value={content[locale]} />
+              <Resizable className="postText" tabIndex={2} placeholder={defaultTexts.content} onChange={this.handlePostContent} value={content[locale]} />
             </div>
           </div>
         }
