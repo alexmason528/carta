@@ -61,7 +61,7 @@ class Menu extends Component {
           <ul>
             { currentPage !== 'Home' && <li><Link to="/">{formatMessage(messages.home)}</Link></li> }
             { currentPage !== 'Quest' && <li><Link to="/quest">{formatMessage(messages.quest)}</Link></li> }
-            <li><a href="http://carta.guide">{formatMessage(messages.about)}</a></li>
+            <li><a href={`http://carta.guide/${locale === 'en' ? '' : locale}`}>{formatMessage(messages.about)}</a></li>
             { authenticated &&
               <div>
                 <li><a href="/" onClick={this.handleSignOut}>{formatMessage(messages.settings)}</a></li>

@@ -65,6 +65,12 @@ export const getPostType = (img, content) => {
 
 export const isLanguageSelectable = (title, img, content, defaultLocale) => {
   const postType = getPostType(img, content)
+
+  for (let lang of LANGUAGES) {
+    const { countryCode } = lang
+    if ((countryCode !== defaultLocale) && ((title && title[countryCode].length > 0) || (content && content[countryCode].length > 0))) return true
+  }
+
   if (postType === 'mediaPost') {
     return title[defaultLocale].length > 0
   } else if (postType === 'textPost' || postType === 'mixedPost') {
@@ -78,10 +84,10 @@ export const getDefaultTexts = (locale = 'en', defaultLocale) => {
 
   if (locale !== defaultLocale) {
     for (let lang of LANGUAGES) {
-      const { countryCode, name } = lang
+      const { countryCode, third } = lang
       if (countryCode === locale) {
-        title = `${name} ${title}`
-        content = `${name} ${content}`
+        title = `${third} ${title}`
+        content = `${third} ${content}`
         break
       }
     }
@@ -95,43 +101,25 @@ export const getSubmitInfo = (title, img, content, defaultLocale, curLocale, for
   const postType = getPostType(img, content)
   const remainCharCnts = !content ? 1000 : 1000 - content[curLocale].length
 
-  if (!isLanguageSelectable(title, img, content, defaultLocale)) {
-    submitError = 'You should input default language post first'
-  } else if (postType === 'mediaPost') {
-    submitError = formatMessage(messages.requireTitle)
-    for (let lang of LANGUAGES) {
-      const { countryCode } = lang
-      if (title[countryCode].length > 0) {
-        submitError = undefined
-        break
-      }
+  if (postType === 'mediaPost') {
+    if (title[defaultLocale] === '') {
+      submitError = formatMessage(messages.requireTitle, { lang: '' })
     }
   } else if (postType === 'textPost' || postType === 'mixedPost') {
-    let remainCharCnts
-    let hasCompletedPost = false
-
-    for (let lang of LANGUAGES) {
-      const { countryCode } = lang
-      if (title[countryCode] !== '' && content[countryCode] !== '') {
-        hasCompletedPost = true
+    if (title[defaultLocale] === '') {
+      submitError = formatMessage(messages.requireTitle, { lang: '' })
+    } else if (content[defaultLocale] === '') {
+      submitError = formatMessage(messages.requireContent, { lang: '' })
+    } else {
+      for (let lang of LANGUAGES) {
+        const { countryCode, third } = lang
+        if (title[countryCode] === '' && content[countryCode] !== '') {
+          submitError = formatMessage(messages.requireTitle, { lang: ` ${third}` })
+        } else if (title[countryCode] !== '' && content[countryCode] === '') {
+          submitError = formatMessage(messages.requireContent, { lang: ` ${third}` })
+        }
+        if (submitError) break
       }
-    }
-
-    for (let lang of LANGUAGES) {
-      const { countryCode } = lang
-      if (content[countryCode].length > 1000) {
-        submitError = formatMessage(messages.limitExceeded)
-      } else if (title[countryCode] === '' && content[countryCode] !== '') {
-        submitError = formatMessage(messages.requireTitle)
-      } else if (title[countryCode] !== '' && content[countryCode] === '') {
-        submitError = formatMessage(messages.requireContent)
-      }
-
-      if (submitError) break
-    }
-
-    if (!hasCompletedPost && !submitError) {
-      submitError = formatMessage(messages.requireTitle)
     }
   }
 

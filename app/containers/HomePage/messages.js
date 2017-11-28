@@ -115,15 +115,15 @@ export default defineMessages({
   },
   requireTitle: {
     id: 'carta.requireTitle',
-    defaultMessage: 'Please add a title',
+    defaultMessage: 'Please add {lang} title',
   },
   requireContent: {
     id: 'carta.requireContent',
-    defaultMessage: 'Please add text or an image',
+    defaultMessage: 'Please add {lang} content',
   },
   limitExceeded: {
     id: 'carta.limitExceeded',
-    defaultMessage: 'Please post a text with less than 1000 characters',
+    defaultMessage: 'Please post a content with less than 1000 characters',
   },
   verificationEmail: {
     id: 'carta.verificationEmail',

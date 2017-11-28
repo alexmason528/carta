@@ -36,7 +36,9 @@ export const DEFAULT_LOCALE = 'en'
 export const LANGUAGES = [{
   countryCode: 'en',
   name: 'English',
+  third: 'English',
 }, {
   countryCode: 'nl',
   name: 'Nederlands',
+  third: 'Nederlandse',
 }]
