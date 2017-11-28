@@ -3,7 +3,7 @@
 
   .error {
     position: relative !important;
-    padding: 0 12px 8px;
+    padding: 4px 12px 12px !important;
     width: 100% !important;
   }
 }
@@ -169,7 +169,7 @@
   display: flex;
   align-items: center;
 
-  &[disabled] {
+  &.disabled {
     color: #bbb;
     cursor: default;
     &:hover { color: #bbb }
@@ -401,7 +401,6 @@
   }
 
   .left button{ margin-right: 5px }
-  // .right button { margin: 0 2px }
 
   input[type=file] { display: none }
 }

@@ -49,6 +49,7 @@ class PostCreate extends Component {
         error: null,
       },
       locale: props.intl.locale,
+      showError: false,
     }
   }
 
@@ -67,6 +68,7 @@ class PostCreate extends Component {
         showInfo: false,
         showLinkBar: false,
         showDeleteConfirm: false,
+        showError: false,
       })
     }
   }
@@ -105,6 +107,7 @@ class PostCreate extends Component {
         en: '',
         nl: '',
       },
+      showError: false,
     }, () => {
       this.handleResize()
       const comp = ReactDOM.findDOMNode(this)
@@ -122,7 +125,7 @@ class PostCreate extends Component {
   }
 
   handleImage = (img, type) => {
-    this.setState({ img }, () => {
+    this.setState({ img, showError: false }, () => {
       this.handleResize()
       const comp = ReactDOM.findDOMNode(this)
       $(comp).find('.postTitleEdit').focus()
@@ -136,6 +139,7 @@ class PostCreate extends Component {
       title: null,
       content: null,
       link: null,
+      showError: false,
     }, () => {
       this.handleResize()
       onClose()
@@ -149,6 +153,7 @@ class PostCreate extends Component {
         ...content,
         [locale]: value,
       },
+      showError: false,
     })
   }
 
@@ -166,7 +171,7 @@ class PostCreate extends Component {
   }
 
   handlePostImageRemove = () => {
-    this.setState({ img: null }, () => {
+    this.setState({ img: null, showError: false }, () => {
       this.handleResize()
       const comp = ReactDOM.findDOMNode(this)
       $(comp).find('.postText').focus()
@@ -174,14 +179,21 @@ class PostCreate extends Component {
   }
 
   handlePostContentRemove = () => {
-    this.setState({ content: null }, () => {
+    this.setState({ content: null, showError: false }, () => {
       this.handleResize()
       const comp = ReactDOM.findDOMNode(this)
       $(comp).find('.postTitleEdit').focus()
     })
   }
 
-  handleSubmit = () => {
+  handleSubmit = submitError => {
+    if (submitError) {
+      this.setState({ showError: true })
+      return
+    } else {
+      this.setState({ showError: false })
+    }
+
     const { content, img, title, link } = this.state
     const { createPostRequest, user } = this.props
 
@@ -218,7 +230,10 @@ class PostCreate extends Component {
 
   handlePostInfoToggle = evt => {
     evt.stopPropagation()
-    this.setState({ showInfo: !this.state.showInfo })
+    this.setState({
+      showInfo: !this.state.showInfo,
+      showError: false,
+    })
   }
 
   handlePostTitle = value => {
@@ -228,6 +243,7 @@ class PostCreate extends Component {
         ...title,
         [locale]: value,
       },
+      showError: false,
     })
   }
 
@@ -237,7 +253,10 @@ class PostCreate extends Component {
 
   handlePostLinkBarChange = evt => {
     evt.stopPropagation()
-    this.setState({ link: evt.target.value })
+    this.setState({
+      link: evt.target.value,
+      showError: false,
+    })
   }
 
   handlePostClick = () => {
@@ -245,15 +264,24 @@ class PostCreate extends Component {
       showInfo: false,
       showLinkBar: false,
       showDeleteConfirm: false,
+      showError: false,
     })
   }
 
   handlePostLanguageChange = evt => {
-    this.setState({ locale: evt.target.value })
+    this.setState({
+      locale: evt.target.value,
+      showError: false,
+    })
   }
 
   handleEnterKey = evt => {
-    if (evt.keyCode === 13) { this.setState({ showLinkBar: false }) }
+    if (evt.keyCode === 13) {
+      this.setState({
+        showLinkBar: false,
+        showError: false,
+      })
+    }
   }
 
   render() {
@@ -268,6 +296,7 @@ class PostCreate extends Component {
       showDeleteConfirm,
       imageUpload,
       locale,
+      showError,
     } = this.state
 
     const defaultTexts = getDefaultTexts(locale, this.props.intl.locale)
@@ -355,14 +384,14 @@ class PostCreate extends Component {
             <div className="right">
               <button type="button" className="postCancelBtn" onClick={this.handleCancel}>{formatMessage(messages.cancel)}</button>
               <DeleteButton onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
-              <button type="button" className="postBorderBtn" disabled={submitError} onClick={this.handleSubmit}>{formatMessage(messages.submit)}</button>
+              <button type="button" className={cx({ postBorderBtn: true, disabled: submitError })} title={submitError} onClick={() => { this.handleSubmit(submitError) }}>{formatMessage(messages.submit)}</button>
             </div>
           }
           <button type="button" className={cx({ postCloseBtn: true, 'postCloseBtn--hasContent': postType })} onClick={onClose}>
             <Img src={`${CLOUDINARY_ICON_URL}/close.png`} />
           </button>
         </div>
-        { submitError && <div className="error">{submitError}</div> }
+        { showError && submitError && <div className="error">{submitError}</div> }
       </div>
     )
   }
