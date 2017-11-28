@@ -88,8 +88,8 @@ class MediaPost extends Component {
 
   handleAddText = () => {
     this.props.postContentChange({
-      content: '',
-      locale: this.state.locale,
+      en: '',
+      nl: '',
     })
   }
 

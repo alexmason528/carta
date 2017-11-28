@@ -94,7 +94,6 @@
 .mixedPost {
   .postTitle, .postTitleEdit {
     bottom: 20px;
-    width: calc(100% - 60px);
   }
 
   .postTitle { cursor: pointer }
@@ -109,26 +108,26 @@
 
 .textPost {
   border-top: 0.5px solid #ccc;
+  padding: 30px 30px 0 30px;
 
   .postTitle, .postTitleEdit {
     position: relative;
     color: #292b2c !important;
     text-shadow: none;
     font-weight: 400;
-    margin: 20px 0 0 20px;
-    width: calc(100% - 60px);
+    padding: 0;
   }
 
   .postTitle {
-    padding: 0;
-    margin: 30px 0 0 30px;
     user-select: text;
     cursor: text;
   }
 
-  .postTitleEdit { padding: 0 10px }
-  .postContent, .postContentText { border: none }
-  .postContentText { padding-left: 0; padding-right: 0 }
+  .postTitleEdit {
+    width: calc(100% - 40px);
+  }
+
+  .postContent, .postContentText { border: none; padding: 20px 0 }
 }
 
 .postImage {
@@ -158,7 +157,6 @@
   }
 
   &:hover img { transform: scale(1.04) }
-
   &.noLink { cursor: zoom-in }
 }
 
@@ -324,7 +322,6 @@
   text-transform: uppercase;      
   font-weight: 900;
   overflow: hidden;
-  max-width: 100%;
   word-break: break-word;
   z-index: 4;
   left: 0;
@@ -332,7 +329,14 @@
   &:focus { outline: none }
 }
 
-.postTitleEdit { cursor: text }
+.postTitle {
+  width: 100%;
+}
+
+.postTitleEdit {
+  cursor: text;
+  width: auto;
+}
 
 .postContent {
   padding: 15px 30px 25px;
