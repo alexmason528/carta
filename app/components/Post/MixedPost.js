@@ -1,19 +1,19 @@
 import React, { Component, PropTypes } from 'react'
-import cx from 'classnames'
-import axios from 'axios'
 import { injectIntl, intlShape } from 'react-intl'
+import axios from 'axios'
+import cx from 'classnames'
 import { createStructuredSelector } from 'reselect'
-import LoadingSpinner from 'components/LoadingSpinner'
-import { QuarterSpinner } from 'components/SvgIcon'
-import { DeleteButton, EditButton, LinkButton, RemoveButton } from 'components/Buttons'
 import { CLOUDINARY_ICON_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_UPLOAD_URL } from 'containers/App/constants'
 import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/constants'
 import messages from 'containers/HomePage/messages'
-import { getTextFromDate } from 'utils/dateHelper'
-import { elemToText, textToElem, getPostLink, getSubmitError } from 'utils/stringHelper'
-import { getCroppedImage } from 'utils/imageHelper'
-import Resizable from 'components/Resizable'
+import { DeleteButton, EditButton, LinkButton, RemoveButton } from 'components/Buttons'
 import Img from 'components/Img'
+import LoadingSpinner from 'components/LoadingSpinner'
+import Resizable from 'components/Resizable'
+import { QuarterSpinner } from 'components/SvgIcon'
+import { getTextFromDate } from 'utils/dateHelper'
+import { getPostLink, getSubmitError } from 'utils/stringHelper'
+import { getCroppedImage } from 'utils/imageHelper'
 import LinkBar from './LinkBar'
 import './style.scss'
 
@@ -32,9 +32,9 @@ class MixedPost extends Component {
     info: PropTypes.object,
     intl: intlShape.isRequired,
     _id: PropTypes.string,
-    title: PropTypes.string,
+    title: PropTypes.object,
     img: PropTypes.string,
-    content: PropTypes.string,
+    content: PropTypes.object,
     link: PropTypes.string,
     firstname: PropTypes.string,
     created_at: PropTypes.string,
@@ -68,10 +68,9 @@ class MixedPost extends Component {
     if (img.indexOf('data:image') !== -1) {
       this.setState({ imageUpload: { uploading: true, error: null } })
       let formData = new FormData()
-      formData.append({
-        file: img,
-        upload_preset: CLOUDINARY_UPLOAD_PRESET,
-      })
+      formData.append('file', img)
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+
       axios.post(CLOUDINARY_UPLOAD_URL, formData, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
       .then(res => {
         const { data: { url } } = res
@@ -169,22 +168,22 @@ class MixedPost extends Component {
           <a className={cx({ postImage: true, noLink: !link })} href={postLink} onClick={this.handlePostImageClick}>
             { showImage && <Img onLoad={this.handleResize} src={img} /> }
             { editing
-              ? <Resizable className="postTitleEdit" tabIndex={1} placeholder={formatMessage(messages.title)} onChange={this.handlePostTitleChange} value={title} />
-              : <div className="postTitle" onClick={this.handleOpenLink} title={elemToText(title)} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
+              ? <Resizable className="postTitleEdit" tabIndex={1} placeholder={formatMessage(messages.title)} onChange={this.handlePostTitleChange} value={title[locale]} />
+              : <div className="postTitle" onClick={this.handleOpenLink} title={title[locale]} dangerouslySetInnerHTML={{ __html: title[locale] }} />
             }
           </a>
           <div className="postContent">
-            { editing && <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostRemoveContent} /> }
+            { editing && <RemoveButton type="content" onClick={this.handlePostRemoveContent} /> }
             <div className="postMeta">
               { firstname } - CARTA | {getTextFromDate(created_at, locale)}
               { editable && !editing && <EditButton onClick={this.handleEditStart} /> }
             </div>
             { editing
               ? <Resizable className="postText" tabIndex={2} placeholder={formatMessage(messages.writeHere)} onChange={this.handlePostContentChange} value={content} />
-              : <div className="postText" dangerouslySetInnerHTML={{ __html: textToElem(content) }} />
+              : <div className="postText" dangerouslySetInnerHTML={{ __html: content[locale] }} />
             }
           </div>
-          { editing && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostRemoveImage} /> }
+          { editing && <RemoveButton type="image" onClick={this.handlePostRemoveImage} /> }
           { showPostLinkButton && <LinkButton onClick={this.handleLinkButtonClick} /> }
           <LinkBar {...linkBarProps} />
         </div>

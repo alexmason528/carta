@@ -77,7 +77,7 @@ class HomePage extends Component {
     const { authenticated, user, params: { vcode } } = this.props
     const { homeInfo, info: { status } } = nextProps
 
-    if (status === CREATE_POST_SUCCESS) {
+    if (homeInfo.status === CREATE_POST_SUCCESS) {
       this.setState({ showCreatePostForm: false })
     }
 
@@ -125,7 +125,7 @@ class HomePage extends Component {
 
   render() {
     const { showAuthForm, showCreatePostForm, showAccountMenu, timer, coverPic, profilePic } = this.state
-    const { posts, authenticated, user, signOut, updateUserRequest, info, intl: { formatMessage }, editingPost } = this.props
+    const { posts, authenticated, user, signOut, updateUserRequest, info, intl: { locale, formatMessage }, editingPost } = this.props
     const { status, error } = info
 
     let createPostButtonType = 'text'
@@ -168,14 +168,11 @@ class HomePage extends Component {
               posts && posts.map((post, key) => {
                 const { _id, content, created_at, img, title, link } = post
 
+                if (title[locale].length === 0) return null
+
                 let data = {
-                  _id,
-                  created_at,
-                  title,
+                  ...post,
                   key,
-                  link: link || '',
-                  content: content.length === 0 ? null : content,
-                  img: img.length === 0 ? null : img,
                   firstname: getFirstname(post.author.fullname),
                   editable: (authenticated && (post.author._id === user._id || user.role === 'admin')) && !editingPost && !showCreatePostForm,
                   first: (key === 0 && authenticated),
@@ -194,14 +191,11 @@ class HomePage extends Component {
                 posts && posts.map((post, key) => {
                   const { _id, content, created_at, img, title, link } = post
 
+                  if (title[locale].length === 0) return null
+
                   let data = {
-                    _id,
-                    created_at,
-                    title,
+                    ...post,
                     key,
-                    link: link || '',
-                    content: content.length === 0 ? null : content,
-                    img: img.length === 0 ? null : img,
                     firstname: getFirstname(post.author.fullname),
                     editable: (authenticated && (post.author._id === user._id || user.role === 'admin')) && !editingPost && !showCreatePostForm,
                     first: (key === 0 && authenticated),
@@ -217,14 +211,11 @@ class HomePage extends Component {
               posts && posts.map((post, key) => {
                 const { _id, content, created_at, img, title, link } = post
 
+                if (title[locale].length === 0) return null
+
                 let data = {
-                  _id,
-                  created_at,
-                  title,
+                  ...post,
                   key,
-                  link: link || '',
-                  content: content.length === 0 ? null : content,
-                  img: img.length === 0 ? null : img,
                   firstname: getFirstname(post.author.fullname),
                   editable: (authenticated && (post.author._id === user._id || user.role === 'admin')) && !editingPost && !showCreatePostForm,
                   first: (key === 0 && authenticated),

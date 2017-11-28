@@ -2,14 +2,14 @@ import React, { Component, PropTypes } from 'react'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/constants'
-import LoadingSpinner from 'components/LoadingSpinner'
-import { QuarterSpinner } from 'components/SvgIcon'
-import { DeleteButton, EditButton, RemoveButton } from 'components/Buttons'
 import messages from 'containers/HomePage/messages'
-import { getTextFromDate } from 'utils/dateHelper'
-import { elemToText, textToElem, getSubmitError } from 'utils/stringHelper'
-import { getCroppedImage } from 'utils/imageHelper'
+import { DeleteButton, EditButton, RemoveButton } from 'components/Buttons'
+import LoadingSpinner from 'components/LoadingSpinner'
 import Resizable from 'components/Resizable'
+import { QuarterSpinner } from 'components/SvgIcon'
+import { getTextFromDate } from 'utils/dateHelper'
+import { getCroppedImage } from 'utils/imageHelper'
+import { getSubmitError } from 'utils/stringHelper'
 import './style.scss'
 
 class TextPost extends Component {
@@ -25,9 +25,9 @@ class TextPost extends Component {
     info: PropTypes.object,
     intl: intlShape.isRequired,
     _id: PropTypes.string,
-    title: PropTypes.string,
+    title: PropTypes.object,
     img: PropTypes.string,
-    content: PropTypes.string,
+    content: PropTypes.object,
     link: PropTypes.string,
     firstname: PropTypes.string,
     created_at: PropTypes.string,
@@ -111,17 +111,17 @@ class TextPost extends Component {
         <div className="post textPost" onClick={this.handlePostClick}>
           { editing
             ? <Resizable className="postTitleEdit" tabIndex={1} placeholder={formatMessage(messages.title)} onChange={this.handlePostTitleChange} value={title} />
-            : <div className="postTitle" title={elemToText(title)} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
+            : <div className="postTitle" title={title} dangerouslySetInnerHTML={{ __html: title[locale] }} />
           }
           <div className="postContent">
-            { editing && <RemoveButton className="postRemoveContentBtn" image="close" onClick={this.handlePostRemoveContent} /> }
+            { editing && <RemoveButton type="content" onClick={this.handlePostRemoveContent} /> }
             <div className="postMeta">
               { firstname } - CARTA | {getTextFromDate(created_at, locale)}
               { editable && !editing && <EditButton onClick={this.handleEditStart} /> }
             </div>
             { editing
               ? <Resizable className="postText" tabIndex={2} placeholder={formatMessage(messages.writeHere)} onChange={this.handlePostContentChange} value={content} />
-              : <div className="postText" dangerouslySetInnerHTML={{ __html: textToElem(content) }} />
+              : <div className="postText" dangerouslySetInnerHTML={{ __html: content[locale] }} />
             }
           </div>
         </div>

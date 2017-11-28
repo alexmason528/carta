@@ -77,7 +77,7 @@ class AccountMenu extends Component {
           <button type="button" onClick={signOut}>{formatMessage(messages.signOut)}</button> | <button type="button" onClick={this.handleSettingClick}>{formatMessage(messages.settings)}</button>
         </div>
         <div className={cx({ accountMenu__content: true, 'accountMenu__content--hidden': !showContent })}>
-          <RemoveButton className="accountMenu__deleteButton" image="delete-red" onClick={this.handleDeleteAccountClick}>
+          <RemoveButton type="user" onClick={this.handleDeleteAccountClick}>
             <span>{formatMessage(messages.deleteAccount)}</span>
           </RemoveButton>
           <Form className={cx({ accountMenu__deleteForm: true, 'accountMenu__deleteForm--hidden': !showForm })} onSubmit={handleSubmit(this.handleDeleteUser)}>

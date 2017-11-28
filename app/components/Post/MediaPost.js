@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
-import cx from 'classnames'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
+import cx from 'classnames'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/constants'
 import messages from 'containers/HomePage/messages'
@@ -12,7 +12,7 @@ import Resizable from 'components/Resizable'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { getTextFromDate } from 'utils/dateHelper'
 import { getCroppedImage } from 'utils/imageHelper'
-import { elemToText, textToElem, getPostLink, getSubmitError } from 'utils/stringHelper'
+import { getPostLink, getSubmitError } from 'utils/stringHelper'
 import LinkBar from './LinkBar'
 import './style.scss'
 
@@ -31,9 +31,9 @@ class MediaPost extends Component {
     info: PropTypes.object,
     intl: intlShape.isRequired,
     _id: PropTypes.string,
-    title: PropTypes.string,
+    title: PropTypes.object,
     img: PropTypes.string,
-    content: PropTypes.string,
+    content: PropTypes.object,
     link: PropTypes.string,
     firstname: PropTypes.string,
     created_at: PropTypes.string,
@@ -145,8 +145,8 @@ class MediaPost extends Component {
           <a className={cx({ postImage: true, noLink: !link })} href={postLink} onClick={this.handlePostImageClick}>
             { showImage && <Img onLoad={this.handleResize} src={img} /> }
             { editing
-              ? <Resizable className="postTitleEdit" placeholder={formatMessage(messages.title)} onChange={this.handleTitleChange} value={title} />
-              : <div className="postTitle" title={elemToText(title)} onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: textToElem(title) }} />
+              ? <Resizable className="postTitleEdit" placeholder={formatMessage(messages.title)} onChange={this.handleTitleChange} value={title[locale]} />
+              : <div className="postTitle" title={title[locale]} onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: title[locale] }} />
             }
           </a>
           <div className={cx({ postInfo: true, 'postInfo--hidden': !showInfo })}>
@@ -154,7 +154,7 @@ class MediaPost extends Component {
           </div>
           <LinkBar {...linkBarProps} />
           { editable && !editing && <EditButton white onClick={this.handleEditStart} /> }
-          { editing && <RemoveButton className="postRemoveImageBtn" image="close-white-shadow" hover onClick={this.handlePostRemoveImage} /> }
+          { editing && <RemoveButton onClick={this.handlePostRemoveImage} /> }
           { showPostLinkButton && <LinkButton onClick={this.handleLinkButtonClick} /> }
           <InfoButton active={showInfo} onClick={this.handlePostInfoToggle} />
         </div>

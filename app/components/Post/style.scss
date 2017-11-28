@@ -88,7 +88,7 @@
 .mixedPost {
   .postTitle, .postTitleEdit {
     bottom: 20px;
-    max-width: calc(100% - 40px);
+    width: calc(100% - 60px);
   }
 
   .postTitle { cursor: pointer }
@@ -110,7 +110,7 @@
     text-shadow: none;
     font-weight: 400;
     margin: 20px 0 0 20px;
-    max-width: calc(100% - 40px);
+    width: calc(100% - 60px);
   }
 
   .postTitle {
@@ -395,7 +395,7 @@
   }
 
   .left button{ margin-right: 5px }
-  .right button { margin: 0 2px }
+  // .right button { margin: 0 2px }
 
   input[type=file] { display: none }
 }
@@ -417,6 +417,11 @@
 
     &:hover { color: rgba(0, 0, 0, 1) }
     &:focus { outline: none }
+
+    &[disabled] {
+      color: #bbb;
+      cursor: default;
+    }
   }
 
   &:after{
@@ -432,6 +437,12 @@
     border-left:5px solid transparent;
     border-right:5px solid transparent;
     pointer-events:none;
+  }
+
+  &.disabled {
+    &:after {
+      border-top: 5px solid #bbb;
+    }
   }
 }
 

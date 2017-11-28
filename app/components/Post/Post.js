@@ -2,7 +2,18 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { updatePostRequest, deletePostRequest, postEditStart, postEditEnd, postTitleChange, postContentChange, postImageChange, postLinkChange, postShowLinkBar, postShowDeleteConfirm } from 'containers/HomePage/actions'
+import {
+  updatePostRequest,
+  deletePostRequest,
+  postEditStart,
+  postEditEnd,
+  postTitleChange,
+  postContentChange,
+  postImageChange,
+  postLinkChange,
+  postShowLinkBar,
+  postShowDeleteConfirm,
+} from 'containers/HomePage/actions'
 import { selectEditingPost, selectHomeInfo } from 'containers/HomePage/selectors'
 import MixedPost from './MixedPost'
 import MediaPost from './MediaPost'

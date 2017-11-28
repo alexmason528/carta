@@ -109,10 +109,6 @@ export default defineMessages({
     id: 'carta.link',
     defaultMessage: 'Link',
   },
-  writeHere: {
-    id: 'carta.writeHere',
-    defaultMessage: 'Write here...',
-  },
   linkMessage: {
     id: 'carta.linkMessage',
     defaultMessage: 'Paste or write link here',

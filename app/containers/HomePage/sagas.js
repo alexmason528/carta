@@ -2,7 +2,6 @@ import { take, call, put, select, cancel, takeLatest } from 'redux-saga/effects'
 import { LOCATION_CHANGE } from 'react-router-redux'
 
 import request from 'utils/request'
-import { elemToText } from 'utils/stringHelper'
 import { setItem, getItem, removeItem } from 'utils/localStorage'
 
 import { API_BASE_URL, SIGNIN_REQUEST, REGISTER_REQUEST, DELETE_USER_REQUEST, VERIFY_REQUEST, UPDATE_USER_REQUEST } from 'containers/App/constants'
@@ -184,8 +183,8 @@ export function* updatePostRequest() {
 
   const requestURL = `${API_BASE_URL}api/v1/post/${_id}`
   const payload = {
-    title: elemToText(title),
-    content: elemToText(content),
+    title,
+    content,
     link: link || '',
     img: img || '',
   }

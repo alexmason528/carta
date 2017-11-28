@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
-import cx from 'classnames'
 import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
+import cx from 'classnames'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import messages from 'containers/HomePage/messages'
 import Img from 'components/Img'

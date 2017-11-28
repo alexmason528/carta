@@ -1,4 +1,12 @@
 import messages from 'containers/HomePage/messages'
+import { LANGUAGES } from 'containers/App/constants'
+import enTranslationMessages from 'translations/en.json'
+import nlTranslationMessages from 'translations/nl.json'
+
+const translations = {
+  en: enTranslationMessages,
+  nl: nlTranslationMessages,
+}
 
 export const elemToText = elem =>
   elem !== null ?
@@ -27,16 +35,105 @@ export const getPostLink = (editing, link, img) => {
 }
 
 export const getSubmitError = (img, title, content, formatMessage) => {
-  let submitErrorTxt = ''
+  let error = ''
   const remainCharCnts = !content ? 1000 : 1000 - content.length
 
   if (!title) {
-    submitErrorTxt = formatMessage(messages.requireTitle)
+    error = formatMessage(messages.requireTitle)
   } else if (!img && !content) {
-    submitErrorTxt = formatMessage(messages.requireContent)
+    error = formatMessage(messages.requireContent)
   } else if (remainCharCnts < 0) {
-    submitErrorTxt = formatMessage(messages.limitExceeded)
+    error = formatMessage(messages.limitExceeded)
   }
 
-  return submitErrorTxt
+  return error
+}
+
+export const getPostType = (img, content) => {
+  let postType
+
+  if (img && content !== null) {
+    postType = 'mixedPost'
+  } else if (img && content === null) {
+    postType = 'mediaPost'
+  } else if (!img && content !== null) {
+    postType = 'textPost'
+  }
+
+  return postType
+}
+
+export const isLanguageSelectable = (title, img, content, defaultLocale) => {
+  const postType = getPostType(img, content)
+  if (postType === 'mediaPost') {
+    return title[defaultLocale].length > 0
+  } else if (postType === 'textPost' || postType === 'mixedPost') {
+    return (title[defaultLocale].length > 0 && content[defaultLocale].length > 0)
+  }
+}
+
+export const getDefaultTexts = (locale = 'en', defaultLocale) => {
+  let title = translations[locale]['carta.title']
+  let content = `${translations[locale]['carta.text']}...`
+
+  if (locale !== defaultLocale) {
+    for (let lang of LANGUAGES) {
+      const { countryCode, name } = lang
+      if (countryCode === locale) {
+        title = `${name} ${title}`
+        content = `${name} ${content}`
+        break
+      }
+    }
+  }
+
+  return { title, content }
+}
+
+export const getSubmitInfo = (title, img, content, defaultLocale, curLocale, formatMessage) => {
+  let submitError
+  const postType = getPostType(img, content)
+  const remainCharCnts = !content ? 1000 : 1000 - content[curLocale].length
+
+  if (!isLanguageSelectable(title, img, content, defaultLocale)) {
+    submitError = 'You should input default language post first'
+  } else if (postType === 'mediaPost') {
+    submitError = formatMessage(messages.requireTitle)
+    for (let lang of LANGUAGES) {
+      const { countryCode } = lang
+      if (title[countryCode].length > 0) {
+        submitError = undefined
+        break
+      }
+    }
+  } else if (postType === 'textPost' || postType === 'mixedPost') {
+    let remainCharCnts
+    let hasCompletedPost = false
+
+    for (let lang of LANGUAGES) {
+      const { countryCode } = lang
+      if (title[countryCode] !== '' && content[countryCode] !== '') {
+        hasCompletedPost = true
+      }
+    }
+
+    for (let lang of LANGUAGES) {
+      const { countryCode } = lang
+      if (content[countryCode].length > 1000) {
+        submitError = formatMessage(messages.limitExceeded)
+      } else if (title[countryCode] === '' && content[countryCode] !== '') {
+        submitError = formatMessage(messages.requireTitle)
+      } else if (title[countryCode] !== '' && content[countryCode] === '') {
+        submitError = formatMessage(messages.requireContent)
+      }
+
+      if (submitError) break
+    }
+
+    if (!hasCompletedPost && !submitError) {
+      submitError = formatMessage(messages.requireTitle)
+    }
+  }
+
+  return { postType, remainCharCnts, submitError }
 }

@@ -142,7 +142,7 @@ class Profile extends Component {
             <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
             <Img onLoad={this.handleLoaded} src={coverPic} />
             { authenticated ? <h2>{user.fullname}</h2> : <h2 onClick={onClick}>{formatMessage(messages.signIn)}</h2> }
-            { authenticated && <UserButton className="profile__userButton" onClick={onClick} /> }
+            { authenticated && <UserButton onClick={onClick} /> }
           </div>
         }
         { profilePic &&
