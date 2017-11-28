@@ -102,21 +102,49 @@ export const getSubmitInfo = (title, img, content, defaultLocale, curLocale, for
   const remainCharCnts = !content ? 1000 : 1000 - content[curLocale].length
 
   if (postType === 'mediaPost') {
+    let hasOtherTitle = false
+    for (let lang of LANGUAGES) {
+      const { countryCode } = lang
+      if (countryCode !== defaultLocale && title[countryCode] !== '') {
+        hasOtherTitle = true
+        break
+      }
+    }
+
     if (title[defaultLocale] === '') {
-      submitError = formatMessage(messages.requireTitle, { lang: '' })
+      submitError = hasOtherTitle ? formatMessage(messages.requireTitle, { lang: defaultLocale.toUpperCase() }) : formatMessage(messages.requireDefaultTitle)
     }
   } else if (postType === 'textPost' || postType === 'mixedPost') {
+    let hasOtherTitle = false
+    let hasOtherContent = false
+
+    for (let lang of LANGUAGES) {
+      const { countryCode } = lang
+      if (countryCode !== defaultLocale && title[countryCode] !== '') {
+        hasOtherTitle = true
+        break
+      }
+    }
+
+    for (let lang of LANGUAGES) {
+      const { countryCode } = lang
+      if (countryCode !== defaultLocale && content[countryCode] !== '') {
+        hasOtherContent = true
+        break
+      }
+    }
+
     if (title[defaultLocale] === '') {
-      submitError = formatMessage(messages.requireTitle, { lang: '' })
+      submitError = hasOtherTitle ? formatMessage(messages.requireTitle, { lang: defaultLocale.toUpperCase() }) : formatMessage(messages.requireDefaultTitle)
     } else if (content[defaultLocale] === '') {
-      submitError = formatMessage(messages.requireContent, { lang: '' })
+      submitError = hasOtherContent ? formatMessage(messages.requireContent, { lang: defaultLocale.toUpperCase() }) : formatMessage(messages.requireDefaultContent)
     } else {
       for (let lang of LANGUAGES) {
-        const { countryCode, third } = lang
+        const { countryCode } = lang
         if (title[countryCode] === '' && content[countryCode] !== '') {
-          submitError = formatMessage(messages.requireTitle, { lang: ` ${third}` })
+          submitError = formatMessage(messages.requireTitle, { lang: countryCode.toUpperCase() })
         } else if (title[countryCode] !== '' && content[countryCode] === '') {
-          submitError = formatMessage(messages.requireContent, { lang: ` ${third}` })
+          submitError = formatMessage(messages.requireContent, { lang: countryCode.toUpperCase() })
         }
         if (submitError) break
       }

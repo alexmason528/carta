@@ -113,13 +113,21 @@ export default defineMessages({
     id: 'carta.linkMessage',
     defaultMessage: 'Paste or write link here',
   },
+  requireDefaultTitle: {
+    id: 'carta.requireDefaultTitle',
+    defaultMessage: 'Please add a title',
+  },
+  requireDefaultContent: {
+    id: 'carta.requireDefaultContent',
+    defaultMessage: 'Please add a text to you post',
+  },
   requireTitle: {
     id: 'carta.requireTitle',
-    defaultMessage: 'Please add {lang} title',
+    defaultMessage: 'Please add a title to the {lang} version of your post',
   },
   requireContent: {
     id: 'carta.requireContent',
-    defaultMessage: 'Please add {lang} content',
+    defaultMessage: 'Please add a text to the {lang} version of your post',
   },
   limitExceeded: {
     id: 'carta.limitExceeded',

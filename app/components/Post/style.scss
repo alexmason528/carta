@@ -1,5 +1,11 @@
 .postContainer { 
   position: relative;
+
+  .error {
+    position: relative !important;
+    padding: 0 12px 8px;
+    width: 100% !important;
+  }
 }
 
 .backLayer {

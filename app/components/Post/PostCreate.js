@@ -355,13 +355,14 @@ class PostCreate extends Component {
             <div className="right">
               <button type="button" className="postCancelBtn" onClick={this.handleCancel}>{formatMessage(messages.cancel)}</button>
               <DeleteButton onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
-              <button type="button" className="postBorderBtn" title={submitError} disabled={submitError} onClick={this.handleSubmit}>{formatMessage(messages.submit)}</button>
+              <button type="button" className="postBorderBtn" disabled={submitError} onClick={this.handleSubmit}>{formatMessage(messages.submit)}</button>
             </div>
           }
           <button type="button" className={cx({ postCloseBtn: true, 'postCloseBtn--hasContent': postType })} onClick={onClose}>
             <Img src={`${CLOUDINARY_ICON_URL}/close.png`} />
           </button>
         </div>
+        { submitError && <div className="error">{submitError}</div> }
       </div>
     )
   }
