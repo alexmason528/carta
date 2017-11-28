@@ -9,7 +9,7 @@ import messages from 'containers/HomePage/messages'
 import { DeleteButton, EditButton, LinkButton, RemoveButton } from 'components/Buttons'
 import Img from 'components/Img'
 import LoadingSpinner from 'components/LoadingSpinner'
-import Resizable from 'components/Resizable'
+import ContentEditable from 'components/ContentEditable'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { getTextFromDate } from 'utils/dateHelper'
 import { getDefaultTexts, getPostLink, getSubmitInfo, isLanguageSelectable } from 'utils/stringHelper'
@@ -198,7 +198,7 @@ class MixedPost extends Component {
           <a className={cx({ postImage: true, noLink: !link })} href={postLink} onClick={this.handlePostImageClick}>
             { showImage && <Img onLoad={this.handleResize} src={img} /> }
             { editing
-              ? <Resizable className="postTitleEdit" tabIndex={1} placeholder={defaultTexts.title} onChange={this.handlePostTitleChange} value={title[locale]} />
+              ? <ContentEditable className="postTitleEdit" tabIndex={1} placeholder={defaultTexts.title} onChange={this.handlePostTitleChange} value={title[locale]} />
               : <div className="postTitle" onClick={this.handleOpenLink} title={title[locale]} dangerouslySetInnerHTML={{ __html: title[locale] }} />
             }
           </a>
@@ -209,7 +209,7 @@ class MixedPost extends Component {
               { editable && !editing && <EditButton onClick={this.handleEditStart} /> }
             </div>
             { editing
-              ? <Resizable className="postText" tabIndex={2} placeholder={defaultTexts.content} onChange={this.handlePostContentChange} value={content[locale]} />
+              ? <ContentEditable className="postText" tabIndex={2} placeholder={defaultTexts.content} onChange={this.handlePostContentChange} value={content[locale]} />
               : <div className="postText" dangerouslySetInnerHTML={{ __html: content[locale] }} />
             }
           </div>
