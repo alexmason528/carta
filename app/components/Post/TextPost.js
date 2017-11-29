@@ -73,8 +73,7 @@ class TextPost extends Component {
   }
 
   handleResize = () => {
-    const comp = ReactDOM.findDOMNode(this)
-    const post = $(comp).find('.post')
+    const post = ReactDOM.findDOMNode(this)
     const width = $(post).width()
     const fontSize = (width / 76) * 3 * 1.15 * 1.25
     $(post).find('.postTitleEdit').css({ fontSize: `${fontSize}px` })

@@ -84,8 +84,7 @@ class MixedPost extends Component {
   }
 
   handleResize = () => {
-    const comp = ReactDOM.findDOMNode(this)
-    const post = $(comp).find('.post')
+    const post = ReactDOM.findDOMNode(this)
     const width = $(post).width()
     const height = $(post).find('.postImage').height() - 65
     const fontSize = (width / 44) * 3 * 1.15
