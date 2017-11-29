@@ -1,10 +1,16 @@
 import React, { Component, PropTypes } from 'react'
+import ReactDOM from 'react-dom'
 import { injectIntl, intlShape } from 'react-intl'
 import axios from 'axios'
 import cx from 'classnames'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_UPLOAD_URL, LANGUAGES } from 'containers/App/constants'
-import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/constants'
+import {
+  UPDATE_POST_REQUEST,
+  UPDATE_POST_SUCCESS,
+  UPDATE_POST_FAIL,
+  DELETE_POST_REQUEST,
+} from 'containers/HomePage/constants'
 import messages from 'containers/HomePage/messages'
 import { DeleteButton, EditButton, LinkButton, RemoveButton } from 'components/Buttons'
 import Img from 'components/Img'
@@ -58,12 +64,52 @@ class MixedPost extends Component {
     }
   }
 
+  componentDidMount() {
+    window.addEventListener('resize', this.handleResize)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { info: { status }, intl: { locale } } = nextProps
+
+    if (status === UPDATE_POST_SUCCESS || status === UPDATE_POST_FAIL) {
+      this.setState({ locale })
+    }
+
+    this.handleResize()
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize)
+  }
+
+  handleResize = () => {
+    const comp = ReactDOM.findDOMNode(this)
+    const post = $(comp).find('.post')
+    const width = $(post).width()
+    const height = $(post).find('.postImage').height() - 65
+    const fontSize = (width / 44) * 3 * 1.15
+    const lines = fontSize > 0 ? Math.floor(height / (fontSize * 1.2)) : 0
+
+    $(post).find('.postTitle').css({
+      'font-size': `${fontSize}px`,
+      'max-height': `${fontSize * lines * 1.2}px`,
+      '-webkit-line-clamp': lines.toString(),
+      display: '-webkit-box',
+      '-webkit-box-orient': 'vertical',
+    })
+
+    $(post).find('.postTitleEdit').css({
+      'font-size': `${fontSize}px`,
+      'max-height': `${fontSize * lines * 1.2}px`,
+    })
+  }
+
   handleEditStart = evt => {
     evt.stopPropagation()
     const { _id, title, content, img, link } = this.props
     const data = { _id, title, content, img, link, showDeleteConfirm: false, showLinkBar: false }
     this.props.postEditStart(data)
-    this.setState({ showError: false })
+    this.setState({ showError: false }, this.handleResize)
   }
 
   handleSubmit = submitError => {
@@ -157,6 +203,12 @@ class MixedPost extends Component {
     })
   }
 
+  handleCancel = () => {
+    const { intl: { locale } } = this.props
+    this.props.postEditEnd()
+    this.setState({ locale }, this.handleResize)
+  }
+
   render() {
     const {
       img,
@@ -229,7 +281,7 @@ class MixedPost extends Component {
               </div>
             </div>
             <div className="right">
-              <button type="button" className="postCancelBtn" onClick={postEditEnd}>{formatMessage(messages.cancel)}</button>
+              <button type="button" className="postCancelBtn" onClick={this.handleCancel}>{formatMessage(messages.cancel)}</button>
               <DeleteButton onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
               <button type="button" className={cx({ postBorderBtn: true, disabled: submitError })} title={submitError} onClick={() => { this.handleSubmit(submitError) }}>{formatMessage(messages.submit)}</button>
             </div>

@@ -1,9 +1,15 @@
 import React, { Component, PropTypes } from 'react'
+import ReactDOM from 'react-dom'
 import { injectIntl, intlShape } from 'react-intl'
 import cx from 'classnames'
 import { createStructuredSelector } from 'reselect'
 import { LANGUAGES } from 'containers/App/constants'
-import { UPDATE_POST_REQUEST, DELETE_POST_REQUEST } from 'containers/HomePage/constants'
+import {
+  UPDATE_POST_REQUEST,
+  UPDATE_POST_SUCCESS,
+  UPDATE_POST_FAIL,
+  DELETE_POST_REQUEST,
+} from 'containers/HomePage/constants'
 import messages from 'containers/HomePage/messages'
 import { DeleteButton, EditButton, RemoveButton } from 'components/Buttons'
 import LoadingSpinner from 'components/LoadingSpinner'
@@ -47,11 +53,44 @@ class TextPost extends Component {
     }
   }
 
+  componentDidMount() {
+    window.addEventListener('resize', this.handleResize)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { info: { status }, intl: { locale } } = nextProps
+
+    if (status === UPDATE_POST_SUCCESS || status === UPDATE_POST_FAIL) {
+      this.setState({ locale })
+    }
+
+    this.handleResize()
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize)
+  }
+
+  handleResize = () => {
+    const comp = ReactDOM.findDOMNode(this)
+    const post = $(comp).find('.post')
+    const width = $(post).width()
+    const fontSize = (width / 76) * 3 * 1.15
+    $(post).find('.postTitleEdit').css({ fontSize: `${fontSize}px` })
+    $(post).find('.postTitle').css({
+      fontSize: `${fontSize}px`,
+      'max-height': `${fontSize * 2 * 1.2}px`,
+      '-webkit-line-clamp': '2',
+      display: '-webkit-box',
+      '-webkit-box-orient': 'vertical',
+    })
+  }
+
   handleEditStart = () => {
     const { _id, title, img, link, content } = this.props
     const data = { _id, title, img, link, content, showDeleteConfirm: false, showLinkBar: false }
     this.props.postEditStart(data)
-    this.setState({ showError: false })
+    this.setState({ showError: false }, this.handleResize)
   }
 
   handlePostClick = () => {
@@ -127,6 +166,12 @@ class TextPost extends Component {
     this.props.updatePostRequest()
   }
 
+  handleCancel = () => {
+    const { intl: { locale } } = this.props
+    this.props.postEditEnd()
+    this.setState({ locale }, this.handleResize)
+  }
+
   render() {
     const {
       _id,
@@ -189,7 +234,7 @@ class TextPost extends Component {
               </div>
             </div>
             <div className="right">
-              <button type="button" className="postCancelBtn" onClick={postEditEnd}>{formatMessage(messages.cancel)}</button>
+              <button type="button" className="postCancelBtn" onClick={this.handleCancel}>{formatMessage(messages.cancel)}</button>
               <DeleteButton onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
               <button type="button" className={cx({ postBorderBtn: true, disabled: submitError })} title={submitError} onClick={() => { this.handleSubmit(submitError) }}>{formatMessage(messages.submit)}</button>
             </div>
