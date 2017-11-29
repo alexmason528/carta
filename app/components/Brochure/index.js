@@ -28,9 +28,9 @@ class Brochure extends Component {
       evt.stopPropagation()
       let tileWidth
 
-      if ($('.brochure-container').width() < 550) {
+      if ($('.brochure-container').width() < 768) {
         tileWidth = $('.brochure-container').width()
-      } else if ($('.brochure-container').width() < 1000) {
+      } else if ($('.brochure-container').width() < 992) {
         tileWidth = $('.brochure-container').width() / 2
       } else {
         tileWidth = $('.brochure-container').width() / 3
@@ -115,7 +115,7 @@ class Brochure extends Component {
 
     tileCount = $('.tile').length
 
-    if ($('.brochure-container').width() < 550) {
+    if ($('.brochure-container').width() < 768) {
       cols = 1
       tileWidth = $('.brochure-container').width() / cols
       rows = Math.ceil(tileCount - 1)
@@ -126,7 +126,7 @@ class Brochure extends Component {
       $('.main-poster h1').css({ 'font-size': `${tileWidth / 10}px` })
 
       this.AddDividers(cols, rows)
-    } else if ($('.brochure-container').width() < 1000) {
+    } else if ($('.brochure-container').width() < 992) {
       cols = 2
       tileWidth = $('.brochure-container').width() / cols
       rows = Math.ceil((tileCount / cols) + 0.5)
