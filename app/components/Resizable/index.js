@@ -11,14 +11,6 @@ class Resizable extends Component {
     disabled: PropTypes.bool,
   }
 
-  componentDidMount() {
-    this.resizeTextArea()
-  }
-
-  componentWillReceiveProps() {
-    this.resizeTextArea()
-  }
-
   handleChange = evt => {
     const { onChange } = this.props
     this.resizeTextArea()

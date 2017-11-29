@@ -60,6 +60,7 @@ class MediaPost extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize)
+    this.handleResize()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -85,16 +86,21 @@ class MediaPost extends Component {
     const lines = fontSize > 0 ? Math.floor(height / (fontSize * 1.2)) : 0
 
     $(post).find('.postTitle').css({
-      'font-size': `${fontSize}px`,
-      'max-height': `${fontSize * lines * 1.2}px`,
-      '-webkit-line-clamp': lines.toString(),
+      fontSize: `${fontSize}px`,
+      maxHeight: `${fontSize * lines * 1.2}px`,
       display: '-webkit-box',
+      '-webkit-line-clamp': lines.toString(),
       '-webkit-box-orient': 'vertical',
     })
+
     $(post).find('.postTitleEdit').css({
-      'font-size': `${fontSize}px`,
-      'max-height': `${fontSize * lines * 1.2}px`,
+      fontSize: `${fontSize}px`,
+      maxHeight: `${fontSize * lines * 1.2}px`,
     })
+
+    const sH = $(post).find('.postTitleEdit').prop('scrollHeight')
+
+    $(post).find('.postTitleEdit').css({ height: `${sH}px` })
   }
 
   handleEditStart = evt => {

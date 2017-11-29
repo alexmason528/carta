@@ -55,6 +55,7 @@ class TextPost extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize)
+    this.handleResize()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -79,11 +80,14 @@ class TextPost extends Component {
     $(post).find('.postTitleEdit').css({ fontSize: `${fontSize}px` })
     $(post).find('.postTitle').css({
       fontSize: `${fontSize}px`,
-      'max-height': `${fontSize * 2 * 1.2}px`,
-      '-webkit-line-clamp': '2',
+      maxHeight: `${fontSize * 2 * 1.2}px`,
       display: '-webkit-box',
+      '-webkit-line-clamp': '2',
       '-webkit-box-orient': 'vertical',
     })
+
+    const sH = $(post).find('.postTitleEdit').prop('scrollHeight')
+    $(post).find('.postTitleEdit').css({ height: `${sH}px` })
   }
 
   handleEditStart = () => {
