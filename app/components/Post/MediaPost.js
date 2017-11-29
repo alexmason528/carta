@@ -66,8 +66,8 @@ class MediaPost extends Component {
   componentWillReceiveProps(nextProps) {
     const { info: { status }, intl: { locale } } = nextProps
 
-    if (status === UPDATE_POST_SUCCESS || status === UPDATE_POST_FAIL) {
-      this.setState({ locale })
+    if (status !== this.props.info.status && (status === UPDATE_POST_SUCCESS || status === UPDATE_POST_FAIL)) {
+      this.setState({ locale }, this.handleResize)
     }
 
     this.handleResize()
