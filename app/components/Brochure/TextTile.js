@@ -37,7 +37,7 @@ class TextTile extends Component {
   handleResize = () => {
     const tile = ReactDOM.findDOMNode(this)
     const width = $(tile).width()
-    const fontSize = (width / 76) * 3 * 1.15 * 1.25
+    const fontSize = (width / 76) * 3 * 1.15
     $(tile).find('h2').css({ fontSize: `${fontSize}px` })
 
     const { expanded } = this.state

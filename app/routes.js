@@ -36,7 +36,7 @@ export default function createRoutes(store) {
 
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('quest', reducer.default)
-          injectSagas(sagas.default)
+          injectSagas('quest', sagas.default)
 
           renderRoute(component)
         })
@@ -57,7 +57,7 @@ export default function createRoutes(store) {
 
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('home', reducer.default)
-          injectSagas(sagas.default)
+          injectSagas('home', sagas.default)
 
           renderRoute(component)
         })

@@ -60,7 +60,7 @@ function homeReducer(state = initialState, action) {
           ...state.posts,
         ],
         status: type,
-        error: payload,
+        error: null,
       }
 
     case CREATE_POST_FAIL:

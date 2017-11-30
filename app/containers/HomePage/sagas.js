@@ -81,12 +81,6 @@ export function* registerRequest({ payload }) {
   }
 }
 
-export function* registerRequestWatcher() {
-  const watcher = yield takeLatest(REGISTER_REQUEST, registerRequest)
-  yield take(LOCATION_CHANGE)
-  yield cancel(watcher)
-}
-
 export function* deleteUserRequest({ payload }) {
   const { id, password } = payload
   const requestURL = `${API_BASE_URL}api/v1/auth/${id}`
@@ -259,6 +253,12 @@ export function* updateUserRequest({ payload }) {
   } catch (err) {
     yield put(updateUserFail(err.details))
   }
+}
+
+export function* registerRequestWatcher() {
+  const watcher = yield takeLatest(REGISTER_REQUEST, registerRequest)
+  yield take(LOCATION_CHANGE)
+  yield cancel(watcher)
 }
 
 export function* signInRequestWatcher() {

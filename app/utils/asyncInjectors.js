@@ -50,7 +50,9 @@ export function injectAsyncReducer(store, isValid) {
  * Inject an asynchronously loaded saga
  */
 export function injectAsyncSagas(store, isValid) {
-  return function injectSagas(sagas) {
+  const asyncSagas = {}
+
+  return function injectSagas(name, sagas) {
     if (!isValid) checkStore(store)
 
     invariant(
@@ -63,6 +65,9 @@ export function injectAsyncSagas(store, isValid) {
       '(app/utils...) injectAsyncSagas: Received an empty `sagas` array'
     )
 
+    if (Reflect.has(asyncSagas, name)) return
+
+    asyncSagas[name] = sagas
     sagas.map(store.runSaga)
   }
 }
