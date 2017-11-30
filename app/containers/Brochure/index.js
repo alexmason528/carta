@@ -9,19 +9,10 @@ import { browserHistory } from 'react-router'
 import { fetchBrochure } from 'containers/QuestPage/actions'
 import { selectBrochure } from 'containers/QuestPage/selectors'
 import Img from 'components/Img'
-import ImageTile from './ImageTile'
-import TextTile from './TextTile'
+import { ImageTile, TextTile } from 'components/Tiles'
 import './style.scss'
 
 class Brochure extends Component {
-
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      imageLoaded: false,
-    }
-  }
 
   componentDidMount() {
     const { fetchBrochure, name } = this.props
@@ -33,7 +24,6 @@ class Brochure extends Component {
     if (!brochure) return null
 
     const { mainPoster, description, tiles } = brochure
-    const { imageLoaded } = this.state
 
     return (
       <Container fluid className="brochure">

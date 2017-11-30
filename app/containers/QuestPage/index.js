@@ -7,16 +7,15 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
 import { Container } from 'reactstrap'
+import Brochure from 'containers/Brochure'
 import Menu from 'components/Menu'
 import { MAP_ACCESS_TOKEN, CLOUDINARY_POINTS_URL, CLOUDINARY_SHAPES_URL } from 'containers/App/constants'
 import { MapBlock, ScoreBoardBlock } from 'components/Blocks'
 import QuestPanel from 'components/QuestPanel'
-import Brochure from 'components/Brochure'
 import { Button, QuestButton } from 'components/Buttons'
 import URLParser from 'utils/questURLparser'
 import { mapChange, fetchQuestInfo, fetchRecommendations, setDefaultQuest } from './actions'
 import { selectRecommendations, selectPlaces } from './selectors'
-
 
 const Map = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN })
 

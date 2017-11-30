@@ -47,14 +47,17 @@ class TextTile extends Component {
       $(tile).css({ zIndex: 20 })
       $(tile).find('.textTile').css({ bottom: `calc(-100% - ${type === 'description' ? 60 : 8}px)` })
     } else {
-      $(tile).css({ zIndex: 1 })
       $(tile).find('.textTile').css({ bottom: 0, zIndex: 1 })
     }
 
     setTimeout(() => {
       $(tile).find('.textTile__content').trigger('update.dot')
       $(tile).find('.arrowBtn').css('display', $(tile).find('.is-truncated').length > 0 || expanded ? 'block' : 'none')
-    }, 100)
+    }, 200)
+
+    if (!expanded) {
+      setTimeout(() => { $(tile).css({ zIndex: 1 }) }, 250)
+    }
   }
 
   handleToggleExpand = () => {
