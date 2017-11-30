@@ -17,7 +17,7 @@ import Resizable from 'components/Resizable'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { getTextFromDate } from 'utils/dateHelper'
 import { getCroppedImage } from 'utils/imageHelper'
-import { getDefaultTexts, getSubmitInfo, isLanguageSelectable } from 'utils/stringHelper'
+import { textToElem, getDefaultTexts, getSubmitInfo, isLanguageSelectable } from 'utils/stringHelper'
 import './style.scss'
 
 class TextPost extends Component {
@@ -85,8 +85,10 @@ class TextPost extends Component {
       '-webkit-box-orient': 'vertical',
     })
 
-    const sH = $(post).find('.postTitleEdit').prop('scrollHeight')
-    $(post).find('.postTitleEdit').css({ height: `${sH}px` })
+    const sH = $(post).find('.postTitle').prop('scrollHeight')
+    const editSH = $(post).find('.postTitleEdit').prop('scrollHeight')
+    $(post).find('.postTitle').css({ height: `${sH}px` })
+    $(post).find('.postTitleEdit').css({ height: `${editSH}px` })
   }
 
   handleEditStart = () => {
@@ -209,7 +211,7 @@ class TextPost extends Component {
         <div className="post textPost" onClick={this.handlePostClick}>
           { editing
             ? <Resizable className="postTitleEdit" tabIndex={1} placeholder={defaultTexts.title} onChange={this.handlePostTitleChange} value={title[locale]} />
-            : <div className="postTitle" title={title[locale]} dangerouslySetInnerHTML={{ __html: title[locale] }} />
+            : <div className="postTitle" title={title[locale]} dangerouslySetInnerHTML={{ __html: textToElem(title[locale]) }} />
           }
           <div className="postContent">
             { editing && <RemoveButton type="content" onClick={this.handlePostRemoveContent} /> }

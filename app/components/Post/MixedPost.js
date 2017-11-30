@@ -18,7 +18,7 @@ import LoadingSpinner from 'components/LoadingSpinner'
 import Resizable from 'components/Resizable'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { getTextFromDate } from 'utils/dateHelper'
-import { getDefaultTexts, getPostLink, getSubmitInfo, isLanguageSelectable } from 'utils/stringHelper'
+import { textToElem, getDefaultTexts, getPostLink, getSubmitInfo, isLanguageSelectable } from 'utils/stringHelper'
 import { getCroppedImage } from 'utils/imageHelper'
 import LinkBar from './LinkBar'
 import './style.scss'
@@ -254,7 +254,7 @@ class MixedPost extends Component {
             <Img onLoad={this.handleResize} src={img} />
             { editing
               ? <Resizable className="postTitleEdit" tabIndex={1} placeholder={defaultTexts.title} onChange={this.handlePostTitleChange} value={title[locale]} />
-              : <div className="postTitle" onClick={this.handleOpenLink} title={title[locale]} dangerouslySetInnerHTML={{ __html: title[locale] }} />
+              : <div className="postTitle" onClick={this.handleOpenLink} title={title[locale]} dangerouslySetInnerHTML={{ __html: textToElem(title[locale]) }} />
             }
           </a>
           <div className="postContent">

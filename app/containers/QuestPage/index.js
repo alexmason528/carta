@@ -57,8 +57,6 @@ class QuestPage extends Component {
     //   }
     // }
 
-    const { fetchQuestInfo } = this.props
-
     this.mapStyle = {
       version: 8,
       sources: {
@@ -86,17 +84,14 @@ class QuestPage extends Component {
     this.center = [5.822, 52.142]
     this.zoom = [6]
 
-    fetchQuestInfo()
+    this.props.fetchQuestInfo()
 
     this.colors = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379']
-
     this.shapesGeoJSONSource = `${CLOUDINARY_SHAPES_URL}/shapes.geojson`
     this.pointsGeoJSONSource = `${CLOUDINARY_POINTS_URL}/points.geojson`
 
     this.map = ''
-
     this.count = 5
-
     this.handleRedrawMap(this.props)
   }
 
@@ -105,27 +100,25 @@ class QuestPage extends Component {
   }
 
   handleZoomEnd = map => {
-    const { mapChange, fetchRecommendations } = this.props
     const { showQuest, minimized, closed } = this.state
 
-    mapChange({
+    this.props.mapChange({
       zoom: map.getZoom(),
       bounds: map.getBounds(),
     })
 
     if (showQuest || minimized) {
-      fetchRecommendations()
+      this.props.fetchRecommendations()
     }
   }
 
   handleStyleLoad = map => {
-    const { mapChange, fetchRecommendations } = this.props
-    mapChange({
+    this.props.mapChange({
       zoom: map.getZoom(),
       bounds: map.getBounds(),
     })
 
-    fetchRecommendations()
+    this.props.fetchRecommendations()
     this.map = map
 
     map.addSource('shapes', {
@@ -143,8 +136,7 @@ class QuestPage extends Component {
   }
 
   handleDragEnd = map => {
-    const { mapChange, fetchRecommendations } = this.props
-    mapChange({
+    this.props.mapChange({
       zoom: map.getZoom(),
       bounds: map.getBounds(),
     })
@@ -152,7 +144,7 @@ class QuestPage extends Component {
     const { showQuest, minimized, closed } = this.state
 
     if (showQuest || minimized) {
-      fetchRecommendations()
+      this.props.fetchRecommendations()
     }
   }
 

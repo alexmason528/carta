@@ -18,7 +18,7 @@ import Resizable from 'components/Resizable'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { getTextFromDate } from 'utils/dateHelper'
 import { getCroppedImage } from 'utils/imageHelper'
-import { getDefaultTexts, getPostLink, getSubmitInfo, isLanguageSelectable } from 'utils/stringHelper'
+import { textToElem, getDefaultTexts, getPostLink, getSubmitInfo, isLanguageSelectable } from 'utils/stringHelper'
 import LinkBar from './LinkBar'
 import './style.scss'
 
@@ -241,7 +241,7 @@ class MediaPost extends Component {
             <Img onLoad={this.handleResize} src={img} />
             { editing
               ? <Resizable className="postTitleEdit" placeholder={defaultTexts.title} onChange={this.handleTitleChange} value={title[locale]} />
-              : <div className="postTitle" title={title[locale]} onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: title[locale] }} />
+              : <div className="postTitle" title={title[locale]} onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: textToElem(title[locale]) }} />
             }
           </a>
           <div className={cx({ postInfo: true, 'postInfo--hidden': !showInfo })}>

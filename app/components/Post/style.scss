@@ -124,11 +124,14 @@
     cursor: text;
   }
 
-  .postTitleEdit {
-    width: calc(100% - 40px);
+  .postTitleEdit { width: 100% }
+  .postContent {
+    padding: 10px 0 0 0;
   }
 
-  .postContent, .postContentText { border: none; padding: 20px 0 }
+  .postRemoveContentBtn {
+    right: -15px;
+  }
 }
 
 .postImage {
@@ -340,9 +343,8 @@
 }
 
 .postContent {
+  display: block;
   padding: 15px 30px 25px;
-  display: flex;
-  flex-direction: column;
   position: relative;
   font-size: 18px;
 }
