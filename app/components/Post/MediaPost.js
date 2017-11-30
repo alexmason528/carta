@@ -221,7 +221,6 @@ class MediaPost extends Component {
     const { showError, showInfo, locale } = this.state
 
     const showPostLinkButton = editing && !showLinkBar
-    const showImage = status !== UPDATE_POST_REQUEST
     const spinnerShow = editing && (status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST)
     const defaultTexts = getDefaultTexts(locale, this.props.intl.locale)
     const dropdownDisabled = !isLanguageSelectable(title, img, content, this.props.intl.locale)
@@ -239,7 +238,7 @@ class MediaPost extends Component {
         </LoadingSpinner>
         <div className="post mediaPost">
           <a className={cx({ postImage: true, noLink: !link })} href={postLink} onClick={this.handlePostImageClick}>
-            { showImage && <Img onLoad={this.handleResize} src={img} /> }
+            <Img onLoad={this.handleResize} src={img} />
             { editing
               ? <Resizable className="postTitleEdit" placeholder={defaultTexts.title} onChange={this.handleTitleChange} value={title[locale]} />
               : <div className="postTitle" title={title[locale]} onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: title[locale] }} />

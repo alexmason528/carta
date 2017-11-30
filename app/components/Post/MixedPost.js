@@ -234,7 +234,6 @@ class MixedPost extends Component {
 
     const { showInfo, showError, imageUpload, locale } = this.state
     const showPostLinkButton = editing && !showLinkBar
-    const showImage = status !== UPDATE_POST_REQUEST
     const spinnerShow = editing && (status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST || imageUpload.uploading)
     const defaultTexts = getDefaultTexts(locale, this.props.intl.locale)
     const dropdownDisabled = !isLanguageSelectable(title, img, content, this.props.intl.locale)
@@ -252,7 +251,7 @@ class MixedPost extends Component {
         </LoadingSpinner>
         <div className="post mixedPost">
           <a className={cx({ postImage: true, noLink: !link })} href={postLink} onClick={this.handlePostImageClick}>
-            { showImage && <Img onLoad={this.handleResize} src={img} /> }
+            <Img onLoad={this.handleResize} src={img} />
             { editing
               ? <Resizable className="postTitleEdit" tabIndex={1} placeholder={defaultTexts.title} onChange={this.handlePostTitleChange} value={title[locale]} />
               : <div className="postTitle" onClick={this.handleOpenLink} title={title[locale]} dangerouslySetInnerHTML={{ __html: title[locale] }} />
