@@ -14,7 +14,7 @@ injectGlobal`
   }
 
   body {
-    width: 100%;
+    width: calc(100% + 10px);
     height: 100%;
     font-family: 'Open Sans', sans-serif; 
     font-size: 14.5px; 
