@@ -14,7 +14,7 @@ injectGlobal`
   }
 
   body {
-    width: calc(100% + 10px);
+    width: 100%;
     height: 100%;
     font-family: 'Open Sans', sans-serif; 
     font-size: 14.5px; 
@@ -26,18 +26,14 @@ injectGlobal`
     font-weight: 300; 
     position: relative;
 
-    &::-webkit-scrollbar {
-      width: 10px;
-      background: transparent;
-    }
+    // &::-webkit-scrollbar {
+    //   width: 10px;
+    //   background: transparent;
+    // }
 
-    &::-webkit-scrollbar-thumb {
-      background: rgba(200, 200, 200, 0.7) !important;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
+    // &::-webkit-scrollbar-thumb {
+    //   background: rgba(200, 200, 200, 0.7) !important;
+    // }
   }
 
   * {
