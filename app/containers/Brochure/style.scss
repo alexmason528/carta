@@ -1,13 +1,30 @@
+@media (max-width: 767px) {
+  .brochure {
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
 .brochure {
   position: absolute;
   top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
-  background: #fff;
-  overflow-x: hidden;
   z-index: 20;
   padding: 0;
   margin: 0;
+  background: #fff;
+  
+  &::-webkit-scrollbar {
+    width: 10px;
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(200, 200, 200, 0.7) !important;
+  }
   
   &__row {
     margin: 0 -4px;
