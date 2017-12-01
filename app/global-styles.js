@@ -9,31 +9,41 @@ injectGlobal`
 
   #app {
     background-color: #fafafa;
-    max-height: 100%;
+    max-height: 100%; 
     max-width: 100%;
   }
 
   body {
-    width: 100%;
+    width: calc(100% + 10px);
     height: 100%;
     font-family: 'Open Sans', sans-serif; 
     font-size: 14.5px; 
     margin: 0; 
     -webkit-tap-highlight-color: rgba(0,0,0,0);
     -webkit-text-size-adjust: 100%; 
-    overflow-x: hidden;
-    overflow-y: overlay;
     font-weight: 300; 
     position: relative;
+    overflow-x: hidden;
+    overflow-y: overlay;
 
-    // &::-webkit-scrollbar {
-    //   width: 10px;
-    //   background: transparent;
-    // }
+    &::-webkit-scrollbar {
+      width: 10px;
+      background: transparent;
+    }
 
-    // &::-webkit-scrollbar-thumb {
-    //   background: rgba(200, 200, 200, 0.7) !important;
-    // }
+    &::-webkit-scrollbar-thumb {
+      background: rgba(200, 200, 200, 0.7) !important;
+    }
+  }
+
+  @media (max-width: 767px) {
+    body {
+      width: 100%;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
   }
 
   * {
