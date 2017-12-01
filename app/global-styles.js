@@ -14,7 +14,7 @@ injectGlobal`
   }
 
   body {
-    width: calc(100% + 10px);
+    width: 100%;
     height: 100%;
     font-family: 'Open Sans', sans-serif; 
     font-size: 14.5px; 
@@ -22,16 +22,21 @@ injectGlobal`
     -webkit-tap-highlight-color: rgba(0,0,0,0);
     -webkit-text-size-adjust: 100%; 
     overflow-x: hidden;
+    overflow-y: overlay;
     font-weight: 300; 
     position: relative;
 
     &::-webkit-scrollbar {
       width: 10px;
-      background:transparent;
+      background: transparent;
     }
 
     &::-webkit-scrollbar-thumb {
       background: rgba(200, 200, 200, 0.7) !important;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
     }
   }
 
