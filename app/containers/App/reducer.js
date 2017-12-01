@@ -22,6 +22,8 @@ import {
   UPDATE_USER_REQUEST,
   UPDATE_USER_SUCCESS,
   UPDATE_USER_FAIL,
+
+  AUTH_METHOD_CHANGE,
 } from './constants'
 
 const initialState = {
@@ -29,9 +31,12 @@ const initialState = {
   authenticated: !!getItem('auth'),
   status: null,
   error: null,
+  authMethod: 'signIn',
 }
 
 function appReducer(state = initialState, { type, payload }) {
+  let newState
+
   switch (type) {
     case SIGNIN_REQUEST:
       return {
@@ -52,13 +57,19 @@ function appReducer(state = initialState, { type, payload }) {
       }
 
     case SIGNIN_FAIL:
-      return {
+      newState = {
         ...state,
         user: null,
         authenticated: false,
         status: type,
         error: payload,
       }
+
+      if (payload === 'carta.incorrectEmail') {
+        newState.authMethod = 'register'
+      }
+
+      return newState
 
     case SIGNOUT:
       removeItem('auth')
@@ -89,13 +100,19 @@ function appReducer(state = initialState, { type, payload }) {
       }
 
     case REGISTER_FAIL:
-      return {
+      newState = {
         ...state,
         user: null,
         authenticated: false,
         status: type,
         error: payload,
       }
+
+      if (payload === 'carta.alreadyRegistered') {
+        newState.authMethod = 'signIn'
+      }
+
+      return newState
 
     case VERIFY_REQUEST:
       return {
@@ -161,6 +178,14 @@ function appReducer(state = initialState, { type, payload }) {
         ...state,
         status: type,
         error: payload,
+      }
+
+    case AUTH_METHOD_CHANGE:
+      return {
+        ...state,
+        status: AUTH_METHOD_CHANGE,
+        authMethod: payload,
+        error: null,
       }
 
     default:

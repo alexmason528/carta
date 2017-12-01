@@ -10,7 +10,10 @@ const selectAuthenticated = () => createSelector(
 
 const selectInfo = () => createSelector(
   selectGlobal,
-  substate => ({ status: substate.status, error: substate.error })
+  substate => {
+    const { status, error, authMethod } = substate
+    return { status, error, authMethod }
+  }
 )
 
 const selectUser = () => createSelector(

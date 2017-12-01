@@ -6,7 +6,14 @@ import axios from 'axios'
 import cx from 'classnames'
 import { Popover, PopoverBody } from 'reactstrap'
 import { createStructuredSelector } from 'reselect'
-import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_ICON_URL, LANGUAGES, DEFAULT_LOCALE } from 'containers/App/constants'
+import {
+  CLOUDINARY_UPLOAD_URL,
+  CLOUDINARY_UPLOAD_PRESET,
+  CLOUDINARY_ICON_URL,
+  LANGUAGES,
+  DEFAULT_LOCALE,
+  LANGUAGE_CONST,
+} from 'containers/App/constants'
 import { createPostRequest } from 'containers/HomePage/actions'
 import { CREATE_POST_REQUEST, CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
 import messages from 'containers/HomePage/messages'
@@ -36,10 +43,7 @@ class PostCreate extends Component {
     this.state = {
       img: null,
       content: null,
-      title: {
-        en: '',
-        nl: '',
-      },
+      title: LANGUAGE_CONST,
       link: '',
       showInfo: false,
       showLinkBar: false,
@@ -103,10 +107,7 @@ class PostCreate extends Component {
 
   handleAddText = () => {
     this.setState({
-      content: {
-        en: '',
-        nl: '',
-      },
+      content: LANGUAGE_CONST,
       showError: false,
     }, () => {
       this.handleResize()

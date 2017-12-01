@@ -20,6 +20,8 @@ import {
   UPDATE_USER_REQUEST,
   UPDATE_USER_SUCCESS,
   UPDATE_USER_FAIL,
+
+  AUTH_METHOD_CHANGE,
 } from './constants'
 
 export function signInRequest(payload) {
@@ -128,6 +130,13 @@ export function updateUserSuccess(payload) {
 export function updateUserFail(payload) {
   return {
     type: UPDATE_USER_FAIL,
+    payload,
+  }
+}
+
+export function authMethodChange(payload) {
+  return {
+    type: AUTH_METHOD_CHANGE,
     payload,
   }
 }

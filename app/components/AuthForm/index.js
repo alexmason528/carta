@@ -1,17 +1,25 @@
 import React, { Component, PropTypes } from 'react'
+import { injectIntl, intlShape } from 'react-intl'
 import { connect } from 'react-redux'
+import { compose } from 'redux'
+import { change, reduxForm, Field } from 'redux-form'
 import { createStructuredSelector } from 'reselect'
 import axios from 'axios'
 import cx from 'classnames'
-import { compose } from 'redux'
-import { injectIntl, intlShape } from 'react-intl'
-import { reduxForm, Field } from 'redux-form'
 import GoogleLogin from 'react-google-login'
 import FacebookLogin from 'react-facebook-login'
 import RenderField from 'components/RenderField'
 import RenderDropzone from 'components/RenderDropzone'
-import { SIGNIN_REQUEST, SIGNIN_FAIL, REGISTER_REQUEST, REGISTER_FAIL, CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_ICON_URL } from 'containers/App/constants'
-import { signInRequest, registerRequest } from 'containers/App/actions'
+import {
+  SIGNIN_REQUEST,
+  SIGNIN_FAIL,
+  REGISTER_REQUEST,
+  REGISTER_FAIL,
+  CLOUDINARY_UPLOAD_URL,
+  CLOUDINARY_UPLOAD_PRESET,
+  CLOUDINARY_ICON_URL,
+} from 'containers/App/constants'
+import { authMethodChange, signInRequest, registerRequest } from 'containers/App/actions'
 import { selectInfo } from 'containers/App/selectors'
 import messages from 'containers/HomePage/messages'
 import LoadingSpinner from 'components/LoadingSpinner'
@@ -26,6 +34,7 @@ class AuthForm extends Component {
     registerRequest: PropTypes.func,
     onCoverPicChange: PropTypes.func,
     onProfilePicChange: PropTypes.func,
+    authMethodChange: PropTypes.func,
     handleSubmit: PropTypes.func,
     coverPic: PropTypes.oneOfType([
       PropTypes.string,
@@ -44,10 +53,7 @@ class AuthForm extends Component {
     super(props)
 
     this.state = {
-      authType: 'signIn',
-      email: '',
-      password: '',
-      error: null,
+      formChanged: false,
       imageUpload: {
         uploading: false,
         error: null,
@@ -56,38 +62,27 @@ class AuthForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { info: { status, error } } = nextProps
+    const { info: { status } } = this.props
+    const { info } = nextProps
 
-    if (status === SIGNIN_FAIL && error === 'carta.incorrectEmail') {
-      this.setState({ authType: 'register' })
-    } else if (status === REGISTER_FAIL && error === 'carta.alreadyRegistered') {
-      this.setState({ authType: 'signIn' })
+    if (status !== info.status && (info.status === SIGNIN_FAIL || info.status === REGISTER_FAIL)) {
+      this.setState({ formChanged: false })
     }
   }
 
-  handleAuthTypeChange = authType => {
-    this.setState({
-      authType,
-      signInError: null,
-      registerError: null,
-    })
-  }
-
   handleSubmit = values => {
-    const { authType } = this.state
-    if (authType === 'signIn') {
+    const { info: { authMethod } } = this.props
+    if (authMethod === 'signIn') {
       this.handleSignIn(values)
-    } else if (authType === 'register') {
+    } else if (authMethod === 'register') {
       this.handleRegister(values)
     }
   }
 
   handleSignIn = values => {
     const { signInRequest } = this.props
-    this.setState({
-      email: values.email,
-      password: values.password,
-    }, () => { signInRequest(values) })
+    const { email, password } = values
+    this.setState({ email, password }, () => { signInRequest(values) })
   }
 
   handleRegister = values => {
@@ -155,6 +150,20 @@ class AuthForm extends Component {
     }
   }
 
+  handleAuthMethodChange = () => {
+    const { info: { authMethod }, authMethodChange } = this.props
+    const method = authMethod === 'signIn' ? 'register' : 'signIn'
+    authMethodChange(method)
+  }
+
+  handleFormChange = evt => {
+    const fields = ['email', 'password', 'text']
+    const { target: { type } } = evt
+    if (fields.indexOf(type) !== -1) {
+      this.setState({ formChanged: true })
+    }
+  }
+
   handleGoogleLoginSuccess = res => {
   }
 
@@ -165,11 +174,23 @@ class AuthForm extends Component {
   }
 
   render() {
-    const { authType, email, password, imageUpload } = this.state
-    const { info: { status, error }, show, signInRequest, onCoverPicChange, onProfilePicChange, handleSubmit, intl: { formatMessage } } = this.props
+    const {
+      info: {
+        status,
+        error,
+        authMethod,
+      },
+      show,
+      signInRequest,
+      authMethodChange,
+      onCoverPicChange,
+      onProfilePicChange,
+      handleSubmit,
+      intl: { formatMessage },
+    } = this.props
 
+    const { formChanged, imageUpload } = this.state
     const spinnerShow = status === SIGNIN_REQUEST || status === REGISTER_REQUEST || imageUpload.uploading
-    const param = authType === 'signIn' ? 'register' : 'signIn'
 
     return (
       <div className={cx({ authForm: true, 'authForm--hidden': !show })} onClick={evt => evt.stopPropagation()}>
@@ -201,10 +222,10 @@ class AuthForm extends Component {
         <div className="authForm__divider">
           <span>{formatMessage(messages.or)}</span>
         </div>
-        <form onSubmit={handleSubmit(this.handleSubmit)}>
+        <form onSubmit={handleSubmit(this.handleSubmit)} onChange={this.handleFormChange}>
           <Field name="email" type="email" component={RenderField} label={formatMessage(messages.email)} order={1} />
           <Field name="password" type="password" component={RenderField} label={formatMessage(messages.password)} order={2} />
-          { authType === 'register' &&
+          { authMethod === 'register' &&
             <div>
               <Field name="confirmPassword" type="password" component={RenderField} label={formatMessage(messages.repeatPassword)} order={2} />
               <Field name="fullname" type="text" component={RenderField} label={formatMessage(messages.fullname)} order={3} />
@@ -216,13 +237,13 @@ class AuthForm extends Component {
           }
           <div className="authForm__authButtons">
             <button className="authForm__authButton authForm__authButton--active">
-              { authType === 'signIn' ? formatMessage(messages.signIn) : formatMessage(messages.register) }
+              { authMethod === 'signIn' ? formatMessage(messages.signIn) : formatMessage(messages.register) }
             </button>
-            <button className="authForm__authButton authForm__authButton--inactive" type="button" onClick={() => { this.handleAuthTypeChange(param) }}>
-              { authType !== 'signIn' ? formatMessage(messages.signIn) : formatMessage(messages.register) }
+            <button className="authForm__authButton authForm__authButton--inactive" type="button" onClick={this.handleAuthMethodChange}>
+              { authMethod !== 'signIn' ? formatMessage(messages.signIn) : formatMessage(messages.register) }
             </button>
           </div>
-          { error && <div className="error">{formatMessage({ id: error })}</div> }
+          { !formChanged && error && (status === SIGNIN_FAIL || status === REGISTER_FAIL) && <div className="error">{formatMessage({ id: error })}</div> }
         </form>
       </div>
     )
@@ -236,12 +257,14 @@ const selectors = createStructuredSelector({
 const actions = {
   signInRequest,
   registerRequest,
+  authMethodChange,
 }
 
-export default injectIntl(compose(
+export default compose(
+  injectIntl,
   connect(selectors, actions),
   reduxForm({
     form: 'authForm',
     validate: authFormValidator,
   }),
-)(AuthForm))
+)(AuthForm)
