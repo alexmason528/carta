@@ -33,19 +33,3 @@ export const CLOUDINARY_ICON_URL = 'https://res.cloudinary.com/hyvpvyohj/raw/upl
 export const CLOUDINARY_PROFILE_URL = 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1509975396/image/profile'
 export const CLOUDINARY_POINTS_URL = 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510139598/data'
 export const CLOUDINARY_SHAPES_URL = 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510139627/data'
-
-export const DEFAULT_LOCALE = 'en'
-export const LANGUAGES = [{
-  countryCode: 'en',
-  name: 'English',
-  third: 'English',
-}, {
-  countryCode: 'nl',
-  name: 'Nederlands',
-  third: 'Nederlandse',
-}]
-
-export const LANGUAGE_CONST = {
-  en: '',
-  nl: '',
-}

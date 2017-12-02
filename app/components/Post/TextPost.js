@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom'
 import { injectIntl, intlShape } from 'react-intl'
 import cx from 'classnames'
 import { createStructuredSelector } from 'reselect'
-import { LANGUAGES } from 'containers/App/constants'
 import {
   UPDATE_POST_REQUEST,
   UPDATE_POST_SUCCESS,
   UPDATE_POST_FAIL,
   DELETE_POST_REQUEST,
 } from 'containers/HomePage/constants'
+import { LANGUAGES } from 'containers/LanguageProvider/constants'
 import messages from 'containers/HomePage/messages'
 import { DeleteButton, EditButton, RemoveButton } from 'components/Buttons'
 import LoadingSpinner from 'components/LoadingSpinner'

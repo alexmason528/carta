@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import cx from 'classnames'
-import { CLOUDINARY_ICON_URL, LANGUAGES, LANGUAGE_CONST } from 'containers/App/constants'
+import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
+import { LANGUAGES, LANGUAGE_CONST } from 'containers/LanguageProvider/constants'
 import {
   UPDATE_POST_REQUEST,
   UPDATE_POST_SUCCESS,

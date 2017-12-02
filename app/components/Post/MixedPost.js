@@ -4,7 +4,8 @@ import { injectIntl, intlShape } from 'react-intl'
 import axios from 'axios'
 import cx from 'classnames'
 import { createStructuredSelector } from 'reselect'
-import { CLOUDINARY_ICON_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_UPLOAD_URL, LANGUAGES } from 'containers/App/constants'
+import { CLOUDINARY_ICON_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_UPLOAD_URL } from 'containers/App/constants'
+import { LANGUAGES } from 'containers/LanguageProvider/constants'
 import {
   UPDATE_POST_REQUEST,
   UPDATE_POST_SUCCESS,

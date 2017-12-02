@@ -10,10 +10,8 @@ import {
   CLOUDINARY_UPLOAD_URL,
   CLOUDINARY_UPLOAD_PRESET,
   CLOUDINARY_ICON_URL,
-  LANGUAGES,
-  DEFAULT_LOCALE,
-  LANGUAGE_CONST,
 } from 'containers/App/constants'
+import { LANGUAGES, DEFAULT_LOCALE, LANGUAGE_CONST } from 'containers/LanguageProvider/constants'
 import { createPostRequest } from 'containers/HomePage/actions'
 import { CREATE_POST_REQUEST, CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
 import messages from 'containers/HomePage/messages'

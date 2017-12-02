@@ -1,6 +1,5 @@
 import { getItem, setItem } from 'utils/localStorage'
-import { DEFAULT_LOCALE } from 'containers/App/constants'
-import { CHANGE_LOCALE } from './constants'
+import { DEFAULT_LOCALE, CHANGE_LOCALE } from './constants'
 
 const browserLanguage = window.navigator.language
 

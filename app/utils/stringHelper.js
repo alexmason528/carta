@@ -1,5 +1,5 @@
 import messages from 'containers/HomePage/messages'
-import { LANGUAGES } from 'containers/App/constants'
+import { LANGUAGES } from 'containers/LanguageProvider/constants'
 import enTranslationMessages from 'translations/en.json'
 import nlTranslationMessages from 'translations/nl.json'
 

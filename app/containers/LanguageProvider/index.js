@@ -11,7 +11,7 @@ export class LanguageProvider extends Component { // eslint-disable-line react/p
       <IntlProvider locale={locale} key={locale} messages={messages[locale]}>
         {React.Children.only(children)}
       </IntlProvider>
-    );
+    )
   }
 }
 
