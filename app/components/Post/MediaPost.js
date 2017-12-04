@@ -87,25 +87,18 @@ class MediaPost extends Component {
     const lines = fontSize > 0 ? Math.floor(height / (fontSize * 1.2)) : 0
     const maxHeight = fontSize * lines * 1.2
 
-    if (editing) {
-      const $postTitleEdit = $(post).find('.postTitleEdit')
-      $postTitleEdit.css({
-        fontSize: `${fontSize}px`,
-        maxHeight: `${maxHeight}px`,
-      })
-    } else {
-      const $postTitle = $(post).find('.postTitle')
-      $postTitle.css({
-        fontSize: `${fontSize}px`,
-        maxHeight: `${maxHeight}px`,
-        height: 'auto',
-        '-webkit-line-clamp': lines.toString(),
-        '-webkit-box-orient': 'vertical',
-      })
+    const $title = editing ? $(post).find('.postTitleEdit') : $(post).find('.postTitle')
+    $title.css({
+      fontSize: `${fontSize}px`,
+      maxHeight: `${maxHeight}px`,
+      height: 'auto',
+    })
 
-      const sH = $postTitle.prop('scrollHeight')
-      $postTitle.css({ height: `${sH}px` })
+    if (!editing) {
+      $title.css({ '-webkit-line-clamp': lines.toString() })
     }
+    let sH = $title.prop('scrollHeight')
+    $title.css({ height: `${sH}px` })
   }
 
   handleEditStart = evt => {

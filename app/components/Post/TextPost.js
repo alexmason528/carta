@@ -79,24 +79,23 @@ class TextPost extends Component {
     const fontSize = (width / 76) * 3 * 1.15
     const maxHeight = fontSize * 2 * 1.2
 
-    if (editing) {
-      const $postTitleEdit = $(post).find('.postTitleEdit')
-      $postTitleEdit.css({
-        fontSize: `${fontSize}px`,
-        maxHeight: `${maxHeight}px`,
-      })
-    } else {
-      const $postTitle = $(post).find('.postTitle')
-      $postTitle.css({
-        fontSize: `${fontSize}px`,
-        maxHeight: `${maxHeight}px`,
-        height: 'auto',
-        '-webkit-line-clamp': '2',
-        '-webkit-box-orient': 'vertical',
-      })
-      const sH = $postTitle.prop('scrollHeight')
-      $postTitle.css({ height: `${sH}px` })
+    const $title = editing ? $(post).find('.postTitleEdit') : $(post).find('.postTitle')
+    $title.css({
+      fontSize: `${fontSize}px`,
+      maxHeight: `${maxHeight}px`,
+      height: 'auto',
+    })
+
+    if (!editing) {
+      $title.css({ '-webkit-line-clamp': '2' })
     }
+    let sH = $title.prop('scrollHeight')
+    $title.css({ height: `${sH}px` })
+
+    const $text = $(post).find('.postText')
+    $text.css({ height: 'auto' })
+    sH = $text.prop('scrollHeight')
+    $text.css({ height: `${sH}px` })
   }
 
   handleEditStart = () => {
