@@ -327,6 +327,7 @@
   word-break: break-word;
   z-index: 4;
   left: 0;
+  display: -webkit-box;
 
   &:focus { outline: none }
 }

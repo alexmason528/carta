@@ -85,28 +85,33 @@ class MixedPost extends Component {
   }
 
   handleResize = () => {
+    const { editing } = this.props
     const post = ReactDOM.findDOMNode(this)
     const width = $(post).width()
     const height = $(post).find('.postImage').height() - 65
     const fontSize = (width / 44) * 3 * 1.15
     const lines = fontSize > 0 ? Math.floor(height / (fontSize * 1.2)) : 0
+    const maxHeight = fontSize * lines * 1.2
 
-    $(post).find('.postTitle').css({
-      fontSize: `${fontSize}px`,
-      maxHeight: `${fontSize * lines * 1.2}px`,
-      display: '-webkit-box',
-      '-webkit-line-clamp': lines.toString(),
-      '-webkit-box-orient': 'vertical',
-    })
+    if (editing) {
+      const $postTitleEdit = $(post).find('.postTitleEdit')
+      $postTitleEdit.css({
+        fontSize: `${fontSize}px`,
+        maxHeight: `${maxHeight}px`,
+      })
+    } else {
+      const $postTitle = $(post).find('.postTitle')
+      $postTitle.css({
+        fontSize: `${fontSize}px`,
+        maxHeight: `${maxHeight}px`,
+        height: 'auto',
+        '-webkit-line-clamp': lines.toString(),
+        '-webkit-box-orient': 'vertical',
+      })
 
-    $(post).find('.postTitleEdit').css({
-      fontSize: `${fontSize}px`,
-      maxHeight: `${fontSize * lines * 1.2}px`,
-    })
-
-    const sH = $(post).find('.postTitleEdit').prop('scrollHeight')
-
-    $(post).find('.postTitleEdit').css({ height: `${sH}px` })
+      const sH = $postTitle.prop('scrollHeight')
+      $postTitle.css({ height: `${sH}px` })
+    }
   }
 
   handleEditStart = evt => {
@@ -205,7 +210,7 @@ class MixedPost extends Component {
     this.setState({
       locale: evt.target.value,
       showError: false,
-    })
+    }, this.handleResize)
   }
 
   handleCancel = () => {

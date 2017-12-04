@@ -73,22 +73,30 @@ class TextPost extends Component {
   }
 
   handleResize = () => {
+    const { editing } = this.props
     const post = ReactDOM.findDOMNode(this)
     const width = $(post).width()
     const fontSize = (width / 76) * 3 * 1.15
-    $(post).find('.postTitleEdit').css({ fontSize: `${fontSize}px` })
-    $(post).find('.postTitle').css({
-      fontSize: `${fontSize}px`,
-      maxHeight: `${fontSize * 2 * 1.2}px`,
-      display: '-webkit-box',
-      '-webkit-line-clamp': '2',
-      '-webkit-box-orient': 'vertical',
-    })
+    const maxHeight = fontSize * 2 * 1.2
 
-    const sH = $(post).find('.postTitle').prop('scrollHeight')
-    const editSH = $(post).find('.postTitleEdit').prop('scrollHeight')
-    $(post).find('.postTitle').css({ height: `${sH}px` })
-    $(post).find('.postTitleEdit').css({ height: `${editSH}px` })
+    if (editing) {
+      const $postTitleEdit = $(post).find('.postTitleEdit')
+      $postTitleEdit.css({
+        fontSize: `${fontSize}px`,
+        maxHeight: `${maxHeight}px`,
+      })
+    } else {
+      const $postTitle = $(post).find('.postTitle')
+      $postTitle.css({
+        fontSize: `${fontSize}px`,
+        maxHeight: `${maxHeight}px`,
+        height: 'auto',
+        '-webkit-line-clamp': '2',
+        '-webkit-box-orient': 'vertical',
+      })
+      const sH = $postTitle.prop('scrollHeight')
+      $postTitle.css({ height: `${sH}px` })
+    }
   }
 
   handleEditStart = () => {
@@ -159,7 +167,7 @@ class TextPost extends Component {
     this.setState({
       locale: evt.target.value,
       showError: false,
-    })
+    }, this.handleResize)
   }
 
   handleSubmit = submitError => {
