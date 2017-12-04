@@ -10,17 +10,17 @@ import {
   QUEST_SELECT,
   QUEST_REMOVE,
 
-  FETCH_QUESTINFO,
-  FETCH_QUESTINFO_SUCCESS,
-  FETCH_QUESTINFO_FAIL,
+  GET_QUESTINFO_REQUEST,
+  GET_QUESTINFO_SUCCESS,
+  GET_QUESTINFO_FAIL,
 
-  FETCH_RECOMMENDATIONS,
-  FETCH_RECOMMENDATIONS_SUCCESS,
-  FETCH_RECOMMENDATIONS_FAIL,
+  GET_RECOMMENDATION_REQUEST,
+  GET_RECOMMENDATION_SUCCESS,
+  GET_RECOMMENDATION_FAIL,
 
-  FETCH_BROCHURE,
-  FETCH_BROCHURE_SUCCESS,
-  FETCH_BROCHURE_FAIL,
+  GET_BROCHURE_REQUEST,
+  GET_BROCHURE_SUCCESS,
+  GET_BROCHURE_FAIL,
 } from './constants'
 
 const initialState = {
@@ -206,7 +206,7 @@ function questReducer(state = initialState, { type, payload }) {
     case SET_DEFAULT_QUEST:
       return state
 
-    case FETCH_QUESTINFO:
+    case GET_QUESTINFO_REQUEST:
       questInfo = {
         categories: {
           places: [],
@@ -224,7 +224,7 @@ function questReducer(state = initialState, { type, payload }) {
         questInfo,
       }
 
-    case FETCH_QUESTINFO_SUCCESS:
+    case GET_QUESTINFO_SUCCESS:
       questInfo = {
         categories: payload,
         quests: initialState.questInfo.quests,
@@ -238,7 +238,7 @@ function questReducer(state = initialState, { type, payload }) {
         questInfo,
       }
 
-    case FETCH_QUESTINFO_FAIL:
+    case GET_QUESTINFO_FAIL:
       questInfo = {
         categories: {
           places: [],
@@ -256,21 +256,21 @@ function questReducer(state = initialState, { type, payload }) {
         questInfo,
       }
 
-    case FETCH_RECOMMENDATIONS:
+    case GET_RECOMMENDATION_REQUEST:
       return {
         ...state,
         status: type,
         error: null,
       }
 
-    case FETCH_RECOMMENDATIONS_SUCCESS:
+    case GET_RECOMMENDATION_SUCCESS:
       return {
         ...state,
         status: type,
         recommendations: payload,
       }
 
-    case FETCH_RECOMMENDATIONS_FAIL:
+    case GET_RECOMMENDATION_FAIL:
       return {
         ...state,
         status: type,
@@ -278,7 +278,7 @@ function questReducer(state = initialState, { type, payload }) {
         recommendations: [],
       }
 
-    case FETCH_BROCHURE:
+    case GET_BROCHURE_REQUEST:
       return {
         ...state,
         status: type,
@@ -286,14 +286,14 @@ function questReducer(state = initialState, { type, payload }) {
         brochure: {},
       }
 
-    case FETCH_BROCHURE_SUCCESS:
+    case GET_BROCHURE_SUCCESS:
       return {
         ...state,
         status: type,
         brochure: payload,
       }
 
-    case FETCH_BROCHURE_FAIL:
+    case GET_BROCHURE_FAIL:
       return {
         ...state,
         error: payload,

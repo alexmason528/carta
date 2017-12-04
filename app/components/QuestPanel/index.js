@@ -1,10 +1,10 @@
 import React, { Component, PropTypes, Children } from 'react'
 import styled, { css } from 'styled-components'
-import classNames from 'classnames'
+import cx from 'classnames'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
-import { fetchRecommendations, questAdd, questSelect, questRemove } from 'containers/QuestPage/actions'
+import { getRecommendationRequest, questAdd, questSelect, questRemove } from 'containers/QuestPage/actions'
 import { selectQuests, selectCurrentQuestIndex } from 'containers/QuestPage/selectors'
 import Img from 'components/Img'
 import Quest from '../Quest'
@@ -15,7 +15,7 @@ class QuestPanel extends Component {
     minimizeClicked: PropTypes.func.isRequired,
     closeClicked: PropTypes.func.isRequired,
     mapViewPortChange: PropTypes.func,
-    fetchRecommendations: PropTypes.func,
+    getRecommendationRequest: PropTypes.func,
     questAdd: PropTypes.func,
     questSelect: PropTypes.func,
     questRemove: PropTypes.func,
@@ -25,22 +25,19 @@ class QuestPanel extends Component {
   }
 
   handleQuestAdd = () => {
-    const { questAdd } = this.props
-    questAdd()
+    this.props.questAdd()
   }
 
   handleQuestSelect = index => {
-    const { questSelect, fetchRecommendations } = this.props
-
-    questSelect(index)
-    fetchRecommendations()
+    this.props.questSelect(index)
+    this.props.getRecommendationRequest()
   }
 
   handleQuestRemove = (evt, index) => {
     evt.preventDefault()
 
-    const { currentQuestIndex, quests, questRemove } = this.props
-    if (currentQuestIndex !== index && quests.length !== 1) questRemove(index)
+    const { currentQuestIndex, quests } = this.props
+    if (currentQuestIndex !== index && quests.length !== 1) this.props.questRemove(index)
   }
 
   render() {
@@ -57,38 +54,26 @@ class QuestPanel extends Component {
         </div>
         <div className="list">
           {
-            quests.map((quest, index) => {
-              const questTabClass = classNames({
-                item: true,
-                on: index === currentQuestIndex,
-              })
-              return (
-                <button
-                  className={questTabClass}
-                  key={index}
-                  onClick={() => { this.handleQuestSelect(index) }}
-                  onContextMenu={evt => { this.handleQuestRemove(evt, index) }}
-                >
-                  {index + 1}
-                </button>
-              )
-            })
+            quests.map((quest, index) => (
+              <button
+                className={cx({ item: true, on: index === currentQuestIndex })}
+                key={index}
+                onClick={() => { this.handleQuestSelect(index) }}
+                onContextMenu={evt => { this.handleQuestRemove(evt, index) }}
+              >
+                {index + 1}
+              </button>
+            ))
           }
           <button className="add-quest" onClick={this.handleQuestAdd}>+</button>
         </div>
         <div className="quests">
           {
-            quests.map((quest, index) => {
-              const questClass = classNames({
-                quest: true,
-                show: index === currentQuestIndex,
-              })
-              return (
-                <Quest key={index} className={questClass} mapViewPortChange={mapViewPortChange}>
-                  {index}
-                </Quest>
-              )
-            })
+            quests.map((quest, index) => (
+              <Quest key={index} className={cx({ quest: true, show: index === currentQuestIndex })} mapViewPortChange={mapViewPortChange}>
+                {index}
+              </Quest>
+            ))
           }
         </div>
       </div>
@@ -105,7 +90,7 @@ const actions = {
   questAdd,
   questSelect,
   questRemove,
-  fetchRecommendations,
+  getRecommendationRequest,
 }
 
 export default connect(selectors, actions)(QuestPanel)

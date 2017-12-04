@@ -1,9 +1,8 @@
 import React, { Component, PropTypes, Children } from 'react'
-import classNames from 'classnames'
 import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
-import { fetchRecommendations, placeSelect } from 'containers/QuestPage/actions'
+import { placeSelect } from 'containers/QuestPage/actions'
 import messages from 'containers/QuestPage/messages'
 import { selectPlaces } from 'containers/QuestPage/selectors'
 import { Button, StarButton } from 'components/Buttons'
@@ -14,7 +13,6 @@ class PlaceSection extends Component {
     places: PropTypes.array,
     questIndex: PropTypes.number,
     mapViewPortChange: PropTypes.func,
-    fetchRecommendations: PropTypes.func,
     intl: intlShape.isRequired,
   }
 
@@ -41,8 +39,7 @@ class PlaceSection extends Component {
   }
 
   handlePlaceClick = placeName => {
-    const { mapViewPortChange } = this.props
-    mapViewPortChange(placeName)
+    this.props.mapViewPortChange(placeName)
   }
 
   handleInputChange = evt => {
@@ -71,8 +68,4 @@ const selectors = createStructuredSelector({
   places: selectPlaces(),
 })
 
-const actions = {
-  fetchRecommendations,
-}
-
-export default injectIntl(connect(selectors, actions)(PlaceSection))
+export default injectIntl(connect(selectors)(PlaceSection))

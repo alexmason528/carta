@@ -10,17 +10,17 @@ import {
   QUEST_SELECT,
   QUEST_REMOVE,
 
-  FETCH_QUESTINFO,
-  FETCH_QUESTINFO_SUCCESS,
-  FETCH_QUESTINFO_FAIL,
+  GET_QUESTINFO_REQUEST,
+  GET_QUESTINFO_SUCCESS,
+  GET_QUESTINFO_FAIL,
 
-  FETCH_RECOMMENDATIONS,
-  FETCH_RECOMMENDATIONS_SUCCESS,
-  FETCH_RECOMMENDATIONS_FAIL,
+  GET_RECOMMENDATION_REQUEST,
+  GET_RECOMMENDATION_SUCCESS,
+  GET_RECOMMENDATION_FAIL,
 
-  FETCH_BROCHURE,
-  FETCH_BROCHURE_SUCCESS,
-  FETCH_BROCHURE_FAIL,
+  GET_BROCHURE_REQUEST,
+  GET_BROCHURE_SUCCESS,
+  GET_BROCHURE_FAIL,
 } from './constants'
 
 export function mapChange(payload) {
@@ -77,63 +77,63 @@ export function questRemove(payload) {
   }
 }
 
-export function fetchQuestInfo() {
+export function getQuestInfoRequest() {
   return {
-    type: FETCH_QUESTINFO,
+    type: GET_QUESTINFO_REQUEST,
   }
 }
 
-export function fetchQuestInfoSuccess(payload) {
+export function getQuestInfoSuccess(payload) {
   return {
-    type: FETCH_QUESTINFO_SUCCESS,
+    type: GET_QUESTINFO_SUCCESS,
     payload,
   }
 }
 
-export function fetchQuestInfoFail(payload) {
+export function getQuestInfoFail(payload) {
   return {
-    type: FETCH_QUESTINFO_FAIL,
+    type: GET_QUESTINFO_FAIL,
     payload,
   }
 }
 
-export function fetchRecommendations() {
+export function getRecommendationRequest() {
   return {
-    type: FETCH_RECOMMENDATIONS,
+    type: GET_RECOMMENDATION_REQUEST,
   }
 }
 
-export function fetchRecommendationsSuccess(payload) {
+export function getRecommendationSuccess(payload) {
   return {
-    type: FETCH_RECOMMENDATIONS_SUCCESS,
+    type: GET_RECOMMENDATION_SUCCESS,
     payload,
   }
 }
 
-export function fetchRecommendationsFail(payload) {
+export function getRecommendationFail(payload) {
   return {
-    type: FETCH_RECOMMENDATIONS_FAIL,
+    type: GET_RECOMMENDATION_FAIL,
     payload,
   }
 }
 
-export function fetchBrochure(payload) {
+export function getBrochureRequest(payload) {
   return {
-    type: FETCH_BROCHURE,
+    type: GET_BROCHURE_REQUEST,
     payload,
   }
 }
 
-export function fetchBrochureSuccess(payload) {
+export function getBrochureSuccess(payload) {
   return {
-    type: FETCH_BROCHURE_SUCCESS,
+    type: GET_BROCHURE_SUCCESS,
     payload,
   }
 }
 
-export function fetchBrochureFail(payload) {
+export function getBrochureFail(payload) {
   return {
-    type: FETCH_BROCHURE_FAIL,
+    type: GET_BROCHURE_FAIL,
     payload,
   }
 }

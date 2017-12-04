@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import className from 'classnames'
 import ReactDOM from 'react-dom'
 import './style.scss'
 

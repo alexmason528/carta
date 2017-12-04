@@ -12,6 +12,7 @@ import { LANGUAGES } from 'containers/LanguageProvider/constants'
 import { changeLocale } from 'containers/LanguageProvider/actions'
 import messages from 'containers/HomePage/messages'
 import Img from 'components/Img'
+import { MobileUp } from 'components/Responsive'
 import './style.scss'
 
 class Menu extends Component {
@@ -84,9 +85,11 @@ class Menu extends Component {
               })
             }
           </ul>
-          <div className="menu__tab" onClick={this.handleToggleMenu}>
-            <Img src={`${CLOUDINARY_ICON_URL}/name-vertical.png`} />
-          </div>
+          <MobileUp>
+            <div className="menu__tab" onClick={this.handleToggleMenu}>
+              <Img src={`${CLOUDINARY_ICON_URL}/name-vertical.png`} />
+            </div>
+          </MobileUp>
         </div>
       </div>
     )

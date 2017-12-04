@@ -5,18 +5,17 @@ import request from 'utils/request'
 import { API_BASE_URL } from 'containers/App/constants'
 import { selectCurrentTypes, selectCurrentDescriptives, selectViewport } from 'containers/QuestPage/selectors'
 
-
-import { FETCH_BROCHURE, FETCH_RECOMMENDATIONS, FETCH_QUESTINFO } from './constants'
+import { GET_BROCHURE_REQUEST, GET_RECOMMENDATION_REQUEST, GET_QUESTINFO_REQUEST } from './constants'
 import {
-  fetchRecommendationsSuccess,
-  fetchRecommendationsFail,
-  fetchQuestInfoSuccess,
-  fetchQuestInfoFail,
-  fetchBrochureSuccess,
-  fetchBrochureFail,
+  getRecommendationSuccess,
+  getRecommendationFail,
+  getQuestInfoSuccess,
+  getQuestInfoFail,
+  getBrochureSuccess,
+  getBrochureFail,
 } from './actions'
 
-export function* getRecommendations() {
+export function* getRecommendationRequest() {
   const curDescriptives = yield select(selectCurrentDescriptives())
   const curTypes = yield select(selectCurrentTypes())
   const viewport = yield select(selectViewport())
@@ -71,13 +70,13 @@ export function* getRecommendations() {
       res = yield call(request, requestURL, params)
     }
 
-    yield put(fetchRecommendationsSuccess(res))
+    yield put(getRecommendationSuccess(res))
   } catch (err) {
-    yield put(fetchRecommendationsFail(err.toString()))
+    yield put(getRecommendationFail(err.toString()))
   }
 }
 
-export function* getQuestInfo() {
+export function* getQuestInfoRequest() {
   const requestURL = `${API_BASE_URL}api/v1/map/questinfo/`
 
   const params = {
@@ -114,13 +113,13 @@ export function* getQuestInfo() {
       descriptives: res.descriptives.map(descriptive => ({ c: descriptive.c, name: descriptive.name })),
     }
 
-    yield put(fetchQuestInfoSuccess(payload))
+    yield put(getQuestInfoSuccess(payload))
   } catch (err) {
-    yield put(fetchQuestInfoFail(err.toString()))
+    yield put(getQuestInfoFail(err.toString()))
   }
 }
 
-export function* getBrochureInformation({ payload }) {
+export function* getBrochureRequest({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/map/place/`
 
   const data = {
@@ -137,32 +136,32 @@ export function* getBrochureInformation({ payload }) {
 
   try {
     const res = yield call(request, requestURL, params)
-    yield put(fetchBrochureSuccess(res.info))
+    yield put(getBrochureSuccess(res.info))
   } catch (err) {
-    yield put(fetchBrochureFail(err.toString()))
+    yield put(getBrochureFail(err.toString()))
   }
 }
 
-export function* getRecommendationsWatcher() {
-  const watcher = yield takeLatest(FETCH_RECOMMENDATIONS, getRecommendations)
+export function* getRecommendationWatcher() {
+  const watcher = yield takeLatest(GET_RECOMMENDATION_REQUEST, getRecommendationRequest)
   yield take(LOCATION_CHANGE)
   yield cancel(watcher)
 }
 
 export function* getQuestInfoWatcher() {
-  const watcher = yield takeLatest(FETCH_QUESTINFO, getQuestInfo)
+  const watcher = yield takeLatest(GET_QUESTINFO_REQUEST, getQuestInfoRequest)
   yield take(LOCATION_CHANGE)
   yield cancel(watcher)
 }
 
-export function* getBrochureInformationWatcher() {
-  const watcher = yield takeLatest(FETCH_BROCHURE, getBrochureInformation)
+export function* getBrochureWatcher() {
+  const watcher = yield takeLatest(GET_BROCHURE_REQUEST, getBrochureRequest)
   yield take(LOCATION_CHANGE)
   yield cancel(watcher)
 }
 
 export default [
-  getRecommendationsWatcher,
+  getRecommendationWatcher,
   getQuestInfoWatcher,
-  getBrochureInformationWatcher,
+  getBrochureWatcher,
 ]

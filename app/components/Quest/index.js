@@ -1,6 +1,6 @@
 import React, { Component, PropTypes, Children } from 'react'
 import { injectIntl, intlShape } from 'react-intl'
-import classNames from 'classnames'
+import cx from 'classnames'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import messages from 'containers/QuestPage/messages'
 import Img from 'components/Img'
@@ -32,63 +32,23 @@ class Quest extends Component {
   handleKeypress = e => {
     if (e.altKey || e.ctrlKey || e.shiftKey || e.metaKey) return
     if (e.keyCode === 9) {
-      const tab = this.state.currentTab
-      this.handleTabClick((tab + 1) % 3)
+      const { currentTab } = this.state
+      this.handleTabClick((currentTab + 1) % 3)
     }
   }
 
-  handleTabClick = tab => {
-    this.setState({ currentTab: tab })
+  handleTabClick = currentTab => {
+    this.setState({ currentTab })
   }
 
   handleNextBtnClick = () => {
-    const tab = this.state.currentTab
-    this.handleTabClick((tab + 1) % 3)
+    const { currentTab } = this.state
+    this.handleTabClick((currentTab + 1) % 3)
   }
 
   render() {
     const { currentTab } = this.state
     const { className, mapViewPortChange, intl: { formatMessage } } = this.props
-
-    const tabClass = classNames({
-      tab: true,
-      first: currentTab === 0,
-      second: currentTab === 1,
-      third: currentTab === 2,
-    })
-
-    const placesTabClass = classNames({
-      'places-tab': true,
-      active: currentTab === 0,
-    })
-
-    const placesPageClass = classNames({
-      page: true,
-      'places-page': true,
-      hidden: currentTab !== 0,
-    })
-
-    const typesTabClass = classNames({
-      'types-tab': true,
-      active: currentTab === 1,
-    })
-
-    const typesPageClass = classNames({
-      page: true,
-      'types-page': true,
-      hidden: currentTab !== 1,
-    })
-
-    const descriptivesTabClass = classNames({
-      'descriptives-tab': true,
-      active: currentTab === 2,
-    })
-
-    const descriptivesPageClass = classNames({
-      page: true,
-      'descriptives-page': true,
-      hidden: currentTab !== 2,
-    })
 
     return (
       <div className={className}>
@@ -97,16 +57,16 @@ class Quest extends Component {
           <button className="next" onClick={this.handleNextBtnClick}>{ formatMessage(messages.next) }
             <Img src={`${CLOUDINARY_ICON_URL}/next.png`} />
           </button>
-          <div className={tabClass}></div>
-          <Img className={placesTabClass} src={`${CLOUDINARY_ICON_URL}/marker.png`} onClick={() => { this.handleTabClick(0) }} />
-          <Img className={typesTabClass} src={`${CLOUDINARY_ICON_URL}/check.png`} onClick={() => { this.handleTabClick(1) }} />
-          <Img className={descriptivesTabClass} src={`${CLOUDINARY_ICON_URL}/star.png`} onClick={() => { this.handleTabClick(2) }} />
+          <div className={cx({ tab: true, first: currentTab === 0, second: currentTab === 1, third: currentTab === 2 })}></div>
+          <Img className={cx({ 'places-tab': true, active: currentTab === 0 })} src={`${CLOUDINARY_ICON_URL}/marker.png`} onClick={() => { this.handleTabClick(0) }} />
+          <Img className={cx({ 'types-tab': true, active: currentTab === 1 })} src={`${CLOUDINARY_ICON_URL}/check.png`} onClick={() => { this.handleTabClick(1) }} />
+          <Img className={cx({ 'descriptives-tab': true, active: currentTab === 2 })} src={`${CLOUDINARY_ICON_URL}/star.png`} onClick={() => { this.handleTabClick(2) }} />
         </div>
 
         <div className="pages">
-          <PlaceSection className={placesPageClass} mapViewPortChange={mapViewPortChange} />
-          <TypeSection className={typesPageClass} />
-          <DescriptiveSection className={descriptivesPageClass} />
+          <PlaceSection className={cx({ page: true, 'places-page': true, hidden: currentTab !== 0 })} mapViewPortChange={mapViewPortChange} />
+          <TypeSection className={cx({ page: true, 'types-page': true, hidden: currentTab !== 1 })} />
+          <DescriptiveSection className={cx({ page: true, 'descriptives-page': true, hidden: currentTab !== 2 })} />
         </div>
       </div>
     )

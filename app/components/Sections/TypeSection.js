@@ -1,11 +1,11 @@
 import React, { Component, PropTypes, Children } from 'react'
-import classNames from 'classnames'
+import cx from 'classnames'
 import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
-import { FETCH_QUESTINFO_SUCCESS, FETCH_QUESTINFO_FAIL, QUEST_ADD } from 'containers/QuestPage/constants'
-import { fetchRecommendations, typeSelect } from 'containers/QuestPage/actions'
+import { GET_QUESTINFO_SUCCESS, GET_QUESTINFO_FAIL, QUEST_ADD } from 'containers/QuestPage/constants'
+import { getRecommendationRequest, typeSelect } from 'containers/QuestPage/actions'
 import messages from 'containers/QuestPage/messages'
 import { selectInfo, selectTypes, selectCurrentTypes } from 'containers/QuestPage/selectors'
 import { Button, StarButton } from 'components/Buttons'
@@ -14,7 +14,7 @@ import Img from 'components/Img'
 class TypeSection extends Component {
   static propTypes = {
     typeSelect: PropTypes.func,
-    fetchRecommendations: PropTypes.func,
+    getRecommendationRequest: PropTypes.func,
     className: PropTypes.string,
     types: PropTypes.array,
     currentTypes: PropTypes.object,
@@ -62,7 +62,7 @@ class TypeSection extends Component {
   initializeState = props => {
     const { info: { status }, types, currentTypes } = props
 
-    if (status === FETCH_QUESTINFO_SUCCESS || status === FETCH_QUESTINFO_FAIL || status === QUEST_ADD) {
+    if (status === GET_QUESTINFO_SUCCESS || status === GET_QUESTINFO_FAIL || status === QUEST_ADD) {
       this.setState({
         types: types.map(type => ({ ...type, visible: false, active: currentTypes.active.indexOf(type.c) !== -1 })),
       })
@@ -95,18 +95,17 @@ class TypeSection extends Component {
       stateData.expanded = true
     }
 
-    this.setState(stateData, this.handleFetchRecommendations)
+    this.setState(stateData, this.handleGetRecommendation)
   }
 
   handleTypeClick = name => {
     const { types } = this.state
     this.setState({
       types: types.map(type => (type.name === name) ? { ...type, active: !type.active } : type),
-    }, this.handleFetchRecommendations)
+    }, this.handleGetRecommendation)
   }
 
-  handleFetchRecommendations = () => {
-    const { typeSelect, fetchRecommendations } = this.props
+  handleGetRecommendation = () => {
     const { types, anything } = this.state
 
     let active = []
@@ -116,8 +115,8 @@ class TypeSection extends Component {
 
     let questTypes = { anything, active, inactive }
 
-    typeSelect(questTypes)
-    fetchRecommendations()
+    this.props.typeSelect(questTypes)
+    this.props.getRecommendationRequest()
   }
 
   render() {
@@ -128,32 +127,32 @@ class TypeSection extends Component {
     let excludedTypes = types.filter(type => !type.active)
     let activeTypes = types.filter(type => type.active)
 
-    const searchBtnClass = classNames({
+    const searchBtnClass = cx({
       search: true,
       invisible: expanded,
     })
 
-    const closeBtnClass = classNames({
+    const closeBtnClass = cx({
       close: true,
       invisible: !expanded || (!anything && activeTypes.length === 0),
     })
 
-    const anythingBtnClass = classNames({
+    const anythingBtnClass = cx({
       hidden: (!expanded && !anything) || ('anything'.indexOf(search.toLowerCase()) === -1),
     })
 
-    const searchInputClass = classNames({
+    const searchInputClass = cx({
       'search-input': true,
       'type-search': true,
       invisible: !expanded,
     })
 
-    const filteredClass = classNames({
+    const filteredClass = cx({
       filtered: true,
       show: expanded || (!expanded && !anything),
     })
 
-    const excludedClass = classNames({
+    const excludedClass = cx({
       excluded: true,
       show: anything && !expanded && excludedTypes.length > 0 && excludedTypes.length !== types.length,
     })
@@ -196,7 +195,7 @@ const selectors = createStructuredSelector({
 })
 
 const actions = {
-  fetchRecommendations,
+  getRecommendationRequest,
   typeSelect,
 }
 

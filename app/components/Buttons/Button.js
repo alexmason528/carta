@@ -1,21 +1,11 @@
 import React, { PropTypes, Children } from 'react'
-import classNames from 'classnames'
+import cx from 'classnames'
 
-const Button = props => {
-  const { active, className, children, onClick } = props
-  let btnClass = classNames({
-    'button-wrapper': true,
-    active,
-  })
-
-  if (className) btnClass = `${btnClass} ${className}`
-
-  return (
-    <div className={btnClass}>
-      <button onClick={onClick}>{Children.toArray(children)}</button>
-    </div>
-  )
-}
+const Button = ({ active, className, children, onClick }) => (
+  <div className={cx({ 'button-wrapper': true, active, [className]: className })}>
+    <button onClick={onClick}>{Children.toArray(children)}</button>
+  </div>
+)
 
 Button.propTypes = {
   onClick: PropTypes.func,

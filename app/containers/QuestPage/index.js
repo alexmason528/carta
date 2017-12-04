@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import Helmet from 'react-helmet'
 import ReactMapboxGl from 'react-mapbox-gl'
-import classNames from 'classnames'
+import cx from 'classnames'
 import ReactResizeDetector from 'react-resize-detector'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
@@ -14,7 +14,7 @@ import { MapBlock, ScoreBoardBlock } from 'components/Blocks'
 import QuestPanel from 'components/QuestPanel'
 import { Button, QuestButton } from 'components/Buttons'
 import URLParser from 'utils/questURLparser'
-import { mapChange, fetchQuestInfo, fetchRecommendations, setDefaultQuest } from './actions'
+import { mapChange, getQuestInfoRequest, getRecommendationRequest, setDefaultQuest } from './actions'
 import { selectRecommendations, selectPlaces } from './selectors'
 
 const Map = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN })
@@ -30,8 +30,8 @@ class QuestPage extends Component {
       descriptives: PropTypes.string,
     }),
     mapChange: PropTypes.func,
-    fetchQuestInfo: PropTypes.func,
-    fetchRecommendations: PropTypes.func,
+    getQuestInfoRequest: PropTypes.func,
+    getRecommendationRequest: PropTypes.func,
     setDefaultQuest: PropTypes.func,
   }
 
@@ -46,14 +46,14 @@ class QuestPage extends Component {
   }
 
   componentWillMount() {
-    // const { params: { viewport, types, descriptives }, setDefaultQuest, fetchRecommendations } = this.props
+    // const { params: { viewport, types, descriptives }, setDefaultQuest, getRecommendationRequest } = this.props
 
     // if (viewport && types && descriptives) {
     //   const res = URLParser({ viewport, types, descriptives })
 
     //   if (!res.error) {
     //     setDefaultQuest(res.data)
-    //     fetchRecommendations()
+    //     getRecommendationRequest()
     //   }
     // }
 
@@ -84,7 +84,7 @@ class QuestPage extends Component {
     this.center = [5.822, 52.142]
     this.zoom = [6]
 
-    this.props.fetchQuestInfo()
+    this.props.getQuestInfoRequest()
 
     this.colors = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379']
     this.shapesGeoJSONSource = `${CLOUDINARY_SHAPES_URL}/shapes.geojson`
@@ -108,7 +108,7 @@ class QuestPage extends Component {
     })
 
     if (showQuest || minimized) {
-      this.props.fetchRecommendations()
+      this.props.getRecommendationRequest()
     }
   }
 
@@ -118,7 +118,7 @@ class QuestPage extends Component {
       bounds: map.getBounds(),
     })
 
-    this.props.fetchRecommendations()
+    this.props.getRecommendationRequest()
     this.map = map
 
     map.addSource('shapes', {
@@ -144,7 +144,7 @@ class QuestPage extends Component {
     const { showQuest, minimized, closed } = this.state
 
     if (showQuest || minimized) {
-      this.props.fetchRecommendations()
+      this.props.getRecommendationRequest()
     }
   }
 
@@ -328,22 +328,6 @@ class QuestPage extends Component {
     const { showQuest, minimized, closed } = this.state
     const { recommendations, params: { brochure } } = this.props
 
-    const mapBlockClass = classNames({
-      'map-block': true,
-      'no-quest-block': !showQuest,
-    })
-
-    const questPanelClass = classNames({
-      'quest-block': true,
-      'quest-hide': !showQuest,
-    })
-
-    const questButtonClass = classNames({
-      'quest-button': true,
-      active: minimized,
-      inactive: !minimized,
-    })
-
     return (
       <Container fluid className="questpage">
         <Helmet
@@ -353,17 +337,17 @@ class QuestPage extends Component {
         />
         <Menu currentPage="Quest" />
         <QuestButton
-          className={questButtonClass}
+          className={cx({ 'quest-button': true, active: minimized, inactive: !minimized })}
           onClick={this.handleQuestButtonClick}
           onCloseClick={this.handleCloseClick}
         />
         <QuestPanel
-          className={questPanelClass}
+          className={cx({ 'quest-block': true, 'quest-hide': !showQuest })}
           minimizeClicked={this.handleMimimizeClick}
           closeClicked={this.handleCloseClick}
           mapViewPortChange={this.handleMapViewportChange}
         />
-        <MapBlock className={mapBlockClass}>
+        <MapBlock className={cx({ 'map-block': true, 'no-quest-block': !showQuest })}>
           <ReactResizeDetector handleWidth handleHeight onResize={() => { if (this.map) this.map.resize() }} />
           <Map
             style={this.mapStyle}
@@ -396,8 +380,8 @@ const selectors = createStructuredSelector({
 
 const actions = {
   mapChange,
-  fetchQuestInfo,
-  fetchRecommendations,
+  getQuestInfoRequest,
+  getRecommendationRequest,
   setDefaultQuest,
 }
 

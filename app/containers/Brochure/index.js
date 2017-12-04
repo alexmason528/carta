@@ -6,17 +6,22 @@ import cx from 'classnames'
 import { Container, Row, Col } from 'reactstrap'
 import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
-import { fetchBrochure } from 'containers/QuestPage/actions'
+import { getBrochureRequest } from 'containers/QuestPage/actions'
 import { selectBrochure } from 'containers/QuestPage/selectors'
 import Img from 'components/Img'
 import { ImageTile, TextTile } from 'components/Tiles'
 import './style.scss'
 
 class Brochure extends Component {
+  static propTypes = {
+    getBrochureRequest: PropTypes.func,
+    brochure: PropTypes.object,
+    name: PropTypes.string.isRequired,
+  }
 
   componentDidMount() {
-    const { fetchBrochure, name } = this.props
-    fetchBrochure(name)
+    const { getBrochureRequest, name } = this.props
+    getBrochureRequest(name)
   }
 
   render() {
@@ -57,18 +62,12 @@ class Brochure extends Component {
   }
 }
 
-Brochure.propTypes = {
-  fetchBrochure: PropTypes.func,
-  brochure: PropTypes.object,
-  name: PropTypes.string.isRequired,
-}
-
 const selectors = createStructuredSelector({
   brochure: selectBrochure(),
 })
 
 const actions = {
-  fetchBrochure,
+  getBrochureRequest,
 }
 
 export default connect(selectors, actions)(Brochure)

@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import Helmet from 'react-helmet'
-import className from 'classnames'
 import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
