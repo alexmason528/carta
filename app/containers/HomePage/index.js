@@ -134,6 +134,10 @@ class HomePage extends Component {
       createPostButtonType = 'image'
     }
 
+    const firstCol = [6, 8, 9, 12, 15, 18, 21, 24]
+    const secondCol = [0, 1, 4, 7, 10, 13, 16, 19, 22]
+    const thirdCol = [2, 3, 5, 11, 14, 17, 20, 23]
+
     return (
       <Container fluid className="homepage">
         <Helmet
@@ -175,7 +179,7 @@ class HomePage extends Component {
                   editable: (authenticated && (post.author._id === user._id || user.role === 'admin')) && !editingPost && !showCreatePostForm,
                   first: (key === 0 && authenticated),
                 }
-                return (key === 6 || key === 8) ? <Post {...data} /> : null
+                return (firstCol.indexOf(key) !== -1) ? <Post {...data} /> : null
               })
             }
           </Col>
@@ -195,7 +199,7 @@ class HomePage extends Component {
                     first: (key === 0 && authenticated),
                   }
 
-                  return (key === 0 || key === 1 || key === 4 || key === 7) ? <Post {...data} /> : null
+                  return (secondCol.indexOf(key) !== -1) ? <Post {...data} /> : null
                 })
               }
             </div>
@@ -213,7 +217,7 @@ class HomePage extends Component {
                   first: (key === 0 && authenticated),
                 }
 
-                return (key === 2 || key === 3 || key === 5) ? <Post {...data} /> : null
+                return (thirdCol.indexOf(key) !== -1) ? <Post {...data} /> : null
               })
             }
           </Col>
