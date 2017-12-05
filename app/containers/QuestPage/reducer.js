@@ -176,7 +176,13 @@ function questReducer(state = initialState, action) {
       }
 
     case DESCRIPTIVE_ANYTHING_CLICK:
-      newDescriptives = descriptives.map(descriptive => { return { ...descriptive, active: !descriptivesAll, visible: !descriptivesAll } })
+      newDescriptives = descriptives.map(descriptive => {
+        return Object.assign(
+          descriptive,
+          { active: !descriptivesAll, visible: !descriptivesAll },
+          descriptivesAll && { star: false },
+        )
+      })
       quests[curQuestInd].descriptives = newDescriptives
       quests[curQuestInd].descriptivesAll = !descriptivesAll
 
