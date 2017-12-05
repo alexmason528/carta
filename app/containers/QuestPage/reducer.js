@@ -1,6 +1,5 @@
 import {
   MAP_CHANGE,
-  PLACE_SELECT,
   TYPE_SELECT,
   DESCRIPTIVE_SELECT,
   UPDATE_VISIBILITY,
@@ -23,35 +22,34 @@ import {
   GET_BROCHURE_FAIL,
 } from './constants'
 
-const initialState = {
-  questInfo: {
-    categories: {
-      places: [],
-      types: [],
-      descriptives: [],
-    },
-    quests: [{
-      viewport: {
-        x: 0,
-        y: 0,
-        zoomlevel: 0,
-      },
-      types: {
-        anything: false,
-        active: [],
-        inactive: [],
-      },
-      descriptives: {
-        anything: false,
-        star: [],
-        active: [],
-        inactive: [],
-      },
-    }],
-    currentQuestIndex: 0,
+const initialQuest = {
+  viewport: {
+    x: 0,
+    y: 0,
+    zoomlevel: 0,
   },
-  recommendations: [],
+  types: {
+    anything: false,
+    active: [],
+    inactive: [],
+  },
+  descriptives: {
+    anything: false,
+    star: [],
+    active: [],
+    inactive: [],
+  },
+}
 
+const initialState = {
+  categories: {
+    places: [],
+    types: [],
+    descriptives: [],
+  },
+  quests: [initialQuest],
+  selectedQuest: 0,
+  recommendations: [],
   viewport: {
     zoom: 7,
     northeast: {},
@@ -65,195 +63,93 @@ const initialState = {
 
 
 function questReducer(state = initialState, { type, payload }) {
-  let questInfo
-  let recommendations
-  let currentQuestIndex
-  let types
-  let descriptives
-  let quests
-  let brochure
+  let quests = state.quests.slice()
 
   switch (type) {
 
     case MAP_CHANGE:
+      const { zoom, bounds: { _ne, _sw } } = payload
       return {
         ...state,
         status: type,
         viewport: {
-          zoom: payload.zoom,
+          zoom,
           northeast: {
-            x: payload.bounds._ne.lng,
-            y: payload.bounds._ne.lat,
+            x: _ne.lng,
+            y: _ne.lat,
           },
           southwest: {
-            x: payload.bounds._sw.lng,
-            y: payload.bounds._sw.lat,
+            x: _sw.lng,
+            y: _sw.lat,
           },
-        },
-      }
-
-    case PLACE_SELECT:
-      currentQuestIndex = state.questInfo.currentQuestIndex
-      quests = state.questInfo.quests
-      quests[currentQuestIndex].place = payload
-
-      return {
-        ...state,
-        status: type,
-        questInfo: {
-          ...state.questInfo,
-          quests,
         },
       }
 
     case TYPE_SELECT:
-      currentQuestIndex = state.questInfo.currentQuestIndex
-      quests = state.questInfo.quests
-      quests[currentQuestIndex].types = payload
+      quests[state.selectedQuest].types = payload
       return {
         ...state,
         status: type,
-        questInfo: {
-          ...state.questInfo,
-          quests,
-        },
+        quests,
       }
 
     case DESCRIPTIVE_SELECT:
-      currentQuestIndex = state.questInfo.currentQuestIndex
-      quests = state.questInfo.quests
-      quests[currentQuestIndex].descriptives = payload
-
+      quests[state.selectedQuest].descriptives = payload
       return {
         ...state,
         status: type,
-        questInfo: {
-          ...state.questInfo,
-          quests,
-        },
+        quests,
       }
 
     case QUEST_ADD:
-      const defaultQuest = {
-        viewport: {
-          x: 0,
-          y: 0,
-          zoomlevel: 0,
-        },
-        types: {
-          anything: false,
-          active: [],
-          inactive: [],
-        },
-        descriptives: {
-          anything: false,
-          star: [],
-          active: [],
-          inactive: [],
-        },
-      }
-
-      const newState = {
+      return {
         ...state,
         status: type,
-        questInfo: {
-          ...state.questInfo,
-          quests: [
-            ...state.questInfo.quests,
-            defaultQuest,
-          ],
-        },
+        quests: [...state.quests, initialQuest],
       }
-
-      return newState
 
     case QUEST_SELECT:
       return {
         ...state,
         status: type,
-        questInfo: {
-          ...state.questInfo,
-          currentQuestIndex: payload,
-        },
+        selectedQuest: payload,
       }
 
     case QUEST_REMOVE:
-      currentQuestIndex = state.questInfo.currentQuestIndex
-      let newQuests = [...state.questInfo.quests]
-      newQuests.splice(payload, 1)
+      const { selectedQuest } = state
 
-      if (payload < currentQuestIndex) {
-        return {
-          ...state,
+      return Object.assign({},
+        state,
+        {
           status: type,
-          questInfo: {
-            ...state.questInfo,
-            quests: newQuests,
-            currentQuestIndex: currentQuestIndex - 1,
-          },
-        }
-      }
-
-      return {
-        ...state,
-        status: type,
-        questInfo: {
-          ...state.questInfo,
-          quests: newQuests,
+          quests: quests.splice(payload, 1),
         },
-      }
+        (payload < selectedQuest) && { selectedQuest: selectedQuest - 1 },
+      )
 
     case SET_DEFAULT_QUEST:
       return state
 
     case GET_QUESTINFO_REQUEST:
-      questInfo = {
-        categories: {
-          places: [],
-          types: [],
-          descriptives: [],
-        },
-        quests: initialState.questInfo.quests,
-        currentQuestIndex: 0,
-      }
-
       return {
         ...state,
         status: type,
         error: null,
-        questInfo,
       }
 
     case GET_QUESTINFO_SUCCESS:
-      questInfo = {
-        categories: payload,
-        quests: initialState.questInfo.quests,
-        currentQuestIndex: 0,
-      }
-
       return {
         ...state,
         status: type,
         error: null,
-        questInfo,
+        categories: payload,
       }
 
     case GET_QUESTINFO_FAIL:
-      questInfo = {
-        categories: {
-          places: [],
-          types: [],
-          descriptives: [],
-        },
-        quests: initialState.questInfo.quests,
-        currentQuestIndex: 0,
-      }
-
       return {
         ...state,
         status: type,
         error: payload,
-        questInfo,
       }
 
     case GET_RECOMMENDATION_REQUEST:
@@ -275,7 +171,6 @@ function questReducer(state = initialState, { type, payload }) {
         ...state,
         status: type,
         error: payload,
-        recommendations: [],
       }
 
     case GET_BROCHURE_REQUEST:
@@ -283,7 +178,6 @@ function questReducer(state = initialState, { type, payload }) {
         ...state,
         status: type,
         error: null,
-        brochure: {},
       }
 
     case GET_BROCHURE_SUCCESS:
@@ -297,7 +191,6 @@ function questReducer(state = initialState, { type, payload }) {
       return {
         ...state,
         error: payload,
-        brochure: {},
       }
 
     default:

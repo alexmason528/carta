@@ -1,6 +1,5 @@
 import {
   MAP_CHANGE,
-  PLACE_SELECT,
   TYPE_SELECT,
   DESCRIPTIVE_SELECT,
   UPDATE_VISIBILITY,
@@ -26,13 +25,6 @@ import {
 export function mapChange(payload) {
   return {
     type: MAP_CHANGE,
-    payload,
-  }
-}
-
-export function placeSelect(payload) {
-  return {
-    type: PLACE_SELECT,
     payload,
   }
 }

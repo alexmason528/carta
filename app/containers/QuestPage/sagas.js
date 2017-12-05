@@ -107,10 +107,11 @@ export function* getQuestInfoRequest() {
   try {
     const res = yield call(request, requestURL, params)
 
+    const { types, descriptives } = res
     const payload = {
-      places: places,
-      types: res.types.map(type => ({ c: type.c, name: type.name })),
-      descriptives: res.descriptives.map(descriptive => ({ c: descriptive.c, name: descriptive.name })),
+      places,
+      types,
+      descriptives,
     }
 
     yield put(getQuestInfoSuccess(payload))

@@ -104,19 +104,19 @@ class DescriptiveSection extends Component {
     this.setState(stateData, this.handleGetRecommendation)
   }
 
-  handleDescriptiveClick = name => {
+  handleDescriptiveClick = c => {
     const { descriptives } = this.state
 
     this.setState({
-      descriptives: descriptives.map(descriptive => (descriptive.name === name) ? { ...descriptive, star: false, active: !descriptive.active } : descriptive),
+      descriptives: descriptives.map(descriptive => (descriptive.c === c) ? { ...descriptive, star: false, active: !descriptive.active } : descriptive),
     }, this.handleGetRecommendation)
   }
 
-  handleDescriptiveStarClick = name => {
+  handleDescriptiveStarClick = c => {
     const { descriptives } = this.state
 
     this.setState({
-      descriptives: descriptives.map(descriptive => (descriptive.name === name) ? { ...descriptive, star: !descriptive.star } : descriptive),
+      descriptives: descriptives.map(descriptive => (descriptive.c === c) ? { ...descriptive, star: !descriptive.star } : descriptive),
     }, this.handleGetRecommendation)
   }
 
@@ -143,27 +143,9 @@ class DescriptiveSection extends Component {
     this.props.getRecommendationRequest()
   }
 
-  // handleDescriptiveClick = descriptiveName => {
-  //   const { descriptiveSelect, questIndex, getRecommendationRequest } = this.props
-  //   let descriptives = [...this.state.descriptives]
-
-  //   let newDescriptives = descriptives.map((descriptive, index) => {
-  //     const { name, star, visible, active } = descriptive
-  //     if (name === descriptiveName) {
-  //       descriptiveSelect(name, 1, 1, 1, questIndex)
-  //       return { name: name, star: 1, visible: 1, active: 1 }
-  //     }
-  //     return descriptive
-  //   })
-
-  //   this.setState({
-  //     descriptives: newDescriptives,
-  //   }, () => { getRecommendationRequest() })
-  // }
-
   render() {
     const { descriptives, expanded, anything, search } = this.state
-    const { className, intl: { formatMessage } } = this.props
+    const { className, intl: { formatMessage, locale } } = this.props
 
     let searchedDescriptives = (search === '') ? descriptives : descriptives.filter(descriptive => (descriptive.name.toLowerCase().indexOf(search) !== -1))
 
@@ -208,7 +190,7 @@ class DescriptiveSection extends Component {
 
     return (
       <div className={className}>
-        <h1>{ formatMessage(messages.knownfor) }</h1>
+        <h1>{ formatMessage(messages.knownFor) }</h1>
         <Img className={searchBtnClass} src={`${CLOUDINARY_ICON_URL}/search.png`} onClick={() => { this.handleExpand(true) }} />
         <Img className={closeBtnClass} src={`${CLOUDINARY_ICON_URL}/back.png`} onClick={() => { this.handleExpand(false) }} />
         <input className={searchInputClass} value={search} onChange={this.handleInputChange} />
@@ -217,15 +199,15 @@ class DescriptiveSection extends Component {
           <div className={filteredClass}>
             {
             searchedDescriptives.map((descriptive, index) => {
-              const { name, star, active } = descriptive
+              const { c, star, active } = descriptive
               return (expanded || (star || active)) ? (
                 <StarButton
                   key={index}
                   {...descriptive}
-                  onMouseDown={() => { this.handleDescriptiveClick(name) }}
-                  onStarClick={() => { this.handleDescriptiveStarClick(name) }}
+                  onMouseDown={() => { this.handleDescriptiveClick(c) }}
+                  onStarClick={() => { this.handleDescriptiveStarClick(c) }}
                 >
-                  {name}
+                  {descriptive[locale]}
                 </StarButton>) : null
             })
             }
@@ -233,37 +215,31 @@ class DescriptiveSection extends Component {
           <div className={staredClass}>
             <div className="notable">{ formatMessage(messages.notably) }</div>
             {
-              staredDescriptives.map((descriptive, index) => {
-                const { name } = descriptive
-                return (
-                  <StarButton
-                    key={index}
-                    {...descriptive}
-                    onMouseDown={() => { this.handleDescriptiveClick(name) }}
-                    onStarClick={() => { this.handleDescriptiveStarClick(name) }}
-                  >
-                    {name}
-                  </StarButton>
-                )
-              })
+              staredDescriptives.map((descriptive, index) => (
+                <StarButton
+                  key={index}
+                  {...descriptive}
+                  onMouseDown={() => { this.handleDescriptiveClick(descriptive.c) }}
+                  onStarClick={() => { this.handleDescriptiveStarClick(descriptive.c) }}
+                >
+                  {descriptive[locale]}
+                </StarButton>
+              ))
             }
           </div>
           <div className={excludedClass}>
-            <div className="except">{ formatMessage(messages.onlyignoring) }</div>
+            <div className="except">{ formatMessage(messages.onlyIgnoring) }</div>
             {
-              excludedDescriptives.map((descriptive, index) => {
-                const { name } = descriptive
-                return (
-                  <StarButton
-                    key={index}
-                    {...descriptives}
-                    onMouseDown={() => { this.handleDescriptiveClick(name) }}
-                    onStarClick={() => { this.handleDescriptiveStarClick(name) }}
-                  >
-                    {name}
-                  </StarButton>
-                )
-              })
+              excludedDescriptives.map((descriptive, index) => (
+                <StarButton
+                  key={index}
+                  {...descriptive}
+                  onMouseDown={() => { this.handleDescriptiveClick(descriptive.c) }}
+                  onStarClick={() => { this.handleDescriptiveStarClick(descriptive.c) }}
+                >
+                  {descriptive[locale]}
+                </StarButton>
+              ))
             }
           </div>
         </div>

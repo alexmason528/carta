@@ -1,24 +1,24 @@
 import { defineMessages } from 'react-intl'
 
 export default defineMessages({
-  inaround: {
-    id: 'carta.inaround',
+  inAround: {
+    id: 'carta.inAround',
     defaultMessage: 'In & around',
   },
-  showme: {
-    id: 'carta.showme',
+  showMe: {
+    id: 'carta.showMe',
     defaultMessage: 'Show Me',
   },
-  knownfor: {
-    id: 'carta.knownfor',
+  knownFor: {
+    id: 'carta.knownFor',
     defaultMessage: 'Known For',
   },
   next: {
     id: 'carta.next',
     defaultMessage: 'Next',
   },
-  onlyignoring: {
-    id: 'carta.onlyignoring',
+  onlyIgnoring: {
+    id: 'carta.onlyIgnoring',
     defaultMessage: 'Only Ignoring',
   },
   notably: {

@@ -2,11 +2,6 @@ import { createSelector } from 'reselect'
 
 const selectQuest = state => state.quest
 
-const selectQuestInfo = () => createSelector(
-  selectQuest,
-  substate => substate.questInfo
-)
-
 const selectRecommendations = () => createSelector(
   selectQuest,
   substate => substate.recommendations
@@ -19,42 +14,42 @@ const selectViewport = () => createSelector(
 
 const selectCategories = () => createSelector(
   selectQuest,
-  substate => substate.questInfo.categories
+  substate => substate.categories
 )
 
 const selectQuests = () => createSelector(
   selectQuest,
-  substate => substate.questInfo.quests
+  substate => substate.quests
 )
 
 const selectCurrentQuestIndex = () => createSelector(
   selectQuest,
-  substate => substate.questInfo.currentQuestIndex
+  substate => substate.selectedQuest
 )
 
 const selectPlaces = () => createSelector(
   selectQuest,
-  substate => substate.questInfo.categories.places
+  substate => substate.categories.places
 )
 
 const selectTypes = () => createSelector(
   selectQuest,
-  substate => substate.questInfo.categories.types
+  substate => substate.categories.types
 )
 
 const selectCurrentTypes = () => createSelector(
   selectQuest,
-  substate => substate.questInfo.quests[substate.questInfo.currentQuestIndex].types
+  substate => substate.quests[substate.selectedQuest].types
 )
 
 const selectDescriptives = () => createSelector(
   selectQuest,
-  substate => substate.questInfo.categories.descriptives
+  substate => substate.categories.descriptives
 )
 
 const selectCurrentDescriptives = () => createSelector(
   selectQuest,
-  substate => substate.questInfo.quests[substate.questInfo.currentQuestIndex].descriptives
+  substate => substate.quests[substate.selectedQuest].descriptives
 )
 
 const selectBrochure = () => createSelector(
@@ -69,7 +64,6 @@ const selectInfo = () => createSelector(
 
 export {
   selectQuest,
-  selectQuestInfo,
   selectRecommendations,
   selectViewport,
   selectCategories,

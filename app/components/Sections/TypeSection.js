@@ -98,10 +98,10 @@ class TypeSection extends Component {
     this.setState(stateData, this.handleGetRecommendation)
   }
 
-  handleTypeClick = name => {
+  handleTypeClick = c => {
     const { types } = this.state
     this.setState({
-      types: types.map(type => (type.name === name) ? { ...type, active: !type.active } : type),
+      types: types.map(type => (type.c === c) ? { ...type, active: !type.active } : type),
     }, this.handleGetRecommendation)
   }
 
@@ -121,9 +121,9 @@ class TypeSection extends Component {
 
   render() {
     const { types, expanded, anything, search } = this.state
-    const { className, intl: { formatMessage } } = this.props
+    const { className, intl: { formatMessage, locale } } = this.props
 
-    let searchedTypes = (search === '') ? types : types.filter(type => type.name.toLowerCase().indexOf(search.toLowerCase()) !== -1)
+    let searchedTypes = (search === '') ? types : types.filter(type => type[locale].toLowerCase().indexOf(search.toLowerCase()) !== -1)
     let excludedTypes = types.filter(type => !type.active)
     let activeTypes = types.filter(type => type.active)
 
@@ -159,7 +159,7 @@ class TypeSection extends Component {
 
     return (
       <div className={className}>
-        <h1>{ formatMessage(messages.showme) }</h1>
+        <h1>{ formatMessage(messages.showMe) }</h1>
         <Img className={searchBtnClass} src={`${CLOUDINARY_ICON_URL}/search.png`} onClick={() => { this.handleExpand(true) }} />
         <Img className={closeBtnClass} src={`${CLOUDINARY_ICON_URL}/back.png`} onClick={() => { this.handleExpand(false) }} />
         <input className={searchInputClass} value={search} onChange={this.handleInputChange} />
@@ -174,13 +174,12 @@ class TypeSection extends Component {
           <div className={filteredClass}>
             {
             searchedTypes.map((type, index) =>
-              (expanded || type.active) ? <Button active={type.active} onClick={() => { this.handleTypeClick(type.name) }} key={index}>{type.name}</Button> : null
-            )
+              (expanded || type.active) ? <Button active={type.active} onClick={() => { this.handleTypeClick(type.c) }} key={index}>{type[locale]}</Button> : null)
             }
           </div>
           <div className={excludedClass}>
-            <div className="except">{ formatMessage(messages.onlyignoring) }</div>
-            { excludedTypes.map((type, index) => <Button key={index} active={type.active} onClick={() => { this.handleTypeClick(type.name) }}>{type.name}</Button>) }
+            <div className="except">{ formatMessage(messages.onlyIgnoring) }</div>
+            { excludedTypes.map((type, index) => <Button key={index} active={type.active} onClick={() => { this.handleTypeClick(type.c) }}>{type[locale]}</Button>) }
           </div>
         </div>
       </div>

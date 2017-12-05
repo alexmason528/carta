@@ -1,5 +1,4 @@
 export const MAP_CHANGE = 'carta/Quest/MAP_CHANGE'
-export const PLACE_SELECT = 'carta/Quest/PLACE_SELECT'
 export const TYPE_SELECT = 'carta/Quest/TYPE_SELECT'
 export const DESCRIPTIVE_SELECT = 'carta/Quest/DESCRIPTIVE_SELECT'
 export const UPDATE_VISIBILITY = 'carta/Quest/UPDATE_VISIBILITY'
