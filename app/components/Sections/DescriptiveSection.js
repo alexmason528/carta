@@ -1,23 +1,29 @@
 import React, { Component, PropTypes, Children } from 'react'
 import cx from 'classnames'
+import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
-import { getRecommendationRequest, descriptiveSelect } from 'containers/QuestPage/actions'
+import {
+  getRecommendationRequest,
+  descriptiveClick,
+  descriptiveStarClick,
+  descriptiveAnythingClick,
+} from 'containers/QuestPage/actions'
 import messages from 'containers/QuestPage/messages'
-import { selectDescriptives, selectCurrentDescriptives } from 'containers/QuestPage/selectors'
+import { selectCurrentDescriptives } from 'containers/QuestPage/selectors'
 import { Button, StarButton } from 'components/Buttons'
 import Img from 'components/Img'
 
 class DescriptiveSection extends Component {
   static propTypes = {
-    className: PropTypes.string,
-    descriptives: PropTypes.array,
-    currentDescriptives: PropTypes.object,
-    questIndex: PropTypes.number,
-    descriptiveSelect: PropTypes.func,
+    descriptiveClick: PropTypes.func,
+    descriptiveStarClick: PropTypes.func,
+    descriptiveAnythingClick: PropTypes.func,
     getRecommendationRequest: PropTypes.func,
+    currentDescriptives: PropTypes.object,
+    className: PropTypes.string,
     intl: intlShape.isRequired,
   }
 
@@ -25,63 +31,26 @@ class DescriptiveSection extends Component {
     super(props)
 
     this.state = {
-      descriptives: [],
       expanded: true,
-      anything: false,
       search: '',
     }
   }
 
-  componentWillMount() {
-    this.initializeState(this.props)
-  }
-
   componentWillReceiveProps(nextProps) {
-    this.initializeState(nextProps)
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    let closable = false
-
-    const { descriptives } = nextState
-    const { className } = this.props
+    const { currentDescriptives: { descriptives } } = nextProps
 
     for (let descriptive of descriptives) {
-      if (descriptive.active) {
-        closable = true
-        break
-      }
+      if (descriptive.visible) { return }
     }
-
-    if (nextProps.className !== className) {
-      nextState.expanded = !closable
-    }
-  }
-
-  initializeState = props => {
-    const { descriptives, currentDescriptives: { star, active } } = props
-
-    const newDescriptives = descriptives.map(descriptive => {
-      const { c } = descriptive
-      const isStar = star.indexOf(c) !== -1
-      const isActive = active.indexOf(c) !== -1
-
-      return { ...descriptive, star: isStar, active: isStar || isActive }
-    })
-
-    this.setState({
-      descriptives: newDescriptives,
-    })
+    this.setState({ expanded: true })
   }
 
   handleExpand = expanded => {
-    const data = Object.assign(
+    this.setState(Object.assign(
       this.state,
       { expanded },
       !expanded && { search: '' }
-    )
-
-    this.setState(data)
+    ))
   }
 
   handleInputChange = evt => {
@@ -89,63 +58,23 @@ class DescriptiveSection extends Component {
   }
 
   handleAnythingClick = () => {
-    const { descriptives, anything } = this.state
-    let newDescriptives = descriptives.map(descriptive => ({ ...descriptive, star: anything ? false : descriptive.star, active: !anything, visible: !anything }))
-
-    let stateData = {
-      anything: !anything,
-      descriptives: newDescriptives,
-    }
-
-    if (anything) {
-      stateData.expanded = true
-    }
-
-    this.setState(stateData, this.handleGetRecommendation)
+    this.props.descriptiveAnythingClick()
+    this.props.getRecommendationRequest()
   }
 
   handleDescriptiveClick = c => {
-    const { descriptives } = this.state
-
-    this.setState({
-      descriptives: descriptives.map(descriptive => (descriptive.c === c) ? { ...descriptive, star: false, active: !descriptive.active } : descriptive),
-    }, this.handleGetRecommendation)
+    this.props.descriptiveClick(c)
+    this.props.getRecommendationRequest()
   }
 
   handleDescriptiveStarClick = c => {
-    const { descriptives } = this.state
-
-    this.setState({
-      descriptives: descriptives.map(descriptive => (descriptive.c === c) ? { ...descriptive, star: !descriptive.star } : descriptive),
-    }, this.handleGetRecommendation)
-  }
-
-  handleGetRecommendation = () => {
-    const { descriptives, anything } = this.state
-
-    let star = []
-    let active = []
-    let inactive = []
-
-    descriptives.forEach(descriptive => {
-      if (descriptive.star) {
-        star.push(descriptive.c)
-      } else if (descriptive.active) {
-        active.push(descriptive.c)
-      } else {
-        inactive.push(descriptive.c)
-      }
-    })
-
-    let questDescriptives = { anything, active, inactive, star }
-
-    this.props.descriptiveSelect(questDescriptives)
+    this.props.descriptiveStarClick(c)
     this.props.getRecommendationRequest()
   }
 
   render() {
-    const { descriptives, expanded, anything, search } = this.state
-    const { className, intl: { formatMessage, locale } } = this.props
+    const { expanded, search } = this.state
+    const { className, intl: { formatMessage, locale }, currentDescriptives: { descriptives, descriptivesAll } } = this.props
 
     let searchedDescriptives = (search === '') ? descriptives : descriptives.filter(descriptive => (descriptive.name.toLowerCase().indexOf(search) !== -1))
 
@@ -160,11 +89,11 @@ class DescriptiveSection extends Component {
 
     const closeBtnClass = cx({
       close: true,
-      invisible: !expanded || (!anything && staredDescriptives.length === 0 && activeDescriptives.length === 0),
+      invisible: !expanded || (!descriptivesAll && staredDescriptives.length === 0 && activeDescriptives.length === 0),
     })
 
     const anythingBtnClass = cx({
-      hidden: (!expanded && !anything) || ('anything'.indexOf(search.toLowerCase()) === -1),
+      hidden: (!expanded && !descriptivesAll) || ('anything'.indexOf(search.toLowerCase()) === -1),
     })
 
     const searchInputClass = cx({
@@ -175,17 +104,17 @@ class DescriptiveSection extends Component {
 
     const filteredClass = cx({
       filtered: true,
-      show: expanded || (!expanded && !anything),
+      show: expanded || (!expanded && !descriptivesAll),
     })
 
     const excludedClass = cx({
       excluded: true,
-      show: anything && !expanded && excludedDescriptives.length > 0 && excludedDescriptives.length !== descriptives.length,
+      show: descriptivesAll && !expanded && excludedDescriptives.length > 0 && excludedDescriptives.length !== descriptives.length,
     })
 
     const staredClass = cx({
       stared: true,
-      show: anything && staredDescriptives.length > 0,
+      show: descriptivesAll && staredDescriptives.length > 0,
     })
 
     return (
@@ -195,12 +124,12 @@ class DescriptiveSection extends Component {
         <Img className={closeBtnClass} src={`${CLOUDINARY_ICON_URL}/back.png`} onClick={() => { this.handleExpand(false) }} />
         <input className={searchInputClass} value={search} onChange={this.handleInputChange} />
         <div className="suggestions">
-          <Button className={anythingBtnClass} active={anything} onClick={this.handleAnythingClick}>Anything</Button>
+          <Button className={anythingBtnClass} active={descriptivesAll} onClick={this.handleAnythingClick}>Anything</Button>
           <div className={filteredClass}>
             {
             searchedDescriptives.map((descriptive, index) => {
-              const { c, star, active } = descriptive
-              return (expanded || (star || active)) ? (
+              const { c, star, visible } = descriptive
+              return (expanded || (star || visible)) ? (
                 <StarButton
                   key={index}
                   {...descriptive}
@@ -249,13 +178,17 @@ class DescriptiveSection extends Component {
 }
 
 const selectors = createStructuredSelector({
-  descriptives: selectDescriptives(),
   currentDescriptives: selectCurrentDescriptives(),
 })
 
 const actions = {
-  descriptiveSelect,
+  descriptiveClick,
+  descriptiveStarClick,
+  descriptiveAnythingClick,
   getRecommendationRequest,
 }
 
-export default injectIntl(connect(selectors, actions)(DescriptiveSection))
+export default compose(
+  injectIntl,
+  connect(selectors, actions),
+)(DescriptiveSection)

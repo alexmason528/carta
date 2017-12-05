@@ -1,8 +1,15 @@
 import {
   MAP_CHANGE,
-  TYPE_SELECT,
-  DESCRIPTIVE_SELECT,
+
+  TYPE_CLICK,
+  TYPE_ANYTHING_CLICK,
+
+  DESCRIPTIVE_CLICK,
+  DESCRIPTIVE_STAR_CLICK,
+  DESCRIPTIVE_ANYTHING_CLICK,
+
   UPDATE_VISIBILITY,
+
   SET_DEFAULT_QUEST,
 
   QUEST_ADD,
@@ -23,22 +30,10 @@ import {
 } from './constants'
 
 const initialQuest = {
-  viewport: {
-    x: 0,
-    y: 0,
-    zoomlevel: 0,
-  },
-  types: {
-    anything: false,
-    active: [],
-    inactive: [],
-  },
-  descriptives: {
-    anything: false,
-    star: [],
-    active: [],
-    inactive: [],
-  },
+  types: [],
+  typesAll: false,
+  descriptives: [],
+  descriptivesAll: false,
 }
 
 const initialState = {
@@ -47,84 +42,169 @@ const initialState = {
     types: [],
     descriptives: [],
   },
-  quests: [initialQuest],
-  selectedQuest: 0,
-  recommendations: [],
   viewport: {
-    zoom: 7,
-    northeast: {},
-    southwest: {},
+    x: 0,
+    y: 0,
+    zoomlevel: 0,
   },
-
+  quests: [initialQuest],
+  curQuestInd: 0,
+  recommendations: [],
   brochure: {},
   status: null,
   error: null,
 }
 
 
-function questReducer(state = initialState, { type, payload }) {
+function questReducer(state = initialState, action) {
   let quests = state.quests.slice()
+  const { categories, curQuestInd } = state
+  const { types, typesAll, descriptives, descriptivesAll } = quests[curQuestInd]
+  let newTypes
+  let newDescriptives
+  let activeCnt
 
-  switch (type) {
-
+  switch (action.type) {
     case MAP_CHANGE:
-      const { zoom, bounds: { _ne, _sw } } = payload
-      return {
-        ...state,
-        status: type,
-        viewport: {
-          zoom,
-          northeast: {
-            x: _ne.lng,
-            y: _ne.lat,
-          },
-          southwest: {
-            x: _sw.lng,
-            y: _sw.lat,
-          },
+      const { zoom, bounds: { _ne, _sw } } = action.payload
+      const viewport = {
+        zoom,
+        northeast: {
+          x: _ne.lng,
+          y: _ne.lat,
+        },
+        southwest: {
+          x: _sw.lng,
+          y: _sw.lat,
         },
       }
 
-    case TYPE_SELECT:
-      quests[state.selectedQuest].types = payload
       return {
         ...state,
-        status: type,
+        status: action.type,
+        viewport,
+      }
+
+    case TYPE_CLICK:
+      newTypes = types.map((type, index) => {
+        const { c, active } = type
+        return (c === action.payload)
+        ? Object.assign(
+          type,
+          { active: !active },
+          !active && { visible: true })
+        : type
+      })
+      quests[curQuestInd].types = newTypes
+
+      activeCnt = 0
+      for (let type of newTypes) {
+        if (type.active) {
+          activeCnt += 1
+        }
+      }
+
+      if (activeCnt === 0) {
+        quests[curQuestInd].typesAll = false
+      } else if (activeCnt === types.length) {
+        quests[curQuestInd].typesAll = true
+      }
+
+      return {
+        ...state,
+        status: action.type,
         quests,
       }
 
-    case DESCRIPTIVE_SELECT:
-      quests[state.selectedQuest].descriptives = payload
+    case TYPE_ANYTHING_CLICK:
+      newTypes = types.map(type => { return { ...type, active: !typesAll, visible: !typesAll } })
+      quests[curQuestInd].types = newTypes
+      quests[curQuestInd].typesAll = !typesAll
+
       return {
         ...state,
-        status: type,
+        status: action.type,
+        quests,
+      }
+
+    case DESCRIPTIVE_CLICK:
+      newDescriptives = descriptives.map(descriptive => {
+        const { c, active } = descriptive
+        return (c === action.payload)
+        ? Object.assign(
+          descriptive,
+          { active: !active },
+          active ? { star: false } : { visible: true })
+        : descriptive
+      })
+      quests[curQuestInd].descriptives = newDescriptives
+
+      activeCnt = 0
+      for (let descriptive of newDescriptives) {
+        if (descriptive.active) {
+          activeCnt += 1
+        }
+      }
+
+      if (activeCnt === 0) {
+        quests[curQuestInd].descriptivesAll = false
+      } else if (activeCnt === descriptives.length) {
+        quests[curQuestInd].descriptivesAll = true
+      }
+
+      return {
+        ...state,
+        status: action.type,
+        quests,
+      }
+
+    case DESCRIPTIVE_STAR_CLICK:
+      newDescriptives = descriptives.map(descriptive => {
+        const { c, star } = descriptive
+        return (c === action.payload)
+        ? Object.assign(
+          descriptive,
+          { star: !star })
+        : descriptive
+      })
+      quests[curQuestInd].descriptives = newDescriptives
+
+      return {
+        ...state,
+        status: action.type,
+        quests,
+      }
+
+    case DESCRIPTIVE_ANYTHING_CLICK:
+      newDescriptives = descriptives.map(descriptive => { return { ...descriptive, active: !descriptivesAll, visible: !descriptivesAll } })
+      quests[curQuestInd].descriptives = newDescriptives
+      quests[curQuestInd].descriptivesAll = !descriptivesAll
+
+      return {
+        ...state,
+        status: action.type,
         quests,
       }
 
     case QUEST_ADD:
       return {
         ...state,
-        status: type,
-        quests: [...state.quests, initialQuest],
+        status: JSON.parse(JSON.stringify(action.type)),
+        quests: [...quests, { ...initialQuest, ...JSON.parse(JSON.stringify(categories)) }],
       }
 
     case QUEST_SELECT:
       return {
         ...state,
-        status: type,
-        selectedQuest: payload,
+        status: action.type,
+        curQuestInd: action.payload,
       }
 
     case QUEST_REMOVE:
-      const { selectedQuest } = state
-
+      quests.splice(action.payload, 1)
       return Object.assign({},
-        state,
-        {
-          status: type,
-          quests: quests.splice(payload, 1),
-        },
-        (payload < selectedQuest) && { selectedQuest: selectedQuest - 1 },
+        { ...state, status: action.type, quests },
+        (action.payload < curQuestInd) && { curQuestInd: curQuestInd - 1 },
       )
 
     case SET_DEFAULT_QUEST:
@@ -133,64 +213,65 @@ function questReducer(state = initialState, { type, payload }) {
     case GET_QUESTINFO_REQUEST:
       return {
         ...state,
-        status: type,
+        status: action.type,
         error: null,
       }
 
     case GET_QUESTINFO_SUCCESS:
       return {
         ...state,
-        status: type,
+        status: action.type,
         error: null,
-        categories: payload,
+        categories: JSON.parse(JSON.stringify(action.payload)),
+        quests: [{ ...initialQuest, ...JSON.parse(JSON.stringify(action.payload)) }],
       }
 
     case GET_QUESTINFO_FAIL:
       return {
         ...state,
-        status: type,
-        error: payload,
+        status: action.type,
+        error: action.payload,
       }
 
     case GET_RECOMMENDATION_REQUEST:
       return {
         ...state,
-        status: type,
+        status: action.type,
         error: null,
       }
 
     case GET_RECOMMENDATION_SUCCESS:
       return {
         ...state,
-        status: type,
-        recommendations: payload,
+        status: action.type,
+        recommendations: action.payload,
       }
 
     case GET_RECOMMENDATION_FAIL:
       return {
         ...state,
-        status: type,
-        error: payload,
+        status: action.type,
+        error: action.payload,
       }
 
     case GET_BROCHURE_REQUEST:
       return {
         ...state,
-        status: type,
+        status: action.type,
         error: null,
       }
 
     case GET_BROCHURE_SUCCESS:
       return {
         ...state,
-        status: type,
-        brochure: payload,
+        status: action.type,
+        brochure: action.payload,
       }
 
     case GET_BROCHURE_FAIL:
       return {
         ...state,
-        error: payload,
+        error: action.payload,
       }
 
     default:

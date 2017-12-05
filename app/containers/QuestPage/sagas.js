@@ -1,11 +1,11 @@
-import { take, call, put, select, cancel, takeLatest } from 'redux-saga/effects'
+import { take, call, put, select, cancel, takeLatest, actionChannel } from 'redux-saga/effects'
 import { LOCATION_CHANGE } from 'react-router-redux'
 
 import request from 'utils/request'
 import { API_BASE_URL } from 'containers/App/constants'
 import { selectCurrentTypes, selectCurrentDescriptives, selectViewport } from 'containers/QuestPage/selectors'
 
-import { GET_BROCHURE_REQUEST, GET_RECOMMENDATION_REQUEST, GET_QUESTINFO_REQUEST } from './constants'
+import { GET_BROCHURE_REQUEST, GET_RECOMMENDATION_REQUEST, GET_QUESTINFO_REQUEST, DESCRIPTIVE_ANYTHING_CLICK } from './constants'
 import {
   getRecommendationSuccess,
   getRecommendationFail,
@@ -22,32 +22,62 @@ export function* getRecommendationRequest() {
 
   const requestURL = `${API_BASE_URL}api/v1/map/recommendation/`
 
-  let types = {
-    active: curTypes.active,
-    inactive: curTypes.inactive,
+  const { types, typesAll } = curTypes
+  const { descriptives, descriptivesAll } = curDescriptives
+
+  let typesData = {
+    active: [],
+    inactive: [],
   }
 
-  let descriptives
+  let descriptivesData = {
+    stars: [],
+    interests: [],
+  }
 
-  if (curDescriptives.anything) {
-    descriptives = {
-      stars: curDescriptives.star,
-      interests: curDescriptives.inactive,
+  for (let type of types) {
+    const { c, active } = type
+    if (active) {
+      typesData.active.push(c)
+    } else {
+      typesData.inactive.push(c)
+    }
+  }
+
+  for (let descriptive of descriptives) {
+    const { c, active, star } = descriptive
+    if (star) {
+      descriptivesData.stars.push(c)
+    }
+  }
+
+  if (descriptivesAll) {
+    for (let descriptive of descriptives) {
+      const { c, active, star } = descriptive
+      if (star) {
+        descriptivesData.stars.push(c)
+      } else if (!active) {
+        descriptivesData.interests.push(c)
+      }
     }
   } else {
-    descriptives = {
-      stars: curDescriptives.star,
-      interests: curDescriptives.active,
+    for (let descriptive of descriptives) {
+      const { c, active, star } = descriptive
+      if (star) {
+        descriptivesData.stars.push(c)
+      } else if (active) {
+        descriptivesData.interests.push(c)
+      }
     }
   }
 
   const data = {
     count: 5,
-    descriptivesAll: curDescriptives.anything,
-    descriptives: descriptives,
-    typesAll: curTypes.anything,
-    types: types,
-    viewport: viewport,
+    descriptives: descriptivesData,
+    descriptivesAll,
+    types: typesData,
+    typesAll,
+    viewport,
   }
 
   const params = {
@@ -106,12 +136,12 @@ export function* getQuestInfoRequest() {
 
   try {
     const res = yield call(request, requestURL, params)
-
     const { types, descriptives } = res
+
     const payload = {
       places,
-      types,
-      descriptives,
+      types: types.map(type => { return { ...type, active: false, visible: false } }),
+      descriptives: descriptives.map(descriptive => { return { ...descriptive, active: false, visible: false } }),
     }
 
     yield put(getQuestInfoSuccess(payload))

@@ -9,15 +9,17 @@ import { Button, StarButton } from 'components/Buttons'
 
 class PlaceSection extends Component {
   static propTypes = {
-    className: PropTypes.string,
-    places: PropTypes.array,
     mapViewPortChange: PropTypes.func,
+    places: PropTypes.array,
+    className: PropTypes.string,
     intl: intlShape.isRequired,
   }
 
   constructor(props) {
     super(props)
-    this.state = { search: '' }
+    this.state = {
+      search: '',
+    }
   }
 
   handlePlaceClick = placeName => {

@@ -1,24 +1,25 @@
 import React, { Component, PropTypes, Children } from 'react'
 import cx from 'classnames'
+import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { GET_QUESTINFO_SUCCESS, GET_QUESTINFO_FAIL, QUEST_ADD } from 'containers/QuestPage/constants'
-import { getRecommendationRequest, typeSelect } from 'containers/QuestPage/actions'
+import { getRecommendationRequest, typeClick, typeAnythingClick } from 'containers/QuestPage/actions'
 import messages from 'containers/QuestPage/messages'
-import { selectInfo, selectTypes, selectCurrentTypes } from 'containers/QuestPage/selectors'
+import { selectInfo, selectCurrentTypes } from 'containers/QuestPage/selectors'
 import { Button, StarButton } from 'components/Buttons'
 import Img from 'components/Img'
 
 class TypeSection extends Component {
   static propTypes = {
-    typeSelect: PropTypes.func,
+    typeClick: PropTypes.func,
+    typeAnythingClick: PropTypes.func,
     getRecommendationRequest: PropTypes.func,
-    className: PropTypes.string,
-    types: PropTypes.array,
     currentTypes: PropTypes.object,
     info: PropTypes.object,
+    className: PropTypes.string,
     intl: intlShape.isRequired,
   }
 
@@ -26,57 +27,27 @@ class TypeSection extends Component {
     super(props)
 
     this.state = {
-      types: [],
       expanded: true,
-      anything: false,
       search: '',
     }
   }
 
-  componentWillMount() {
-    this.initializeState(this.props)
-  }
-
   componentWillReceiveProps(nextProps) {
-    this.initializeState(nextProps)
-  }
+    const { currentTypes: { types } } = nextProps
 
-  componentWillUpdate(nextProps, nextState) {
-    let closable = false
-
-    const { types } = nextState
-    const { className } = this.props
-
-    for (let tp of types) {
-      if (tp.active) {
-        closable = true
-        break
-      }
+    for (let type of types) {
+      if (type.visible) { return }
     }
-
-    if (className !== nextProps.className) {
-      nextState.expanded = !closable
-    }
-  }
-
-  initializeState = props => {
-    const { info: { status }, types, currentTypes } = props
-
-    if (status === GET_QUESTINFO_SUCCESS || status === GET_QUESTINFO_FAIL || status === QUEST_ADD) {
-      this.setState({
-        types: types.map(type => ({ ...type, visible: false, active: currentTypes.active.indexOf(type.c) !== -1 })),
-      })
-    }
+    this.setState({ expanded: true })
   }
 
   handleExpand = expanded => {
-    const data = Object.assign(
+    this.setState(Object.assign(
+      {},
       this.state,
       { expanded },
-      !expanded && { search: '' }
-    )
-
-    this.setState(data)
+      !expanded && { search: '' },
+    ))
   }
 
   handleInputChange = evt => {
@@ -84,44 +55,18 @@ class TypeSection extends Component {
   }
 
   handleAnythingClick = () => {
-    const { types, anything } = this.state
-
-    let stateData = {
-      anything: !anything,
-      types: types.map(type => ({ ...type, active: !anything })),
-    }
-
-    if (anything) {
-      stateData.expanded = true
-    }
-
-    this.setState(stateData, this.handleGetRecommendation)
+    this.props.typeAnythingClick()
+    this.props.getRecommendationRequest()
   }
 
   handleTypeClick = c => {
-    const { types } = this.state
-    this.setState({
-      types: types.map(type => (type.c === c) ? { ...type, active: !type.active } : type),
-    }, this.handleGetRecommendation)
-  }
-
-  handleGetRecommendation = () => {
-    const { types, anything } = this.state
-
-    let active = []
-    let inactive = []
-
-    types.forEach(type => type.active ? active.push(type.c) : inactive.push(type.c))
-
-    let questTypes = { anything, active, inactive }
-
-    this.props.typeSelect(questTypes)
+    this.props.typeClick(c)
     this.props.getRecommendationRequest()
   }
 
   render() {
-    const { types, expanded, anything, search } = this.state
-    const { className, intl: { formatMessage, locale } } = this.props
+    const { expanded, search } = this.state
+    const { className, intl: { formatMessage, locale }, currentTypes: { types, typesAll } } = this.props
 
     let searchedTypes = (search === '') ? types : types.filter(type => type[locale].toLowerCase().indexOf(search.toLowerCase()) !== -1)
     let excludedTypes = types.filter(type => !type.active)
@@ -134,11 +79,11 @@ class TypeSection extends Component {
 
     const closeBtnClass = cx({
       close: true,
-      invisible: !expanded || (!anything && activeTypes.length === 0),
+      invisible: !expanded || (!typesAll && activeTypes.length === 0),
     })
 
     const anythingBtnClass = cx({
-      hidden: (!expanded && !anything) || ('anything'.indexOf(search.toLowerCase()) === -1),
+      hidden: (!expanded && !typesAll) || ('anything'.indexOf(search.toLowerCase()) === -1),
     })
 
     const searchInputClass = cx({
@@ -149,12 +94,12 @@ class TypeSection extends Component {
 
     const filteredClass = cx({
       filtered: true,
-      show: expanded || (!expanded && !anything),
+      show: expanded || (!expanded && !typesAll),
     })
 
     const excludedClass = cx({
       excluded: true,
-      show: anything && !expanded && excludedTypes.length > 0 && excludedTypes.length !== types.length,
+      show: typesAll && !expanded && excludedTypes.length > 0 && excludedTypes.length !== types.length,
     })
 
     return (
@@ -166,7 +111,7 @@ class TypeSection extends Component {
         <div className="suggestion">
           <Button
             className={anythingBtnClass}
-            active={anything}
+            active={typesAll}
             onClick={this.handleAnythingClick}
           >
             Anything
@@ -174,7 +119,7 @@ class TypeSection extends Component {
           <div className={filteredClass}>
             {
             searchedTypes.map((type, index) =>
-              (expanded || type.active) ? <Button active={type.active} onClick={() => { this.handleTypeClick(type.c) }} key={index}>{type[locale]}</Button> : null)
+              (expanded || type.visible) ? <Button active={type.active} onClick={() => { this.handleTypeClick(type.c) }} key={index}>{type[locale]}</Button> : null)
             }
           </div>
           <div className={excludedClass}>
@@ -188,14 +133,17 @@ class TypeSection extends Component {
 }
 
 const selectors = createStructuredSelector({
-  types: selectTypes(),
   info: selectInfo(),
   currentTypes: selectCurrentTypes(),
 })
 
 const actions = {
   getRecommendationRequest,
-  typeSelect,
+  typeClick,
+  typeAnythingClick,
 }
 
-export default injectIntl(connect(selectors, actions)(TypeSection))
+export default compose(
+  injectIntl,
+  connect(selectors, actions),
+)(TypeSection)

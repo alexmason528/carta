@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { getRecommendationRequest, questAdd, questSelect, questRemove } from 'containers/QuestPage/actions'
-import { selectQuests, selectCurrentQuestIndex } from 'containers/QuestPage/selectors'
+import { selectQuestCnt, selectCurQuestInd } from 'containers/QuestPage/selectors'
 import Img from 'components/Img'
 import Quest from '../Quest'
 import './style.scss'
@@ -19,8 +19,8 @@ class QuestPanel extends Component {
     questAdd: PropTypes.func,
     questSelect: PropTypes.func,
     questRemove: PropTypes.func,
-    quests: PropTypes.array,
-    currentQuestIndex: PropTypes.number,
+    curQuestInd: PropTypes.number,
+    questCnt: PropTypes.number,
     className: PropTypes.string,
   }
 
@@ -28,20 +28,21 @@ class QuestPanel extends Component {
     this.props.questAdd()
   }
 
-  handleQuestSelect = index => {
-    this.props.questSelect(index)
+  handleQuestSelect = ind => {
+    this.props.questSelect(ind)
     this.props.getRecommendationRequest()
   }
 
-  handleQuestRemove = (evt, index) => {
+  handleQuestRemove = (evt, ind) => {
     evt.preventDefault()
 
-    const { currentQuestIndex, quests } = this.props
-    if (currentQuestIndex !== index && quests.length !== 1) this.props.questRemove(index)
+    const { curQuestInd, questCnt } = this.props
+    if (curQuestInd !== ind && questCnt !== 1) this.props.questRemove(ind)
   }
 
   render() {
-    const { quests, currentQuestIndex, className, minimizeClicked, closeClicked, mapViewPortChange } = this.props
+    const { curQuestInd, className, minimizeClicked, questCnt, closeClicked, mapViewPortChange } = this.props
+    const quests = Array(questCnt).fill(0)
     return (
       <div className={className}>
         <div className="buttons">
@@ -56,7 +57,7 @@ class QuestPanel extends Component {
           {
             quests.map((quest, index) => (
               <button
-                className={cx({ item: true, on: index === currentQuestIndex })}
+                className={cx({ item: true, on: index === curQuestInd })}
                 key={index}
                 onClick={() => { this.handleQuestSelect(index) }}
                 onContextMenu={evt => { this.handleQuestRemove(evt, index) }}
@@ -67,23 +68,15 @@ class QuestPanel extends Component {
           }
           <button className="add-quest" onClick={this.handleQuestAdd}>+</button>
         </div>
-        <div className="quests">
-          {
-            quests.map((quest, index) => (
-              <Quest key={index} className={cx({ quest: true, show: index === currentQuestIndex })} mapViewPortChange={mapViewPortChange}>
-                {index}
-              </Quest>
-            ))
-          }
-        </div>
+        <Quest className="quest" mapViewPortChange={mapViewPortChange} />
       </div>
     )
   }
 }
 
 const selectors = createStructuredSelector({
-  quests: selectQuests(),
-  currentQuestIndex: selectCurrentQuestIndex(),
+  questCnt: selectQuestCnt(),
+  curQuestInd: selectCurQuestInd(),
 })
 
 const actions = {

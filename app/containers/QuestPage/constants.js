@@ -1,11 +1,18 @@
 export const MAP_CHANGE = 'carta/Quest/MAP_CHANGE'
-export const TYPE_SELECT = 'carta/Quest/TYPE_SELECT'
-export const DESCRIPTIVE_SELECT = 'carta/Quest/DESCRIPTIVE_SELECT'
+
+export const TYPE_CLICK = 'carta/Quest/TYPE_CLICK'
+export const TYPE_ANYTHING_CLICK = 'carta/Quest/TYPE_ANYTHING_CLICK'
+
+export const DESCRIPTIVE_CLICK = 'carta/Quest/DESCRIPTIVE_CLICK'
+export const DESCRIPTIVE_STAR_CLICK = 'carta/Quest/DESCRIPTIVE_STAR_CLICK'
+export const DESCRIPTIVE_ANYTHING_CLICK = 'carta/Quest/DESCRIPTIVE_ANYTHING_CLICK'
+
 export const UPDATE_VISIBILITY = 'carta/Quest/UPDATE_VISIBILITY'
+
 export const SET_DEFAULT_QUEST = 'carta/Quest/SET_DEFAULT_QUEST'
 
 export const QUEST_ADD = 'carta/Quest/QUEST_ADD'
-export const QUEST_SELECT = 'cara/Quest/QUEST_REMOVE'
+export const QUEST_SELECT = 'cara/Quest/QUEST_SELECT'
 export const QUEST_REMOVE = 'carta/Quest/QUEST_REMOVE'
 
 export const GET_QUESTINFO_REQUEST = 'carta/Quest/GET_QUESTINFO_REQUEST'

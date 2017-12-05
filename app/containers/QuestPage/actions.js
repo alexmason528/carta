@@ -1,8 +1,15 @@
 import {
   MAP_CHANGE,
-  TYPE_SELECT,
-  DESCRIPTIVE_SELECT,
+
+  TYPE_CLICK,
+  TYPE_ANYTHING_CLICK,
+
+  DESCRIPTIVE_CLICK,
+  DESCRIPTIVE_STAR_CLICK,
+  DESCRIPTIVE_ANYTHING_CLICK,
+
   UPDATE_VISIBILITY,
+
   SET_DEFAULT_QUEST,
 
   QUEST_ADD,
@@ -29,16 +36,37 @@ export function mapChange(payload) {
   }
 }
 
-export function typeSelect(payload) {
+export function typeClick(payload) {
   return {
-    type: TYPE_SELECT,
+    type: TYPE_CLICK,
     payload,
   }
 }
 
-export function descriptiveSelect(payload) {
+export function typeAnythingClick(payload) {
   return {
-    type: DESCRIPTIVE_SELECT,
+    type: TYPE_ANYTHING_CLICK,
+    payload,
+  }
+}
+
+export function descriptiveClick(payload) {
+  return {
+    type: DESCRIPTIVE_CLICK,
+    payload,
+  }
+}
+
+export function descriptiveStarClick(payload) {
+  return {
+    type: DESCRIPTIVE_STAR_CLICK,
+    payload,
+  }
+}
+
+export function descriptiveAnythingClick(payload) {
+  return {
+    type: DESCRIPTIVE_ANYTHING_CLICK,
     payload,
   }
 }
