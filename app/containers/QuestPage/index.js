@@ -64,8 +64,6 @@ class QuestPage extends Component {
         this.center = [viewport.x, viewport.y]
         this.zoom = [viewport.zoom]
       }
-    } else {
-      browserHistory.push('/quest')
     }
 
     this.props.getQuestInfoRequest(questData)
