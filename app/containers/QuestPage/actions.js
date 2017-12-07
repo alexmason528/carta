@@ -97,9 +97,10 @@ export function questRemove(payload) {
   }
 }
 
-export function getQuestInfoRequest() {
+export function getQuestInfoRequest(payload) {
   return {
     type: GET_QUESTINFO_REQUEST,
+    payload,
   }
 }
 

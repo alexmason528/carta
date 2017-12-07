@@ -1,3 +1,5 @@
+import { getUrlStr } from 'utils/urlHelper'
+
 import {
   MAP_CHANGE,
 
@@ -59,7 +61,6 @@ const initialState = {
 function questReducer(state = initialState, action) {
   let quests = state.quests.slice()
   const { categories, curQuestInd } = state
-  const { types, typesAll, descriptives, descriptivesAll } = quests[curQuestInd]
   let newTypes
   let newDescriptives
   let activeCnt
@@ -67,26 +68,25 @@ function questReducer(state = initialState, action) {
   switch (action.type) {
     case MAP_CHANGE:
       const { zoom, bounds: { _ne, _sw } } = action.payload
-      const viewport = {
-        zoom,
-        northeast: {
-          x: _ne.lng,
-          y: _ne.lat,
-        },
-        southwest: {
-          x: _sw.lng,
-          y: _sw.lat,
-        },
-      }
 
       return {
         ...state,
         status: action.type,
-        viewport,
+        viewport: {
+          zoom,
+          northeast: {
+            x: _ne.lng,
+            y: _ne.lat,
+          },
+          southwest: {
+            x: _sw.lng,
+            y: _sw.lat,
+          },
+        },
       }
 
     case TYPE_CLICK:
-      newTypes = types.map((type, index) => {
+      newTypes = quests[curQuestInd].types.map((type, index) => {
         const { c, active } = type
         return (c === action.payload)
         ? Object.assign(
@@ -106,7 +106,7 @@ function questReducer(state = initialState, action) {
 
       if (activeCnt === 0) {
         quests[curQuestInd].typesAll = false
-      } else if (activeCnt === types.length) {
+      } else if (activeCnt === quests[curQuestInd].types.length) {
         quests[curQuestInd].typesAll = true
       }
 
@@ -117,9 +117,9 @@ function questReducer(state = initialState, action) {
       }
 
     case TYPE_ANYTHING_CLICK:
-      newTypes = types.map(type => { return { ...type, active: !typesAll, visible: !typesAll } })
+      newTypes = quests[curQuestInd].types.map(type => { return { ...type, active: !quests[curQuestInd].typesAll, visible: !quests[curQuestInd].typesAll } })
       quests[curQuestInd].types = newTypes
-      quests[curQuestInd].typesAll = !typesAll
+      quests[curQuestInd].typesAll = !quests[curQuestInd].typesAll
 
       return {
         ...state,
@@ -128,7 +128,7 @@ function questReducer(state = initialState, action) {
       }
 
     case DESCRIPTIVE_CLICK:
-      newDescriptives = descriptives.map(descriptive => {
+      newDescriptives = quests[curQuestInd].descriptives.map(descriptive => {
         const { c, active } = descriptive
         return (c === action.payload)
         ? Object.assign(
@@ -148,7 +148,7 @@ function questReducer(state = initialState, action) {
 
       if (activeCnt === 0) {
         quests[curQuestInd].descriptivesAll = false
-      } else if (activeCnt === descriptives.length) {
+      } else if (activeCnt === quests[curQuestInd].descriptives.length) {
         quests[curQuestInd].descriptivesAll = true
       }
 
@@ -159,7 +159,7 @@ function questReducer(state = initialState, action) {
       }
 
     case DESCRIPTIVE_STAR_CLICK:
-      newDescriptives = descriptives.map(descriptive => {
+      newDescriptives = quests[curQuestInd].descriptives.map(descriptive => {
         const { c, star } = descriptive
         return (c === action.payload)
         ? Object.assign(
@@ -176,15 +176,15 @@ function questReducer(state = initialState, action) {
       }
 
     case DESCRIPTIVE_ANYTHING_CLICK:
-      newDescriptives = descriptives.map(descriptive => {
+      newDescriptives = quests[curQuestInd].descriptives.map(descriptive => {
         return Object.assign(
           descriptive,
-          { active: !descriptivesAll, visible: !descriptivesAll },
-          descriptivesAll && { star: false },
+          { active: !quests[curQuestInd].descriptivesAll, visible: !quests[curQuestInd].descriptivesAll },
+          quests[curQuestInd].descriptivesAll && { star: false },
         )
       })
       quests[curQuestInd].descriptives = newDescriptives
-      quests[curQuestInd].descriptivesAll = !descriptivesAll
+      quests[curQuestInd].descriptivesAll = !quests[curQuestInd].descriptivesAll
 
       return {
         ...state,
@@ -214,7 +214,46 @@ function questReducer(state = initialState, action) {
       )
 
     case SET_DEFAULT_QUEST:
-      return state
+      const { quest, locale } = action.payload
+      const { viewport, types, descriptives } = quest
+      const { typesAll } = types
+      const { descriptivesAll } = descriptives
+
+      newTypes = quests[curQuestInd].types.map(type => {
+        const transType = getUrlStr(type[locale])
+        if (types.active.indexOf(transType) !== -1) {
+          return { ...type, active: true }
+        } else if (types.inactive.indexOf(transType) !== -1) {
+          return { ...type, active: false }
+        } else {
+          return { ...type, active: typesAll }
+        }
+      })
+
+      newDescriptives = quests[curQuestInd].descriptives.map(desc => {
+        const transDesc = getUrlStr(desc[locale])
+        if (descriptives.stars.indexOf(transDesc) !== -1) {
+          return { ...desc, star: true, active: true }
+        } else if (descriptives.active.indexOf(transDesc) !== -1) {
+          return { ...desc, star: false, active: true }
+        } else if (descriptives.inactive.indexOf(transDesc) !== -1) {
+          return { ...desc, star: false, active: false }
+        } else {
+          return { ...desc, active: descriptivesAll }
+        }
+      })
+
+      quests[curQuestInd].types = newTypes
+      quests[curQuestInd].typesAll = typesAll
+      quests[curQuestInd].descriptives = newDescriptives
+      quests[curQuestInd].descriptivesAll = descriptivesAll
+
+      return {
+        ...state,
+        status: action.type,
+        viewport,
+        quests,
+      }
 
     case GET_QUESTINFO_REQUEST:
       return {

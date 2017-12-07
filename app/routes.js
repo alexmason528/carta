@@ -23,7 +23,7 @@ export default function createRoutes(store) {
 
   return [
     {
-      path: '/quest(/i/:brochure)(p/:viewport/:types/:descriptives)',
+      path: '/quest(/i/:brochure)(/q/:viewport/:types/:descriptives)',
       name: 'questPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([

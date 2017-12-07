@@ -13,6 +13,7 @@ import {
   getQuestInfoFail,
   getBrochureSuccess,
   getBrochureFail,
+  setDefaultQuest,
 } from './actions'
 
 export function* getRecommendationRequest() {
@@ -106,7 +107,7 @@ export function* getRecommendationRequest() {
   }
 }
 
-export function* getQuestInfoRequest() {
+export function* getQuestInfoRequest({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/map/questinfo/`
 
   const params = {
@@ -138,13 +139,17 @@ export function* getQuestInfoRequest() {
     const res = yield call(request, requestURL, params)
     const { types, descriptives } = res
 
-    const payload = {
+    const questData = {
       places,
       types: types.map(type => { return { ...type, active: false, visible: false } }),
       descriptives: descriptives.map(descriptive => { return { ...descriptive, active: false, visible: false } }),
     }
 
-    yield put(getQuestInfoSuccess(payload))
+    yield put(getQuestInfoSuccess(questData))
+
+    if (payload) {
+      yield put(setDefaultQuest(payload))
+    }
   } catch (err) {
     yield put(getQuestInfoFail(err.toString()))
   }

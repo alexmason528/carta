@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react'
+import { injectIntl, intlShape } from 'react-intl'
 import Helmet from 'react-helmet'
 import ReactMapboxGl from 'react-mapbox-gl'
 import cx from 'classnames'
+import { compose } from 'redux'
 import ReactResizeDetector from 'react-resize-detector'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
@@ -13,8 +15,8 @@ import { MAP_ACCESS_TOKEN, CLOUDINARY_POINTS_URL, CLOUDINARY_SHAPES_URL } from '
 import { MapBlock, ScoreBoardBlock } from 'components/Blocks'
 import QuestPanel from 'components/QuestPanel'
 import { Button, QuestButton } from 'components/Buttons'
-import URLParser from 'utils/questURLparser'
-import { mapChange, getQuestInfoRequest, getRecommendationRequest, setDefaultQuest } from './actions'
+import { urlParser } from 'utils/urlHelper'
+import { mapChange, getQuestInfoRequest, getRecommendationRequest } from './actions'
 import { selectRecommendations, selectPlaces } from './selectors'
 
 const Map = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN })
@@ -32,7 +34,8 @@ class QuestPage extends Component {
     mapChange: PropTypes.func,
     getQuestInfoRequest: PropTypes.func,
     getRecommendationRequest: PropTypes.func,
-    setDefaultQuest: PropTypes.func,
+    injectIntl: PropTypes.func,
+    intl: intlShape.isRequired,
   }
 
   constructor(props) {
@@ -46,16 +49,31 @@ class QuestPage extends Component {
   }
 
   componentWillMount() {
-    // const { params: { viewport, types, descriptives }, setDefaultQuest, getRecommendationRequest } = this.props
+    const { params: { viewport, types, descriptives }, intl: { locale }, getRecommendationRequest } = this.props
 
-    // if (viewport && types && descriptives) {
-    //   const res = URLParser({ viewport, types, descriptives })
+    let questData = null
+    if (viewport && types && descriptives) {
+      const res = urlParser(viewport, types, descriptives)
+      if (res) {
+        questData = {
+          quest: res,
+          locale,
+        }
 
-    //   if (!res.error) {
-    //     setDefaultQuest(res.data)
-    //     getRecommendationRequest()
-    //   }
-    // }
+        const { viewport } = res
+        this.center = [viewport.x, viewport.y]
+        this.zoom = [viewport.zoom]
+      }
+    } else {
+      browserHistory.push('/quest')
+    }
+
+    this.props.getQuestInfoRequest(questData)
+
+    if (!questData) {
+      this.center = [5.822, 52.142]
+      this.zoom = [6]
+    }
 
     this.mapStyle = {
       version: 8,
@@ -80,11 +98,6 @@ class QuestPage extends Component {
       width: '100%',
       height: '100%',
     }
-
-    this.center = [5.822, 52.142]
-    this.zoom = [6]
-
-    this.props.getQuestInfoRequest()
 
     this.colors = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379']
     this.shapesGeoJSONSource = `${CLOUDINARY_SHAPES_URL}/shapes.geojson`
@@ -382,7 +395,9 @@ const actions = {
   mapChange,
   getQuestInfoRequest,
   getRecommendationRequest,
-  setDefaultQuest,
 }
 
-export default connect(selectors, actions)(QuestPage)
+export default compose(
+  injectIntl,
+  connect(selectors, actions),
+)(QuestPage)
