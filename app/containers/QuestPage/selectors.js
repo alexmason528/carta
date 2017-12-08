@@ -28,14 +28,24 @@ const selectPlaces = () => createSelector(
   substate => get(substate, 'categories.places')
 )
 
+const selectTypes = () => createSelector(
+  selectQuest,
+  substate => get(substate, 'categories.types')
+)
+
 const selectCurrentTypes = () => createSelector(
   selectQuest,
-  substate => ({ types: substate.quests[substate.curQuestInd].types, typesAll: substate.quests[substate.curQuestInd].typesAll })
+  substate => substate.quests[substate.curQuestInd].types
+)
+
+const selectDescriptives = () => createSelector(
+  selectQuest,
+  substate => get(substate, 'categories.descriptives')
 )
 
 const selectCurrentDescriptives = () => createSelector(
   selectQuest,
-  substate => ({ descriptives: substate.quests[substate.curQuestInd].descriptives, descriptivesAll: substate.quests[substate.curQuestInd].descriptivesAll })
+  substate => substate.quests[substate.curQuestInd].descriptives
 )
 
 const selectBrochure = () => createSelector(

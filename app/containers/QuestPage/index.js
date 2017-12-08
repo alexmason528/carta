@@ -297,6 +297,7 @@ class QuestPage extends Component {
           center: [x, y],
           zoom: zoom,
         })
+        break
       }
     }
   }

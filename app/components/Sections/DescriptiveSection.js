@@ -1,10 +1,12 @@
 import React, { Component, PropTypes, Children } from 'react'
 import cx from 'classnames'
+import { findIndex } from 'lodash'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
+import { UPDATE_VISIBILITY } from 'containers/QuestPage/constants'
 import {
   getRecommendationRequest,
   descriptiveClick,
@@ -12,7 +14,7 @@ import {
   descriptiveAnythingClick,
 } from 'containers/QuestPage/actions'
 import messages from 'containers/QuestPage/messages'
-import { selectCurrentDescriptives } from 'containers/QuestPage/selectors'
+import { selectInfo, selectDescriptives, selectCurrentDescriptives } from 'containers/QuestPage/selectors'
 import { Button, StarButton } from 'components/Buttons'
 import Img from 'components/Img'
 
@@ -23,6 +25,8 @@ class DescriptiveSection extends Component {
     descriptiveAnythingClick: PropTypes.func,
     getRecommendationRequest: PropTypes.func,
     currentDescriptives: PropTypes.object,
+    info: PropTypes.object,
+    descriptives: PropTypes.array,
     className: PropTypes.string,
     intl: intlShape.isRequired,
   }
@@ -37,12 +41,11 @@ class DescriptiveSection extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { currentDescriptives: { descriptives } } = nextProps
+    const { currentDescriptives: { visibles } } = nextProps
 
-    for (let descriptive of descriptives) {
-      if (descriptive.visible) { return }
+    if (visibles.length === 0) {
+      this.setState({ expanded: true })
     }
-    this.setState({ expanded: true })
   }
 
   handleExpand = expanded => {
@@ -62,25 +65,29 @@ class DescriptiveSection extends Component {
     this.props.getRecommendationRequest()
   }
 
-  handleDescriptiveClick = c => {
-    this.props.descriptiveClick(c)
+  handleDescriptiveClick = (desc, active) => {
+    this.props.descriptiveClick({ desc, active })
     this.props.getRecommendationRequest()
   }
 
-  handleDescriptiveStarClick = c => {
-    this.props.descriptiveStarClick(c)
+  handleDescriptiveStarClick = (desc, star) => {
+    this.props.descriptiveStarClick({ desc, star })
     this.props.getRecommendationRequest()
   }
 
   render() {
     const { expanded, search } = this.state
-    const { className, intl: { formatMessage, locale }, currentDescriptives: { descriptives, descriptivesAll } } = this.props
+    const {
+      className,
+      intl: { formatMessage, locale },
+      descriptives,
+      currentDescriptives: { all, stars, includes, excludes, visibles },
+    } = this.props
 
-    let searchedDescriptives = (search === '') ? descriptives : descriptives.filter(descriptive => (descriptive.name.toLowerCase().indexOf(search) !== -1))
-
-    let excludedDescriptives = descriptives.filter(descriptive => !descriptive.active)
-    let staredDescriptives = descriptives.filter(descriptive => descriptive.star)
-    let activeDescriptives = descriptives.filter(descriptive => descriptive.active)
+    let searchedDescriptives =
+    (search === '')
+    ? descriptives
+    : descriptives.filter(descriptive => descriptive[locale].toLowerCase().indexOf(search.toLowerCase()) !== -1)
 
     const searchBtnClass = cx({
       search: true,
@@ -89,11 +96,11 @@ class DescriptiveSection extends Component {
 
     const closeBtnClass = cx({
       close: true,
-      invisible: !expanded || (!descriptivesAll && staredDescriptives.length === 0 && activeDescriptives.length === 0),
+      invisible: !expanded || (!all && stars.length === 0 && includes.length === 0),
     })
 
     const anythingBtnClass = cx({
-      hidden: (!expanded && !descriptivesAll) || ('anything'.indexOf(search.toLowerCase()) === -1),
+      hidden: (!expanded && !all) || ('anything'.indexOf(search.toLowerCase()) === -1),
     })
 
     const searchInputClass = cx({
@@ -104,17 +111,17 @@ class DescriptiveSection extends Component {
 
     const filteredClass = cx({
       filtered: true,
-      show: expanded || (!expanded && !descriptivesAll),
+      show: expanded || (!expanded && !all),
     })
 
     const excludedClass = cx({
       excluded: true,
-      show: descriptivesAll && !expanded && excludedDescriptives.length > 0 && excludedDescriptives.length !== descriptives.length,
+      show: all && !expanded && excludes.length > 0 && excludes.length !== descriptives.length,
     })
 
     const staredClass = cx({
       stared: true,
-      show: descriptivesAll && staredDescriptives.length > 0,
+      show: all && stars.length > 0,
     })
 
     return (
@@ -124,34 +131,39 @@ class DescriptiveSection extends Component {
         <Img className={closeBtnClass} src={`${CLOUDINARY_ICON_URL}/back.png`} onClick={() => { this.handleExpand(false) }} />
         <input className={searchInputClass} value={search} onChange={this.handleInputChange} />
         <div className="suggestions">
-          <Button className={anythingBtnClass} active={descriptivesAll} onClick={this.handleAnythingClick}>Anything</Button>
+          <Button className={anythingBtnClass} active={all} onClick={this.handleAnythingClick}>Anything</Button>
           <div className={filteredClass}>
             {
-            searchedDescriptives.map((descriptive, index) => {
-              const { c, star, visible } = descriptive
-              return (expanded || (star || visible)) ? (
-                <StarButton
-                  key={index}
-                  {...descriptive}
-                  onMouseDown={() => { this.handleDescriptiveClick(c) }}
-                  onStarClick={() => { this.handleDescriptiveStarClick(c) }}
-                >
-                  {descriptive[locale]}
-                </StarButton>) : null
-            })
+              searchedDescriptives.map((desc, index) => {
+                const show = findIndex(visibles, desc) !== -1
+                const star = findIndex(stars, desc) !== -1
+                const active = star || (all ? findIndex(excludes, desc) === -1 : findIndex(includes, desc) !== -1)
+
+                return (expanded || star || show) ? (
+                  <StarButton
+                    key={index}
+                    active={active}
+                    star={star}
+                    onMouseDown={() => { this.handleDescriptiveClick(desc, active) }}
+                    onStarClick={() => { this.handleDescriptiveStarClick(desc, star) }}
+                  >
+                    {desc[locale]}
+                  </StarButton>) : null
+              })
             }
           </div>
           <div className={staredClass}>
             <div className="notable">{ formatMessage(messages.notably) }</div>
             {
-              staredDescriptives.map((descriptive, index) => (
+              stars.map((desc, index) => (
                 <StarButton
                   key={index}
-                  {...descriptive}
-                  onMouseDown={() => { this.handleDescriptiveClick(descriptive.c) }}
-                  onStarClick={() => { this.handleDescriptiveStarClick(descriptive.c) }}
+                  active
+                  star
+                  onMouseDown={() => { this.handleDescriptiveClick(desc, true) }}
+                  onStarClick={() => { this.handleDescriptiveStarClick(desc, true) }}
                 >
-                  {descriptive[locale]}
+                  {desc[locale]}
                 </StarButton>
               ))
             }
@@ -159,14 +171,15 @@ class DescriptiveSection extends Component {
           <div className={excludedClass}>
             <div className="except">{ formatMessage(messages.onlyIgnoring) }</div>
             {
-              excludedDescriptives.map((descriptive, index) => (
+              excludes.map((desc, index) => (
                 <StarButton
                   key={index}
-                  {...descriptive}
-                  onMouseDown={() => { this.handleDescriptiveClick(descriptive.c) }}
-                  onStarClick={() => { this.handleDescriptiveStarClick(descriptive.c) }}
+                  active={false}
+                  star={false}
+                  onMouseDown={() => { this.handleDescriptiveClick(desc, false) }}
+                  onStarClick={() => { this.handleDescriptiveStarClick(desc, false) }}
                 >
-                  {descriptive[locale]}
+                  {desc[locale]}
                 </StarButton>
               ))
             }
@@ -178,6 +191,8 @@ class DescriptiveSection extends Component {
 }
 
 const selectors = createStructuredSelector({
+  info: selectInfo(),
+  descriptives: selectDescriptives(),
   currentDescriptives: selectCurrentDescriptives(),
 })
 

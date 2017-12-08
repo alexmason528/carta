@@ -35,22 +35,22 @@ const getTypes = typesStr => {
   let segs = typesStr.split(',')
 
   let types = {
-    typesAll: false,
-    active: [],
-    inactive: [],
+    all: false,
+    includes: [],
+    excludes: [],
   }
 
   if (segs[0] === 'anything') {
-    types.typesAll = true
+    types.all = true
     segs.splice(0, 1)
   }
 
   for (let seg of segs) {
     if (getObjectType(seg) !== -1) return null
-    if (types.typesAll) {
-      types.inactive.push(seg)
+    if (types.all) {
+      types.excludes.push(seg)
     } else {
-      types.active.push(seg)
+      types.includes.push(seg)
     }
   }
 
@@ -61,18 +61,18 @@ const getDescriptives = desStr => {
   let segs = desStr.split(',')
 
   let descriptives = {
-    descriptivesAll: false,
+    all: false,
     stars: [],
-    active: [],
-    inactive: [],
+    includes: [],
+    excludes: [],
   }
 
   if (segs[0] === 'anything') {
-    descriptives.descriptivesAll = true
+    descriptives.all = true
     segs.splice(0, 1)
   }
 
-  if (descriptives.descriptivesAll) {
+  if (descriptives.all) {
     for (let seg of segs) {
       if (seg.length <= 2) return null
       const sign = seg[0]
@@ -81,7 +81,7 @@ const getDescriptives = desStr => {
       if (sign === '+') {
         descriptives.stars.push(desc)
       } else if (sign === '-') {
-        descriptives.inactive.push(desc)
+        descriptives.excludes.push(desc)
       } else {
         return null
       }
@@ -97,7 +97,7 @@ const getDescriptives = desStr => {
       } else {
         const desc = seg
         if (getObjectType(desc) !== -1) return null
-        descriptives.active.push(desc)
+        descriptives.includes.push(desc)
       }
     }
   }
@@ -121,6 +121,6 @@ export const urlParser = (viewportStr, typesStr, descriptivesStr) => {
   }
 }
 
-export const getUrlStr = str => {
-  return str.toLowerCase().replace(' ', '-')
+export const getQuestStr = str => {
+  return (str.charAt(0).toUpperCase() + str.slice(1)).replace('-', ' ')
 }

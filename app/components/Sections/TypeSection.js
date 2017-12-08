@@ -4,11 +4,12 @@ import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
+import { findIndex } from 'lodash'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
-import { GET_QUESTINFO_SUCCESS, GET_QUESTINFO_FAIL, QUEST_ADD } from 'containers/QuestPage/constants'
+import { UPDATE_VISIBILITY } from 'containers/QuestPage/constants'
 import { getRecommendationRequest, typeClick, typeAnythingClick } from 'containers/QuestPage/actions'
 import messages from 'containers/QuestPage/messages'
-import { selectInfo, selectCurrentTypes } from 'containers/QuestPage/selectors'
+import { selectInfo, selectTypes, selectCurrentTypes } from 'containers/QuestPage/selectors'
 import { Button, StarButton } from 'components/Buttons'
 import Img from 'components/Img'
 
@@ -17,6 +18,7 @@ class TypeSection extends Component {
     typeClick: PropTypes.func,
     typeAnythingClick: PropTypes.func,
     getRecommendationRequest: PropTypes.func,
+    types: PropTypes.array,
     currentTypes: PropTypes.object,
     info: PropTypes.object,
     className: PropTypes.string,
@@ -33,12 +35,11 @@ class TypeSection extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { currentTypes: { types } } = nextProps
+    const { currentTypes: { visibles } } = nextProps
 
-    for (let type of types) {
-      if (type.visible) { return }
+    if (visibles.length === 0) {
+      this.setState({ expanded: true })
     }
-    this.setState({ expanded: true })
   }
 
   handleExpand = expanded => {
@@ -59,18 +60,24 @@ class TypeSection extends Component {
     this.props.getRecommendationRequest()
   }
 
-  handleTypeClick = c => {
-    this.props.typeClick(c)
+  handleTypeClick = (type, active) => {
+    this.props.typeClick({ type, active })
     this.props.getRecommendationRequest()
   }
 
   render() {
     const { expanded, search } = this.state
-    const { className, intl: { formatMessage, locale }, currentTypes: { types, typesAll } } = this.props
+    const {
+      className,
+      intl: { formatMessage, locale },
+      types,
+      currentTypes: { all, includes, excludes, visibles },
+    } = this.props
 
-    let searchedTypes = (search === '') ? types : types.filter(type => type[locale].toLowerCase().indexOf(search.toLowerCase()) !== -1)
-    let excludedTypes = types.filter(type => !type.active)
-    let activeTypes = types.filter(type => type.active)
+    let searchedTypes =
+    (search === '')
+    ? types
+    : types.filter(type => type[locale].toLowerCase().indexOf(search.toLowerCase()) !== -1)
 
     const searchBtnClass = cx({
       search: true,
@@ -79,11 +86,11 @@ class TypeSection extends Component {
 
     const closeBtnClass = cx({
       close: true,
-      invisible: !expanded || (!typesAll && activeTypes.length === 0),
+      invisible: !expanded || (!all && includes.length === 0),
     })
 
     const anythingBtnClass = cx({
-      hidden: (!expanded && !typesAll) || ('anything'.indexOf(search.toLowerCase()) === -1),
+      hidden: (!expanded && !all) || ('anything'.indexOf(search.toLowerCase()) === -1),
     })
 
     const searchInputClass = cx({
@@ -94,12 +101,12 @@ class TypeSection extends Component {
 
     const filteredClass = cx({
       filtered: true,
-      show: expanded || (!expanded && !typesAll),
+      show: expanded || (!expanded && !all),
     })
 
     const excludedClass = cx({
       excluded: true,
-      show: typesAll && !expanded && excludedTypes.length > 0 && excludedTypes.length !== types.length,
+      show: all && !expanded && excludes.length > 0 && excludes.length !== types.length,
     })
 
     return (
@@ -109,22 +116,19 @@ class TypeSection extends Component {
         <Img className={closeBtnClass} src={`${CLOUDINARY_ICON_URL}/back.png`} onClick={() => { this.handleExpand(false) }} />
         <input className={searchInputClass} value={search} onChange={this.handleInputChange} />
         <div className="suggestion">
-          <Button
-            className={anythingBtnClass}
-            active={typesAll}
-            onClick={this.handleAnythingClick}
-          >
-            Anything
-          </Button>
+          <Button className={anythingBtnClass} active={all} onClick={this.handleAnythingClick}>Anything</Button>
           <div className={filteredClass}>
             {
-            searchedTypes.map((type, index) =>
-              (expanded || type.visible) ? <Button active={type.active} onClick={() => { this.handleTypeClick(type.c) }} key={index}>{type[locale]}</Button> : null)
+              searchedTypes.map((type, index) => {
+                const active = all ? findIndex(excludes, type) === -1 : findIndex(includes, type) !== -1
+                const show = findIndex(visibles, type) !== -1
+                return (expanded || show) ? <Button active={active} onClick={() => { this.handleTypeClick(type, active) }} key={index}>{type[locale]}</Button> : null
+              })
             }
           </div>
           <div className={excludedClass}>
             <div className="except">{ formatMessage(messages.onlyIgnoring) }</div>
-            { excludedTypes.map((type, index) => <Button key={index} active={type.active} onClick={() => { this.handleTypeClick(type.c) }}>{type[locale]}</Button>) }
+            { excludes.map((type, index) => <Button key={index} active={false} onClick={() => { this.handleTypeClick(type, false) }}>{type[locale]}</Button>) }
           </div>
         </div>
       </div>
@@ -134,6 +138,7 @@ class TypeSection extends Component {
 
 const selectors = createStructuredSelector({
   info: selectInfo(),
+  types: selectTypes(),
   currentTypes: selectCurrentTypes(),
 })
 
@@ -144,6 +149,6 @@ const actions = {
 }
 
 export default compose(
-  injectIntl,
   connect(selectors, actions),
+  injectIntl,
 )(TypeSection)

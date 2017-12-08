@@ -1,7 +1,10 @@
 import React, { Component, PropTypes, Children } from 'react'
 import { injectIntl, intlShape } from 'react-intl'
+import { compose } from 'redux'
+import { connect } from 'react-redux'
 import cx from 'classnames'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
+import { updateVisibility } from 'containers/QuestPage/actions'
 import messages from 'containers/QuestPage/messages'
 import Img from 'components/Img'
 import { DescriptiveSection, PlaceSection, TypeSection } from '../Sections'
@@ -73,4 +76,11 @@ class Quest extends Component {
   }
 }
 
-export default injectIntl(Quest)
+const actions = {
+  updateVisibility,
+}
+
+export default compose(
+  injectIntl,
+  connect(null, actions),
+)(Quest)

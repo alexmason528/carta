@@ -1,9 +1,10 @@
 import { take, call, put, select, cancel, takeLatest, actionChannel } from 'redux-saga/effects'
 import { LOCATION_CHANGE } from 'react-router-redux'
+import { findIndex } from 'lodash'
 
 import request from 'utils/request'
 import { API_BASE_URL } from 'containers/App/constants'
-import { selectCurrentTypes, selectCurrentDescriptives, selectViewport } from 'containers/QuestPage/selectors'
+import { selectCurrentTypes, selectCurrentDescriptives, selectViewport, selectTypes } from 'containers/QuestPage/selectors'
 
 import { GET_BROCHURE_REQUEST, GET_RECOMMENDATION_REQUEST, GET_QUESTINFO_REQUEST, DESCRIPTIVE_ANYTHING_CLICK } from './constants'
 import {
@@ -17,68 +18,61 @@ import {
 } from './actions'
 
 export function* getRecommendationRequest() {
-  const curDescriptives = yield select(selectCurrentDescriptives())
-  const curTypes = yield select(selectCurrentTypes())
   const viewport = yield select(selectViewport())
+  const questTypes = yield select(selectTypes())
+  const curTypes = yield select(selectCurrentTypes())
+  const curDescriptives = yield select(selectCurrentDescriptives())
 
   const requestURL = `${API_BASE_URL}api/v1/map/recommendation/`
 
-  const { types, typesAll } = curTypes
-  const { descriptives, descriptivesAll } = curDescriptives
-
-  let typesData = {
-    active: [],
-    inactive: [],
+  let types = {
+    all: curTypes.all,
+    includes: [],
+    excludes: [],
   }
 
-  let descriptivesData = {
+  let descriptives = {
+    all: curDescriptives.all,
     stars: [],
-    interests: [],
+    includes: [],
+    excludes: [],
   }
 
-  for (let type of types) {
-    const { c, active } = type
-    if (active) {
-      typesData.active.push(c)
-    } else {
-      typesData.inactive.push(c)
-    }
-  }
-
-  for (let descriptive of descriptives) {
-    const { c, active, star } = descriptive
-    if (star) {
-      descriptivesData.stars.push(c)
-    }
-  }
-
-  if (descriptivesAll) {
-    for (let descriptive of descriptives) {
-      const { c, active, star } = descriptive
-      if (star) {
-        descriptivesData.stars.push(c)
-      } else if (!active) {
-        descriptivesData.interests.push(c)
+  if (curTypes.all) {
+    for (let type of questTypes) {
+      if (findIndex(curTypes.excludes, type) === -1) {
+        types.includes.push(type.c)
+      } else {
+        types.excludes.push(type.c)
       }
     }
   } else {
-    for (let descriptive of descriptives) {
-      const { c, active, star } = descriptive
-      if (star) {
-        descriptivesData.stars.push(c)
-      } else if (active) {
-        descriptivesData.interests.push(c)
+    for (let type of questTypes) {
+      if (findIndex(curTypes.includes, type) === -1) {
+        types.excludes.push(type.c)
+      } else {
+        types.includes.push(type.c)
       }
     }
+  }
+
+  for (let type of curDescriptives.stars) {
+    descriptives.stars.push(type.c)
+  }
+
+  for (let type of curDescriptives.includes) {
+    descriptives.includes.push(type.c)
+  }
+
+  for (let type of curDescriptives.excludes) {
+    descriptives.excludes.push(type.c)
   }
 
   const data = {
     count: 5,
-    descriptives: descriptivesData,
-    descriptivesAll,
-    types: typesData,
-    typesAll,
     viewport,
+    types,
+    descriptives,
   }
 
   const params = {
@@ -90,17 +84,14 @@ export function* getRecommendationRequest() {
   }
 
   let sendRequest = false
-  if ((data.typesAll || data.types.active.length > 0) && (data.descriptivesAll || data.descriptives.stars.length > 0 || data.descriptives.interests.length > 0)) {
+  if ((types.all || types.includes.length > 0) && (descriptives.all || descriptives.stars.length > 0 || data.descriptives.includes.length > 0)) {
     sendRequest = true
   }
 
   let res = []
 
   try {
-    if (sendRequest) {
-      res = yield call(request, requestURL, params)
-    }
-
+    if (sendRequest) { res = yield call(request, requestURL, params) }
     yield put(getRecommendationSuccess(res))
   } catch (err) {
     yield put(getRecommendationFail(err.toString()))
@@ -141,12 +132,11 @@ export function* getQuestInfoRequest({ payload }) {
 
     const questData = {
       places,
-      types: types.map(type => { return { ...type, active: false, visible: false } }),
-      descriptives: descriptives.map(descriptive => { return { ...descriptive, active: false, visible: false } }),
+      types,
+      descriptives,
     }
 
     yield put(getQuestInfoSuccess(questData))
-
     if (payload) {
       yield put(setDefaultQuest(payload))
     }

@@ -55,11 +55,11 @@ const getQuestInfo = (req, res) => {
  * @returns void
  */
 const getRecommendations = (req, res) => {
-  const { count, descriptivesAll, descriptives, typesAll, types, viewport } = req.body
+  const { count, viewport, types, descriptives } = req.body
   let columns = []
   let typeMatch = []
 
-  types.active.map((type) => {
+  types.includes.map((type) => {
     let typeSearch = {}
     typeSearch[`type.${type}`] = '1'
     typeMatch.push(typeSearch)
@@ -67,23 +67,29 @@ const getRecommendations = (req, res) => {
 
   let typeProject = { sum: 1 }
 
-  types.active.map(type => {
+  types.includes.map(type => {
     typeProject[type] = 1
   })
 
-  types.inactive.map(type => {
+  types.excludes.map(type => {
     typeProject[type] = 1
   })
 
   let descriptiveProject = { sum: 1 }
 
-  descriptives.interests.map(interest => {
-    descriptiveProject[interest] = 1
-  })
-
   descriptives.stars.map(star => {
     descriptiveProject[star] = 1
   })
+
+  if (descriptives.all) {
+    descriptives.excludes.map(desc => {
+      descriptiveProject[desc] = 1
+    })
+  } else {
+    descriptives.includes.map(desc => {
+      descriptiveProject[desc] = 1
+    })
+  }
 
   const pipeline = [
     {
@@ -142,16 +148,16 @@ const getRecommendations = (req, res) => {
       let dScore = 0
       let tScore = 0
 
-      if (!descriptivesAll) {
-        descriptives.interests.map((interest) => {
-          if (element.descriptive[interest] !== '') {
-            dScore += parseFloat(element.descriptive[interest]) * 0.3
-          }
-        })
-
+      if (!descriptives.all) {
         descriptives.stars.map((star) => {
           if (element.descriptive[star] !== '') {
             dScore += parseFloat(element.descriptive[star]) * 1
+          }
+        })
+
+        descriptives.includes.map((desc) => {
+          if (element.descriptive[desc] !== '') {
+            dScore += parseFloat(element.descriptive[desc]) * 0.3
           }
         })
       } else {
@@ -159,21 +165,21 @@ const getRecommendations = (req, res) => {
           dScore += parseFloat(element.descriptive.sum) * 0.3
         }
 
-        descriptives.interests.map((interest) => {
-          if (element.descriptive[interest] !== '') {
-            dScore += parseFloat(element.descriptive[interest]) * (-0.3)
-          }
-        })
-
         descriptives.stars.map((star) => {
           if (element.descriptive[star] !== '') {
             dScore += parseFloat(element.descriptive[star]) * 0.7
           }
         })
+
+        descriptives.excludes.map((desc) => {
+          if (element.descriptive[desc] !== '') {
+            dScore += parseFloat(element.descriptive[desc]) * (-0.3)
+          }
+        })
       }
 
-      if (!typesAll) {
-        types.active.map((type) => {
+      if (!types.all) {
+        types.includes.map((type) => {
           if (element.type[type] !== '') {
             tScore += parseFloat(element.type[type])
           }
@@ -183,7 +189,7 @@ const getRecommendations = (req, res) => {
           tScore += parseFloat(element.type.sum)
         }
 
-        types.inactive.map((type) => {
+        types.excludes.map((type) => {
           if (element.type[type] !== '') {
             tScore -= parseFloat(element.type[type])
           }
