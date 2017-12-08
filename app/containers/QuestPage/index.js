@@ -1,8 +1,9 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component, PropTypes, isValidElement } from 'react'
 import { injectIntl, intlShape } from 'react-intl'
 import Helmet from 'react-helmet'
 import ReactMapboxGl from 'react-mapbox-gl'
 import cx from 'classnames'
+import { isEqual } from 'lodash'
 import { compose } from 'redux'
 import ReactResizeDetector from 'react-resize-detector'
 import { connect } from 'react-redux'
@@ -11,18 +12,33 @@ import { browserHistory } from 'react-router'
 import { Container } from 'reactstrap'
 import Brochure from 'containers/Brochure'
 import Menu from 'components/Menu'
-import { MAP_ACCESS_TOKEN, CLOUDINARY_POINTS_URL, CLOUDINARY_SHAPES_URL } from 'containers/App/constants'
-import { MapBlock, ScoreBoardBlock } from 'components/Blocks'
+import { MAP_ACCESS_TOKEN, CLOUDINARY_POINTS_URL, CLOUDINARY_SHAPES_URL, COLORS } from 'containers/App/constants'
+import Map from 'components/Map'
 import QuestPanel from 'components/QuestPanel'
+import ScoreBoard from 'components/ScoreBoard'
 import { Button, QuestButton } from 'components/Buttons'
-import { urlParser } from 'utils/urlHelper'
+import { urlParser, composeUrl } from 'utils/urlHelper'
 import { mapChange, getQuestInfoRequest, getRecommendationRequest } from './actions'
-import { selectRecommendations, selectPlaces } from './selectors'
+import {
+  selectRecommendations,
+  selectPlaces,
+  selectViewport,
+  selectCurrentTypes,
+  selectCurrentDescriptives,
+} from './selectors'
 
-const Map = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN })
+const MapBox = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN })
 
 class QuestPage extends Component {
   static propTypes = {
+    mapChange: PropTypes.func,
+    getQuestInfoRequest: PropTypes.func,
+    getRecommendationRequest: PropTypes.func,
+    injectIntl: PropTypes.func,
+    viewport: PropTypes.object,
+    descriptives: PropTypes.object,
+    types: PropTypes.object,
+    location: PropTypes.object,
     recommendations: PropTypes.array,
     places: PropTypes.array,
     params: PropTypes.shape({
@@ -31,10 +47,6 @@ class QuestPage extends Component {
       types: PropTypes.string,
       descriptives: PropTypes.string,
     }),
-    mapChange: PropTypes.func,
-    getQuestInfoRequest: PropTypes.func,
-    getRecommendationRequest: PropTypes.func,
-    injectIntl: PropTypes.func,
     intl: intlShape.isRequired,
   }
 
@@ -97,7 +109,6 @@ class QuestPage extends Component {
       height: '100%',
     }
 
-    this.colors = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379']
     this.shapesGeoJSONSource = `${CLOUDINARY_SHAPES_URL}/shapes.geojson`
     this.pointsGeoJSONSource = `${CLOUDINARY_POINTS_URL}/points.geojson`
 
@@ -107,6 +118,25 @@ class QuestPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // const { types, descriptives, viewport, location: { pathname } } = this.props
+
+    // const isViewportEqual = isEqual(viewport, nextProps.viewport)
+    // const isTypesEqual = isEqual(types, nextProps.types)
+    // const isDescriptivesEqual = isEqual(descriptives, nextProps.descriptives)
+    // const shouldUpdate = pathname !== nextProps.location.pathname
+
+    // if (!isViewportEqual || !isTypesEqual || !isDescriptivesEqual || shouldUpdate) {
+    //   const { url, sendRequest, viewport, types, descriptives } = composeUrl(nextProps.viewport, nextProps.types, nextProps.descriptives)
+    //   if (pathname !== url) {
+    //     if (sendRequest) {
+    //       browserHistory.push(url)
+    //     } else {
+    //       browserHistory.push('/quest')
+    //     }
+    //     this.props.getRecommendationRequest()
+    //   }
+    // }
+
     this.handleRedrawMap(nextProps)
   }
 
@@ -124,13 +154,12 @@ class QuestPage extends Component {
   }
 
   handleStyleLoad = map => {
-    this.props.mapChange({
-      zoom: map.getZoom(),
-      bounds: map.getBounds(),
-    })
-
-    this.props.getRecommendationRequest()
     this.map = map
+
+    this.props.mapChange({
+      zoom: this.map.getZoom(),
+      bounds: this.map.getBounds(),
+    })
 
     map.addSource('shapes', {
       type: 'geojson',
@@ -167,7 +196,7 @@ class QuestPage extends Component {
         source: 'shapes',
         layout: {},
         paint: {
-          'fill-color': this.colors[i],
+          'fill-color': COLORS[i],
           'fill-opacity': 0,
         },
         filter: ['==', 'e', ''],
@@ -179,7 +208,7 @@ class QuestPage extends Component {
         source: 'shapes',
         layout: {},
         paint: {
-          'line-color': this.colors[i],
+          'line-color': COLORS[i],
           'line-width': 2.5,
           'line-opacity': 0.15,
           'line-offset': 1.5,
@@ -193,7 +222,7 @@ class QuestPage extends Component {
         source: 'shapes',
         layout: {},
         paint: {
-          'line-color': this.colors[i],
+          'line-color': COLORS[i],
           'line-width': 0.5,
         },
         filter: ['==', 'e', ''],
@@ -229,7 +258,7 @@ class QuestPage extends Component {
           'text-transform': 'uppercase',
         },
         paint: {
-          'text-color': this.colors[i],
+          'text-color': COLORS[i],
           'text-halo-width': 2,
           'text-halo-color': '#fff',
         },
@@ -254,10 +283,10 @@ class QuestPage extends Component {
   }
 
   handleRedrawMap = props => {
-    if (this.map) {
+    const { recommendations } = props
+    if (this.map && recommendations) {
       this.handleClearMap()
-
-      props.recommendations.map((recommendation, index) => {
+      recommendations.map((recommendation, index) => {
         const { display, e } = recommendation
         let filter = ['==', 'e', e]
 
@@ -277,14 +306,16 @@ class QuestPage extends Component {
 
   handleClearMap = () => {
     const { recommendations } = this.props
-    recommendations.map((recommendation, index) => {
-      let filter = ['==', 'e', '']
+    if (this.map && recommendations) {
+      recommendations.map((recommendation, index) => {
+        let filter = ['==', 'e', '']
 
-      this.map.setFilter(`shape-border-offset-${index}`, filter)
-      this.map.setFilter(`shape-border-${index}`, filter)
-      this.map.setFilter(`shape-fill-${index}`, filter)
-      this.map.setFilter(`shape-caption-${index}`, filter)
-    })
+        this.map.setFilter(`shape-border-offset-${index}`, filter)
+        this.map.setFilter(`shape-border-${index}`, filter)
+        this.map.setFilter(`shape-fill-${index}`, filter)
+        this.map.setFilter(`shape-caption-${index}`, filter)
+      })
+    }
   }
 
   handleMapViewportChange = placeName => {
@@ -359,9 +390,9 @@ class QuestPage extends Component {
           closeClicked={this.handleCloseClick}
           mapViewPortChange={this.handleMapViewportChange}
         />
-        <MapBlock className={cx({ 'map-block': true, 'no-quest-block': !showQuest })}>
+        <Map className={cx({ 'map-block': true, 'no-quest-block': !showQuest })}>
           <ReactResizeDetector handleWidth handleHeight onResize={() => { if (this.map) this.map.resize() }} />
-          <Map
+          <MapBox
             style={this.mapStyle}
             containerStyle={this.containerStyle}
             center={this.center}
@@ -370,15 +401,8 @@ class QuestPage extends Component {
             onStyleLoad={this.handleStyleLoad}
             onDragEnd={this.handleDragEnd}
           />
-        </MapBlock>
-        <ScoreBoardBlock>
-          {
-            recommendations.map((recommendation, index) => {
-              const { name, score } = recommendation
-              return <div key={index} style={{ color: this.colors[index % 5] }}>{name} : {score}</div>
-            })
-          }
-        </ScoreBoardBlock>
+        </Map>
+        { recommendations && <ScoreBoard recommendations={recommendations} /> }
         { brochure && <Brochure name={brochure} />}
       </Container>
     )
@@ -388,6 +412,9 @@ class QuestPage extends Component {
 const selectors = createStructuredSelector({
   recommendations: selectRecommendations(),
   places: selectPlaces(),
+  viewport: selectViewport(),
+  types: selectCurrentTypes(),
+  descriptives: selectCurrentDescriptives(),
 })
 
 const actions = {

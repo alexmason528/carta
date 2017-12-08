@@ -5,6 +5,8 @@
   -1: String
 **/
 
+import { map, join } from 'lodash'
+
 const getObjectType = input => {
   if (input[0] === '.') return -1
   if (input.indexOf('e') !== -1) return -1
@@ -82,8 +84,6 @@ const getDescriptives = desStr => {
         descriptives.stars.push(desc)
       } else if (sign === '-') {
         descriptives.excludes.push(desc)
-      } else {
-        return null
       }
     }
   } else {
@@ -92,9 +92,7 @@ const getDescriptives = desStr => {
         const desc = seg.slice(1)
         if (desc.length === 0 || getObjectType(desc) !== -1) return null
         descriptives.stars.push(desc)
-      } else if (seg[0] === '-') {
-        return null
-      } else {
+      } else if (seg[0] !== '-') {
         const desc = seg
         if (getObjectType(desc) !== -1) return null
         descriptives.includes.push(desc)
@@ -122,5 +120,63 @@ export const urlParser = (viewportStr, typesStr, descriptivesStr) => {
 }
 
 export const getQuestStr = str => {
-  return (str.charAt(0).toUpperCase() + str.slice(1)).replace('-', ' ')
+  return (str.charAt(0).toUpperCase() + str.slice(1)).replace(/-/g, ' ')
+}
+
+export const getUrlStr = str => {
+  return (str.charAt(0).toLowerCase() + str.slice(1)).replace(/ /g, '-')
+}
+
+export const composeUrl = (viewport, types, descriptives) => {
+  const { zoom, northeast, southwest, x, y } = viewport
+  let viewportStr
+  if (northeast && southwest) {
+    viewportStr = `${((northeast.x + southwest.x) / 2).toFixed(2)},${((northeast.y + southwest.y) / 2).toFixed(2)},${zoom}`
+  } else {
+    viewportStr = `${x},${y},${zoom.toFixed(2)}`
+  }
+
+  let typeStr = ''
+  let descStr = ''
+
+  const typeAll = types.all ? 'anything' : undefined
+  const typeIncludes = types.includes.length ? types.includes.map(type => getUrlStr(type.en)).join(',') : undefined
+  const typeExcludes = types.excludes.length ? types.excludes.map(type => getUrlStr(type.en)).join(',') : undefined
+
+  const descAll = descriptives.all ? 'anything' : undefined
+  const descStars = descriptives.stars.length ? descriptives.stars.map(type => `+${getUrlStr(type.en)}`).join(',') : undefined
+  const descIncludes = descriptives.includes.length ? descriptives.includes.map(type => getUrlStr(type.en)).join(',') : undefined
+  const descExcludes = descriptives.excludes.length ? descriptives.excludes.map(type => `-${getUrlStr(type.en)}`).join(',') : undefined
+
+  if (types.all) {
+    let arr = [typeAll]
+    if (typeExcludes) arr.push(typeExcludes)
+    typeStr = arr.join(',')
+  } else {
+    typeStr = typeIncludes || ''
+  }
+
+  if (descriptives.all) {
+    let arr = [descAll]
+
+    if (descStars) arr.push(descStars)
+    if (descExcludes) arr.push(descExcludes)
+    descStr = arr.join(',')
+  } else {
+    let arr = []
+    if (descStars) arr.push(descStars)
+    if (descIncludes) arr.push(descIncludes)
+    descStr = arr.join(',')
+  }
+
+  const url = `${viewportStr}/${typeStr}/${descStr}`
+  const sendRequest = (viewportStr !== '' && typeStr !== '' && descStr !== '')
+
+  return {
+    viewport: viewportStr,
+    types: typeStr,
+    descriptives: descStr,
+    url: `/quest/q/${viewportStr}/${typeStr}/${descStr}`,
+    sendRequest,
+  }
 }

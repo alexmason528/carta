@@ -1,11 +1,10 @@
 import { take, call, put, select, cancel, takeLatest, actionChannel } from 'redux-saga/effects'
 import { LOCATION_CHANGE } from 'react-router-redux'
 import { findIndex } from 'lodash'
-
-import request from 'utils/request'
 import { API_BASE_URL } from 'containers/App/constants'
 import { selectCurrentTypes, selectCurrentDescriptives, selectViewport, selectTypes } from 'containers/QuestPage/selectors'
-
+import request from 'utils/request'
+import { composeUrl } from 'utils/urlHelper'
 import { GET_BROCHURE_REQUEST, GET_RECOMMENDATION_REQUEST, GET_QUESTINFO_REQUEST, DESCRIPTIVE_ANYTHING_CLICK } from './constants'
 import {
   getRecommendationSuccess,
@@ -83,13 +82,9 @@ export function* getRecommendationRequest() {
     },
   }
 
-  let sendRequest = false
-  if ((types.all || types.includes.length > 0) && (descriptives.all || descriptives.stars.length > 0 || data.descriptives.includes.length > 0)) {
-    sendRequest = true
-  }
+  const { sendRequest } = composeUrl(viewport, curTypes, curDescriptives)
 
   let res = []
-
   try {
     if (sendRequest) { res = yield call(request, requestURL, params) }
     yield put(getRecommendationSuccess(res))

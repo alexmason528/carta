@@ -31,7 +31,6 @@ import {
   GET_BROCHURE_SUCCESS,
   GET_BROCHURE_FAIL,
 } from './constants'
-import { descriptiveAnythingClick } from './actions';
 
 const initialQuest = {
   types: {
@@ -58,12 +57,12 @@ const initialState = {
   viewport: {
     x: 0,
     y: 0,
-    zoomlevel: 0,
+    zoom: 0,
   },
   quests: [JSON.parse(JSON.stringify(initialQuest))],
   curQuestInd: 0,
-  recommendations: [],
-  brochure: {},
+  recommendations: null,
+  brochure: null,
   status: null,
   error: null,
 }
@@ -71,8 +70,6 @@ const initialState = {
 function questReducer(state = initialState, { type, payload }) {
   const { curQuestInd, categories } = state
   let quests = JSON.parse(JSON.stringify(state.quests))
-  let newTypes
-  let newDescriptives
   let newQuests
 
   switch (type) {
@@ -85,12 +82,12 @@ function questReducer(state = initialState, { type, payload }) {
         viewport: {
           zoom,
           northeast: {
-            x: _ne.lng,
-            y: _ne.lat,
+            x: Math.round(_ne.lng * 100) / 100,
+            y: Math.round(_ne.lat * 100) / 100,
           },
           southwest: {
-            x: _sw.lng,
-            y: _sw.lat,
+            x: Math.round(_sw.lng * 100) / 100,
+            y: Math.round(_sw.lat * 100) / 100,
           },
         },
       }

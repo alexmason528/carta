@@ -33,3 +33,5 @@ export const CLOUDINARY_ICON_URL = 'https://res.cloudinary.com/hyvpvyohj/raw/upl
 export const CLOUDINARY_PROFILE_URL = 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1509975396/image/profile'
 export const CLOUDINARY_POINTS_URL = 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510139598/data'
 export const CLOUDINARY_SHAPES_URL = 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510139627/data'
+
+export const COLORS = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379']
