@@ -162,7 +162,6 @@
         "multiline"
       ],
       "react/jsx-no-target-blank": 0,
-      
       "react/no-danger": 0,
       "react/no-find-dom-node": 0,
       "react/no-multi-comp": 0,
@@ -272,7 +271,7 @@
     "react-https-redirect": "^1.0.9",
     "react-intl": "2.1.5",
     "react-loader-advanced": "^1.7.0",
-    "react-mapbox-gl": "^2.1.0",
+    "react-mapbox-gl": "^3.2.1",
     "react-masonry-component": "^6.0.1",
     "react-redux": "4.4.6",
     "react-responsive": "^3.0.0",

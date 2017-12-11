@@ -27,8 +27,10 @@ const getViewport = viewportStr => {
   }
 
   return {
-    x: parseFloat(segs[0]),
-    y: parseFloat(segs[1]),
+    center: {
+      x: parseFloat(segs[0]),
+      y: parseFloat(segs[1]),
+    },
     zoom: parseFloat(segs[2]),
   }
 }
@@ -140,13 +142,13 @@ export const composeUrl = (viewport, types, descriptives) => {
   let descStr = ''
 
   const typeAll = types.all ? 'anything' : undefined
-  const typeIncludes = types.includes.length ? types.includes.map(type => getUrlStr(type.en)).join(',') : undefined
-  const typeExcludes = types.excludes.length ? types.excludes.map(type => getUrlStr(type.en)).join(',') : undefined
+  const typeIncludes = types.includes.length > 0 ? types.includes.map(type => getUrlStr(type.en)).join(',') : undefined
+  const typeExcludes = types.excludes.length > 0 ? types.excludes.map(type => getUrlStr(type.en)).join(',') : undefined
 
   const descAll = descriptives.all ? 'anything' : undefined
-  const descStars = descriptives.stars.length ? descriptives.stars.map(type => `+${getUrlStr(type.en)}`).join(',') : undefined
-  const descIncludes = descriptives.includes.length ? descriptives.includes.map(type => getUrlStr(type.en)).join(',') : undefined
-  const descExcludes = descriptives.excludes.length ? descriptives.excludes.map(type => `-${getUrlStr(type.en)}`).join(',') : undefined
+  const descStars = descriptives.stars.length > 0 ? descriptives.stars.map(type => `+${getUrlStr(type.en)}`).join(',') : undefined
+  const descIncludes = descriptives.includes.length > 0 ? descriptives.includes.map(type => getUrlStr(type.en)).join(',') : undefined
+  const descExcludes = descriptives.excludes.length > 0 ? descriptives.excludes.map(type => `-${getUrlStr(type.en)}`).join(',') : undefined
 
   if (types.all) {
     let arr = [typeAll]

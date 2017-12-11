@@ -1,5 +1,7 @@
 export const MAP_CHANGE = 'carta/Quest/MAP_CHANGE'
 
+export const PLACE_CLICK = 'carta/Quest/PLACE_CLICK'
+
 export const TYPE_CLICK = 'carta/Quest/TYPE_CLICK'
 export const TYPE_ANYTHING_CLICK = 'carta/Quest/TYPE_ANYTHING_CLICK'
 

@@ -9,10 +9,14 @@ class ScoreBoard extends Component { // eslint-disable-line react/prefer-statele
     show: PropTypes.bool,
   }
 
+  static defaultProps = {
+    show: false,
+  }
+
   render() {
     const { recommendations, show } = this.props
     return (
-      <div className={cx({ scoreboard: true, hidden: !show })}>
+      <div className={cx({ scoreBoard: true, hidden: !show })}>
         {
           recommendations.map((recommendation, index) => {
             const { name, score } = recommendation

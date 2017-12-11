@@ -4,12 +4,13 @@ import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import messages from 'containers/QuestPage/messages'
+import { placeClick } from 'containers/QuestPage/actions'
 import { selectPlaces } from 'containers/QuestPage/selectors'
 import { Button, StarButton } from 'components/Buttons'
 
 class PlaceSection extends Component {
   static propTypes = {
-    mapViewPortChange: PropTypes.func,
+    placeClick: PropTypes.func,
     places: PropTypes.array,
     className: PropTypes.string,
     intl: intlShape.isRequired,
@@ -22,8 +23,9 @@ class PlaceSection extends Component {
     }
   }
 
-  handlePlaceClick = placeName => {
-    this.props.mapViewPortChange(placeName)
+  handlePlaceClick = place => {
+    const { x, y, zoom } = place
+    this.props.placeClick({ x, y, zoom })
   }
 
   handleInputChange = evt => {
@@ -41,7 +43,7 @@ class PlaceSection extends Component {
         <h1>{ formatMessage(messages.inAround) }</h1>
         <input className="search-input place-search" value={search} onChange={this.handleInputChange} />
         <div className="buttons-row">
-          { filteredPlaces.map((place, index) => <button className="place-button" key={index} onClick={() => { this.handlePlaceClick(place.name) }}>{place.name}</button>) }
+          { filteredPlaces.map((place, index) => <button className="place-button" key={index} onClick={() => { this.handlePlaceClick(place) }}>{place.name}</button>) }
         </div>
       </div>
     )
@@ -52,7 +54,11 @@ const selectors = createStructuredSelector({
   places: selectPlaces(),
 })
 
+const actions = {
+  placeClick,
+}
+
 export default compose(
   injectIntl,
-  connect(selectors),
+  connect(selectors, actions),
 )(PlaceSection)

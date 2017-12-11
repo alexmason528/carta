@@ -35,3 +35,4 @@ export const CLOUDINARY_POINTS_URL = 'https://res.cloudinary.com/hyvpvyohj/raw/u
 export const CLOUDINARY_SHAPES_URL = 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510139627/data'
 
 export const COLORS = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379']
+export const CENTER_COORDS = [5.822, 52.142]

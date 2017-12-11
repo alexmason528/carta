@@ -1,8 +1,10 @@
 import { findIndex, find } from 'lodash'
 import { getQuestStr } from 'utils/urlHelper'
-
+import { CENTER_COORDS } from 'containers/App/constants'
 import {
   MAP_CHANGE,
+
+  PLACE_CLICK,
 
   TYPE_CLICK,
   TYPE_ANYTHING_CLICK,
@@ -55,13 +57,23 @@ const initialState = {
     descriptives: [],
   },
   viewport: {
-    x: 0,
-    y: 0,
-    zoom: 0,
+    northeast: {
+      x: 8.019265624981585,
+      y: 55.18678597629906,
+    },
+    southwest: {
+      x: 3.624734374990169,
+      y: 48.87383712585131,
+    },
+    center: {
+      x: 5.822,
+      y: 52.142,
+    },
+    zoom: 6,
   },
   quests: [JSON.parse(JSON.stringify(initialQuest))],
   curQuestInd: 0,
-  recommendations: null,
+  recommendations: [],
   brochure: null,
   status: null,
   error: null,
@@ -74,21 +86,40 @@ function questReducer(state = initialState, { type, payload }) {
 
   switch (type) {
     case MAP_CHANGE:
-      const { zoom, bounds: { _ne, _sw } } = payload
+      const { zoom, bounds: { _ne, _sw }, center: { lng, lat } } = payload
 
       return {
         ...state,
         status: type,
         viewport: {
+          ...state.viewport,
           zoom,
           northeast: {
-            x: Math.round(_ne.lng * 100) / 100,
-            y: Math.round(_ne.lat * 100) / 100,
+            x: _ne.lng,
+            y: _ne.lat,
           },
           southwest: {
-            x: Math.round(_sw.lng * 100) / 100,
-            y: Math.round(_sw.lat * 100) / 100,
+            x: _sw.lng,
+            y: _sw.lat,
           },
+          center: {
+            x: lng,
+            y: lat,
+          },
+        },
+      }
+
+    case PLACE_CLICK:
+      return {
+        ...state,
+        status: type,
+        viewport: {
+          ...state.viewport,
+          center: {
+            x: payload.x,
+            y: payload.y,
+          },
+          zoom: payload.zoom,
         },
       }
 
@@ -277,7 +308,10 @@ function questReducer(state = initialState, { type, payload }) {
 
       return {
         ...state,
-        viewport,
+        viewport: {
+          ...state.viewport,
+          ...viewport,
+        },
         status: type,
         quests: newQuests,
       }

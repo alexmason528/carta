@@ -13,7 +13,6 @@ import './style.scss'
 class Quest extends Component {
   static propTypes = {
     className: PropTypes.string,
-    mapViewPortChange: PropTypes.func,
     updateVisibility: PropTypes.func,
     intl: intlShape.isRequired,
   }
@@ -51,7 +50,7 @@ class Quest extends Component {
 
   render() {
     const { currentTab } = this.state
-    const { className, mapViewPortChange, intl: { formatMessage } } = this.props
+    const { className, intl: { formatMessage } } = this.props
 
     return (
       <div className={className}>
@@ -67,7 +66,7 @@ class Quest extends Component {
         </div>
 
         <div className="pages">
-          <PlaceSection className={cx({ page: true, 'places-page': true, hidden: currentTab !== 0 })} mapViewPortChange={mapViewPortChange} />
+          <PlaceSection className={cx({ page: true, 'places-page': true, hidden: currentTab !== 0 })} />
           <TypeSection className={cx({ page: true, 'types-page': true, hidden: currentTab !== 1 })} />
           <DescriptiveSection className={cx({ page: true, 'descriptives-page': true, hidden: currentTab !== 2 })} />
         </div>

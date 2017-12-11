@@ -1,6 +1,8 @@
 import {
   MAP_CHANGE,
 
+  PLACE_CLICK,
+
   TYPE_CLICK,
   TYPE_ANYTHING_CLICK,
 
@@ -32,6 +34,13 @@ import {
 export function mapChange(payload) {
   return {
     type: MAP_CHANGE,
+    payload,
+  }
+}
+
+export function placeClick(payload) {
+  return {
+    type: PLACE_CLICK,
     payload,
   }
 }

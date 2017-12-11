@@ -1,22 +1,19 @@
-import React, { Component, PropTypes, isValidElement } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { injectIntl, intlShape } from 'react-intl'
 import Helmet from 'react-helmet'
-import ReactMapboxGl from 'react-mapbox-gl'
 import cx from 'classnames'
 import { isEqual } from 'lodash'
 import { compose } from 'redux'
-import ReactResizeDetector from 'react-resize-detector'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
 import { Container } from 'reactstrap'
 import Brochure from 'containers/Brochure'
-import Menu from 'components/Menu'
-import { MAP_ACCESS_TOKEN, CLOUDINARY_POINTS_URL, CLOUDINARY_SHAPES_URL, COLORS } from 'containers/App/constants'
-import Map from 'components/Map'
-import QuestPanel from 'components/QuestPanel'
-import ScoreBoard from 'components/ScoreBoard'
 import { Button, QuestButton } from 'components/Buttons'
+import Map from 'components/Map'
+import Menu from 'components/Menu'
+import SidePanel from 'components/SidePanel'
+import ScoreBoard from 'components/ScoreBoard'
 import { urlParser, composeUrl } from 'utils/urlHelper'
 import { mapChange, getQuestInfoRequest, getRecommendationRequest } from './actions'
 import {
@@ -26,8 +23,6 @@ import {
   selectCurrentTypes,
   selectCurrentDescriptives,
 } from './selectors'
-
-const MapBox = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN })
 
 class QuestPage extends Component {
   static propTypes = {
@@ -54,9 +49,7 @@ class QuestPage extends Component {
     super(props)
 
     this.state = {
-      showQuest: true,
-      minimized: false,
-      closed: false,
+      panelState: 'opened',
     }
   }
 
@@ -66,55 +59,13 @@ class QuestPage extends Component {
     let questData = null
     if (viewport && types && descriptives) {
       const res = urlParser(viewport, types, descriptives)
-      if (res) {
-        questData = {
-          quest: res,
-          locale,
-        }
 
-        const { viewport } = res
-        this.center = [viewport.x, viewport.y]
-        this.zoom = [viewport.zoom]
+      if (res) {
+        questData = { quest: res, locale }
       }
     }
 
     this.props.getQuestInfoRequest(questData)
-
-    if (!questData) {
-      this.center = [5.822, 52.142]
-      this.zoom = [6]
-    }
-
-    this.mapStyle = {
-      version: 8,
-      sources: {
-        'raster-tiles': {
-          type: 'raster',
-          url: 'mapbox://cartaguide.white',
-          tileSize: 128,
-        },
-      },
-      layers: [{
-        id: 'simple-tiles',
-        type: 'raster',
-        source: 'raster-tiles',
-        minzoom: 0,
-        maxzoom: 22,
-      }],
-      glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
-    }
-
-    this.containerStyle = {
-      width: '100%',
-      height: '100%',
-    }
-
-    this.shapesGeoJSONSource = `${CLOUDINARY_SHAPES_URL}/shapes.geojson`
-    this.pointsGeoJSONSource = `${CLOUDINARY_POINTS_URL}/points.geojson`
-
-    this.map = ''
-    this.count = 5
-    this.handleRedrawMap(this.props)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -137,238 +88,17 @@ class QuestPage extends Component {
     //   }
     // }
 
-    this.handleRedrawMap(nextProps)
+    // this.handleRedrawMap(nextProps)
   }
 
-  handleZoomEnd = map => {
-    const { showQuest, minimized, closed } = this.state
-
-    this.props.mapChange({
-      zoom: map.getZoom(),
-      bounds: map.getBounds(),
-    })
-
-    if (showQuest || minimized) {
-      this.props.getRecommendationRequest()
-    }
-  }
-
-  handleStyleLoad = map => {
-    this.map = map
-
-    this.props.mapChange({
-      zoom: this.map.getZoom(),
-      bounds: this.map.getBounds(),
-    })
-
-    map.addSource('shapes', {
-      type: 'geojson',
-      data: this.shapesGeoJSONSource,
-    })
-
-    map.addSource('points', {
-      type: 'geojson',
-      data: this.pointsGeoJSONSource,
-    })
-
-    this.handleAddShapes(map)
-    this.handleAddCaptions(map)
-  }
-
-  handleDragEnd = map => {
-    this.props.mapChange({
-      zoom: map.getZoom(),
-      bounds: map.getBounds(),
-    })
-
-    const { showQuest, minimized, closed } = this.state
-
-    if (showQuest || minimized) {
-      this.props.getRecommendationRequest()
-    }
-  }
-
-  handleAddShapes = map => {
-    for (let i = this.count - 1; i >= 0; i -= 1) {
-      map.addLayer({
-        id: `shape-fill-${i}`,
-        type: 'fill',
-        source: 'shapes',
-        layout: {},
-        paint: {
-          'fill-color': COLORS[i],
-          'fill-opacity': 0,
-        },
-        filter: ['==', 'e', ''],
-      })
-
-      map.addLayer({
-        id: `shape-border-offset-${i}`,
-        type: 'line',
-        source: 'shapes',
-        layout: {},
-        paint: {
-          'line-color': COLORS[i],
-          'line-width': 2.5,
-          'line-opacity': 0.15,
-          'line-offset': 1.5,
-        },
-        filter: ['==', 'e', ''],
-      })
-
-      map.addLayer({
-        id: `shape-border-${i}`,
-        type: 'line',
-        source: 'shapes',
-        layout: {},
-        paint: {
-          'line-color': COLORS[i],
-          'line-width': 0.5,
-        },
-        filter: ['==', 'e', ''],
-      })
-
-      const shapeFill = `shape-fill-${i}`
-
-      map.on('mousemove', shapeFill, () => {
-        map.getCanvas().style.cursor = 'pointer'
-      })
-
-      map.on('mouseleave', shapeFill, () => {
-        map.getCanvas().style.cursor = ''
-      })
-
-      map.on('click', shapeFill, data => {
-        const name = data.features[0].properties.name
-        this.handleElementClick(name)
-      })
-    }
-  }
-
-  handleAddCaptions = map => {
-    for (let i = this.count - 1; i >= 0; i -= 1) {
-      map.addLayer({
-        id: `shape-caption-${i}`,
-        type: 'symbol',
-        source: 'points',
-        layout: {
-          'text-field': '{name}',
-          'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
-          'text-size': 13,
-          'text-transform': 'uppercase',
-        },
-        paint: {
-          'text-color': COLORS[i],
-          'text-halo-width': 2,
-          'text-halo-color': '#fff',
-        },
-        filter: ['==', 'e', ''],
-      })
-
-      const shapeCaption = `shape-caption-${i}`
-
-      map.on('mousemove', shapeCaption, () => {
-        map.getCanvas().style.cursor = 'pointer'
-      })
-
-      map.on('mouseleave', shapeCaption, () => {
-        map.getCanvas().style.cursor = ''
-      })
-
-      map.on('click', shapeCaption, data => {
-        const name = data.features[0].properties.name
-        this.handleElementClick(name)
-      })
-    }
-  }
-
-  handleRedrawMap = props => {
-    const { recommendations } = props
-    if (this.map && recommendations) {
-      this.handleClearMap()
-      recommendations.map((recommendation, index) => {
-        const { display, e } = recommendation
-        let filter = ['==', 'e', e]
-
-        if (display === 'shape') {
-          this.map.setFilter(`shape-border-offset-${index}`, filter)
-          this.map.setFilter(`shape-border-${index}`, filter)
-          this.map.setFilter(`shape-fill-${index}`, filter)
-          this.map.setFilter(`shape-caption-${index}`, filter)
-        } else if (display === 'icon') {
-          this.map.setFilter(`shape-border-offset-${index}`, ['==', 'e', ''])
-          this.map.setFilter(`shape-border-${index}`, ['==', 'e', ''])
-          this.map.setFilter(`shape-caption-${index}`, filter)
-        }
-      })
-    }
-  }
-
-  handleClearMap = () => {
-    const { recommendations } = this.props
-    if (this.map && recommendations) {
-      recommendations.map((recommendation, index) => {
-        let filter = ['==', 'e', '']
-
-        this.map.setFilter(`shape-border-offset-${index}`, filter)
-        this.map.setFilter(`shape-border-${index}`, filter)
-        this.map.setFilter(`shape-fill-${index}`, filter)
-        this.map.setFilter(`shape-caption-${index}`, filter)
-      })
-    }
-  }
-
-  handleMapViewportChange = placeName => {
-    const { places } = this.props
-
-    for (let place of places) {
-      if (place.name === placeName) {
-        const { x, y, zoom } = place
-        this.map.flyTo({
-          center: [x, y],
-          zoom: zoom,
-        })
-        break
-      }
-    }
-  }
-
-  handleElementClick = name => {
-    browserHistory.push(`/quest/i/${name}`)
-  }
-
-  handleQuestButtonClick = () => {
+  handleQuestButtonClick = state => {
     this.setState({
-      showQuest: !this.state.showQuest,
-      minimized: false,
-      closed: false,
+      panelState: state,
     })
-
-    this.handleRedrawMap(this.props)
-  }
-
-  handleMimimizeClick = () => {
-    this.setState({
-      showQuest: false,
-      minimized: true,
-      closed: false,
-    })
-  }
-
-  handleCloseClick = () => {
-    this.setState({
-      showQuest: false,
-      minimized: false,
-      closed: true,
-    })
-
-    if (this.map) {
-      this.handleClearMap()
-    }
   }
 
   render() {
-    const { showQuest, minimized, closed } = this.state
+    const { panelState } = this.state
     const { recommendations, params: { brochure } } = this.props
 
     return (
@@ -380,29 +110,17 @@ class QuestPage extends Component {
         />
         <Menu currentPage="Quest" />
         <QuestButton
-          className={cx({ 'quest-button': true, active: minimized, inactive: !minimized })}
-          onClick={this.handleQuestButtonClick}
-          onCloseClick={this.handleCloseClick}
+          className={cx({ questBtn: true, questBtn__opened: panelState === 'minimized', questBtn__closed: panelState !== 'minimized' })}
+          onClick={() => { this.handleQuestButtonClick('opened') }}
+          onCloseClick={() => { this.handleQuestButtonClick('closed') }}
         />
-        <QuestPanel
-          className={cx({ 'quest-block': true, 'quest-hide': !showQuest })}
-          minimizeClicked={this.handleMimimizeClick}
-          closeClicked={this.handleCloseClick}
-          mapViewPortChange={this.handleMapViewportChange}
+        <SidePanel
+          className={cx({ 'quest-block': true, 'quest-hide': panelState !== 'opened' })}
+          onMinimizeClick={() => { this.handleQuestButtonClick('minimized') }}
+          onCloseClick={() => { this.handleQuestButtonClick('closed') }}
         />
-        <Map className={cx({ 'map-block': true, 'no-quest-block': !showQuest })}>
-          <ReactResizeDetector handleWidth handleHeight onResize={() => { if (this.map) this.map.resize() }} />
-          <MapBox
-            style={this.mapStyle}
-            containerStyle={this.containerStyle}
-            center={this.center}
-            zoom={this.zoom}
-            onZoomEnd={this.handleZoomEnd}
-            onStyleLoad={this.handleStyleLoad}
-            onDragEnd={this.handleDragEnd}
-          />
-        </Map>
-        { recommendations && <ScoreBoard recommendations={recommendations} /> }
+        <Map className={cx({ 'map-block': true, 'no-quest-block': panelState !== 'opened' })} panelState={panelState} />
+        { (recommendations.length > 0) && <ScoreBoard recommendations={recommendations} /> }
         { brochure && <Brochure name={brochure} />}
       </Container>
     )

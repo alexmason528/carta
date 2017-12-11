@@ -10,11 +10,10 @@ import Img from 'components/Img'
 import Quest from '../Quest'
 import './style.scss'
 
-class QuestPanel extends Component {
+class SidePanel extends Component {
   static propTypes = {
-    minimizeClicked: PropTypes.func.isRequired,
-    closeClicked: PropTypes.func.isRequired,
-    mapViewPortChange: PropTypes.func,
+    onMinimizeClick: PropTypes.func.isRequired,
+    onCloseClick: PropTypes.func.isRequired,
     getRecommendationRequest: PropTypes.func,
     questAdd: PropTypes.func,
     questSelect: PropTypes.func,
@@ -41,15 +40,15 @@ class QuestPanel extends Component {
   }
 
   render() {
-    const { curQuestInd, className, minimizeClicked, questCnt, closeClicked, mapViewPortChange } = this.props
+    const { curQuestInd, className, onMinimizeClick, questCnt, onCloseClick } = this.props
     const quests = Array(questCnt).fill(0)
     return (
       <div className={className}>
         <div className="buttons">
-          <button className="minimize" onClick={minimizeClicked}>
+          <button className="minimize" onClick={onMinimizeClick}>
             <Img src={`${CLOUDINARY_ICON_URL}/min.png`} />
           </button>
-          <button className="close" onClick={closeClicked}>
+          <button className="close" onClick={onCloseClick}>
             <Img src={`${CLOUDINARY_ICON_URL}/close.png`} />
           </button>
         </div>
@@ -68,7 +67,7 @@ class QuestPanel extends Component {
           }
           <button className="add-quest" onClick={this.handleQuestAdd}>+</button>
         </div>
-        <Quest className="quest" mapViewPortChange={mapViewPortChange} />
+        <Quest className="quest" />
       </div>
     )
   }
@@ -86,4 +85,4 @@ const actions = {
   getRecommendationRequest,
 }
 
-export default connect(selectors, actions)(QuestPanel)
+export default connect(selectors, actions)(SidePanel)

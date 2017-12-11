@@ -1,4 +1,4 @@
-.scoreboard{
+.scoreBoard{
   right: 20px; 
   top: 20px; 
   text-align: right; 
@@ -6,8 +6,4 @@
   font-weight: 900; 
   text-transform: uppercase; 
   position: absolute;
-  
-  &.hidden {
-    display: none;
-  }
 }
