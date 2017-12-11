@@ -1,8 +1,14 @@
-.map-block {
+.map {
   position: absolute;
   top: 0; 
   bottom: 0; 
   left: 256px; 
   width: calc(100% - 256px);
   transition: all 0.1s;
+
+  &__withoutQuest {
+    left: 0;
+    width: 100%;
+    transition: 0.1s all;
+  }
 }

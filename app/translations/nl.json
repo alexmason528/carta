@@ -53,5 +53,6 @@
   "carta.passwordNotEqual": "Deze wachtwoorden zijn niet identiek",
   "carta.incorrectPassword": "Wachtwoord onjuist",
   "carta.incorrectEmail": "Verander je email of registreer bij Carta!",
-  "carta.alreadyRegistered": "Je bent al ingeschreven. Je kunt inloggen"
+  "carta.alreadyRegistered": "Je bent al ingeschreven. Je kunt inloggen",
+  "carta.anything": "Alles"
 }

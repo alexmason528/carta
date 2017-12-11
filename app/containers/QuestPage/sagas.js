@@ -3,8 +3,9 @@ import { LOCATION_CHANGE } from 'react-router-redux'
 import { findIndex } from 'lodash'
 import { API_BASE_URL } from 'containers/App/constants'
 import { selectCurrentTypes, selectCurrentDescriptives, selectViewport, selectTypes } from 'containers/QuestPage/selectors'
+import { selectLocale } from 'containers/LanguageProvider/selectors'
 import request from 'utils/request'
-import { composeUrl } from 'utils/urlHelper'
+import { urlComposer } from 'utils/urlHelper'
 import { GET_BROCHURE_REQUEST, GET_RECOMMENDATION_REQUEST, GET_QUESTINFO_REQUEST, DESCRIPTIVE_ANYTHING_CLICK } from './constants'
 import {
   getRecommendationSuccess,
@@ -21,6 +22,7 @@ export function* getRecommendationRequest() {
   const questTypes = yield select(selectTypes())
   const curTypes = yield select(selectCurrentTypes())
   const curDescriptives = yield select(selectCurrentDescriptives())
+  const locale = yield select(selectLocale())
 
   const requestURL = `${API_BASE_URL}api/v1/map/recommendation/`
 
@@ -82,7 +84,7 @@ export function* getRecommendationRequest() {
     },
   }
 
-  const { sendRequest } = composeUrl(viewport, curTypes, curDescriptives)
+  const { sendRequest } = urlComposer(viewport, curTypes, curDescriptives, locale)
 
   let res = []
   try {

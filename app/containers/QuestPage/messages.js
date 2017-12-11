@@ -25,4 +25,8 @@ export default defineMessages({
     id: 'carta.notably',
     defaultMessage: 'Notably',
   },
+  anything: {
+    id: 'carta.anything',
+    defaultMessage: 'Anything',
+  },
 })

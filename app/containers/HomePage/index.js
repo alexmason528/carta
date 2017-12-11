@@ -139,15 +139,15 @@ class HomePage extends Component {
     const thirdCol = [2, 3, 5, 11, 14, 17, 20, 23]
 
     return (
-      <Container fluid className="homepage">
+      <Container fluid className="homePage">
         <Helmet
           meta={[
             { name: 'description', content: 'Carta' },
           ]}
         />
         <Menu currentPage="Home" />
-        <Row className="homepage__row">
-          <Col lg={4} md={6} sm={12} xs={12} className="homepage__col">
+        <Row className="homePage__row">
+          <Col lg={4} md={6} sm={12} xs={12} className="homePage__col">
             <Profile
               onClick={this.handleProfileClick}
               onUpdate={updateUserRequest}
@@ -183,7 +183,7 @@ class HomePage extends Component {
               })
             }
           </Col>
-          <Col lg={4} md={6} sm={12} xs={12} className="homepage__col">
+          <Col lg={4} md={6} sm={12} xs={12} className="homePage__col">
             { authenticated && !showCreatePostForm && user.verified && !editingPost && <CreatePostButton type={createPostButtonType} onClick={this.toggleCreatePostForm} />}
             { authenticated && showCreatePostForm && <PostCreate onClose={this.toggleCreatePostForm} user={user} /> }
             <div>
@@ -204,7 +204,7 @@ class HomePage extends Component {
               }
             </div>
           </Col>
-          <Col lg={4} md={6} sm={12} xs={12} className="homepage__col">
+          <Col lg={4} md={6} sm={12} xs={12} className="homePage__col">
             {
               filteredPosts && filteredPosts.map((post, key) => {
                 const { _id, content, created_at, img, title, link } = post

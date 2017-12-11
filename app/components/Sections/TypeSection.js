@@ -56,68 +56,52 @@ class TypeSection extends Component {
   }
 
   handleAnythingClick = () => {
-    this.props.typeAnythingClick()
-    this.props.getRecommendationRequest()
+    const { typeAnythingClick, getRecommendationRequest } = this.props
+    typeAnythingClick()
+    getRecommendationRequest()
   }
 
   handleTypeClick = (type, active) => {
-    this.props.typeClick({ type, active })
-    this.props.getRecommendationRequest()
+    const { typeClick, getRecommendationRequest } = this.props
+    typeClick({ type, active })
+    getRecommendationRequest()
   }
 
   render() {
     const { expanded, search } = this.state
     const {
       className,
-      intl: { formatMessage, locale },
       types,
+      intl: { formatMessage, locale },
       currentTypes: { all, includes, excludes, visibles },
     } = this.props
 
-    let searchedTypes =
-    (search === '')
-    ? types
-    : types.filter(type => type[locale].toLowerCase().indexOf(search.toLowerCase()) !== -1)
-
-    const searchBtnClass = cx({
-      search: true,
-      invisible: expanded,
-    })
-
-    const closeBtnClass = cx({
-      close: true,
-      invisible: !expanded || (!all && includes.length === 0),
-    })
-
-    const anythingBtnClass = cx({
-      hidden: (!expanded && !all) || ('anything'.indexOf(search.toLowerCase()) === -1),
-    })
-
-    const searchInputClass = cx({
-      'search-input': true,
-      'type-search': true,
-      invisible: !expanded,
-    })
-
-    const filteredClass = cx({
-      filtered: true,
-      show: expanded || (!expanded && !all),
-    })
-
-    const excludedClass = cx({
-      excluded: true,
-      show: all && !expanded && excludes.length > 0 && excludes.length !== types.length,
-    })
+    let searchedTypes = (search === '') ? types : types.filter(type => type[locale].toLowerCase().indexOf(search.toLowerCase()) !== -1)
 
     return (
-      <div className={className}>
-        <h1>{ formatMessage(messages.showMe) }</h1>
-        <Img className={searchBtnClass} src={`${CLOUDINARY_ICON_URL}/search.png`} onClick={() => { this.handleExpand(true) }} />
-        <Img className={closeBtnClass} src={`${CLOUDINARY_ICON_URL}/back.png`} onClick={() => { this.handleExpand(false) }} />
-        <input className={searchInputClass} value={search} onChange={this.handleInputChange} />
-        <div className="suggestion">
-          <Button className={anythingBtnClass} active={all} onClick={this.handleAnythingClick}>Anything</Button>
-          <div className={filteredClass}>
+      <div className="section section--type">
+        <h1 className="section__title">{ formatMessage(messages.showMe) }</h1>
+        <Img
+          className={cx({
+            section__searchOpenBtn: true,
+            invisible: expanded,
+          })}
+          src={`${CLOUDINARY_ICON_URL}/search.png`} onClick={() => { this.handleExpand(true) }}
+        />
+        <Img
+          className={cx({ section__searchCloseBtn: true, invisible: !expanded || (!all && includes.length === 0) })}
+          src={`${CLOUDINARY_ICON_URL}/back.png`} onClick={() => { this.handleExpand(false) }}
+        />
+        <input className={cx({ section__searchInput: true, invisible: !expanded })} value={search} onChange={this.handleInputChange} />
+        <div className="section__filteredList">
+          <Button
+            className={cx({ hidden: (!expanded && !all) || (formatMessage(messages.anything).toLowerCase().indexOf(search.toLowerCase()) === -1) })}
+            active={all}
+            onClick={this.handleAnythingClick}
+          >
+            { formatMessage(messages.anything) }
+          </Button>
+          <div className={cx({ filtered: true, show: expanded || (!expanded && !all) })}>
             {
               searchedTypes.map((type, index) => {
                 const active = all ? findIndex(excludes, type) === -1 : findIndex(includes, type) !== -1
@@ -126,7 +110,12 @@ class TypeSection extends Component {
               })
             }
           </div>
-          <div className={excludedClass}>
+          <div
+            className={cx({
+              excluded: true,
+              show: all && !expanded && excludes.length > 0 && excludes.length !== types.length,
+            })}
+          >
             <div className="except">{ formatMessage(messages.onlyIgnoring) }</div>
             { excludes.map((type, index) => <Button key={index} active={false} onClick={() => { this.handleTypeClick(type, false) }}>{type[locale]}</Button>) }
           </div>

@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import cx from 'classnames'
 import { connect } from 'react-redux'
 import ReactResizeDetector from 'react-resize-detector'
 import ReactMapboxGl from 'react-mapbox-gl'
@@ -243,10 +244,10 @@ class Map extends Component {
   }
 
   render() {
-    const { className, viewport: { center: { x, y }, zoom } } = this.props
+    const { panelState, viewport: { center: { x, y }, zoom } } = this.props
 
     return (
-      <div className={className}>
+      <div className={cx({ map: true, map__withoutQuest: panelState !== 'opened' })}>
         <ReactResizeDetector handleWidth handleHeight onResize={this.handleResize} />
         <MapBox
           style={this.mapStyle}

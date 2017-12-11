@@ -33,28 +33,6 @@
     z-index: 102;
   }
 
-  .logo {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 100;
-    cursor: pointer;
-
-    img {
-      left: 10px;
-      top: 10px;
-      width: 32px;
-      box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
-      border-radius: 20px;
-      height: auto;
-      z-index: 102;
-      position: relative;
-      transition: all 0.1s;
-    }
-
-    &:hover img { box-shadow: 0 0 7px rgba(0, 0, 0, 0.6) }
-  }
-
   &__content {
     position: fixed;
     left: 0;
@@ -126,4 +104,26 @@
       width: auto;
     }
   }
+}
+
+.logo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  cursor: pointer;
+
+  img {
+    left: 10px;
+    top: 10px;
+    width: 32px;
+    box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    height: auto;
+    z-index: 102;
+    position: relative;
+    transition: all 0.1s;
+  }
+
+  &:hover img { box-shadow: 0 0 7px rgba(0, 0, 0, 0.6) }
 }

@@ -2,7 +2,7 @@ import React, { PropTypes, Children } from 'react'
 import cx from 'classnames'
 
 const Button = ({ active, className, children, onClick }) => (
-  <div className={cx({ 'button-wrapper': true, active, [className]: className })}>
+  <div className={cx({ section__btn: true, active, [className]: className })}>
     <button onClick={onClick}>{Children.toArray(children)}</button>
   </div>
 )

@@ -20,7 +20,7 @@ class SidePanel extends Component {
     questRemove: PropTypes.func,
     curQuestInd: PropTypes.number,
     questCnt: PropTypes.number,
-    className: PropTypes.string,
+    panelState: PropTypes.string,
   }
 
   handleQuestAdd = () => {
@@ -40,23 +40,23 @@ class SidePanel extends Component {
   }
 
   render() {
-    const { curQuestInd, className, onMinimizeClick, questCnt, onCloseClick } = this.props
+    const { curQuestInd, panelState, onMinimizeClick, questCnt, onCloseClick } = this.props
     const quests = Array(questCnt).fill(0)
     return (
-      <div className={className}>
-        <div className="buttons">
-          <button className="minimize" onClick={onMinimizeClick}>
+      <div className={cx({ sidePanel: true, sidePanel__hidden: panelState !== 'opened' })}>
+        <div>
+          <button className="sidePanel__minimizeBtn" onClick={onMinimizeClick}>
             <Img src={`${CLOUDINARY_ICON_URL}/min.png`} />
           </button>
-          <button className="close" onClick={onCloseClick}>
+          <button className="sidePanel__closeBtn" onClick={onCloseClick}>
             <Img src={`${CLOUDINARY_ICON_URL}/close.png`} />
           </button>
         </div>
-        <div className="list">
+        <div className="sidePanel__questIndexBtnList">
           {
             quests.map((quest, index) => (
               <button
-                className={cx({ item: true, on: index === curQuestInd })}
+                className={cx({ sidePanel__questIndexBtn: true, 'sidePanel__questIndexBtn--active': index === curQuestInd })}
                 key={index}
                 onClick={() => { this.handleQuestSelect(index) }}
                 onContextMenu={evt => { this.handleQuestRemove(evt, index) }}
@@ -65,9 +65,9 @@ class SidePanel extends Component {
               </button>
             ))
           }
-          <button className="add-quest" onClick={this.handleQuestAdd}>+</button>
+          <button className="sidePanel__questAddBtn" onClick={this.handleQuestAdd}>+</button>
         </div>
-        <Quest className="quest" />
+        <Quest />
       </div>
     )
   }

@@ -14,7 +14,7 @@ import Map from 'components/Map'
 import Menu from 'components/Menu'
 import SidePanel from 'components/SidePanel'
 import ScoreBoard from 'components/ScoreBoard'
-import { urlParser, composeUrl } from 'utils/urlHelper'
+import { urlParser, urlComposer } from 'utils/urlHelper'
 import { mapChange, getQuestInfoRequest, getRecommendationRequest } from './actions'
 import {
   selectRecommendations,
@@ -23,6 +23,7 @@ import {
   selectCurrentTypes,
   selectCurrentDescriptives,
 } from './selectors'
+import './style.scss'
 
 class QuestPage extends Component {
   static propTypes = {
@@ -58,7 +59,7 @@ class QuestPage extends Component {
 
     let questData = null
     if (viewport && types && descriptives) {
-      const res = urlParser(viewport, types, descriptives)
+      const res = urlParser(viewport, types, descriptives, locale)
 
       if (res) {
         questData = { quest: res, locale }
@@ -69,7 +70,7 @@ class QuestPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // const { types, descriptives, viewport, location: { pathname } } = this.props
+    // const { types, descriptives, viewport, location: { pathname }, intl: { locale } } = this.props
 
     // const isViewportEqual = isEqual(viewport, nextProps.viewport)
     // const isTypesEqual = isEqual(types, nextProps.types)
@@ -77,7 +78,7 @@ class QuestPage extends Component {
     // const shouldUpdate = pathname !== nextProps.location.pathname
 
     // if (!isViewportEqual || !isTypesEqual || !isDescriptivesEqual || shouldUpdate) {
-    //   const { url, sendRequest, viewport, types, descriptives } = composeUrl(nextProps.viewport, nextProps.types, nextProps.descriptives)
+    //   const { url, sendRequest, viewport, types, descriptives } = urlComposer(nextProps.viewport, nextProps.types, nextProps.descriptives, locale)
     //   if (pathname !== url) {
     //     if (sendRequest) {
     //       browserHistory.push(url)
@@ -91,10 +92,8 @@ class QuestPage extends Component {
     // this.handleRedrawMap(nextProps)
   }
 
-  handleQuestButtonClick = state => {
-    this.setState({
-      panelState: state,
-    })
+  handleQuestBtnClick = state => {
+    this.setState({ panelState: state })
   }
 
   render() {
@@ -102,7 +101,7 @@ class QuestPage extends Component {
     const { recommendations, params: { brochure } } = this.props
 
     return (
-      <Container fluid className="questpage">
+      <Container fluid className="questPage">
         <Helmet
           meta={[
             { name: 'description', content: 'Carta' },
@@ -110,16 +109,16 @@ class QuestPage extends Component {
         />
         <Menu currentPage="Quest" />
         <QuestButton
-          className={cx({ questBtn: true, questBtn__opened: panelState === 'minimized', questBtn__closed: panelState !== 'minimized' })}
-          onClick={() => { this.handleQuestButtonClick('opened') }}
-          onCloseClick={() => { this.handleQuestButtonClick('closed') }}
+          panelState={panelState}
+          onClick={() => { this.handleQuestBtnClick('opened') }}
+          onCloseClick={() => { this.handleQuestBtnClick('closed') }}
         />
         <SidePanel
-          className={cx({ 'quest-block': true, 'quest-hide': panelState !== 'opened' })}
-          onMinimizeClick={() => { this.handleQuestButtonClick('minimized') }}
-          onCloseClick={() => { this.handleQuestButtonClick('closed') }}
+          panelState={panelState}
+          onMinimizeClick={() => { this.handleQuestBtnClick('minimized') }}
+          onCloseClick={() => { this.handleQuestBtnClick('closed') }}
         />
-        <Map className={cx({ 'map-block': true, 'no-quest-block': panelState !== 'opened' })} panelState={panelState} />
+        <Map panelState={panelState} />
         { (recommendations.length > 0) && <ScoreBoard recommendations={recommendations} /> }
         { brochure && <Brochure name={brochure} />}
       </Container>

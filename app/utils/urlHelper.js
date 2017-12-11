@@ -7,6 +7,16 @@
 
 import { map, join } from 'lodash'
 
+import messages from 'containers/HomePage/messages'
+import { LANGUAGES } from 'containers/LanguageProvider/constants'
+import enTranslationMessages from 'translations/en.json'
+import nlTranslationMessages from 'translations/nl.json'
+
+const translations = {
+  en: enTranslationMessages,
+  nl: nlTranslationMessages,
+}
+
 const getObjectType = input => {
   if (input[0] === '.') return -1
   if (input.indexOf('e') !== -1) return -1
@@ -35,7 +45,7 @@ const getViewport = viewportStr => {
   }
 }
 
-const getTypes = typesStr => {
+const getTypes = (typesStr, locale) => {
   let segs = typesStr.split(',')
 
   let types = {
@@ -44,7 +54,7 @@ const getTypes = typesStr => {
     excludes: [],
   }
 
-  if (segs[0] === 'anything') {
+  if (segs[0].toLowerCase() === translations[locale]['carta.anything'].toLowerCase()) {
     types.all = true
     segs.splice(0, 1)
   }
@@ -61,7 +71,7 @@ const getTypes = typesStr => {
   return types
 }
 
-const getDescriptives = desStr => {
+const getDescriptives = (desStr, locale) => {
   let segs = desStr.split(',')
 
   let descriptives = {
@@ -71,7 +81,7 @@ const getDescriptives = desStr => {
     excludes: [],
   }
 
-  if (segs[0] === 'anything') {
+  if (segs[0].toLowerCase() === translations[locale]['carta.anything'].toLowerCase()) {
     descriptives.all = true
     segs.splice(0, 1)
   }
@@ -105,10 +115,10 @@ const getDescriptives = desStr => {
   return descriptives
 }
 
-export const urlParser = (viewportStr, typesStr, descriptivesStr) => {
+export const urlParser = (viewportStr, typesStr, descriptivesStr, locale) => {
   const viewport = getViewport(viewportStr)
-  const types = getTypes(typesStr)
-  const descriptives = getDescriptives(descriptivesStr)
+  const types = getTypes(typesStr, locale)
+  const descriptives = getDescriptives(descriptivesStr, locale)
 
   if (viewport && types && descriptives) {
     return {
@@ -129,7 +139,7 @@ export const getUrlStr = str => {
   return (str.charAt(0).toLowerCase() + str.slice(1)).replace(/ /g, '-')
 }
 
-export const composeUrl = (viewport, types, descriptives) => {
+export const urlComposer = (viewport, types, descriptives, locale) => {
   const { zoom, northeast, southwest, x, y } = viewport
   let viewportStr
   if (northeast && southwest) {
@@ -141,11 +151,11 @@ export const composeUrl = (viewport, types, descriptives) => {
   let typeStr = ''
   let descStr = ''
 
-  const typeAll = types.all ? 'anything' : undefined
+  const typeAll = types.all ? translations[locale]['carta.anything'].toLowerCase() : undefined
   const typeIncludes = types.includes.length > 0 ? types.includes.map(type => getUrlStr(type.en)).join(',') : undefined
   const typeExcludes = types.excludes.length > 0 ? types.excludes.map(type => getUrlStr(type.en)).join(',') : undefined
 
-  const descAll = descriptives.all ? 'anything' : undefined
+  const descAll = descriptives.all ? translations[locale]['carta.anything'].toLowerCase() : undefined
   const descStars = descriptives.stars.length > 0 ? descriptives.stars.map(type => `+${getUrlStr(type.en)}`).join(',') : undefined
   const descIncludes = descriptives.includes.length > 0 ? descriptives.includes.map(type => getUrlStr(type.en)).join(',') : undefined
   const descExcludes = descriptives.excludes.length > 0 ? descriptives.excludes.map(type => `-${getUrlStr(type.en)}`).join(',') : undefined

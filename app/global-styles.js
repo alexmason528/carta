@@ -84,6 +84,13 @@ injectGlobal`
 
   .show { display: block !important }
 
+  .invisible {
+    visibility: hidden;
+    width: 0;
+    opacity: 0;
+    left: 0;
+  }
+
   textarea, input {
     -khtml-user-select: text;
     -o-user-select: text;

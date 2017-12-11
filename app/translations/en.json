@@ -53,5 +53,6 @@
   "carta.passwordNotEqual": "These passwords are not identical",
   "carta.incorrectPassword": "Incorrect password",
   "carta.incorrectEmail": "We don't know this email. Register if you like!",
-  "carta.alreadyRegistered": "You are already registered. Please sign in"
+  "carta.alreadyRegistered": "You are already registered. Please sign in",
+  "carta.anything": "Anything"
 }

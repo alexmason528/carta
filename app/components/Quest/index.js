@@ -50,25 +50,49 @@ class Quest extends Component {
 
   render() {
     const { currentTab } = this.state
-    const { className, intl: { formatMessage } } = this.props
+    const { intl: { formatMessage } } = this.props
+
+    let section
+    if (currentTab === 0) {
+      section = <PlaceSection />
+    } else if (currentTab === 1) {
+      section = <TypeSection />
+    } else {
+      section = <DescriptiveSection />
+    }
+
+    const tabs = ['marker', 'check', 'star']
 
     return (
-      <div className={className}>
-        <div className="tabs">
-          <div className="line"></div>
-          <button className="next" onClick={this.handleNextBtnClick}>{ formatMessage(messages.next) }
+      <div className="quest">
+        <div className="quest__tabs">
+          <div className="quest__divider"></div>
+          <button className="quest__nextBtn" onClick={this.handleNextBtnClick}>{ formatMessage(messages.next) }
             <Img src={`${CLOUDINARY_ICON_URL}/next.png`} />
           </button>
-          <div className={cx({ tab: true, first: currentTab === 0, second: currentTab === 1, third: currentTab === 2 })}></div>
-          <Img className={cx({ 'places-tab': true, active: currentTab === 0 })} src={`${CLOUDINARY_ICON_URL}/marker.png`} onClick={() => { this.handleTabClick(0) }} />
-          <Img className={cx({ 'types-tab': true, active: currentTab === 1 })} src={`${CLOUDINARY_ICON_URL}/check.png`} onClick={() => { this.handleTabClick(1) }} />
-          <Img className={cx({ 'descriptives-tab': true, active: currentTab === 2 })} src={`${CLOUDINARY_ICON_URL}/star.png`} onClick={() => { this.handleTabClick(2) }} />
+          <div
+            className={cx({
+              quest__activeTab: true,
+              'quest__activeTab--first': currentTab === 0,
+              'quest__activeTab--second': currentTab === 1,
+              'quest__activeTab--third': currentTab === 2 }
+            )}
+          />
+          { tabs.map((tabIcon, index) => (
+            <Img
+              key={index}
+              className={cx({
+                quest__tabBtn: true,
+                'quest__tabBtn--active': currentTab === index,
+              })}
+              src={`${CLOUDINARY_ICON_URL}/${tabIcon}.png`}
+              onClick={() => { this.handleTabClick(index) }}
+            />
+          ))}
         </div>
 
-        <div className="pages">
-          <PlaceSection className={cx({ page: true, 'places-page': true, hidden: currentTab !== 0 })} />
-          <TypeSection className={cx({ page: true, 'types-page': true, hidden: currentTab !== 1 })} />
-          <DescriptiveSection className={cx({ page: true, 'descriptives-page': true, hidden: currentTab !== 2 })} />
+        <div className="quest__sections">
+          {section}
         </div>
       </div>
     )
