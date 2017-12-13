@@ -8,7 +8,7 @@
 import { map, join } from 'lodash'
 
 import messages from 'containers/HomePage/messages'
-import { LANGUAGES } from 'containers/LanguageProvider/constants'
+import { DEFAULT_LOCALE, LANGUAGES } from 'containers/LanguageProvider/constants'
 import enTranslationMessages from 'translations/en.json'
 import nlTranslationMessages from 'translations/nl.json'
 
@@ -44,7 +44,7 @@ const getViewport = viewportStr => {
   }
 }
 
-const getTypes = (typesStr, locale) => {
+const getTypes = typesStr => {
   let segs = typesStr.split(',')
 
   let types = {
@@ -53,16 +53,19 @@ const getTypes = (typesStr, locale) => {
     excludes: [],
   }
 
-  if (segs[0].toLowerCase() === translations[locale]['carta.anything'].toLowerCase()) {
+  if (segs[0].toLowerCase() === translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()) {
     types.all = true
     segs.splice(0, 1)
   }
 
-  for (let seg of segs) {
-    if (getObjectType(seg) !== -1) return null
-    if (types.all) {
+  if (types.all) {
+    for (let seg of segs) {
+      if (getObjectType(seg) !== -1 || seg[0] !== '-') return null
       types.excludes.push(seg)
-    } else {
+    }
+  } else {
+    for (let seg of segs) {
+      if (getObjectType(seg) !== -1 || seg[0] === '-') return null
       types.includes.push(seg)
     }
   }
@@ -70,7 +73,7 @@ const getTypes = (typesStr, locale) => {
   return types
 }
 
-const getDescriptives = (desStr, locale) => {
+const getDescriptives = desStr => {
   let segs = desStr.split(',')
 
   let descriptives = {
@@ -80,7 +83,7 @@ const getDescriptives = (desStr, locale) => {
     excludes: [],
   }
 
-  if (segs[0].toLowerCase() === translations[locale]['carta.anything'].toLowerCase()) {
+  if (segs[0].toLowerCase() === translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()) {
     descriptives.all = true
     segs.splice(0, 1)
   }
@@ -114,10 +117,10 @@ const getDescriptives = (desStr, locale) => {
   return descriptives
 }
 
-export const urlParser = (viewportStr, typesStr, descriptivesStr, locale) => {
+export const urlParser = (viewportStr, typesStr, descriptivesStr) => {
   const viewport = getViewport(viewportStr)
-  const types = getTypes(typesStr, locale)
-  const descriptives = getDescriptives(descriptivesStr, locale)
+  const types = getTypes(typesStr)
+  const descriptives = getDescriptives(descriptivesStr)
 
   if (viewport && types && descriptives) {
     return {
@@ -138,21 +141,21 @@ export const getUrlStr = str => {
   return (str.charAt(0).toLowerCase() + str.slice(1)).replace(/ /g, '-')
 }
 
-export const urlComposer = (viewport, types, descriptives, locale, brochure = '') => {
+export const urlComposer = (viewport, types, descriptives, brochure = '') => {
   const { zoom, center: { x, y } } = viewport
   let viewportStr = `${parseFloat(x).toFixed(4)},${parseFloat(y).toFixed(4)},${parseFloat(zoom).toFixed(2)}`
 
   let typeStr = ''
   let descStr = ''
 
-  const typeAll = types.all ? translations[locale]['carta.anything'].toLowerCase() : undefined
-  const typeIncludes = types.includes.length > 0 ? types.includes.map(type => getUrlStr(type.en)).join(',') : undefined
-  const typeExcludes = types.excludes.length > 0 ? types.excludes.map(type => getUrlStr(type.en)).join(',') : undefined
+  const typeAll = types.all ? translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase() : undefined
+  const typeIncludes = types.includes.length > 0 ? types.includes.map(type => getUrlStr(type[DEFAULT_LOCALE])).join(',') : undefined
+  const typeExcludes = types.excludes.length > 0 ? types.excludes.map(type => `-${getUrlStr(type[DEFAULT_LOCALE])}`).join(',') : undefined
 
-  const descAll = descriptives.all ? translations[locale]['carta.anything'].toLowerCase() : undefined
-  const descStars = descriptives.stars.length > 0 ? descriptives.stars.map(type => `+${getUrlStr(type.en)}`).join(',') : undefined
-  const descIncludes = descriptives.includes.length > 0 ? descriptives.includes.map(type => getUrlStr(type.en)).join(',') : undefined
-  const descExcludes = descriptives.excludes.length > 0 ? descriptives.excludes.map(type => `-${getUrlStr(type.en)}`).join(',') : undefined
+  const descAll = descriptives.all ? translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase() : undefined
+  const descStars = descriptives.stars.length > 0 ? descriptives.stars.map(type => `+${getUrlStr(type[DEFAULT_LOCALE])}`).join(',') : undefined
+  const descIncludes = descriptives.includes.length > 0 ? descriptives.includes.map(type => getUrlStr(type[DEFAULT_LOCALE])).join(',') : undefined
+  const descExcludes = descriptives.excludes.length > 0 ? descriptives.excludes.map(type => `-${getUrlStr(type[DEFAULT_LOCALE])}`).join(',') : undefined
 
   if (types.all) {
     let arr = [typeAll]

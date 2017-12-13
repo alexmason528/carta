@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react'
-import { injectIntl, intlShape } from 'react-intl'
 import Helmet from 'react-helmet'
 import cx from 'classnames'
 import { isEqual } from 'lodash'
-import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
@@ -28,7 +26,6 @@ class QuestPage extends Component {
   static propTypes = {
     getQuestInfoRequest: PropTypes.func,
     getRecommendationRequest: PropTypes.func,
-    injectIntl: PropTypes.func,
     viewport: PropTypes.object,
     descriptives: PropTypes.object,
     types: PropTypes.object,
@@ -40,7 +37,6 @@ class QuestPage extends Component {
       types: PropTypes.string,
       descriptives: PropTypes.string,
     }),
-    intl: intlShape.isRequired,
   }
 
   constructor(props) {
@@ -49,25 +45,24 @@ class QuestPage extends Component {
   }
 
   componentWillMount() {
-    const { params: { viewport, types, descriptives }, intl: { locale }, getQuestInfoRequest } = this.props
-    let questData = null
+    const { params: { viewport, types, descriptives }, getQuestInfoRequest } = this.props
+    let quest = null
     if (viewport && types && descriptives) {
-      const res = urlParser(viewport, types, descriptives, locale)
-      if (res) questData = { quest: res, locale }
+      quest = urlParser(viewport, types, descriptives)
     }
-    getQuestInfoRequest(questData)
+    getQuestInfoRequest(quest)
   }
 
   componentWillReceiveProps(nextProps) {
     const { types, descriptives, viewport, location: { pathname } } = this.props
-    const { params: { brochure }, intl: { locale } } = nextProps
+    const { params: { brochure } } = nextProps
     const isViewportEqual = isEqual(viewport, nextProps.viewport)
     const isTypesEqual = isEqual(types, nextProps.types)
     const isDescriptivesEqual = isEqual(descriptives, nextProps.descriptives)
     const shouldUpdate = (pathname === nextProps.location.pathname && brochure === nextProps.brochure)
 
     if ((!isViewportEqual || !isTypesEqual || !isDescriptivesEqual) && shouldUpdate) {
-      const { url } = urlComposer(nextProps.viewport, nextProps.types, nextProps.descriptives, locale, brochure)
+      const { url } = urlComposer(nextProps.viewport, nextProps.types, nextProps.descriptives, brochure)
       browserHistory.push(url)
     }
   }
@@ -114,7 +109,4 @@ const actions = {
   getRecommendationRequest,
 }
 
-export default compose(
-  injectIntl,
-  connect(selectors, actions),
-)(QuestPage)
+export default connect(selectors, actions)(QuestPage)

@@ -1,6 +1,7 @@
 import { findIndex, find } from 'lodash'
 import { getQuestStr } from 'utils/urlHelper'
 import { CENTER_COORDS } from 'containers/App/constants'
+import { DEFAULT_LOCALE } from 'containers/LanguageProvider/constants'
 import {
   MAP_CHANGE,
 
@@ -264,20 +265,19 @@ function questReducer(state = initialState, { type, payload }) {
       )
 
     case SET_DEFAULT_QUEST:
-      const { quest, locale } = payload
-      const { viewport, types, descriptives } = quest
+      const { viewport, types, descriptives } = payload
 
       newQuests = quests.map((quest, index) => {
         if (index === curQuestInd) {
           quest.types.all = types.all
           for (let type of types.includes) {
-            const typeObj = find(categories.types, { [locale]: getQuestStr(type) })
+            const typeObj = find(categories.types, { [DEFAULT_LOCALE]: getQuestStr(type) })
             if (typeObj) {
               quest.types.includes.push(typeObj)
             }
           }
           for (let type of types.excludes) {
-            const typeObj = find(categories.types, { [locale]: getQuestStr(type) })
+            const typeObj = find(categories.types, { [DEFAULT_LOCALE]: getQuestStr(type) })
             if (typeObj) {
               quest.types.excludes.push(typeObj)
             }
@@ -285,19 +285,19 @@ function questReducer(state = initialState, { type, payload }) {
 
           quest.descriptives.all = descriptives.all
           for (let desc of descriptives.stars) {
-            const descObj = find(categories.descriptives, { [locale]: getQuestStr(desc) })
+            const descObj = find(categories.descriptives, { [DEFAULT_LOCALE]: getQuestStr(desc) })
             if (descObj) {
               quest.descriptives.stars.push(descObj)
             }
           }
           for (let desc of descriptives.includes) {
-            const descObj = find(categories.descriptives, { [locale]: getQuestStr(desc) })
+            const descObj = find(categories.descriptives, { [DEFAULT_LOCALE]: getQuestStr(desc) })
             if (descObj) {
               quest.descriptives.includes.push(descObj)
             }
           }
           for (let desc of descriptives.excludes) {
-            const descObj = find(categories.descriptives, { [locale]: getQuestStr(desc) })
+            const descObj = find(categories.descriptives, { [DEFAULT_LOCALE]: getQuestStr(desc) })
             if (descObj) {
               quest.descriptives.excludes.push(descObj)
             }
