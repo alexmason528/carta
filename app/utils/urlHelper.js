@@ -140,7 +140,7 @@ export const getUrlStr = str => {
 
 export const urlComposer = (viewport, types, descriptives, locale, brochure = '') => {
   const { zoom, center: { x, y } } = viewport
-  let viewportStr = `${parseFloat(x).toFixed(2)},${parseFloat(y).toFixed(2)},${parseFloat(zoom).toFixed(1)}`
+  let viewportStr = `${parseFloat(x).toFixed(4)},${parseFloat(y).toFixed(4)},${parseFloat(zoom).toFixed(2)}`
 
   let typeStr = ''
   let descStr = ''
