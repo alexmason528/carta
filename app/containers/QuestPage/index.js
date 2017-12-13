@@ -15,10 +15,9 @@ import Menu from 'components/Menu'
 import SidePanel from 'components/SidePanel'
 import ScoreBoard from 'components/ScoreBoard'
 import { urlParser, urlComposer } from 'utils/urlHelper'
-import { mapChange, getQuestInfoRequest, getRecommendationRequest } from './actions'
+import { getQuestInfoRequest, getRecommendationRequest } from './actions'
 import {
   selectRecommendations,
-  selectPlaces,
   selectViewport,
   selectCurrentTypes,
   selectCurrentDescriptives,
@@ -27,7 +26,6 @@ import './style.scss'
 
 class QuestPage extends Component {
   static propTypes = {
-    mapChange: PropTypes.func,
     getQuestInfoRequest: PropTypes.func,
     getRecommendationRequest: PropTypes.func,
     injectIntl: PropTypes.func,
@@ -36,7 +34,6 @@ class QuestPage extends Component {
     types: PropTypes.object,
     location: PropTypes.object,
     recommendations: PropTypes.array,
-    places: PropTypes.array,
     params: PropTypes.shape({
       brochure: PropTypes.string,
       viewport: PropTypes.string,
@@ -62,14 +59,15 @@ class QuestPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { types, descriptives, viewport, location: { pathname }, intl: { locale } } = this.props
+    const { types, descriptives, viewport, location: { pathname } } = this.props
+    const { params: { brochure }, intl: { locale } } = nextProps
     const isViewportEqual = isEqual(viewport, nextProps.viewport)
     const isTypesEqual = isEqual(types, nextProps.types)
     const isDescriptivesEqual = isEqual(descriptives, nextProps.descriptives)
-    const shouldUpdate = pathname === nextProps.location.pathname
+    const shouldUpdate = (pathname === nextProps.location.pathname && brochure === nextProps.brochure)
 
     if ((!isViewportEqual || !isTypesEqual || !isDescriptivesEqual) && shouldUpdate) {
-      const { url } = urlComposer(nextProps.viewport, nextProps.types, nextProps.descriptives, locale)
+      const { url } = urlComposer(nextProps.viewport, nextProps.types, nextProps.descriptives, locale, brochure)
       browserHistory.push(url)
     }
   }
@@ -106,14 +104,12 @@ class QuestPage extends Component {
 
 const selectors = createStructuredSelector({
   recommendations: selectRecommendations(),
-  places: selectPlaces(),
   viewport: selectViewport(),
   types: selectCurrentTypes(),
   descriptives: selectCurrentDescriptives(),
 })
 
 const actions = {
-  mapChange,
   getQuestInfoRequest,
   getRecommendationRequest,
 }

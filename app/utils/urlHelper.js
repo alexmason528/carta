@@ -139,7 +139,7 @@ export const getUrlStr = str => {
   return (str.charAt(0).toLowerCase() + str.slice(1)).replace(/ /g, '-')
 }
 
-export const urlComposer = (viewport, types, descriptives, locale) => {
+export const urlComposer = (viewport, types, descriptives, locale, brochure = '') => {
   const { zoom, center: { x, y } } = viewport
   let viewportStr = `${x},${y},${zoom}`
 
@@ -177,7 +177,17 @@ export const urlComposer = (viewport, types, descriptives, locale) => {
   }
 
   const sendRequest = (viewportStr !== '' && typeStr !== '' && descStr !== '')
-  const url = sendRequest ? `/quest/${viewportStr}/${typeStr}/${descStr}` : '/quest'
+
+  let url
+  if (sendRequest && brochure) {
+    url = `/quest/${viewportStr}/${typeStr}/${descStr}/info/${brochure}`
+  } else if (sendRequest && !brochure) {
+    url = `/quest/${viewportStr}/${typeStr}/${descStr}`
+  } else if (!sendRequest && brochure) {
+    url = `/quest/info/${brochure}`
+  } else {
+    url = '/quest'
+  }
 
   return {
     viewport: viewportStr,

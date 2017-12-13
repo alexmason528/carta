@@ -179,8 +179,6 @@ export function* getQuestInfoWatcher() {
 
 export function* getBrochureWatcher() {
   const watcher = yield takeLatest(GET_BROCHURE_REQUEST, getBrochureRequestHandler)
-  yield take(LOCATION_CHANGE)
-  yield cancel(watcher)
 }
 
 export default [

@@ -25,4 +25,4 @@ App.propTypes = {
   children: PropTypes.node,
 }
 
-export default withProgressBar(App)
+export default App

@@ -3,9 +3,12 @@ import { getQuestStr } from 'utils/urlHelper'
 import { CENTER_COORDS } from 'containers/App/constants'
 import {
   MAP_CHANGE,
+
   PLACE_CLICK,
+
   TYPE_CLICK,
   TYPE_ANYTHING_CLICK,
+
   DESCRIPTIVE_CLICK,
   DESCRIPTIVE_STAR_CLICK,
   DESCRIPTIVE_ANYTHING_CLICK,

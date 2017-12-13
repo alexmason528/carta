@@ -58,7 +58,10 @@ class Map extends Component {
   }
 
   handleElementClick = name => {
-    browserHistory.push(`/quest/i/${name}`)
+    const { pathname } = browserHistory.getCurrentLocation()
+    if (pathname.indexOf('/info/') === -1) {
+      browserHistory.push(`${pathname}/info/${name}`)
+    }
   }
 
   handleZoomEnd = map => {
