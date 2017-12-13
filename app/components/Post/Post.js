@@ -33,7 +33,7 @@ class Post extends Component {
 
     let data
     if (editingPost && editingPost._id === _id) {
-      data = { ...this.props, ...this.props.editingPost, editing: true }
+      data = { ...this.props, ...editingPost, editing: true }
     } else {
       data = { ...this.props, editing: false }
     }

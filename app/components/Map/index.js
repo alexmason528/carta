@@ -76,7 +76,8 @@ class Map extends Component {
 
   handleStyleLoad = map => {
     this.map = map
-    this.props.mapChange({
+    const { mapChange } = this.props
+    mapChange({
       zoom: map.getZoom(),
       bounds: map.getBounds(),
       center: map.getCenter(),

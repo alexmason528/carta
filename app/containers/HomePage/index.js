@@ -127,12 +127,7 @@ class HomePage extends Component {
     const { posts, authenticated, user, signOut, updateUserRequest, info, intl: { locale, formatMessage }, editingPost } = this.props
     const { status, error } = info
     const filteredPosts = posts.filter(post => post.title[locale] !== '')
-
-    let createPostButtonType = 'text'
-
-    if (filteredPosts.length > 0 && filteredPosts[0].img) {
-      createPostButtonType = 'image'
-    }
+    const createPostButtonType = (filteredPosts.length > 0 && filteredPosts[0].img) ? 'image' : 'text'
 
     const firstCol = [6, 8, 9, 12, 15, 18, 21, 24]
     const secondCol = [0, 1, 4, 7, 10, 13, 16, 19, 22]
@@ -140,11 +135,7 @@ class HomePage extends Component {
 
     return (
       <Container fluid className="homePage">
-        <Helmet
-          meta={[
-            { name: 'description', content: 'Carta' },
-          ]}
-        />
+        <Helmet meta={[{ name: 'description', content: 'Carta' }]} />
         <Menu currentPage="Home" />
         <Row className="homePage__row">
           <Col lg={4} md={6} sm={12} xs={12} className="homePage__col">
@@ -170,9 +161,7 @@ class HomePage extends Component {
             <StartQuest authenticated={authenticated} />
             {
               filteredPosts && filteredPosts.map((post, key) => {
-                const { _id, content, created_at, img, title, link } = post
-
-                let data = {
+                const data = {
                   ...post,
                   key,
                   firstname: getFirstname(post.author.fullname),
@@ -189,16 +178,13 @@ class HomePage extends Component {
             <div>
               {
                 filteredPosts && filteredPosts.map((post, key) => {
-                  const { _id, content, created_at, img, title, link } = post
-
-                  let data = {
+                  const data = {
                     ...post,
                     key,
                     firstname: getFirstname(post.author.fullname),
                     editable: (authenticated && (post.author._id === user._id || user.role === 'admin')) && !editingPost && !showCreatePostForm,
                     first: (key === 0 && authenticated),
                   }
-
                   return (secondCol.indexOf(key) !== -1) ? <Post {...data} /> : null
                 })
               }
@@ -207,16 +193,13 @@ class HomePage extends Component {
           <Col lg={4} md={6} sm={12} xs={12} className="homePage__col">
             {
               filteredPosts && filteredPosts.map((post, key) => {
-                const { _id, content, created_at, img, title, link } = post
-
-                let data = {
+                const data = {
                   ...post,
                   key,
                   firstname: getFirstname(post.author.fullname),
                   editable: (authenticated && (post.author._id === user._id || user.role === 'admin')) && !editingPost && !showCreatePostForm,
                   first: (key === 0 && authenticated),
                 }
-
                 return (thirdCol.indexOf(key) !== -1) ? <Post {...data} /> : null
               })
             }

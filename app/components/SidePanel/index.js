@@ -24,19 +24,21 @@ class SidePanel extends Component {
   }
 
   handleQuestAdd = () => {
-    this.props.questAdd()
+    const { questAdd } = this.props
+    questAdd()
   }
 
   handleQuestSelect = ind => {
-    this.props.questSelect(ind)
-    this.props.getRecommendationRequest()
+    const { questSelect, getRecommendationRequest } = this.props
+    questSelect(ind)
+    getRecommendationRequest()
   }
 
   handleQuestRemove = (evt, ind) => {
     evt.preventDefault()
 
-    const { curQuestInd, questCnt } = this.props
-    if (curQuestInd !== ind && questCnt !== 1) this.props.questRemove(ind)
+    const { curQuestInd, questCnt, questRemove } = this.props
+    if (curQuestInd !== ind && questCnt !== 1) questRemove(ind)
   }
 
   render() {

@@ -61,18 +61,21 @@ class DescriptiveSection extends Component {
   }
 
   handleAnythingClick = () => {
-    this.props.descriptiveAnythingClick()
-    this.props.getRecommendationRequest()
+    const { descriptiveAnythingClick, getRecommendationRequest } = this.props
+    descriptiveAnythingClick()
+    getRecommendationRequest()
   }
 
   handleDescClick = (desc, active) => {
-    this.props.descriptiveClick({ desc, active })
-    this.props.getRecommendationRequest()
+    const { descriptiveClick, getRecommendationRequest } = this.props
+    descriptiveClick({ desc, active })
+    getRecommendationRequest()
   }
 
   handleStarClick = (desc, star) => {
-    this.props.descriptiveStarClick({ desc, star })
-    this.props.getRecommendationRequest()
+    const { descriptiveStarClick, getRecommendationRequest } = this.props
+    descriptiveStarClick({ desc, star })
+    getRecommendationRequest()
   }
 
   render() {

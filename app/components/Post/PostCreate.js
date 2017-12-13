@@ -284,7 +284,7 @@ class PostCreate extends Component {
   }
 
   render() {
-    const { show, onClose, user: { fullname }, info: { error, status }, intl: { formatMessage } } = this.props
+    const { show, onClose, user: { fullname }, info: { error, status }, intl: { formatMessage }, intl } = this.props
     const {
       img,
       title,
@@ -298,12 +298,12 @@ class PostCreate extends Component {
       showError,
     } = this.state
 
-    const defaultTexts = getDefaultTexts(locale, this.props.intl.locale)
+    const defaultTexts = getDefaultTexts(locale, intl.locale)
     const showPostLinkButton = !showLinkBar
     const showImage = status !== CREATE_POST_REQUEST
     const spinnerShow = status === CREATE_POST_REQUEST || imageUpload.uploading
-    const dropdownDisabled = !isLanguageSelectable(title, img, content, this.props.intl.locale)
-    const { postType, remainCharCnts, submitError } = getSubmitInfo(title, img, content, this.props.intl.locale, locale, formatMessage)
+    const dropdownDisabled = !isLanguageSelectable(title, img, content, intl.locale)
+    const { postType, remainCharCnts, submitError } = getSubmitInfo(title, img, content, intl.locale, locale, formatMessage)
 
     return (
       <div className="postContainer">

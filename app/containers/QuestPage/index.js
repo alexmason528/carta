@@ -48,48 +48,30 @@ class QuestPage extends Component {
 
   constructor(props) {
     super(props)
-
-    this.state = {
-      panelState: 'opened',
-    }
+    this.state = { panelState: 'opened' }
   }
 
   componentWillMount() {
-    const { params: { viewport, types, descriptives }, intl: { locale }, getRecommendationRequest } = this.props
-
+    const { params: { viewport, types, descriptives }, intl: { locale }, getQuestInfoRequest } = this.props
     let questData = null
     if (viewport && types && descriptives) {
       const res = urlParser(viewport, types, descriptives, locale)
-
-      if (res) {
-        questData = { quest: res, locale }
-      }
+      if (res) questData = { quest: res, locale }
     }
-
-    this.props.getQuestInfoRequest(questData)
+    getQuestInfoRequest(questData)
   }
 
   componentWillReceiveProps(nextProps) {
-    // const { types, descriptives, viewport, location: { pathname }, intl: { locale } } = this.props
+    const { types, descriptives, viewport, location: { pathname }, intl: { locale } } = this.props
+    const isViewportEqual = isEqual(viewport, nextProps.viewport)
+    const isTypesEqual = isEqual(types, nextProps.types)
+    const isDescriptivesEqual = isEqual(descriptives, nextProps.descriptives)
+    const shouldUpdate = pathname === nextProps.location.pathname
 
-    // const isViewportEqual = isEqual(viewport, nextProps.viewport)
-    // const isTypesEqual = isEqual(types, nextProps.types)
-    // const isDescriptivesEqual = isEqual(descriptives, nextProps.descriptives)
-    // const shouldUpdate = pathname !== nextProps.location.pathname
-
-    // if (!isViewportEqual || !isTypesEqual || !isDescriptivesEqual || shouldUpdate) {
-    //   const { url, sendRequest, viewport, types, descriptives } = urlComposer(nextProps.viewport, nextProps.types, nextProps.descriptives, locale)
-    //   if (pathname !== url) {
-    //     if (sendRequest) {
-    //       browserHistory.push(url)
-    //     } else {
-    //       browserHistory.push('/quest')
-    //     }
-    //     this.props.getRecommendationRequest()
-    //   }
-    // }
-
-    // this.handleRedrawMap(nextProps)
+    if ((!isViewportEqual || !isTypesEqual || !isDescriptivesEqual) && shouldUpdate) {
+      const { url } = urlComposer(nextProps.viewport, nextProps.types, nextProps.descriptives, locale)
+      browserHistory.push(url)
+    }
   }
 
   handleQuestBtnClick = state => {
@@ -102,11 +84,7 @@ class QuestPage extends Component {
 
     return (
       <Container fluid className="questPage">
-        <Helmet
-          meta={[
-            { name: 'description', content: 'Carta' },
-          ]}
-        />
+        <Helmet meta={[{ name: 'Quest', content: 'Carta' }]} />
         <Menu currentPage="Quest" />
         <QuestButton
           panelState={panelState}

@@ -8,6 +8,7 @@ import request from 'utils/request'
 import { urlComposer } from 'utils/urlHelper'
 import { GET_BROCHURE_REQUEST, GET_RECOMMENDATION_REQUEST, GET_QUESTINFO_REQUEST, DESCRIPTIVE_ANYTHING_CLICK } from './constants'
 import {
+  getRecommendationRequest,
   getRecommendationSuccess,
   getRecommendationFail,
   getQuestInfoSuccess,
@@ -17,7 +18,7 @@ import {
   setDefaultQuest,
 } from './actions'
 
-export function* getRecommendationRequest() {
+export function* getRecommendationRequestHandler() {
   const viewport = yield select(selectViewport())
   const questTypes = yield select(selectTypes())
   const curTypes = yield select(selectCurrentTypes())
@@ -95,7 +96,7 @@ export function* getRecommendationRequest() {
   }
 }
 
-export function* getQuestInfoRequest({ payload }) {
+export function* getQuestInfoRequestHandler({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/map/questinfo/`
 
   const params = {
@@ -136,13 +137,14 @@ export function* getQuestInfoRequest({ payload }) {
     yield put(getQuestInfoSuccess(questData))
     if (payload) {
       yield put(setDefaultQuest(payload))
+      yield put(getRecommendationRequest())
     }
   } catch (err) {
     yield put(getQuestInfoFail(err.toString()))
   }
 }
 
-export function* getBrochureRequest({ payload }) {
+export function* getBrochureRequestHandler({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/map/place/`
 
   const data = {
@@ -166,19 +168,17 @@ export function* getBrochureRequest({ payload }) {
 }
 
 export function* getRecommendationWatcher() {
-  const watcher = yield takeLatest(GET_RECOMMENDATION_REQUEST, getRecommendationRequest)
-  yield take(LOCATION_CHANGE)
-  yield cancel(watcher)
+  const watcher = yield takeLatest(GET_RECOMMENDATION_REQUEST, getRecommendationRequestHandler)
 }
 
 export function* getQuestInfoWatcher() {
-  const watcher = yield takeLatest(GET_QUESTINFO_REQUEST, getQuestInfoRequest)
+  const watcher = yield takeLatest(GET_QUESTINFO_REQUEST, getQuestInfoRequestHandler)
   yield take(LOCATION_CHANGE)
   yield cancel(watcher)
 }
 
 export function* getBrochureWatcher() {
-  const watcher = yield takeLatest(GET_BROCHURE_REQUEST, getBrochureRequest)
+  const watcher = yield takeLatest(GET_BROCHURE_REQUEST, getBrochureRequestHandler)
   yield take(LOCATION_CHANGE)
   yield cancel(watcher)
 }

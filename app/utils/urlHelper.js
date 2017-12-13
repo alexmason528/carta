@@ -140,13 +140,8 @@ export const getUrlStr = str => {
 }
 
 export const urlComposer = (viewport, types, descriptives, locale) => {
-  const { zoom, northeast, southwest, x, y } = viewport
-  let viewportStr
-  if (northeast && southwest) {
-    viewportStr = `${((northeast.x + southwest.x) / 2).toFixed(2)},${((northeast.y + southwest.y) / 2).toFixed(2)},${zoom}`
-  } else {
-    viewportStr = `${x},${y},${zoom.toFixed(2)}`
-  }
+  const { zoom, center: { x, y } } = viewport
+  let viewportStr = `${x},${y},${zoom}`
 
   let typeStr = ''
   let descStr = ''
@@ -181,14 +176,14 @@ export const urlComposer = (viewport, types, descriptives, locale) => {
     descStr = arr.join(',')
   }
 
-  const url = `${viewportStr}/${typeStr}/${descStr}`
   const sendRequest = (viewportStr !== '' && typeStr !== '' && descStr !== '')
+  const url = sendRequest ? `/quest/${viewportStr}/${typeStr}/${descStr}` : '/quest'
 
   return {
     viewport: viewportStr,
     types: typeStr,
     descriptives: descStr,
-    url: `/quest/q/${viewportStr}/${typeStr}/${descStr}`,
+    url,
     sendRequest,
   }
 }
