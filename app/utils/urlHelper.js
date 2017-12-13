@@ -117,16 +117,16 @@ const getDescriptives = desStr => {
   return descriptives
 }
 
-export const urlParser = (viewportStr, typesStr, descriptivesStr) => {
-  const viewport = getViewport(viewportStr)
-  const types = getTypes(typesStr)
-  const descriptives = getDescriptives(descriptivesStr)
+export const urlParser = ({ viewport, types, descriptives }) => {
+  const resViewport = getViewport(viewport)
+  const resTypes = getTypes(types)
+  const resDescriptives = getDescriptives(descriptives)
 
-  if (viewport && types && descriptives) {
+  if (resViewport && resTypes && resDescriptives) {
     return {
-      viewport,
-      types,
-      descriptives,
+      viewport: resViewport,
+      types: resTypes,
+      descriptives: resDescriptives,
     }
   } else {
     return null
@@ -141,9 +141,9 @@ export const getUrlStr = str => {
   return (str.charAt(0).toLowerCase() + str.slice(1)).replace(/ /g, '-')
 }
 
-export const urlComposer = (viewport, types, descriptives, brochure = '') => {
+export const urlComposer = ({ viewport, types, descriptives, brochure }) => {
   const { zoom, center: { x, y } } = viewport
-  let viewportStr = `${parseFloat(x).toFixed(4)},${parseFloat(y).toFixed(4)},${parseFloat(zoom).toFixed(4)}`
+  let viewportStr = `${x},${y},${zoom}`
 
   let typeStr = ''
   let descStr = ''
@@ -182,9 +182,9 @@ export const urlComposer = (viewport, types, descriptives, brochure = '') => {
 
   let url
   if (sendRequest && brochure) {
-    url = `/quest/${viewportStr}/${typeStr}/${descStr}/info/${brochure}`
+    url = `/quest/${typeStr}/${descStr}/${viewportStr}/info/${brochure}`
   } else if (sendRequest && !brochure) {
-    url = `/quest/${viewportStr}/${typeStr}/${descStr}`
+    url = `/quest/${typeStr}/${descStr}/${viewportStr}`
   } else if (!sendRequest && brochure) {
     url = `/quest/info/${brochure}`
   } else {

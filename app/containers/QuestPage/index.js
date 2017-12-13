@@ -48,7 +48,7 @@ class QuestPage extends Component {
     const { params: { viewport, types, descriptives }, getQuestInfoRequest } = this.props
     let quest = null
     if (viewport && types && descriptives) {
-      quest = urlParser(viewport, types, descriptives)
+      quest = urlParser({ viewport, types, descriptives })
     }
     getQuestInfoRequest(quest)
   }
@@ -62,7 +62,8 @@ class QuestPage extends Component {
     const shouldUpdate = (pathname === nextProps.location.pathname && brochure === nextProps.brochure)
 
     if ((!isViewportEqual || !isTypesEqual || !isDescriptivesEqual) && shouldUpdate) {
-      const { url } = urlComposer(nextProps.viewport, nextProps.types, nextProps.descriptives, brochure)
+      const { viewport, types, descriptives } = nextProps
+      const { url } = urlComposer({ viewport, types, descriptives, brochure })
       browserHistory.push(url)
     }
   }

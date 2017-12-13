@@ -85,7 +85,12 @@ export function* getRecommendationRequestHandler() {
     },
   }
 
-  const { sendRequest } = urlComposer(viewport, curTypes, curDescriptives, locale)
+  const { sendRequest } = urlComposer({
+    viewport,
+    types: curTypes,
+    descriptives: curDescriptives,
+    brochure: '',
+  })
 
   let res = []
   try {
