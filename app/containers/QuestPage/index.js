@@ -54,18 +54,18 @@ class QuestPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // const { types, descriptives, viewport, location: { pathname } } = this.props
-    // const { params: { brochure } } = nextProps
-    // const isViewportEqual = isEqual(viewport, nextProps.viewport)
-    // const isTypesEqual = isEqual(types, nextProps.types)
-    // const isDescriptivesEqual = isEqual(descriptives, nextProps.descriptives)
-    // const shouldUpdate = (pathname === nextProps.location.pathname && brochure === nextProps.brochure)
+    const { types, descriptives, viewport, location: { pathname } } = this.props
+    const { params: { brochure } } = nextProps
+    const isViewportEqual = isEqual(viewport, nextProps.viewport)
+    const isTypesEqual = isEqual(types, nextProps.types)
+    const isDescriptivesEqual = isEqual(descriptives, nextProps.descriptives)
+    const shouldUpdate = (pathname === nextProps.location.pathname && brochure === nextProps.brochure)
 
-    // if ((!isViewportEqual || !isTypesEqual || !isDescriptivesEqual) && shouldUpdate) {
-    //   const { viewport, types, descriptives } = nextProps
-    //   const { url } = urlComposer({ viewport, types, descriptives, brochure })
-    //   browserHistory.push(url)
-    // }
+    if ((!isViewportEqual || !isTypesEqual || !isDescriptivesEqual) && shouldUpdate) {
+      const { viewport, types, descriptives } = nextProps
+      const { url } = urlComposer({ viewport, types, descriptives, brochure })
+      browserHistory.push(url)
+    }
   }
 
   handleQuestBtnClick = state => {
