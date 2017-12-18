@@ -142,8 +142,8 @@ export function* getQuestInfoRequestHandler({ payload }) {
     yield put(getQuestInfoSuccess(questData))
     if (payload) {
       yield put(setDefaultQuest(payload))
-      yield put(getRecommendationRequest())
     }
+    yield put(getRecommendationRequest())
   } catch (err) {
     yield put(getQuestInfoFail(err.toString()))
   }

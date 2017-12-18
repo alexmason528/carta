@@ -58,6 +58,11 @@ const selectInfo = () => createSelector(
   substate => ({ status: substate.status, error: substate.error })
 )
 
+const selectCurrentQuest = () => createSelector(
+  selectQuest,
+  substate => substate.quests[substate.curQuestInd]
+)
+
 export {
   selectQuest,
   selectRecommendations,
@@ -74,4 +79,5 @@ export {
   selectCurrentDescriptives,
   selectBrochure,
   selectInfo,
+  selectCurrentQuest,
 }

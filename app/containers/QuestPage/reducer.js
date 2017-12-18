@@ -1,7 +1,8 @@
 import { findIndex, find } from 'lodash'
-import { getQuestStr } from 'utils/urlHelper'
 import { CENTER_COORDS } from 'containers/App/constants'
 import { DEFAULT_LOCALE } from 'containers/LanguageProvider/constants'
+import { getQuestStr } from 'utils/urlHelper'
+import { getItem, setItem } from 'utils/localStorage'
 import {
   MAP_CHANGE,
 
@@ -35,7 +36,7 @@ import {
   GET_BROCHURE_FAIL,
 } from './constants'
 
-const initialQuest = {
+export const initialQuest = {
   types: {
     all: false,
     includes: [],
@@ -51,28 +52,30 @@ const initialQuest = {
   },
 }
 
+const initialViewport = {
+  northeast: {
+    x: 8.019265624981585,
+    y: 55.18678597629906,
+  },
+  southwest: {
+    x: 3.624734374990169,
+    y: 48.87383712585131,
+  },
+  center: {
+    x: 5.822,
+    y: 52.142,
+  },
+  zoom: 6,
+}
+
 const initialState = {
   categories: {
     places: [],
     types: [],
     descriptives: [],
   },
-  viewport: {
-    northeast: {
-      x: 8.019265624981585,
-      y: 55.18678597629906,
-    },
-    southwest: {
-      x: 3.624734374990169,
-      y: 48.87383712585131,
-    },
-    center: {
-      x: 5.822,
-      y: 52.142,
-    },
-    zoom: 6,
-  },
-  quests: [JSON.parse(JSON.stringify(initialQuest))],
+  viewport: JSON.parse(getItem('viewport')) || initialViewport,
+  quests: JSON.parse(getItem('quests')) || [JSON.parse(JSON.stringify(initialQuest))],
   curQuestInd: 0,
   recommendations: [],
   brochure: null,
@@ -84,44 +87,52 @@ function questReducer(state = initialState, { type, payload }) {
   const { curQuestInd, categories } = state
   let quests = JSON.parse(JSON.stringify(state.quests))
   let newQuests
+  let newViewport
 
   switch (type) {
     case MAP_CHANGE:
       const { zoom, bounds: { _ne, _sw }, center: { lng, lat } } = payload
-
-      return {
-        ...state,
-        status: type,
-        viewport: {
-          ...state.viewport,
-          zoom,
-          northeast: {
-            x: _ne.lng,
-            y: _ne.lat,
-          },
-          southwest: {
-            x: _sw.lng,
-            y: _sw.lat,
-          },
-          center: {
-            x: lng,
-            y: lat,
-          },
+      newViewport = {
+        ...state.viewport,
+        zoom,
+        northeast: {
+          x: _ne.lng,
+          y: _ne.lat,
+        },
+        southwest: {
+          x: _sw.lng,
+          y: _sw.lat,
+        },
+        center: {
+          x: lng,
+          y: lat,
         },
       }
 
-    case PLACE_CLICK:
+      setItem('viewport', JSON.stringify(newViewport))
+
       return {
         ...state,
         status: type,
-        viewport: {
-          ...state.viewport,
-          center: {
-            x: payload.x,
-            y: payload.y,
-          },
-          zoom: payload.zoom,
+        viewport: newViewport,
+      }
+
+    case PLACE_CLICK:
+      newViewport = {
+        ...state.viewport,
+        center: {
+          x: payload.x,
+          y: payload.y,
         },
+        zoom: payload.zoom,
+      }
+
+      setItem('viewport', JSON.stringify(newViewport))
+
+      return {
+        ...state,
+        status: type,
+        viewport: newViewport,
       }
 
     case TYPE_CLICK:
@@ -144,6 +155,8 @@ function questReducer(state = initialState, { type, payload }) {
         return quest
       })
 
+      setItem('quests', JSON.stringify(newQuests))
+
       return {
         ...state,
         status: type,
@@ -162,6 +175,8 @@ function questReducer(state = initialState, { type, payload }) {
         }
         return quest
       })
+
+      setItem('quests', JSON.stringify(newQuests))
 
       return {
         ...state,
@@ -191,6 +206,8 @@ function questReducer(state = initialState, { type, payload }) {
         return quest
       })
 
+      setItem('quests', JSON.stringify(newQuests))
+
       return {
         ...state,
         status: type,
@@ -216,6 +233,8 @@ function questReducer(state = initialState, { type, payload }) {
         return quest
       })
 
+      setItem('quests', JSON.stringify(newQuests))
+
       return {
         ...state,
         status: type,
@@ -237,6 +256,8 @@ function questReducer(state = initialState, { type, payload }) {
         return quest
       })
 
+      setItem('quests', JSON.stringify(newQuests))
+
       return {
         ...state,
         status: type,
@@ -244,10 +265,14 @@ function questReducer(state = initialState, { type, payload }) {
       }
 
     case QUEST_ADD:
+      newQuests = [...quests, JSON.parse(JSON.stringify(initialQuest))]
+
+      setItem('quests', JSON.stringify(newQuests))
+
       return {
         ...state,
         status: type,
-        quests: [...quests, JSON.parse(JSON.stringify(initialQuest))],
+        quests: newQuests,
       }
 
     case QUEST_SELECT:
@@ -259,6 +284,9 @@ function questReducer(state = initialState, { type, payload }) {
 
     case QUEST_REMOVE:
       quests.splice(payload, 1)
+
+      setItem('quests', JSON.stringify(quests))
+
       return Object.assign({},
         { ...state, status: type, quests },
         (payload < curQuestInd) && { curQuestInd: curQuestInd - 1 },
@@ -306,12 +334,17 @@ function questReducer(state = initialState, { type, payload }) {
         return quest
       })
 
+      newViewport = {
+        ...state.viewport,
+        ...viewport,
+      }
+
+      setItem('viewport', JSON.stringify(newViewport))
+      setItem('quests', JSON.stringify(newQuests))
+
       return {
         ...state,
-        viewport: {
-          ...state.viewport,
-          ...viewport,
-        },
+        viewport: newViewport,
         status: type,
         quests: newQuests,
       }
@@ -324,6 +357,8 @@ function questReducer(state = initialState, { type, payload }) {
         }
         return quest
       })
+
+      setIteem('quests', JSON.stringify(newQuests))
 
       return {
         ...state,

@@ -14,11 +14,13 @@ import SidePanel from 'components/SidePanel'
 import ScoreBoard from 'components/ScoreBoard'
 import { urlParser, urlComposer } from 'utils/urlHelper'
 import { getQuestInfoRequest, getRecommendationRequest } from './actions'
+import { initialQuest } from './reducer'
 import {
   selectRecommendations,
   selectViewport,
   selectCurrentTypes,
   selectCurrentDescriptives,
+  selectCurrentQuest,
 } from './selectors'
 import './style.scss'
 
@@ -28,6 +30,7 @@ class QuestPage extends Component {
     getRecommendationRequest: PropTypes.func,
     viewport: PropTypes.object,
     descriptives: PropTypes.object,
+    quest: PropTypes.object,
     types: PropTypes.object,
     location: PropTypes.object,
     recommendations: PropTypes.array,
@@ -54,16 +57,19 @@ class QuestPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { types, descriptives, viewport, location: { pathname } } = this.props
-    const { params: { brochure } } = nextProps
+    const { types, descriptives, viewport, location: { pathname }, quest } = this.props
+    const { params } = nextProps
     const isViewportEqual = isEqual(viewport, nextProps.viewport)
     const isTypesEqual = isEqual(types, nextProps.types)
     const isDescriptivesEqual = isEqual(descriptives, nextProps.descriptives)
-    const shouldUpdate = (pathname === nextProps.location.pathname && brochure === nextProps.brochure)
+    const isParamInequal = !isViewportEqual || !isTypesEqual || !isDescriptivesEqual
+    const isParamEmpty = !params.viewport && !params.types && !params.descriptives
+    const isInitialQuest = isEqual(initialQuest, quest)
+    const shouldUpdate = (pathname === nextProps.location.pathname && params.brochure === nextProps.brochure)
 
-    if ((!isViewportEqual || !isTypesEqual || !isDescriptivesEqual) && shouldUpdate) {
+    if (isParamInequal && (shouldUpdate || (isParamInequal && isInitialQuest))) {
       const { viewport, types, descriptives } = nextProps
-      const { url } = urlComposer({ viewport, types, descriptives, brochure })
+      const { url } = urlComposer({ viewport, types, descriptives, brochure: params.brochure })
       browserHistory.push(url)
     }
   }
@@ -103,6 +109,7 @@ const selectors = createStructuredSelector({
   viewport: selectViewport(),
   types: selectCurrentTypes(),
   descriptives: selectCurrentDescriptives(),
+  quest: selectCurrentQuest(),
 })
 
 const actions = {
