@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import cx from 'classnames'
 import { Link, withRouter, browserHistory } from 'react-router'
@@ -14,7 +13,6 @@ import { changeLocale } from 'containers/LanguageProvider/actions'
 import messages from 'containers/HomePage/messages'
 import Img from 'components/Img'
 import { MobileUp } from 'components/Responsive'
-import { urlComposer } from 'utils/urlHelper'
 import './style.scss'
 
 class Menu extends Component {
@@ -66,9 +64,7 @@ class Menu extends Component {
     const { showMenu } = this.state
     const {
       authenticated,
-      signOut,
       currentPage,
-      changeLocale,
       intl: {
         formatMessage,
         locale,

@@ -1,13 +1,12 @@
 import React, { Component, PropTypes } from 'react'
 import Helmet from 'react-helmet'
-import cx from 'classnames'
 import { isEqual } from 'lodash'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
 import { Container } from 'reactstrap'
 import Brochure from 'containers/Brochure'
-import { Button, QuestButton } from 'components/Buttons'
+import { QuestButton } from 'components/Buttons'
 import Map from 'components/Map'
 import Menu from 'components/Menu'
 import SidePanel from 'components/SidePanel'
@@ -63,7 +62,6 @@ class QuestPage extends Component {
     const isTypesEqual = isEqual(types, nextProps.types)
     const isDescriptivesEqual = isEqual(descriptives, nextProps.descriptives)
     const isParamInequal = !isViewportEqual || !isTypesEqual || !isDescriptivesEqual
-    const isParamEmpty = !params.viewport && !params.types && !params.descriptives
     const isInitialQuest = isEqual(initialQuest, quest)
     const shouldUpdate = (pathname === nextProps.location.pathname && params.brochure === nextProps.brochure)
 

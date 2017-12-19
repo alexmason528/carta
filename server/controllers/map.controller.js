@@ -55,8 +55,7 @@ const getQuestInfo = (req, res) => {
  * @returns void
  */
 const getRecommendations = (req, res) => {
-  const { count, viewport, types, descriptives } = req.body
-  let columns = []
+  const { viewport, types, descriptives } = req.body
   let typeMatch = []
 
   types.includes.map((type) => {
