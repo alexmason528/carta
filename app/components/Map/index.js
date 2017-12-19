@@ -57,10 +57,10 @@ class Map extends Component {
     this.handleRedrawMap(nextProps)
   }
 
-  handleElementClick = name => {
+  handleElementClick = link => {
     const { pathname } = browserHistory.getCurrentLocation()
     if (pathname.indexOf('/info/') === -1) {
-      browserHistory.push(`${pathname}/info/${name}`)
+      browserHistory.push(`${pathname}/info/${link}`)
     }
   }
 
@@ -150,8 +150,8 @@ class Map extends Component {
       })
 
       this.map.on('click', shapeFill, data => {
-        const name = data.features[0].properties.name
-        this.handleElementClick(name)
+        const link = data.features[0].properties.link
+        this.handleElementClick(link)
       })
     })
   }
@@ -192,8 +192,8 @@ class Map extends Component {
       })
 
       this.map.on('click', shapeCaption, data => {
-        const name = data.features[0].properties.name
-        this.handleElementClick(name)
+        const link = data.features[0].properties.link
+        this.handleElementClick(link)
       })
     })
   }

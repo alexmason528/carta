@@ -228,15 +228,15 @@ const getRecommendations = (req, res) => {
 }
 
 /**
- * Get recommendations
+ * Get brochure
  * @param req
  * @param res
- * @returns void
+ * @returns brochure
  */
-const getPlace = (req, res) => {
-  const { name } = req.body
+const getBrochure = (req, res) => {
+  const { link } = req.body
 
-  Place.findOne({ name: name }, { _id: 0, e: 0, name: 0 }, (err, place) => {
+  Place.findOne({ link }, { _id: 0, e: 0, name: 0 }, (err, place) => {
     if (err) throw err
     return res.json(place || {})
   })
@@ -244,4 +244,4 @@ const getPlace = (req, res) => {
 
 module.exports.getQuestInfo = getQuestInfo
 module.exports.getRecommendations = getRecommendations
-module.exports.getPlace = getPlace
+module.exports.getBrochure = getBrochure

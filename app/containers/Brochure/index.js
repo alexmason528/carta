@@ -2,10 +2,12 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import Helmet from 'react-helmet'
 import { connect } from 'react-redux'
+import { compose } from 'redux'
 import cx from 'classnames'
 import { Container, Row, Col } from 'reactstrap'
 import { createStructuredSelector } from 'reselect'
-import { browserHistory } from 'react-router'
+import { browserHistory, withRouter } from 'react-router'
+import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { getBrochureRequest } from 'containers/QuestPage/actions'
 import { selectBrochure } from 'containers/QuestPage/selectors'
 import Img from 'components/Img'
@@ -15,13 +17,20 @@ import './style.scss'
 class Brochure extends Component {
   static propTypes = {
     getBrochureRequest: PropTypes.func,
+    params: PropTypes.object,
     brochure: PropTypes.object,
-    name: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired,
   }
 
   componentDidMount() {
-    const { getBrochureRequest, name } = this.props
-    getBrochureRequest(name)
+    const { getBrochureRequest, link } = this.props
+    getBrochureRequest(link)
+  }
+
+  handleBrochureClose = () => {
+    const { params: { viewport, types, descriptives } } = this.props
+    const url = (viewport && types && descriptives) ? `/quest/${viewport}/${types}/${descriptives}/` : 'quest'
+    browserHistory.push(url)
   }
 
   render() {
@@ -40,6 +49,11 @@ class Brochure extends Component {
           }
           { description &&
             <Col lg={4} md={12} sm={12} xs={12} className="brochure__col">
+              <div className="brochure__menu">
+                <button className="brochure__closeBtn" onClick={this.handleBrochureClose}>
+                  <Img src={`${CLOUDINARY_ICON_URL}/close-white-shadow.png`} />
+                </button>
+              </div>
               <Row className="brochure__row">
                 <Col lg={12} md={6} sm={12} xs={12} className="brochure__col">
                   <TextTile type="description" title={''} content={description.text.content} />
@@ -70,4 +84,7 @@ const actions = {
   getBrochureRequest,
 }
 
-export default connect(selectors, actions)(Brochure)
+export default compose(
+  withRouter,
+  connect(selectors, actions)
+)(Brochure)

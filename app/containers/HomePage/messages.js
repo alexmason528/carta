@@ -153,4 +153,8 @@ export default defineMessages({
     id: 'carta.now',
     defaultMessage: 'Now',
   },
+  map: {
+    id: 'carta.map',
+    defaultMessage: 'Map',
+  },
 })

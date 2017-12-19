@@ -36,6 +36,18 @@
     position: relative;
   }
 
+  &__menu {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    z-index: 100;
+  }
+
+  &__closeBtn img {
+    width: 30px;
+    height: 30px;
+  }
+
   .mainPoster {
     padding: 0;
 

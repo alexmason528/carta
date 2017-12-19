@@ -150,10 +150,10 @@ export function* getQuestInfoRequestHandler({ payload }) {
 }
 
 export function* getBrochureRequestHandler({ payload }) {
-  const requestURL = `${API_BASE_URL}api/v1/map/place/`
+  const requestURL = `${API_BASE_URL}api/v1/map/brochure/`
 
   const data = {
-    name: payload,
+    link: payload,
   }
 
   const params = {

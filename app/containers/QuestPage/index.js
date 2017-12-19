@@ -98,7 +98,7 @@ class QuestPage extends Component {
         />
         <Map panelState={panelState} />
         { (recommendations.length > 0) && <ScoreBoard recommendations={recommendations} /> }
-        { brochure && <Brochure name={brochure} />}
+        { brochure && <Brochure link={brochure} />}
       </Container>
     )
   }

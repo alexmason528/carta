@@ -182,9 +182,9 @@ export const urlComposer = ({ viewport, types, descriptives, brochure }) => {
 
   let url
   if (sendRequest && brochure) {
-    url = `/quest/${typeStr}/${descStr}/${viewportStr}/info/${brochure}`
+    url = `/quest/${viewportStr}/${typeStr}/${descStr}/info/${brochure}`
   } else if (sendRequest && !brochure) {
-    url = `/quest/${typeStr}/${descStr}/${viewportStr}`
+    url = `/quest/${viewportStr}/${typeStr}/${descStr}`
   } else if (!sendRequest && brochure) {
     url = `/quest/info/${brochure}`
   } else {

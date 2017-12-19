@@ -2,8 +2,9 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import cx from 'classnames'
-import { Link } from 'react-router'
+import { Link, withRouter, browserHistory } from 'react-router'
 import { injectIntl, intlShape } from 'react-intl'
+import { compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { signOut } from 'containers/App/actions'
@@ -13,12 +14,14 @@ import { changeLocale } from 'containers/LanguageProvider/actions'
 import messages from 'containers/HomePage/messages'
 import Img from 'components/Img'
 import { MobileUp } from 'components/Responsive'
+import { urlComposer } from 'utils/urlHelper'
 import './style.scss'
 
 class Menu extends Component {
   static propTypes = {
     signOut: PropTypes.func,
     changeLocale: PropTypes.func,
+    params: PropTypes.object,
     currentPage: PropTypes.string,
     authenticated: PropTypes.bool,
     intl: intlShape.isRequired,
@@ -50,9 +53,30 @@ class Menu extends Component {
     signOut()
   }
 
+  handleSettings = () => {}
+
+  handleMap = evt => {
+    evt.preventDefault()
+    const { params: { viewport, types, descriptives } } = this.props
+    const url = (viewport && types && descriptives) ? `/quest/${viewport}/${types}/${descriptives}/` : 'quest'
+    browserHistory.push(url)
+  }
+
   render() {
     const { showMenu } = this.state
-    const { authenticated, signOut, currentPage, changeLocale, intl: { formatMessage, locale } } = this.props
+    const {
+      authenticated,
+      signOut,
+      currentPage,
+      changeLocale,
+      intl: {
+        formatMessage,
+        locale,
+      },
+      params: {
+        brochure,
+      },
+    } = this.props
 
     return (
       <div className={cx({ menu: true, menu__opened: showMenu })} onClick={this.handleToggleMenu}>
@@ -64,9 +88,10 @@ class Menu extends Component {
             { currentPage !== 'Home' && <li><Link to="/">{formatMessage(messages.home)}</Link></li> }
             { currentPage !== 'Quest' && <li><Link to="/quest">{formatMessage(messages.quest)}</Link></li> }
             <li><a href={`http://carta.guide/${locale === 'en' ? '' : locale}`}>{formatMessage(messages.about)}</a></li>
+            { brochure && <li><a href="/" onClick={this.handleMap}>{formatMessage(messages.map)}</a></li> }
             { authenticated &&
               <div>
-                <li><a href="/" onClick={this.handleSignOut}>{formatMessage(messages.settings)}</a></li>
+                <li><a href="/" onClick={this.handleSettings}>{formatMessage(messages.settings)}</a></li>
                 <li><a href="/" onClick={this.handleSignOut}>{formatMessage(messages.signOut)}</a></li>
               </div>
             }
@@ -105,4 +130,8 @@ const actions = {
   changeLocale,
 }
 
-export default injectIntl(connect(selectors, actions)(Menu))
+export default compose(
+  injectIntl,
+  withRouter,
+  connect(selectors, actions)
+)(Menu)
