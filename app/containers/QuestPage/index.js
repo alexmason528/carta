@@ -56,18 +56,23 @@ class QuestPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { types, descriptives, viewport, location: { pathname }, quest } = this.props
-    const { params } = nextProps
+    const { viewport, types, descriptives, location: { pathname } } = this.props
+    const { params, quest } = nextProps
     const isViewportEqual = isEqual(viewport, nextProps.viewport)
     const isTypesEqual = isEqual(types, nextProps.types)
     const isDescriptivesEqual = isEqual(descriptives, nextProps.descriptives)
-    const isParamInequal = !isViewportEqual || !isTypesEqual || !isDescriptivesEqual
+    const isParamEmpty = !params.viewport && !params.types && !params.descriptives
+    const isParamEqual = isViewportEqual && isTypesEqual && isDescriptivesEqual
     const isInitialQuest = isEqual(initialQuest, quest)
     const shouldUpdate = (pathname === nextProps.location.pathname && params.brochure === nextProps.brochure)
+    const { url, sendRequest } = urlComposer({
+      viewport: nextProps.viewport,
+      types: nextProps.types,
+      descriptives: nextProps.descriptives,
+      brochure: params.brochure,
+    })
 
-    if (isParamInequal && (shouldUpdate || (isParamInequal && isInitialQuest))) {
-      const { viewport, types, descriptives } = nextProps
-      const { url } = urlComposer({ viewport, types, descriptives, brochure: params.brochure })
+    if ((!isParamEqual && shouldUpdate) || (isParamEmpty && !isInitialQuest && sendRequest)) {
       browserHistory.push(url)
     }
   }
@@ -83,7 +88,7 @@ class QuestPage extends Component {
     return (
       <Container fluid className="questPage">
         <Helmet meta={[{ name: 'Quest', content: 'Carta' }]} />
-        <Menu currentPage="Quest" />
+        <Menu currentPage="quest" />
         <QuestButton
           panelState={panelState}
           onClick={() => { this.handleQuestBtnClick('opened') }}

@@ -23,7 +23,9 @@ import {
   UPDATE_USER_SUCCESS,
   UPDATE_USER_FAIL,
 
-  AUTH_METHOD_CHANGE,
+  CHANGE_AUTH_METHOD,
+
+  TOGGLE_MENU,
 } from './constants'
 
 const initialState = {
@@ -32,6 +34,7 @@ const initialState = {
   status: null,
   error: null,
   authMethod: 'signIn',
+  menuOpened: false,
 }
 
 function appReducer(state = initialState, { type, payload }) {
@@ -180,12 +183,18 @@ function appReducer(state = initialState, { type, payload }) {
         error: payload,
       }
 
-    case AUTH_METHOD_CHANGE:
+    case CHANGE_AUTH_METHOD:
       return {
         ...state,
-        status: AUTH_METHOD_CHANGE,
+        status: CHANGE_AUTH_METHOD,
         authMethod: payload,
         error: null,
+      }
+
+    case TOGGLE_MENU:
+      return {
+        ...state,
+        menuOpened: !state.menuOpened,
       }
 
     default:

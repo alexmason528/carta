@@ -1,5 +1,3 @@
-import { findIndex } from 'lodash'
-
 import {
   CREATE_POST_REQUEST,
   CREATE_POST_SUCCESS,
@@ -42,7 +40,7 @@ const initialState = {
 }
 
 function homeReducer(state = initialState, action) {
-  const { type, payload, id } = action
+  const { type, payload } = action
 
   switch (type) {
     case CREATE_POST_REQUEST:

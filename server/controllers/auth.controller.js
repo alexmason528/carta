@@ -70,7 +70,7 @@ const register = (req, res) => {
     verified: false,
   }
 
-  User.create(data, (err, element) => {
+  User.create(data, (err) => {
     if (err) {
       if (err.name === 'MongoError' && err.code === 11000) {
         res.status(400).send({
@@ -95,7 +95,7 @@ const register = (req, res) => {
         html: `Please verify your email by clicking <a href="${verifyUrl}/${cryptr.encrypt(data.email)}">this link</a>`,
       }
 
-      transporter.sendMail(mailOptions, (error, info) => {
+      transporter.sendMail(mailOptions, () => {
         return res.send(data)
       })
     }

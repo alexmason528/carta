@@ -15,7 +15,7 @@ class RenderDropZone extends Component {
     crop: PropTypes.string,
   }
 
-  handleDrop = (filesToUpload, e) => {
+  handleDrop = (filesToUpload) => {
     const img = filesToUpload[0]
     const { crop } = this.props
 
@@ -26,13 +26,13 @@ class RenderDropZone extends Component {
     }
   }
 
-  handleImage = (img, type) => {
+  handleImage = (img) => {
     const { input } = this.props
     input.onChange(img)
   }
 
   render() {
-    const { input, className, label, meta: { touched, error, warning } } = this.props
+    const { input, className, label, meta: { touched, error } } = this.props
     const files = input.value
     const name = input.name
 

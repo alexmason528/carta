@@ -105,7 +105,7 @@ class Profile extends Component {
     getCroppedImage(file, this.handleImage, (imageType === 'profilePic') ? 'portrait' : 'landscape')
   }
 
-  handleImage = (img, type) => {
+  handleImage = (img) => {
     const { imageType } = this.state
     const { onUpdate } = this.props
 
@@ -127,8 +127,8 @@ class Profile extends Component {
   }
 
   render() {
-    const { authenticated, user, onClick, info: { status, error }, intl: { formatMessage } } = this.props
-    const { coverPic, profilePic, imageUpload, imageType, imageLoaded } = this.state
+    const { authenticated, user, onClick, info: { status }, intl: { formatMessage } } = this.props
+    const { coverPic, profilePic, imageUpload, imageType } = this.state
     const coverPicSpinner = imageType === 'coverPic' && (imageUpload.uploading || status === UPDATE_USER_REQUEST)
     const profilePicSpinner = imageType === 'profilePic' && (imageUpload.uploading || status === UPDATE_USER_REQUEST)
 

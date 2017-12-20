@@ -2,7 +2,7 @@ import { take, call, put, select, cancel, takeLatest } from 'redux-saga/effects'
 import { LOCATION_CHANGE } from 'react-router-redux'
 
 import request from 'utils/request'
-import { setItem, getItem, removeItem } from 'utils/localStorage'
+import { setItem, removeItem } from 'utils/localStorage'
 
 import { API_BASE_URL, SIGNIN_REQUEST, REGISTER_REQUEST, DELETE_USER_REQUEST, VERIFY_REQUEST, UPDATE_USER_REQUEST } from 'containers/App/constants'
 import {
@@ -94,7 +94,7 @@ export function* deleteUserRequest({ payload }) {
   }
 
   try {
-    const res = yield call(request, requestURL, params)
+    yield call(request, requestURL, params)
     yield call(removeItem, 'auth')
     yield put(deleteUserSuccess())
     yield put(deleteUserPosts(id))
@@ -193,7 +193,6 @@ export function* updatePostRequest() {
 
   try {
     const res = yield call(request, requestURL, params)
-    const user = yield select(selectUser())
 
     const { _id, title, img, content, link, created_at } = res
     const info = { _id, title, img, content, link, created_at }
@@ -212,7 +211,7 @@ export function* deletePostRequest({ payload }) {
   }
 
   try {
-    const res = yield call(request, requestURL, params)
+    yield call(request, requestURL, params)
     yield put(deletePostSuccess(payload))
   } catch (err) {
     yield put(deletePostFail(err.details))

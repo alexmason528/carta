@@ -6,7 +6,7 @@ import Img from 'components/Img'
 const StarButton = ({ star, active, className, children, onStarClick, onMouseDown }) => (
   <div className={cx({ section__btn: true, star, active, [className]: className })}>
     <button onMouseDown={onMouseDown}>{Children.toArray(children)}</button>
-    <Img className="star" src={`${CLOUDINARY_ICON_URL}/star-green.png`} onClick={onStarClick} />
+    <Img src={`${CLOUDINARY_ICON_URL}/star-green.png`} onClick={onStarClick} />
   </div>
 )
 

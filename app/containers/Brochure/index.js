@@ -26,9 +26,11 @@ class Brochure extends Component {
 
   handleBrochureClose = () => {
     const { params: { viewport, types, descriptives } } = this.props
-    const url = (viewport && types && descriptives) ? `/quest/${viewport}/${types}/${descriptives}/` : 'quest'
+    const url = (viewport && types && descriptives) ? `/quest/${viewport}/${types}/${descriptives}/` : '/quest'
     browserHistory.push(url)
   }
+
+  handleBrochureResize = () => {}
 
   render() {
     const { brochure } = this.props
@@ -38,6 +40,14 @@ class Brochure extends Component {
 
     return (
       <Container fluid className="brochure">
+        <div className="brochure__menu">
+          <button className="brochure__resizeBtn" onClick={this.handleBrochureResize}>
+            <Img src={`${CLOUDINARY_ICON_URL}/narrow.png`} />
+          </button>
+          <button className="brochure__closeBtn" onClick={this.handleBrochureClose}>
+            <Img src={`${CLOUDINARY_ICON_URL}/close.png`} />
+          </button>
+        </div>
         <Row className="brochure__row">
           { mainPoster &&
             <Col lg={8} md={12} sm={12} xs={12} className="brochure__col">
@@ -46,11 +56,6 @@ class Brochure extends Component {
           }
           { description &&
             <Col lg={4} md={12} sm={12} xs={12} className="brochure__col">
-              <div className="brochure__menu">
-                <button className="brochure__closeBtn" onClick={this.handleBrochureClose}>
-                  <Img src={`${CLOUDINARY_ICON_URL}/close-white-shadow.png`} />
-                </button>
-              </div>
               <Row className="brochure__row">
                 <Col lg={12} md={6} sm={12} xs={12} className="brochure__col">
                   <TextTile type="description" title={''} content={description.text.content} />

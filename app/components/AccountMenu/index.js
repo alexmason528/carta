@@ -67,12 +67,11 @@ class AccountMenu extends Component {
   }
 
   render() {
-    const { handleSubmit, signOut, show, info: { error, status }, onClick, intl: { formatMessage } } = this.props
+    const { handleSubmit, signOut, show, info: { error, status }, intl: { formatMessage } } = this.props
     const { showContent, showForm } = this.state
 
     return (
       <div className={cx({ accountMenu: true, 'accountMenu--hidden': !show })} onClick={evt => evt.stopPropagation()}>
-        { /* <div className="backLayer" onClick={onClick} /> */ }
         <div className="accountMenu__items">
           <button type="button" onClick={signOut}>{formatMessage(messages.signOut)}</button> | <button type="button" onClick={this.handleSettingClick}>{formatMessage(messages.settings)}</button>
         </div>

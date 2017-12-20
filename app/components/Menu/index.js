@@ -6,8 +6,8 @@ import { injectIntl, intlShape } from 'react-intl'
 import { compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
-import { signOut } from 'containers/App/actions'
-import { selectAuthenticated } from 'containers/App/selectors'
+import { signOut, toggleMenu } from 'containers/App/actions'
+import { selectAuthenticated, selectMenuState } from 'containers/App/selectors'
 import { LANGUAGES } from 'containers/LanguageProvider/constants'
 import { changeLocale } from 'containers/LanguageProvider/actions'
 import messages from 'containers/HomePage/messages'
@@ -19,20 +19,12 @@ class Menu extends Component {
   static propTypes = {
     signOut: PropTypes.func,
     changeLocale: PropTypes.func,
+    toggleMenu: PropTypes.func,
     params: PropTypes.object,
     currentPage: PropTypes.string,
     authenticated: PropTypes.bool,
+    menuOpened: PropTypes.bool,
     intl: intlShape.isRequired,
-  }
-
-  constructor(props) {
-    super(props)
-    this.state = { showMenu: false }
-  }
-
-  handleToggleMenu = evt => {
-    evt.stopPropagation()
-    this.setState({ showMenu: !this.state.showMenu })
   }
 
   handleLanguageClick = evt => {
@@ -55,13 +47,24 @@ class Menu extends Component {
 
   handleMap = evt => {
     evt.preventDefault()
-    const { params: { viewport, types, descriptives } } = this.props
-    const url = (viewport && types && descriptives) ? `/quest/${viewport}/${types}/${descriptives}/` : 'quest'
+    const { params: { viewport, types, descriptives }, toggleMenu } = this.props
+    const url = (viewport && types && descriptives) ? `/quest/${viewport}/${types}/${descriptives}/` : '/quest'
     browserHistory.push(url)
+    toggleMenu()
+  }
+
+  handleToggleMenu = evt => {
+    evt.stopPropagation()
+    const { toggleMenu } = this.props
+    toggleMenu()
+  }
+
+  handlePageChange = () => {
+    const { toggleMenu } = this.props
+    toggleMenu()
   }
 
   render() {
-    const { showMenu } = this.state
     const {
       authenticated,
       currentPage,
@@ -72,19 +75,20 @@ class Menu extends Component {
       params: {
         brochure,
       },
+      menuOpened,
     } = this.props
 
     return (
-      <div className={cx({ menu: true, menu__opened: showMenu })} onClick={this.handleToggleMenu}>
+      <div className={cx({ menu: true, menu__opened: menuOpened })} onClick={this.handleToggleMenu}>
         <div className="logo" onClick={this.handleToggleMenu}>
           <Img src={`${CLOUDINARY_ICON_URL}/logo-100.png`} />
         </div>
-        <div className={cx({ menu__content: true, 'menu__content--hidden': !showMenu })} onClick={evt => { evt.stopPropagation() }}>
+        <div className={cx({ menu__content: true, 'menu__content--hidden': !menuOpened })} onClick={evt => { evt.stopPropagation() }}>
           <ul>
-            { currentPage !== 'Home' && <li><Link to="/">{formatMessage(messages.home)}</Link></li> }
-            { currentPage !== 'Quest' && <li><Link to="/quest">{formatMessage(messages.quest)}</Link></li> }
-            <li><a href={`http://carta.guide/${locale === 'en' ? '' : locale}`}>{formatMessage(messages.about)}</a></li>
             { brochure && <li><a href="/" onClick={this.handleMap}>{formatMessage(messages.map)}</a></li> }
+            { currentPage === 'home' && <li><Link to="/quest" onClick={this.handlePageChange}>{formatMessage(messages.quest)}</Link></li> }
+            { currentPage === 'quest' && <li><Link to="/" onClick={this.handlePageChange}>{formatMessage(messages.home)}</Link></li> }
+            <li><a href={`http://carta.guide/${locale === 'en' ? '' : locale}`}>{formatMessage(messages.about)}</a></li>
             { authenticated &&
               <div>
                 <li><a href="/" onClick={this.handleSettings}>{formatMessage(messages.settings)}</a></li>
@@ -119,11 +123,13 @@ class Menu extends Component {
 
 const selectors = createStructuredSelector({
   authenticated: selectAuthenticated(),
+  menuOpened: selectMenuState(),
 })
 
 const actions = {
   signOut,
   changeLocale,
+  toggleMenu,
 }
 
 export default compose(

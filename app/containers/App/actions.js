@@ -21,7 +21,9 @@ import {
   UPDATE_USER_SUCCESS,
   UPDATE_USER_FAIL,
 
-  AUTH_METHOD_CHANGE,
+  CHANGE_AUTH_METHOD,
+
+  TOGGLE_MENU,
 } from './constants'
 
 export function signInRequest(payload) {
@@ -134,9 +136,15 @@ export function updateUserFail(payload) {
   }
 }
 
-export function authMethodChange(payload) {
+export function changeAuthMethod(payload) {
   return {
-    type: AUTH_METHOD_CHANGE,
+    type: CHANGE_AUTH_METHOD,
     payload,
+  }
+}
+
+export function toggleMenu() {
+  return {
+    type: TOGGLE_MENU,
   }
 }

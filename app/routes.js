@@ -17,8 +17,6 @@ export default function createRoutes(store) {
   const {
     injectReducer,
     injectSagas,
-    redirectToHome,
-    redirectToVerify,
   } = getAsyncInjectors(store)
 
   return [

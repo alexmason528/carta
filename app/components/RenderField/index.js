@@ -1,8 +1,7 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 import { injectIntl, intlShape } from 'react-intl'
-import { Alert } from 'reactstrap'
 
-const RenderField = ({ input, label, type, order, meta: { touched, error, warning }, intl: { formatMessage } }) => {
+const RenderField = ({ input, label, type, order, meta: { touched, error }, intl: { formatMessage } }) => {
   return (
     <div>
       <input {...input} placeholder={label} type={type} />

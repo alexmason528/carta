@@ -20,7 +20,9 @@ export const UPDATE_USER_REQUEST = 'carta/App/UPDATE_USER_REQUEST'
 export const UPDATE_USER_SUCCESS = 'carta/App/UPDATE_USER_SUCCESS'
 export const UPDATE_USER_FAIL = 'carta/App/UPDATE_USER_FAIL'
 
-export const AUTH_METHOD_CHANGE = 'carta/App/AUTH_METHOD_CHANGE'
+export const CHANGE_AUTH_METHOD = 'carta/App/CHANGE_AUTH_METHOD'
+
+export const TOGGLE_MENU = 'carta/App/TOGGLE_MENU'
 
 export const API_BASE_URL = (process.env.NODE_ENV === 'production') ? 'https://cartamap.herokuapp.com/' : 'http://localhost:3000/'
 export const MAP_ACCESS_TOKEN = 'pk.eyJ1IjoiY2FydGFndWlkZSIsImEiOiJjajMzNG5rcjAwMDFmMnFud3hpNW8wenJpIn0.uQaLvmopUNSmyGSI1WKynw'

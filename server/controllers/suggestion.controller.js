@@ -1,6 +1,4 @@
-const mongoose = require('mongoose')
 const Suggestion = require('../models/suggestion')
-const Schema = mongoose.Schema
 
 /**
  * list suggestion

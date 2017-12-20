@@ -1,8 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { injectIntl, intlShape } from 'react-intl'
 import { browserHistory } from 'react-router'
-import { dispatch } from 'react-redux'
-import { signOut } from 'containers/App/actions'
 import { VERIFY_SUCCESS, VERIFY_FAIL } from 'containers/App/constants'
 import { getFirstname } from 'utils/stringHelper'
 import messages from 'containers/HomePage/messages'

@@ -1,12 +1,11 @@
-import { take, call, put, select, cancel, takeLatest, actionChannel } from 'redux-saga/effects'
+import { take, call, put, select, cancel, takeLatest } from 'redux-saga/effects'
 import { LOCATION_CHANGE } from 'react-router-redux'
 import { findIndex } from 'lodash'
 import { API_BASE_URL } from 'containers/App/constants'
 import { selectCurrentTypes, selectCurrentDescriptives, selectViewport, selectTypes } from 'containers/QuestPage/selectors'
-import { selectLocale } from 'containers/LanguageProvider/selectors'
 import request from 'utils/request'
 import { urlComposer } from 'utils/urlHelper'
-import { GET_BROCHURE_REQUEST, GET_RECOMMENDATION_REQUEST, GET_QUESTINFO_REQUEST, DESCRIPTIVE_ANYTHING_CLICK } from './constants'
+import { GET_BROCHURE_REQUEST, GET_RECOMMENDATION_REQUEST, GET_QUESTINFO_REQUEST } from './constants'
 import {
   getRecommendationRequest,
   getRecommendationSuccess,
@@ -23,7 +22,6 @@ export function* getRecommendationRequestHandler() {
   const questTypes = yield select(selectTypes())
   const curTypes = yield select(selectCurrentTypes())
   const curDescriptives = yield select(selectCurrentDescriptives())
-  const locale = yield select(selectLocale())
 
   const requestURL = `${API_BASE_URL}api/v1/map/recommendation/`
 
@@ -173,7 +171,7 @@ export function* getBrochureRequestHandler({ payload }) {
 }
 
 export function* getRecommendationWatcher() {
-  const watcher = yield takeLatest(GET_RECOMMENDATION_REQUEST, getRecommendationRequestHandler)
+  yield takeLatest(GET_RECOMMENDATION_REQUEST, getRecommendationRequestHandler)
 }
 
 export function* getQuestInfoWatcher() {
@@ -183,7 +181,7 @@ export function* getQuestInfoWatcher() {
 }
 
 export function* getBrochureWatcher() {
-  const watcher = yield takeLatest(GET_BROCHURE_REQUEST, getBrochureRequestHandler)
+  yield takeLatest(GET_BROCHURE_REQUEST, getBrochureRequestHandler)
 }
 
 export default [

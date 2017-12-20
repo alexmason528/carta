@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 import { injectIntl, intlShape } from 'react-intl'
 import cx from 'classnames'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'

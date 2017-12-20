@@ -1,5 +1,4 @@
-import React, { Component, PropTypes, Children } from 'react'
-import styled, { css } from 'styled-components'
+import React, { Component, PropTypes } from 'react'
 import cx from 'classnames'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'

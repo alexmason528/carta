@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import cx from 'classnames'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
@@ -20,7 +19,7 @@ class LinkBar extends Component { // eslint-disable-line react/prefer-stateless-
 
     return (
       <div className={cx({ postLinkBar: true, 'postLinkBar--hidden': !showLinkBar })} onClick={evt => { evt.preventDefault() }}>
-        <Img onClick={evt => { postShowLinkBar(!showLinkBar) }} src={`${CLOUDINARY_ICON_URL}/link.png`} />
+        <Img onClick={() => { postShowLinkBar(!showLinkBar) }} src={`${CLOUDINARY_ICON_URL}/link.png`} />
         <input
           type="text"
           value={link}

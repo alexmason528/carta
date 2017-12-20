@@ -33,7 +33,7 @@ class StartQuest extends Component {
     $(quest).find('h2').css({ fontSize: `${(width / 44) * 3 * 1.15}px` })
   }
 
-  handleLoaded = (evt) => {
+  handleLoaded = () => {
     this.setState({ imageLoaded: true }, this.handleResize)
   }
 

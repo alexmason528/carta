@@ -5,10 +5,7 @@
   -1: String
 **/
 
-import { map, join } from 'lodash'
-
-import messages from 'containers/HomePage/messages'
-import { DEFAULT_LOCALE, LANGUAGES } from 'containers/LanguageProvider/constants'
+import { DEFAULT_LOCALE } from 'containers/LanguageProvider/constants'
 import enTranslationMessages from 'translations/en.json'
 import nlTranslationMessages from 'translations/nl.json'
 

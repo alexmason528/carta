@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import { injectIntl, intlShape } from 'react-intl'
-import { createStructuredSelector } from 'reselect'
 import cx from 'classnames'
-import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { LANGUAGES, LANGUAGE_CONST } from 'containers/LanguageProvider/constants'
 import {
   UPDATE_POST_REQUEST,
@@ -18,7 +16,6 @@ import LoadingSpinner from 'components/LoadingSpinner'
 import Resizable from 'components/Resizable'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { getTextFromDate } from 'utils/dateHelper'
-import { getCroppedImage } from 'utils/imageHelper'
 import { textToElem, getDefaultTexts, getPostLink, getSubmitInfo, isLanguageSelectable } from 'utils/stringHelper'
 import LinkBar from './LinkBar'
 import './style.scss'
@@ -130,7 +127,7 @@ class MediaPost extends Component {
     })
   }
 
-  handleLinkButtonClick = evt => {
+  handleLinkButtonClick = () => {
     this.props.postShowLinkBar(!this.props.showLinkBar)
     this.setState({ showError: false })
   }
@@ -202,13 +199,10 @@ class MediaPost extends Component {
       editable,
       showLinkBar,
       showDeleteConfirm,
-      info: { error, status },
+      info: { status },
       intl: { formatMessage },
       postShowLinkBar,
       postLinkChange,
-      postEditEnd,
-      deletePostRequest,
-      updatePostRequest,
     } = this.props
 
     const { showError, showInfo, locale } = this.state
@@ -217,7 +211,7 @@ class MediaPost extends Component {
     const spinnerShow = editing && (status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST)
     const defaultTexts = getDefaultTexts(locale, this.props.intl.locale)
     const dropdownDisabled = !isLanguageSelectable(title, img, content, this.props.intl.locale)
-    const { postType, remainCharCnts, submitError } = getSubmitInfo(title, img, content, this.props.intl.locale, locale, formatMessage)
+    const { submitError } = getSubmitInfo(title, img, content, this.props.intl.locale, locale, formatMessage)
 
     let postLink = getPostLink(editing, link, img)
 

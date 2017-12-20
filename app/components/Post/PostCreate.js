@@ -4,25 +4,24 @@ import { injectIntl, intlShape } from 'react-intl'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import cx from 'classnames'
-import { Popover, PopoverBody } from 'reactstrap'
 import { createStructuredSelector } from 'reselect'
 import {
   CLOUDINARY_UPLOAD_URL,
   CLOUDINARY_UPLOAD_PRESET,
   CLOUDINARY_ICON_URL,
 } from 'containers/App/constants'
-import { LANGUAGES, DEFAULT_LOCALE, LANGUAGE_CONST } from 'containers/LanguageProvider/constants'
+import { LANGUAGES, LANGUAGE_CONST } from 'containers/LanguageProvider/constants'
 import { createPostRequest } from 'containers/HomePage/actions'
 import { CREATE_POST_REQUEST, CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
 import messages from 'containers/HomePage/messages'
 import { selectHomeInfo } from 'containers/HomePage/selectors'
-import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
+import { DeleteButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
 import Img from 'components/Img'
 import LoadingSpinner from 'components/LoadingSpinner'
 import Resizable from 'components/Resizable'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { getCroppedImage } from 'utils/imageHelper'
-import { getDefaultTexts, getPostType, getSubmitInfo, isLanguageSelectable } from 'utils/stringHelper'
+import { getDefaultTexts, getSubmitInfo, isLanguageSelectable } from 'utils/stringHelper'
 import './style.scss'
 
 class PostCreate extends Component {
@@ -99,7 +98,7 @@ class PostCreate extends Component {
     }
   }
 
-  handleAddMedia = evt => {
+  handleAddMedia = () => {
     this.mediaUploader.click()
   }
 
@@ -123,7 +122,7 @@ class PostCreate extends Component {
     getCroppedImage(file, this.handleImage, 'landscape')
   }
 
-  handleImage = (img, type) => {
+  handleImage = (img) => {
     this.setState({ img, showError: false }, () => {
       this.handleResize()
       const comp = ReactDOM.findDOMNode(this)
@@ -284,7 +283,7 @@ class PostCreate extends Component {
   }
 
   render() {
-    const { show, onClose, user: { fullname }, info: { error, status }, intl: { formatMessage }, intl } = this.props
+    const { onClose, user: { fullname }, info: { status }, intl: { formatMessage }, intl } = this.props
     const {
       img,
       title,

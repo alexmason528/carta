@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import './style.scss'
 
 const LoadingSpinner = props => {
-  const { show, children } = props
+  const { show } = props
 
   if (!show) return null;
   return (

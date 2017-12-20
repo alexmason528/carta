@@ -21,10 +21,16 @@ const selectUser = () => createSelector(
   substate => substate.user
 )
 
+const selectMenuState = () => createSelector(
+  selectGlobal,
+  substate => substate.menuOpened,
+)
+
 export {
   selectGlobal,
   selectLocationState,
   selectAuthenticated,
   selectInfo,
   selectUser,
+  selectMenuState,
 };

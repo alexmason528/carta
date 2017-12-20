@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import { injectIntl, intlShape } from 'react-intl'
 import cx from 'classnames'
-import { createStructuredSelector } from 'reselect'
 import {
   UPDATE_POST_REQUEST,
   UPDATE_POST_SUCCESS,
@@ -157,7 +156,7 @@ class TextPost extends Component {
     getCroppedImage(evt.target.files[0], this.handleImage, 'landscape')
   }
 
-  handleImage = (img, type) => {
+  handleImage = (img) => {
     this.props.postImageChange(img)
     this.setState({ showError: false })
   }
@@ -186,7 +185,6 @@ class TextPost extends Component {
 
   render() {
     const {
-      _id,
       title,
       img,
       content,
@@ -195,10 +193,8 @@ class TextPost extends Component {
       editing,
       editable,
       showDeleteConfirm,
-      info: { status, error },
+      info: { status },
       intl: { formatMessage },
-      postEditEnd,
-      updatePostRequest,
     } = this.props
 
     const { locale, showError } = this.state
@@ -206,7 +202,7 @@ class TextPost extends Component {
     const defaultTexts = getDefaultTexts(locale, this.props.intl.locale)
     const spinnerShow = editing && (status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST)
     const dropdownDisabled = !isLanguageSelectable(title, img, content, this.props.intl.locale)
-    const { postType, remainCharCnts, submitError } = getSubmitInfo(title, img, content, this.props.intl.locale, locale, formatMessage)
+    const { remainCharCnts, submitError } = getSubmitInfo(title, img, content, this.props.intl.locale, locale, formatMessage)
 
     return (
       <div className="postContainer">

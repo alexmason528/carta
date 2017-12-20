@@ -73,7 +73,7 @@ export function injectAsyncSagas(store, isValid) {
 }
 
 function redirectToVerify(store) {
-  return nextState => {
+  return () => {
     const authenticated = selectAuthenticated()(store.getState())
     const user = selectUser()(store.getState())
 
@@ -84,7 +84,7 @@ function redirectToVerify(store) {
 }
 
 function redirectToHome(store) {
-  return nextState => {
+  return () => {
     const authenticated = selectAuthenticated()(store.getState())
     const user = selectUser()(store.getState())
 

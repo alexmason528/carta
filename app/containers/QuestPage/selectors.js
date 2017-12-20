@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { get, pick } from 'lodash'
+import { get } from 'lodash'
 
 const selectQuest = state => get(state, 'quest')
 

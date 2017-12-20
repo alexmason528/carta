@@ -47,7 +47,6 @@
     font-size: 12px;
     text-transform: uppercase;
     z-index: 10;
-    opacity: 0.75;
     color: rgba(0, 108, 161, 0.7);
     font-weight: 700;
 
@@ -112,16 +111,13 @@
     font-weight:bold; 
     font-size:12px;
   
-    .star {
+    img {
       position: relative;
       height: 13px;
       display: none;
       top: -1px;
       margin-left: 3px;
       filter: grayscale(100%);
-      color: rgba(0, 0, 0, 0.3);
-  
-      &:hover { color: rgba(0, 0, 0, 1) }
     }
   
     button {
@@ -135,14 +131,18 @@
         color: #fff;
       }
   
-      .star { display: inline-block }
+      img { display: inline-block; opacity: 0.7 }
+      &:hover {
+        img:hover {
+          opacity: 1;
+        }
+      }
     }
   
     &.star {
-      .star {
+      img {
         filter: none;
         display: inline-block;
-        opacity: 1;
       }
     }
   }

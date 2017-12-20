@@ -1,4 +1,4 @@
-import React, { PropTypes, Children } from 'react'
+import React, { PropTypes } from 'react'
 import cx from 'classnames'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import Img from 'components/Img'

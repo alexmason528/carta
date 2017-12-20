@@ -4,10 +4,8 @@ import { connect } from 'react-redux'
 import ReactResizeDetector from 'react-resize-detector'
 import ReactMapboxGl from 'react-mapbox-gl'
 import { browserHistory } from 'react-router'
-import { isEqual } from 'lodash'
 import { createStructuredSelector } from 'reselect'
 import {
-  CENTER_COORDS,
   COLORS,
   CLOUDINARY_POINTS_URL,
   CLOUDINARY_SHAPES_URL,
@@ -53,7 +51,6 @@ class Map extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { locale, recommendations } = this.props
     this.handleRedrawMap(nextProps)
   }
 
@@ -100,13 +97,18 @@ class Map extends Component {
     }
   }
 
-  handleAddShapes = () => {
+  handleAddSource = () => {
     this.map.addSource('shapes', {
       type: 'geojson',
       data: `${CLOUDINARY_SHAPES_URL}/shapes.geojson`,
     })
 
-    COLORS.forEach((color, index) => {
+    this.map.addSource('points', {
+      type: 'geojson',
+      data: `${CLOUDINARY_POINTS_URL}/points.geojson`,
+    })
+
+    COLORS.reverse().forEach((color, index) => {
       this.map.addLayer({
         id: `shape-fill-${index}`,
         type: 'fill',
@@ -153,16 +155,7 @@ class Map extends Component {
         const link = data.features[0].properties.link
         this.handleElementClick(link)
       })
-    })
-  }
 
-  handleAddCaptions = () => {
-    this.map.addSource('points', {
-      type: 'geojson',
-      data: `${CLOUDINARY_POINTS_URL}/points.geojson`,
-    })
-
-    COLORS.forEach((color, index) => {
       this.map.addLayer({
         id: `shape-caption-${index}`,
         type: 'symbol',
@@ -198,14 +191,11 @@ class Map extends Component {
     })
   }
 
+
   handleClearMap = () => {
     if (this.map) {
-      if (!this.map.getSource('shapes')) {
-        this.handleAddShapes()
-      }
-
-      if (!this.map.getSource('points')) {
-        this.handleAddCaptions()
+      if (!this.map.getSource('shapes') || !this.map.getSource('points')) {
+        this.handleAddSource()
       }
 
       const sources = Array(COLORS.length).fill(0)

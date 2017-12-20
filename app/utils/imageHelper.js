@@ -1,5 +1,4 @@
-import axios from 'axios'
-import { CLOUDINARY_UPLOAD_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_COVER_URL, CLOUDINARY_PROFILE_URL } from 'containers/App/constants'
+import { CLOUDINARY_COVER_URL, CLOUDINARY_PROFILE_URL } from 'containers/App/constants'
 
 const getImagePortion = (imgObj, type) => {
   let tnCanvas = document.createElement('canvas')

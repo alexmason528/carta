@@ -1,5 +1,4 @@
 import { findIndex, find } from 'lodash'
-import { CENTER_COORDS } from 'containers/App/constants'
 import { DEFAULT_LOCALE } from 'containers/LanguageProvider/constants'
 import { getQuestStr } from 'utils/urlHelper'
 import { getItem, setItem } from 'utils/localStorage'
@@ -218,7 +217,7 @@ function questReducer(state = initialState, { type, payload }) {
       newQuests = quests.map((quest, index) => {
         if (index === curQuestInd) {
           let ind
-          let { stars, includes, excludes } = quest.descriptives
+          let { stars, includes } = quest.descriptives
           const { desc, star } = payload
           if (star) {
             ind = findIndex(stars, desc)

@@ -2,8 +2,6 @@ import React, { PropTypes } from 'react'
 import Helmet from 'react-helmet'
 import styled from 'styled-components'
 
-import withProgressBar from 'components/ProgressBar'
-
 const AppWrapper = styled.div`
   margin: 0 auto
   display: flex

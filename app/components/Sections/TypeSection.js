@@ -1,4 +1,4 @@
-import React, { Component, PropTypes, Children } from 'react'
+import React, { Component, PropTypes } from 'react'
 import cx from 'classnames'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
@@ -6,11 +6,10 @@ import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import { findIndex } from 'lodash'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
-import { UPDATE_VISIBILITY } from 'containers/QuestPage/constants'
 import { getRecommendationRequest, typeClick, typeAnythingClick } from 'containers/QuestPage/actions'
 import messages from 'containers/QuestPage/messages'
 import { selectInfo, selectTypes, selectCurrentTypes } from 'containers/QuestPage/selectors'
-import { Button, StarButton } from 'components/Buttons'
+import { Button } from 'components/Buttons'
 import Img from 'components/Img'
 
 class TypeSection extends Component {
@@ -70,7 +69,6 @@ class TypeSection extends Component {
   render() {
     const { expanded, search } = this.state
     const {
-      className,
       types,
       intl: { formatMessage, locale },
       currentTypes: { all, includes, excludes, visibles },

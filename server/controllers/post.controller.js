@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const Post = require('../models/post')
-const Schema = mongoose.Schema
 
 /**
  * list post
@@ -57,7 +56,6 @@ const listPost = (req, res) => {
 const updatePost = (req, res) => {
   const { postID } = req.params
   const { content, title, link, img } = req.body
-  const { files } = req
 
   let data = {
     content,
@@ -110,7 +108,6 @@ const deletePost = (req, res) => {
 
 const createPost = (req, res) => {
   const { title, content, link, author, img } = req.body
-  const { files } = req
 
   let data = {
     title,

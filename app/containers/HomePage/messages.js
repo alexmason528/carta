@@ -157,4 +157,8 @@ export default defineMessages({
     id: 'carta.map',
     defaultMessage: 'Map',
   },
+  community: {
+    id: 'carta.map',
+    defaultMessage: 'Community',
+  },
 })

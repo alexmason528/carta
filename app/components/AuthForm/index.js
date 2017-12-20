@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { injectIntl, intlShape } from 'react-intl'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import { change, reduxForm, Field } from 'redux-form'
+import { reduxForm, Field } from 'redux-form'
 import { createStructuredSelector } from 'reselect'
 import axios from 'axios'
 import cx from 'classnames'
@@ -19,7 +19,7 @@ import {
   CLOUDINARY_UPLOAD_PRESET,
   CLOUDINARY_ICON_URL,
 } from 'containers/App/constants'
-import { authMethodChange, signInRequest, registerRequest } from 'containers/App/actions'
+import { changeAuthMethod, signInRequest, registerRequest } from 'containers/App/actions'
 import { selectInfo } from 'containers/App/selectors'
 import messages from 'containers/HomePage/messages'
 import LoadingSpinner from 'components/LoadingSpinner'
@@ -34,7 +34,7 @@ class AuthForm extends Component {
     registerRequest: PropTypes.func,
     onCoverPicChange: PropTypes.func,
     onProfilePicChange: PropTypes.func,
-    authMethodChange: PropTypes.func,
+    changeAuthMethod: PropTypes.func,
     handleSubmit: PropTypes.func,
     coverPic: PropTypes.oneOfType([
       PropTypes.string,
@@ -150,10 +150,10 @@ class AuthForm extends Component {
     }
   }
 
-  handleAuthMethodChange = () => {
-    const { info: { authMethod }, authMethodChange } = this.props
+  handleChangeAuthMethod = () => {
+    const { info: { authMethod }, changeAuthMethod } = this.props
     const method = authMethod === 'signIn' ? 'register' : 'signIn'
-    authMethodChange(method)
+    changeAuthMethod(method)
   }
 
   handleFormChange = evt => {
@@ -164,13 +164,13 @@ class AuthForm extends Component {
     }
   }
 
-  handleGoogleLoginSuccess = res => {
+  handleGoogleLoginSuccess = () => {
   }
 
-  handleGoogleLoginFail = err => {
+  handleGoogleLoginFail = () => {
   }
 
-  handleFacebookLogin = res => {
+  handleFacebookLogin = () => {
   }
 
   render() {
@@ -181,8 +181,6 @@ class AuthForm extends Component {
         authMethod,
       },
       show,
-      signInRequest,
-      authMethodChange,
       onCoverPicChange,
       onProfilePicChange,
       handleSubmit,
@@ -239,7 +237,7 @@ class AuthForm extends Component {
             <button className="authForm__authButton authForm__authButton--active">
               { authMethod === 'signIn' ? formatMessage(messages.signIn) : formatMessage(messages.register) }
             </button>
-            <button className="authForm__authButton authForm__authButton--inactive" type="button" onClick={this.handleAuthMethodChange}>
+            <button className="authForm__authButton authForm__authButton--inactive" type="button" onClick={this.handleChangeAuthMethod}>
               { authMethod !== 'signIn' ? formatMessage(messages.signIn) : formatMessage(messages.register) }
             </button>
           </div>
@@ -257,7 +255,7 @@ const selectors = createStructuredSelector({
 const actions = {
   signInRequest,
   registerRequest,
-  authMethodChange,
+  changeAuthMethod,
 }
 
 export default compose(

@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom'
 import { injectIntl, intlShape } from 'react-intl'
 import axios from 'axios'
 import cx from 'classnames'
-import { createStructuredSelector } from 'reselect'
-import { CLOUDINARY_ICON_URL, CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_UPLOAD_URL } from 'containers/App/constants'
+import { CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_UPLOAD_URL } from 'containers/App/constants'
 import { LANGUAGES } from 'containers/LanguageProvider/constants'
 import {
   UPDATE_POST_REQUEST,
@@ -20,7 +19,6 @@ import Resizable from 'components/Resizable'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { getTextFromDate } from 'utils/dateHelper'
 import { textToElem, getDefaultTexts, getPostLink, getSubmitInfo, isLanguageSelectable } from 'utils/stringHelper'
-import { getCroppedImage } from 'utils/imageHelper'
 import LinkBar from './LinkBar'
 import './style.scss'
 
@@ -142,7 +140,7 @@ class MixedPost extends Component {
         this.props.postImageChange(url)
         this.props.updatePostRequest()
       })
-      .catch(err => {
+      .catch(() => {
         this.setState({ imageUpload: { uploading: false, error: null } })
       })
     } else {
@@ -230,11 +228,10 @@ class MixedPost extends Component {
       editable,
       showLinkBar,
       showDeleteConfirm,
-      info: { error, status },
+      info: { status },
       intl: { formatMessage },
       postShowLinkBar,
       postLinkChange,
-      postEditEnd,
     } = this.props
 
     const { showInfo, showError, imageUpload, locale } = this.state
@@ -242,7 +239,7 @@ class MixedPost extends Component {
     const spinnerShow = editing && (status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST || imageUpload.uploading)
     const defaultTexts = getDefaultTexts(locale, this.props.intl.locale)
     const dropdownDisabled = !isLanguageSelectable(title, img, content, this.props.intl.locale)
-    const { postType, remainCharCnts, submitError } = getSubmitInfo(title, img, content, this.props.intl.locale, locale, formatMessage)
+    const { remainCharCnts, submitError } = getSubmitInfo(title, img, content, this.props.intl.locale, locale, formatMessage)
 
     let postLink = getPostLink(editing, link, img)
 

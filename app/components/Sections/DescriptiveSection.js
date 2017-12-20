@@ -1,4 +1,4 @@
-import React, { Component, PropTypes, Children } from 'react'
+import React, { Component, PropTypes } from 'react'
 import cx from 'classnames'
 import { findIndex } from 'lodash'
 import { compose } from 'redux'
@@ -6,7 +6,6 @@ import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
-import { UPDATE_VISIBILITY } from 'containers/QuestPage/constants'
 import {
   getRecommendationRequest,
   descriptiveClick,
@@ -81,7 +80,6 @@ class DescriptiveSection extends Component {
   render() {
     const { expanded, search } = this.state
     const {
-      className,
       descriptives,
       intl: { formatMessage, locale },
       currentDescriptives: { all, stars, includes, excludes, visibles },

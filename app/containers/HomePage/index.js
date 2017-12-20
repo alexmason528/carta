@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import { Container, Row, Col } from 'reactstrap'
-import { UPDATE_USER_SUCCESS, CLOUDINARY_COVER_URL, CLOUDINARY_PROFILE_URL, SIGNOUT } from 'containers/App/constants'
+import { UPDATE_USER_SUCCESS, SIGNOUT } from 'containers/App/constants'
 import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
 import { signOut, verifyRequest, updateUserRequest } from 'containers/App/actions'
 import { CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
@@ -16,11 +16,10 @@ import Verify from 'components/Verify'
 import { Post, PostCreate } from 'components/Post'
 import Profile from 'components/Profile'
 import StartQuest from 'components/StartQuest'
-import { getCroppedImage, getCoverProfilePic } from 'utils/imageHelper'
+import { getCoverProfilePic } from 'utils/imageHelper'
 import { getFirstname } from 'utils/stringHelper'
 import { selectPosts, selectHomeInfo, selectEditingPost } from './selectors'
 import { listPostRequest } from './actions'
-import messages from './messages'
 import './style.scss'
 
 class HomePage extends Component {
@@ -73,7 +72,7 @@ class HomePage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { authenticated, user, params: { vcode } } = this.props
+    const { authenticated } = this.props
     const { homeInfo, info: { status } } = nextProps
 
     if (homeInfo.status === CREATE_POST_SUCCESS) {
@@ -114,18 +113,18 @@ class HomePage extends Component {
     this.setState({ showCreatePostForm: !this.state.showCreatePostForm })
   }
 
-  handleProfilePic = (evt, newVal, prevVal) => {
+  handleProfilePic = (evt, newVal) => {
     this.setState({ profilePic: newVal })
   }
 
-  handleCoverPic = (evt, newVal, prevVal) => {
+  handleCoverPic = (evt, newVal) => {
     this.setState({ coverPic: newVal })
   }
 
   render() {
-    const { showAuthForm, showCreatePostForm, showAccountMenu, timer, coverPic, profilePic } = this.state
-    const { posts, authenticated, user, signOut, updateUserRequest, info, intl: { locale, formatMessage }, editingPost } = this.props
-    const { status, error } = info
+    const { showAuthForm, showCreatePostForm, showAccountMenu, coverPic, profilePic } = this.state
+    const { posts, authenticated, user, signOut, updateUserRequest, info, intl: { locale }, editingPost } = this.props
+    const { status } = info
     const filteredPosts = posts.filter(post => post.title[locale] !== '')
     const createPostButtonType = (filteredPosts.length > 0 && filteredPosts[0].img) ? 'image' : 'text'
 
@@ -136,7 +135,7 @@ class HomePage extends Component {
     return (
       <Container fluid className="homePage">
         <Helmet meta={[{ name: 'description', content: 'Carta' }]} />
-        <Menu currentPage="Home" />
+        <Menu currentPage="home" />
         <Row className="homePage__row">
           <Col lg={4} md={6} sm={12} xs={12} className="homePage__col">
             <Profile

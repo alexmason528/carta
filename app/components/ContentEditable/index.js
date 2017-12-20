@@ -28,7 +28,7 @@ export default class ContentEditable extends Component {
     }
   }
 
-  onChange = evt => {
+  onChange = () => {
     const component = ReactDOM.findDOMNode(this)
     let content = component.innerHTML
     const { onChange } = this.props
