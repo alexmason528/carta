@@ -7,8 +7,10 @@ import { browserHistory } from 'react-router'
 import { createStructuredSelector } from 'reselect'
 import {
   COLORS,
+  CENTER_COORDS,
   CLOUDINARY_POINTS_URL,
   CLOUDINARY_SHAPES_URL,
+  DEFAULT_ZOOM,
   MAP_ACCESS_TOKEN,
 } from 'containers/App/constants'
 import { getRecommendationRequest, mapChange } from 'containers/QuestPage/actions'
@@ -76,6 +78,8 @@ class Map extends Component {
 
   handleStyleLoad = map => {
     this.map = map
+    this.map.setZoom(DEFAULT_ZOOM)
+    this.map.setCenter(CENTER_COORDS)
     const { mapChange } = this.props
     mapChange({
       zoom: map.getZoom(),
@@ -86,6 +90,7 @@ class Map extends Component {
 
   handleDragEnd = map => {
     const { panelState, mapChange, getRecommendationRequest } = this.props
+
     mapChange({
       zoom: map.getZoom(),
       bounds: map.getBounds(),
@@ -238,7 +243,7 @@ class Map extends Component {
   }
 
   render() {
-    const { panelState, viewport: { center: { x, y }, zoom } } = this.props
+    const { panelState } = this.props
 
     return (
       <div className={cx({ map: true, map__withoutQuest: panelState !== 'opened' })}>
@@ -246,8 +251,6 @@ class Map extends Component {
         <MapBox
           style={this.mapStyle}
           containerStyle={{ width: '100%', height: '100%' }}
-          center={[x, y]}
-          zoom={[zoom]}
           onStyleLoad={this.handleStyleLoad}
           onZoomEnd={this.handleZoomEnd}
           onDragEnd={this.handleDragEnd}

@@ -103,8 +103,8 @@ function questReducer(state = initialState, { type, payload }) {
           y: _sw.lat,
         },
         center: {
-          x: lng,
-          y: lat,
+          x: parseFloat(lng).toFixed(2),
+          y: parseFloat(lat).toFixed(2),
         },
       }
 
@@ -123,7 +123,7 @@ function questReducer(state = initialState, { type, payload }) {
           x: payload.x,
           y: payload.y,
         },
-        zoom: payload.zoom,
+        zoom: parseFloat(payload.zoom).toFixed(1),
       }
 
       setItem('viewport', JSON.stringify(newViewport))
