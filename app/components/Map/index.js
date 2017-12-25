@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import cx from 'classnames'
+import { isEqual } from 'lodash'
 import { connect } from 'react-redux'
 import ReactResizeDetector from 'react-resize-detector'
 import ReactMapboxGl from 'react-mapbox-gl'
@@ -14,7 +15,8 @@ import {
   MAP_ACCESS_TOKEN,
 } from 'containers/App/constants'
 import { getRecommendationRequest, mapChange } from 'containers/QuestPage/actions'
-import { selectRecommendations, selectViewport } from 'containers/QuestPage/selectors'
+import { PLACE_CLICK } from 'containers/QuestPage/constants'
+import { selectRecommendations, selectViewport, selectInfo } from 'containers/QuestPage/selectors'
 import { selectLocale } from 'containers/LanguageProvider/selectors'
 import './style.scss'
 
@@ -29,6 +31,14 @@ class Map extends Component {
     panelState: PropTypes.string,
     className: PropTypes.string,
     locale: PropTypes.string,
+  }
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      styleLoaded: false,
+    }
   }
 
   componentWillMount() {
@@ -53,6 +63,13 @@ class Map extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { info: { status }, viewport: { center, zoom } } = nextProps
+    if (status === PLACE_CLICK && this.map) {
+      this.map.flyTo({
+        center,
+        zoom,
+      })
+    }
     this.handleRedrawMap(nextProps)
   }
 
@@ -77,15 +94,18 @@ class Map extends Component {
   }
 
   handleStyleLoad = map => {
+    const { mapChange, viewport: { center, zoom }, getRecommendationRequest } = this.props
     this.map = map
-    this.map.setZoom(DEFAULT_ZOOM)
-    this.map.setCenter(CENTER_COORDS)
-    const { mapChange } = this.props
+    this.map.setZoom(zoom !== DEFAULT_ZOOM ? zoom : DEFAULT_ZOOM)
+    this.map.setCenter(!isEqual(CENTER_COORDS, center) ? center : CENTER_COORDS)
+
     mapChange({
       zoom: map.getZoom(),
       bounds: map.getBounds(),
       center: map.getCenter(),
     })
+
+    this.setState({ styleLoaded: true }, getRecommendationRequest)
   }
 
   handleDragEnd = map => {
@@ -102,18 +122,13 @@ class Map extends Component {
     }
   }
 
-  handleAddSource = () => {
+  handleAddShapes = () => {
     this.map.addSource('shapes', {
       type: 'geojson',
       data: `${CLOUDINARY_SHAPES_URL}/shapes.geojson`,
     })
 
-    this.map.addSource('points', {
-      type: 'geojson',
-      data: `${CLOUDINARY_POINTS_URL}/points.geojson`,
-    })
-
-    COLORS.reverse().forEach((color, index) => {
+    COLORS.slice().reverse().forEach((color, index) => {
       this.map.addLayer({
         id: `shape-fill-${index}`,
         type: 'fill',
@@ -160,7 +175,16 @@ class Map extends Component {
         const link = data.features[0].properties.link
         this.handleElementClick(link)
       })
+    })
+  }
 
+  handleAddCaption = () => {
+    this.map.addSource('points', {
+      type: 'geojson',
+      data: `${CLOUDINARY_POINTS_URL}/points.geojson`,
+    })
+
+    COLORS.slice().reverse().forEach((color, index) => {
       this.map.addLayer({
         id: `shape-caption-${index}`,
         type: 'symbol',
@@ -196,11 +220,14 @@ class Map extends Component {
     })
   }
 
-
   handleClearMap = () => {
     if (this.map) {
-      if (!this.map.getSource('shapes') || !this.map.getSource('points')) {
-        this.handleAddSource()
+      if (!this.map.getSource('shapes')) {
+        this.handleAddShapes()
+      }
+
+      if (!this.map.getSource('points')) {
+        this.handleAddCaption()
       }
 
       const sources = Array(COLORS.length).fill(0)
@@ -217,22 +244,27 @@ class Map extends Component {
   handleRedrawMap = props => {
     const { panelState, recommendations } = props
     this.handleClearMap()
-    if (this.map && panelState !== 'closed') {
-      recommendations.map((recommendation, index) => {
-        const { display, e } = recommendation
-        let filter = ['==', 'e', e]
-
-        if (display === 'shape') {
-          this.map.setFilter(`shape-border-offset-${index}`, filter)
-          this.map.setFilter(`shape-border-${index}`, filter)
-          this.map.setFilter(`shape-fill-${index}`, filter)
-          this.map.setFilter(`shape-caption-${index}`, filter)
-        } else if (display === 'icon') {
-          this.map.setFilter(`shape-border-offset-${index}`, ['==', 'e', ''])
-          this.map.setFilter(`shape-border-${index}`, ['==', 'e', ''])
-          this.map.setFilter(`shape-caption-${index}`, filter)
-        }
-      })
+    if (this.map) {
+      // this.map.flyTo({
+      //   center: props.viewport.center,
+      //   zoom: props.viewport.zoom,
+      // })
+      if (panelState !== 'closed') {
+        recommendations.map((recommendation, index) => {
+          const { display, e } = recommendation
+          const filter = ['==', 'e', e]
+          if (display === 'shape') {
+            this.map.setFilter(`shape-border-offset-${index}`, filter)
+            this.map.setFilter(`shape-border-${index}`, filter)
+            this.map.setFilter(`shape-fill-${index}`, filter)
+            this.map.setFilter(`shape-caption-${index}`, filter)
+          } else if (display === 'icon') {
+            this.map.setFilter(`shape-border-offset-${index}`, ['==', 'e', ''])
+            this.map.setFilter(`shape-border-${index}`, ['==', 'e', ''])
+            this.map.setFilter(`shape-caption-${index}`, filter)
+          }
+        })
+      }
     }
   }
 
@@ -244,9 +276,10 @@ class Map extends Component {
 
   render() {
     const { panelState } = this.props
+    const { styleLoaded } = this.state
 
     return (
-      <div className={cx({ map: true, map__withoutQuest: panelState !== 'opened' })}>
+      <div className={cx({ map: true, map__withoutQuest: panelState !== 'opened', hidden: !styleLoaded })}>
         <ReactResizeDetector handleWidth handleHeight onResize={this.handleResize} />
         <MapBox
           style={this.mapStyle}
@@ -264,6 +297,7 @@ const selectors = createStructuredSelector({
   locale: selectLocale(),
   viewport: selectViewport(),
   recommendations: selectRecommendations(),
+  info: selectInfo(),
 })
 
 const actions = {

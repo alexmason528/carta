@@ -141,7 +141,13 @@ const getRecommendations = (req, res) => {
   ]
 
   Element.aggregate(pipeline, (err, elements) => {
-    if (err) throw err
+    if (err) {
+      return res.status(400).send({
+        error: {
+          details: err,
+        },
+      })
+    }
 
     let scoreElements = elements.map((element) => {
       let dScore = 0
@@ -236,7 +242,13 @@ const getBrochure = (req, res) => {
   const { link } = req.body
 
   Place.findOne({ link }, { _id: 0, e: 0, name: 0 }, (err, place) => {
-    if (err) throw err
+    if (err) {
+      return res.status(400).send({
+        error: {
+          details: err,
+        },
+      })
+    }
     return res.json(place || {})
   })
 }

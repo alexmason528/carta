@@ -1,4 +1,5 @@
 import { findIndex, find } from 'lodash'
+import { DEFAULT_ZOOM, CENTER_COORDS } from 'containers/App/constants'
 import { DEFAULT_LOCALE } from 'containers/LanguageProvider/constants'
 import { getQuestStr } from 'utils/urlHelper'
 import { getItem, setItem } from 'utils/localStorage'
@@ -60,11 +61,8 @@ const initialViewport = {
     x: 3.624734374990169,
     y: 48.87383712585131,
   },
-  center: {
-    x: 5.822,
-    y: 52.142,
-  },
-  zoom: 6,
+  center: CENTER_COORDS,
+  zoom: DEFAULT_ZOOM,
 }
 
 const initialState = {
@@ -75,7 +73,7 @@ const initialState = {
   },
   viewport: JSON.parse(getItem('viewport')) || initialViewport,
   quests: JSON.parse(getItem('quests')) || [JSON.parse(JSON.stringify(initialQuest))],
-  curQuestInd: 0,
+  curQuestInd: JSON.parse(getItem('curQuestInd')) || 0,
   recommendations: [],
   brochure: null,
   status: null,
@@ -93,7 +91,7 @@ function questReducer(state = initialState, { type, payload }) {
       const { zoom, bounds: { _ne, _sw }, center: { lng, lat } } = payload
       newViewport = {
         ...state.viewport,
-        zoom,
+        zoom: parseFloat(zoom.toFixed(1)),
         northeast: {
           x: _ne.lng,
           y: _ne.lat,
@@ -102,10 +100,7 @@ function questReducer(state = initialState, { type, payload }) {
           x: _sw.lng,
           y: _sw.lat,
         },
-        center: {
-          x: parseFloat(lng).toFixed(2),
-          y: parseFloat(lat).toFixed(2),
-        },
+        center: [parseFloat(lng.toFixed(4)), parseFloat(lat.toFixed(4))],
       }
 
       setItem('viewport', JSON.stringify(newViewport))
@@ -119,11 +114,8 @@ function questReducer(state = initialState, { type, payload }) {
     case PLACE_CLICK:
       newViewport = {
         ...state.viewport,
-        center: {
-          x: payload.x,
-          y: payload.y,
-        },
-        zoom: parseFloat(payload.zoom).toFixed(1),
+        center: [parseFloat(payload.x.toFixed(4)), parseFloat(payload.y.toFixed(4))],
+        zoom: parseFloat(payload.zoom.toFixed(1)),
       }
 
       setItem('viewport', JSON.stringify(newViewport))
@@ -275,6 +267,7 @@ function questReducer(state = initialState, { type, payload }) {
       }
 
     case QUEST_SELECT:
+      setItem('curQuestInd', payload)
       return {
         ...state,
         status: type,
@@ -286,6 +279,10 @@ function questReducer(state = initialState, { type, payload }) {
 
       setItem('quests', JSON.stringify(quests))
 
+      if (payload < curQuestInd) {
+        setItem('curQuestInd', curQuestInd - 1)
+      }
+
       return Object.assign({},
         { ...state, status: type, quests },
         (payload < curQuestInd) && { curQuestInd: curQuestInd - 1 },
@@ -293,19 +290,18 @@ function questReducer(state = initialState, { type, payload }) {
 
     case SET_DEFAULT_QUEST:
       const { viewport, types, descriptives } = payload
-
       newQuests = quests.map((quest, index) => {
         if (index === curQuestInd) {
           quest.types.all = types.all
           for (let type of types.includes) {
             const typeObj = find(categories.types, { [DEFAULT_LOCALE]: getQuestStr(type) })
-            if (typeObj) {
+            if (typeObj && !find(quest.types.includes, typeObj)) {
               quest.types.includes.push(typeObj)
             }
           }
           for (let type of types.excludes) {
             const typeObj = find(categories.types, { [DEFAULT_LOCALE]: getQuestStr(type) })
-            if (typeObj) {
+            if (typeObj && !find(quest.types.excludes, typeObj)) {
               quest.types.excludes.push(typeObj)
             }
           }
@@ -313,19 +309,19 @@ function questReducer(state = initialState, { type, payload }) {
           quest.descriptives.all = descriptives.all
           for (let desc of descriptives.stars) {
             const descObj = find(categories.descriptives, { [DEFAULT_LOCALE]: getQuestStr(desc) })
-            if (descObj) {
+            if (descObj && !find(quest.descriptives.stars, descObj)) {
               quest.descriptives.stars.push(descObj)
             }
           }
           for (let desc of descriptives.includes) {
             const descObj = find(categories.descriptives, { [DEFAULT_LOCALE]: getQuestStr(desc) })
-            if (descObj) {
+            if (descObj && !find(quest.descriptives.includes, descObj)) {
               quest.descriptives.includes.push(descObj)
             }
           }
           for (let desc of descriptives.excludes) {
             const descObj = find(categories.descriptives, { [DEFAULT_LOCALE]: getQuestStr(desc) })
-            if (descObj) {
+            if (descObj && !find(quest.descriptives.excludes, descObj)) {
               quest.descriptives.excludes.push(descObj)
             }
           }
@@ -345,7 +341,7 @@ function questReducer(state = initialState, { type, payload }) {
         ...state,
         viewport: newViewport,
         status: type,
-        quests: newQuests,
+        quests: JSON.parse(JSON.stringify(newQuests)),
       }
 
     case UPDATE_VISIBILITY:

@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
 import { Container } from 'reactstrap'
+import { MAPBOX_DEFAULT_CENTER } from 'containers/App/constants'
 import Brochure from 'containers/Brochure'
 import { QuestButton } from 'components/Buttons'
 import Map from 'components/Map'
@@ -73,7 +74,9 @@ class QuestPage extends Component {
     })
 
     if ((!isParamEqual && shouldUpdate) || (isParamEmpty && !isInitialQuest && sendRequest)) {
-      browserHistory.push(url)
+      if (!isEqual(nextProps.viewport.center, MAPBOX_DEFAULT_CENTER)) {
+        browserHistory.push(url)
+      }
     }
   }
 

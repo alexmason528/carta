@@ -14,7 +14,13 @@ const Category = require('../models/category')
 
 const importElements = (req, res) => {
   Element.remove({}, (err) => {
-    if (err) throw err
+    if (err) {
+      return res.status(400).send({
+        error: {
+          details: err,
+        },
+      })
+    }
 
     const csvPath = path.join(__dirname, '../csv/elements.csv')
     const stream = fs.createReadStream(csvPath)
@@ -38,7 +44,13 @@ const importElements = (req, res) => {
 
 const importDescriptives = (req, res) => {
   Descriptive.remove({}, (err) => {
-    if (err) throw err
+    if (err) {
+      return res.status(400).send({
+        error: {
+          details: err,
+        },
+      })
+    }
 
     const csvPath = path.join(__dirname, '../csv/descriptives.csv')
     const stream = fs.createReadStream(csvPath)
@@ -62,7 +74,13 @@ const importDescriptives = (req, res) => {
 
 const importTypes = (req, res) => {
   Type.remove({}, (err) => {
-    if (err) throw err
+    if (err) {
+      return res.status(400).send({
+        error: {
+          details: err,
+        },
+      })
+    }
 
     const csvPath = path.join(__dirname, '../csv/types.csv')
     const stream = fs.createReadStream(csvPath)
@@ -86,7 +104,13 @@ const importTypes = (req, res) => {
 
 const importCategories = (req, res) => {
   Category.remove({}, (err) => {
-    if (err) throw err
+    if (err) {
+      return res.status(400).send({
+        error: {
+          details: err,
+        },
+      })
+    }
 
     const csvPath = path.join(__dirname, '../csv/categories.csv')
     const stream = fs.createReadStream(csvPath)

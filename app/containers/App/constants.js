@@ -38,4 +38,5 @@ export const CLOUDINARY_SHAPES_URL = 'https://res.cloudinary.com/hyvpvyohj/raw/u
 
 export const COLORS = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379']
 export const CENTER_COORDS = [5.822, 52.142]
+export const MAPBOX_DEFAULT_CENTER = [-0.2417, 51.5286]
 export const DEFAULT_ZOOM = 6
