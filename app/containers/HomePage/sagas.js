@@ -1,5 +1,4 @@
-import { take, call, put, select, cancel, takeLatest } from 'redux-saga/effects'
-import { LOCATION_CHANGE } from 'react-router-redux'
+import { call, put, select, takeLatest } from 'redux-saga/effects'
 
 import request from 'utils/request'
 import { setItem, removeItem } from 'utils/localStorage'
@@ -255,63 +254,43 @@ export function* updateUserRequest({ payload }) {
 }
 
 export function* registerRequestWatcher() {
-  const watcher = yield takeLatest(REGISTER_REQUEST, registerRequest)
-  yield take(LOCATION_CHANGE)
-  yield cancel(watcher)
+  yield takeLatest(REGISTER_REQUEST, registerRequest)
 }
 
 export function* signInRequestWatcher() {
-  const watcher = yield takeLatest(SIGNIN_REQUEST, signInRequest)
-  yield take(LOCATION_CHANGE)
-  yield cancel(watcher)
+  yield takeLatest(SIGNIN_REQUEST, signInRequest)
 }
 
 export function* deleteUserWatcher() {
-  const watcher = yield takeLatest(DELETE_USER_REQUEST, deleteUserRequest)
-  yield take(LOCATION_CHANGE)
-  yield cancel(watcher)
+  yield takeLatest(DELETE_USER_REQUEST, deleteUserRequest)
 }
 
 export function* verifyRequestWatcher() {
-  const watcher = yield takeLatest(VERIFY_REQUEST, verifyRequest)
-  yield take(LOCATION_CHANGE)
-  yield cancel(watcher)
+  yield takeLatest(VERIFY_REQUEST, verifyRequest)
 }
 
 export function* createPostWatcher() {
-  const watcher = yield takeLatest(CREATE_POST_REQUEST, createPostRequest)
-  yield take(LOCATION_CHANGE)
-  yield cancel(watcher)
+  yield takeLatest(CREATE_POST_REQUEST, createPostRequest)
 }
 
 export function* listPostWatcher() {
-  const watcher = yield takeLatest(LIST_POST_REQUEST, listPostRequest)
-  yield take(LOCATION_CHANGE)
-  yield cancel(watcher)
+  yield takeLatest(LIST_POST_REQUEST, listPostRequest)
 }
 
 export function* updatePostWatcher() {
-  const watcher = yield takeLatest(UPDATE_POST_REQUEST, updatePostRequest)
-  yield take(LOCATION_CHANGE)
-  yield cancel(watcher)
+  yield takeLatest(UPDATE_POST_REQUEST, updatePostRequest)
 }
 
 export function* deletePostWatcher() {
-  const watcher = yield takeLatest(DELETE_POST_REQUEST, deletePostRequest)
-  yield take(LOCATION_CHANGE)
-  yield cancel(watcher)
+  yield takeLatest(DELETE_POST_REQUEST, deletePostRequest)
 }
 
 export function* listSuggestionWatcher() {
-  const watcher = yield takeLatest(LIST_SUGGESTION_REQUEST, listSuggestionRequest)
-  yield take(LOCATION_CHANGE)
-  yield cancel(watcher)
+  yield takeLatest(LIST_SUGGESTION_REQUEST, listSuggestionRequest)
 }
 
 export function* updateUserWatcher() {
-  const watcher = yield takeLatest(UPDATE_USER_REQUEST, updateUserRequest)
-  yield take(LOCATION_CHANGE)
-  yield cancel(watcher)
+  yield takeLatest(UPDATE_USER_REQUEST, updateUserRequest)
 }
 
 export default [

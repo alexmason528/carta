@@ -1,5 +1,4 @@
-import { take, call, put, select, cancel, takeLatest } from 'redux-saga/effects'
-import { LOCATION_CHANGE } from 'react-router-redux'
+import { call, put, select, takeLatest } from 'redux-saga/effects'
 import { findIndex } from 'lodash'
 import { API_BASE_URL } from 'containers/App/constants'
 import { selectCurrentTypes, selectCurrentDescriptives, selectViewport, selectTypes } from 'containers/QuestPage/selectors'
