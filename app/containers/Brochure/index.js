@@ -26,7 +26,7 @@ class Brochure extends Component {
 
   handleBrochureClose = () => {
     const { params: { viewport, types, descriptives } } = this.props
-    const url = (viewport && types && descriptives) ? `/quest/${viewport}/${types}/${descriptives}/` : '/quest'
+    const url = (viewport && types && descriptives) ? `/quest/${viewport}/${types}/${descriptives}` : '/quest'
     browserHistory.push(url)
   }
 
