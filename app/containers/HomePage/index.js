@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import { Container, Row, Col } from 'reactstrap'
+import Masonry from 'react-masonry-component'
 import { UPDATE_USER_SUCCESS, SIGNOUT } from 'containers/App/constants'
 import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
 import { signOut, verifyRequest, updateUserRequest } from 'containers/App/actions'
@@ -128,16 +129,15 @@ class HomePage extends Component {
     const filteredPosts = posts.filter(post => post.title[locale] !== '')
     const createPostButtonType = (filteredPosts.length > 0 && filteredPosts[0].img) ? 'image' : 'text'
 
-    const firstCol = [6, 8, 9, 12, 15, 18, 21, 24]
-    const secondCol = [0, 1, 4, 7, 10, 13, 16, 19, 22]
-    const thirdCol = [2, 3, 5, 11, 14, 17, 20, 23]
-
     return (
       <Container fluid className="homePage">
         <Helmet meta={[{ name: 'description', content: 'Carta' }]} />
         <Menu currentPage="home" />
-        <Row className="homePage__row">
-          <Col lg={4} md={6} sm={12} xs={12} className="homePage__col">
+        <Masonry
+          className="homePage__row"
+          updateOnEachImageLoad
+        >
+          <Col md={4} sm={6} className="homePage__col">
             <Profile
               onClick={this.handleProfileClick}
               onUpdate={updateUserRequest}
@@ -147,7 +147,8 @@ class HomePage extends Component {
               coverPic={coverPic}
               profilePic={profilePic}
             />
-            { authenticated ?
+            {
+            authenticated ?
               <AccountMenu show={showAccountMenu} onClick={this.handleProfileClick} /> :
               <AuthForm
                 show={showAuthForm}
@@ -156,54 +157,28 @@ class HomePage extends Component {
                 coverPic={coverPic}
                 profilePic={profilePic}
               />
-            }
+          }
+          </Col>
+          <Col md={4} sm={6} className="homePage__col">
             <StartQuest authenticated={authenticated} />
-            {
-              filteredPosts && filteredPosts.map((post, key) => {
-                const data = {
-                  ...post,
-                  key,
-                  firstname: getFirstname(post.author.fullname),
-                  editable: (authenticated && (post.author._id === user._id || user.role === 'admin')) && !editingPost && !showCreatePostForm,
-                  first: (key === 0 && authenticated),
-                }
-                return (firstCol.indexOf(key) !== -1) ? <Post {...data} /> : null
-              })
+          </Col>
+          <Col md={4} sm={6} className="homePage__col">
+            <StartQuest authenticated={authenticated} />
+          </Col>
+          {filteredPosts && filteredPosts.map((post, key) => {
+            const data = {
+              ...post,
+              firstname: getFirstname(post.author.fullname),
+              editable: (authenticated && (post.author._id === user._id || user.role === 'admin')) && !editingPost && !showCreatePostForm,
+              first: (key === 0 && authenticated),
             }
-          </Col>
-          <Col lg={4} md={6} sm={12} xs={12} className="homePage__col">
-            { authenticated && !showCreatePostForm && user.verified && !editingPost && <CreatePostButton type={createPostButtonType} onClick={this.toggleCreatePostForm} />}
-            { authenticated && showCreatePostForm && <PostCreate onClose={this.toggleCreatePostForm} user={user} /> }
-            <div>
-              {
-                filteredPosts && filteredPosts.map((post, key) => {
-                  const data = {
-                    ...post,
-                    key,
-                    firstname: getFirstname(post.author.fullname),
-                    editable: (authenticated && (post.author._id === user._id || user.role === 'admin')) && !editingPost && !showCreatePostForm,
-                    first: (key === 0 && authenticated),
-                  }
-                  return (secondCol.indexOf(key) !== -1) ? <Post {...data} /> : null
-                })
-              }
-            </div>
-          </Col>
-          <Col lg={4} md={6} sm={12} xs={12} className="homePage__col">
-            {
-              filteredPosts && filteredPosts.map((post, key) => {
-                const data = {
-                  ...post,
-                  key,
-                  firstname: getFirstname(post.author.fullname),
-                  editable: (authenticated && (post.author._id === user._id || user.role === 'admin')) && !editingPost && !showCreatePostForm,
-                  first: (key === 0 && authenticated),
-                }
-                return (thirdCol.indexOf(key) !== -1) ? <Post {...data} /> : null
-              })
-            }
-          </Col>
-        </Row>
+            return (
+              <Col key={key} md={4} sm={6} className="homePage__col">
+                <Post {...data} />
+              </Col>
+            )
+          })}
+        </Masonry>
         <Verify user={user} status={status} signOut={signOut} />
       </Container>
     )
