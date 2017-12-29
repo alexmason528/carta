@@ -14,9 +14,16 @@ import {
   DEFAULT_ZOOM,
   MAP_ACCESS_TOKEN,
 } from 'containers/App/constants'
-import { getRecommendationRequest, mapChange } from 'containers/QuestPage/actions'
+import {
+  getRecommendationRequest,
+  mapChange,
+} from 'containers/QuestPage/actions'
 import { PLACE_CLICK } from 'containers/QuestPage/constants'
-import { selectRecommendations, selectViewport, selectInfo } from 'containers/QuestPage/selectors'
+import {
+  selectRecommendations,
+  selectViewport,
+  selectInfo,
+} from 'containers/QuestPage/selectors'
 import { selectLocale } from 'containers/LanguageProvider/selectors'
 import './style.scss'
 
@@ -51,13 +58,15 @@ class Map extends Component {
           tileSize: 128,
         },
       },
-      layers: [{
-        id: 'simple-tiles',
-        type: 'raster',
-        source: 'raster-tiles',
-        minzoom: 0,
-        maxzoom: 22,
-      }],
+      layers: [
+        {
+          id: 'simple-tiles',
+          type: 'raster',
+          source: 'raster-tiles',
+          minzoom: 0,
+          maxzoom: 22,
+        },
+      ],
       glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
     }
   }
@@ -94,7 +103,11 @@ class Map extends Component {
   }
 
   handleStyleLoad = map => {
-    const { mapChange, viewport: { center, zoom }, getRecommendationRequest } = this.props
+    const {
+      mapChange,
+      viewport: { center, zoom },
+      getRecommendationRequest,
+    } = this.props
     this.map = map
     this.map.setZoom(zoom !== DEFAULT_ZOOM ? zoom : DEFAULT_ZOOM)
     this.map.setCenter(!isEqual(CENTER_COORDS, center) ? center : CENTER_COORDS)
@@ -128,54 +141,56 @@ class Map extends Component {
       data: `${CLOUDINARY_SHAPES_URL}/shapes.geojson`,
     })
 
-    COLORS.slice().reverse().forEach((color, index) => {
-      this.map.addLayer({
-        id: `shape-fill-${index}`,
-        type: 'fill',
-        source: 'shapes',
-        layout: {},
-        paint: { 'fill-color': color, 'fill-opacity': 0 },
-        filter: ['==', 'e', ''],
-      })
+    COLORS.slice()
+      .reverse()
+      .forEach((color, index) => {
+        this.map.addLayer({
+          id: `shape-fill-${index}`,
+          type: 'fill',
+          source: 'shapes',
+          layout: {},
+          paint: { 'fill-color': color, 'fill-opacity': 0 },
+          filter: ['==', 'e', ''],
+        })
 
-      this.map.addLayer({
-        id: `shape-border-offset-${index}`,
-        type: 'line',
-        source: 'shapes',
-        layout: {},
-        paint: {
-          'line-color': color,
-          'line-width': 2.5,
-          'line-opacity': 0.15,
-          'line-offset': 1.5,
-        },
-        filter: ['==', 'e', ''],
-      })
+        this.map.addLayer({
+          id: `shape-border-offset-${index}`,
+          type: 'line',
+          source: 'shapes',
+          layout: {},
+          paint: {
+            'line-color': color,
+            'line-width': 2.5,
+            'line-opacity': 0.15,
+            'line-offset': 1.5,
+          },
+          filter: ['==', 'e', ''],
+        })
 
-      this.map.addLayer({
-        id: `shape-border-${index}`,
-        type: 'line',
-        source: 'shapes',
-        layout: {},
-        paint: { 'line-color': color, 'line-width': 0.5 },
-        filter: ['==', 'e', ''],
-      })
+        this.map.addLayer({
+          id: `shape-border-${index}`,
+          type: 'line',
+          source: 'shapes',
+          layout: {},
+          paint: { 'line-color': color, 'line-width': 0.5 },
+          filter: ['==', 'e', ''],
+        })
 
-      const shapeFill = `shape-fill-${index}`
+        const shapeFill = `shape-fill-${index}`
 
-      this.map.on('mousemove', shapeFill, () => {
-        this.map.getCanvas().style.cursor = 'pointer'
-      })
+        this.map.on('mousemove', shapeFill, () => {
+          this.map.getCanvas().style.cursor = 'pointer'
+        })
 
-      this.map.on('mouseleave', shapeFill, () => {
-        this.map.getCanvas().style.cursor = ''
-      })
+        this.map.on('mouseleave', shapeFill, () => {
+          this.map.getCanvas().style.cursor = ''
+        })
 
-      this.map.on('click', shapeFill, data => {
-        const link = data.features[0].properties.link
-        this.handleElementClick(link)
+        this.map.on('click', shapeFill, data => {
+          const link = data.features[0].properties.link
+          this.handleElementClick(link)
+        })
       })
-    })
   }
 
   handleAddCaption = () => {
@@ -184,40 +199,42 @@ class Map extends Component {
       data: `${CLOUDINARY_POINTS_URL}/points.geojson`,
     })
 
-    COLORS.slice().reverse().forEach((color, index) => {
-      this.map.addLayer({
-        id: `shape-caption-${index}`,
-        type: 'symbol',
-        source: 'points',
-        layout: {
-          'text-field': '{name}',
-          'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
-          'text-size': 13,
-          'text-transform': 'uppercase',
-        },
-        paint: {
-          'text-color': color,
-          'text-halo-width': 2,
-          'text-halo-color': '#fff',
-        },
-        filter: ['==', 'e', ''],
-      })
+    COLORS.slice()
+      .reverse()
+      .forEach((color, index) => {
+        this.map.addLayer({
+          id: `shape-caption-${index}`,
+          type: 'symbol',
+          source: 'points',
+          layout: {
+            'text-field': '{name}',
+            'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+            'text-size': 13,
+            'text-transform': 'uppercase',
+          },
+          paint: {
+            'text-color': color,
+            'text-halo-width': 2,
+            'text-halo-color': '#fff',
+          },
+          filter: ['==', 'e', ''],
+        })
 
-      const shapeCaption = `shape-caption-${index}`
+        const shapeCaption = `shape-caption-${index}`
 
-      this.map.on('mousemove', shapeCaption, () => {
-        this.map.getCanvas().style.cursor = 'pointer'
-      })
+        this.map.on('mousemove', shapeCaption, () => {
+          this.map.getCanvas().style.cursor = 'pointer'
+        })
 
-      this.map.on('mouseleave', shapeCaption, () => {
-        this.map.getCanvas().style.cursor = ''
-      })
+        this.map.on('mouseleave', shapeCaption, () => {
+          this.map.getCanvas().style.cursor = ''
+        })
 
-      this.map.on('click', shapeCaption, data => {
-        const link = data.features[0].properties.link
-        this.handleElementClick(link)
+        this.map.on('click', shapeCaption, data => {
+          const link = data.features[0].properties.link
+          this.handleElementClick(link)
+        })
       })
-    })
   }
 
   handleClearMap = () => {
@@ -245,10 +262,6 @@ class Map extends Component {
     const { panelState, recommendations } = props
     this.handleClearMap()
     if (this.map) {
-      // this.map.flyTo({
-      //   center: props.viewport.center,
-      //   zoom: props.viewport.zoom,
-      // })
       if (panelState !== 'closed') {
         recommendations.map((recommendation, index) => {
           const { display, e } = recommendation
@@ -279,8 +292,18 @@ class Map extends Component {
     const { styleLoaded } = this.state
 
     return (
-      <div className={cx({ map: true, map__withoutQuest: panelState !== 'opened', hidden: !styleLoaded })}>
-        <ReactResizeDetector handleWidth handleHeight onResize={this.handleResize} />
+      <div
+        className={cx({
+          map: true,
+          map__withoutQuest: panelState !== 'opened',
+          hidden: !styleLoaded,
+        })}
+      >
+        <ReactResizeDetector
+          handleWidth
+          handleHeight
+          onResize={this.handleResize}
+        />
         <MapBox
           style={this.mapStyle}
           containerStyle={{ width: '100%', height: '100%' }}

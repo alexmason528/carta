@@ -1,0 +1,47 @@
+@import '../../styles/common';
+
+.fixedTile {
+  &:before {
+    content: '';
+    display: block;
+    padding-top: 50%;
+  }
+
+  &__image {
+    width: 100%;
+    transform: scale(1);
+    @include transition(all, $fastTrans);
+  }
+
+  &:hover &__image {
+    transform: scale($enlargeSize);
+  }
+
+  &__content {
+    @include absoluteFill();
+
+    &:before {
+      content: '';
+      z-index: 1;
+      @include absoluteFill();
+      @include insetBoxShadow($boxShadowBlur, $darkShadowColor);
+    }
+  }
+
+  &__title {
+    color: $white;
+    font-weight: $heavyFw;
+    line-height: $textLH;
+    @include vCenter();
+    @include textShadow($textShadowBlur, $shadowColor);
+  }
+
+  &__message {
+    position: absolute;
+    right: 15px;
+    bottom: 5px;
+    color: $white;
+    font-size: 14px;
+    @include textShadow($textShadowBlur, $shadowColor);
+  }
+}

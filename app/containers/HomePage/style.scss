@@ -1,58 +1,64 @@
+@import '../../styles/common';
+
 .homePage {
-  background: #fff;
-  padding: 0;
-  margin: 0;
-  overflow-x: hidden;
-  
-  &__row { margin: 0 -4px }
+  background: $white;
+
+  &__row {
+    margin: 0 -4px;
+  }
 
   &__col {
     padding: 0 4px;
     position: relative;
 
     &:first-child .post {
-      .postTitle, .postTitleEdit, .postContent { padding-left: 60px; }
+      .postTitle,
+      .postTitleEdit,
+      .postContent {
+        padding-left: 60px;
+      }
     }
   }
 
-  img { cursor: pointer }
+  img {
+    cursor: pointer;
+  }
 
-  input, textarea {
+  input,
+  textarea {
     cursor: text;
     resize: none;
   }
 
-  textarea { overflow-y: hidden }
+  textarea {
+    overflow-y: hidden;
+  }
 
   input::placeholder,
   textarea::placeholder {
-    color: #bbb;
-    opacity: 1;
+    color: $placeholderColor;
+    opacity: $darkerOpacity;
   }
 
   input:-webkit-autofill,
-  input:-webkit-autofill:hover, 
-  input:-webkit-autofill:focus
-  input:-webkit-autofill, 
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus input:-webkit-autofill,
   textarea:-webkit-autofill,
-  textarea:-webkit-autofill:hover
-  textarea:-webkit-autofill:focus,
+  textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus,
   select:-webkit-autofill,
   select:-webkit-autofill:hover,
   select:-webkit-autofill:focus {
-    -webkit-background-color: #fff;
-    background-color: #fff;
-    -webkit-box-shadow: 0 0 0px 1000px white inset;
-    box-shadow: 0 0 0px 1000px white inset;
+    @include insetBoxShadow(1000px, $white);
+    @include backgroundColor($white);
   }
 
   .error {
     position: absolute;
-    color: #e80303;
     bottom: 0;
-    background: #fff;
-    font-weight: 300;
     width: calc(100% - 80px);
+    color: $errorColor;
+    background: $white;
+    font-weight: $lighterFw;
   }
 }
 
@@ -68,17 +74,19 @@
   }
 
   .btnImage {
-    line-height: 0;
-    border-radius: 20px;
+    line-height: $noLH;
     margin-right: 5px;
-    
+    @include borderRadius(20px);
+
     img {
       width: 13px;
       height: 13px;
     }
   }
 
-  .btnText { text-transform: uppercase }
+  .btnText {
+    text-transform: uppercase;
+  }
 
   &--afterImage {
     top: 16px;
@@ -86,80 +94,51 @@
     left: 24px;
 
     .btnImage {
-      background: #fff;
+      background: $white;
       padding: 5px;
-      box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
-      transition: all 0.1s;
+      transition: all $fastTrans;
+      @include boxShadow($boxShadowBlur, $shadowColor);
     }
 
     .btnText {
-      color: #fff;
-      font-weight: 700;
+      color: $white;
+      font-weight: $normalFw;
       font-size: 15px;
-      text-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
-      transition: all 0.1s;
+      @include textShadow($textShadowBlur, $shadowColor);
+      transition: all $fastTrans;
     }
 
     &:hover {
-      .btnImage { box-shadow: 0 0 7px rgba(0, 0, 0, 0.6) }
-      .btnText { text-shadow: 0 0 7px rgba(0, 0, 0, 0.6) }
+      .btnImage {
+        @include boxShadow($boxShadowBlur, $darkShadowColor);
+      }
+      .btnText {
+        @include textShadow($boxShadowBlur, $darkShadowColor);
+      }
     }
   }
 
   &--afterText {
     padding: 4px 8px;
-    border: 0.5px solid #fff;
+    border: 0.5px solid $white;
     margin: 9px 0 8px 14px;
 
     .btnText {
-      color: rgba(0, 0, 0, 0.7);
+      color: $darkerShadowColor;
       font-size: 13px;
     }
 
-    .btnImage { opacity: 0.7 }
+    .btnImage {
+      opacity: $darkOpacity;
+    }
 
     &:hover {
-      .btnText { color: rgba(0, 0, 0, 1) }
-      .btnImage { opacity: 1 }
+      .btnText {
+        color: $black;
+      }
+      .btnImage {
+        opacity: $darkerOpacity;
+      }
     }
-  }
-}
-
-.verifyCtrl {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  left: 0;
-  top: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-
-  &__message {
-    width: 220px;
-    height: 220px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #fff;
-    border-radius: 50%;
-    padding: 30px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
-    word-break: break-word;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-weight: 400;
-  }
-
-  &__signOutForm {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translate(-50%, 0);
-    background: #fff;
-    padding: 15px 25px;
-    font-weight: 400;
   }
 }

@@ -4,8 +4,10 @@ import { browserHistory } from 'react-router'
 import { VERIFY_SUCCESS, VERIFY_FAIL } from 'containers/App/constants'
 import { getFirstname } from 'utils/stringHelper'
 import messages from 'containers/HomePage/messages'
+import './style.scss'
 
-class Verify extends Component { // eslint-disable-line react/prefer-stateless-function
+class Verify extends Component {
+  // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     signOut: PropTypes.func,
     user: PropTypes.object,
@@ -21,20 +23,22 @@ class Verify extends Component { // eslint-disable-line react/prefer-stateless-f
   componentWillReceiveProps(nextProps) {
     const { status } = this.props
     if (nextProps.status === VERIFY_SUCCESS && nextProps.status !== status) {
-      this.setState({
-        timer: 5,
-      }, () => {
-        const intervalID =
-        setInterval(() => {
-          const { timer } = this.state
-          if (timer === 0) {
-            clearInterval(intervalID)
-            browserHistory.push('/')
-          } else {
-            this.setState({ timer: timer - 1 })
-          }
-        }, 1000)
-      })
+      this.setState(
+        {
+          timer: 5,
+        },
+        () => {
+          const intervalID = setInterval(() => {
+            const { timer } = this.state
+            if (timer === 0) {
+              clearInterval(intervalID)
+              browserHistory.push('/')
+            } else {
+              this.setState({ timer: timer - 1 })
+            }
+          }, 1000)
+        }
+      )
     }
   }
 
@@ -44,30 +48,27 @@ class Verify extends Component { // eslint-disable-line react/prefer-stateless-f
 
     let verifyMessage
 
-    if (user && !user.verified && (status !== VERIFY_FAIL)) {
-      verifyMessage = formatMessage(messages.verificationEmail, { name: getFirstname(user.fullname) })
+    if (user && !user.verified && status !== VERIFY_FAIL) {
+      verifyMessage = formatMessage(messages.verificationEmail, {
+        name: getFirstname(user.fullname),
+      })
     } else if (user && timer !== 0 && status === VERIFY_SUCCESS) {
       verifyMessage = formatMessage(messages.verificationSuccess, { timer })
     } else if (status === VERIFY_FAIL) {
       verifyMessage = formatMessage(messages.verificationFail)
     }
 
-    return (
-      verifyMessage
-      ? (
-        <div className="verifyCtrl">
-          <div className="verifyCtrl__message">
-            { verifyMessage }
+    return verifyMessage ? (
+      <div className="verifyCtrl">
+        <div className="verifyCtrl__message Wb-Bw P-30">{verifyMessage}</div>
+        {((user && !user.verified) || status === VERIFY_FAIL) && (
+          <div className="verifyCtrl__signOutForm Px-25 Py-15">
+            {formatMessage(messages.verificationRequired)}{' '}
+            <button onClick={signOut}>{formatMessage(messages.signOut)}</button>
           </div>
-          { ((user && !user.verified) || status === VERIFY_FAIL) &&
-            <div className="verifyCtrl__signOutForm">
-              { formatMessage(messages.verificationRequired) } <button onClick={signOut}>{ formatMessage(messages.signOut) }</button>
-            </div>
-          }
-        </div>
-      )
-      : null
-    )
+        )}
+      </div>
+    ) : null
   }
 }
 

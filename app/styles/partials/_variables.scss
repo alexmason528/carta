@@ -1,0 +1,46 @@
+// CSS variables
+
+$enlargeSize: 1.04;
+
+$textShadowBlur: 7px;
+$boxShadowBlur: 7px;
+
+$textLH: 1.2;
+$noLH: 0;
+
+$hrBorderWidth: 0.8px;
+
+// Font weight
+$heavyFw: 900;
+$normalFw: 700;
+$lightFw: 400;
+$lighterFw: 300;
+
+// Opacity
+$darkOpacity: 0.7;
+$darkerOpacity: 1;
+
+$lighterOpacity: 0;
+$lightOpacity: 0.3;
+$normalOpacity: 0.5;
+$darkOpacity: 0.7;
+$darkerOpacity: 1;
+
+// Transition
+$fastTrans: 0.1s;
+$normalTrans: 1s;
+
+// Colors
+$white: #fff;
+$black: #000;
+$lightWhite: #ccc;
+
+$darkerShadowColor: rgba(0, 0, 0, $darkOpacity);
+$darkShadowColor: rgba(0, 0, 0, $normalOpacity);
+$shadowColor: rgba(0, 0, 0, $lightOpacity);
+
+$errorColor: #e80303;
+
+$placeholderColor: #bbb;
+
+$scrollbarThumbColor: rgba(200, 200, 200, 0.7);

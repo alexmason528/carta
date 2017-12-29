@@ -1,0 +1,129 @@
+// Mixins
+
+@mixin insetBoxShadow($distance, $color) {
+  box-shadow: inset 0 0 $distance $color;
+  -moz-box-shadow: inset 0 0 $distance $color;
+  -webkit-box-shadow: inset 0 0 $distance $color;
+}
+
+@mixin boxShadow($distance, $color) {
+  box-shadow: 0 0 $distance $color;
+  -moz-box-shadow: 0 0 $distance $color;
+  -webkit-box-shadow: 0 0 $distance $color;
+}
+
+@mixin noBoxShadow() {
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+@mixin textShadow($distance, $color) {
+  text-shadow: 0 0 $distance $color;
+}
+
+@mixin vCenter() {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+
+@mixin hCenter() {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+@mixin vhCenter() {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin absoluteFill() {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+@mixin fixedFill() {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+@mixin fixedTopLeft() {
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+@mixin absoluteTopLeft() {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+@mixin noTextDecoration() {
+  text-decoration: none;
+  &:visited,
+  &:hover,
+  &:active {
+    text-decoration: none;
+  }
+}
+
+@mixin centerProfileImg() {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+@mixin fillBox() {
+  width: 100%;
+  height: 100%;
+}
+
+@mixin fillViewport() {
+  width: 100vw;
+  height: 100vh;
+}
+
+@mixin borderRadius($radius) {
+  border-radius: $radius;
+  -moz-border-radius: $radius;
+  -webkit-border-radius: $radius;
+}
+
+@mixin borderRadiusDetail($radiusTL, $radiusTR, $radiusBR, $radiusBL) {
+  border-radius: $radiusTL $radiusTR $radiusBR $radiusBL;
+  -moz-border-radius: $radiusTL $radiusTR $radiusBR $radiusBL;
+  -webkit-border-radius: $radiusTL $radiusTR $radiusBR $radiusBL;
+}
+
+@mixin backgroundColor($color) {
+  background-color: $white;
+  -webkit-background-color: $white;
+  -moz-background-color: $white;
+}
+
+@mixin contentCenter() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+@mixin transition($effect, $duration) {
+  transition: $effect $duration;
+  -moz-transition: $effect $duration;
+  -webkit-transition: $effect $duration;
+}

@@ -1,76 +1,24 @@
+@import '../../styles/common';
+
 .profile {
-  position: relative;
-  margin-bottom: 8px;
+  &:before {
+    content: '';
+    display: block;
+    padding-top: 50%;
+  }
 
-  .coverPic {
-    overflow: hidden;
-    cursor: pointer;
-    position: relative;
-
-    img {
-      width: 100%;
-      transform: scale(1);
-      transition: all 1s;
-    }
+  &__content {
+    @include absoluteFill();
 
     &:before {
       content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right:  0;
-      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
-      -moz-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
-      -webkit-box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
-      z-index: 3;
-    }
-
-    &:hover img { transform: scale(1.04) }
-
-    h2 {
-      padding: 20px 34px;
-      text-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
-      color: #fff;
-      text-transform: uppercase;
-      position: absolute;
-      font-weight: 900;
-      line-height: 1.3;
-      margin-bottom: 0;
-      left: 30%;
-      bottom: 0;
-      cursor: pointer;
-      z-index: 4;
-    }
-  }
-
-  .profilePic {
-    position: absolute;
-    width: 28%;
-    padding-top: calc(28% - 16px);
-    border-radius: 100%;
-    background: #fff;
-    overflow: hidden;
-    left: 30px;
-    bottom: 0;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-    border: 8px solid #fff;
-    z-index: 80;
-    transform: translate(0, calc(50% + 4px));
-
-    img {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 100%;
-      height: 100%;
       z-index: 1;
-      transform: translate(-50%, -50%) scale(1);
+      @include absoluteFill();
+      @include insetBoxShadow($boxShadowBlur, $darkShadowColor);
     }
   }
 
   &__userButton {
-    position: absolute;
     bottom: 6px;
     right: 6px;
     z-index: 4;
@@ -83,8 +31,8 @@
     }
 
     .hover {
-      opacity: 0;
       position: absolute !important;
+      opacity: 0;
       right: 0;
       transition: all 0.1s;
     }
@@ -96,7 +44,59 @@
     }
   }
 
-  input[type=file] {
+  input[type='file'] {
     display: none;
+  }
+}
+
+.coverPic {
+  width: 100%;
+  height: 100%;
+
+  img {
+    width: 100%;
+    transform: scale(1);
+    transition: all 1s;
+  }
+
+  &:before {
+    content: '';
+    z-index: 3;
+    @include insetBoxShadow($boxShadowBlur, $darkShadowColor);
+    @include absoluteFill();
+  }
+
+  &:hover img {
+    transform: scale($enlargeSize);
+  }
+
+  h2 {
+    padding: 20px 34px;
+    color: $white;
+    font-weight: $heavyFw;
+    line-height: $textLH;
+    left: 30%;
+    bottom: 0;
+    z-index: 4;
+    @include textShadow($textShadowBlur, $shadowColor);
+  }
+}
+
+.profilePic {
+  position: absolute;
+  width: 28%;
+  padding-top: calc(28% - 16px);
+  background: $white;
+  left: 30px;
+  bottom: 0;
+  border: 8px solid $white;
+  z-index: 80;
+  transform: translate(0, calc(50% + 4px));
+  @include boxShadow($boxShadowBlur, $shadowColor);
+  @include borderRadius(100%);
+
+  img {
+    z-index: 1;
+    @include centerProfileImg();
   }
 }

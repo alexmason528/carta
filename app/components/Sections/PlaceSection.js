@@ -36,14 +36,34 @@ class PlaceSection extends Component {
     const { intl: { formatMessage }, places } = this.props
     const { search } = this.state
 
-    let filteredPlaces = (search === '') ? places : places.filter(place => place.name.toLowerCase().indexOf(search) !== -1)
+    let filteredPlaces =
+      search === ''
+        ? places
+        : places.filter(
+            place => place.name.toLowerCase().indexOf(search) !== -1
+          )
 
     return (
       <div className="section section--place">
-        <h1 className="section__title">{ formatMessage(messages.inAround) }</h1>
-        <input className="section__searchInput" value={search} onChange={this.handleInputChange} />
+        <h1 className="section__title Tt-U Cr-D">
+          {formatMessage(messages.inAround)}
+        </h1>
+        <input
+          className="section__searchInput"
+          value={search}
+          onChange={this.handleInputChange}
+        />
         <div className="section__filteredList">
-          { filteredPlaces.map((place, index) => <Button key={index} onClick={() => { this.handlePlaceClick(place) }}>{place.name}</Button>) }
+          {filteredPlaces.map((place, index) => (
+            <Button
+              key={index}
+              onClick={() => {
+                this.handlePlaceClick(place)
+              }}
+            >
+              {place.name}
+            </Button>
+          ))}
         </div>
       </div>
     )
@@ -58,7 +78,4 @@ const actions = {
   placeClick,
 }
 
-export default compose(
-  injectIntl,
-  connect(selectors, actions),
-)(PlaceSection)
+export default compose(injectIntl, connect(selectors, actions))(PlaceSection)

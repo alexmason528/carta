@@ -21,30 +21,42 @@ const getQuestInfo = (req, res) => {
     types: false,
   }
 
-  Descriptive.findOne({ }, { _id: 0, name: 0, e: 0, sum: 0 }, (descriptiveError, element) => {
-    const descriptives = Object.keys(element._doc)
+  Descriptive.findOne(
+    {},
+    { _id: 0, name: 0, e: 0, sum: 0 },
+    (descriptiveError, element) => {
+      const descriptives = Object.keys(element._doc)
 
-    Category.find({ c: { $in: descriptives } }, { _id: 0 }, (categoryError, elements) => {
-      questInfo.descriptives = elements
-      getQuest.descriptives = true
+      Category.find(
+        { c: { $in: descriptives } },
+        { _id: 0 },
+        (categoryError, elements) => {
+          questInfo.descriptives = elements
+          getQuest.descriptives = true
 
-      if (getQuest.descriptives && getQuest.types) {
-        return res.json(questInfo)
-      }
-    })
-  })
+          if (getQuest.descriptives && getQuest.types) {
+            return res.json(questInfo)
+          }
+        }
+      )
+    }
+  )
 
-  Type.findOne({ }, { _id: 0, name: 0, e: 0, sum: 0 }, (typeError, element) => {
+  Type.findOne({}, { _id: 0, name: 0, e: 0, sum: 0 }, (typeError, element) => {
     const types = Object.keys(element._doc)
 
-    Category.find({ c: { $in: types } }, { _id: 0 }, (categoryError, elements) => {
-      questInfo.types = elements
-      getQuest.types = true
+    Category.find(
+      { c: { $in: types } },
+      { _id: 0 },
+      (categoryError, elements) => {
+        questInfo.types = elements
+        getQuest.types = true
 
-      if (getQuest.descriptives && getQuest.types) {
-        return res.json(questInfo)
+        if (getQuest.descriptives && getQuest.types) {
+          return res.json(questInfo)
+        }
       }
-    })
+    )
   })
 }
 
@@ -58,7 +70,7 @@ const getRecommendations = (req, res) => {
   const { viewport, types, descriptives } = req.body
   let typeMatch = []
 
-  types.includes.map((type) => {
+  types.includes.map(type => {
     let typeSearch = {}
     typeSearch[`type.${type}`] = '1'
     typeMatch.push(typeSearch)
@@ -142,21 +154,21 @@ const getRecommendations = (req, res) => {
 
   Element.aggregate(pipeline, (err, elements) => {
     if (err) {
-      return res.json({})
+      return res.json([])
     }
 
-    let scoreElements = elements.map((element) => {
+    let scoreElements = elements.map(element => {
       let dScore = 0
       let tScore = 0
 
       if (!descriptives.all) {
-        descriptives.stars.map((star) => {
+        descriptives.stars.map(star => {
           if (element.descriptive[star] !== '') {
             dScore += parseFloat(element.descriptive[star]) * 1
           }
         })
 
-        descriptives.includes.map((desc) => {
+        descriptives.includes.map(desc => {
           if (element.descriptive[desc] !== '') {
             dScore += parseFloat(element.descriptive[desc]) * 0.3
           }
@@ -166,21 +178,21 @@ const getRecommendations = (req, res) => {
           dScore += parseFloat(element.descriptive.sum) * 0.3
         }
 
-        descriptives.stars.map((star) => {
+        descriptives.stars.map(star => {
           if (element.descriptive[star] !== '') {
             dScore += parseFloat(element.descriptive[star]) * 0.7
           }
         })
 
-        descriptives.excludes.map((desc) => {
+        descriptives.excludes.map(desc => {
           if (element.descriptive[desc] !== '') {
-            dScore += parseFloat(element.descriptive[desc]) * (-0.3)
+            dScore += parseFloat(element.descriptive[desc]) * -0.3
           }
         })
       }
 
       if (!types.all) {
-        types.includes.map((type) => {
+        types.includes.map(type => {
           if (element.type[type] !== '') {
             tScore += parseFloat(element.type[type])
           }
@@ -190,7 +202,7 @@ const getRecommendations = (req, res) => {
           tScore += parseFloat(element.type.sum)
         }
 
-        types.excludes.map((type) => {
+        types.excludes.map(type => {
           if (element.type[type] !== '') {
             tScore -= parseFloat(element.type[type])
           }
@@ -239,7 +251,7 @@ const getBrochure = (req, res) => {
 
   Place.findOne({ link }, { _id: 0, e: 0, name: 0 }, (err, place) => {
     if (err) {
-      return res.json({})
+      return res.json([])
     }
     return res.json(place || {})
   })

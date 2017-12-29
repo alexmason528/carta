@@ -1,54 +1,42 @@
+@import '../../styles/common';
+
 .menu {
   a {
     font-size: 13px;
-    cursor: pointer;
-    border-radius: 0;
-    color: rgba(0, 0, 0, 0.7);
+    color: $darkerShadowColor;
     text-transform: uppercase;
-    text-decoration: none;
-    font-weight: 400;
+    font-weight: $lightFw;
+    cursor: pointer;
+    @include borderRadius(0);
+    @include noTextDecoration();
 
     &:hover {
-      color: rgba(0, 0, 0, 1);
-    }
-
-    &:visited,
-    &:hover,
-    &:active {
-      text-decoration: none;
+      color: $black;
     }
   }
 
   hr {
-    margin-top: 12px;
-    margin-bottom: 12px;
-    border-top: 0.8px solid #ccc;
+    border-top: $hrBorderWidth solid $lightWhite;
   }
 
   &__opened {
-    position: fixed;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0);
+    background: transparent;
     z-index: 102;
+    @include fixedFill();
   }
 
   &__content {
-    position: fixed;
-    left: 0;
-    top: 0;
     height: 100%;
-    background: #fff;
-    transition: all 0.1s;
+    background: $white;
     z-index: 200;
+    @include transition(all, $fastTrans);
+    @include fixedTopLeft();
 
     ul {
-      background: #fff;
+      background: $white;
       height: 100%;
       padding: 12px 25px 12px 30px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      @include boxShadow(15px, $shadowColor);
 
       li {
         list-style-type: none;
@@ -56,76 +44,76 @@
       }
     }
 
-    &--hidden { transform: translate(-100%, 0) }
+    &--hidden {
+      transform: translate(-100%, 0);
+    }
   }
 
   &__language {
-    a { font-weight: 300 }
+    a {
+      font-weight: $lighterFw;
+    }
     &--active {
       list-style-type: circle !important;
     }
   }
 
   &__tab {
-    position: absolute;
     height: 85px;
-    padding: 7px;
     left: 100%;
     bottom: 20%;
-    box-sizing: content-box;
-    background: #fff;
-    cursor: pointer;
-    border-radius: 0 5px 5px 0;
-    transition: all 0.1s;
+    background: $white;
+    @include borderRadiusDetail(0, 5px, 5px, 0);
+    @include transition(all, $fastTrans);
 
-    &:hover{
-      &:before { box-shadow: 0 0 7px rgba(0, 0, 0, 0.6) }
+    &:hover {
+      &:before {
+        @include boxShadow($boxShadowBlur, $darkShadowColor);
+      }
     }
 
-    &:before, &:after {
-      background: #fff;
-      display: block;
-      position: absolute;
-      left: 0;
-      top: 0;
+    &:before,
+    &:after {
       content: ' ';
-      width: 100%;
-      height: 100%;
-      box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
-      transition: all 0.1s;
+      background: $white;
+      display: block;
       z-index: -1;
-      border-radius: 0 5px 5px 0;
+      @include transition(all, $fastTrans);
+      @include absoluteFill();
+      @include boxShadow($boxShadowBlur, $shadowColor);
+      @include borderRadiusDetail(0, 5px, 5px, 0);
     }
 
-    &:after { box-shadow: none; }
+    &:after {
+      @include noBoxShadow();
+    }
 
     img {
       position: relative;
+      width: auto;
       z-index: 3;
       height: 100%;
-      width: auto;
     }
   }
 }
 
 .logo {
-  position: fixed;
-  top: 0;
-  left: 0;
   z-index: 100;
-  cursor: pointer;
+  @include fixedTopLeft();
 
   img {
     left: 10px;
     top: 10px;
     width: 32px;
-    box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
     border-radius: 20px;
     height: auto;
     z-index: 102;
     position: relative;
     transition: all 0.1s;
+    @include boxShadow($boxShadowBlur, $shadowColor);
   }
 
-  &:hover img { box-shadow: 0 0 7px rgba(0, 0, 0, 0.6) }
+  &:hover img {
+    @include boxShadow($boxShadowBlur, $darkShadowColor);
+  }
 }

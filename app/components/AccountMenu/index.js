@@ -67,19 +67,45 @@ class AccountMenu extends Component {
   }
 
   render() {
-    const { handleSubmit, signOut, show, info: { error, status }, intl: { formatMessage } } = this.props
+    const {
+      handleSubmit,
+      signOut,
+      show,
+      info: { error, status },
+      intl: { formatMessage },
+    } = this.props
     const { showContent, showForm } = this.state
 
     return (
-      <div className={cx({ accountMenu: true, 'accountMenu--hidden': !show })} onClick={evt => evt.stopPropagation()}>
+      <div
+        className={cx({ accountMenu: true, 'accountMenu--hidden': !show })}
+        onClick={evt => evt.stopPropagation()}
+      >
         <div className="accountMenu__items">
-          <button type="button" onClick={signOut}>{formatMessage(messages.signOut)}</button> | <button type="button" onClick={this.handleSettingClick}>{formatMessage(messages.settings)}</button>
+          <button type="button" onClick={signOut}>
+            {formatMessage(messages.signOut)}
+          </button>{' '}
+          |{' '}
+          <button type="button" onClick={this.handleSettingClick}>
+            {formatMessage(messages.settings)}
+          </button>
         </div>
-        <div className={cx({ accountMenu__content: true, 'accountMenu__content--hidden': !showContent })}>
+        <div
+          className={cx({
+            accountMenu__content: true,
+            'accountMenu__content--hidden': !showContent,
+          })}
+        >
           <RemoveButton type="user" onClick={this.handleDeleteAccountClick}>
             <span>{formatMessage(messages.deleteAccount)}</span>
           </RemoveButton>
-          <Form className={cx({ accountMenu__deleteForm: true, 'accountMenu__deleteForm--hidden': !showForm })} onSubmit={handleSubmit(this.handleDeleteUser)}>
+          <Form
+            className={cx({
+              accountMenu__deleteForm: true,
+              'accountMenu__deleteForm--hidden': !showForm,
+            })}
+            onSubmit={handleSubmit(this.handleDeleteUser)}
+          >
             <Field
               name="password"
               type="password"
@@ -88,15 +114,18 @@ class AccountMenu extends Component {
               order={1}
             />
             <div className="accountMenu__warning">
-              { formatMessage(messages.deleteConfirm) }
+              {formatMessage(messages.deleteConfirm)}
             </div>
             <div className="accountMenu__deleteFormButtons">
-              <button type="button" onClick={this.handleCancelClick}>{formatMessage(messages.cancel)}</button>
-              <button className="active">{formatMessage(messages.confirm)}</button>
+              <button type="button" onClick={this.handleCancelClick}>
+                {formatMessage(messages.cancel)}
+              </button>
+              <button className="active">
+                {formatMessage(messages.confirm)}
+              </button>
             </div>
-            { status === DELETE_USER_FAIL && error &&
-              <div className="error">{error}</div>
-            }
+            {status === DELETE_USER_FAIL &&
+              error && <div className="error">{error}</div>}
           </Form>
         </div>
       </div>
@@ -114,10 +143,12 @@ const actions = {
   deleteUserRequest,
 }
 
-export default injectIntl(compose(
-  connect(selectors, actions),
-  reduxForm({
-    form: 'deleteAccountForm',
-    validate: deleteAccountFormValidator,
-  }),
-)(AccountMenu))
+export default injectIntl(
+  compose(
+    connect(selectors, actions),
+    reduxForm({
+      form: 'deleteAccountForm',
+      validate: deleteAccountFormValidator,
+    })
+  )(AccountMenu)
+)

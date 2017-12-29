@@ -24,17 +24,29 @@ export const CHANGE_AUTH_METHOD = 'carta/App/CHANGE_AUTH_METHOD'
 
 export const TOGGLE_MENU = 'carta/App/TOGGLE_MENU'
 
-export const API_BASE_URL = (process.env.NODE_ENV === 'production') ? 'https://cartamap.herokuapp.com/' : 'http://localhost:3000/'
-export const MAP_ACCESS_TOKEN = 'pk.eyJ1IjoiY2FydGFndWlkZSIsImEiOiJjajMzNG5rcjAwMDFmMnFud3hpNW8wenJpIn0.uQaLvmopUNSmyGSI1WKynw'
+export const API_BASE_URL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://cartamap.herokuapp.com/'
+    : 'http://localhost:3000/'
+export const MAP_ACCESS_TOKEN =
+  'pk.eyJ1IjoiY2FydGFndWlkZSIsImEiOiJjajMzNG5rcjAwMDFmMnFud3hpNW8wenJpIn0.uQaLvmopUNSmyGSI1WKynw'
 
-export const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/hyvpvyohj/upload'
+export const CLOUDINARY_UPLOAD_URL =
+  'https://api.cloudinary.com/v1_1/hyvpvyohj/upload'
 export const CLOUDINARY_UPLOAD_PRESET = 'miqo0u8m'
 
-export const CLOUDINARY_COVER_URL = 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1509974856/image/cover'
-export const CLOUDINARY_ICON_URL = 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1509975466/image/icon'
-export const CLOUDINARY_PROFILE_URL = 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1509975396/image/profile'
-export const CLOUDINARY_POINTS_URL = 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510139598/data'
-export const CLOUDINARY_SHAPES_URL = 'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510139627/data'
+export const CLOUDINARY_COVER_URL =
+  'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1509974856/image/cover'
+export const CLOUDINARY_ICON_URL =
+  'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1509975466/image/icon'
+export const CLOUDINARY_PROFILE_URL =
+  'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1509975396/image/profile'
+export const CLOUDINARY_POINTS_URL =
+  'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510139598/data'
+export const CLOUDINARY_SHAPES_URL =
+  'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510139627/data'
+export const CLOUDINARY_FIXED_URL =
+  'http://res.cloudinary.com/hyvpvyohj/raw/upload/v1514494421/image/fixed'
 
 export const COLORS = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379']
 export const CENTER_COORDS = [5.822, 52.142]

@@ -3,11 +3,20 @@ import Helmet from 'react-helmet'
 import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
-import { Container, Row, Col } from 'reactstrap'
+import { Container, Col } from 'reactstrap'
+import { compose } from 'redux'
 import Masonry from 'react-masonry-component'
 import { UPDATE_USER_SUCCESS, SIGNOUT } from 'containers/App/constants'
-import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
-import { signOut, verifyRequest, updateUserRequest } from 'containers/App/actions'
+import {
+  selectAuthenticated,
+  selectUser,
+  selectInfo,
+} from 'containers/App/selectors'
+import {
+  signOut,
+  verifyRequest,
+  updateUserRequest,
+} from 'containers/App/actions'
 import { CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
 import { CreatePostButton } from 'components/Buttons'
 import AccountMenu from 'components/AccountMenu'
@@ -16,11 +25,12 @@ import Menu from 'components/Menu'
 import Verify from 'components/Verify'
 import { Post, PostCreate } from 'components/Post'
 import Profile from 'components/Profile'
-import StartQuest from 'components/StartQuest'
+import FixedTile from 'components/FixedTile'
 import { getCoverProfilePic } from 'utils/imageHelper'
 import { getFirstname } from 'utils/stringHelper'
 import { selectPosts, selectHomeInfo, selectEditingPost } from './selectors'
 import { listPostRequest } from './actions'
+import messages from './messages'
 import './style.scss'
 
 class HomePage extends Component {
@@ -52,7 +62,13 @@ class HomePage extends Component {
   }
 
   componentWillMount() {
-    const { listPostRequest, verifyRequest, params: { vcode }, authenticated, user } = this.props
+    const {
+      listPostRequest,
+      verifyRequest,
+      params: { vcode },
+      authenticated,
+      user,
+    } = this.props
 
     if (vcode && (!user || !user.verified)) {
       verifyRequest({ vcode })
@@ -80,7 +96,10 @@ class HomePage extends Component {
       this.setState({ showCreatePostForm: false })
     }
 
-    if ((!authenticated && nextProps.authenticated) || (status === UPDATE_USER_SUCCESS)) {
+    if (
+      (!authenticated && nextProps.authenticated) ||
+      status === UPDATE_USER_SUCCESS
+    ) {
       const { coverPic, profilePic } = nextProps.user
       this.setState({ coverPic, profilePic })
     } else if (status === SIGNOUT) {
@@ -123,19 +142,39 @@ class HomePage extends Component {
   }
 
   render() {
-    const { showAuthForm, showCreatePostForm, showAccountMenu, coverPic, profilePic } = this.state
-    const { posts, authenticated, user, signOut, updateUserRequest, info, intl: { locale }, editingPost } = this.props
+    const {
+      showAuthForm,
+      showCreatePostForm,
+      showAccountMenu,
+      coverPic,
+      profilePic,
+    } = this.state
+
+    const {
+      posts,
+      authenticated,
+      user,
+      signOut,
+      updateUserRequest,
+      info,
+      intl: { locale, formatMessage },
+      editingPost,
+    } = this.props
     const { status } = info
     const filteredPosts = posts.filter(post => post.title[locale] !== '')
-    const createPostButtonType = (filteredPosts.length > 0 && filteredPosts[0].img) ? 'image' : 'text'
+    const createPostButtonType =
+      filteredPosts.length > 0 && filteredPosts[0].img ? 'image' : 'text'
 
     return (
-      <Container fluid className="homePage">
+      <Container fluid className="homePage P-0 M-0 Ov-XH">
         <Helmet meta={[{ name: 'description', content: 'Carta' }]} />
         <Menu currentPage="home" />
         <Masonry
           className="homePage__row"
-          updateOnEachImageLoad
+          options={{
+            gutter: 0,
+          }}
+          enableResizableChildren
         >
           <Col md={4} sm={6} className="homePage__col">
             <Profile
@@ -147,9 +186,12 @@ class HomePage extends Component {
               coverPic={coverPic}
               profilePic={profilePic}
             />
-            {
-            authenticated ?
-              <AccountMenu show={showAccountMenu} onClick={this.handleProfileClick} /> :
+            {authenticated ? (
+              <AccountMenu
+                show={showAccountMenu}
+                onClick={this.handleProfileClick}
+              />
+            ) : (
               <AuthForm
                 show={showAuthForm}
                 onCoverPicChange={this.handleCoverPic}
@@ -157,27 +199,44 @@ class HomePage extends Component {
                 coverPic={coverPic}
                 profilePic={profilePic}
               />
-          }
+            )}
           </Col>
           <Col md={4} sm={6} className="homePage__col">
-            <StartQuest authenticated={authenticated} />
+            <FixedTile
+              img="quest.jpg"
+              link="/quest"
+              title={formatMessage(messages.startQuest).replace(/\n/g, '<br/>')}
+              message="Start a new quest"
+              authenticated={authenticated}
+            />
           </Col>
-          <Col md={4} sm={6} className="homePage__col">
-            <StartQuest authenticated={authenticated} />
+          <Col md={4} sm={6} className="homePage__col hidden-sm">
+            <FixedTile
+              img="theme.jpg"
+              link="/quest"
+              title={'Thema<br/>Highlight'}
+              message="Browse new themes"
+              authenticated={authenticated}
+            />
           </Col>
-          {filteredPosts && filteredPosts.map((post, key) => {
-            const data = {
-              ...post,
-              firstname: getFirstname(post.author.fullname),
-              editable: (authenticated && (post.author._id === user._id || user.role === 'admin')) && !editingPost && !showCreatePostForm,
-              first: (key === 0 && authenticated),
-            }
-            return (
-              <Col key={key} md={4} sm={6} className="homePage__col">
-                <Post {...data} />
-              </Col>
-            )
-          })}
+          {filteredPosts &&
+            filteredPosts.map((post, key) => {
+              const data = {
+                ...post,
+                firstname: getFirstname(post.author.fullname),
+                editable:
+                  authenticated &&
+                  (post.author._id === user._id || user.role === 'admin') &&
+                  !editingPost &&
+                  !showCreatePostForm,
+                first: key === 0 && authenticated,
+              }
+              return (
+                <Col key={key} md={4} sm={6} className="homePage__col">
+                  <Post {...data} />
+                </Col>
+              )
+            })}
         </Masonry>
         <Verify user={user} status={status} signOut={signOut} />
       </Container>
@@ -201,4 +260,4 @@ const actions = {
   signOut,
 }
 
-export default injectIntl(connect(selectors, actions)(HomePage))
+export default compose(injectIntl, connect(selectors, actions))(HomePage)

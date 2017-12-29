@@ -19,7 +19,11 @@ import {
   CLOUDINARY_UPLOAD_PRESET,
   CLOUDINARY_ICON_URL,
 } from 'containers/App/constants'
-import { changeAuthMethod, signInRequest, registerRequest } from 'containers/App/actions'
+import {
+  changeAuthMethod,
+  signInRequest,
+  registerRequest,
+} from 'containers/App/actions'
 import { selectInfo } from 'containers/App/selectors'
 import messages from 'containers/HomePage/messages'
 import LoadingSpinner from 'components/LoadingSpinner'
@@ -36,14 +40,8 @@ class AuthForm extends Component {
     onProfilePicChange: PropTypes.func,
     changeAuthMethod: PropTypes.func,
     handleSubmit: PropTypes.func,
-    coverPic: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.object,
-    ]),
-    profilePic: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.object,
-    ]),
+    coverPic: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    profilePic: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     info: PropTypes.object,
     show: PropTypes.bool,
     intl: intlShape.isRequired,
@@ -65,7 +63,10 @@ class AuthForm extends Component {
     const { info: { status } } = this.props
     const { info } = nextProps
 
-    if (status !== info.status && (info.status === SIGNIN_FAIL || info.status === REGISTER_FAIL)) {
+    if (
+      status !== info.status &&
+      (info.status === SIGNIN_FAIL || info.status === REGISTER_FAIL)
+    ) {
       this.setState({ formChanged: false })
     }
   }
@@ -82,12 +83,21 @@ class AuthForm extends Component {
   handleSignIn = values => {
     const { signInRequest } = this.props
     const { email, password } = values
-    this.setState({ email, password }, () => { signInRequest(values) })
+    this.setState({ email, password }, () => {
+      signInRequest(values)
+    })
   }
 
   handleRegister = values => {
     const { registerRequest } = this.props
-    const { email, password, confirmPassword, fullname, profilePic, coverPic } = values
+    const {
+      email,
+      password,
+      confirmPassword,
+      fullname,
+      profilePic,
+      coverPic,
+    } = values
 
     let data = {
       email,
@@ -111,41 +121,52 @@ class AuthForm extends Component {
         let formData = new FormData()
         formData.append('file', profilePic)
         formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
-        axios.post(CLOUDINARY_UPLOAD_URL, formData, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
-        .then(res => {
-          const { data: { url } } = res
-          cnt -= 1
-          data.profilePic = url
+        axios
+          .post(CLOUDINARY_UPLOAD_URL, formData, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          })
+          .then(res => {
+            const { data: { url } } = res
+            cnt -= 1
+            data.profilePic = url
 
-          if (cnt === 0) {
-            registerRequest(data)
-            this.setState({ imageUpload: { uploading: false, error: null } })
-          }
-        }).catch(err => {
-          this.setState({ imageUpload: { uploading: false, error: err.toString() } })
-        })
+            if (cnt === 0) {
+              registerRequest(data)
+              this.setState({ imageUpload: { uploading: false, error: null } })
+            }
+          })
+          .catch(err => {
+            this.setState({
+              imageUpload: { uploading: false, error: err.toString() },
+            })
+          })
       }
 
       if (coverPic) {
         let formData = new FormData()
         formData.append('file', coverPic)
         formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
-        axios.post(CLOUDINARY_UPLOAD_URL, formData, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        }).then(res => {
-          const { data: { url } } = res
-          cnt -= 1
-          data.coverPic = url
+        axios
+          .post(CLOUDINARY_UPLOAD_URL, formData, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+          })
+          .then(res => {
+            const { data: { url } } = res
+            cnt -= 1
+            data.coverPic = url
 
-          if (cnt === 0) {
-            registerRequest(data)
-            this.setState({ imageUpload: { uploading: false, error: null } })
-          }
-        }).catch(err => {
-          this.setState({ imageUpload: { uploading: false, error: err.toString() } })
-        })
+            if (cnt === 0) {
+              registerRequest(data)
+              this.setState({ imageUpload: { uploading: false, error: null } })
+            }
+          })
+          .catch(err => {
+            this.setState({
+              imageUpload: { uploading: false, error: err.toString() },
+            })
+          })
       }
     }
   }
@@ -164,22 +185,15 @@ class AuthForm extends Component {
     }
   }
 
-  handleGoogleLoginSuccess = () => {
-  }
+  handleGoogleLoginSuccess = () => {}
 
-  handleGoogleLoginFail = () => {
-  }
+  handleGoogleLoginFail = () => {}
 
-  handleFacebookLogin = () => {
-  }
+  handleFacebookLogin = () => {}
 
   render() {
     const {
-      info: {
-        status,
-        error,
-        authMethod,
-      },
+      info: { status, error, authMethod },
       show,
       onCoverPicChange,
       onProfilePicChange,
@@ -188,25 +202,34 @@ class AuthForm extends Component {
     } = this.props
 
     const { formChanged, imageUpload } = this.state
-    const spinnerShow = status === SIGNIN_REQUEST || status === REGISTER_REQUEST || imageUpload.uploading
+    const spinnerShow =
+      status === SIGNIN_REQUEST ||
+      status === REGISTER_REQUEST ||
+      imageUpload.uploading
 
     return (
-      <div className={cx({ authForm: true, 'authForm--hidden': !show })} onClick={evt => evt.stopPropagation()}>
+      <div
+        className={cx({ authForm: true, 'authForm--hidden': !show })}
+        onClick={evt => evt.stopPropagation()}
+      >
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
         <div className="authForm__divider">
-          <span>{formatMessage(messages.with)}</span>
+          <span className="Tt-U">{formatMessage(messages.with)}</span>
         </div>
         <div className="authForm__socialButtons">
           <GoogleLogin
-            clientId={'658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com'}
+            clientId={
+              '658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com'
+            }
             onSuccess={this.handleGoogleLoginSuccess}
             onFailure={this.handleGoogleLoginFail}
             className="button"
             style={{}}
           >
-            <Img src={`${CLOUDINARY_ICON_URL}/google.png`} /><span>Google</span>
+            <Img src={`${CLOUDINARY_ICON_URL}/google.png`} />
+            <span>Google</span>
           </GoogleLogin>
           <FacebookLogin
             appId="1088597931155576"
@@ -220,28 +243,81 @@ class AuthForm extends Component {
         <div className="authForm__divider">
           <span>{formatMessage(messages.or)}</span>
         </div>
-        <form onSubmit={handleSubmit(this.handleSubmit)} onChange={this.handleFormChange}>
-          <Field name="email" type="email" component={RenderField} label={formatMessage(messages.email)} order={1} />
-          <Field name="password" type="password" component={RenderField} label={formatMessage(messages.password)} order={2} />
-          { authMethod === 'register' &&
+        <form
+          onSubmit={handleSubmit(this.handleSubmit)}
+          onChange={this.handleFormChange}
+        >
+          <Field
+            name="email"
+            type="email"
+            component={RenderField}
+            label={formatMessage(messages.email)}
+            order={1}
+          />
+          <Field
+            name="password"
+            type="password"
+            component={RenderField}
+            label={formatMessage(messages.password)}
+            order={2}
+          />
+          {authMethod === 'register' && (
             <div>
-              <Field name="confirmPassword" type="password" component={RenderField} label={formatMessage(messages.repeatPassword)} order={2} />
-              <Field name="fullname" type="text" component={RenderField} label={formatMessage(messages.fullname)} order={3} />
+              <Field
+                name="confirmPassword"
+                type="password"
+                component={RenderField}
+                label={formatMessage(messages.repeatPassword)}
+                order={2}
+              />
+              <Field
+                name="fullname"
+                type="text"
+                component={RenderField}
+                label={formatMessage(messages.fullname)}
+                order={3}
+              />
               <div className="authForm__uploadButtons">
-                <Field className="authForm__uploadButton" name="profilePic" label={formatMessage(messages.profilePic)} onChange={onProfilePicChange} component={RenderDropzone} crop="portrait" />
-                <Field className="authForm__uploadButton" name="coverPic" label={formatMessage(messages.coverPic)} onChange={onCoverPicChange} component={RenderDropzone} crop="landscape" />
+                <Field
+                  className="authForm__uploadButton Tt-U"
+                  name="profilePic"
+                  label={formatMessage(messages.profilePic)}
+                  onChange={onProfilePicChange}
+                  component={RenderDropzone}
+                  crop="portrait"
+                />
+                <Field
+                  className="authForm__uploadButton Tt-U"
+                  name="coverPic"
+                  label={formatMessage(messages.coverPic)}
+                  onChange={onCoverPicChange}
+                  component={RenderDropzone}
+                  crop="landscape"
+                />
               </div>
             </div>
-          }
+          )}
           <div className="authForm__authButtons">
             <button className="authForm__authButton authForm__authButton--active">
-              { authMethod === 'signIn' ? formatMessage(messages.signIn) : formatMessage(messages.register) }
+              {authMethod === 'signIn'
+                ? formatMessage(messages.signIn)
+                : formatMessage(messages.register)}
             </button>
-            <button className="authForm__authButton authForm__authButton--inactive" type="button" onClick={this.handleChangeAuthMethod}>
-              { authMethod !== 'signIn' ? formatMessage(messages.signIn) : formatMessage(messages.register) }
+            <button
+              className="authForm__authButton authForm__authButton--inactive"
+              type="button"
+              onClick={this.handleChangeAuthMethod}
+            >
+              {authMethod !== 'signIn'
+                ? formatMessage(messages.signIn)
+                : formatMessage(messages.register)}
             </button>
           </div>
-          { !formChanged && error && (status === SIGNIN_FAIL || status === REGISTER_FAIL) && <div className="error">{formatMessage({ id: error })}</div> }
+          {!formChanged &&
+            error &&
+            (status === SIGNIN_FAIL || status === REGISTER_FAIL) && (
+              <div className="error">{formatMessage({ id: error })}</div>
+            )}
         </form>
       </div>
     )
@@ -264,5 +340,5 @@ export default compose(
   reduxForm({
     form: 'authForm',
     validate: authFormValidator,
-  }),
+  })
 )(AuthForm)

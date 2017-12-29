@@ -48,7 +48,10 @@ class Menu extends Component {
   handleMap = evt => {
     evt.preventDefault()
     const { params: { viewport, types, descriptives }, toggleMenu } = this.props
-    const url = (viewport && types && descriptives) ? `/quest/${viewport}/${types}/${descriptives}/` : '/quest'
+    const url =
+      viewport && types && descriptives
+        ? `/quest/${viewport}/${types}/${descriptives}/`
+        : '/quest'
     browserHistory.push(url)
     toggleMenu()
   }
@@ -68,50 +71,96 @@ class Menu extends Component {
     const {
       authenticated,
       currentPage,
-      intl: {
-        formatMessage,
-        locale,
-      },
-      params: {
-        brochure,
-      },
+      intl: { formatMessage, locale },
+      params: { brochure },
       menuOpened,
     } = this.props
 
     return (
-      <div className={cx({ menu: true, menu__opened: menuOpened })} onClick={this.handleToggleMenu}>
-        <div className="logo" onClick={this.handleToggleMenu}>
+      <div
+        className={cx({ menu: true, menu__opened: menuOpened })}
+        onClick={this.handleToggleMenu}
+      >
+        <div className="logo Cr-P" onClick={this.handleToggleMenu}>
           <Img src={`${CLOUDINARY_ICON_URL}/logo-100.png`} />
         </div>
-        <div className={cx({ menu__content: true, 'menu__content--hidden': !menuOpened })} onClick={evt => { evt.stopPropagation() }}>
+        <div
+          className={cx({
+            menu__content: true,
+            'menu__content--hidden': !menuOpened,
+          })}
+          onClick={evt => {
+            evt.stopPropagation()
+          }}
+        >
           <ul>
-            { brochure && <li><a href="/" onClick={this.handleMap}>{formatMessage(messages.map)}</a></li> }
-            { currentPage === 'home' && <li><Link to="/quest" onClick={this.handlePageChange}>{formatMessage(messages.quest)}</Link></li> }
-            { currentPage === 'quest' && <li><Link to="/" onClick={this.handlePageChange}>{formatMessage(messages.home)}</Link></li> }
-            <li><a href={`http://carta.guide/${locale === 'en' ? '' : locale}`}>{formatMessage(messages.about)}</a></li>
-            { authenticated &&
+            {brochure && (
+              <li>
+                <a href="/" onClick={this.handleMap}>
+                  {formatMessage(messages.map)}
+                </a>
+              </li>
+            )}
+            {currentPage === 'home' && (
+              <li>
+                <Link to="/quest" onClick={this.handlePageChange}>
+                  {formatMessage(messages.quest)}
+                </Link>
+              </li>
+            )}
+            {currentPage === 'quest' && (
+              <li>
+                <Link to="/" onClick={this.handlePageChange}>
+                  {formatMessage(messages.home)}
+                </Link>
+              </li>
+            )}
+            <li>
+              <a href={`http://carta.guide/${locale === 'en' ? '' : locale}`}>
+                {formatMessage(messages.about)}
+              </a>
+            </li>
+            {authenticated && (
               <div>
-                <li><a href="/" onClick={this.handleSettings}>{formatMessage(messages.settings)}</a></li>
-                <li><a href="/" onClick={this.handleSignOut}>{formatMessage(messages.signOut)}</a></li>
+                <li>
+                  <a href="/" onClick={this.handleSettings}>
+                    {formatMessage(messages.settings)}
+                  </a>
+                </li>
+                <li>
+                  <a href="/" onClick={this.handleSignOut}>
+                    {formatMessage(messages.signOut)}
+                  </a>
+                </li>
               </div>
-            }
-            <hr />
-            {
-              LANGUAGES.map(lang => {
-                const { countryCode, name } = lang
-                return (
-                  <li
-                    key={countryCode}
-                    className={cx({ menu__language: true, 'menu__language--active': locale === countryCode })}
+            )}
+            <hr className="My-12" />
+            {LANGUAGES.map(lang => {
+              const { countryCode, name } = lang
+              return (
+                <li
+                  key={countryCode}
+                  className={cx({
+                    menu__language: true,
+                    'menu__language--active': locale === countryCode,
+                  })}
+                >
+                  <a
+                    href="/"
+                    onClick={this.handleLanguageClick}
+                    data-locale={countryCode}
                   >
-                    <a href="/" onClick={this.handleLanguageClick} data-locale={countryCode}>{name}</a>
-                  </li>
-                )
-              })
-            }
+                    {name}
+                  </a>
+                </li>
+              )
+            })}
           </ul>
           <MobileUp>
-            <div className="menu__tab" onClick={this.handleToggleMenu}>
+            <div
+              className="menu__tab Cr-P P-7 Bs-Cb P-A"
+              onClick={this.handleToggleMenu}
+            >
               <Img src={`${CLOUDINARY_ICON_URL}/name-vertical.png`} />
             </div>
           </MobileUp>
@@ -132,8 +181,6 @@ const actions = {
   toggleMenu,
 }
 
-export default compose(
-  injectIntl,
-  withRouter,
-  connect(selectors, actions)
-)(Menu)
+export default compose(injectIntl, withRouter, connect(selectors, actions))(
+  Menu
+)

@@ -26,7 +26,10 @@ class Brochure extends Component {
 
   handleBrochureClose = () => {
     const { params: { viewport, types, descriptives } } = this.props
-    const url = (viewport && types && descriptives) ? `/quest/${viewport}/${types}/${descriptives}` : '/quest'
+    const url =
+      viewport && types && descriptives
+        ? `/quest/${viewport}/${types}/${descriptives}`
+        : '/quest'
     browserHistory.push(url)
   }
 
@@ -39,39 +42,62 @@ class Brochure extends Component {
     const { mainPoster, description, tiles } = brochure
 
     return (
-      <Container fluid className="brochure">
+      <Container fluid className="brochure P-0 M-0">
         <div className="brochure__menu">
-          <button className="brochure__resizeBtn" onClick={this.handleBrochureResize}>
-            <Img src={`${CLOUDINARY_ICON_URL}/narrow.png`} />
+          <button
+            className="P-5 Ml-2 Lh-100P Cr-P"
+            onClick={this.handleBrochureResize}
+          >
+            <Img className="Sq-15" src={`${CLOUDINARY_ICON_URL}/narrow.png`} />
           </button>
-          <button className="brochure__closeBtn" onClick={this.handleBrochureClose}>
-            <Img src={`${CLOUDINARY_ICON_URL}/close.png`} />
+          <button
+            className="P-5 Ml-2 Lh-100P Cr-P"
+            onClick={this.handleBrochureClose}
+          >
+            <Img className="Sq-15" src={`${CLOUDINARY_ICON_URL}/close.png`} />
           </button>
         </div>
         <Row className="brochure__row">
-          { mainPoster &&
+          {mainPoster && (
             <Col lg={8} md={12} sm={12} xs={12} className="brochure__col">
-              <ImageTile type="main" img={mainPoster.url} title={mainPoster.title} />
+              <ImageTile
+                type="main"
+                img={mainPoster.url}
+                title={mainPoster.title}
+              />
             </Col>
-          }
-          { description &&
+          )}
+          {description && (
             <Col lg={4} md={12} sm={12} xs={12} className="brochure__col">
               <Row className="brochure__row">
                 <Col lg={12} md={6} sm={12} xs={12} className="brochure__col">
-                  <TextTile type="description" title={''} content={description.text.content} />
+                  <TextTile
+                    type="description"
+                    title={''}
+                    content={description.text.content}
+                  />
                 </Col>
                 <Col lg={12} md={6} sm={12} xs={12} className="brochure__col">
-                  <ImageTile type="description" img={description.poster.url} title={description.poster.title} />
+                  <ImageTile
+                    type="description"
+                    img={description.poster.url}
+                    title={description.poster.title}
+                  />
                 </Col>
               </Row>
             </Col>
-          }
+          )}
         </Row>
         <Row className="brochure__row">
-          { tiles && tiles.map((tile, index) => {
-            const { content, title, type, url } = tile
-            return (type === 'text') ? <TextTile title={title} content={content} key={index} /> : <ImageTile img={url} title={title} key={index} />
-          })}
+          {tiles &&
+            tiles.map((tile, index) => {
+              const { content, title, type, url } = tile
+              return type === 'text' ? (
+                <TextTile title={title} content={content} key={index} />
+              ) : (
+                <ImageTile img={url} title={title} key={index} />
+              )
+            })}
         </Row>
       </Container>
     )
@@ -86,7 +112,4 @@ const actions = {
   getBrochureRequest,
 }
 
-export default compose(
-  withRouter,
-  connect(selectors, actions)
-)(Brochure)
+export default compose(withRouter, connect(selectors, actions))(Brochure)

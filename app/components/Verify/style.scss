@@ -1,0 +1,26 @@
+@import '../../styles/common';
+
+.verifyCtrl {
+  z-index: 1000;
+  background: $darkShadowColor;
+  @include fillViewport();
+  @include fixedTopLeft();
+
+  &__message {
+    width: 220px;
+    height: 220px;
+    background: $white;
+    font-weight: $lightFw;
+    @include borderRadius(50%);
+    @include vhCenter();
+    @include contentCenter();
+    @include boxShadow(15px, $darkShadowColor);
+  }
+
+  &__signOutForm {
+    bottom: 0;
+    background: $white;
+    font-weight: $lightFw;
+    @include hCenter();
+  }
+}
