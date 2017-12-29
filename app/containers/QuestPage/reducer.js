@@ -5,32 +5,23 @@ import { getQuestStr } from 'utils/urlHelper'
 import { getItem, setItem } from 'utils/localStorage'
 import {
   MAP_CHANGE,
-
   PLACE_CLICK,
-
   TYPE_CLICK,
   TYPE_ANYTHING_CLICK,
-
   DESCRIPTIVE_CLICK,
   DESCRIPTIVE_STAR_CLICK,
   DESCRIPTIVE_ANYTHING_CLICK,
-
   UPDATE_VISIBILITY,
-
   SET_DEFAULT_QUEST,
-
   QUEST_ADD,
   QUEST_SELECT,
   QUEST_REMOVE,
-
   GET_QUESTINFO_REQUEST,
   GET_QUESTINFO_SUCCESS,
   GET_QUESTINFO_FAIL,
-
   GET_RECOMMENDATION_REQUEST,
   GET_RECOMMENDATION_SUCCESS,
   GET_RECOMMENDATION_FAIL,
-
   GET_BROCHURE_REQUEST,
   GET_BROCHURE_SUCCESS,
   GET_BROCHURE_FAIL,
@@ -72,7 +63,9 @@ const initialState = {
     descriptives: [],
   },
   viewport: JSON.parse(getItem('viewport')) || initialViewport,
-  quests: JSON.parse(getItem('quests')) || [JSON.parse(JSON.stringify(initialQuest))],
+  quests: JSON.parse(getItem('quests')) || [
+    JSON.parse(JSON.stringify(initialQuest)),
+  ],
   curQuestInd: JSON.parse(getItem('curQuestInd')) || 0,
   recommendations: [],
   brochure: null,
@@ -114,7 +107,10 @@ function questReducer(state = initialState, { type, payload }) {
     case PLACE_CLICK:
       newViewport = {
         ...state.viewport,
-        center: [parseFloat(payload.x.toFixed(4)), parseFloat(payload.y.toFixed(4))],
+        center: [
+          parseFloat(payload.x.toFixed(4)),
+          parseFloat(payload.y.toFixed(4)),
+        ],
         zoom: parseFloat(payload.zoom.toFixed(1)),
       }
 
@@ -283,9 +279,10 @@ function questReducer(state = initialState, { type, payload }) {
         setItem('curQuestInd', curQuestInd - 1)
       }
 
-      return Object.assign({},
+      return Object.assign(
+        {},
         { ...state, status: type, quests },
-        (payload < curQuestInd) && { curQuestInd: curQuestInd - 1 },
+        payload < curQuestInd && { curQuestInd: curQuestInd - 1 }
       )
 
     case SET_DEFAULT_QUEST:
@@ -294,13 +291,17 @@ function questReducer(state = initialState, { type, payload }) {
         if (index === curQuestInd) {
           quest.types.all = types.all
           for (let type of types.includes) {
-            const typeObj = find(categories.types, { [DEFAULT_LOCALE]: getQuestStr(type) })
+            const typeObj = find(categories.types, {
+              [DEFAULT_LOCALE]: getQuestStr(type),
+            })
             if (typeObj && !find(quest.types.includes, typeObj)) {
               quest.types.includes.push(typeObj)
             }
           }
           for (let type of types.excludes) {
-            const typeObj = find(categories.types, { [DEFAULT_LOCALE]: getQuestStr(type) })
+            const typeObj = find(categories.types, {
+              [DEFAULT_LOCALE]: getQuestStr(type),
+            })
             if (typeObj && !find(quest.types.excludes, typeObj)) {
               quest.types.excludes.push(typeObj)
             }
@@ -308,19 +309,25 @@ function questReducer(state = initialState, { type, payload }) {
 
           quest.descriptives.all = descriptives.all
           for (let desc of descriptives.stars) {
-            const descObj = find(categories.descriptives, { [DEFAULT_LOCALE]: getQuestStr(desc) })
+            const descObj = find(categories.descriptives, {
+              [DEFAULT_LOCALE]: getQuestStr(desc),
+            })
             if (descObj && !find(quest.descriptives.stars, descObj)) {
               quest.descriptives.stars.push(descObj)
             }
           }
           for (let desc of descriptives.includes) {
-            const descObj = find(categories.descriptives, { [DEFAULT_LOCALE]: getQuestStr(desc) })
+            const descObj = find(categories.descriptives, {
+              [DEFAULT_LOCALE]: getQuestStr(desc),
+            })
             if (descObj && !find(quest.descriptives.includes, descObj)) {
               quest.descriptives.includes.push(descObj)
             }
           }
           for (let desc of descriptives.excludes) {
-            const descObj = find(categories.descriptives, { [DEFAULT_LOCALE]: getQuestStr(desc) })
+            const descObj = find(categories.descriptives, {
+              [DEFAULT_LOCALE]: getQuestStr(desc),
+            })
             if (descObj && !find(quest.descriptives.excludes, descObj)) {
               quest.descriptives.excludes.push(descObj)
             }
@@ -332,6 +339,7 @@ function questReducer(state = initialState, { type, payload }) {
       newViewport = {
         ...state.viewport,
         ...viewport,
+        status: type,
       }
 
       setItem('viewport', JSON.stringify(newViewport))

@@ -5,8 +5,10 @@ import { connect } from 'react-redux'
 import cx from 'classnames'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
+import { SET_DEFAULT_QUEST } from 'containers/QuestPage/constants'
 import { updateVisibility } from 'containers/QuestPage/actions'
 import {
+  selectInfo,
   selectCurrentTypes,
   selectCurrentDescriptives,
 } from 'containers/QuestPage/selectors'
@@ -21,6 +23,7 @@ class Quest extends Component {
     currentTypes: PropTypes.object,
     currentDescriptives: PropTypes.object,
     updateVisibility: PropTypes.func,
+    info: PropTypes.object,
     intl: intlShape.isRequired,
   }
 
@@ -46,16 +49,18 @@ class Quest extends Component {
   }
 
   initializeProps = props => {
-    const { currentTypes, currentDescriptives } = props
+    const { currentTypes, currentDescriptives, info: { status } } = props
 
-    if (currentTypes.all || currentTypes.includes.length > 0) {
-      this.setState({ currentTab: 1 })
-    } else if (
-      currentDescriptives.all ||
-      currentDescriptives.includes.length > 0 ||
-      currentDescriptives.stars.length > 0
-    ) {
-      this.setState({ currentTab: 2 })
+    if (status === SET_DEFAULT_QUEST) {
+      if (currentTypes.all || currentTypes.includes.length > 0) {
+        this.setState({ currentTab: 1 })
+      } else if (
+        currentDescriptives.all ||
+        currentDescriptives.includes.length > 0 ||
+        currentDescriptives.stars.length > 0
+      ) {
+        this.setState({ currentTab: 2 })
+      }
     }
   }
 
@@ -134,6 +139,7 @@ class Quest extends Component {
 const selectors = createStructuredSelector({
   currentTypes: selectCurrentTypes(),
   currentDescriptives: selectCurrentDescriptives(),
+  info: selectInfo(),
 })
 
 const actions = {
