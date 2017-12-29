@@ -19,6 +19,19 @@
   text-transform: uppercase;
 }
 
+// Text Align
+.Ta-L {
+  text-align: left;
+}
+
+.Ta-C {
+  text-align: center;
+}
+
+.Ta-R {
+  text-align: right;
+}
+
 // Mouse Cursor
 .Cr-P {
   cursor: pointer;
@@ -67,6 +80,15 @@
   padding-left: 60px;
 }
 
+.Pb-20 {
+  padding-bottom: 20px;
+}
+
+.Py-5 {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
 .Py-15 {
   padding-top: 15px;
   padding-bottom: 15px;
@@ -91,6 +113,10 @@
 
 .M-0 {
   margin: 0;
+}
+
+.M-8 {
+  margin: 8px;
 }
 
 .Mb-0 {
@@ -134,6 +160,10 @@
   display: block;
 }
 
+.D-N {
+  display: none;
+}
+
 // Word Break
 
 .Wb-Bw {
@@ -144,6 +174,10 @@
 
 .Bs-Cb {
   box-sizing: content-box;
+}
+
+.Bs-Bb {
+  box-sizing: border-box;
 }
 
 // Square

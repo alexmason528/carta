@@ -78,7 +78,12 @@ class AccountMenu extends Component {
 
     return (
       <div
-        className={cx({ accountMenu: true, 'accountMenu--hidden': !show })}
+        className={cx({
+          accountMenu: true,
+          'P-R': true,
+          'Cr-D': true,
+          'accountMenu--hidden': !show,
+        })}
         onClick={evt => evt.stopPropagation()}
       >
         <div className="accountMenu__items">
@@ -113,7 +118,7 @@ class AccountMenu extends Component {
               label={formatMessage(messages.password)}
               order={1}
             />
-            <div className="accountMenu__warning">
+            <div className="accountMenu__warning Cr-T">
               {formatMessage(messages.deleteConfirm)}
             </div>
             <div className="accountMenu__deleteFormButtons">
@@ -125,7 +130,7 @@ class AccountMenu extends Component {
               </button>
             </div>
             {status === DELETE_USER_FAIL &&
-              error && <div className="error">{error}</div>}
+              error && <div className="error M-8 P-0">{error}</div>}
           </Form>
         </div>
       </div>

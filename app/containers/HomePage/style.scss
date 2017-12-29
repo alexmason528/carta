@@ -102,7 +102,7 @@
 
     .btnText {
       color: $white;
-      font-weight: $normalFw;
+      font-weight: $heavyFw;
       font-size: 15px;
       @include textShadow($textShadowBlur, $shadowColor);
       transition: all $fastTrans;

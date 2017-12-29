@@ -1,26 +1,21 @@
 import {
+  INIT,
   CREATE_POST_REQUEST,
   CREATE_POST_SUCCESS,
   CREATE_POST_FAIL,
-
   LIST_POST_REQUEST,
   LIST_POST_SUCCESS,
   LIST_POST_FAIL,
-
   UPDATE_POST_REQUEST,
   UPDATE_POST_SUCCESS,
   UPDATE_POST_FAIL,
-
   DELETE_POST_REQUEST,
   DELETE_POST_SUCCESS,
   DELETE_POST_FAIL,
-
   LIST_SUGGESTION_REQUEST,
   LIST_SUGGESTION_SUCCESS,
   LIST_SUGGESTION_FAIL,
-
   DELETE_USER_POSTS,
-
   POST_EDIT_START,
   POST_EDIT_END,
   POST_TITLE_CHANGE,
@@ -35,7 +30,7 @@ const initialState = {
   posts: [],
   suggestions: [],
   editingPost: null,
-  status: null,
+  status: INIT,
   error: null,
 }
 
@@ -53,10 +48,7 @@ function homeReducer(state = initialState, action) {
     case CREATE_POST_SUCCESS:
       return {
         ...state,
-        posts: [
-          payload,
-          ...state.posts,
-        ],
+        posts: [payload, ...state.posts],
         status: type,
         error: null,
       }

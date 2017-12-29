@@ -3,8 +3,16 @@ import cx from 'classnames'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
-import { getRecommendationRequest, questAdd, questSelect, questRemove } from 'containers/QuestPage/actions'
-import { selectQuestCnt, selectCurQuestInd } from 'containers/QuestPage/selectors'
+import {
+  getRecommendationRequest,
+  questAdd,
+  questSelect,
+  questRemove,
+} from 'containers/QuestPage/actions'
+import {
+  selectQuestCnt,
+  selectCurQuestInd,
+} from 'containers/QuestPage/selectors'
 import Img from 'components/Img'
 import Quest from '../Quest'
 import './style.scss'
@@ -41,10 +49,23 @@ class SidePanel extends Component {
   }
 
   render() {
-    const { curQuestInd, panelState, onMinimizeClick, questCnt, onCloseClick } = this.props
+    const {
+      curQuestInd,
+      panelState,
+      onMinimizeClick,
+      questCnt,
+      onCloseClick,
+    } = this.props
     const quests = Array(questCnt).fill(0)
     return (
-      <div className={cx({ sidePanel: true, sidePanel__hidden: panelState !== 'opened' })}>
+      <div
+        className={cx({
+          sidePanel: true,
+          'Bs-Bb': true,
+          'P-R': true,
+          sidePanel__hidden: panelState !== 'opened',
+        })}
+      >
         <div>
           <button className="sidePanel__minimizeBtn" onClick={onMinimizeClick}>
             <Img src={`${CLOUDINARY_ICON_URL}/min.png`} />
@@ -54,19 +75,29 @@ class SidePanel extends Component {
           </button>
         </div>
         <div className="sidePanel__questIndexBtnList">
-          {
-            quests.map((quest, index) => (
-              <button
-                className={cx({ sidePanel__questIndexBtn: true, 'sidePanel__questIndexBtn--active': index === curQuestInd })}
-                key={index}
-                onClick={() => { this.handleQuestSelect(index) }}
-                onContextMenu={evt => { this.handleQuestRemove(evt, index) }}
-              >
-                {index + 1}
-              </button>
-            ))
-          }
-          <button className="sidePanel__questAddBtn" onClick={this.handleQuestAdd}>+</button>
+          {quests.map((quest, index) => (
+            <button
+              className={cx({
+                sidePanel__questIndexBtn: true,
+                'sidePanel__questIndexBtn--active': index === curQuestInd,
+              })}
+              key={index}
+              onClick={() => {
+                this.handleQuestSelect(index)
+              }}
+              onContextMenu={evt => {
+                this.handleQuestRemove(evt, index)
+              }}
+            >
+              {index + 1}
+            </button>
+          ))}
+          <button
+            className="sidePanel__questAddBtn"
+            onClick={this.handleQuestAdd}
+          >
+            +
+          </button>
         </div>
         <Quest />
       </div>

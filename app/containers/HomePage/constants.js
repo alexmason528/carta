@@ -1,3 +1,5 @@
+export const INIT = 'carta/Home/INIT'
+
 export const CREATE_POST_REQUEST = 'carta/Home/CREATE_POST_REQUEST'
 export const CREATE_POST_SUCCESS = 'carta/Home/CREATE_POST_SUCCESS'
 export const CREATE_POST_FAIL = 'carta/Home/CREATE_POST_FAIL'

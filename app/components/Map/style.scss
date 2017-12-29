@@ -1,14 +1,16 @@
+@import '../../styles/common';
+
 .map {
   position: absolute;
-  top: 0; 
-  bottom: 0; 
-  left: 256px; 
+  top: 0;
+  bottom: 0;
+  left: 256px;
   width: calc(100% - 256px);
-  transition: all 0.1s;
+  @include transition(all, $fastTrans);
 
   &__withoutQuest {
     left: 0;
     width: 100%;
-    transition: 0.1s all;
+    @include transition(all, $fastTrans);
   }
 }

@@ -1,5 +1,7 @@
 export const MAP_CHANGE = 'carta/Quest/MAP_CHANGE'
 
+export const INIT = 'carta/Quest/INIT'
+
 export const PLACE_CLICK = 'carta/Quest/PLACE_CLICK'
 
 export const TYPE_CLICK = 'carta/Quest/TYPE_CLICK'
@@ -7,7 +9,8 @@ export const TYPE_ANYTHING_CLICK = 'carta/Quest/TYPE_ANYTHING_CLICK'
 
 export const DESCRIPTIVE_CLICK = 'carta/Quest/DESCRIPTIVE_CLICK'
 export const DESCRIPTIVE_STAR_CLICK = 'carta/Quest/DESCRIPTIVE_STAR_CLICK'
-export const DESCRIPTIVE_ANYTHING_CLICK = 'carta/Quest/DESCRIPTIVE_ANYTHING_CLICK'
+export const DESCRIPTIVE_ANYTHING_CLICK =
+  'carta/Quest/DESCRIPTIVE_ANYTHING_CLICK'
 
 export const UPDATE_VISIBILITY = 'carta/Quest/UPDATE_VISIBILITY'
 
@@ -21,8 +24,10 @@ export const GET_QUESTINFO_REQUEST = 'carta/Quest/GET_QUESTINFO_REQUEST'
 export const GET_QUESTINFO_SUCCESS = 'carta/Quest/GET_QUESTINFO_SUCCESS'
 export const GET_QUESTINFO_FAIL = 'carta/Quest/GET_QUESTINFO_FAIL'
 
-export const GET_RECOMMENDATION_REQUEST = 'carta/Quest/GET_RECOMMENDATION_REQUEST'
-export const GET_RECOMMENDATION_SUCCESS = 'carta/Quest/GET_RECOMMENDATION_SUCCESS'
+export const GET_RECOMMENDATION_REQUEST =
+  'carta/Quest/GET_RECOMMENDATION_REQUEST'
+export const GET_RECOMMENDATION_SUCCESS =
+  'carta/Quest/GET_RECOMMENDATION_SUCCESS'
 export const GET_RECOMMENDATION_FAIL = 'carta/Quest/GET_RECOMMENDATION_FAIL'
 
 export const GET_BROCHURE_REQUEST = 'carta/Quest/GET_BROCHURE_REQUEST'

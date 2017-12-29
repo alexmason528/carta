@@ -23,7 +23,9 @@ class ImageTile extends Component {
   handleResize = () => {
     const imageTile = ReactDOM.findDOMNode(this)
     const width = $(imageTile).width()
-    $(imageTile).find('h2').css({ fontSize: `${(width / 44) * 3 * 1.35}px` })
+    $(imageTile)
+      .find('h2')
+      .css({ fontSize: `${width / 44 * 3 * 1.35}px` })
   }
 
   handleLoaded = () => {
@@ -44,9 +46,12 @@ class ImageTile extends Component {
         {...data}
       >
         <div className="tileContainer">
-          <div className="tile imageTile">
+          <div className="tile imageTile Ov-H Cr-P">
             <Img onLoad={this.handleLoaded} src={img} />
-            <h2 dangerouslySetInnerHTML={{ __html: title }} />
+            <h2
+              className="Mb-0 Tt-U Px-30 Py-19"
+              dangerouslySetInnerHTML={{ __html: title }}
+            />
           </div>
         </div>
       </Col>

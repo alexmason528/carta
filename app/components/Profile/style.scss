@@ -22,7 +22,7 @@
     bottom: 6px;
     right: 6px;
     z-index: 4;
-    opacity: 1;
+    opacity: $darkerOpacity;
 
     img {
       position: relative !important;
@@ -32,14 +32,14 @@
 
     .hover {
       position: absolute !important;
-      opacity: 0;
+      opacity: $lighterOpacity;
       right: 0;
-      transition: all 0.1s;
+      @include transition(all, $fastTrans);
     }
 
     &:hover {
       .hover {
-        opacity: 1;
+        opacity: $darkerOpacity;
       }
     }
   }
@@ -56,7 +56,7 @@
   img {
     width: 100%;
     transform: scale(1);
-    transition: all 1s;
+    @include transition(all, $fastTrans);
   }
 
   &:before {
@@ -73,7 +73,7 @@
   h2 {
     padding: 20px 34px;
     color: $white;
-    font-weight: $heavyFw;
+    font-weight: $heavierFw;
     line-height: $textLH;
     left: 30%;
     bottom: 0;

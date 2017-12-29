@@ -21,10 +21,12 @@ class TextTile extends Component {
 
   componentDidMount() {
     const comp = ReactDOM.findDOMNode(this)
-    $(comp).find('.textTile__content').dotdotdot({
-      watch: 'window',
-      ellipsis: ' ...',
-    })
+    $(comp)
+      .find('.textTile__content')
+      .dotdotdot({
+        watch: 'window',
+        ellipsis: ' ...',
+      })
 
     window.addEventListener('resize', this.handleResize)
     this.handleResize()
@@ -37,26 +39,43 @@ class TextTile extends Component {
   handleResize = () => {
     const tile = ReactDOM.findDOMNode(this)
     const width = $(tile).width()
-    const fontSize = (width / 76) * 3 * 1.15 * 1.25
-    $(tile).find('h2').css({ fontSize: `${fontSize}px` })
+    const fontSize = width / 76 * 3 * 1.15 * 1.25
+    $(tile)
+      .find('h2')
+      .css({ fontSize: `${fontSize}px` })
 
     const { expanded } = this.state
     const { type } = this.props
 
     if (expanded) {
       $(tile).css({ zIndex: 20 })
-      $(tile).find('.textTile').css({ bottom: `calc(-100% - ${type === 'description' ? 60 : 8}px)` })
+      $(tile)
+        .find('.textTile')
+        .css({ bottom: `calc(-100% - ${type === 'description' ? 60 : 8}px)` })
     } else {
-      $(tile).find('.textTile').css({ bottom: 0, zIndex: 1 })
+      $(tile)
+        .find('.textTile')
+        .css({ bottom: 0, zIndex: 1 })
     }
 
     setTimeout(() => {
-      $(tile).find('.textTile__content').trigger('update.dot')
-      $(tile).find('.arrowBtn').css('display', $(tile).find('.is-truncated').length > 0 || expanded ? 'block' : 'none')
+      $(tile)
+        .find('.textTile__content')
+        .trigger('update.dot')
+      $(tile)
+        .find('.arrowBtn')
+        .css(
+          'display',
+          $(tile).find('.is-truncated').length > 0 || expanded
+            ? 'block'
+            : 'none'
+        )
     }, 200)
 
     if (!expanded) {
-      setTimeout(() => { $(tile).css({ zIndex: 1 }) }, 250)
+      setTimeout(() => {
+        $(tile).css({ zIndex: 1 })
+      }, 250)
     }
   }
 
@@ -78,16 +97,23 @@ class TextTile extends Component {
         {...data}
       >
         <div className="tileContainer">
-          <div className="tile textTile">
-            <h2 className="textTile__title">{title}</h2>
+          <div className="tile textTile Ov-H P-30">
+            <h2 className="textTile__title Tt-U Pb-20">{title}</h2>
             <div className="textTile__content">{content}</div>
-            <div className={cx({ arrowBtn: true, more: !expanded, less: expanded })} onClick={this.handleToggleExpand} />
+            <div
+              className={cx({
+                arrowBtn: true,
+                'Cr-P': true,
+                more: !expanded,
+                less: expanded,
+              })}
+              onClick={this.handleToggleExpand}
+            />
           </div>
         </div>
       </Col>
     )
   }
 }
-
 
 export default TextTile

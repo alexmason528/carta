@@ -30,7 +30,7 @@
 
   &__title {
     color: $white;
-    font-weight: $heavyFw;
+    font-weight: $heavierFw;
     line-height: $textLH;
     @include vCenter();
     @include textShadow($textShadowBlur, $shadowColor);

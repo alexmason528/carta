@@ -170,7 +170,7 @@
 
   .excluded .except,
   .stared .notable {
-    font-weight: $normalFw;
+    font-weight: $sectionTitleFw;
     font-size: 12px;
     margin: 20px 0 8px 0;
     padding: 3px 5px;
@@ -181,7 +181,7 @@
   &__title {
     font-size: 15px;
     margin: 24px 0 10px 5px;
-    font-weight: $normalFw;
+    font-weight: $sectionTitleFw;
   }
 
   &__searchOpenBtn,

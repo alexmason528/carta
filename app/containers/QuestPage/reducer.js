@@ -5,6 +5,7 @@ import { getQuestStr } from 'utils/urlHelper'
 import { getItem, setItem } from 'utils/localStorage'
 import {
   MAP_CHANGE,
+  INIT,
   PLACE_CLICK,
   TYPE_CLICK,
   TYPE_ANYTHING_CLICK,
@@ -69,7 +70,7 @@ const initialState = {
   curQuestInd: JSON.parse(getItem('curQuestInd')) || 0,
   recommendations: [],
   brochure: null,
-  status: null,
+  status: INIT,
   error: null,
 }
 

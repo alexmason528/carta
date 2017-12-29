@@ -5,7 +5,10 @@ import { connect } from 'react-redux'
 import cx from 'classnames'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
-import { SET_DEFAULT_QUEST } from 'containers/QuestPage/constants'
+import {
+  GET_QUESTINFO_REQUEST,
+  SET_DEFAULT_QUEST,
+} from 'containers/QuestPage/constants'
 import { updateVisibility } from 'containers/QuestPage/actions'
 import {
   selectInfo,
@@ -51,15 +54,24 @@ class Quest extends Component {
   initializeProps = props => {
     const { currentTypes, currentDescriptives, info: { status } } = props
 
-    if (status === SET_DEFAULT_QUEST) {
-      if (currentTypes.all || currentTypes.includes.length > 0) {
-        this.setState({ currentTab: 1 })
-      } else if (
-        currentDescriptives.all ||
-        currentDescriptives.includes.length > 0 ||
-        currentDescriptives.stars.length > 0
+    if (status === SET_DEFAULT_QUEST || status === GET_QUESTINFO_REQUEST) {
+      if (
+        (currentTypes.all || currentTypes.includes.length > 0) &&
+        (currentDescriptives.all ||
+          currentDescriptives.includes.length > 0 ||
+          currentDescriptives.stars.length > 0)
       ) {
         this.setState({ currentTab: 2 })
+      } else if (
+        currentTypes.all ||
+        currentTypes.includes.length > 0 ||
+        (currentDescriptives.all ||
+          currentDescriptives.includes.length > 0 ||
+          currentDescriptives.stars.length > 0)
+      ) {
+        this.setState({ currentTab: 1 })
+      } else {
+        this.setState({ currentTab: 0 })
       }
     }
   }

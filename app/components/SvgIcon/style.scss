@@ -1,4 +1,6 @@
+@import '../../styles/common';
+
 svg path,
-svg rect{
-  fill: #fff;
+svg rect {
+  fill: $white;
 }

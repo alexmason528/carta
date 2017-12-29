@@ -105,11 +105,11 @@
     left: 10px;
     top: 10px;
     width: 32px;
-    border-radius: 20px;
     height: auto;
     z-index: 102;
     position: relative;
-    transition: all 0.1s;
+    @include transition(all, $fastTrans);
+    @include borderRadius(20px);
     @include boxShadow($boxShadowBlur, $shadowColor);
   }
 

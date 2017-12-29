@@ -11,8 +11,10 @@ $noLH: 0;
 $hrBorderWidth: 0.8px;
 
 // Font weight
-$heavyFw: 900;
-$normalFw: 700;
+$heavierFw: 900;
+$heavyFw: 700;
+$sectionTitleFw: 600;
+$normalFw: 500;
 $lightFw: 400;
 $lighterFw: 300;
 
@@ -32,8 +34,15 @@ $normalTrans: 1s;
 
 // Colors
 $white: #fff;
-$black: #000;
+$secondaryWhite: #fbfbfb;
 $lightWhite: #ccc;
+
+$black: #000;
+$secondaryBlack: #222;
+$thirdBlack: #333;
+
+$brochureArrowColor: #ddd;
+$brochureArrowHoverColor: #006bca;
 
 $darkerShadowColor: rgba(0, 0, 0, $darkOpacity);
 $darkShadowColor: rgba(0, 0, 0, $normalOpacity);

@@ -27,7 +27,9 @@ class Suggestion extends Component {
   handleResize = () => {
     const suggestion = ReactDOM.findDOMNode(this)
     const width = $(suggestion).width()
-    $(suggestion).find('h2').css({ fontSize: `${(width / 44) * 3 * 1.15}px` })
+    $(suggestion)
+      .find('h2')
+      .css({ fontSize: `${width / 44 * 3 * 1.15}px` })
   }
 
   handleLoaded = () => {
@@ -39,9 +41,18 @@ class Suggestion extends Component {
     const { imageLoaded } = this.state
 
     return (
-      <div className={cx({ suggestion: true, hidden: !imageLoaded })}>
+      <div
+        className={cx({
+          suggestion: true,
+          'P-R': true,
+          'Mb-8': true,
+          'Cr-P': true,
+          'Ov-H': true,
+          hidden: !imageLoaded,
+        })}
+      >
         <Img onLoad={this.handleLoaded} src={img} />
-        <h2>{title}</h2>
+        <h2 className="Px-30 Py-19 Tt-U Mb-0">{title}</h2>
       </div>
     )
   }

@@ -1,9 +1,8 @@
-.scoreBoard{
-  right: 20px; 
-  top: 20px; 
-  text-align: right; 
-  color:#000; 
-  font-weight: 900; 
-  text-transform: uppercase; 
-  position: absolute;
+@import '../../styles/common';
+
+.scoreBoard {
+  right: 20px;
+  top: 20px;
+  color: $black;
+  font-weight: $heavierFw;
 }
