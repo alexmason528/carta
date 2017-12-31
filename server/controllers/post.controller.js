@@ -23,7 +23,6 @@ const listPost = (req, res) => {
         'author.password': 0,
         'author.email': 0,
         'author.profilePic': 0,
-        'author.coverPic': 0,
         'author.verified': 0,
       },
     },
@@ -64,17 +63,22 @@ const updatePost = (req, res) => {
     img,
   }
 
-  Post.findOneAndUpdate({ _id: postID }, { $set: data }, { new: true }, (err, element) => {
-    if (element && element._id) {
-      return res.json(element)
-    }
+  Post.findOneAndUpdate(
+    { _id: postID },
+    { $set: data },
+    { new: true },
+    (err, element) => {
+      if (element && element._id) {
+        return res.json(element)
+      }
 
-    return res.status(400).send({
-      error: {
-        details: 'Failed to upddate post',
-      },
-    })
-  })
+      return res.status(400).send({
+        error: {
+          details: 'Failed to upddate post',
+        },
+      })
+    }
+  )
 }
 
 /**
@@ -86,7 +90,7 @@ const updatePost = (req, res) => {
 
 const deletePost = (req, res) => {
   const { postID } = req.params
-  Post.remove({ _id: postID }, (err) => {
+  Post.remove({ _id: postID }, err => {
     if (err) {
       return res.status(400).send({
         error: {

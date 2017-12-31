@@ -5,6 +5,7 @@ import axios from 'axios'
 import {
   CLOUDINARY_UPLOAD_URL,
   CLOUDINARY_UPLOAD_PRESET,
+  CLOUDINARY_PLACE_URL,
   UPDATE_USER_REQUEST,
 } from 'containers/App/constants'
 import { UserButton } from 'components/Buttons'
@@ -22,8 +23,7 @@ class Profile extends Component {
     authenticated: PropTypes.bool,
     user: PropTypes.object,
     info: PropTypes.object,
-    coverPic: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-    profilePic: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    profilePic: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     intl: intlShape.isRequired,
   }
 
@@ -32,7 +32,6 @@ class Profile extends Component {
 
     this.state = {
       profilePic: null,
-      coverPic: null,
       imageType: null,
       imageLoaded: false,
       imageUpload: {
@@ -42,8 +41,8 @@ class Profile extends Component {
     }
   }
   componentWillMount() {
-    const { profilePic, coverPic } = this.props
-    this.setState({ profilePic, coverPic })
+    const { profilePic } = this.props
+    this.setState({ profilePic })
   }
 
   componentDidMount() {
@@ -51,16 +50,10 @@ class Profile extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { profilePic, coverPic } = this.props
+    const { profilePic } = this.props
     if (profilePic !== nextProps.profilePic) {
       this.setState({ profilePic: null }, () => {
         this.setState({ profilePic: nextProps.profilePic })
-      })
-    }
-
-    if (coverPic !== nextProps.coverPic) {
-      this.setState({ coverPic: null }, () => {
-        this.setState({ coverPic: nextProps.coverPic })
       })
     }
   }
@@ -82,14 +75,6 @@ class Profile extends Component {
     this.setState({ imageLoaded: true }, this.handleResize)
   }
 
-  handleCoverImg = () => {
-    const { authenticated } = this.props
-    if (authenticated) {
-      this.setState({ imageType: 'coverPic' })
-      this.mediaUploader.click()
-    }
-  }
-
   handleProfilePic = evt => {
     evt.stopPropagation()
     const { authenticated } = this.props
@@ -101,16 +86,10 @@ class Profile extends Component {
 
   handleFiles = evt => {
     const file = evt.target.files[0]
-    const { imageType } = this.state
-    getCroppedImage(
-      file,
-      this.handleImage,
-      imageType === 'profilePic' ? 'portrait' : 'landscape'
-    )
+    getCroppedImage(file, this.handleImage, 'portrait')
   }
 
   handleImage = img => {
-    const { imageType } = this.state
     const { onUpdate } = this.props
 
     this.setState({ imageUpload: { uploading: true, error: null } })
@@ -126,7 +105,7 @@ class Profile extends Component {
       .then(res => {
         const { data: { url } } = res
         this.setState({ imageUpload: { uploading: false, error: null } })
-        onUpdate({ [imageType]: url })
+        onUpdate({ profilePic: url })
       })
       .catch(err => {
         this.setState({
@@ -143,46 +122,37 @@ class Profile extends Component {
       info: { status },
       intl: { formatMessage },
     } = this.props
-    const { coverPic, profilePic, imageUpload, imageType } = this.state
-    const coverPicSpinner =
-      imageType === 'coverPic' &&
-      (imageUpload.uploading || status === UPDATE_USER_REQUEST)
+    const { profilePic, imageUpload, imageType } = this.state
     const profilePicSpinner =
       imageType === 'profilePic' &&
       (imageUpload.uploading || status === UPDATE_USER_REQUEST)
 
+    const placeList = [
+      { name: 'amsterdam', link: 'amsterdam' },
+      { name: 'rotterdam', link: 'rotterdam' },
+      { name: 'utrecht', link: 'utrecht' },
+      { name: 'gelderland', link: 'gelderland' },
+    ]
+
+    const coverPic = Math.floor(Math.random()) * 4
+
     return (
       <div className="profile Mb-8 P-R">
         <div className="profile__content">
-          {coverPic && (
-            <div
-              className="coverPic Cr-P Ov-H P-R"
-              onClick={authenticated ? this.handleCoverImg : onClick}
-            >
-              <LoadingSpinner show={coverPicSpinner}>
-                <QuarterSpinner width={30} height={30} />
-              </LoadingSpinner>
-              <input
-                type="file"
-                ref={ref => {
-                  this.mediaUploader = ref
-                }}
-                accept="image/*"
-                onChange={this.handleFiles}
-              />
-              <Img onLoad={this.handleLoaded} src={coverPic} />
-              {authenticated ? (
-                <h2 className="Mb-0 Tt-U P-A">{user.fullname}</h2>
-              ) : (
-                <h2 className="Mb-0 Tt-U P-A" onClick={onClick}>
-                  {formatMessage(messages.signIn)}
-                </h2>
-              )}
-              {authenticated && (
-                <UserButton className="P-A" onClick={onClick} />
-              )}
-            </div>
-          )}
+          <div className="coverPic Cr-P Ov-H P-R">
+            <Img
+              onLoad={this.handleLoaded}
+              src={`${CLOUDINARY_PLACE_URL}/${placeList[coverPic].name}.jpg`}
+            />
+            {authenticated ? (
+              <h2 className="Mb-0 Tt-U P-A">{user.fullname}</h2>
+            ) : (
+              <h2 className="Mb-0 Tt-U P-A" onClick={onClick}>
+                {formatMessage(messages.signIn)}
+              </h2>
+            )}
+            {authenticated && <UserButton className="P-A" onClick={onClick} />}
+          </div>
         </div>
         {profilePic && (
           <div
@@ -195,6 +165,14 @@ class Profile extends Component {
             <Img src={profilePic} />
           </div>
         )}
+        <input
+          type="file"
+          ref={ref => {
+            this.mediaUploader = ref
+          }}
+          accept="image/*"
+          onChange={this.handleFiles}
+        />
       </div>
     )
   }

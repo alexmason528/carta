@@ -36,12 +36,10 @@ class AuthForm extends Component {
   static propTypes = {
     signInRequest: PropTypes.func,
     registerRequest: PropTypes.func,
-    onCoverPicChange: PropTypes.func,
     onProfilePicChange: PropTypes.func,
     changeAuthMethod: PropTypes.func,
     handleSubmit: PropTypes.func,
-    coverPic: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-    profilePic: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    profilePic: PropTypes.string,
     info: PropTypes.object,
     show: PropTypes.bool,
     intl: intlShape.isRequired,
@@ -90,14 +88,7 @@ class AuthForm extends Component {
 
   handleRegister = values => {
     const { registerRequest } = this.props
-    const {
-      email,
-      password,
-      confirmPassword,
-      fullname,
-      profilePic,
-      coverPic,
-    } = values
+    const { email, password, confirmPassword, fullname, profilePic } = values
 
     let data = {
       email,
@@ -105,69 +96,30 @@ class AuthForm extends Component {
       confirmPassword,
       fullname,
       profilePic: profilePic ? '' : this.props.profilePic,
-      coverPic: coverPic ? '' : this.props.coverPic,
     }
 
-    if (!profilePic && !coverPic) {
+    if (!profilePic) {
       registerRequest(data)
     } else {
       this.setState({ imageUpload: { uploading: true, error: false } })
-
-      let cnt = 0
-      if (profilePic) cnt += 1
-      if (coverPic) cnt += 1
-
-      if (profilePic) {
-        let formData = new FormData()
-        formData.append('file', profilePic)
-        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
-        axios
-          .post(CLOUDINARY_UPLOAD_URL, formData, {
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      let formData = new FormData()
+      formData.append('file', profilePic)
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+      axios
+        .post(CLOUDINARY_UPLOAD_URL, formData, {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        })
+        .then(res => {
+          const { data: { url } } = res
+          data.profilePic = url
+          registerRequest(data)
+          this.setState({ imageUpload: { uploading: false, error: null } })
+        })
+        .catch(err => {
+          this.setState({
+            imageUpload: { uploading: false, error: err.toString() },
           })
-          .then(res => {
-            const { data: { url } } = res
-            cnt -= 1
-            data.profilePic = url
-
-            if (cnt === 0) {
-              registerRequest(data)
-              this.setState({ imageUpload: { uploading: false, error: null } })
-            }
-          })
-          .catch(err => {
-            this.setState({
-              imageUpload: { uploading: false, error: err.toString() },
-            })
-          })
-      }
-
-      if (coverPic) {
-        let formData = new FormData()
-        formData.append('file', coverPic)
-        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
-        axios
-          .post(CLOUDINARY_UPLOAD_URL, formData, {
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-            },
-          })
-          .then(res => {
-            const { data: { url } } = res
-            cnt -= 1
-            data.coverPic = url
-
-            if (cnt === 0) {
-              registerRequest(data)
-              this.setState({ imageUpload: { uploading: false, error: null } })
-            }
-          })
-          .catch(err => {
-            this.setState({
-              imageUpload: { uploading: false, error: err.toString() },
-            })
-          })
-      }
+        })
     }
   }
 
@@ -195,7 +147,6 @@ class AuthForm extends Component {
     const {
       info: { status, error, authMethod },
       show,
-      onCoverPicChange,
       onProfilePicChange,
       handleSubmit,
       intl: { formatMessage },
@@ -277,24 +228,14 @@ class AuthForm extends Component {
                 label={formatMessage(messages.fullname)}
                 order={3}
               />
-              <div className="authForm__uploadButtons">
-                <Field
-                  className="authForm__uploadButton Tt-U"
-                  name="profilePic"
-                  label={formatMessage(messages.profilePic)}
-                  onChange={onProfilePicChange}
-                  component={RenderDropzone}
-                  crop="portrait"
-                />
-                <Field
-                  className="authForm__uploadButton Tt-U"
-                  name="coverPic"
-                  label={formatMessage(messages.coverPic)}
-                  onChange={onCoverPicChange}
-                  component={RenderDropzone}
-                  crop="landscape"
-                />
-              </div>
+              <Field
+                className="authForm__profileButton"
+                name="profilePic"
+                label={formatMessage(messages.profilePic)}
+                onChange={onProfilePicChange}
+                component={RenderDropzone}
+                crop="portrait"
+              />
             </div>
           )}
           <div className="authForm__authButtons">

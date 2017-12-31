@@ -47,6 +47,8 @@ export const CLOUDINARY_SHAPES_URL =
   'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510139627/data'
 export const CLOUDINARY_FIXED_URL =
   'http://res.cloudinary.com/hyvpvyohj/raw/upload/v1514494421/image/fixed'
+export const CLOUDINARY_PLACE_URL =
+  'http://res.cloudinary.com/hyvpvyohj/raw/upload/v1514724157/image/place'
 
 export const COLORS = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379']
 export const CENTER_COORDS = [5.822, 52.142]

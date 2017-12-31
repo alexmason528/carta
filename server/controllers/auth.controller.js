@@ -6,11 +6,13 @@ const ses = require('nodemailer-ses-transport')
 const Post = require('../models/post')
 const User = require('../models/user')
 
-let transporter = nodemailer.createTransport(ses({
-  accessKeyId: 'AKIAILWMKMTWHAJBH5HQ',
-  secretAccessKey: '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',
-  region: 'eu-west-1',
-}))
+let transporter = nodemailer.createTransport(
+  ses({
+    accessKeyId: 'AKIAILWMKMTWHAJBH5HQ',
+    secretAccessKey: '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',
+    region: 'eu-west-1',
+  })
+)
 
 /**
  * SignIn
@@ -24,8 +26,15 @@ const signIn = (req, res) => {
   User.find({ email: email }, (err, element) => {
     if (element.length > 0) {
       if (element[0].password === cryptr.encrypt(password)) {
-        const { _id, fullname, email, role, profilePic, coverPic, verified } = element[0]
-        const data = { _id, fullname, email, role, profilePic, coverPic, verified }
+        const { _id, fullname, email, role, profilePic, verified } = element[0]
+        const data = {
+          _id,
+          fullname,
+          email,
+          role,
+          profilePic,
+          verified,
+        }
         return res.json(data)
       } else {
         return res.status(400).send({
@@ -42,7 +51,6 @@ const signIn = (req, res) => {
   })
 }
 
-
 /**
  * Register
  * @param req
@@ -50,7 +58,14 @@ const signIn = (req, res) => {
  * @returns userInfo
  */
 const register = (req, res) => {
-  const { fullname, email, role, profilePic, coverPic, password, confirmPassword } = req.body
+  const {
+    fullname,
+    email,
+    role,
+    profilePic,
+    password,
+    confirmPassword,
+  } = req.body
 
   if (password !== confirmPassword) {
     return res.status(400).send({
@@ -66,11 +81,10 @@ const register = (req, res) => {
     password: cryptr.encrypt(password),
     role,
     profilePic,
-    coverPic,
     verified: false,
   }
 
-  User.create(data, (err) => {
+  User.create(data, err => {
     if (err) {
       if (err.name === 'MongoError' && err.code === 11000) {
         res.status(400).send({
@@ -86,13 +100,18 @@ const register = (req, res) => {
         })
       }
     } else {
-      const verifyUrl = (process.env.NODE_ENV === 'development') ? 'http://localhost:3000/verify' : 'https://cartamap.herokuapp.com/verify'
+      const verifyUrl =
+        process.env.NODE_ENV === 'development'
+          ? 'http://localhost:3000/verify'
+          : 'https://cartamap.herokuapp.com/verify'
       let mailOptions = {
         from: '<Carta@carta.guide>',
         to: data.email,
         subject: 'Verify your email',
         text: `Hi, ${data.fullname}`,
-        html: `Please verify your email by clicking <a href="${verifyUrl}/${cryptr.encrypt(data.email)}">this link</a>`,
+        html: `Please verify your email by clicking <a href="${verifyUrl}/${cryptr.encrypt(
+          data.email
+        )}">this link</a>`,
       }
 
       transporter.sendMail(mailOptions, () => {
@@ -112,26 +131,30 @@ const register = (req, res) => {
 const updateUser = (req, res) => {
   const { userID } = req.params
 
-  User.findOneAndUpdate({ _id: userID }, { $set: req.body }, { new: true }, (err, element) => {
-    if (element && element.fullname) {
-      let response = {
-        _id: element._id,
-        fullname: element.fullname,
-        email: element.email,
-        role: element.role,
-        profilePic: element.profilePic,
-        coverPic: element.coverPic,
-        verified: element.verified,
+  User.findOneAndUpdate(
+    { _id: userID },
+    { $set: req.body },
+    { new: true },
+    (err, element) => {
+      if (element && element.fullname) {
+        let response = {
+          _id: element._id,
+          fullname: element.fullname,
+          email: element.email,
+          role: element.role,
+          profilePic: element.profilePic,
+          verified: element.verified,
+        }
+        return res.json(response)
       }
-      return res.json(response)
-    }
 
-    return res.status(400).send({
-      error: {
-        details: 'Failed to update',
-      },
-    })
-  })
+      return res.status(400).send({
+        error: {
+          details: 'Failed to update',
+        },
+      })
+    }
+  )
 }
 
 /**
@@ -155,26 +178,30 @@ const verify = (req, res) => {
     })
   }
 
-  User.findOneAndUpdate({ email: email }, { $set: { verified: true } }, { new: true }, (err, element) => {
-    if (element && element.fullname) {
-      let response = {
-        _id: element._id,
-        fullname: element.fullname,
-        email: element.email,
-        role: element.role,
-        profilePic: element.profilePic,
-        coverPic: element.coverPic,
-        verified: true,
+  User.findOneAndUpdate(
+    { email: email },
+    { $set: { verified: true } },
+    { new: true },
+    (err, element) => {
+      if (element && element.fullname) {
+        let response = {
+          _id: element._id,
+          fullname: element.fullname,
+          email: element.email,
+          role: element.role,
+          profilePic: element.profilePic,
+          verified: true,
+        }
+        return res.json(response)
       }
-      return res.json(response)
-    }
 
-    return res.status(400).send({
-      error: {
-        details: 'Failed to verify',
-      },
-    })
-  })
+      return res.status(400).send({
+        error: {
+          details: 'Failed to verify',
+        },
+      })
+    }
+  )
 }
 
 /**
@@ -188,45 +215,48 @@ const deleteUser = (req, res) => {
   const { userID } = req.params
   const { password } = req.body
 
-  User.findOne({ _id: userID, password: cryptr.encrypt(password) }, (err, element) => {
-    if (err) {
-      return res.status(400).send({
-        error: {
-          details: err.toString(),
-        },
-      })
-    }
-
-    if (!element) {
-      return res.status(400).send({
-        error: {
-          details: 'Password is not correct',
-        },
-      })
-    }
-
-    User.remove({ _id: userID }, (err) => {
+  User.findOne(
+    { _id: userID, password: cryptr.encrypt(password) },
+    (err, element) => {
       if (err) {
         return res.status(400).send({
           error: {
             details: err.toString(),
           },
         })
-      } else {
-        Post.remove({ author: mongoose.Types.ObjectId(userID) }, (err) => {
-          if (err) {
-            return res.status(400).send({
-              error: {
-                details: err.toString(),
-              },
-            })
-          } else {
-            return res.json({})
-          }
+      }
+
+      if (!element) {
+        return res.status(400).send({
+          error: {
+            details: 'Password is not correct',
+          },
         })
       }
-    })
-  })
+
+      User.remove({ _id: userID }, err => {
+        if (err) {
+          return res.status(400).send({
+            error: {
+              details: err.toString(),
+            },
+          })
+        } else {
+          Post.remove({ author: mongoose.Types.ObjectId(userID) }, err => {
+            if (err) {
+              return res.status(400).send({
+                error: {
+                  details: err.toString(),
+                },
+              })
+            } else {
+              return res.json({})
+            }
+          })
+        }
+      })
+    }
+  )
 }
 
 module.exports.signIn = signIn

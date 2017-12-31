@@ -3,10 +3,14 @@ import Helmet from 'react-helmet'
 import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
-import { Container, Col, Row } from 'reactstrap'
+import { Container, Col } from 'reactstrap'
 import { compose } from 'redux'
 import Masonry from 'react-masonry-component'
-import { UPDATE_USER_SUCCESS, SIGNOUT } from 'containers/App/constants'
+import {
+  CLOUDINARY_PROFILE_URL,
+  UPDATE_USER_SUCCESS,
+  SIGNOUT,
+} from 'containers/App/constants'
 import {
   selectAuthenticated,
   selectUser,
@@ -26,7 +30,6 @@ import Verify from 'components/Verify'
 import { Post, PostCreate } from 'components/Post'
 import Profile from 'components/Profile'
 import FixedTile from 'components/FixedTile'
-import { getCoverProfilePic } from 'utils/imageHelper'
 import { getFirstname } from 'utils/stringHelper'
 import { selectPosts, selectHomeInfo, selectEditingPost } from './selectors'
 import { listPostRequest } from './actions'
@@ -55,33 +58,24 @@ class HomePage extends Component {
       showAuthForm: false,
       showCreatePostForm: false,
       showAccountMenu: false,
-      coverPic: null,
       profilePic: null,
       timer: 0,
     }
   }
 
   componentWillMount() {
-    const {
-      listPostRequest,
-      verifyRequest,
-      params: { vcode },
-      authenticated,
-      user,
-    } = this.props
+    const { params: { vcode }, authenticated, user } = this.props
 
     if (vcode && (!user || !user.verified)) {
-      verifyRequest({ vcode })
+      this.props.verifyRequest({ vcode })
     }
-    listPostRequest()
+    this.props.listPostRequest()
 
-    if (authenticated) {
-      const { coverPic, profilePic } = user
-      this.setState({ coverPic, profilePic })
-    } else {
-      const { coverPic, profilePic } = getCoverProfilePic()
-      this.setState({ coverPic, profilePic })
-    }
+    this.setState({
+      profilePic: authenticated
+        ? user.profilePic
+        : `${CLOUDINARY_PROFILE_URL}/${Math.floor(Math.random()) * 4}.jpg`,
+    })
   }
 
   componentDidMount() {
@@ -100,11 +94,13 @@ class HomePage extends Component {
       (!authenticated && nextProps.authenticated) ||
       status === UPDATE_USER_SUCCESS
     ) {
-      const { coverPic, profilePic } = nextProps.user
-      this.setState({ coverPic, profilePic })
+      const { profilePic } = nextProps.user
+      this.setState({ profilePic })
     } else if (status === SIGNOUT) {
-      const { coverPic, profilePic } = getCoverProfilePic()
-      this.setState({ coverPic, profilePic })
+      this.setState({
+        profilePic: `${CLOUDINARY_PROFILE_URL}/${Math.floor(Math.random()) *
+          4}.jpg`,
+      })
     }
   }
 
@@ -137,16 +133,11 @@ class HomePage extends Component {
     this.setState({ profilePic: newVal })
   }
 
-  handleCoverPic = (evt, newVal) => {
-    this.setState({ coverPic: newVal })
-  }
-
   render() {
     const {
       showAuthForm,
       showCreatePostForm,
       showAccountMenu,
-      coverPic,
       profilePic,
     } = this.state
 
@@ -184,7 +175,6 @@ class HomePage extends Component {
               authenticated={authenticated}
               user={user}
               info={info}
-              coverPic={coverPic}
               profilePic={profilePic}
             />
             {authenticated ? (
@@ -195,9 +185,7 @@ class HomePage extends Component {
             ) : (
               <AuthForm
                 show={showAuthForm}
-                onCoverPicChange={this.handleCoverPic}
                 onProfilePicChange={this.handleProfilePic}
-                coverPic={coverPic}
                 profilePic={profilePic}
               />
             )}
