@@ -173,9 +173,9 @@ class HomePage extends Component {
               onClick={this.handleProfileClick}
               onUpdate={updateUserRequest}
               authenticated={authenticated}
+              profilePic={profilePic}
               user={user}
               info={info}
-              profilePic={profilePic}
             />
             {authenticated ? (
               <AccountMenu

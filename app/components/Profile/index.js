@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import { injectIntl, intlShape } from 'react-intl'
+import { browserHistory } from 'react-router'
 import axios from 'axios'
 import {
   CLOUDINARY_UPLOAD_URL,
@@ -23,7 +24,7 @@ class Profile extends Component {
     authenticated: PropTypes.bool,
     user: PropTypes.object,
     info: PropTypes.object,
-    profilePic: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    profilePic: PropTypes.string,
     intl: intlShape.isRequired,
   }
 
@@ -39,6 +40,8 @@ class Profile extends Component {
         error: null,
       },
     }
+
+    this.coverPic = Math.floor(Math.random() * 4)
   }
   componentWillMount() {
     const { profilePic } = this.props
@@ -114,6 +117,11 @@ class Profile extends Component {
       })
   }
 
+  handlePlaceInfoBtnClick = (evt, place) => {
+    evt.stopPropagation()
+    browserHistory.push(`/quest/info/${place}`)
+  }
+
   render() {
     const {
       authenticated,
@@ -130,19 +138,34 @@ class Profile extends Component {
     const placeList = [
       { name: 'amsterdam', link: 'amsterdam' },
       { name: 'rotterdam', link: 'rotterdam' },
-      { name: 'utrecht', link: 'utrecht' },
+      { name: 'utrecht', link: 'utrecht-province' },
       { name: 'gelderland', link: 'gelderland' },
     ]
 
-    const coverPic = Math.floor(Math.random()) * 4
-
     return (
       <div className="profile Mb-8 P-R">
+        <div className="profile__menu">
+          <button
+            className="profile__placeInfoBtn Tt-U Fw-B Fz-10"
+            onClick={evt =>
+              this.handlePlaceInfoBtnClick(evt, placeList[this.coverPic].link)
+            }
+          >
+            {placeList[this.coverPic].name}
+          </button>|<button className="Tt-U Fw-B Fz-10">Browse</button>
+        </div>
         <div className="profile__content">
-          <div className="coverPic Cr-P Ov-H P-R">
+          <div
+            className="coverPic Cr-P Ov-H P-R"
+            onClick={evt =>
+              this.handlePlaceInfoBtnClick(evt, placeList[this.coverPic].link)
+            }
+          >
             <Img
               onLoad={this.handleLoaded}
-              src={`${CLOUDINARY_PLACE_URL}/${placeList[coverPic].name}.jpg`}
+              src={`${CLOUDINARY_PLACE_URL}/${
+                placeList[this.coverPic].name
+              }.jpg`}
             />
             {authenticated ? (
               <h2 className="Mb-0 Tt-U P-A">{user.fullname}</h2>
