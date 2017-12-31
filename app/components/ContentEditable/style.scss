@@ -1,6 +1,6 @@
-[contentEditable=true]:empty:before{
+[contentEditable='true']:empty:before {
   content: attr(data-placeholder);
   color: inherit;
   display: block;
   opacity: 0.5;
-}  
+}

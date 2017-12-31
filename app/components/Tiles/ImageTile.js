@@ -34,7 +34,7 @@ class ImageTile extends Component {
 
   render() {
     const { img, title, type } = this.props
-    const data = type ? {} : { lg: 4, md: 6, sm: 12, xs: 12 }
+    const data = type ? {} : { xs: 12, sm: 6, md: 4 }
 
     return (
       <Col

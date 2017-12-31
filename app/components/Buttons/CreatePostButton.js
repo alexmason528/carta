@@ -7,7 +7,11 @@ import Img from 'components/Img'
 
 const CreatePostButton = ({ type, onClick, intl: { formatMessage } }) => (
   <button
-    className={cx({ createPostBtn: true, 'createPostBtn--afterImage': type === 'image', 'createPostBtn--afterText': type === 'text' })}
+    className={cx({
+      createPostBtn: true,
+      'createPostBtn--afterImage': type === 'image',
+      'createPostBtn--afterText': type === 'text',
+    })}
     onClick={onClick}
   >
     <div className="btnImage">

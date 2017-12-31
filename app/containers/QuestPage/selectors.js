@@ -3,65 +3,52 @@ import { get } from 'lodash'
 
 const selectQuest = state => get(state, 'quest')
 
-const selectRecommendations = () => createSelector(
-  selectQuest,
-  substate => get(substate, 'recommendations')
-)
+const selectRecommendations = () =>
+  createSelector(selectQuest, substate => get(substate, 'recommendations'))
 
-const selectViewport = () => createSelector(
-  selectQuest,
-  substate => get(substate, 'viewport')
-)
+const selectViewport = () =>
+  createSelector(selectQuest, substate => get(substate, 'viewport'))
 
-const selectQuestCnt = () => createSelector(
-  selectQuest,
-  substate => substate.quests.length
-)
+const selectQuestCnt = () =>
+  createSelector(selectQuest, substate => substate.quests.length)
 
-const selectCurQuestInd = () => createSelector(
-  selectQuest,
-  substate => get(substate, 'curQuestInd')
-)
+const selectCurQuestInd = () =>
+  createSelector(selectQuest, substate => get(substate, 'curQuestInd'))
 
-const selectPlaces = () => createSelector(
-  selectQuest,
-  substate => get(substate, 'categories.places')
-)
+const selectPlaces = () =>
+  createSelector(selectQuest, substate => get(substate, 'categories.places'))
 
-const selectTypes = () => createSelector(
-  selectQuest,
-  substate => get(substate, 'categories.types')
-)
+const selectTypes = () =>
+  createSelector(selectQuest, substate => get(substate, 'categories.types'))
 
-const selectCurrentTypes = () => createSelector(
-  selectQuest,
-  substate => substate.quests[substate.curQuestInd].types
-)
+const selectCurrentTypes = () =>
+  createSelector(
+    selectQuest,
+    substate => substate.quests[substate.curQuestInd].types
+  )
 
-const selectDescriptives = () => createSelector(
-  selectQuest,
-  substate => get(substate, 'categories.descriptives')
-)
+const selectDescriptives = () =>
+  createSelector(selectQuest, substate =>
+    get(substate, 'categories.descriptives')
+  )
 
-const selectCurrentDescriptives = () => createSelector(
-  selectQuest,
-  substate => substate.quests[substate.curQuestInd].descriptives
-)
+const selectCurrentDescriptives = () =>
+  createSelector(
+    selectQuest,
+    substate => substate.quests[substate.curQuestInd].descriptives
+  )
 
-const selectBrochure = () => createSelector(
-  selectQuest,
-  substate => get(substate, 'brochure')
-)
+const selectBrochure = () =>
+  createSelector(selectQuest, substate => get(substate, 'brochure'))
 
-const selectInfo = () => createSelector(
-  selectQuest,
-  substate => ({ status: substate.status, error: substate.error })
-)
+const selectInfo = () =>
+  createSelector(selectQuest, substate => ({
+    status: substate.status,
+    error: substate.error,
+  }))
 
-const selectCurrentQuest = () => createSelector(
-  selectQuest,
-  substate => substate.quests[substate.curQuestInd]
-)
+const selectCurrentQuest = () =>
+  createSelector(selectQuest, substate => substate.quests[substate.curQuestInd])
 
 export {
   selectQuest,

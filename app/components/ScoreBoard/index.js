@@ -4,7 +4,6 @@ import { COLORS } from 'containers/App/constants'
 import './style.scss'
 
 class ScoreBoard extends Component {
-  // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     recommendations: PropTypes.array,
     show: PropTypes.bool,

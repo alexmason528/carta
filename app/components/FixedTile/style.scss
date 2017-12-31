@@ -7,10 +7,16 @@
     padding-top: 50%;
   }
 
+  @media (max-width: 575px) {
+    &:before {
+      padding-top: 100%;
+    }
+  }
+
   &__image {
     width: 100%;
     transform: scale(1);
-    @include transition(all, $fastTrans);
+    @include transition(all, $normalTrans);
   }
 
   &:hover &__image {

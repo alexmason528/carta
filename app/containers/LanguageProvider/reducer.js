@@ -3,7 +3,7 @@ import { DEFAULT_LOCALE, CHANGE_LOCALE } from './constants'
 
 const browserLanguage = window.navigator.language
 
-let locale = (browserLanguage === 'nl') ? 'nl' : DEFAULT_LOCALE
+let locale = browserLanguage === 'nl' ? 'nl' : DEFAULT_LOCALE
 
 const initialState = {
   locale: getItem('locale') || locale,

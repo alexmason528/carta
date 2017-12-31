@@ -1,38 +1,46 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <!-- The first thing in any HTML file should be the charset -->
-    <meta charset="utf-8">
-    <!-- Make the page mobile compatible -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <!-- Allow installing the app to the homescreen -->
-    <link rel="manifest" href="manifest.json">
-    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:300,350,300italic,400italic,400,600,700,800,900'>
 
-    <meta name="mobile-web-app-capable" content="yes">
+<head>
+  <!-- The first thing in any HTML file should be the charset -->
+  <meta charset="utf-8">
+  <!-- Make the page mobile compatible -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+  <!-- Allow installing the app to the homescreen -->
+  <link rel="manifest" href="manifest.json">
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:300,350,300italic,400italic,400,600,700,800,900'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.dotdotdot/1.8.3/jquery.dotdotdot.js"></script>
+  <meta name="mobile-web-app-capable" content="yes">
 
-    <script type="text/javascript">
-        window._mfq = window._mfq || [];
-        (function() {
-            var mf = document.createElement("script");
-            mf.type = "text/javascript"; mf.async = true;
-            mf.src = "https://cdn.mouseflow.com/projects/d97ab1eb-b0fc-4b5c-ba77-492dca738266.js";
-            document.getElementsByTagName("head")[0].appendChild(mf);
-        })();
-    </script>
-    
-    <title>Carta</title>
-  </head>
-  <body>
-    <!-- Display a message if JS has been disabled on the browser. -->
-    <noscript>If you're seeing this message, that means <strong>JavaScript has been disabled on your browser</strong>, please <strong>enable JS</strong> to make this app work.</noscript>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.dotdotdot/1.8.3/jquery.dotdotdot.js"></script>
 
-    <!-- The app hooks into this div -->
-    <div id="app"></div>
+  <script type="text/javascript">
+    window._mfq = window._mfq || [];
+    (function () {
+      var mf = document.createElement("script");
+      mf.type = "text/javascript";
+      mf.async = true;
+      mf.src = "https://cdn.mouseflow.com/projects/d97ab1eb-b0fc-4b5c-ba77-492dca738266.js";
+      document.getElementsByTagName("head")[0].appendChild(mf);
+    })();
 
-    <!-- A lot of magic happens in this file. HtmlWebpackPlugin automatically includes all assets (e.g. bundle.js, main.css) with the correct HTML tags, which is why they are missing in this HTML file. Don't add any assets here! (Check out the webpack config files in internals/webpack for details) -->
-  </body>
+  </script>
+
+  <title>Carta</title>
+</head>
+
+<body>
+  <!-- Display a message if JS has been disabled on the browser. -->
+  <noscript>If you're seeing this message, that means
+    <strong>JavaScript has been disabled on your browser</strong>, please
+    <strong>enable JS</strong> to make this app work.</noscript>
+
+  <!-- The app hooks into this div -->
+  <div id="app"></div>
+
+  <!-- A lot of magic happens in this file. HtmlWebpackPlugin automatically includes all assets (e.g. bundle.js, main.css) with the correct HTML tags, which is why they are missing in this HTML file. Don't add any assets here! (Check out the webpack config files in internals/webpack for details) -->
+</body>
+
 </html>

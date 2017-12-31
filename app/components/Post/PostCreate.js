@@ -10,18 +10,33 @@ import {
   CLOUDINARY_UPLOAD_PRESET,
   CLOUDINARY_ICON_URL,
 } from 'containers/App/constants'
-import { LANGUAGES, LANGUAGE_CONST } from 'containers/LanguageProvider/constants'
+import {
+  LANGUAGES,
+  LANGUAGE_CONST,
+} from 'containers/LanguageProvider/constants'
 import { createPostRequest } from 'containers/HomePage/actions'
-import { CREATE_POST_REQUEST, CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
+import {
+  CREATE_POST_REQUEST,
+  CREATE_POST_SUCCESS,
+} from 'containers/HomePage/constants'
 import messages from 'containers/HomePage/messages'
 import { selectHomeInfo } from 'containers/HomePage/selectors'
-import { DeleteButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
+import {
+  DeleteButton,
+  InfoButton,
+  LinkButton,
+  RemoveButton,
+} from 'components/Buttons'
 import Img from 'components/Img'
 import LoadingSpinner from 'components/LoadingSpinner'
 import Resizable from 'components/Resizable'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { getCroppedImage } from 'utils/imageHelper'
-import { getDefaultTexts, getSubmitInfo, isLanguageSelectable } from 'utils/stringHelper'
+import {
+  getDefaultTexts,
+  getSubmitInfo,
+  isLanguageSelectable,
+} from 'utils/stringHelper'
 import './style.scss'
 
 class PostCreate extends Component {
@@ -84,17 +99,24 @@ class PostCreate extends Component {
     const width = $(post).width()
 
     if ($(post).hasClass('textPost')) {
-      const fontSize = (width / 76) * 3 * 1.15
-      $(post).find('.postTitleEdit').css({ fontSize: `${fontSize}px` })
+      const fontSize = width / 76 * 3 * 1.15
+      $(post)
+        .find('.postTitleEdit')
+        .css({ fontSize: `${fontSize}px` })
     } else {
-      const height = $(post).find('.postImage').height() - ($(post).hasClass('mediaPost') ? 90 : 60)
-      const fontSize = (width / 44) * 3 * 1.15
+      const height =
+        $(post)
+          .find('.postImage')
+          .height() - ($(post).hasClass('mediaPost') ? 90 : 60)
+      const fontSize = width / 44 * 3 * 1.15
       let lines = fontSize > 0 ? Math.floor(height / (fontSize * 1.2)) : 0
 
-      $(post).find('.postTitleEdit').css({
-        fontSize: `${fontSize}px`,
-        'max-height': `${fontSize * lines * 1.2}px`,
-      })
+      $(post)
+        .find('.postTitleEdit')
+        .css({
+          fontSize: `${fontSize}px`,
+          'max-height': `${fontSize * lines * 1.2}px`,
+        })
     }
   }
 
@@ -103,18 +125,25 @@ class PostCreate extends Component {
   }
 
   handleAddText = () => {
-    this.setState({
-      content: LANGUAGE_CONST,
-      showError: false,
-    }, () => {
-      this.handleResize()
-      const comp = ReactDOM.findDOMNode(this)
-      if ($(comp).find('.postImage').length > 0) {
-        $(comp).find('.postText').focus()
-      } else {
-        $(comp).find('.postTitleEdit').focus()
+    this.setState(
+      {
+        content: LANGUAGE_CONST,
+        showError: false,
+      },
+      () => {
+        this.handleResize()
+        const comp = ReactDOM.findDOMNode(this)
+        if ($(comp).find('.postImage').length > 0) {
+          $(comp)
+            .find('.postText')
+            .focus()
+        } else {
+          $(comp)
+            .find('.postTitleEdit')
+            .focus()
+        }
       }
-    })
+    )
   }
 
   handleFiles = evt => {
@@ -122,26 +151,31 @@ class PostCreate extends Component {
     getCroppedImage(file, this.handleImage, 'landscape')
   }
 
-  handleImage = (img) => {
+  handleImage = img => {
     this.setState({ img, showError: false }, () => {
       this.handleResize()
       const comp = ReactDOM.findDOMNode(this)
-      $(comp).find('.postTitleEdit').focus()
+      $(comp)
+        .find('.postTitleEdit')
+        .focus()
     })
   }
 
   handleCancel = () => {
     const { onClose } = this.props
-    this.setState({
-      img: null,
-      title: null,
-      content: null,
-      link: null,
-      showError: false,
-    }, () => {
-      this.handleResize()
-      onClose()
-    })
+    this.setState(
+      {
+        img: null,
+        title: null,
+        content: null,
+        link: null,
+        showError: false,
+      },
+      () => {
+        this.handleResize()
+        onClose()
+      }
+    )
   }
 
   handlePostContent = value => {
@@ -172,7 +206,9 @@ class PostCreate extends Component {
     this.setState({ img: null, showError: false }, () => {
       this.handleResize()
       const comp = ReactDOM.findDOMNode(this)
-      $(comp).find('.postText').focus()
+      $(comp)
+        .find('.postText')
+        .focus()
     })
   }
 
@@ -180,7 +216,9 @@ class PostCreate extends Component {
     this.setState({ content: null, showError: false }, () => {
       this.handleResize()
       const comp = ReactDOM.findDOMNode(this)
-      $(comp).find('.postTitleEdit').focus()
+      $(comp)
+        .find('.postTitleEdit')
+        .focus()
     })
   }
 
@@ -211,16 +249,20 @@ class PostCreate extends Component {
       formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
 
       axios
-      .post(CLOUDINARY_UPLOAD_URL, formData, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
-      .then(res => {
-        const { data: { url } } = res
-        this.setState({ imageUpload: { uploading: false, error: null } })
-        data.img = url
-        createPostRequest(data)
-      })
-      .catch(err => {
-        this.setState({ imageUpload: { uploading: false, error: err.toString() } })
-      })
+        .post(CLOUDINARY_UPLOAD_URL, formData, {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        })
+        .then(res => {
+          const { data: { url } } = res
+          this.setState({ imageUpload: { uploading: false, error: null } })
+          data.img = url
+          createPostRequest(data)
+        })
+        .catch(err => {
+          this.setState({
+            imageUpload: { uploading: false, error: err.toString() },
+          })
+        })
     } else {
       createPostRequest(data)
     }
@@ -283,7 +325,13 @@ class PostCreate extends Component {
   }
 
   render() {
-    const { onClose, user: { fullname }, info: { status }, intl: { formatMessage }, intl } = this.props
+    const {
+      onClose,
+      user: { fullname },
+      info: { status },
+      intl: { formatMessage },
+      intl,
+    } = this.props
     const {
       img,
       title,
@@ -301,95 +349,254 @@ class PostCreate extends Component {
     const showPostLinkButton = !showLinkBar
     const showImage = status !== CREATE_POST_REQUEST
     const spinnerShow = status === CREATE_POST_REQUEST || imageUpload.uploading
-    const dropdownDisabled = !isLanguageSelectable(title, img, content, intl.locale)
-    const { postType, remainCharCnts, submitError } = getSubmitInfo(title, img, content, intl.locale, locale, formatMessage)
+    const dropdownDisabled = !isLanguageSelectable(
+      title,
+      img,
+      content,
+      intl.locale
+    )
+    const { postType, remainCharCnts, submitError } = getSubmitInfo(
+      title,
+      img,
+      content,
+      intl.locale,
+      locale,
+      formatMessage
+    )
 
     return (
       <div className="postContainer">
-        { (showLinkBar || showInfo || showDeleteConfirm) && <div className="backLayer" onClick={this.handlePostClick} /> }
+        {(showLinkBar || showInfo || showDeleteConfirm) && (
+          <div className="backLayer" onClick={this.handlePostClick} />
+        )}
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
-        { postType === 'mixedPost' &&
-          <div className={cx({ post: true, postCreate: true, [postType]: true })} onClick={this.handlePostClick}>
+        {postType === 'mixedPost' && (
+          <div
+            className={cx({ post: true, postCreate: true, [postType]: true })}
+            onClick={this.handlePostClick}
+          >
             <div className="postImage">
-              { showImage && <Img src={img} /> }
-              <div className={cx({ postLinkBar: true, 'postLinkBar--hidden': !showLinkBar })} onClick={this.handlePostLinkBarClick}>
-                <Img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} />
-                <input type="text" value={link} placeholder={formatMessage(messages.linkMessage)} onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
+              {showImage && <Img src={img} />}
+              <div
+                className={cx({
+                  postLinkBar: true,
+                  'postLinkBar--hidden': !showLinkBar,
+                })}
+                onClick={this.handlePostLinkBarClick}
+              >
+                <Img
+                  onClick={this.handlePostLinkBtn}
+                  src={`${CLOUDINARY_ICON_URL}/link.png`}
+                />
+                <input
+                  type="text"
+                  value={link}
+                  placeholder={formatMessage(messages.linkMessage)}
+                  onKeyDown={this.handleEnterKey}
+                  onChange={this.handlePostLinkBarChange}
+                />
               </div>
-              <Resizable className="postTitleEdit" tabIndex={1} placeholder={defaultTexts.title} onChange={this.handlePostTitle} value={title[locale]} />
+              <Resizable
+                className="postTitleEdit"
+                tabIndex={1}
+                placeholder={defaultTexts.title}
+                onChange={this.handlePostTitle}
+                value={title[locale]}
+              />
             </div>
             <div className="postContent">
-              <RemoveButton type="content" onClick={this.handlePostContentRemove} />
+              <RemoveButton
+                type="content"
+                onClick={this.handlePostContentRemove}
+              />
               <div className="postMeta">
                 {fullname} - CARTA | {formatMessage(messages.now)}
               </div>
-              <Resizable className="postText" tabIndex={2} placeholder={defaultTexts.content} onChange={this.handlePostContent} value={content[locale]} />
+              <Resizable
+                className="postText"
+                tabIndex={2}
+                placeholder={defaultTexts.content}
+                onChange={this.handlePostContent}
+                value={content[locale]}
+              />
             </div>
             <RemoveButton type="image" onClick={this.handlePostImageRemove} />
-            { showPostLinkButton && <LinkButton onClick={this.handlePostLinkBtn} /> }
+            {showPostLinkButton && (
+              <LinkButton onClick={this.handlePostLinkBtn} />
+            )}
           </div>
-        }
+        )}
 
-        { postType === 'mediaPost' &&
-          <div className={cx({ post: true, postCreate: true, [postType]: true })} onClick={this.handlePostClick}>
+        {postType === 'mediaPost' && (
+          <div
+            className={cx({ post: true, postCreate: true, [postType]: true })}
+            onClick={this.handlePostClick}
+          >
             <div className="postImage">
-              { showImage && <Img src={img} /> }
+              {showImage && <Img src={img} />}
               <RemoveButton type="image" onClick={this.handlePostImageRemove} />
-              { showPostLinkButton && <LinkButton onClick={this.handlePostLinkBtn} /> }
-              <div className={cx({ postLinkBar: true, 'postLinkBar--hidden': !showLinkBar })} onClick={this.handlePostLinkBarClick}>
-                <Img onClick={this.handlePostLinkBtn} src={`${CLOUDINARY_ICON_URL}/link.png`} />
-                <input type="text" value={link} placeholder={formatMessage(messages.linkMessage)} onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
+              {showPostLinkButton && (
+                <LinkButton onClick={this.handlePostLinkBtn} />
+              )}
+              <div
+                className={cx({
+                  postLinkBar: true,
+                  'postLinkBar--hidden': !showLinkBar,
+                })}
+                onClick={this.handlePostLinkBarClick}
+              >
+                <Img
+                  onClick={this.handlePostLinkBtn}
+                  src={`${CLOUDINARY_ICON_URL}/link.png`}
+                />
+                <input
+                  type="text"
+                  value={link}
+                  placeholder={formatMessage(messages.linkMessage)}
+                  onKeyDown={this.handleEnterKey}
+                  onChange={this.handlePostLinkBarChange}
+                />
               </div>
             </div>
-            <Resizable className="postTitleEdit" placeholder={defaultTexts.title} onChange={this.handlePostTitle} value={title[locale]} />
-            <div className={cx({ postInfo: true, 'postInfo--hidden': !showInfo })}>
+            <Resizable
+              className="postTitleEdit"
+              placeholder={defaultTexts.title}
+              onChange={this.handlePostTitle}
+              value={title[locale]}
+            />
+            <div
+              className={cx({ postInfo: true, 'postInfo--hidden': !showInfo })}
+            >
               {fullname} - Carta | {formatMessage(messages.now)}
             </div>
             <InfoButton active={showInfo} onClick={this.handlePostInfoToggle} />
           </div>
-        }
+        )}
 
-        { postType === 'textPost' &&
-          <div className={cx({ post: true, postCreate: true, [postType]: true })} onClick={this.handlePostClick}>
-            <Resizable className="postTitleEdit" tabIndex={1} placeholder={defaultTexts.title} onChange={this.handlePostTitle} value={title[locale]} />
+        {postType === 'textPost' && (
+          <div
+            className={cx({ post: true, postCreate: true, [postType]: true })}
+            onClick={this.handlePostClick}
+          >
+            <Resizable
+              className="postTitleEdit"
+              tabIndex={1}
+              placeholder={defaultTexts.title}
+              onChange={this.handlePostTitle}
+              value={title[locale]}
+            />
             <div className="postContent">
-              <RemoveButton type="content" onClick={this.handlePostContentRemove} />
+              <RemoveButton
+                type="content"
+                onClick={this.handlePostContentRemove}
+              />
               <div className="postMeta">
                 {fullname} - CARTA | {formatMessage(messages.now)}
               </div>
-              <Resizable className="postText" tabIndex={2} placeholder={defaultTexts.content} onChange={this.handlePostContent} value={content[locale]} />
+              <Resizable
+                className="postText"
+                tabIndex={2}
+                placeholder={defaultTexts.content}
+                onChange={this.handlePostContent}
+                value={content[locale]}
+              />
             </div>
           </div>
-        }
+        )}
 
         <div className="postButtons postCreate">
           <div className="left">
-            <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
-            { (postType === 'textPost' || postType === 'mixedPost') && <span style={{ marginRight: '4px' }}>{ remainCharCnts >= 0 ? remainCharCnts : 0 }</span> }
-            { (postType !== 'mediaPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddMedia}>+ {formatMessage(messages.picture)}</button> }
-            { (postType !== 'textPost' && postType !== 'mixedPost') && <button type="button" className="postBorderBtn" onClick={this.handleAddText}>+ {formatMessage(messages.text)}</button> }
-            { postType &&
-              <div className={cx({ postLang: true, disabled: dropdownDisabled })}>
-                <select onChange={this.handlePostLanguageChange} disabled={dropdownDisabled} value={locale}>
-                  { LANGUAGES.map(lang => <option key={lang.countryCode} value={lang.countryCode}>{lang.countryCode}</option>)}
+            <input
+              type="file"
+              ref={ref => {
+                this.mediaUploader = ref
+              }}
+              accept="image/*"
+              onChange={this.handleFiles}
+            />
+            {(postType === 'textPost' || postType === 'mixedPost') && (
+              <span style={{ marginRight: '4px' }}>
+                {remainCharCnts >= 0 ? remainCharCnts : 0}
+              </span>
+            )}
+            {postType !== 'mediaPost' &&
+              postType !== 'mixedPost' && (
+                <button
+                  type="button"
+                  className="postBorderBtn"
+                  onClick={this.handleAddMedia}
+                >
+                  + {formatMessage(messages.picture)}
+                </button>
+              )}
+            {postType !== 'textPost' &&
+              postType !== 'mixedPost' && (
+                <button
+                  type="button"
+                  className="postBorderBtn"
+                  onClick={this.handleAddText}
+                >
+                  + {formatMessage(messages.text)}
+                </button>
+              )}
+            {postType && (
+              <div
+                className={cx({ postLang: true, disabled: dropdownDisabled })}
+              >
+                <select
+                  onChange={this.handlePostLanguageChange}
+                  disabled={dropdownDisabled}
+                  value={locale}
+                >
+                  {LANGUAGES.map(lang => (
+                    <option key={lang.countryCode} value={lang.countryCode}>
+                      {lang.countryCode}
+                    </option>
+                  ))}
                 </select>
               </div>
-            }
+            )}
           </div>
-          { postType &&
+          {postType && (
             <div className="right">
-              <button type="button" className="postCancelBtn" onClick={this.handleCancel}>{formatMessage(messages.cancel)}</button>
-              <DeleteButton onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
-              <button type="button" className={cx({ postBorderBtn: true, disabled: submitError })} title={submitError} onClick={() => { this.handleSubmit(submitError) }}>{formatMessage(messages.submit)}</button>
+              <button
+                type="button"
+                className="postCancelBtn"
+                onClick={this.handleCancel}
+              >
+                {formatMessage(messages.cancel)}
+              </button>
+              <DeleteButton
+                onClick={this.handleDelete}
+                onConfirm={this.handleDeleteConfirm}
+                showConfirm={showDeleteConfirm}
+              />
+              <button
+                type="button"
+                className={cx({ postBorderBtn: true, disabled: submitError })}
+                title={submitError}
+                onClick={() => {
+                  this.handleSubmit(submitError)
+                }}
+              >
+                {formatMessage(messages.submit)}
+              </button>
             </div>
-          }
-          <button type="button" className={cx({ postCloseBtn: true, 'postCloseBtn--hasContent': postType })} onClick={onClose}>
+          )}
+          <button
+            type="button"
+            className={cx({
+              postCloseBtn: true,
+              'postCloseBtn--hasContent': postType,
+            })}
+            onClick={onClose}
+          >
             <Img src={`${CLOUDINARY_ICON_URL}/close.png`} />
           </button>
         </div>
-        { showError && submitError && <div className="error">{submitError}</div> }
+        {showError && submitError && <div className="error">{submitError}</div>}
       </div>
     )
   }

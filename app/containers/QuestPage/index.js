@@ -48,7 +48,10 @@ class QuestPage extends Component {
   }
 
   componentWillMount() {
-    const { params: { viewport, types, descriptives }, getQuestInfoRequest } = this.props
+    const {
+      params: { viewport, types, descriptives },
+      getQuestInfoRequest,
+    } = this.props
     let quest = null
     if (viewport && types && descriptives) {
       quest = urlParser({ viewport, types, descriptives })
@@ -62,10 +65,13 @@ class QuestPage extends Component {
     const isViewportEqual = isEqual(viewport, nextProps.viewport)
     const isTypesEqual = isEqual(types, nextProps.types)
     const isDescriptivesEqual = isEqual(descriptives, nextProps.descriptives)
-    const isParamEmpty = !params.viewport && !params.types && !params.descriptives
+    const isParamEmpty =
+      !params.viewport && !params.types && !params.descriptives
     const isParamEqual = isViewportEqual && isTypesEqual && isDescriptivesEqual
     const isInitialQuest = isEqual(initialQuest, quest)
-    const shouldUpdate = (pathname === nextProps.location.pathname && params.brochure === nextProps.brochure)
+    const shouldUpdate =
+      pathname === nextProps.location.pathname &&
+      params.brochure === nextProps.brochure
     const { url, sendRequest } = urlComposer({
       viewport: nextProps.viewport,
       types: nextProps.types,
@@ -73,7 +79,10 @@ class QuestPage extends Component {
       brochure: params.brochure,
     })
 
-    if ((!isParamEqual && shouldUpdate) || (isParamEmpty && !isInitialQuest && sendRequest)) {
+    if (
+      (!isParamEqual && shouldUpdate) ||
+      (isParamEmpty && !isInitialQuest && sendRequest)
+    ) {
       if (!isEqual(nextProps.viewport.center, MAPBOX_DEFAULT_CENTER)) {
         browserHistory.push(url)
       }
@@ -94,17 +103,27 @@ class QuestPage extends Component {
         <Menu currentPage="quest" />
         <QuestButton
           panelState={panelState}
-          onClick={() => { this.handleQuestBtnClick('opened') }}
-          onCloseClick={() => { this.handleQuestBtnClick('closed') }}
+          onClick={() => {
+            this.handleQuestBtnClick('opened')
+          }}
+          onCloseClick={() => {
+            this.handleQuestBtnClick('closed')
+          }}
         />
         <SidePanel
           panelState={panelState}
-          onMinimizeClick={() => { this.handleQuestBtnClick('minimized') }}
-          onCloseClick={() => { this.handleQuestBtnClick('closed') }}
+          onMinimizeClick={() => {
+            this.handleQuestBtnClick('minimized')
+          }}
+          onCloseClick={() => {
+            this.handleQuestBtnClick('closed')
+          }}
         />
         <Map panelState={panelState} />
-        { (recommendations.length > 0) && <ScoreBoard recommendations={recommendations} /> }
-        { brochure && <Brochure link={brochure} />}
+        {recommendations.length > 0 && (
+          <ScoreBoard recommendations={recommendations} />
+        )}
+        {brochure && <Brochure link={brochure} />}
       </Container>
     )
   }

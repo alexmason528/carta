@@ -16,7 +16,12 @@ import Resizable from 'components/Resizable'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { getTextFromDate } from 'utils/dateHelper'
 import { getCroppedImage } from 'utils/imageHelper'
-import { textToElem, getDefaultTexts, getSubmitInfo, isLanguageSelectable } from 'utils/stringHelper'
+import {
+  textToElem,
+  getDefaultTexts,
+  getSubmitInfo,
+  isLanguageSelectable,
+} from 'utils/stringHelper'
 import './style.scss'
 
 class TextPost extends Component {
@@ -60,7 +65,10 @@ class TextPost extends Component {
   componentWillReceiveProps(nextProps) {
     const { info: { status }, intl: { locale } } = nextProps
 
-    if (status !== this.props.info.status && (status === UPDATE_POST_SUCCESS || status === UPDATE_POST_FAIL)) {
+    if (
+      status !== this.props.info.status &&
+      (status === UPDATE_POST_SUCCESS || status === UPDATE_POST_FAIL)
+    ) {
       this.setState({ locale }, this.handleResize)
     }
 
@@ -75,10 +83,12 @@ class TextPost extends Component {
     const { editing } = this.props
     const post = ReactDOM.findDOMNode(this)
     const width = $(post).width()
-    const fontSize = (width / 76) * 3 * 1.15
+    const fontSize = width / 76 * 3 * 1.15
     const maxHeight = fontSize * 2 * 1.2
 
-    const $title = editing ? $(post).find('.postTitleEdit') : $(post).find('.postTitle')
+    const $title = editing
+      ? $(post).find('.postTitleEdit')
+      : $(post).find('.postTitle')
     $title.css({
       fontSize: `${fontSize}px`,
       maxHeight: `${maxHeight}px`,
@@ -99,13 +109,23 @@ class TextPost extends Component {
 
   handleEditStart = () => {
     const { _id, title, img, link, content } = this.props
-    const data = { _id, title, img, link, content, showDeleteConfirm: false, showLinkBar: false }
+    const data = {
+      _id,
+      title,
+      img,
+      link,
+      content,
+      showDeleteConfirm: false,
+      showLinkBar: false,
+    }
     this.props.postEditStart(data)
     this.setState({ showError: false }, this.handleResize)
   }
 
   handlePostClick = () => {
-    if (this.props.showDeleteConfirm) { this.props.postShowDeleteConfirm(false) }
+    if (this.props.showDeleteConfirm) {
+      this.props.postShowDeleteConfirm(false)
+    }
   }
 
   handleDelete = () => {
@@ -156,16 +176,19 @@ class TextPost extends Component {
     getCroppedImage(evt.target.files[0], this.handleImage, 'landscape')
   }
 
-  handleImage = (img) => {
+  handleImage = img => {
     this.props.postImageChange(img)
     this.setState({ showError: false })
   }
 
   handlePostLanguageChange = evt => {
-    this.setState({
-      locale: evt.target.value,
-      showError: false,
-    }, this.handleResize)
+    this.setState(
+      {
+        locale: evt.target.value,
+        showError: false,
+      },
+      this.handleResize
+    )
   }
 
   handleSubmit = submitError => {
@@ -200,55 +223,143 @@ class TextPost extends Component {
     const { locale, showError } = this.state
 
     const defaultTexts = getDefaultTexts(locale, this.props.intl.locale)
-    const spinnerShow = editing && (status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST)
-    const dropdownDisabled = !isLanguageSelectable(title, img, content, this.props.intl.locale)
-    const { remainCharCnts, submitError } = getSubmitInfo(title, img, content, this.props.intl.locale, locale, formatMessage)
+    const spinnerShow =
+      editing &&
+      (status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST)
+    const dropdownDisabled = !isLanguageSelectable(
+      title,
+      img,
+      content,
+      this.props.intl.locale
+    )
+    const { remainCharCnts, submitError } = getSubmitInfo(
+      title,
+      img,
+      content,
+      this.props.intl.locale,
+      locale,
+      formatMessage
+    )
 
     return (
       <div className="postContainer">
-        { showDeleteConfirm && <div className="backLayer" onClick={this.handlePostClick} /> }
+        {showDeleteConfirm && (
+          <div className="backLayer" onClick={this.handlePostClick} />
+        )}
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
 
         <div className="post textPost" onClick={this.handlePostClick}>
-          { editing
-            ? <Resizable className="postTitleEdit" tabIndex={1} placeholder={defaultTexts.title} onChange={this.handlePostTitleChange} value={title[locale]} />
-            : <div className="postTitle" title={title[locale]} dangerouslySetInnerHTML={{ __html: textToElem(title[locale]) }} />
-          }
+          {editing ? (
+            <Resizable
+              className="postTitleEdit"
+              tabIndex={1}
+              placeholder={defaultTexts.title}
+              onChange={this.handlePostTitleChange}
+              value={title[locale]}
+            />
+          ) : (
+            <div
+              className="postTitle"
+              title={title[locale]}
+              dangerouslySetInnerHTML={{ __html: textToElem(title[locale]) }}
+            />
+          )}
           <div className="postContent">
-            { editing && <RemoveButton type="content" onClick={this.handlePostRemoveContent} /> }
+            {editing && (
+              <RemoveButton
+                type="content"
+                onClick={this.handlePostRemoveContent}
+              />
+            )}
             <div className="postMeta">
-              { firstname } - CARTA | {getTextFromDate(created_at, this.props.intl.locale)}
-              { editable && !editing && <EditButton onClick={this.handleEditStart} /> }
+              {firstname} - CARTA |{' '}
+              {getTextFromDate(created_at, this.props.intl.locale)}
+              {editable &&
+                !editing && <EditButton onClick={this.handleEditStart} />}
             </div>
-            { editing
-              ? <Resizable className="postText" tabIndex={2} placeholder={defaultTexts.content} onChange={this.handlePostContentChange} value={content[locale]} />
-              : <div className="postText" dangerouslySetInnerHTML={{ __html: content[locale] }} />
-            }
+            {editing ? (
+              <Resizable
+                className="postText"
+                tabIndex={2}
+                placeholder={defaultTexts.content}
+                onChange={this.handlePostContentChange}
+                value={content[locale]}
+              />
+            ) : (
+              <div
+                className="postText"
+                dangerouslySetInnerHTML={{ __html: content[locale] }}
+              />
+            )}
           </div>
         </div>
 
-        { editing &&
+        {editing && (
           <div className="postButtons">
             <div className="left">
-              <input type="file" ref={ref => { this.mediaUploader = ref }} accept="image/*" onChange={this.handleFiles} />
-              <span style={{ marginRight: '8px' }}>{ remainCharCnts >= 0 ? remainCharCnts : 0 }</span>
-              <button type="button" className="postBorderBtn" onClick={this.handleAddMedia}>+ {formatMessage(messages.picture)}</button>
-              <div className={cx({ postLang: true, disabled: dropdownDisabled })}>
-                <select onChange={this.handlePostLanguageChange} disabled={dropdownDisabled} value={locale}>
-                  { LANGUAGES.map(lang => <option key={lang.countryCode} value={lang.countryCode}>{lang.countryCode}</option>)}
+              <input
+                type="file"
+                ref={ref => {
+                  this.mediaUploader = ref
+                }}
+                accept="image/*"
+                onChange={this.handleFiles}
+              />
+              <span style={{ marginRight: '8px' }}>
+                {remainCharCnts >= 0 ? remainCharCnts : 0}
+              </span>
+              <button
+                type="button"
+                className="postBorderBtn"
+                onClick={this.handleAddMedia}
+              >
+                + {formatMessage(messages.picture)}
+              </button>
+              <div
+                className={cx({ postLang: true, disabled: dropdownDisabled })}
+              >
+                <select
+                  onChange={this.handlePostLanguageChange}
+                  disabled={dropdownDisabled}
+                  value={locale}
+                >
+                  {LANGUAGES.map(lang => (
+                    <option key={lang.countryCode} value={lang.countryCode}>
+                      {lang.countryCode}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
             <div className="right">
-              <button type="button" className="postCancelBtn" onClick={this.handleCancel}>{formatMessage(messages.cancel)}</button>
-              <DeleteButton onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
-              <button type="button" className={cx({ postBorderBtn: true, disabled: submitError })} title={submitError} onClick={() => { this.handleSubmit(submitError) }}>{formatMessage(messages.submit)}</button>
+              <button
+                type="button"
+                className="postCancelBtn"
+                onClick={this.handleCancel}
+              >
+                {formatMessage(messages.cancel)}
+              </button>
+              <DeleteButton
+                onClick={this.handleDelete}
+                onConfirm={this.handleDeleteConfirm}
+                showConfirm={showDeleteConfirm}
+              />
+              <button
+                type="button"
+                className={cx({ postBorderBtn: true, disabled: submitError })}
+                title={submitError}
+                onClick={() => {
+                  this.handleSubmit(submitError)
+                }}
+              >
+                {formatMessage(messages.submit)}
+              </button>
             </div>
           </div>
-        }
-        { showError && submitError && <div className="error">{submitError}</div>}
+        )}
+        {showError && submitError && <div className="error">{submitError}</div>}
       </div>
     )
   }

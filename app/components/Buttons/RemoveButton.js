@@ -23,14 +23,12 @@ const RemoveButton = ({ className, type, children, onClick }) => {
   }
 
   return (
-    <button
-      type="button"
-      className={btnClass}
-      onClick={onClick}
-    >
+    <button type="button" className={btnClass} onClick={onClick}>
       <Img src={`${CLOUDINARY_ICON_URL}/${image}.png`} />
-      { hover && <Img className="hover" src={`${CLOUDINARY_ICON_URL}/${image}.png`} /> }
-      { children }
+      {hover && (
+        <Img className="hover" src={`${CLOUDINARY_ICON_URL}/${image}.png`} />
+      )}
+      {children}
     </button>
   )
 }

@@ -4,12 +4,8 @@ import './style.scss'
 const LoadingSpinner = props => {
   const { show } = props
 
-  if (!show) return null;
-  return (
-    <div className="loader">
-      {props.children}
-    </div>
-  )
+  if (!show) return null
+  return <div className="loader">{props.children}</div>
 }
 
 LoadingSpinner.propTypes = {

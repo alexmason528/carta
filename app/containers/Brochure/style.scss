@@ -75,49 +75,7 @@
     z-index: 1;
   }
 
-  @media (max-width: 767px) {
-    .tileCol {
-      .imageTile h2,
-      .textTile {
-        padding-left: 60px;
-      }
-    }
-
-    .descriptionText {
-      padding-left: 30px;
-    }
-
-    .descriptionPoster {
-      .imageTile h2,
-      .textTile {
-        padding-left: 60px;
-      }
-    }
-
-    &__menu {
-      button {
-        @include boxShadow($boxShadowBlur, $shadowColor);
-        &:hover {
-          @include boxShadow($boxShadowBlur, $darkShadowColor);
-        }
-      }
-    }
-  }
-
-  @media (min-width: 768px) and (max-width: 991px) {
-    .tileCol:nth-child(2n + 1) {
-      .imageTile h2,
-      .textTile {
-        padding-left: 60px;
-      }
-    }
-
-    .descriptionText {
-      padding-left: 30px;
-    }
-  }
-
-  @media (min-width: 992px) {
+  @media (min-width: 768px) {
     .tileCol:nth-child(3n + 1) {
       .imageTile h2,
       .textTile {
@@ -126,14 +84,30 @@
     }
   }
 
-  @media (max-width: 991px) {
-    &__menu {
-      button {
-        @include boxShadow($boxShadowBlur, $shadowColor);
-        &:hover {
-          @include boxShadow($boxShadowBlur, $darkShadowColor);
-        }
+  @media (min-width: 576px) and (max-width: 767px) {
+    .tileCol:nth-child(2n + 1) {
+      .imageTile h2,
+      .textTile {
+        padding-left: 60px;
       }
+    }
+
+    .descriptionText .textTile {
+      padding-left: 60px;
+    }
+  }
+
+  @media (max-width: 575px) {
+    .tileCol {
+      .imageTile h2,
+      .textTile {
+        padding-left: 60px;
+      }
+    }
+
+    .descriptionText .textTile,
+    .descriptionPoster .imageTile h2 {
+      padding-left: 60px;
     }
   }
 

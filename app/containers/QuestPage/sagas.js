@@ -1,10 +1,19 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects'
 import { findIndex } from 'lodash'
 import { API_BASE_URL } from 'containers/App/constants'
-import { selectCurrentTypes, selectCurrentDescriptives, selectViewport, selectTypes } from 'containers/QuestPage/selectors'
+import {
+  selectCurrentTypes,
+  selectCurrentDescriptives,
+  selectViewport,
+  selectTypes,
+} from 'containers/QuestPage/selectors'
 import request from 'utils/request'
 import { urlComposer } from 'utils/urlHelper'
-import { GET_BROCHURE_REQUEST, GET_RECOMMENDATION_REQUEST, GET_QUESTINFO_REQUEST } from './constants'
+import {
+  GET_BROCHURE_REQUEST,
+  GET_RECOMMENDATION_REQUEST,
+  GET_QUESTINFO_REQUEST,
+} from './constants'
 import {
   getRecommendationRequest,
   getRecommendationSuccess,
@@ -91,7 +100,9 @@ export function* getRecommendationRequestHandler() {
 
   let res = []
   try {
-    if (sendRequest) { res = yield call(request, requestURL, params) }
+    if (sendRequest) {
+      res = yield call(request, requestURL, params)
+    }
     yield put(getRecommendationSuccess(res))
   } catch (err) {
     yield put(getRecommendationFail(err.toString()))
@@ -108,14 +119,14 @@ export function* getQuestInfoRequestHandler({ payload }) {
   const places = [
     { name: 'Netherlands', x: 5.291266, y: 52.132633, zoom: 6.3 },
     { name: 'Amsterdam', x: 4.895168, y: 52.370216, zoom: 13 },
-    { name: 'Rotterdam', x: 4.477733, y: 51.924420, zoom: 13 },
-    { name: 'Den Haag', x: 4.300700, y: 52.070498, zoom: 13 },
+    { name: 'Rotterdam', x: 4.477733, y: 51.92442, zoom: 13 },
+    { name: 'Den Haag', x: 4.3007, y: 52.070498, zoom: 13 },
     { name: 'Haarlem', x: 4.646219, y: 52.387388, zoom: 15 },
     { name: 'Delft', x: 4.357068, y: 52.011577, zoom: 15 },
-    { name: 'Leiden', x: 4.497010, y: 52.160114, zoom: 15 },
+    { name: 'Leiden', x: 4.49701, y: 52.160114, zoom: 15 },
     { name: 'Maastricht', x: 5.690973, y: 50.851368, zoom: 15 },
     { name: 'Brabant', x: 5.232169, y: 51.482654, zoom: 9 },
-    { name: 'Utrecht (city)', x: 5.121420, y: 52.090737, zoom: 15 },
+    { name: 'Utrecht (city)', x: 5.12142, y: 52.090737, zoom: 15 },
     { name: 'Groningen (city)', x: 6.572026205, y: 53.22174606, zoom: 15 },
     { name: 'Friesland', x: 5.84860417, y: 53.11035652, zoom: 9 },
     { name: 'Drenthe', x: 6.625179798, y: 52.86318343, zoom: 9 },

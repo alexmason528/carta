@@ -3,7 +3,14 @@ import { call, put, select, takeLatest } from 'redux-saga/effects'
 import request from 'utils/request'
 import { setItem, removeItem } from 'utils/localStorage'
 
-import { API_BASE_URL, SIGNIN_REQUEST, REGISTER_REQUEST, DELETE_USER_REQUEST, VERIFY_REQUEST, UPDATE_USER_REQUEST } from 'containers/App/constants'
+import {
+  API_BASE_URL,
+  SIGNIN_REQUEST,
+  REGISTER_REQUEST,
+  DELETE_USER_REQUEST,
+  VERIFY_REQUEST,
+  UPDATE_USER_REQUEST,
+} from 'containers/App/constants'
 import {
   signInSuccess,
   signInFail,
@@ -20,23 +27,24 @@ import {
 import { selectUser } from 'containers/App/selectors'
 import { selectEditingPost } from 'containers/HomePage/selectors'
 
-import { CREATE_POST_REQUEST, LIST_POST_REQUEST, UPDATE_POST_REQUEST, DELETE_POST_REQUEST, LIST_SUGGESTION_REQUEST } from './constants'
+import {
+  CREATE_POST_REQUEST,
+  LIST_POST_REQUEST,
+  UPDATE_POST_REQUEST,
+  DELETE_POST_REQUEST,
+  LIST_SUGGESTION_REQUEST,
+} from './constants'
 import {
   createPostSuccess,
   createPostFail,
-
   listPostSuccess,
   listPostFail,
-
   updatePostSuccess,
   updatePostFail,
-
   deletePostSuccess,
   deletePostFail,
-
   listSuggestionSuccess,
   listSuggestionFail,
-
   deleteUserPosts,
 } from './actions'
 

@@ -7,7 +7,6 @@ import messages from 'containers/HomePage/messages'
 import './style.scss'
 
 class Verify extends Component {
-  // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     signOut: PropTypes.func,
     user: PropTypes.object,

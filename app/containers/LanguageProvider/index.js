@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect'
 import { IntlProvider } from 'react-intl'
 import { selectLocale } from './selectors'
 
-export class LanguageProvider extends Component { // eslint-disable-line react/prefer-stateless-function
+export class LanguageProvider extends Component {
   render() {
     const { locale, messages, children } = this.props
     return (

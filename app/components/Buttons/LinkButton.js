@@ -6,7 +6,11 @@ import messages from 'containers/HomePage/messages'
 import Img from 'components/Img'
 
 const LinkButton = ({ onClick, className, intl: { formatMessage } }) => (
-  <button type="button" className={cx({ postLinkBtn: true, [className]: className })} onClick={onClick}>
+  <button
+    type="button"
+    className={cx({ postLinkBtn: true, [className]: className })}
+    onClick={onClick}
+  >
     <div className="btnImage">
       <Img src={`${CLOUDINARY_ICON_URL}/link.png`} />
     </div>

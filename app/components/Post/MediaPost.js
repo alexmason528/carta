@@ -2,7 +2,10 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import { injectIntl, intlShape } from 'react-intl'
 import cx from 'classnames'
-import { LANGUAGES, LANGUAGE_CONST } from 'containers/LanguageProvider/constants'
+import {
+  LANGUAGES,
+  LANGUAGE_CONST,
+} from 'containers/LanguageProvider/constants'
 import {
   UPDATE_POST_REQUEST,
   UPDATE_POST_SUCCESS,
@@ -10,13 +13,25 @@ import {
   DELETE_POST_REQUEST,
 } from 'containers/HomePage/constants'
 import messages from 'containers/HomePage/messages'
-import { DeleteButton, EditButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
+import {
+  DeleteButton,
+  EditButton,
+  InfoButton,
+  LinkButton,
+  RemoveButton,
+} from 'components/Buttons'
 import Img from 'components/Img'
 import LoadingSpinner from 'components/LoadingSpinner'
 import Resizable from 'components/Resizable'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { getTextFromDate } from 'utils/dateHelper'
-import { textToElem, getDefaultTexts, getPostLink, getSubmitInfo, isLanguageSelectable } from 'utils/stringHelper'
+import {
+  textToElem,
+  getDefaultTexts,
+  getPostLink,
+  getSubmitInfo,
+  isLanguageSelectable,
+} from 'utils/stringHelper'
 import LinkBar from './LinkBar'
 import './style.scss'
 
@@ -64,7 +79,10 @@ class MediaPost extends Component {
   componentWillReceiveProps(nextProps) {
     const { info: { status }, intl: { locale } } = nextProps
 
-    if (status !== this.props.info.status && (status === UPDATE_POST_SUCCESS || status === UPDATE_POST_FAIL)) {
+    if (
+      status !== this.props.info.status &&
+      (status === UPDATE_POST_SUCCESS || status === UPDATE_POST_FAIL)
+    ) {
       this.setState({ locale }, this.handleResize)
     }
 
@@ -79,12 +97,17 @@ class MediaPost extends Component {
     const { editing } = this.props
     const post = ReactDOM.findDOMNode(this)
     const width = $(post).width()
-    const height = $(post).find('.postImage').height() - 65
-    const fontSize = (width / 44) * 3 * 1.15
+    const height =
+      $(post)
+        .find('.postImage')
+        .height() - 65
+    const fontSize = width / 44 * 3 * 1.15
     const lines = fontSize > 0 ? Math.floor(height / (fontSize * 1.2)) : 0
     const maxHeight = fontSize * lines * 1.2
 
-    const $title = editing ? $(post).find('.postTitleEdit') : $(post).find('.postTitle')
+    const $title = editing
+      ? $(post).find('.postTitleEdit')
+      : $(post).find('.postTitle')
     $title.css({
       fontSize: `${fontSize}px`,
       maxHeight: `${maxHeight}px`,
@@ -101,7 +124,15 @@ class MediaPost extends Component {
   handleEditStart = evt => {
     evt.stopPropagation()
     const { _id, title, content, img, link } = this.props
-    const data = { _id, title, content, img, link, showDeleteConfirm: false, showLinkBar: false }
+    const data = {
+      _id,
+      title,
+      content,
+      img,
+      link,
+      showDeleteConfirm: false,
+      showLinkBar: false,
+    }
     this.props.postEditStart(data)
     this.setState({ showError: false }, this.handleResize)
   }
@@ -162,14 +193,19 @@ class MediaPost extends Component {
   handlePostImageClick = evt => {
     const { editing, link, img } = this.props
     let postLink = getPostLink(editing, link, img)
-    if (postLink === '#') { evt.preventDefault() }
+    if (postLink === '#') {
+      evt.preventDefault()
+    }
   }
 
   handlePostLanguageChange = evt => {
-    this.setState({
-      locale: evt.target.value,
-      showError: false,
-    }, this.handleResize)
+    this.setState(
+      {
+        locale: evt.target.value,
+        showError: false,
+      },
+      this.handleResize
+    )
   }
 
   handleSubmit = submitError => {
@@ -208,10 +244,24 @@ class MediaPost extends Component {
     const { showError, showInfo, locale } = this.state
 
     const showPostLinkButton = editing && !showLinkBar
-    const spinnerShow = editing && (status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST)
+    const spinnerShow =
+      editing &&
+      (status === UPDATE_POST_REQUEST || status === DELETE_POST_REQUEST)
     const defaultTexts = getDefaultTexts(locale, this.props.intl.locale)
-    const dropdownDisabled = !isLanguageSelectable(title, img, content, this.props.intl.locale)
-    const { submitError } = getSubmitInfo(title, img, content, this.props.intl.locale, locale, formatMessage)
+    const dropdownDisabled = !isLanguageSelectable(
+      title,
+      img,
+      content,
+      this.props.intl.locale
+    )
+    const { submitError } = getSubmitInfo(
+      title,
+      img,
+      content,
+      this.props.intl.locale,
+      locale,
+      formatMessage
+    )
 
     let postLink = getPostLink(editing, link, img)
 
@@ -219,46 +269,105 @@ class MediaPost extends Component {
 
     return (
       <div className="postContainer">
-        { (showLinkBar || showInfo || showDeleteConfirm) && <div className="backLayer" onClick={this.handleBackLayerClick} /> }
+        {(showLinkBar || showInfo || showDeleteConfirm) && (
+          <div className="backLayer" onClick={this.handleBackLayerClick} />
+        )}
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
         <div className="post mediaPost">
-          <a className={cx({ postImage: true, noLink: !link })} href={postLink} onClick={this.handlePostImageClick}>
+          <a
+            className={cx({ postImage: true, noLink: !link })}
+            href={postLink}
+            onClick={this.handlePostImageClick}
+          >
             <Img onLoad={this.handleResize} src={img} />
-            { editing
-              ? <Resizable className="postTitleEdit" placeholder={defaultTexts.title} onChange={this.handleTitleChange} value={title[locale]} />
-              : <div className="postTitle" title={title[locale]} onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: textToElem(title[locale]) }} />
-            }
+            {editing ? (
+              <Resizable
+                className="postTitleEdit"
+                placeholder={defaultTexts.title}
+                onChange={this.handleTitleChange}
+                value={title[locale]}
+              />
+            ) : (
+              <div
+                className="postTitle"
+                title={title[locale]}
+                onClick={this.handleOpenLink}
+                dangerouslySetInnerHTML={{ __html: textToElem(title[locale]) }}
+              />
+            )}
           </a>
-          <div className={cx({ postInfo: true, 'postInfo--hidden': !showInfo })}>
-            { firstname } - Carta | {getTextFromDate(created_at, locale)}
+          <div
+            className={cx({ postInfo: true, 'postInfo--hidden': !showInfo })}
+          >
+            {firstname} - Carta | {getTextFromDate(created_at, locale)}
           </div>
           <LinkBar {...linkBarProps} />
-          { editable && !editing && <EditButton white onClick={this.handleEditStart} /> }
-          { editing && <RemoveButton type="image" onClick={this.handlePostRemoveImage} /> }
-          { showPostLinkButton && <LinkButton onClick={this.handleLinkButtonClick} /> }
+          {editable &&
+            !editing && <EditButton white onClick={this.handleEditStart} />}
+          {editing && (
+            <RemoveButton type="image" onClick={this.handlePostRemoveImage} />
+          )}
+          {showPostLinkButton && (
+            <LinkButton onClick={this.handleLinkButtonClick} />
+          )}
           <InfoButton active={showInfo} onClick={this.handlePostInfoToggle} />
         </div>
 
-        { editing &&
+        {editing && (
           <div className="postButtons">
             <div className="left">
-              <button type="button" className="postBorderBtn" onClick={this.handleAddText}>+ {formatMessage(messages.text)}</button>
-              <div className={cx({ postLang: true, disabled: dropdownDisabled })}>
-                <select onChange={this.handlePostLanguageChange} disabled={dropdownDisabled} value={locale}>
-                  { LANGUAGES.map(lang => <option key={lang.countryCode} value={lang.countryCode}>{lang.countryCode}</option>)}
+              <button
+                type="button"
+                className="postBorderBtn"
+                onClick={this.handleAddText}
+              >
+                + {formatMessage(messages.text)}
+              </button>
+              <div
+                className={cx({ postLang: true, disabled: dropdownDisabled })}
+              >
+                <select
+                  onChange={this.handlePostLanguageChange}
+                  disabled={dropdownDisabled}
+                  value={locale}
+                >
+                  {LANGUAGES.map(lang => (
+                    <option key={lang.countryCode} value={lang.countryCode}>
+                      {lang.countryCode}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
             <div className="right">
-              <button type="button" className="postCancelBtn" onClick={this.handleCancel}>{formatMessage(messages.cancel)}</button>
-              <DeleteButton onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
-              <button type="button" className={cx({ postBorderBtn: true, disabled: submitError })} title={submitError} onClick={() => { this.handleSubmit(submitError) }}>{formatMessage(messages.submit)}</button>
+              <button
+                type="button"
+                className="postCancelBtn"
+                onClick={this.handleCancel}
+              >
+                {formatMessage(messages.cancel)}
+              </button>
+              <DeleteButton
+                onClick={this.handleDelete}
+                onConfirm={this.handleDeleteConfirm}
+                showConfirm={showDeleteConfirm}
+              />
+              <button
+                type="button"
+                className={cx({ postBorderBtn: true, disabled: submitError })}
+                title={submitError}
+                onClick={() => {
+                  this.handleSubmit(submitError)
+                }}
+              >
+                {formatMessage(messages.submit)}
+              </button>
             </div>
           </div>
-        }
-        { showError && submitError && <div className="error">{submitError}</div>}
+        )}
+        {showError && submitError && <div className="error">{submitError}</div>}
       </div>
     )
   }

@@ -3,7 +3,6 @@ import Wrapper from './Wrapper'
 import Percent from './Percent'
 
 class ProgressBar extends Component {
-
   static defaultProps = {
     percent: -1,
     autoIncrement: true,
@@ -47,7 +46,7 @@ class ProgressBar extends Component {
 
   increment = () => {
     let { percent } = this.state
-    percent += ((Math.random() + 1) - Math.random())
+    percent += Math.random() + 1 - Math.random()
     percent = percent < 99 ? percent : 99
     this.setState({ percent })
   }
@@ -58,15 +57,21 @@ class ProgressBar extends Component {
     }
 
     if (props.percent >= 100) {
-      this.setState({
-        percent: 99.9,
-      }, () => {
-        this.timeout = setTimeout(() => {
-          this.setState({
-            percent: -1,
-          }, () => props.updateProgress(-1))
-        }, 300)
-      })
+      this.setState(
+        {
+          percent: 99.9,
+        },
+        () => {
+          this.timeout = setTimeout(() => {
+            this.setState(
+              {
+                percent: -1,
+              },
+              () => props.updateProgress(-1)
+            )
+          }, 300)
+        }
+      )
     } else {
       this.setState({ percent: props.percent })
     }
@@ -75,7 +80,7 @@ class ProgressBar extends Component {
   render() {
     const { percent } = this.state
     const isHidden = percent < 0 || percent >= 100
-    const style = { width: `${(percent <= 0 ? 0 : percent)}%` }
+    const style = { width: `${percent <= 0 ? 0 : percent}%` }
 
     return (
       <Wrapper hidden={isHidden}>

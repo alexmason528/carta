@@ -13,7 +13,10 @@ import {
   postShowLinkBar,
   postShowDeleteConfirm,
 } from 'containers/HomePage/actions'
-import { selectEditingPost, selectHomeInfo } from 'containers/HomePage/selectors'
+import {
+  selectEditingPost,
+  selectHomeInfo,
+} from 'containers/HomePage/selectors'
 import MixedPost from './MixedPost'
 import MediaPost from './MediaPost'
 import TextPost from './TextPost'
@@ -43,7 +46,7 @@ class Post extends Component {
       component = <MixedPost {...data} />
     } else if (img && content === null) {
       component = <MediaPost {...data} />
-    } else if ((!img && content !== null) || (title !== null)) {
+    } else if ((!img && content !== null) || title !== null) {
       component = <TextPost {...data} />
     }
 

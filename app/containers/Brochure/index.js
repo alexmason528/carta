@@ -59,7 +59,7 @@ class Brochure extends Component {
         </div>
         <Row className="brochure__row">
           {mainPoster && (
-            <Col lg={8} md={12} sm={12} xs={12} className="brochure__col">
+            <Col md={8} sm={12} xs={12} className="brochure__col">
               <ImageTile
                 type="main"
                 img={mainPoster.url}
@@ -68,16 +68,16 @@ class Brochure extends Component {
             </Col>
           )}
           {description && (
-            <Col lg={4} md={12} sm={12} xs={12} className="brochure__col">
+            <Col md={4} sm={12} xs={12} className="brochure__col">
               <Row className="brochure__row">
-                <Col lg={12} md={6} sm={12} xs={12} className="brochure__col">
+                <Col lg={12} md={12} sm={6} xs={12} className="brochure__col">
                   <TextTile
                     type="description"
                     title={''}
                     content={description.text.content}
                   />
                 </Col>
-                <Col lg={12} md={6} sm={12} xs={12} className="brochure__col">
+                <Col lg={12} md={12} sm={6} xs={12} className="brochure__col">
                   <ImageTile
                     type="description"
                     img={description.poster.url}

@@ -18,9 +18,15 @@ export default class UserButton extends Component {
   render() {
     const { className } = this.props
     return (
-      <button className={cx({ profile__userButton: true, [className]: className })} onClick={this.handleClick}>
+      <button
+        className={cx({ profile__userButton: true, [className]: className })}
+        onClick={this.handleClick}
+      >
         <Img src={`${CLOUDINARY_ICON_URL}/user-white-shadow.png`} />
-        <Img className="hover" src={`${CLOUDINARY_ICON_URL}/user-white-shadow.png`} />
+        <Img
+          className="hover"
+          src={`${CLOUDINARY_ICON_URL}/user-white-shadow.png`}
+        />
       </button>
     )
   }

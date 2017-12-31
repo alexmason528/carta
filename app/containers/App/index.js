@@ -12,12 +12,15 @@ const AppWrapper = styled.div`
 export function App(props) {
   return (
     <AppWrapper>
-      <Helmet titleTemplate="%s - Carta" defaultTitle="Carta" meta={[{ name: 'description', content: 'Carta' }]} />
+      <Helmet
+        titleTemplate="%s - Carta"
+        defaultTitle="Carta"
+        meta={[{ name: 'description', content: 'Carta' }]}
+      />
       {React.Children.toArray(props.children)}
     </AppWrapper>
   )
 }
-
 
 App.propTypes = {
   children: PropTypes.node,

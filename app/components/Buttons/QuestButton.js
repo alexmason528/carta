@@ -4,7 +4,13 @@ import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import Img from 'components/Img'
 
 const QuestButton = ({ panelState, onClick, onCloseClick }) => (
-  <div className={cx({ questBtn: true, questBtn__opened: panelState === 'minimized', questBtn__closed: panelState !== 'minimized' })}>
+  <div
+    className={cx({
+      questBtn: true,
+      questBtn__opened: panelState === 'minimized',
+      questBtn__closed: panelState !== 'minimized',
+    })}
+  >
     <div onClick={onClick}>
       <Img src={`${CLOUDINARY_ICON_URL}/search.png`} className="inactive" />
       <Img src={`${CLOUDINARY_ICON_URL}/search-blue.png`} className="active" />

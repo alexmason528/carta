@@ -45,13 +45,12 @@ class TextTile extends Component {
       .css({ fontSize: `${fontSize}px` })
 
     const { expanded } = this.state
-    const { type } = this.props
 
     if (expanded) {
       $(tile).css({ zIndex: 20 })
       $(tile)
         .find('.textTile')
-        .css({ bottom: `calc(-100% - ${type === 'description' ? 60 : 8}px)` })
+        .css({ bottom: 'calc(-100% - 8px)' })
     } else {
       $(tile)
         .find('.textTile')
@@ -86,7 +85,7 @@ class TextTile extends Component {
   render() {
     const { title, content, type } = this.props
     const { expanded } = this.state
-    const data = type ? {} : { lg: 4, md: 6, sm: 12, xs: 12 }
+    const data = type ? {} : { xs: 12, sm: 6, md: 4 }
 
     return (
       <Col

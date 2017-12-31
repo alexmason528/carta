@@ -6,12 +6,26 @@ import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import Img from 'components/Img'
 
 const DeleteButton = props => {
-  const { showConfirm, onClick, onConfirm, className, intl: { formatMessage } } = props
+  const {
+    showConfirm,
+    onClick,
+    onConfirm,
+    className,
+    intl: { formatMessage },
+  } = props
   return (
-    <div className={cx({ postDeleteBtn: true, [className]: className })} onClick={onClick}>
+    <div
+      className={cx({ postDeleteBtn: true, [className]: className })}
+      onClick={onClick}
+    >
       <Img src={`${CLOUDINARY_ICON_URL}/delete.png`} />
-      <div className="popOver" style={{ display: showConfirm ? 'block' : 'none' }}>
-        <button type="button" onClick={onConfirm}>{formatMessage(messages.sure)}</button>
+      <div
+        className="popOver"
+        style={{ display: showConfirm ? 'block' : 'none' }}
+      >
+        <button type="button" onClick={onConfirm}>
+          {formatMessage(messages.sure)}
+        </button>
       </div>
     </div>
   )

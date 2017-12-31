@@ -60,6 +60,28 @@
     background: $white;
     font-weight: $lighterFw;
   }
+
+  @media (min-width: 576px) and (max-width: 767px) {
+    .themeTile {
+      display: none;
+    }
+
+    .homePage__col:nth-child(2n) {
+      .postTitle,
+      .postContent {
+        padding-left: 60px;
+      }
+    }
+  }
+
+  @media (min-width: 768px) {
+    .homePage__col:nth-child(3n + 1) {
+      .postTitle,
+      .postContent {
+        padding-left: 60px;
+      }
+    }
+  }
 }
 
 .createPostBtn {

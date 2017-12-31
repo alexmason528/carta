@@ -15,7 +15,7 @@ class RenderDropZone extends Component {
     crop: PropTypes.string,
   }
 
-  handleDrop = (filesToUpload) => {
+  handleDrop = filesToUpload => {
     const img = filesToUpload[0]
     const { crop } = this.props
 
@@ -26,7 +26,7 @@ class RenderDropZone extends Component {
     }
   }
 
-  handleImage = (img) => {
+  handleImage = img => {
     const { input } = this.props
     input.onChange(img)
   }
@@ -46,9 +46,11 @@ class RenderDropZone extends Component {
           multiple={false}
         >
           <div>{label}</div>
-          { files.length > 0 && <Img src={`${CLOUDINARY_ICON_URL}/check-green.png`} /> }
+          {files.length > 0 && (
+            <Img src={`${CLOUDINARY_ICON_URL}/check-green.png`} />
+          )}
         </Dropzone>
-        { touched && error && <span className="error">{error}</span> }
+        {touched && error && <span className="error">{error}</span>}
       </div>
     )
   }

@@ -3,8 +3,17 @@ import cx from 'classnames'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import Img from 'components/Img'
 
-const StarButton = ({ star, active, className, children, onStarClick, onMouseDown }) => (
-  <div className={cx({ section__btn: true, star, active, [className]: className })}>
+const StarButton = ({
+  star,
+  active,
+  className,
+  children,
+  onStarClick,
+  onMouseDown,
+}) => (
+  <div
+    className={cx({ section__btn: true, star, active, [className]: className })}
+  >
     <button onMouseDown={onMouseDown}>{Children.toArray(children)}</button>
     <Img src={`${CLOUDINARY_ICON_URL}/star-green.png`} onClick={onStarClick} />
   </div>

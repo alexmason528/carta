@@ -17,7 +17,7 @@ export default class ContentEditable extends Component {
 
   shouldComponentUpdate(nextProps) {
     const component = ReactDOM.findDOMNode(this)
-    return (nextProps.value !== component.innerHTML)
+    return nextProps.value !== component.innerHTML
   }
 
   componentDidUpdate() {

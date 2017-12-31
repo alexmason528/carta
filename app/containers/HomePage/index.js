@@ -3,7 +3,7 @@ import Helmet from 'react-helmet'
 import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
-import { Container, Col } from 'reactstrap'
+import { Container, Col, Row } from 'reactstrap'
 import { compose } from 'redux'
 import Masonry from 'react-masonry-component'
 import { UPDATE_USER_SUCCESS, SIGNOUT } from 'containers/App/constants'
@@ -173,10 +173,11 @@ class HomePage extends Component {
           className="homePage__row"
           options={{
             gutter: 0,
+            horizontalOrder: true,
           }}
           enableResizableChildren
         >
-          <Col md={4} sm={6} className="homePage__col">
+          <Col xs={12} sm={6} md={4} className="homePage__col">
             <Profile
               onClick={this.handleProfileClick}
               onUpdate={updateUserRequest}
@@ -201,7 +202,7 @@ class HomePage extends Component {
               />
             )}
           </Col>
-          <Col md={4} sm={6} className="homePage__col">
+          <Col xs={12} sm={6} md={4} className="homePage__col">
             <FixedTile
               img="quest.jpg"
               link="/quest"
@@ -210,7 +211,7 @@ class HomePage extends Component {
               authenticated={authenticated}
             />
           </Col>
-          <Col md={4} sm={6} className="homePage__col hidden-sm">
+          <Col xs={12} sm={6} md={4} className="homePage__col themeTile">
             <FixedTile
               img="theme.jpg"
               link="/quest"
@@ -232,7 +233,7 @@ class HomePage extends Component {
                 first: key === 0 && authenticated,
               }
               return (
-                <Col key={key} md={4} sm={6} className="homePage__col">
+                <Col key={key} xs={12} sm={6} md={4} className="homePage__col">
                   <Post {...data} />
                 </Col>
               )

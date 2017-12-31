@@ -3,9 +3,4 @@ import Tablet from './Tablet'
 import Mobile from './Mobile'
 import MobileUp from './MobileUp'
 
-export {
-  Desktop,
-  Tablet,
-  Mobile,
-  MobileUp,
-}
+export { Desktop, Tablet, Mobile, MobileUp }
