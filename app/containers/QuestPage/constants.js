@@ -1,6 +1,11 @@
+export const INIT = 'carta/Quest/INIT'
+
 export const MAP_CHANGE = 'carta/Quest/MAP_CHANGE'
 
-export const INIT = 'carta/Quest/INIT'
+export const TYPE_SEARCH_EXP_CHANGE = 'carta/Quest/TYPE_SEARCH_EXP_CHANGE'
+export const DESCRIPTIVE_SEARCH_EXP_CHANGE =
+  'carta/Quest/DESCRIPTIVE_SEARCH_EXP_CHANGE'
+export const UPDATE_EXPAND = 'carta/Quest/UPDATE_EXPAND'
 
 export const PLACE_CLICK = 'carta/Quest/PLACE_CLICK'
 

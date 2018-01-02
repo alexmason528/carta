@@ -68,6 +68,7 @@
 
     .homePage__col:nth-child(2n) {
       .postTitle,
+      .postTitleEdit,
       .postContent {
         padding-left: 60px;
       }
@@ -77,6 +78,7 @@
   @media (min-width: 768px) {
     .homePage__col:nth-child(3n + 1) {
       .postTitle,
+      .postTitleEdit,
       .postContent {
         padding-left: 60px;
       }
@@ -85,10 +87,10 @@
 }
 
 .createPostBtn {
-  z-index: 50;
   display: flex;
   align-items: center;
   font-size: 14px;
+  z-index: 50;
 
   &--hidden {
     display: none;
@@ -111,15 +113,15 @@
   }
 
   &--afterImage {
-    top: 16px;
     position: absolute;
+    top: 16px;
     left: 24px;
 
     .btnImage {
       background: $white;
       padding: 5px;
-      transition: all $fastTrans;
       @include boxShadow($boxShadowBlur, $shadowColor);
+      @include transition(all, $fastTrans);
     }
 
     .btnText {
@@ -127,7 +129,7 @@
       font-weight: $heavyFw;
       font-size: 15px;
       @include textShadow($textShadowBlur, $shadowColor);
-      transition: all $fastTrans;
+      @include transition(all, $fastTrans);
     }
 
     &:hover {

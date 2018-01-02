@@ -4,8 +4,11 @@ import { DEFAULT_LOCALE } from 'containers/LanguageProvider/constants'
 import { getQuestStr } from 'utils/urlHelper'
 import { getItem, setItem } from 'utils/localStorage'
 import {
-  MAP_CHANGE,
   INIT,
+  MAP_CHANGE,
+  TYPE_SEARCH_EXP_CHANGE,
+  DESCRIPTIVE_SEARCH_EXP_CHANGE,
+  UPDATE_EXPAND,
   PLACE_CLICK,
   TYPE_CLICK,
   TYPE_ANYTHING_CLICK,
@@ -70,6 +73,8 @@ const initialState = {
   curQuestInd: JSON.parse(getItem('curQuestInd')) || 0,
   recommendations: [],
   brochure: null,
+  tSearchExpanded: true,
+  dSearchExpanded: true,
   status: INIT,
   error: null,
 }
@@ -152,10 +157,13 @@ function questReducer(state = initialState, { type, payload }) {
       }
 
     case TYPE_ANYTHING_CLICK:
+      let tSearchExpanded
       newQuests = quests.map((quest, index) => {
         if (index === curQuestInd) {
+          const { all } = quest.types
+          tSearchExpanded = all
           quest.types = {
-            all: !quest.types.all,
+            all: !all,
             includes: [],
             excludes: [],
             visibles: [],
@@ -166,6 +174,14 @@ function questReducer(state = initialState, { type, payload }) {
 
       setItem('quests', JSON.stringify(newQuests))
 
+      if (tSearchExpanded) {
+        return {
+          ...state,
+          status: type,
+          tSearchExpanded,
+          quests: JSON.parse(JSON.stringify(newQuests)),
+        }
+      }
       return {
         ...state,
         status: type,
@@ -230,15 +246,17 @@ function questReducer(state = initialState, { type, payload }) {
       }
 
     case DESCRIPTIVE_ANYTHING_CLICK:
+      let dSearchExpanded
       newQuests = quests.map((quest, index) => {
         if (index === curQuestInd) {
           const { all, stars } = quest.descriptives
+          dSearchExpanded = all
           quest.descriptives = {
+            all: !all,
             stars: all ? [] : stars,
             includes: [],
             excludes: [],
             visibles: [],
-            all: !all,
           }
         }
         return quest
@@ -246,6 +264,14 @@ function questReducer(state = initialState, { type, payload }) {
 
       setItem('quests', JSON.stringify(newQuests))
 
+      if (dSearchExpanded) {
+        return {
+          ...state,
+          status: type,
+          dSearchExpanded,
+          quests: JSON.parse(JSON.stringify(newQuests)),
+        }
+      }
       return {
         ...state,
         status: type,
@@ -431,9 +457,47 @@ function questReducer(state = initialState, { type, payload }) {
     case GET_BROCHURE_FAIL:
       return {
         ...state,
+        status: type,
         error: payload,
       }
 
+    case TYPE_SEARCH_EXP_CHANGE:
+      return {
+        ...state,
+        status: type,
+        tSearchExpanded: payload,
+      }
+
+    case DESCRIPTIVE_SEARCH_EXP_CHANGE:
+      return {
+        ...state,
+        status: type,
+        dSearchExpanded: payload,
+      }
+
+    case UPDATE_EXPAND:
+      if (
+        payload !== 1 &&
+        (state.quests[state.curQuestInd].types.visibles.length > 0 ||
+          state.quests[state.curQuestInd].types.all)
+      ) {
+        return {
+          ...state,
+          status: type,
+          tSearchExpanded: false,
+        }
+      } else if (
+        payload !== 2 &&
+        (state.quests[state.curQuestInd].descriptives.visibles.length > 0 ||
+          state.quests[state.curQuestInd].descriptives.all)
+      ) {
+        return {
+          ...state,
+          status: type,
+          dSearchExpanded: false,
+        }
+      }
+      return state
     default:
       return state
   }

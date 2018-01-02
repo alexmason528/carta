@@ -1,5 +1,8 @@
 import {
   MAP_CHANGE,
+  TYPE_SEARCH_EXP_CHANGE,
+  DESCRIPTIVE_SEARCH_EXP_CHANGE,
+  UPDATE_EXPAND,
   PLACE_CLICK,
   TYPE_CLICK,
   TYPE_ANYTHING_CLICK,
@@ -162,6 +165,27 @@ export function getBrochureFail(payload) {
 export function setDefaultQuest(payload) {
   return {
     type: SET_DEFAULT_QUEST,
+    payload,
+  }
+}
+
+export function typeSearchExpChange(payload) {
+  return {
+    type: TYPE_SEARCH_EXP_CHANGE,
+    payload,
+  }
+}
+
+export function descriptiveSearchExpChange(payload) {
+  return {
+    type: DESCRIPTIVE_SEARCH_EXP_CHANGE,
+    payload,
+  }
+}
+
+export function updateExpand(payload) {
+  return {
+    type: UPDATE_EXPAND,
     payload,
   }
 }

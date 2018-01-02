@@ -164,7 +164,6 @@ class HomePage extends Component {
           className="homePage__row"
           options={{
             gutter: 0,
-            horizontalOrder: true,
           }}
           enableResizableChildren
         >

@@ -10,12 +10,14 @@ import {
   getRecommendationRequest,
   typeClick,
   typeAnythingClick,
+  typeSearchExpChange,
 } from 'containers/QuestPage/actions'
 import messages from 'containers/QuestPage/messages'
 import {
   selectInfo,
   selectTypes,
   selectCurrentTypes,
+  selectTypeSearchExpanded,
 } from 'containers/QuestPage/selectors'
 import { Button } from 'components/Buttons'
 import Img from 'components/Img'
@@ -25,10 +27,12 @@ class TypeSection extends Component {
     typeClick: PropTypes.func,
     typeAnythingClick: PropTypes.func,
     getRecommendationRequest: PropTypes.func,
+    typeSearchExpChange: PropTypes.func,
     types: PropTypes.array,
     currentTypes: PropTypes.object,
     info: PropTypes.object,
     className: PropTypes.string,
+    expanded: PropTypes.bool,
     intl: intlShape.isRequired,
   }
 
@@ -36,23 +40,15 @@ class TypeSection extends Component {
     super(props)
 
     this.state = {
-      expanded: true,
       search: '',
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { currentTypes: { visibles } } = nextProps
-
-    if (visibles.length === 0) {
-      this.setState({ expanded: true })
-    }
-  }
-
   handleExpand = expanded => {
-    this.setState(
-      Object.assign({}, this.state, { expanded }, !expanded && { search: '' })
-    )
+    this.props.typeSearchExpChange(expanded)
+    if (!expanded) {
+      this.setState({ search: '' })
+    }
   }
 
   handleInputChange = evt => {
@@ -60,26 +56,25 @@ class TypeSection extends Component {
   }
 
   handleAnythingClick = () => {
-    const { typeAnythingClick, getRecommendationRequest } = this.props
-    typeAnythingClick()
-    getRecommendationRequest()
+    this.props.typeAnythingClick()
+    this.props.getRecommendationRequest()
   }
 
   handleTypeClick = (type, active) => {
-    const { typeClick, getRecommendationRequest } = this.props
-    typeClick({ type, active })
-    getRecommendationRequest()
+    this.props.typeClick({ type, active })
+    this.props.getRecommendationRequest()
   }
 
   render() {
-    const { expanded, search } = this.state
+    const { search } = this.state
     const {
       types,
+      expanded,
       intl: { formatMessage, locale },
       currentTypes: { all, includes, excludes, visibles },
     } = this.props
 
-    let searchedTypes =
+    const searchedTypes =
       search === ''
         ? types
         : types.filter(
@@ -193,6 +188,7 @@ class TypeSection extends Component {
 const selectors = createStructuredSelector({
   info: selectInfo(),
   types: selectTypes(),
+  expanded: selectTypeSearchExpanded(),
   currentTypes: selectCurrentTypes(),
 })
 
@@ -200,6 +196,7 @@ const actions = {
   getRecommendationRequest,
   typeClick,
   typeAnythingClick,
+  typeSearchExpChange,
 }
 
 export default compose(connect(selectors, actions), injectIntl)(TypeSection)

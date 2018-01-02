@@ -50,6 +50,11 @@ const selectInfo = () =>
 const selectCurrentQuest = () =>
   createSelector(selectQuest, substate => substate.quests[substate.curQuestInd])
 
+const selectTypeSearchExpanded = () =>
+  createSelector(selectQuest, substate => substate.tSearchExpanded)
+const selectDescriptiveSearchExpanded = () =>
+  createSelector(selectQuest, substate => substate.dSearchExpanded)
+
 export {
   selectQuest,
   selectRecommendations,
@@ -67,4 +72,6 @@ export {
   selectBrochure,
   selectInfo,
   selectCurrentQuest,
+  selectTypeSearchExpanded,
+  selectDescriptiveSearchExpanded,
 }

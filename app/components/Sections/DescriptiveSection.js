@@ -11,12 +11,14 @@ import {
   descriptiveClick,
   descriptiveStarClick,
   descriptiveAnythingClick,
+  descriptiveSearchExpChange,
 } from 'containers/QuestPage/actions'
 import messages from 'containers/QuestPage/messages'
 import {
   selectInfo,
   selectDescriptives,
   selectCurrentDescriptives,
+  selectDescriptiveSearchExpanded,
 } from 'containers/QuestPage/selectors'
 import { Button, StarButton } from 'components/Buttons'
 import Img from 'components/Img'
@@ -26,10 +28,12 @@ class DescriptiveSection extends Component {
     descriptiveClick: PropTypes.func,
     descriptiveStarClick: PropTypes.func,
     descriptiveAnythingClick: PropTypes.func,
+    descriptiveSearchExpChange: PropTypes.func,
     getRecommendationRequest: PropTypes.func,
     currentDescriptives: PropTypes.object,
     info: PropTypes.object,
     descriptives: PropTypes.array,
+    expanded: PropTypes.bool,
     className: PropTypes.string,
     intl: intlShape.isRequired,
   }
@@ -38,23 +42,15 @@ class DescriptiveSection extends Component {
     super(props)
 
     this.state = {
-      expanded: true,
       search: '',
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { currentDescriptives: { visibles } } = nextProps
-
-    if (visibles.length === 0) {
-      this.setState({ expanded: true })
-    }
-  }
-
   handleExpand = expanded => {
-    this.setState(
-      Object.assign(this.state, { expanded }, !expanded && { search: '' })
-    )
+    this.props.descriptiveSearchExpChange(expanded)
+    if (!expanded) {
+      this.setState({ search: '' })
+    }
   }
 
   handleInputChange = evt => {
@@ -62,27 +58,25 @@ class DescriptiveSection extends Component {
   }
 
   handleAnythingClick = () => {
-    const { descriptiveAnythingClick, getRecommendationRequest } = this.props
-    descriptiveAnythingClick()
-    getRecommendationRequest()
+    this.props.descriptiveAnythingClick()
+    this.props.getRecommendationRequest()
   }
 
   handleDescClick = (desc, active) => {
-    const { descriptiveClick, getRecommendationRequest } = this.props
-    descriptiveClick({ desc, active })
-    getRecommendationRequest()
+    this.props.descriptiveClick({ desc, active })
+    this.props.getRecommendationRequest()
   }
 
   handleStarClick = (desc, star) => {
-    const { descriptiveStarClick, getRecommendationRequest } = this.props
-    descriptiveStarClick({ desc, star })
-    getRecommendationRequest()
+    this.props.descriptiveStarClick({ desc, star })
+    this.props.getRecommendationRequest()
   }
 
   render() {
-    const { expanded, search } = this.state
+    const { search } = this.state
     const {
       descriptives,
+      expanded,
       intl: { formatMessage, locale },
       currentDescriptives: { all, stars, includes, excludes, visibles },
     } = this.props
@@ -237,12 +231,14 @@ const selectors = createStructuredSelector({
   info: selectInfo(),
   descriptives: selectDescriptives(),
   currentDescriptives: selectCurrentDescriptives(),
+  expanded: selectDescriptiveSearchExpanded(),
 })
 
 const actions = {
   descriptiveClick,
   descriptiveStarClick,
   descriptiveAnythingClick,
+  descriptiveSearchExpChange,
   getRecommendationRequest,
 }
 

@@ -9,7 +9,7 @@ import {
   GET_QUESTINFO_REQUEST,
   SET_DEFAULT_QUEST,
 } from 'containers/QuestPage/constants'
-import { updateVisibility } from 'containers/QuestPage/actions'
+import { updateVisibility, updateExpand } from 'containers/QuestPage/actions'
 import {
   selectInfo,
   selectCurrentTypes,
@@ -26,6 +26,7 @@ class Quest extends Component {
     currentTypes: PropTypes.object,
     currentDescriptives: PropTypes.object,
     updateVisibility: PropTypes.func,
+    updateExpand: PropTypes.func,
     info: PropTypes.object,
     intl: intlShape.isRequired,
   }
@@ -86,11 +87,14 @@ class Quest extends Component {
 
   handleTabClick = currentTab => {
     this.setState({ currentTab })
+    this.props.updateExpand(currentTab)
   }
 
   handleNextBtnClick = () => {
     const { currentTab } = this.state
-    this.handleTabClick((currentTab + 1) % 3)
+    const nextTab = (currentTab + 1) % 3
+    this.handleTabClick(nextTab)
+    this.props.updateExpand(nextTab)
   }
 
   render() {
@@ -156,6 +160,7 @@ const selectors = createStructuredSelector({
 
 const actions = {
   updateVisibility,
+  updateExpand,
 }
 
 export default compose(injectIntl, connect(selectors, actions))(Quest)
