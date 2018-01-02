@@ -17,7 +17,12 @@ const translations = {
 export const getObjectType = input => {
   if (input[0] === '.') return -1
   if (isNaN(input)) return -1
-  if ((parseFloat(input) === parseInt(input, 10)) && input === parseInt(input, 10).toString()) return 1
+  if (
+    parseFloat(input) === parseInt(input, 10) &&
+    input === parseInt(input, 10).toString()
+  ) {
+    return 1
+  }
   return 0
 }
 
@@ -47,7 +52,10 @@ const getTypes = typesStr => {
     excludes: [],
   }
 
-  if (segs[0].toLowerCase() === translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()) {
+  if (
+    segs[0].toLowerCase() ===
+    translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()
+  ) {
     types.all = true
     segs.splice(0, 1)
   }
@@ -55,7 +63,7 @@ const getTypes = typesStr => {
   if (types.all) {
     for (let seg of segs) {
       if (getObjectType(seg) !== -1 || seg[0] !== '-') return null
-      types.excludes.push(seg)
+      types.excludes.push(seg.slice(1))
     }
   } else {
     for (let seg of segs) {
@@ -77,7 +85,10 @@ const getDescriptives = desStr => {
     excludes: [],
   }
 
-  if (segs[0].toLowerCase() === translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()) {
+  if (
+    segs[0].toLowerCase() ===
+    translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()
+  ) {
     descriptives.all = true
     segs.splice(0, 1)
   }
@@ -142,14 +153,41 @@ export const urlComposer = ({ viewport, types, descriptives, brochure }) => {
   let typeStr = ''
   let descStr = ''
 
-  const typeAll = types.all ? translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase() : undefined
-  const typeIncludes = types.includes.length > 0 ? types.includes.map(type => getUrlStr(type[DEFAULT_LOCALE])).join(',') : undefined
-  const typeExcludes = types.excludes.length > 0 ? types.excludes.map(type => `-${getUrlStr(type[DEFAULT_LOCALE])}`).join(',') : undefined
+  const typeAll = types.all
+    ? translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()
+    : undefined
+  const typeIncludes =
+    types.includes.length > 0
+      ? types.includes.map(type => getUrlStr(type[DEFAULT_LOCALE])).join(',')
+      : undefined
+  const typeExcludes =
+    types.excludes.length > 0
+      ? types.excludes
+          .map(type => `-${getUrlStr(type[DEFAULT_LOCALE])}`)
+          .join(',')
+      : undefined
 
-  const descAll = descriptives.all ? translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase() : undefined
-  const descStars = descriptives.stars.length > 0 ? descriptives.stars.map(type => `+${getUrlStr(type[DEFAULT_LOCALE])}`).join(',') : undefined
-  const descIncludes = descriptives.includes.length > 0 ? descriptives.includes.map(type => getUrlStr(type[DEFAULT_LOCALE])).join(',') : undefined
-  const descExcludes = descriptives.excludes.length > 0 ? descriptives.excludes.map(type => `-${getUrlStr(type[DEFAULT_LOCALE])}`).join(',') : undefined
+  const descAll = descriptives.all
+    ? translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()
+    : undefined
+  const descStars =
+    descriptives.stars.length > 0
+      ? descriptives.stars
+          .map(type => `+${getUrlStr(type[DEFAULT_LOCALE])}`)
+          .join(',')
+      : undefined
+  const descIncludes =
+    descriptives.includes.length > 0
+      ? descriptives.includes
+          .map(type => getUrlStr(type[DEFAULT_LOCALE]))
+          .join(',')
+      : undefined
+  const descExcludes =
+    descriptives.excludes.length > 0
+      ? descriptives.excludes
+          .map(type => `-${getUrlStr(type[DEFAULT_LOCALE])}`)
+          .join(',')
+      : undefined
 
   if (types.all) {
     let arr = [typeAll]
@@ -172,7 +210,7 @@ export const urlComposer = ({ viewport, types, descriptives, brochure }) => {
     descStr = arr.join(',')
   }
 
-  const sendRequest = (viewportStr !== '' && typeStr !== '' && descStr !== '')
+  const sendRequest = viewportStr !== '' && typeStr !== '' && descStr !== ''
 
   let url
   if (sendRequest && brochure) {

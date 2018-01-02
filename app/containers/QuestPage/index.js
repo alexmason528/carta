@@ -13,7 +13,11 @@ import Menu from 'components/Menu'
 import SidePanel from 'components/SidePanel'
 import ScoreBoard from 'components/ScoreBoard'
 import { urlParser, urlComposer } from 'utils/urlHelper'
-import { getQuestInfoRequest, getRecommendationRequest } from './actions'
+import {
+  getQuestInfoRequest,
+  getRecommendationRequest,
+  setDefaultQuest,
+} from './actions'
 import { initialQuest } from './reducer'
 import {
   selectRecommendations,
@@ -28,6 +32,7 @@ class QuestPage extends Component {
   static propTypes = {
     getQuestInfoRequest: PropTypes.func,
     getRecommendationRequest: PropTypes.func,
+    setDefaultQuest: React.PropTypes.func,
     viewport: PropTypes.object,
     descriptives: PropTypes.object,
     quest: PropTypes.object,
@@ -60,6 +65,15 @@ class QuestPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // if (!isEqual(this.props.params, nextProps.params)) {
+    //   const { params: { viewport, types, descriptives } } = nextProps
+    //   if (viewport && types && descriptives) {
+    //     const quest = urlParser({ viewport, types, descriptives })
+    //     this.props.setDefaultQuest({ ...quest, first: false })
+    //     this.props.getRecommendationRequest()
+    //   }
+    //   return
+    // }
     const { viewport, types, descriptives, location: { pathname } } = this.props
     const { params, quest } = nextProps
     const isViewportEqual = isEqual(viewport, nextProps.viewport)
@@ -138,6 +152,7 @@ const selectors = createStructuredSelector({
 })
 
 const actions = {
+  setDefaultQuest,
   getQuestInfoRequest,
   getRecommendationRequest,
 }
