@@ -19,7 +19,7 @@ export const DESCRIPTIVE_ANYTHING_CLICK =
 
 export const UPDATE_VISIBILITY = 'carta/Quest/UPDATE_VISIBILITY'
 
-export const SET_DEFAULT_QUEST = 'carta/Quest/SET_DEFAULT_QUEST'
+export const SET_QUEST = 'carta/Quest/SET_QUEST'
 
 export const QUEST_ADD = 'carta/Quest/QUEST_ADD'
 export const QUEST_SELECT = 'cara/Quest/QUEST_SELECT'

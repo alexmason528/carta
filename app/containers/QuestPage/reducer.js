@@ -16,7 +16,7 @@ import {
   DESCRIPTIVE_STAR_CLICK,
   DESCRIPTIVE_ANYTHING_CLICK,
   UPDATE_VISIBILITY,
-  SET_DEFAULT_QUEST,
+  SET_QUEST,
   QUEST_ADD,
   QUEST_SELECT,
   QUEST_REMOVE,
@@ -30,7 +30,6 @@ import {
   GET_BROCHURE_SUCCESS,
   GET_BROCHURE_FAIL,
 } from './constants'
-import { descriptiveAnythingClick } from './actions'
 
 export const initialQuest = {
   types: {
@@ -38,6 +37,7 @@ export const initialQuest = {
     includes: [],
     excludes: [],
     visibles: [],
+    expanded: true,
   },
   descriptives: {
     all: false,
@@ -45,6 +45,7 @@ export const initialQuest = {
     includes: [],
     excludes: [],
     visibles: [],
+    expanded: true,
   },
 }
 
@@ -74,8 +75,6 @@ const initialState = {
   curQuestInd: JSON.parse(getItem('curQuestInd')) || 0,
   recommendations: [],
   brochure: null,
-  tSearchExpanded: true,
-  dSearchExpanded: true,
   status: INIT,
   error: null,
 }
@@ -85,15 +84,13 @@ function questReducer(state = initialState, { type, payload }) {
   let quests = JSON.parse(JSON.stringify(state.quests))
   let newQuests
   let newViewport
-  let tSearchExpanded
-  let dSearchExpanded
 
   switch (type) {
     case MAP_CHANGE:
       const { zoom, bounds: { _ne, _sw }, center: { lng, lat } } = payload
       newViewport = {
         ...state.viewport,
-        zoom: parseFloat(zoom.toFixed(1)),
+        zoom: parseFloat(zoom.toFixed(2)),
         northeast: {
           x: _ne.lng,
           y: _ne.lat,
@@ -120,7 +117,7 @@ function questReducer(state = initialState, { type, payload }) {
           parseFloat(payload.x.toFixed(4)),
           parseFloat(payload.y.toFixed(4)),
         ],
-        zoom: parseFloat(payload.zoom.toFixed(1)),
+        zoom: parseFloat(payload.zoom.toFixed(2)),
       }
 
       setItem('viewport', JSON.stringify(newViewport))
@@ -163,28 +160,28 @@ function questReducer(state = initialState, { type, payload }) {
       newQuests = quests.map((quest, index) => {
         if (index === curQuestInd) {
           const { all } = quest.types
-          tSearchExpanded = all
-          quest.types = {
-            all: !all,
-            includes: [],
-            excludes: [],
-            visibles: [],
-          }
+          quest.types = Object.assign(
+            {},
+            {
+              ...quest.types,
+              all: !all,
+              includes: [],
+              excludes: [],
+              visibles: [],
+            },
+            all && { expanded: true }
+          )
         }
         return quest
       })
 
       setItem('quests', JSON.stringify(newQuests))
 
-      return Object.assign(
-        {},
-        {
-          ...state,
-          status: type,
-          quests: JSON.parse(JSON.stringify(newQuests)),
-        },
-        tSearchExpanded && { tSearchExpanded }
-      )
+      return {
+        ...state,
+        status: type,
+        quests: JSON.parse(JSON.stringify(newQuests)),
+      }
 
     case DESCRIPTIVE_CLICK:
       newQuests = quests.map((quest, index) => {
@@ -247,29 +244,29 @@ function questReducer(state = initialState, { type, payload }) {
       newQuests = quests.map((quest, index) => {
         if (index === curQuestInd) {
           const { all, stars } = quest.descriptives
-          dSearchExpanded = all
-          quest.descriptives = {
-            all: !all,
-            stars: all ? [] : stars,
-            includes: [],
-            excludes: [],
-            visibles: [],
-          }
+          quest.descriptives = Object.assign(
+            {},
+            {
+              ...quest.descriptives,
+              all: !all,
+              stars: all ? [] : stars,
+              includes: [],
+              excludes: [],
+              visibles: [],
+            },
+            all && { expanded: true }
+          )
         }
         return quest
       })
 
       setItem('quests', JSON.stringify(newQuests))
 
-      return Object.assign(
-        {},
-        {
-          ...state,
-          status: type,
-          quests: JSON.parse(JSON.stringify(newQuests)),
-        },
-        dSearchExpanded && { dSearchExpanded }
-      )
+      return {
+        ...state,
+        status: type,
+        quests: JSON.parse(JSON.stringify(newQuests)),
+      }
 
     case QUEST_ADD:
       newQuests = [...quests, JSON.parse(JSON.stringify(initialQuest))]
@@ -284,10 +281,32 @@ function questReducer(state = initialState, { type, payload }) {
 
     case QUEST_SELECT:
       setItem('curQuestInd', payload)
+      newQuests = quests.map((quest, index) => {
+        if (index === curQuestInd) {
+          if (
+            quest.descriptives.all ||
+            quest.descriptives.includes.length > 0 ||
+            quest.descriptives.stars.length > 0 ||
+            quest.descriptives.visibles.length > 0
+          ) {
+            quest.descriptives.expanded = false
+          }
+
+          if (
+            quest.types.all ||
+            quest.types.includes.length > 0 ||
+            quest.types.visibles.length > 0
+          ) {
+            quest.types.expanded = false
+          }
+        }
+        return quest
+      })
       return {
         ...state,
         status: type,
         curQuestInd: payload,
+        quests: JSON.parse(JSON.stringify(newQuests)),
       }
 
     case QUEST_REMOVE:
@@ -305,88 +324,89 @@ function questReducer(state = initialState, { type, payload }) {
         payload < curQuestInd && { curQuestInd: curQuestInd - 1 }
       )
 
-    case SET_DEFAULT_QUEST:
+    case SET_QUEST:
       const { viewport, types, descriptives } = payload
 
       newQuests = quests.map((quest, index) => {
         if (index === curQuestInd) {
-          quest.types = {
-            all: types.all,
-            includes: [],
-            excludes: [],
-            visibles: [],
+          if (types) {
+            quest.types.all = types.all
+            quest.includes = []
+            quest.excludes = []
+
+            for (let type of types.includes) {
+              const typeObj = find(categories.types, {
+                [DEFAULT_LOCALE]: getQuestStr(type),
+              })
+              if (typeObj && !find(quest.types.includes, typeObj)) {
+                quest.types.includes.push(typeObj)
+              }
+              if (typeObj && !find(quest.types.visibles, typeObj)) {
+                quest.types.visibles.push(typeObj)
+              }
+            }
+            for (let type of types.excludes) {
+              const typeObj = find(categories.types, {
+                [DEFAULT_LOCALE]: getQuestStr(type),
+              })
+              if (typeObj && !find(quest.types.excludes, typeObj)) {
+                quest.types.excludes.push(typeObj)
+              }
+              if (typeObj && !find(quest.types.visibles, typeObj)) {
+                quest.types.visibles.push(typeObj)
+              }
+            }
           }
 
-          for (let type of types.includes) {
-            const typeObj = find(categories.types, {
-              [DEFAULT_LOCALE]: getQuestStr(type),
-            })
-            if (typeObj && !find(quest.types.includes, typeObj)) {
-              quest.types.includes.push(typeObj)
-              quest.types.visibles.push(typeObj)
-            }
-          }
-          for (let type of types.excludes) {
-            const typeObj = find(categories.types, {
-              [DEFAULT_LOCALE]: getQuestStr(type),
-            })
-            if (typeObj && !find(quest.types.excludes, typeObj)) {
-              quest.types.excludes.push(typeObj)
-              quest.types.visibles.push(typeObj)
-            }
-          }
+          if (descriptives) {
+            quest.descriptives.all = descriptives.all
+            quest.descriptives.stars = []
+            quest.descriptives.includes = []
+            quest.descriptives.excludes = []
 
-          quest.descriptives = {
-            all: descriptives.all,
-            stars: [],
-            includes: [],
-            excludes: [],
-            visibles: [],
-          }
-
-          for (let desc of descriptives.stars) {
-            const descObj = find(categories.descriptives, {
-              [DEFAULT_LOCALE]: getQuestStr(desc),
-            })
-            if (descObj && !find(quest.descriptives.stars, descObj)) {
-              quest.descriptives.stars.push(descObj)
-              quest.descriptives.visibles.push(descObj)
+            for (let desc of descriptives.stars) {
+              const descObj = find(categories.descriptives, {
+                [DEFAULT_LOCALE]: getQuestStr(desc),
+              })
+              if (descObj && !find(quest.descriptives.stars, descObj)) {
+                quest.descriptives.stars.push(descObj)
+              }
+              if (descObj && !find(quest.descriptives.visibles, descObj)) {
+                quest.descriptives.visibles.push(descObj)
+              }
             }
-          }
-          for (let desc of descriptives.includes) {
-            const descObj = find(categories.descriptives, {
-              [DEFAULT_LOCALE]: getQuestStr(desc),
-            })
-            if (descObj && !find(quest.descriptives.includes, descObj)) {
-              quest.descriptives.includes.push(descObj)
-              quest.descriptives.visibles.push(descObj)
+            for (let desc of descriptives.includes) {
+              const descObj = find(categories.descriptives, {
+                [DEFAULT_LOCALE]: getQuestStr(desc),
+              })
+              if (descObj && !find(quest.descriptives.includes, descObj)) {
+                quest.descriptives.includes.push(descObj)
+              }
+              if (descObj && !find(quest.descriptives.visibles, descObj)) {
+                quest.descriptives.visibles.push(descObj)
+              }
             }
-          }
-          for (let desc of descriptives.excludes) {
-            const descObj = find(categories.descriptives, {
-              [DEFAULT_LOCALE]: getQuestStr(desc),
-            })
-            if (descObj && !find(quest.descriptives.excludes, descObj)) {
-              quest.descriptives.excludes.push(descObj)
-              quest.descriptives.visibles.push(descObj)
+            for (let desc of descriptives.excludes) {
+              const descObj = find(categories.descriptives, {
+                [DEFAULT_LOCALE]: getQuestStr(desc),
+              })
+              if (descObj && !find(quest.descriptives.excludes, descObj)) {
+                quest.descriptives.excludes.push(descObj)
+              }
+              if (descObj && !find(quest.descriptives.visibles, descObj)) {
+                quest.descriptives.visibles.push(descObj)
+              }
             }
           }
         }
-        tSearchExpanded = !(quest.types.all || quest.types.includes.length > 0)
-        dSearchExpanded = !(
-          quest.descriptives.all ||
-          quest.descriptives.stars.length > 0 ||
-          quest.descriptives.includes.length > 0
-        )
-
         return quest
       })
 
-      newViewport = {
-        ...state.viewport,
-        ...viewport,
-        status: type,
-      }
+      newViewport = Object.assign(
+        {},
+        { ...state.viewport },
+        viewport && { ...viewport }
+      )
 
       setItem('viewport', JSON.stringify(newViewport))
       setItem('quests', JSON.stringify(newQuests))
@@ -396,8 +416,6 @@ function questReducer(state = initialState, { type, payload }) {
         viewport: newViewport,
         status: type,
         quests: JSON.parse(JSON.stringify(newQuests)),
-        tSearchExpanded,
-        dSearchExpanded,
       }
 
     case UPDATE_VISIBILITY:
@@ -483,42 +501,66 @@ function questReducer(state = initialState, { type, payload }) {
       }
 
     case TYPE_SEARCH_EXP_CHANGE:
+      newQuests = quests.map((quest, index) => {
+        if (index === curQuestInd) {
+          quest.types.expanded = !quest.types.expanded
+        }
+        return quest
+      })
+
+      setItem('quests', JSON.stringify(newQuests))
+
       return {
         ...state,
         status: type,
-        tSearchExpanded: payload,
+        quests: JSON.parse(JSON.stringify(newQuests)),
       }
 
     case DESCRIPTIVE_SEARCH_EXP_CHANGE:
+      newQuests = quests.map((quest, index) => {
+        if (index === curQuestInd) {
+          quest.descriptives.expanded = !quest.descriptives.expanded
+        }
+        return quest
+      })
+
+      setItem('quests', JSON.stringify(newQuests))
+
       return {
         ...state,
         status: type,
-        dSearchExpanded: payload,
+        quests: JSON.parse(JSON.stringify(newQuests)),
       }
 
     case UPDATE_EXPAND:
-      if (
-        payload !== 1 &&
-        (state.quests[state.curQuestInd].types.visibles.length > 0 ||
-          state.quests[state.curQuestInd].types.all)
-      ) {
-        return {
-          ...state,
-          status: type,
-          tSearchExpanded: false,
+      newQuests = quests.map((quest, index) => {
+        if (index === curQuestInd) {
+          if (
+            payload === 1 &&
+            (quest.descriptives.all ||
+              quest.descriptives.includes.length > 0 ||
+              quest.descriptives.stars.length > 0 ||
+              quest.descriptives.visibles.length > 0)
+          ) {
+            quest.descriptives.expanded = false
+          } else if (
+            payload === 2 &&
+            (quest.types.all ||
+              quest.types.includes.length > 0 ||
+              quest.types.visibles.length > 0)
+          ) {
+            quest.types.expanded = false
+          }
         }
-      } else if (
-        payload !== 2 &&
-        (state.quests[state.curQuestInd].descriptives.visibles.length > 0 ||
-          state.quests[state.curQuestInd].descriptives.all)
-      ) {
-        return {
-          ...state,
-          status: type,
-          dSearchExpanded: false,
-        }
+        return quest
+      })
+
+      return {
+        ...state,
+        status: type,
+        quests: JSON.parse(JSON.stringify(newQuests)),
       }
-      return state
+
     default:
       return state
   }

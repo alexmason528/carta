@@ -7,7 +7,6 @@ import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import {
-  getRecommendationRequest,
   descriptiveClick,
   descriptiveStarClick,
   descriptiveAnythingClick,
@@ -29,7 +28,6 @@ class DescriptiveSection extends Component {
     descriptiveStarClick: PropTypes.func,
     descriptiveAnythingClick: PropTypes.func,
     descriptiveSearchExpChange: PropTypes.func,
-    getRecommendationRequest: PropTypes.func,
     currentDescriptives: PropTypes.object,
     info: PropTypes.object,
     descriptives: PropTypes.array,
@@ -57,21 +55,6 @@ class DescriptiveSection extends Component {
     this.setState({ search: evt.target.value })
   }
 
-  handleAnythingClick = () => {
-    this.props.descriptiveAnythingClick()
-    this.props.getRecommendationRequest()
-  }
-
-  handleDescClick = (desc, active) => {
-    this.props.descriptiveClick({ desc, active })
-    this.props.getRecommendationRequest()
-  }
-
-  handleStarClick = (desc, star) => {
-    this.props.descriptiveStarClick({ desc, star })
-    this.props.getRecommendationRequest()
-  }
-
   render() {
     const { search } = this.state
     const {
@@ -79,6 +62,9 @@ class DescriptiveSection extends Component {
       expanded,
       intl: { formatMessage, locale },
       currentDescriptives: { all, stars, includes, excludes, visibles },
+      descriptiveClick,
+      descriptiveStarClick,
+      descriptiveAnythingClick,
     } = this.props
 
     let searchedDesc =
@@ -139,7 +125,9 @@ class DescriptiveSection extends Component {
                   .indexOf(search.toLowerCase()) === -1,
             })}
             active={all}
-            onClick={this.handleAnythingClick}
+            onClick={() => {
+              descriptiveAnythingClick()
+            }}
           >
             {formatMessage(messages.anything)}
           </Button>
@@ -164,10 +152,10 @@ class DescriptiveSection extends Component {
                   active={active}
                   star={star}
                   onMouseDown={() => {
-                    this.handleDescClick(desc, active)
+                    descriptiveClick({ desc, active })
                   }}
                   onStarClick={() => {
-                    this.handleStarClick(desc, star)
+                    descriptiveStarClick({ desc, star })
                   }}
                 >
                   {' '}
@@ -184,10 +172,10 @@ class DescriptiveSection extends Component {
                 active
                 star
                 onMouseDown={() => {
-                  this.handleDescClick(desc, true)
+                  descriptiveClick({ desc, active: true })
                 }}
                 onStarClick={() => {
-                  this.handleStarClick(desc, true)
+                  descriptiveStarClick({ desc, star: true })
                 }}
               >
                 {desc[locale]}
@@ -211,10 +199,10 @@ class DescriptiveSection extends Component {
                 active={false}
                 star={false}
                 onMouseDown={() => {
-                  this.handleDescClick(desc, false)
+                  descriptiveClick({ desc, active: false })
                 }}
                 onStarClick={() => {
-                  this.handleStarClick(desc, false)
+                  descriptiveStarClick({ desc, star: false })
                 }}
               >
                 {desc[locale]}
@@ -239,7 +227,6 @@ const actions = {
   descriptiveStarClick,
   descriptiveAnythingClick,
   descriptiveSearchExpChange,
-  getRecommendationRequest,
 }
 
 export default compose(injectIntl, connect(selectors, actions))(

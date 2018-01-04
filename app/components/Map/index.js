@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import cx from 'classnames'
-import { isEqual } from 'lodash'
 import { connect } from 'react-redux'
 import ReactResizeDetector from 'react-resize-detector'
 import ReactMapboxGl from 'react-mapbox-gl'
@@ -8,16 +7,11 @@ import { browserHistory } from 'react-router'
 import { createStructuredSelector } from 'reselect'
 import {
   COLORS,
-  CENTER_COORDS,
   CLOUDINARY_POINTS_URL,
   CLOUDINARY_SHAPES_URL,
-  DEFAULT_ZOOM,
   MAP_ACCESS_TOKEN,
 } from 'containers/App/constants'
-import {
-  getRecommendationRequest,
-  mapChange,
-} from 'containers/QuestPage/actions'
+import { mapChange } from 'containers/QuestPage/actions'
 import { PLACE_CLICK } from 'containers/QuestPage/constants'
 import {
   selectRecommendations,
@@ -32,20 +26,11 @@ const MapBox = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN })
 class Map extends Component {
   static propTypes = {
     mapChange: PropTypes.func,
-    getRecommendationRequest: PropTypes.func,
     recommendations: PropTypes.array,
     viewport: PropTypes.object,
     panelState: PropTypes.string,
     className: PropTypes.string,
     locale: PropTypes.string,
-  }
-
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      styleLoaded: false,
-    }
   }
 
   componentWillMount() {
@@ -89,50 +74,32 @@ class Map extends Component {
     }
   }
 
-  handleZoomEnd = map => {
-    const { panelState, mapChange, getRecommendationRequest } = this.props
-    mapChange({
-      zoom: map.getZoom(),
-      bounds: map.getBounds(),
-      center: map.getCenter(),
-    })
+  handleMapChange = map => {
+    this.map = map
+    const { mapChange } = this.props
+    const { lng, lat } = this.map.getCenter()
+    const center = [parseFloat(lng.toFixed(4)), parseFloat(lat.toFixed(4))]
+    const zoom = parseFloat(this.map.getZoom().toFixed(2))
 
-    if (panelState !== 'closed') {
-      getRecommendationRequest()
-    }
+    this.map.setZoom(zoom)
+    this.map.setCenter(center)
+
+    mapChange({
+      zoom: this.map.getZoom(),
+      bounds: this.map.getBounds(),
+      center: this.map.getCenter(),
+    })
   }
 
   handleStyleLoad = map => {
-    const {
-      mapChange,
-      viewport: { center, zoom },
-      getRecommendationRequest,
-    } = this.props
     this.map = map
-    this.map.setZoom(zoom !== DEFAULT_ZOOM ? zoom : DEFAULT_ZOOM)
-    this.map.setCenter(!isEqual(CENTER_COORDS, center) ? center : CENTER_COORDS)
+    const { mapChange } = this.props
 
     mapChange({
-      zoom: map.getZoom(),
-      bounds: map.getBounds(),
-      center: map.getCenter(),
+      zoom: this.map.getZoom(),
+      bounds: this.map.getBounds(),
+      center: this.map.getCenter(),
     })
-
-    this.setState({ styleLoaded: true }, getRecommendationRequest)
-  }
-
-  handleDragEnd = map => {
-    const { panelState, mapChange, getRecommendationRequest } = this.props
-
-    mapChange({
-      zoom: map.getZoom(),
-      bounds: map.getBounds(),
-      center: map.getCenter(),
-    })
-
-    if (panelState !== 'closed') {
-      getRecommendationRequest()
-    }
   }
 
   handleAddShapes = () => {
@@ -288,15 +255,13 @@ class Map extends Component {
   }
 
   render() {
-    const { panelState } = this.props
-    const { styleLoaded } = this.state
+    const { panelState, viewport: { center, zoom } } = this.props
 
     return (
       <div
         className={cx({
           map: true,
           map__withoutQuest: panelState !== 'opened',
-          hidden: !styleLoaded,
         })}
       >
         <ReactResizeDetector
@@ -307,9 +272,11 @@ class Map extends Component {
         <MapBox
           style={this.mapStyle}
           containerStyle={{ width: '100%', height: '100%' }}
+          center={center}
+          zoom={[zoom]}
           onStyleLoad={this.handleStyleLoad}
-          onZoomEnd={this.handleZoomEnd}
-          onDragEnd={this.handleDragEnd}
+          onZoomEnd={this.handleMapChange}
+          onDragEnd={this.handleMapChange}
         />
       </div>
     )
@@ -324,7 +291,6 @@ const selectors = createStructuredSelector({
 })
 
 const actions = {
-  getRecommendationRequest,
   mapChange,
 }
 

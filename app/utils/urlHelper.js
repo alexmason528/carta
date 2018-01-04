@@ -27,6 +27,8 @@ export const getObjectType = input => {
 }
 
 const getViewport = viewportStr => {
+  if (!viewportStr) return undefined
+
   const segs = viewportStr.split(',')
 
   if (segs.length !== 3) {
@@ -44,6 +46,8 @@ const getViewport = viewportStr => {
 }
 
 const getTypes = typesStr => {
+  if (!typesStr) return undefined
+
   let segs = typesStr.split(',')
 
   let types = {
@@ -76,6 +80,8 @@ const getTypes = typesStr => {
 }
 
 const getDescriptives = desStr => {
+  if (!desStr) return undefined
+
   let segs = desStr.split(',')
 
   let descriptives = {
@@ -127,14 +133,10 @@ export const urlParser = ({ viewport, types, descriptives }) => {
   const resTypes = getTypes(types)
   const resDescriptives = getDescriptives(descriptives)
 
-  if (resViewport && resTypes && resDescriptives) {
-    return {
-      viewport: resViewport,
-      types: resTypes,
-      descriptives: resDescriptives,
-    }
-  } else {
-    return null
+  return {
+    viewport: resViewport,
+    types: resTypes,
+    descriptives: resDescriptives,
   }
 }
 

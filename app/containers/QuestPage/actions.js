@@ -10,7 +10,7 @@ import {
   DESCRIPTIVE_STAR_CLICK,
   DESCRIPTIVE_ANYTHING_CLICK,
   UPDATE_VISIBILITY,
-  SET_DEFAULT_QUEST,
+  SET_QUEST,
   QUEST_ADD,
   QUEST_SELECT,
   QUEST_REMOVE,
@@ -162,9 +162,9 @@ export function getBrochureFail(payload) {
   }
 }
 
-export function setDefaultQuest(payload) {
+export function setQuest(payload) {
   return {
-    type: SET_DEFAULT_QUEST,
+    type: SET_QUEST,
     payload,
   }
 }

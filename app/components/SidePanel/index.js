@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import {
-  getRecommendationRequest,
   questAdd,
   questSelect,
   questRemove,
@@ -21,24 +20,12 @@ class SidePanel extends Component {
   static propTypes = {
     onMinimizeClick: PropTypes.func.isRequired,
     onCloseClick: PropTypes.func.isRequired,
-    getRecommendationRequest: PropTypes.func,
     questAdd: PropTypes.func,
     questSelect: PropTypes.func,
     questRemove: PropTypes.func,
     curQuestInd: PropTypes.number,
     questCnt: PropTypes.number,
     panelState: PropTypes.string,
-  }
-
-  handleQuestAdd = () => {
-    const { questAdd } = this.props
-    questAdd()
-  }
-
-  handleQuestSelect = ind => {
-    const { questSelect, getRecommendationRequest } = this.props
-    questSelect(ind)
-    getRecommendationRequest()
   }
 
   handleQuestRemove = (evt, ind) => {
@@ -55,6 +42,8 @@ class SidePanel extends Component {
       onMinimizeClick,
       questCnt,
       onCloseClick,
+      questAdd,
+      questSelect,
     } = this.props
     const quests = Array(questCnt).fill(0)
     return (
@@ -83,7 +72,7 @@ class SidePanel extends Component {
               })}
               key={index}
               onClick={() => {
-                this.handleQuestSelect(index)
+                questSelect(index)
               }}
               onContextMenu={evt => {
                 this.handleQuestRemove(evt, index)
@@ -94,7 +83,9 @@ class SidePanel extends Component {
           ))}
           <button
             className="sidePanel__questAddBtn"
-            onClick={this.handleQuestAdd}
+            onClick={() => {
+              questAdd()
+            }}
           >
             +
           </button>
@@ -114,7 +105,6 @@ const actions = {
   questAdd,
   questSelect,
   questRemove,
-  getRecommendationRequest,
 }
 
 export default connect(selectors, actions)(SidePanel)

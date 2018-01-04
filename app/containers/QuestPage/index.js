@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { browserHistory } from 'react-router'
 import { Container } from 'reactstrap'
-import { MAPBOX_DEFAULT_CENTER } from 'containers/App/constants'
 import Brochure from 'containers/Brochure'
 import { QuestButton } from 'components/Buttons'
 import Map from 'components/Map'
@@ -13,11 +12,7 @@ import Menu from 'components/Menu'
 import SidePanel from 'components/SidePanel'
 import ScoreBoard from 'components/ScoreBoard'
 import { urlParser, urlComposer } from 'utils/urlHelper'
-import {
-  getQuestInfoRequest,
-  getRecommendationRequest,
-  setDefaultQuest,
-} from './actions'
+import { getQuestInfoRequest, setQuest } from './actions'
 import { initialQuest } from './reducer'
 import {
   selectRecommendations,
@@ -31,8 +26,7 @@ import './style.scss'
 class QuestPage extends Component {
   static propTypes = {
     getQuestInfoRequest: PropTypes.func,
-    getRecommendationRequest: PropTypes.func,
-    setDefaultQuest: React.PropTypes.func,
+    setQuest: React.PropTypes.func,
     viewport: PropTypes.object,
     descriptives: PropTypes.object,
     quest: PropTypes.object,
@@ -57,23 +51,16 @@ class QuestPage extends Component {
       params: { viewport, types, descriptives },
       getQuestInfoRequest,
     } = this.props
-    let quest = null
-    if (viewport && types && descriptives) {
-      quest = urlParser({ viewport, types, descriptives })
-    }
-    getQuestInfoRequest(quest)
+    getQuestInfoRequest(urlParser({ viewport, types, descriptives }))
   }
 
   componentWillReceiveProps(nextProps) {
-    // if (!isEqual(this.props.params, nextProps.params)) {
-    //   const { params: { viewport, types, descriptives } } = nextProps
-    //   if (viewport && types && descriptives) {
-    //     const quest = urlParser({ viewport, types, descriptives })
-    //     this.props.setDefaultQuest({ ...quest, first: false })
-    //     this.props.getRecommendationRequest()
-    //   }
-    //   return
-    // }
+    if (!isEqual(this.props.params, nextProps.params)) {
+      const { params: { viewport, types, descriptives }, setQuest } = nextProps
+      setQuest(urlParser({ viewport, types, descriptives }))
+      return
+    }
+
     const { viewport, types, descriptives, location: { pathname } } = this.props
     const { params, quest } = nextProps
     const isViewportEqual = isEqual(viewport, nextProps.viewport)
@@ -92,14 +79,11 @@ class QuestPage extends Component {
       descriptives: nextProps.descriptives,
       brochure: params.brochure,
     })
-
     if (
       (!isParamEqual && shouldUpdate) ||
       (isParamEmpty && !isInitialQuest && sendRequest)
     ) {
-      if (!isEqual(nextProps.viewport.center, MAPBOX_DEFAULT_CENTER)) {
-        browserHistory.push(url)
-      }
+      browserHistory.push(url)
     }
   }
 
@@ -152,9 +136,8 @@ const selectors = createStructuredSelector({
 })
 
 const actions = {
-  setDefaultQuest,
+  setQuest,
   getQuestInfoRequest,
-  getRecommendationRequest,
 }
 
 export default connect(selectors, actions)(QuestPage)

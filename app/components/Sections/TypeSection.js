@@ -7,7 +7,6 @@ import { createStructuredSelector } from 'reselect'
 import { findIndex } from 'lodash'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import {
-  getRecommendationRequest,
   typeClick,
   typeAnythingClick,
   typeSearchExpChange,
@@ -26,7 +25,6 @@ class TypeSection extends Component {
   static propTypes = {
     typeClick: PropTypes.func,
     typeAnythingClick: PropTypes.func,
-    getRecommendationRequest: PropTypes.func,
     typeSearchExpChange: PropTypes.func,
     types: PropTypes.array,
     currentTypes: PropTypes.object,
@@ -55,16 +53,6 @@ class TypeSection extends Component {
     this.setState({ search: evt.target.value })
   }
 
-  handleAnythingClick = () => {
-    this.props.typeAnythingClick()
-    this.props.getRecommendationRequest()
-  }
-
-  handleTypeClick = (type, active) => {
-    this.props.typeClick({ type, active })
-    this.props.getRecommendationRequest()
-  }
-
   render() {
     const { search } = this.state
     const {
@@ -72,6 +60,8 @@ class TypeSection extends Component {
       expanded,
       intl: { formatMessage, locale },
       currentTypes: { all, includes, excludes, visibles },
+      typeClick,
+      typeAnythingClick,
     } = this.props
 
     const searchedTypes =
@@ -128,7 +118,9 @@ class TypeSection extends Component {
                   .indexOf(search.toLowerCase()) === -1,
             })}
             active={all}
-            onClick={this.handleAnythingClick}
+            onClick={() => {
+              typeAnythingClick()
+            }}
           >
             {formatMessage(messages.anything)}
           </Button>
@@ -147,7 +139,7 @@ class TypeSection extends Component {
                 <Button
                   active={active}
                   onClick={() => {
-                    this.handleTypeClick(type, active)
+                    typeClick({ type, active })
                   }}
                   key={index}
                 >
@@ -172,7 +164,7 @@ class TypeSection extends Component {
                 key={index}
                 active={false}
                 onClick={() => {
-                  this.handleTypeClick(type, false)
+                  typeClick({ type, active: false })
                 }}
               >
                 {type[locale]}
@@ -193,7 +185,6 @@ const selectors = createStructuredSelector({
 })
 
 const actions = {
-  getRecommendationRequest,
   typeClick,
   typeAnythingClick,
   typeSearchExpChange,

@@ -1,8 +1,3 @@
-import {
-  CLOUDINARY_PLACE_URL,
-  CLOUDINARY_PROFILE_URL,
-} from 'containers/App/constants'
-
 const getImagePortion = (imgObj, type) => {
   let tnCanvas = document.createElement('canvas')
   let tnCanvasContext = tnCanvas.getContext('2d')

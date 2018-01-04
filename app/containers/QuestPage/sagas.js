@@ -13,16 +13,17 @@ import {
   GET_BROCHURE_REQUEST,
   GET_RECOMMENDATION_REQUEST,
   GET_QUESTINFO_REQUEST,
+  SET_QUEST,
+  QUEST_SELECT,
 } from './constants'
 import {
-  getRecommendationRequest,
   getRecommendationSuccess,
   getRecommendationFail,
   getQuestInfoSuccess,
   getQuestInfoFail,
   getBrochureSuccess,
   getBrochureFail,
-  setDefaultQuest,
+  setQuest,
 } from './actions'
 
 export function* getRecommendationRequestHandler() {
@@ -148,10 +149,7 @@ export function* getQuestInfoRequestHandler({ payload }) {
     }
 
     yield put(getQuestInfoSuccess(questData))
-    if (payload) {
-      yield put(setDefaultQuest(payload))
-    }
-    yield put(getRecommendationRequest())
+    yield put(setQuest(payload))
   } catch (err) {
     yield put(getQuestInfoFail(err.toString()))
   }
@@ -192,8 +190,18 @@ export function* getBrochureWatcher() {
   yield takeLatest(GET_BROCHURE_REQUEST, getBrochureRequestHandler)
 }
 
+export function* setQuestWatcher() {
+  yield takeLatest(SET_QUEST, getRecommendationRequestHandler)
+}
+
+export function* questSelectWatcher() {
+  yield takeLatest(QUEST_SELECT, getRecommendationRequestHandler)
+}
+
 export default [
   getRecommendationWatcher,
   getQuestInfoWatcher,
   getBrochureWatcher,
+  setQuestWatcher,
+  questSelectWatcher,
 ]

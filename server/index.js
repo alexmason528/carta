@@ -7,13 +7,16 @@ const argv = require('minimist')(process.argv.slice(2))
 const setup = require('./middlewares/frontendMiddleware')
 const mongoose = require('mongoose')
 const isDev = process.env.NODE_ENV !== 'production'
-const ngrok = (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel ? require('ngrok') : false
+const ngrok =
+  (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel ? require('ngrok') : false
 const path = require('path')
 const resolve = require('path').resolve
 const app = express()
 const bodyParser = require('body-parser')
 
-let mongoUri = /* isDev ? 'mongodb://localhost:27017/carta' : */'mongodb://heroku_mhwps3cx:585m6idt8moae9v55h3oh504dh@ds149934.mlab.com:49934/heroku_mhwps3cx'
+let mongoUri = isDev
+  ? 'mongodb://localhost:27017/carta'
+  : 'mongodb://heroku_mhwps3cx:585m6idt8moae9v55h3oh504dh@ds149934.mlab.com:49934/heroku_mhwps3cx'
 
 mongoose.connect(mongoUri, {
   useMongoClient: true,
@@ -43,8 +46,7 @@ const prettyHost = customHost || 'localhost'
 const port = argv.port || process.env.PORT || 3000
 
 // Start your app.
-
-app.listen(port, host, (err) => {
+app.listen(port, host, err => {
   if (err) {
     return logger.error(err.message)
   }
