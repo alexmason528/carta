@@ -17,9 +17,7 @@ class PlaceSection extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      search: '',
-    }
+    this.state = { search: '' }
   }
 
   handlePlaceClick = place => {

@@ -20,8 +20,10 @@ import {
   selectCurrentTypes,
   selectCurrentDescriptives,
   selectCurrentQuest,
+  selectInfo,
 } from './selectors'
 import './style.scss'
+import { PLACE_CLICK } from './constants'
 
 class QuestPage extends Component {
   static propTypes = {
@@ -32,6 +34,7 @@ class QuestPage extends Component {
     quest: PropTypes.object,
     types: PropTypes.object,
     location: PropTypes.object,
+    info: PropTypes.object,
     recommendations: PropTypes.array,
     params: PropTypes.shape({
       brochure: PropTypes.string,
@@ -55,6 +58,9 @@ class QuestPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.info.status === PLACE_CLICK) {
+      return
+    }
     if (!isEqual(this.props.params, nextProps.params)) {
       const { params: { viewport, types, descriptives }, setQuest } = nextProps
       setQuest(urlParser({ viewport, types, descriptives }))
@@ -133,6 +139,7 @@ const selectors = createStructuredSelector({
   types: selectCurrentTypes(),
   descriptives: selectCurrentDescriptives(),
   quest: selectCurrentQuest(),
+  info: selectInfo(),
 })
 
 const actions = {
