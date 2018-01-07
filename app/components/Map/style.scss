@@ -13,4 +13,8 @@
     width: 100%;
     @include transition(all, $fastTrans);
   }
+
+  &__hidden {
+    visibility: hidden;
+  }
 }

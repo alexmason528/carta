@@ -51,12 +51,12 @@ export const initialQuest = {
 
 const initialViewport = {
   northeast: {
-    x: 8.019265624981585,
-    y: 55.18678597629906,
+    x: 8.0192,
+    y: 55.1867,
   },
   southwest: {
-    x: 3.624734374990169,
-    y: 48.87383712585131,
+    x: 3.6247,
+    y: 48.8738,
   },
   center: CENTER_COORDS,
   zoom: DEFAULT_ZOOM,
@@ -75,8 +75,8 @@ const initialState = {
   curQuestInd: JSON.parse(getItem('curQuestInd')) || 0,
   recommendations: [],
   brochure: null,
-  status: INIT,
   error: null,
+  status: INIT,
 }
 
 function questReducer(state = initialState, { type, payload }) {
@@ -87,10 +87,11 @@ function questReducer(state = initialState, { type, payload }) {
 
   switch (type) {
     case MAP_CHANGE:
-      const { zoom, bounds: { _ne, _sw }, center: { lng, lat } } = payload
+      const { zoom, center, bounds: { _ne, _sw } } = payload
       newViewport = {
         ...state.viewport,
-        zoom: parseFloat(zoom.toFixed(2)),
+        center,
+        zoom,
         northeast: {
           x: _ne.lng,
           y: _ne.lat,
@@ -99,7 +100,6 @@ function questReducer(state = initialState, { type, payload }) {
           x: _sw.lng,
           y: _sw.lat,
         },
-        center: [parseFloat(lng.toFixed(4)), parseFloat(lat.toFixed(4))],
       }
 
       setItem('viewport', JSON.stringify(newViewport))

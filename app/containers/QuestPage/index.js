@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import Helmet from 'react-helmet'
-import { isEqual } from 'lodash'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { browserHistory } from 'react-router'
 import { Container } from 'reactstrap'
 import Brochure from 'containers/Brochure'
 import { QuestButton } from 'components/Buttons'
@@ -11,9 +9,8 @@ import Map from 'components/Map'
 import Menu from 'components/Menu'
 import SidePanel from 'components/SidePanel'
 import ScoreBoard from 'components/ScoreBoard'
-import { urlParser, urlComposer } from 'utils/urlHelper'
+import { urlParser } from 'utils/urlHelper'
 import { getQuestInfoRequest, setQuest } from './actions'
-import { initialQuest } from './reducer'
 import {
   selectRecommendations,
   selectViewport,
@@ -23,7 +20,6 @@ import {
   selectInfo,
 } from './selectors'
 import './style.scss'
-import { PLACE_CLICK } from './constants'
 
 class QuestPage extends Component {
   static propTypes = {
@@ -58,38 +54,10 @@ class QuestPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.info.status === PLACE_CLICK) {
-      return
-    }
-    if (!isEqual(this.props.params, nextProps.params)) {
+    const { params } = this.props
+    if (params !== nextProps.params) {
       const { params: { viewport, types, descriptives }, setQuest } = nextProps
       setQuest(urlParser({ viewport, types, descriptives }))
-      return
-    }
-
-    const { viewport, types, descriptives, location: { pathname } } = this.props
-    const { params, quest } = nextProps
-    const isViewportEqual = isEqual(viewport, nextProps.viewport)
-    const isTypesEqual = isEqual(types, nextProps.types)
-    const isDescriptivesEqual = isEqual(descriptives, nextProps.descriptives)
-    const isParamEmpty =
-      !params.viewport && !params.types && !params.descriptives
-    const isParamEqual = isViewportEqual && isTypesEqual && isDescriptivesEqual
-    const isInitialQuest = isEqual(initialQuest, quest)
-    const shouldUpdate =
-      pathname === nextProps.location.pathname &&
-      params.brochure === nextProps.brochure
-    const { url, sendRequest } = urlComposer({
-      viewport: nextProps.viewport,
-      types: nextProps.types,
-      descriptives: nextProps.descriptives,
-      brochure: params.brochure,
-    })
-    if (
-      (!isParamEqual && shouldUpdate) ||
-      (isParamEmpty && !isInitialQuest && sendRequest)
-    ) {
-      browserHistory.push(url)
     }
   }
 

@@ -1,5 +1,6 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects'
 import { findIndex } from 'lodash'
+import { browserHistory } from 'react-router'
 import { API_BASE_URL } from 'containers/App/constants'
 import {
   selectCurrentTypes,
@@ -8,13 +9,20 @@ import {
   selectTypes,
 } from 'containers/QuestPage/selectors'
 import request from 'utils/request'
-import { urlComposer } from 'utils/urlHelper'
+import { canSendRequest, urlComposer } from 'utils/urlHelper'
 import {
   GET_BROCHURE_REQUEST,
   GET_RECOMMENDATION_REQUEST,
   GET_QUESTINFO_REQUEST,
-  SET_QUEST,
+  MAP_CHANGE,
+  PLACE_CLICK,
+  TYPE_CLICK,
+  TYPE_ANYTHING_CLICK,
+  DESCRIPTIVE_CLICK,
+  DESCRIPTIVE_STAR_CLICK,
+  DESCRIPTIVE_ANYTHING_CLICK,
   QUEST_SELECT,
+  SET_QUEST,
 } from './constants'
 import {
   getRecommendationSuccess,
@@ -92,17 +100,12 @@ export function* getRecommendationRequestHandler() {
     },
   }
 
-  const { sendRequest } = urlComposer({
-    viewport,
-    types: curTypes,
-    descriptives: curDescriptives,
-    brochure: '',
-  })
-
   let res = []
   try {
-    if (sendRequest) {
+    if (canSendRequest({ types, descriptives })) {
       res = yield call(request, requestURL, params)
+    } else {
+      res = []
     }
     yield put(getRecommendationSuccess(res))
   } catch (err) {
@@ -118,24 +121,24 @@ export function* getQuestInfoRequestHandler({ payload }) {
   }
 
   const places = [
-    { name: 'Netherlands', x: 5.291266, y: 52.132633, zoom: 6.3 },
-    { name: 'Amsterdam', x: 4.895168, y: 52.370216, zoom: 13 },
-    { name: 'Rotterdam', x: 4.477733, y: 51.92442, zoom: 13 },
-    { name: 'Den Haag', x: 4.3007, y: 52.070498, zoom: 13 },
-    { name: 'Haarlem', x: 4.646219, y: 52.387388, zoom: 15 },
-    { name: 'Delft', x: 4.357068, y: 52.011577, zoom: 15 },
-    { name: 'Leiden', x: 4.49701, y: 52.160114, zoom: 15 },
-    { name: 'Maastricht', x: 5.690973, y: 50.851368, zoom: 15 },
-    { name: 'Brabant', x: 5.232169, y: 51.482654, zoom: 9 },
-    { name: 'Utrecht (city)', x: 5.12142, y: 52.090737, zoom: 15 },
-    { name: 'Groningen (city)', x: 6.572026205, y: 53.22174606, zoom: 15 },
-    { name: 'Friesland', x: 5.84860417, y: 53.11035652, zoom: 9 },
-    { name: 'Drenthe', x: 6.625179798, y: 52.86318343, zoom: 9 },
-    { name: 'Noord-Holland', x: 4.872905565, y: 52.58246219, zoom: 9 },
-    { name: 'Flevoland', x: 5.601028581, y: 52.52705193, zoom: 9 },
-    { name: 'Overijssel', x: 6.451303939, y: 52.44486644, zoom: 9 },
-    { name: 'Zeeland', x: 3.835448283, y: 51.45192738, zoom: 9 },
-    { name: 'Limburg', x: 5.938272858, y: 51.21129105, zoom: 9 },
+    { name: 'Netherlands', x: 5.2912, y: 52.1326, zoom: 6.3 },
+    { name: 'Amsterdam', x: 4.8951, y: 52.3702, zoom: 13 },
+    { name: 'Rotterdam', x: 4.4777, y: 51.9244, zoom: 13 },
+    { name: 'Den Haag', x: 4.3007, y: 52.0704, zoom: 13 },
+    { name: 'Haarlem', x: 4.6462, y: 52.3873, zoom: 15 },
+    { name: 'Delft', x: 4.357, y: 52.0115, zoom: 15 },
+    { name: 'Leiden', x: 4.497, y: 52.1601, zoom: 15 },
+    { name: 'Maastricht', x: 5.6909, y: 50.8513, zoom: 15 },
+    { name: 'Brabant', x: 5.2321, y: 51.4826, zoom: 9 },
+    { name: 'Utrecht (city)', x: 5.1214, y: 52.0907, zoom: 15 },
+    { name: 'Groningen (city)', x: 6.572, y: 53.2217, zoom: 15 },
+    { name: 'Friesland', x: 5.8486, y: 53.1103, zoom: 9 },
+    { name: 'Drenthe', x: 6.6251, y: 52.8631, zoom: 9 },
+    { name: 'Noord-Holland', x: 4.8729, y: 52.5824, zoom: 9 },
+    { name: 'Flevoland', x: 5.601, y: 52.527, zoom: 9 },
+    { name: 'Overijssel', x: 6.4513, y: 52.4448, zoom: 9 },
+    { name: 'Zeeland', x: 3.8354, y: 51.4519, zoom: 9 },
+    { name: 'Limburg', x: 5.9382, y: 51.2112, zoom: 9 },
   ]
 
   try {
@@ -178,8 +181,19 @@ export function* getBrochureRequestHandler({ payload }) {
   }
 }
 
+export function* composeUrl() {
+  const viewport = yield select(selectViewport())
+  const types = yield select(selectCurrentTypes())
+  const descriptives = yield select(selectCurrentDescriptives())
+  const url = urlComposer({ viewport, types, descriptives })
+  yield call(browserHistory.push, url)
+}
+
 export function* getRecommendationWatcher() {
-  yield takeLatest(GET_RECOMMENDATION_REQUEST, getRecommendationRequestHandler)
+  yield takeLatest(
+    [GET_RECOMMENDATION_REQUEST, SET_QUEST],
+    getRecommendationRequestHandler
+  )
 }
 
 export function* getQuestInfoWatcher() {
@@ -190,18 +204,25 @@ export function* getBrochureWatcher() {
   yield takeLatest(GET_BROCHURE_REQUEST, getBrochureRequestHandler)
 }
 
-export function* setQuestWatcher() {
-  yield takeLatest(SET_QUEST, getRecommendationRequestHandler)
-}
-
-export function* questSelectWatcher() {
-  yield takeLatest(QUEST_SELECT, getRecommendationRequestHandler)
+export function* composeUrlWatcher() {
+  yield takeLatest(
+    [
+      MAP_CHANGE,
+      PLACE_CLICK,
+      QUEST_SELECT,
+      TYPE_CLICK,
+      TYPE_ANYTHING_CLICK,
+      DESCRIPTIVE_CLICK,
+      DESCRIPTIVE_STAR_CLICK,
+      DESCRIPTIVE_ANYTHING_CLICK,
+    ],
+    composeUrl
+  )
 }
 
 export default [
   getRecommendationWatcher,
   getQuestInfoWatcher,
   getBrochureWatcher,
-  setQuestWatcher,
-  questSelectWatcher,
+  composeUrlWatcher,
 ]

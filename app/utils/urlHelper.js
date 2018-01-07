@@ -212,24 +212,30 @@ export const urlComposer = ({ viewport, types, descriptives, brochure }) => {
     descStr = arr.join(',')
   }
 
-  const sendRequest = viewportStr !== '' && typeStr !== '' && descStr !== ''
+  const canGo = viewportStr !== '' && typeStr !== '' && descStr !== ''
 
   let url
-  if (sendRequest && brochure) {
+  if (canGo && brochure) {
     url = `/quest/${viewportStr}/${typeStr}/${descStr}/info/${brochure}`
-  } else if (sendRequest && !brochure) {
+  } else if (canGo && !brochure) {
     url = `/quest/${viewportStr}/${typeStr}/${descStr}`
-  } else if (!sendRequest && brochure) {
+  } else if (!canGo && brochure) {
     url = `/quest/info/${brochure}`
   } else {
     url = '/quest'
   }
 
-  return {
-    viewport: viewportStr,
-    types: typeStr,
-    descriptives: descStr,
-    url,
-    sendRequest,
+  return url
+}
+
+export const canSendRequest = ({ types, descriptives }) => {
+  if (
+    (types.all || types.includes.length > 0) &&
+    (descriptives.all ||
+      (descriptives.stars.length > 0 || descriptives.includes.length > 0))
+  ) {
+    return true
+  } else {
+    return false
   }
 }

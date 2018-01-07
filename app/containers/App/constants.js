@@ -51,6 +51,5 @@ export const CLOUDINARY_PLACE_URL =
   'http://res.cloudinary.com/hyvpvyohj/raw/upload/v1514724157/image/place'
 
 export const COLORS = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379']
-export const CENTER_COORDS = [5.822, 52.142]
-export const MAPBOX_DEFAULT_CENTER = [-0.2417, 51.5286]
+export const CENTER_COORDS = [5.8224, 52.1424]
 export const DEFAULT_ZOOM = 6

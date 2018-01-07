@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import cx from 'classnames'
+import { isEqual } from 'lodash'
 import { connect } from 'react-redux'
 import ReactResizeDetector from 'react-resize-detector'
 import ReactMapboxGl from 'react-mapbox-gl'
@@ -12,7 +13,6 @@ import {
   MAP_ACCESS_TOKEN,
 } from 'containers/App/constants'
 import { mapChange } from 'containers/QuestPage/actions'
-import { PLACE_CLICK } from 'containers/QuestPage/constants'
 import {
   selectRecommendations,
   selectViewport,
@@ -31,6 +31,13 @@ class Map extends Component {
     panelState: PropTypes.string,
     className: PropTypes.string,
     locale: PropTypes.string,
+  }
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      showMap: false,
+    }
   }
 
   componentWillMount() {
@@ -57,8 +64,9 @@ class Map extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { info: { status }, viewport: { center, zoom } } = nextProps
-    if (status === PLACE_CLICK && this.map) {
+    const { viewport } = this.props
+    if (this.map && !isEqual(viewport, nextProps.viewport)) {
+      const { center, zoom } = nextProps.viewport
       this.map.flyTo({
         center,
         zoom,
@@ -85,21 +93,20 @@ class Map extends Component {
     this.map.setCenter(center)
 
     mapChange({
-      zoom: this.map.getZoom(),
+      zoom,
+      center,
       bounds: this.map.getBounds(),
-      center: this.map.getCenter(),
     })
   }
 
   handleStyleLoad = map => {
     this.map = map
-    const { mapChange } = this.props
+    const { viewport: { center, zoom } } = this.props
 
-    mapChange({
-      zoom: this.map.getZoom(),
-      bounds: this.map.getBounds(),
-      center: this.map.getCenter(),
-    })
+    this.map.setCenter(center)
+    this.map.setZoom(zoom)
+
+    this.setState({ showMap: true })
   }
 
   handleAddShapes = () => {
@@ -255,13 +262,15 @@ class Map extends Component {
   }
 
   render() {
-    const { panelState, viewport: { center, zoom } } = this.props
+    const { showMap } = this.state
+    const { panelState } = this.props
 
     return (
       <div
         className={cx({
           map: true,
           map__withoutQuest: panelState !== 'opened',
+          map__hidden: !showMap,
         })}
       >
         <ReactResizeDetector
@@ -272,8 +281,6 @@ class Map extends Component {
         <MapBox
           style={this.mapStyle}
           containerStyle={{ width: '100%', height: '100%' }}
-          center={center}
-          zoom={[zoom]}
           onStyleLoad={this.handleStyleLoad}
           onZoomEnd={this.handleMapChange}
           onDragEnd={this.handleMapChange}
@@ -284,10 +291,10 @@ class Map extends Component {
 }
 
 const selectors = createStructuredSelector({
+  info: selectInfo(),
   locale: selectLocale(),
   viewport: selectViewport(),
   recommendations: selectRecommendations(),
-  info: selectInfo(),
 })
 
 const actions = {
