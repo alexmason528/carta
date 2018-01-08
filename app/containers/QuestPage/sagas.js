@@ -1,7 +1,7 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects'
 import { findIndex, map } from 'lodash'
 import { browserHistory } from 'react-router'
-import { API_BASE_URL } from 'containers/App/constants'
+import { API_BASE_URL, RECOMMENDATION_COUNT } from 'containers/App/constants'
 import {
   selectBrochure,
   selectCurrentTypes,
@@ -34,6 +34,7 @@ import {
   getBrochureSuccess,
   getBrochureFail,
   setQuest,
+  updateExpand,
 } from './actions'
 
 export function* getRecommendationRequestHandler() {
@@ -82,7 +83,7 @@ export function* getRecommendationRequestHandler() {
     excludes: map(curDescriptives.excludes, 'c'),
   }
 
-  const data = { count: 5, viewport, types, descriptives }
+  const data = { count: RECOMMENDATION_COUNT, viewport, types, descriptives }
 
   const params = {
     method: 'POST',
@@ -145,6 +146,7 @@ export function* getQuestInfoRequestHandler({ payload }) {
 
     yield put(getQuestInfoSuccess(questData))
     yield put(setQuest(payload))
+    yield put(updateExpand())
   } catch (err) {
     yield put(getQuestInfoFail(err.toString()))
   }

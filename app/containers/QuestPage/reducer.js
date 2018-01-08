@@ -350,7 +350,6 @@ function questReducer(state = initialState, { type, payload }) {
 
     case SET_QUEST:
       const { quest: { viewport, types, descriptives }, urlEntered } = payload
-
       newQuests = quests.map((quest, index) => {
         if (index === curQuestInd) {
           quest.types.includes = []
@@ -388,74 +387,52 @@ function questReducer(state = initialState, { type, payload }) {
                 quest.types.visibles.push(typeObj)
               }
             }
+          } else {
+            quest.types.all = false
+            quest.types.visibles = []
+            quest.types.expanded = true
           }
 
-          if (descriptives) {
-            if (descriptives === 'popular') {
-              quest.descriptives.all = false
+          if (!descriptives || descriptives === 'popular') {
+            quest.descriptives.all = false
+            quest.descriptives.visibles = []
+            quest.descriptives.expanded = true
+          } else {
+            quest.descriptives.all = descriptives.all
+
+            if (urlEntered) {
               quest.descriptives.visibles = []
-              quest.descriptives.expanded = true
-            } else {
-              quest.descriptives.all = descriptives.all
+            }
 
-              if (urlEntered) {
-                quest.descriptives.visibles = []
-              }
-
-              for (let desc of descriptives.stars) {
-                const descObj = find(categories.descriptives, {
-                  [DEFAULT_LOCALE]: getQuestStr(desc),
-                })
-                if (descObj && !find(quest.descriptives.stars, descObj)) {
-                  quest.descriptives.stars.push(descObj)
-                  if (
-                    urlEntered &&
-                    !find(quest.descriptives.visibles, descObj)
-                  ) {
-                    quest.descriptives.visibles.push(descObj)
-                  }
-                }
-              }
-              for (let desc of descriptives.includes) {
-                const descObj = find(categories.descriptives, {
-                  [DEFAULT_LOCALE]: getQuestStr(desc),
-                })
-                if (descObj && !find(quest.descriptives.includes, descObj)) {
-                  quest.descriptives.includes.push(descObj)
-                  if (
-                    urlEntered &&
-                    !find(quest.descriptives.visibles, descObj)
-                  ) {
-                    quest.descriptives.visibles.push(descObj)
-                  }
-                }
-              }
-              for (let desc of descriptives.excludes) {
-                const descObj = find(categories.descriptives, {
-                  [DEFAULT_LOCALE]: getQuestStr(desc),
-                })
-                if (descObj && !find(quest.descriptives.excludes, descObj)) {
-                  quest.descriptives.excludes.push(descObj)
+            for (let desc of descriptives.stars) {
+              const descObj = find(categories.descriptives, {
+                [DEFAULT_LOCALE]: getQuestStr(desc),
+              })
+              if (descObj && !find(quest.descriptives.stars, descObj)) {
+                quest.descriptives.stars.push(descObj)
+                if (urlEntered && !find(quest.descriptives.visibles, descObj)) {
+                  quest.descriptives.visibles.push(descObj)
                 }
               }
             }
-          }
-
-          if (urlEntered) {
-            if (
-              quest.descriptives.all ||
-              quest.descriptives.includes.length > 0 ||
-              quest.descriptives.stars.length > 0 ||
-              quest.descriptives.visibles.length > 0
-            ) {
-              quest.descriptives.expanded = false
+            for (let desc of descriptives.includes) {
+              const descObj = find(categories.descriptives, {
+                [DEFAULT_LOCALE]: getQuestStr(desc),
+              })
+              if (descObj && !find(quest.descriptives.includes, descObj)) {
+                quest.descriptives.includes.push(descObj)
+                if (urlEntered && !find(quest.descriptives.visibles, descObj)) {
+                  quest.descriptives.visibles.push(descObj)
+                }
+              }
             }
-            if (
-              quest.types.all ||
-              quest.types.includes.length > 0 ||
-              quest.types.visibles.length > 0
-            ) {
-              quest.types.expanded = false
+            for (let desc of descriptives.excludes) {
+              const descObj = find(categories.descriptives, {
+                [DEFAULT_LOCALE]: getQuestStr(desc),
+              })
+              if (descObj && !find(quest.descriptives.excludes, descObj)) {
+                quest.descriptives.excludes.push(descObj)
+              }
             }
           }
         }

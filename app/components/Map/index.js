@@ -11,6 +11,7 @@ import {
   CLOUDINARY_POINTS_URL,
   CLOUDINARY_SHAPES_URL,
   MAP_ACCESS_TOKEN,
+  RECOMMENDATION_COUNT,
 } from 'containers/App/constants'
 import { mapChange } from 'containers/QuestPage/actions'
 import {
@@ -241,14 +242,32 @@ class Map extends Component {
           const { display, e } = recommendation
           const filter = ['==', 'e', e]
           if (display === 'shape') {
-            this.map.setFilter(`shape-border-offset-${index}`, filter)
-            this.map.setFilter(`shape-border-${index}`, filter)
-            this.map.setFilter(`shape-fill-${index}`, filter)
-            this.map.setFilter(`shape-caption-${index}`, filter)
+            this.map.setFilter(
+              `shape-border-offset-${RECOMMENDATION_COUNT - index - 1}`,
+              filter
+            )
+            this.map.setFilter(
+              `shape-border-${RECOMMENDATION_COUNT - index - 1}`,
+              filter
+            )
+            this.map.setFilter(
+              `shape-fill-${RECOMMENDATION_COUNT - index - 1}`,
+              filter
+            )
+            this.map.setFilter(
+              `shape-caption-${RECOMMENDATION_COUNT - index - 1}`,
+              filter
+            )
           } else if (display === 'icon') {
-            this.map.setFilter(`shape-border-offset-${index}`, ['==', 'e', ''])
-            this.map.setFilter(`shape-border-${index}`, ['==', 'e', ''])
-            this.map.setFilter(`shape-caption-${index}`, filter)
+            this.map.setFilter(
+              `shape-border-offset-${RECOMMENDATION_COUNT - index - 1}`,
+              ['==', 'e', '']
+            )
+            this.map.setFilter(
+              `shape-border-${RECOMMENDATION_COUNT - index - 1}`,
+              ['==', 'e', '']
+            )
+            this.map.setFilter(`shape-caption-${4 - index}`, filter)
           }
         })
       }
