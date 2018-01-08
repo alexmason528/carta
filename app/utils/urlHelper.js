@@ -230,5 +230,5 @@ export const urlComposer = ({ viewport, types, descriptives, brochure }) => {
 }
 
 export const canSendRequest = ({ types }) => {
-  return types.all || types.includes.length > 0
+  return types.includes.length > 0
 }
