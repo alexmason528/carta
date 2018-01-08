@@ -18,6 +18,7 @@ export const DESCRIPTIVE_ANYTHING_CLICK =
   'carta/Quest/DESCRIPTIVE_ANYTHING_CLICK'
 
 export const SET_QUEST = 'carta/Quest/SET_QUEST'
+export const SET_URL_ENTERED_QUEST = 'carta/Quest/SET_URL_ENTERED_QUEST'
 
 export const QUEST_ADD = 'carta/Quest/QUEST_ADD'
 export const QUEST_SELECT = 'cara/Quest/QUEST_SELECT'

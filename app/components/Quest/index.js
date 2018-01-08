@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import cx from 'classnames'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
-import { GET_QUESTINFO_REQUEST } from 'containers/QuestPage/constants'
+import { SET_URL_ENTERED_QUEST } from 'containers/QuestPage/constants'
 import { updateExpand } from 'containers/QuestPage/actions'
 import {
   selectInfo,
@@ -51,7 +51,7 @@ class Quest extends Component {
   initializeProps = props => {
     const { currentTypes, currentDescriptives, info: { status } } = props
 
-    if (status === GET_QUESTINFO_REQUEST) {
+    if (status === SET_URL_ENTERED_QUEST) {
       if (
         (currentTypes.all || currentTypes.includes.length > 0) &&
         (currentDescriptives.all ||

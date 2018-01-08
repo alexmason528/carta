@@ -16,6 +16,7 @@ import {
   DESCRIPTIVE_STAR_CLICK,
   DESCRIPTIVE_ANYTHING_CLICK,
   SET_QUEST,
+  SET_URL_ENTERED_QUEST,
   QUEST_ADD,
   QUEST_SELECT,
   QUEST_REMOVE,
@@ -389,41 +390,53 @@ function questReducer(state = initialState, { type, payload }) {
             }
           }
 
-          if (descriptives && descriptives !== 'popular') {
-            quest.descriptives.all = descriptives.all
-
-            if (urlEntered) {
+          if (descriptives) {
+            if (descriptives === 'popular') {
+              quest.descriptives.all = false
               quest.descriptives.visibles = []
-            }
+              quest.descriptives.expanded = true
+            } else {
+              quest.descriptives.all = descriptives.all
 
-            for (let desc of descriptives.stars) {
-              const descObj = find(categories.descriptives, {
-                [DEFAULT_LOCALE]: getQuestStr(desc),
-              })
-              if (descObj && !find(quest.descriptives.stars, descObj)) {
-                quest.descriptives.stars.push(descObj)
-                if (urlEntered && !find(quest.descriptives.visibles, descObj)) {
-                  quest.descriptives.visibles.push(descObj)
+              if (urlEntered) {
+                quest.descriptives.visibles = []
+              }
+
+              for (let desc of descriptives.stars) {
+                const descObj = find(categories.descriptives, {
+                  [DEFAULT_LOCALE]: getQuestStr(desc),
+                })
+                if (descObj && !find(quest.descriptives.stars, descObj)) {
+                  quest.descriptives.stars.push(descObj)
+                  if (
+                    urlEntered &&
+                    !find(quest.descriptives.visibles, descObj)
+                  ) {
+                    quest.descriptives.visibles.push(descObj)
+                  }
                 }
               }
-            }
-            for (let desc of descriptives.includes) {
-              const descObj = find(categories.descriptives, {
-                [DEFAULT_LOCALE]: getQuestStr(desc),
-              })
-              if (descObj && !find(quest.descriptives.includes, descObj)) {
-                quest.descriptives.includes.push(descObj)
-                if (urlEntered && !find(quest.descriptives.visibles, descObj)) {
-                  quest.descriptives.visibles.push(descObj)
+              for (let desc of descriptives.includes) {
+                const descObj = find(categories.descriptives, {
+                  [DEFAULT_LOCALE]: getQuestStr(desc),
+                })
+                if (descObj && !find(quest.descriptives.includes, descObj)) {
+                  quest.descriptives.includes.push(descObj)
+                  if (
+                    urlEntered &&
+                    !find(quest.descriptives.visibles, descObj)
+                  ) {
+                    quest.descriptives.visibles.push(descObj)
+                  }
                 }
               }
-            }
-            for (let desc of descriptives.excludes) {
-              const descObj = find(categories.descriptives, {
-                [DEFAULT_LOCALE]: getQuestStr(desc),
-              })
-              if (descObj && !find(quest.descriptives.excludes, descObj)) {
-                quest.descriptives.excludes.push(descObj)
+              for (let desc of descriptives.excludes) {
+                const descObj = find(categories.descriptives, {
+                  [DEFAULT_LOCALE]: getQuestStr(desc),
+                })
+                if (descObj && !find(quest.descriptives.excludes, descObj)) {
+                  quest.descriptives.excludes.push(descObj)
+                }
               }
             }
           }
@@ -461,7 +474,7 @@ function questReducer(state = initialState, { type, payload }) {
       return {
         ...state,
         viewport: newViewport,
-        status: type,
+        status: urlEntered ? SET_URL_ENTERED_QUEST : SET_QUEST,
         quests: JSON.parse(JSON.stringify(newQuests)),
       }
 
