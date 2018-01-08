@@ -36,13 +36,10 @@ const listPost = (req, res) => {
   Post.aggregate(pipeline, (err, elements) => {
     if (err) {
       return res.status(400).send({
-        error: {
-          details: err,
-        },
+        error: { details: err.toString() },
       })
-    } else {
-      return res.json(elements)
     }
+    return res.json(elements)
   })
 }
 
@@ -68,15 +65,15 @@ const updatePost = (req, res) => {
     { $set: data },
     { new: true },
     (err, element) => {
+      if (err) {
+        return res.status(400).send({
+          error: { details: err.toString() },
+        })
+      }
+
       if (element && element._id) {
         return res.json(element)
       }
-
-      return res.status(400).send({
-        error: {
-          details: 'Failed to upddate post',
-        },
-      })
     }
   )
 }
@@ -97,9 +94,8 @@ const deletePost = (req, res) => {
           details: err.toString(),
         },
       })
-    } else {
-      return res.json({})
     }
+    return res.json({})
   })
 }
 
@@ -124,13 +120,10 @@ const createPost = (req, res) => {
   Post.create(data, (err, element) => {
     if (err) {
       return res.status(400).send({
-        error: {
-          details: err,
-        },
+        error: { details: err.toString() },
       })
-    } else {
-      return res.json(element)
     }
+    return res.json(element)
   })
 }
 

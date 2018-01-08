@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { Container, Row, Col } from 'reactstrap'
 import { createStructuredSelector } from 'reselect'
-import { browserHistory, withRouter } from 'react-router'
+import { withRouter } from 'react-router'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
-import { getBrochureRequest } from 'containers/QuestPage/actions'
+import { getBrochureRequest, clearBrochure } from 'containers/QuestPage/actions'
 import { selectBrochure } from 'containers/QuestPage/selectors'
 import Img from 'components/Img'
 import { ImageTile, TextTile } from 'components/Tiles'
@@ -14,6 +14,7 @@ import './style.scss'
 class Brochure extends Component {
   static propTypes = {
     getBrochureRequest: PropTypes.func,
+    clearBrochure: PropTypes.func,
     params: PropTypes.object,
     brochure: PropTypes.object,
     link: PropTypes.string.isRequired,
@@ -25,12 +26,8 @@ class Brochure extends Component {
   }
 
   handleBrochureClose = () => {
-    const { params: { viewport, types, descriptives } } = this.props
-    const url =
-      viewport && types && descriptives
-        ? `/quest/${viewport}/${types}/${descriptives}`
-        : '/quest'
-    browserHistory.push(url)
+    const { clearBrochure } = this.props
+    clearBrochure()
   }
 
   handleBrochureResize = () => {}
@@ -38,8 +35,9 @@ class Brochure extends Component {
   render() {
     const { brochure } = this.props
     if (!brochure) return null
+    console.log(brochure)
 
-    const { mainPoster, description, tiles } = brochure
+    const { info: { mainPoster, description, tiles } } = brochure
 
     return (
       <Container fluid className="brochure P-0 M-0">
@@ -110,6 +108,7 @@ const selectors = createStructuredSelector({
 
 const actions = {
   getBrochureRequest,
+  clearBrochure,
 }
 
 export default compose(withRouter, connect(selectors, actions))(Brochure)

@@ -223,7 +223,7 @@ export const urlComposer = ({ viewport, types, descriptives, brochure }) => {
   }
 
   if (brochure) {
-    params.push(brochure)
+    params.push(`info/${brochure}`)
   }
 
   const url = params.join('/')

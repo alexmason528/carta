@@ -13,26 +13,24 @@ const Category = require('../models/category')
  */
 
 const importElements = (req, res) => {
-  Element.remove({}, (err) => {
+  Element.remove({}, err => {
     if (err) {
       return res.status(400).send({
-        error: {
-          details: err,
-        },
+        error: { details: err.toString() },
       })
     }
 
     const csvPath = path.join(__dirname, '../csv/elements.csv')
     const stream = fs.createReadStream(csvPath)
     csv
-    .fromStream(stream, { headers: true })
-    .on('data', (data) => {
-      let element = new Element(data)
-      element.save()
-    })
-    .on('end', () => {
-      return res.send('Importing elements finished')
-    })
+      .fromStream(stream, { headers: true })
+      .on('data', data => {
+        let element = new Element(data)
+        element.save()
+      })
+      .on('end', () => {
+        return res.send('Importing elements finished')
+      })
   })
 }
 
@@ -43,26 +41,24 @@ const importElements = (req, res) => {
  */
 
 const importDescriptives = (req, res) => {
-  Descriptive.remove({}, (err) => {
+  Descriptive.remove({}, err => {
     if (err) {
       return res.status(400).send({
-        error: {
-          details: err,
-        },
+        error: { details: err.toString() },
       })
     }
 
     const csvPath = path.join(__dirname, '../csv/descriptives.csv')
     const stream = fs.createReadStream(csvPath)
     csv
-    .fromStream(stream, { headers: true })
-    .on('data', (data) => {
-      let descriptive = new Descriptive(data)
-      descriptive.save()
-    })
-    .on('end', () => {
-      return res.send('Importing descriptives finished')
-    })
+      .fromStream(stream, { headers: true })
+      .on('data', data => {
+        let descriptive = new Descriptive(data)
+        descriptive.save()
+      })
+      .on('end', () => {
+        return res.send('Importing descriptives finished')
+      })
   })
 }
 
@@ -73,26 +69,24 @@ const importDescriptives = (req, res) => {
  */
 
 const importTypes = (req, res) => {
-  Type.remove({}, (err) => {
+  Type.remove({}, err => {
     if (err) {
       return res.status(400).send({
-        error: {
-          details: err,
-        },
+        error: { details: err.toString() },
       })
     }
 
     const csvPath = path.join(__dirname, '../csv/types.csv')
     const stream = fs.createReadStream(csvPath)
     csv
-    .fromStream(stream, { headers: true })
-    .on('data', (data) => {
-      let type = new Type(data)
-      type.save()
-    })
-    .on('end', () => {
-      return res.send('Importing types finished')
-    })
+      .fromStream(stream, { headers: true })
+      .on('data', data => {
+        let type = new Type(data)
+        type.save()
+      })
+      .on('end', () => {
+        return res.send('Importing types finished')
+      })
   })
 }
 
@@ -103,26 +97,24 @@ const importTypes = (req, res) => {
  */
 
 const importCategories = (req, res) => {
-  Category.remove({}, (err) => {
+  Category.remove({}, err => {
     if (err) {
       return res.status(400).send({
-        error: {
-          details: err,
-        },
+        error: { details: err.toString() },
       })
     }
 
     const csvPath = path.join(__dirname, '../csv/categories.csv')
     const stream = fs.createReadStream(csvPath)
     csv
-    .fromStream(stream, { headers: true })
-    .on('data', (data) => {
-      let category = new Category(data)
-      category.save()
-    })
-    .on('end', () => {
-      return res.send('Importing categories finished')
-    })
+      .fromStream(stream, { headers: true })
+      .on('data', data => {
+        let category = new Category(data)
+        category.save()
+      })
+      .on('end', () => {
+        return res.send('Importing categories finished')
+      })
   })
 }
 

@@ -38,3 +38,5 @@ export const GET_RECOMMENDATION_FAIL = 'carta/Quest/GET_RECOMMENDATION_FAIL'
 export const GET_BROCHURE_REQUEST = 'carta/Quest/GET_BROCHURE_REQUEST'
 export const GET_BROCHURE_SUCCESS = 'carta/Quest/GET_BROCHURE_SUCCESS'
 export const GET_BROCHURE_FAIL = 'carta/Quest/GET_BROCHURE_FAIL'
+
+export const CLEAR_BROCHURE = 'carta/Quest/CLEAR_BROCHURE'

@@ -29,6 +29,7 @@ import {
   GET_BROCHURE_REQUEST,
   GET_BROCHURE_SUCCESS,
   GET_BROCHURE_FAIL,
+  CLEAR_BROCHURE,
 } from './constants'
 
 export const initialQuest = {
@@ -131,19 +132,32 @@ function questReducer(state = initialState, { type, payload }) {
     case TYPE_CLICK:
       newQuests = quests.map((quest, index) => {
         if (index === curQuestInd) {
-          let ind
-          let { includes, excludes, visibles } = quest.types
+          let { types: { includes, excludes, visibles, expanded } } = quest
           let { type, active } = payload
+
           if (active) {
-            ind = findIndex(includes, type)
-            if (ind !== -1) includes.splice(ind, 1)
-            if (findIndex(excludes, type) === -1) excludes.push(type)
+            includes.splice(findIndex(includes, type), 1)
+            if (findIndex(excludes, type) === -1) {
+              excludes.push(type)
+              if (expanded) {
+                visibles.splice(findIndex(visibles, type), 1)
+              }
+            }
+            if (excludes.length === categories.types.length) {
+              quest.types.all = false
+            }
           } else {
-            ind = findIndex(excludes, type)
-            if (ind !== -1) excludes.splice(ind, 1)
-            if (findIndex(includes, type) === -1) includes.push(type)
+            excludes.splice(findIndex(excludes, type), 1)
+            if (expanded && findIndex(visibles, type) === -1) {
+              visibles.push(type)
+            }
+            if (findIndex(includes, type) === -1) {
+              includes.push(type)
+            }
+            if (includes.length === categories.types.length) {
+              quest.types.all = true
+            }
           }
-          if (findIndex(visibles, type) === -1) visibles.push(type)
         }
         return quest
       })
@@ -186,21 +200,34 @@ function questReducer(state = initialState, { type, payload }) {
     case DESCRIPTIVE_CLICK:
       newQuests = quests.map((quest, index) => {
         if (index === curQuestInd) {
-          let ind
-          let { stars, includes, excludes, visibles } = quest.descriptives
+          let {
+            descriptives: { stars, includes, excludes, visibles, expanded },
+          } = quest
           const { desc, active } = payload
           if (active) {
-            ind = findIndex(includes, desc)
-            if (ind !== -1) includes.splice(ind, 1)
-            ind = findIndex(stars, desc)
-            if (ind !== -1) stars.splice(ind, 1)
-            if (findIndex(excludes, desc) === -1) excludes.push(desc)
+            includes.splice(findIndex(includes, desc), 1)
+            stars.splice(findIndex(stars, desc), 1)
+            if (findIndex(excludes, desc) === -1) {
+              excludes.push(desc)
+              if (expanded) {
+                visibles.splice(findIndex(visibles, desc), 1)
+              }
+            }
+            if (excludes.length === categories.types.length) {
+              quest.descriptives.all = false
+            }
           } else {
-            ind = findIndex(excludes, desc)
-            if (ind !== -1) excludes.splice(ind, 1)
-            if (findIndex(includes, desc) === -1) includes.push(desc)
+            excludes.splice(findIndex(excludes, desc), 1)
+            if (expanded && findIndex(visibles, desc) === -1) {
+              visibles.push(desc)
+            }
+            if (findIndex(includes, desc) === -1) {
+              includes.push(desc)
+            }
+            if (includes.length === categories.types.length) {
+              quest.descriptives.all = true
+            }
           }
-          if (findIndex(visibles, desc) === -1) visibles.push(desc)
         }
         return quest
       })
@@ -216,16 +243,13 @@ function questReducer(state = initialState, { type, payload }) {
     case DESCRIPTIVE_STAR_CLICK:
       newQuests = quests.map((quest, index) => {
         if (index === curQuestInd) {
-          let ind
-          let { stars, includes } = quest.descriptives
+          let { descriptives: { stars, includes } } = quest
           const { desc, star } = payload
           if (star) {
-            ind = findIndex(stars, desc)
-            if (ind !== -1) stars.splice(ind, 1)
+            stars.splice(findIndex(stars, desc), 1)
             if (findIndex(includes, desc) === -1) includes.push(desc)
           } else {
-            ind = findIndex(includes, desc)
-            if (ind !== -1) includes.splice(ind, 1)
+            includes.splice(findIndex(includes, desc), 1)
             if (findIndex(stars, desc) === -1) stars.push(desc)
           }
         }
@@ -356,6 +380,13 @@ function questReducer(state = initialState, { type, payload }) {
                 quest.types.visibles.push(typeObj)
               }
             }
+          } else {
+            quest.types = {
+              ...quest.types,
+              all: false,
+              includes: [],
+              excludes: [],
+            }
           }
 
           if (descriptives) {
@@ -396,6 +427,14 @@ function questReducer(state = initialState, { type, payload }) {
               if (descObj && !find(quest.descriptives.visibles, descObj)) {
                 quest.descriptives.visibles.push(descObj)
               }
+            }
+          } else {
+            quest.descriptives = {
+              ...quest.descriptives,
+              all: false,
+              stars: [],
+              includes: [],
+              excludes: [],
             }
           }
         }
@@ -498,12 +537,25 @@ function questReducer(state = initialState, { type, payload }) {
         ...state,
         status: type,
         error: payload,
+        brochure: null,
+      }
+
+    case CLEAR_BROCHURE:
+      return {
+        ...state,
+        status: type,
+        brochure: null,
       }
 
     case TYPE_SEARCH_EXP_CHANGE:
       newQuests = quests.map((quest, index) => {
         if (index === curQuestInd) {
           quest.types.expanded = !quest.types.expanded
+          if (quest.types.expanded) {
+            quest.types.visibles = JSON.parse(
+              JSON.stringify(quest.types.includes)
+            )
+          }
         }
         return quest
       })
@@ -520,6 +572,11 @@ function questReducer(state = initialState, { type, payload }) {
       newQuests = quests.map((quest, index) => {
         if (index === curQuestInd) {
           quest.descriptives.expanded = !quest.descriptives.expanded
+          if (quest.descriptives.expanded) {
+            quest.descriptives.visibles = JSON.parse(
+              JSON.stringify(quest.descriptives.includes)
+            )
+          }
         }
         return quest
       })
@@ -533,24 +590,21 @@ function questReducer(state = initialState, { type, payload }) {
       }
 
     case UPDATE_EXPAND:
-      newQuests = quests.map((quest, index) => {
-        if (index === curQuestInd) {
-          if (
-            payload === 1 &&
-            (quest.descriptives.all ||
-              quest.descriptives.includes.length > 0 ||
-              quest.descriptives.stars.length > 0 ||
-              quest.descriptives.visibles.length > 0)
-          ) {
-            quest.descriptives.expanded = false
-          } else if (
-            payload === 2 &&
-            (quest.types.all ||
-              quest.types.includes.length > 0 ||
-              quest.types.visibles.length > 0)
-          ) {
-            quest.types.expanded = false
-          }
+      newQuests = quests.map(quest => {
+        if (
+          quest.descriptives.all ||
+          quest.descriptives.includes.length > 0 ||
+          quest.descriptives.stars.length > 0 ||
+          quest.descriptives.visibles.length > 0
+        ) {
+          quest.descriptives.expanded = false
+        }
+        if (
+          quest.types.all ||
+          quest.types.includes.length > 0 ||
+          quest.types.visibles.length > 0
+        ) {
+          quest.types.expanded = false
         }
         return quest
       })

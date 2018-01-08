@@ -3,6 +3,7 @@ import { findIndex, map } from 'lodash'
 import { browserHistory } from 'react-router'
 import { API_BASE_URL } from 'containers/App/constants'
 import {
+  selectBrochure,
   selectCurrentTypes,
   selectCurrentDescriptives,
   selectViewport,
@@ -23,6 +24,7 @@ import {
   DESCRIPTIVE_ANYTHING_CLICK,
   QUEST_SELECT,
   SET_QUEST,
+  CLEAR_BROCHURE,
 } from './constants'
 import {
   getRecommendationSuccess,
@@ -165,9 +167,9 @@ export function* getBrochureRequestHandler({ payload }) {
 
   try {
     const res = yield call(request, requestURL, params)
-    yield put(getBrochureSuccess(res.info))
+    yield put(getBrochureSuccess(res))
   } catch (err) {
-    yield put(getBrochureFail(err.toString()))
+    yield put(getBrochureFail(err))
   }
 }
 
@@ -175,7 +177,14 @@ export function* composeUrl() {
   const viewport = yield select(selectViewport())
   const types = yield select(selectCurrentTypes())
   const descriptives = yield select(selectCurrentDescriptives())
-  const url = urlComposer({ viewport, types, descriptives })
+  const brochure = yield select(selectBrochure())
+  const url = urlComposer(
+    Object.assign(
+      {},
+      { viewport, types, descriptives },
+      brochure && { brochure: brochure.link }
+    )
+  )
   yield call(browserHistory.push, url)
 }
 
@@ -198,6 +207,7 @@ export function* composeUrlWatcher() {
   yield takeLatest(
     [
       MAP_CHANGE,
+      CLEAR_BROCHURE,
       PLACE_CLICK,
       QUEST_SELECT,
       TYPE_CLICK,

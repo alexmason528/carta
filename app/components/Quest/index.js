@@ -84,14 +84,13 @@ class Quest extends Component {
 
   handleTabClick = currentTab => {
     this.setState({ currentTab })
-    this.props.updateExpand(currentTab)
+    this.props.updateExpand()
   }
 
   handleNextBtnClick = () => {
     const { currentTab } = this.state
-    const nextTab = (currentTab + 1) % 3
-    this.handleTabClick(nextTab)
-    this.props.updateExpand(nextTab)
+    this.handleTabClick((currentTab + 1) % 3)
+    this.props.updateExpand()
   }
 
   render() {

@@ -23,6 +23,7 @@ import {
   GET_BROCHURE_REQUEST,
   GET_BROCHURE_SUCCESS,
   GET_BROCHURE_FAIL,
+  CLEAR_BROCHURE,
 } from './constants'
 
 export function mapChange(payload) {
@@ -162,6 +163,12 @@ export function getBrochureFail(payload) {
   }
 }
 
+export function clearBrochure() {
+  return {
+    type: CLEAR_BROCHURE,
+  }
+}
+
 export function setQuest(payload) {
   return {
     type: SET_QUEST,
@@ -183,9 +190,8 @@ export function descriptiveSearchExpChange(payload) {
   }
 }
 
-export function updateExpand(payload) {
+export function updateExpand() {
   return {
     type: UPDATE_EXPAND,
-    payload,
   }
 }

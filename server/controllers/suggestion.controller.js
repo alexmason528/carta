@@ -11,13 +11,10 @@ const listSuggestion = (req, res) => {
   Suggestion.find({}, { _id: 0 }, (err, elements) => {
     if (err) {
       return res.status(400).send({
-        error: {
-          details: err,
-        },
+        error: { details: err.toString() },
       })
-    } else {
-      return res.json(elements)
     }
+    return res.json(elements)
   })
 }
 

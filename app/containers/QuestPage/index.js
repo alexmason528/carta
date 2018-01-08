@@ -47,17 +47,20 @@ class QuestPage extends Component {
 
   componentWillMount() {
     const {
-      params: { viewport, types, descriptives },
+      params: { viewport, types, descriptives, brochure },
       getQuestInfoRequest,
     } = this.props
-    getQuestInfoRequest(urlParser({ viewport, types, descriptives }))
+    getQuestInfoRequest(urlParser({ viewport, types, descriptives, brochure }))
   }
 
   componentWillReceiveProps(nextProps) {
     const { params } = this.props
     if (params !== nextProps.params) {
-      const { params: { viewport, types, descriptives }, setQuest } = nextProps
-      setQuest(urlParser({ viewport, types, descriptives }))
+      const {
+        params: { viewport, types, descriptives, brochure },
+        setQuest,
+      } = nextProps
+      setQuest(urlParser({ viewport, types, descriptives, brochure }))
     }
   }
 

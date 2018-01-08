@@ -25,12 +25,23 @@ const getQuestInfo = (req, res) => {
     {},
     { _id: 0, name: 0, e: 0, sum: 0 },
     (descriptiveError, element) => {
+      if (descriptiveError) {
+        return res.status(400).send({
+          error: { details: descriptiveError.toString() },
+        })
+      }
       const descriptives = Object.keys(element._doc)
 
       Category.find(
         { c: { $in: descriptives } },
         { _id: 0 },
         (categoryError, elements) => {
+          if (categoryError) {
+            return res.status(400).send({
+              error: { details: categoryError.toString() },
+            })
+          }
+
           questInfo.descriptives = elements
           getQuest.descriptives = true
 
@@ -43,12 +54,22 @@ const getQuestInfo = (req, res) => {
   )
 
   Type.findOne({}, { _id: 0, name: 0, e: 0, sum: 0 }, (typeError, element) => {
+    if (typeError) {
+      return res.status(400).send({
+        error: { details: typeError.toString() },
+      })
+    }
     const types = Object.keys(element._doc)
 
     Category.find(
       { c: { $in: types } },
       { _id: 0 },
       (categoryError, elements) => {
+        if (categoryError) {
+          return res.status(400).send({
+            error: { details: categoryError.toString() },
+          })
+        }
         questInfo.types = elements
         getQuest.types = true
 
@@ -154,7 +175,9 @@ const getRecommendations = (req, res) => {
 
   Element.aggregate(pipeline, (err, elements) => {
     if (err) {
-      return res.json([])
+      return res.status(400).send({
+        error: { details: err.toString() },
+      })
     }
 
     let scoreElements = elements.map(element => {
@@ -252,9 +275,17 @@ const getBrochure = (req, res) => {
 
   Place.findOne({ link }, { _id: 0, e: 0, name: 0 }, (err, place) => {
     if (err) {
-      return res.json([])
+      return res.status(400).send({
+        error: {
+          details: err.toString(),
+        },
+      })
+    } else if (!place) {
+      return res.status(400).send({
+        error: { details: 'Wrong place' },
+      })
     }
-    return res.json(place || {})
+    return res.json(place)
   })
 }
 
