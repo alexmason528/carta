@@ -481,6 +481,7 @@ function questReducer(state = initialState, { type, payload }) {
       return {
         ...state,
         status: type,
+        recommendations: null,
         error: null,
       }
 

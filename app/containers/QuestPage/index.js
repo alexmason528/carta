@@ -60,7 +60,7 @@ class QuestPage extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { params } = this.props
-    if (JSON.stringify(params) !== JSON.stringify(nextProps.params)) {
+    if (params !== nextProps.params) {
       const {
         params: { viewport, types, descriptives, brochure },
         setQuest,
