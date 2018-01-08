@@ -9,24 +9,27 @@ const translations = {
 }
 
 export const elemToText = elem =>
-  elem !== null ?
-  elem
-  .replace(new RegExp('<div>', 'g'), '\n')
-  .replace(new RegExp('</div>', 'g'), '')
-  .replace(new RegExp('<br>', 'g'), '\n')
-  .replace(new RegExp('&nbsp;', 'g'), ' ')
-  : ''
+  elem !== null
+    ? elem
+        .replace(new RegExp('<div>', 'g'), '\n')
+        .replace(new RegExp('</div>', 'g'), '')
+        .replace(new RegExp('<br>', 'g'), '\n')
+        .replace(new RegExp('&nbsp;', 'g'), ' ')
+    : ''
 
-export const textToElem = text => text ? text.replace(/\n/g, '<br />') : ''
+export const textToElem = text => (text ? text.replace(/\n/g, '<br />') : '')
 
-export const getFirstname = fullname => fullname ? fullname.split(' ')[0] : ''
+export const getFirstname = fullname => (fullname ? fullname.split(' ')[0] : '')
 
 export const getPostLink = (editing, link, img) => {
   let postLink
   if (editing) {
     postLink = '#'
   } else if (link) {
-    postLink = (link.indexOf('http:') !== -1 || link.indexOf('https:') !== -1) ? link : `http://${link}`
+    postLink =
+      link.indexOf('http:') !== -1 || link.indexOf('https:') !== -1
+        ? link
+        : `http://${link}`
   } else {
     postLink = img
   }
@@ -68,13 +71,19 @@ export const isLanguageSelectable = (title, img, content, defaultLocale) => {
 
   for (let lang of LANGUAGES) {
     const { countryCode } = lang
-    if ((countryCode !== defaultLocale) && ((title && title[countryCode].length > 0) || (content && content[countryCode].length > 0))) return true
+    if (
+      countryCode !== defaultLocale &&
+      ((title && title[countryCode].length > 0) ||
+        (content && content[countryCode].length > 0))
+    ) {
+      return true
+    }
   }
 
   if (postType === 'mediaPost') {
     return title[defaultLocale].length > 0
   } else if (postType === 'textPost' || postType === 'mixedPost') {
-    return (title[defaultLocale].length > 0 && content[defaultLocale].length > 0)
+    return title[defaultLocale].length > 0 && content[defaultLocale].length > 0
   }
 }
 
@@ -96,7 +105,14 @@ export const getDefaultTexts = (locale = 'en', defaultLocale) => {
   return { title, content }
 }
 
-export const getSubmitInfo = (title, img, content, defaultLocale, curLocale, formatMessage) => {
+export const getSubmitInfo = (
+  title,
+  img,
+  content,
+  defaultLocale,
+  curLocale,
+  formatMessage
+) => {
   let submitError
   const postType = getPostType(img, content)
   const remainCharCnts = !content ? 1000 : 1000 - content[curLocale].length
@@ -112,7 +128,11 @@ export const getSubmitInfo = (title, img, content, defaultLocale, curLocale, for
     }
 
     if (title[defaultLocale] === '') {
-      submitError = hasOtherTitle ? formatMessage(messages.requireTitle, { lang: defaultLocale.toUpperCase() }) : formatMessage(messages.requireDefaultTitle)
+      submitError = hasOtherTitle
+        ? formatMessage(messages.requireTitle, {
+          lang: defaultLocale.toUpperCase(),
+        })
+        : formatMessage(messages.requireDefaultTitle)
     }
   } else if (postType === 'textPost' || postType === 'mixedPost') {
     let hasOtherTitle = false
@@ -135,16 +155,28 @@ export const getSubmitInfo = (title, img, content, defaultLocale, curLocale, for
     }
 
     if (title[defaultLocale] === '') {
-      submitError = hasOtherTitle ? formatMessage(messages.requireTitle, { lang: defaultLocale.toUpperCase() }) : formatMessage(messages.requireDefaultTitle)
+      submitError = hasOtherTitle
+        ? formatMessage(messages.requireTitle, {
+          lang: defaultLocale.toUpperCase(),
+        })
+        : formatMessage(messages.requireDefaultTitle)
     } else if (content[defaultLocale] === '') {
-      submitError = hasOtherContent ? formatMessage(messages.requireContent, { lang: defaultLocale.toUpperCase() }) : formatMessage(messages.requireDefaultContent)
+      submitError = hasOtherContent
+        ? formatMessage(messages.requireContent, {
+          lang: defaultLocale.toUpperCase(),
+        })
+        : formatMessage(messages.requireDefaultContent)
     } else {
       for (let lang of LANGUAGES) {
         const { countryCode } = lang
         if (title[countryCode] === '' && content[countryCode] !== '') {
-          submitError = formatMessage(messages.requireTitle, { lang: countryCode.toUpperCase() })
+          submitError = formatMessage(messages.requireTitle, {
+            lang: countryCode.toUpperCase(),
+          })
         } else if (title[countryCode] !== '' && content[countryCode] === '') {
-          submitError = formatMessage(messages.requireContent, { lang: countryCode.toUpperCase() })
+          submitError = formatMessage(messages.requireContent, {
+            lang: countryCode.toUpperCase(),
+          })
         }
         if (submitError) break
       }

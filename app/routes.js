@@ -14,10 +14,7 @@ const loadModule = cb => componentModule => {
 
 export default function createRoutes(store) {
   // create reusable async injectors using getAsyncInjectors factory
-  const {
-    injectReducer,
-    injectSagas,
-  } = getAsyncInjectors(store)
+  const { injectReducer, injectSagas } = getAsyncInjectors(store)
 
   return [
     {
@@ -41,7 +38,8 @@ export default function createRoutes(store) {
 
         importModules.catch(errorLoading)
       },
-    }, {
+    },
+    {
       path: '/(verify/:vcode)',
       name: 'homePage',
       getComponent(nextState, cb) {
@@ -62,7 +60,8 @@ export default function createRoutes(store) {
 
         importModules.catch(errorLoading)
       },
-    }, {
+    },
+    {
       path: '*',
       name: 'notfound',
       getComponent(nextState, cb) {

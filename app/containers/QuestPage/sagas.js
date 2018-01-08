@@ -1,5 +1,5 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects'
-import { findIndex } from 'lodash'
+import { findIndex, map } from 'lodash'
 import { browserHistory } from 'react-router'
 import { API_BASE_URL } from 'containers/App/constants'
 import {
@@ -48,13 +48,6 @@ export function* getRecommendationRequestHandler() {
     excludes: [],
   }
 
-  let descriptives = {
-    all: curDescriptives.all,
-    stars: [],
-    includes: [],
-    excludes: [],
-  }
-
   if (curTypes.all) {
     for (let type of questTypes) {
       if (findIndex(curTypes.excludes, type) === -1) {
@@ -73,16 +66,18 @@ export function* getRecommendationRequestHandler() {
     }
   }
 
-  for (let type of curDescriptives.stars) {
-    descriptives.stars.push(type.c)
+  if (types.includes.length !== 0) {
+    types.excludes.pop('c129')
+    if (findIndex(types.includes, 'c129') === -1) {
+      types.includes.push('c129')
+    }
   }
 
-  for (let type of curDescriptives.includes) {
-    descriptives.includes.push(type.c)
-  }
-
-  for (let type of curDescriptives.excludes) {
-    descriptives.excludes.push(type.c)
+  let descriptives = {
+    all: curDescriptives.all,
+    stars: map(curDescriptives.stars, 'c'),
+    includes: map(curDescriptives.includes, 'c'),
+    excludes: map(curDescriptives.excludes, 'c'),
   }
 
   const data = {

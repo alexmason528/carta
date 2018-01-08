@@ -25,12 +25,14 @@ function checkStatus(response) {
 
   const err = pick(response, ['status', 'statusText'])
 
-  return response.json()
-    .then(json => {
+  return response.json().then(
+    json => {
       throw Object.assign(err, pick(json.error, ['details']))
-    }, () => {
+    },
+    () => {
       throw Object.assign(err, { message: 'Failed to parse JSON' })
-    })
+    }
+  )
 }
 
 /**

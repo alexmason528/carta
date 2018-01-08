@@ -70,7 +70,9 @@ const addProdMiddlewares = (app, options) => {
   app.use('/api/v1/post', postRoutes)
   app.use('/api/v1/suggestion', suggestionRoutes)
 
-  app.get('*', (req, res) => res.sendFile(path.resolve(outputPath, 'index.html')))
+  app.get('*', (req, res) =>
+    res.sendFile(path.resolve(outputPath, 'index.html'))
+  )
 }
 
 /**
