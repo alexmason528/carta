@@ -86,7 +86,7 @@ const getRecommendations = (req, res) => {
     typeProject[type] = 1
   })
 
-  let descriptiveProject = { sum: 1 }
+  let descriptiveProject = { sum: 1, rep: 1 }
 
   descriptives.stars.map(star => {
     descriptiveProject[star] = 1
@@ -209,7 +209,8 @@ const getRecommendations = (req, res) => {
         })
       }
 
-      element.score = tScore * (1 + dScore)
+      element.score =
+        tScore * parseFloat(element.descriptive.rep) * (1 + dScore)
 
       return element
     })

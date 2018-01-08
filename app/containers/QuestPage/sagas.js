@@ -80,12 +80,7 @@ export function* getRecommendationRequestHandler() {
     excludes: map(curDescriptives.excludes, 'c'),
   }
 
-  const data = {
-    count: 5,
-    viewport,
-    types,
-    descriptives,
-  }
+  const data = { count: 5, viewport, types, descriptives }
 
   const params = {
     method: 'POST',
@@ -97,7 +92,7 @@ export function* getRecommendationRequestHandler() {
 
   let res = []
   try {
-    if (canSendRequest({ types, descriptives })) {
+    if (canSendRequest({ types })) {
       res = yield call(request, requestURL, params)
     } else {
       res = []

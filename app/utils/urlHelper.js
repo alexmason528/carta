@@ -150,10 +150,10 @@ export const getUrlStr = str => {
 
 export const urlComposer = ({ viewport, types, descriptives, brochure }) => {
   const { zoom, center } = viewport
-  let viewportStr = `${center[0]},${center[1]},${zoom}`
+  let viewportParam = `${center[0]},${center[1]},${zoom}`
 
-  let typeStr = ''
-  let descStr = ''
+  let typeParam = ''
+  let descParam = ''
 
   const typeAll = types.all
     ? translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()
@@ -194,9 +194,9 @@ export const urlComposer = ({ viewport, types, descriptives, brochure }) => {
   if (types.all) {
     let arr = [typeAll]
     if (typeExcludes) arr.push(typeExcludes)
-    typeStr = arr.join(',')
+    typeParam = arr.join(',')
   } else {
-    typeStr = typeIncludes || ''
+    typeParam = typeIncludes || ''
   }
 
   if (descriptives.all) {
@@ -204,38 +204,32 @@ export const urlComposer = ({ viewport, types, descriptives, brochure }) => {
 
     if (descStars) arr.push(descStars)
     if (descExcludes) arr.push(descExcludes)
-    descStr = arr.join(',')
+    descParam = arr.join(',')
   } else {
     let arr = []
     if (descStars) arr.push(descStars)
     if (descIncludes) arr.push(descIncludes)
-    descStr = arr.join(',')
+    descParam = arr.join(',')
   }
 
-  const canGo = viewportStr !== '' && typeStr !== '' && descStr !== ''
+  let params = ['/quest']
 
-  let url
-  if (canGo && brochure) {
-    url = `/quest/${viewportStr}/${typeStr}/${descStr}/info/${brochure}`
-  } else if (canGo && !brochure) {
-    url = `/quest/${viewportStr}/${typeStr}/${descStr}`
-  } else if (!canGo && brochure) {
-    url = `/quest/info/${brochure}`
-  } else {
-    url = '/quest'
+  if (typeParam) {
+    params.push(viewportParam)
+    params.push(typeParam)
+    if (descParam) {
+      params.push(descParam)
+    }
   }
 
+  if (brochure) {
+    params.push(brochure)
+  }
+
+  const url = params.join('/')
   return url
 }
 
-export const canSendRequest = ({ types, descriptives }) => {
-  if (
-    (types.all || types.includes.length > 0) &&
-    (descriptives.all ||
-      (descriptives.stars.length > 0 || descriptives.includes.length > 0))
-  ) {
-    return true
-  } else {
-    return false
-  }
+export const canSendRequest = ({ types }) => {
+  return types.all || types.includes.length > 0
 }
