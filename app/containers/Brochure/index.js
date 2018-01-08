@@ -35,7 +35,6 @@ class Brochure extends Component {
   render() {
     const { brochure } = this.props
     if (!brochure) return null
-    console.log(brochure)
 
     const { info: { mainPoster, description, tiles } } = brochure
 

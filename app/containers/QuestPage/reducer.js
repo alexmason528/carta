@@ -389,7 +389,7 @@ function questReducer(state = initialState, { type, payload }) {
             }
           }
 
-          if (descriptives) {
+          if (descriptives && descriptives !== 'popular') {
             quest.descriptives.all = descriptives.all
             quest.descriptives.stars = []
             quest.descriptives.includes = []

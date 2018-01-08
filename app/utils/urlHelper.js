@@ -131,7 +131,8 @@ const getDescriptives = desStr => {
 export const urlParser = ({ viewport, types, descriptives }) => {
   const resViewport = getViewport(viewport)
   const resTypes = getTypes(types)
-  const resDescriptives = getDescriptives(descriptives)
+  const resDescriptives =
+    descriptives === 'popular' ? descriptives : getDescriptives(descriptives)
 
   return {
     viewport: resViewport,
@@ -217,9 +218,7 @@ export const urlComposer = ({ viewport, types, descriptives, brochure }) => {
   if (typeParam) {
     params.push(viewportParam)
     params.push(typeParam)
-    if (descParam) {
-      params.push(descParam)
-    }
+    params.push(descParam || 'popular')
   }
 
   if (brochure) {

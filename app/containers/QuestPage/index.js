@@ -50,6 +50,7 @@ class QuestPage extends Component {
       params: { viewport, types, descriptives, brochure },
       getQuestInfoRequest,
     } = this.props
+
     getQuestInfoRequest(urlParser({ viewport, types, descriptives, brochure }))
   }
 
