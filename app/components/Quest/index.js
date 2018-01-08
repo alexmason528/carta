@@ -6,7 +6,7 @@ import cx from 'classnames'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { GET_QUESTINFO_REQUEST } from 'containers/QuestPage/constants'
-import { updateVisibility, updateExpand } from 'containers/QuestPage/actions'
+import { updateExpand } from 'containers/QuestPage/actions'
 import {
   selectInfo,
   selectCurrentTypes,
@@ -22,7 +22,6 @@ class Quest extends Component {
     className: PropTypes.string,
     currentTypes: PropTypes.object,
     currentDescriptives: PropTypes.object,
-    updateVisibility: PropTypes.func,
     updateExpand: PropTypes.func,
     info: PropTypes.object,
     intl: intlShape.isRequired,
@@ -155,7 +154,6 @@ const selectors = createStructuredSelector({
 })
 
 const actions = {
-  updateVisibility,
   updateExpand,
 }
 

@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import Helmet from 'react-helmet'
+import { isEqual } from 'lodash'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { Container } from 'reactstrap'
@@ -51,17 +52,23 @@ class QuestPage extends Component {
       getQuestInfoRequest,
     } = this.props
 
-    getQuestInfoRequest(urlParser({ viewport, types, descriptives, brochure }))
+    getQuestInfoRequest({
+      quest: urlParser({ viewport, types, descriptives, brochure }),
+      urlEntered: true,
+    })
   }
 
   componentWillReceiveProps(nextProps) {
     const { params } = this.props
-    if (params !== nextProps.params) {
+    if (!isEqual(params, nextProps.params)) {
       const {
         params: { viewport, types, descriptives, brochure },
         setQuest,
       } = nextProps
-      setQuest(urlParser({ viewport, types, descriptives, brochure }))
+      setQuest({
+        quest: urlParser({ viewport, types, descriptives, brochure }),
+        urlEntered: false,
+      })
     }
   }
 

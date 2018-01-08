@@ -17,8 +17,6 @@ export const DESCRIPTIVE_STAR_CLICK = 'carta/Quest/DESCRIPTIVE_STAR_CLICK'
 export const DESCRIPTIVE_ANYTHING_CLICK =
   'carta/Quest/DESCRIPTIVE_ANYTHING_CLICK'
 
-export const UPDATE_VISIBILITY = 'carta/Quest/UPDATE_VISIBILITY'
-
 export const SET_QUEST = 'carta/Quest/SET_QUEST'
 
 export const QUEST_ADD = 'carta/Quest/QUEST_ADD'

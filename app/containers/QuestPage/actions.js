@@ -9,7 +9,6 @@ import {
   DESCRIPTIVE_CLICK,
   DESCRIPTIVE_STAR_CLICK,
   DESCRIPTIVE_ANYTHING_CLICK,
-  UPDATE_VISIBILITY,
   SET_QUEST,
   QUEST_ADD,
   QUEST_SELECT,
@@ -72,12 +71,6 @@ export function descriptiveAnythingClick(payload) {
   return {
     type: DESCRIPTIVE_ANYTHING_CLICK,
     payload,
-  }
-}
-
-export function updateVisibility() {
-  return {
-    type: UPDATE_VISIBILITY,
   }
 }
 

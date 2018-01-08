@@ -15,7 +15,6 @@ import {
   DESCRIPTIVE_CLICK,
   DESCRIPTIVE_STAR_CLICK,
   DESCRIPTIVE_ANYTHING_CLICK,
-  UPDATE_VISIBILITY,
   SET_QUEST,
   QUEST_ADD,
   QUEST_SELECT,
@@ -349,14 +348,22 @@ function questReducer(state = initialState, { type, payload }) {
       )
 
     case SET_QUEST:
-      const { viewport, types, descriptives } = payload
+      const { quest: { viewport, types, descriptives }, urlEntered } = payload
 
       newQuests = quests.map((quest, index) => {
         if (index === curQuestInd) {
+          quest.types.includes = []
+          quest.types.excludes = []
+
+          quest.descriptives.stars = []
+          quest.descriptives.includes = []
+          quest.descriptives.excludes = []
+
           if (types) {
             quest.types.all = types.all
-            quest.includes = []
-            quest.excludes = []
+            if (urlEntered) {
+              quest.types.visibles = []
+            }
 
             for (let type of types.includes) {
               const typeObj = find(categories.types, {
@@ -364,9 +371,9 @@ function questReducer(state = initialState, { type, payload }) {
               })
               if (typeObj && !find(quest.types.includes, typeObj)) {
                 quest.types.includes.push(typeObj)
-              }
-              if (typeObj && !find(quest.types.visibles, typeObj)) {
-                quest.types.visibles.push(typeObj)
+                if (urlEntered) {
+                  quest.types.visibles.push(typeObj)
+                }
               }
             }
             for (let type of types.excludes) {
@@ -380,20 +387,14 @@ function questReducer(state = initialState, { type, payload }) {
                 quest.types.visibles.push(typeObj)
               }
             }
-          } else {
-            quest.types = {
-              ...quest.types,
-              all: false,
-              includes: [],
-              excludes: [],
-            }
           }
 
           if (descriptives && descriptives !== 'popular') {
             quest.descriptives.all = descriptives.all
-            quest.descriptives.stars = []
-            quest.descriptives.includes = []
-            quest.descriptives.excludes = []
+
+            if (urlEntered) {
+              quest.descriptives.visibles = []
+            }
 
             for (let desc of descriptives.stars) {
               const descObj = find(categories.descriptives, {
@@ -401,9 +402,9 @@ function questReducer(state = initialState, { type, payload }) {
               })
               if (descObj && !find(quest.descriptives.stars, descObj)) {
                 quest.descriptives.stars.push(descObj)
-              }
-              if (descObj && !find(quest.descriptives.visibles, descObj)) {
-                quest.descriptives.visibles.push(descObj)
+                if (urlEntered && !find(quest.descriptives.visibles, descObj)) {
+                  quest.descriptives.visibles.push(descObj)
+                }
               }
             }
             for (let desc of descriptives.includes) {
@@ -412,9 +413,9 @@ function questReducer(state = initialState, { type, payload }) {
               })
               if (descObj && !find(quest.descriptives.includes, descObj)) {
                 quest.descriptives.includes.push(descObj)
-              }
-              if (descObj && !find(quest.descriptives.visibles, descObj)) {
-                quest.descriptives.visibles.push(descObj)
+                if (urlEntered && !find(quest.descriptives.visibles, descObj)) {
+                  quest.descriptives.visibles.push(descObj)
+                }
               }
             }
             for (let desc of descriptives.excludes) {
@@ -424,17 +425,24 @@ function questReducer(state = initialState, { type, payload }) {
               if (descObj && !find(quest.descriptives.excludes, descObj)) {
                 quest.descriptives.excludes.push(descObj)
               }
-              if (descObj && !find(quest.descriptives.visibles, descObj)) {
-                quest.descriptives.visibles.push(descObj)
-              }
             }
-          } else {
-            quest.descriptives = {
-              ...quest.descriptives,
-              all: false,
-              stars: [],
-              includes: [],
-              excludes: [],
+          }
+
+          if (urlEntered) {
+            if (
+              quest.descriptives.all ||
+              quest.descriptives.includes.length > 0 ||
+              quest.descriptives.stars.length > 0 ||
+              quest.descriptives.visibles.length > 0
+            ) {
+              quest.descriptives.expanded = false
+            }
+            if (
+              quest.types.all ||
+              quest.types.includes.length > 0 ||
+              quest.types.visibles.length > 0
+            ) {
+              quest.types.expanded = false
             }
           }
         }
@@ -453,23 +461,6 @@ function questReducer(state = initialState, { type, payload }) {
       return {
         ...state,
         viewport: newViewport,
-        status: type,
-        quests: JSON.parse(JSON.stringify(newQuests)),
-      }
-
-    case UPDATE_VISIBILITY:
-      newQuests = quests.map((quest, index) => {
-        if (index === curQuestInd) {
-          quest.types.visibles = []
-          quest.descriptives.visibles = []
-        }
-        return quest
-      })
-
-      setIteem('quests', JSON.stringify(newQuests))
-
-      return {
-        ...state,
         status: type,
         quests: JSON.parse(JSON.stringify(newQuests)),
       }
