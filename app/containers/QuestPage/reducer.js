@@ -51,13 +51,15 @@ export const initialQuest = {
 }
 
 const initialViewport = {
-  northeast: {
-    x: 8.0192,
-    y: 55.1867,
-  },
-  southwest: {
-    x: 3.6247,
-    y: 48.8738,
+  bounds: {
+    _ne: {
+      lng: 8.0192,
+      lat: 55.1867,
+    },
+    _sw: {
+      lng: 3.6247,
+      lat: 48.8738,
+    },
   },
   center: CENTER_COORDS,
   zoom: DEFAULT_ZOOM,
@@ -88,19 +90,9 @@ function questReducer(state = initialState, { type, payload }) {
 
   switch (type) {
     case MAP_CHANGE:
-      const { zoom, center, bounds: { _ne, _sw } } = payload
       newViewport = {
         ...state.viewport,
-        center,
-        zoom,
-        northeast: {
-          x: _ne.lng,
-          y: _ne.lat,
-        },
-        southwest: {
-          x: _sw.lng,
-          y: _sw.lat,
-        },
+        ...payload,
       }
 
       setItem('viewport', JSON.stringify(newViewport))
@@ -114,11 +106,8 @@ function questReducer(state = initialState, { type, payload }) {
     case PLACE_CLICK:
       newViewport = {
         ...state.viewport,
-        center: [
-          parseFloat(payload.x.toFixed(4)),
-          parseFloat(payload.y.toFixed(4)),
-        ],
-        zoom: parseFloat(payload.zoom.toFixed(2)),
+        center: payload.center,
+        zoom: payload.zoom,
       }
 
       setItem('viewport', JSON.stringify(newViewport))

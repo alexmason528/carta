@@ -128,8 +128,8 @@ const getRecommendations = (req, res) => {
       $match: {
         zmin: { $lte: viewport.zoom },
         zmax: { $gte: viewport.zoom },
-        x: { $gte: viewport.southwest.x, $lte: viewport.northeast.x },
-        y: { $gte: viewport.southwest.y, $lte: viewport.northeast.y },
+        x: { $gte: viewport.bounds._sw.lng, $lte: viewport.bounds._ne.lng },
+        y: { $gte: viewport.bounds._sw.lat, $lte: viewport.bounds._ne.lat },
       },
     },
     {

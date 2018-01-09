@@ -52,5 +52,5 @@ export const CLOUDINARY_PLACE_URL =
 
 export const COLORS = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379']
 export const RECOMMENDATION_COUNT = 5
-export const CENTER_COORDS = [5.8224, 52.1424]
+export const CENTER_COORDS = { lng: 5.8224, lat: 52.1424 }
 export const DEFAULT_ZOOM = 6

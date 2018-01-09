@@ -40,7 +40,7 @@ const getViewport = viewportStr => {
   }
 
   return {
-    center: [parseFloat(segs[0]), parseFloat(segs[1])],
+    center: { lng: parseFloat(segs[0]), lat: parseFloat(segs[1]) },
     zoom: parseFloat(segs[2]),
   }
 }
@@ -151,7 +151,7 @@ export const getUrlStr = str => {
 
 export const urlComposer = ({ viewport, types, descriptives, brochure }) => {
   const { zoom, center } = viewport
-  let viewportParam = `${center[0]},${center[1]},${zoom}`
+  let viewportParam = `${center.lng},${center.lat},${zoom}`
 
   let typeParam = ''
   let descParam = ''

@@ -3,6 +3,7 @@ import Helmet from 'react-helmet'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { Container } from 'reactstrap'
+import { isEqual } from 'lodash'
 import Brochure from 'containers/Brochure'
 import { QuestButton } from 'components/Buttons'
 import Map from 'components/Map'
@@ -59,7 +60,7 @@ class QuestPage extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { params } = this.props
-    if (params !== nextProps.params) {
+    if (!isEqual(params, nextProps.params)) {
       const {
         params: { viewport, types, descriptives, brochure },
         setQuest,

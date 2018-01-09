@@ -21,9 +21,8 @@ class PlaceSection extends Component {
   }
 
   handlePlaceClick = place => {
-    const { x, y, zoom } = place
     const { placeClick } = this.props
-    placeClick({ x, y, zoom })
+    placeClick(place)
   }
 
   handleInputChange = evt => {

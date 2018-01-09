@@ -4,8 +4,9 @@ import { isEqual } from 'lodash'
 import { connect } from 'react-redux'
 import ReactResizeDetector from 'react-resize-detector'
 import ReactMapboxGl from 'react-mapbox-gl'
-import { browserHistory } from 'react-router'
+import { browserHistory, withRouter } from 'react-router'
 import { createStructuredSelector } from 'reselect'
+import { compose } from 'redux'
 import {
   COLORS,
   CLOUDINARY_POINTS_URL,
@@ -29,16 +30,10 @@ class Map extends Component {
     mapChange: PropTypes.func,
     recommendations: PropTypes.array,
     viewport: PropTypes.object,
+    params: PropTypes.object,
     panelState: PropTypes.string,
     className: PropTypes.string,
     locale: PropTypes.string,
-  }
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      showMap: false,
-    }
   }
 
   componentWillMount() {
@@ -65,15 +60,20 @@ class Map extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { viewport } = this.props
-    if (this.map && !isEqual(viewport, nextProps.viewport)) {
-      const { center, zoom } = nextProps.viewport
-      this.map.flyTo({
-        center,
-        zoom,
-      })
-    }
     this.handleRedrawMap(nextProps)
+  }
+
+  shouldComponentUpdate(nextProps) {
+    if (this.props.panelState !== nextProps.panelState) {
+      return true
+    }
+    if (!isEqual(this.props.viewport, nextProps.viewport)) {
+      return true
+    }
+    if (!isEqual(this.props.recommendations, nextProps.recommendations)) {
+      return true
+    }
+    return false
   }
 
   handleElementClick = link => {
@@ -81,33 +81,6 @@ class Map extends Component {
     if (pathname.indexOf('/info/') === -1) {
       browserHistory.push(`${pathname}/info/${link}`)
     }
-  }
-
-  handleMapChange = map => {
-    this.map = map
-    const { mapChange } = this.props
-    const { lng, lat } = this.map.getCenter()
-    const center = [parseFloat(lng.toFixed(4)), parseFloat(lat.toFixed(4))]
-    const zoom = parseFloat(this.map.getZoom().toFixed(2))
-
-    this.map.setZoom(zoom)
-    this.map.setCenter(center)
-
-    mapChange({
-      zoom,
-      center,
-      bounds: this.map.getBounds(),
-    })
-  }
-
-  handleStyleLoad = map => {
-    this.map = map
-    const { viewport: { center, zoom } } = this.props
-
-    this.map.setCenter(center)
-    this.map.setZoom(zoom)
-
-    this.setState({ showMap: true })
   }
 
   handleAddShapes = () => {
@@ -280,16 +253,35 @@ class Map extends Component {
     }
   }
 
+  handleMapChange = map => {
+    this.map = map
+    const { mapChange } = this.props
+
+    const zoom = parseFloat(this.map.getZoom().toFixed(2))
+    const { lng, lat } = this.map.getCenter()
+
+    mapChange({
+      zoom,
+      center: {
+        lng: parseFloat(lng.toFixed(4)),
+        lat: parseFloat(lat.toFixed(4)),
+      },
+      bounds: this.map.getBounds(),
+    })
+  }
+
+  handleStyleLoad = map => {
+    this.map = map
+  }
+
   render() {
-    const { showMap } = this.state
-    const { panelState } = this.props
+    const { panelState, viewport: { center, zoom } } = this.props
 
     return (
       <div
         className={cx({
           map: true,
           map__withoutQuest: panelState !== 'opened',
-          map__hidden: !showMap,
         })}
       >
         <ReactResizeDetector
@@ -300,9 +292,12 @@ class Map extends Component {
         <MapBox
           style={this.mapStyle}
           containerStyle={{ width: '100%', height: '100%' }}
+          center={center}
+          zoom={[zoom]}
           onStyleLoad={this.handleStyleLoad}
           onZoomEnd={this.handleMapChange}
           onDragEnd={this.handleMapChange}
+          movingMethod="jumpTo"
         />
       </div>
     )
@@ -320,4 +315,4 @@ const actions = {
   mapChange,
 }
 
-export default connect(selectors, actions)(Map)
+export default compose(withRouter, connect(selectors, actions))(Map)
