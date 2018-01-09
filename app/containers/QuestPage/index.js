@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import Helmet from 'react-helmet'
-import { isEqual } from 'lodash'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { Container } from 'reactstrap'

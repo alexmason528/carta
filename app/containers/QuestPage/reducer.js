@@ -213,7 +213,7 @@ function questReducer(state = initialState, { type, payload }) {
                 visibles.splice(findIndex(visibles, desc), 1)
               }
             }
-            if (excludes.length === categories.types.length) {
+            if (excludes.length === categories.descriptives.length) {
               quest.descriptives.all = false
             }
           } else {
@@ -224,7 +224,7 @@ function questReducer(state = initialState, { type, payload }) {
             if (findIndex(includes, desc) === -1) {
               includes.push(desc)
             }
-            if (includes.length === categories.types.length) {
+            if (includes.length === categories.descriptives.length) {
               quest.descriptives.all = true
             }
           }
