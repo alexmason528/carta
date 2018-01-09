@@ -40,7 +40,7 @@ class Map extends Component {
     this.mapStyle = {
       version: 8,
       sources: {
-        'raster-tiles': {
+        cartaSource: {
           type: 'raster',
           url: 'mapbox://cartaguide.white',
           tileSize: 128,
@@ -48,9 +48,9 @@ class Map extends Component {
       },
       layers: [
         {
-          id: 'simple-tiles',
+          id: 'cartaSourceTiles',
           type: 'raster',
-          source: 'raster-tiles',
+          source: 'cartaSource',
           minzoom: 0,
           maxzoom: 22,
         },
@@ -261,11 +261,8 @@ class Map extends Component {
     const { lng, lat } = this.map.getCenter()
 
     mapChange({
-      zoom,
-      center: {
-        lng: parseFloat(lng.toFixed(4)),
-        lat: parseFloat(lat.toFixed(4)),
-      },
+      zoom: this.map.getZoom(),
+      center: this.map.getCenter(),
       bounds: this.map.getBounds(),
     })
   }
@@ -298,6 +295,7 @@ class Map extends Component {
           onZoomEnd={this.handleMapChange}
           onDragEnd={this.handleMapChange}
           movingMethod="jumpTo"
+          interactive={false}
         />
       </div>
     )
