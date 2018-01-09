@@ -261,8 +261,11 @@ class Map extends Component {
     const { lng, lat } = this.map.getCenter()
 
     mapChange({
-      zoom: this.map.getZoom(),
-      center: this.map.getCenter(),
+      zoom,
+      center: {
+        lng: parseFloat(lng.toFixed(4)),
+        lat: parseFloat(lat.toFixed(4)),
+      },
       bounds: this.map.getBounds(),
     })
   }
@@ -292,10 +295,9 @@ class Map extends Component {
           center={center}
           zoom={[zoom]}
           onStyleLoad={this.handleStyleLoad}
+          onMoveEnd={this.handleMapChange}
           onZoomEnd={this.handleMapChange}
-          onDragEnd={this.handleMapChange}
           movingMethod="jumpTo"
-          interactive={false}
         />
       </div>
     )
