@@ -10,6 +10,15 @@ const mapRoutes = require('../routes/map.routes')
 const postRoutes = require('../routes/post.routes')
 const suggestionRoutes = require('../routes/suggestion.routes')
 
+// Add Routes
+const addRoutes = app => {
+  app.use('/api/v1/auth', authRoutes)
+  app.use('/api/v1/import', importRoutes)
+  app.use('/api/v1/map', mapRoutes)
+  app.use('/api/v1/post', postRoutes)
+  app.use('/api/v1/suggestion', suggestionRoutes)
+}
+
 // Dev middleware
 const addDevMiddlewares = (app, webpackConfig) => {
   const webpack = require('webpack')
@@ -25,11 +34,7 @@ const addDevMiddlewares = (app, webpackConfig) => {
 
   app.use(middleware)
   app.use(webpackHotMiddleware(compiler))
-  app.use('/api/v1/auth', authRoutes)
-  app.use('/api/v1/import', importRoutes)
-  app.use('/api/v1/map', mapRoutes)
-  app.use('/api/v1/post', postRoutes)
-  app.use('/api/v1/suggestion', suggestionRoutes)
+  addRoutes(app)
 
   // Since webpackDevMiddleware uses memory-fs internally to store build
   // artifacts, we use it instead
@@ -64,11 +69,7 @@ const addProdMiddlewares = (app, options) => {
 
   app.use(compression())
   app.use(publicPath, express.static(outputPath))
-  app.use('/api/v1/auth', authRoutes)
-  app.use('/api/v1/import', importRoutes)
-  app.use('/api/v1/map', mapRoutes)
-  app.use('/api/v1/post', postRoutes)
-  app.use('/api/v1/suggestion', suggestionRoutes)
+  addRoutes(app)
 
   app.get('*', (req, res) =>
     res.sendFile(path.resolve(outputPath, 'index.html'))

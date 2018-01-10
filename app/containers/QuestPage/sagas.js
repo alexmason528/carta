@@ -191,7 +191,9 @@ export function* composeUrl() {
       brochure && { brochure: brochure.link }
     )
   )
-  yield call(browserHistory.push, url)
+  if (browserHistory.getCurrentLocation().pathname !== url) {
+    yield call(browserHistory.push, url)
+  }
 }
 
 export function* getRecommendationWatcher() {
