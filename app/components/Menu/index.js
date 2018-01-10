@@ -10,6 +10,7 @@ import { signOut, toggleMenu } from 'containers/App/actions'
 import { selectAuthenticated, selectMenuState } from 'containers/App/selectors'
 import { LANGUAGES } from 'containers/LanguageProvider/constants'
 import { changeLocale } from 'containers/LanguageProvider/actions'
+import { clearBrochure } from 'containers/QuestPage/actions'
 import messages from 'containers/HomePage/messages'
 import Img from 'components/Img'
 import { MobileUp } from 'components/Responsive'
@@ -19,6 +20,7 @@ class Menu extends Component {
   static propTypes = {
     signOut: PropTypes.func,
     changeLocale: PropTypes.func,
+    clearBrochure: PropTypes.func,
     toggleMenu: PropTypes.func,
     params: PropTypes.object,
     router: PropTypes.object,
@@ -50,6 +52,7 @@ class Menu extends Component {
     evt.preventDefault()
     const {
       params: { viewport, types, descriptives },
+      clearBrochure,
       toggleMenu,
       router,
     } = this.props
@@ -58,6 +61,7 @@ class Menu extends Component {
         ? `/quest/${viewport}/${types}/${descriptives}/`
         : '/quest'
     router.push(url)
+    clearBrochure()
     toggleMenu()
   }
 
@@ -183,6 +187,7 @@ const selectors = createStructuredSelector({
 const actions = {
   signOut,
   changeLocale,
+  clearBrochure,
   toggleMenu,
 }
 

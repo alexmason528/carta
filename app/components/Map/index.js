@@ -21,7 +21,6 @@ import {
   selectInfo,
 } from 'containers/QuestPage/selectors'
 import { selectLocale } from 'containers/LanguageProvider/selectors'
-import { urlComposer, urlParser } from 'utils/urlHelper'
 import './style.scss'
 
 const MapBox = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN })
