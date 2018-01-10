@@ -8,7 +8,7 @@ const Post = require('../models/post')
  * @returns post list
  */
 
-const listPost = (req, res) => {
+exports.listPost = (req, res) => {
   const pipeline = [
     {
       $lookup: {
@@ -49,7 +49,7 @@ const listPost = (req, res) => {
  * @param res
  * @returns updated post
  */
-const updatePost = (req, res) => {
+exports.updatePost = (req, res) => {
   const { postID } = req.params
   const { content, title, link, img } = req.body
 
@@ -85,7 +85,7 @@ const updatePost = (req, res) => {
  * @returns void
  */
 
-const deletePost = (req, res) => {
+exports.deletePost = (req, res) => {
   const { postID } = req.params
   Post.remove({ _id: postID }, err => {
     if (err) {
@@ -106,7 +106,7 @@ const deletePost = (req, res) => {
  * @returns created post
  */
 
-const createPost = (req, res) => {
+exports.createPost = (req, res) => {
   const { title, content, link, author, img } = req.body
 
   let data = {
@@ -126,8 +126,3 @@ const createPost = (req, res) => {
     return res.json(element)
   })
 }
-
-module.exports.listPost = listPost
-module.exports.createPost = createPost
-module.exports.updatePost = updatePost
-module.exports.deletePost = deletePost

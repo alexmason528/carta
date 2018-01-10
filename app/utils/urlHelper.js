@@ -149,80 +149,84 @@ export const getUrlStr = str => {
   return (str.charAt(0).toLowerCase() + str.slice(1)).replace(/ /g, '-')
 }
 
-export const urlComposer = ({ viewport, types, descriptives, brochure }) => {
-  const { zoom, center } = viewport
-  let viewportParam = `${center.lng},${center.lat},${zoom}`
-
-  let typeParam = ''
-  let descParam = ''
-
-  const typeAll = types.all
-    ? translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()
+export const urlComposer = ({ brochure, viewport, types, descriptives }) => {
+  let viewportParam = viewport
+    ? `${viewport.center.lng},${viewport.center.lat},${viewport.zoom}`
     : undefined
-  const typeIncludes =
-    types.includes.length > 0
-      ? types.includes.map(type => getUrlStr(type[DEFAULT_LOCALE])).join(',')
-      : undefined
-  const typeExcludes =
-    types.excludes.length > 0
-      ? types.excludes
-          .map(type => `-${getUrlStr(type[DEFAULT_LOCALE])}`)
-          .join(',')
-      : undefined
 
-  const descAll = descriptives.all
-    ? translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()
-    : undefined
-  const descStars =
-    descriptives.stars.length > 0
-      ? descriptives.stars
-          .map(type => `+${getUrlStr(type[DEFAULT_LOCALE])}`)
-          .join(',')
-      : undefined
-  const descIncludes =
-    descriptives.includes.length > 0
-      ? descriptives.includes
-          .map(type => getUrlStr(type[DEFAULT_LOCALE]))
-          .join(',')
-      : undefined
-  const descExcludes =
-    descriptives.excludes.length > 0
-      ? descriptives.excludes
-          .map(type => `-${getUrlStr(type[DEFAULT_LOCALE])}`)
-          .join(',')
-      : undefined
+  let typeParam
+  let descParam
 
-  if (types.all) {
-    let arr = [typeAll]
-    if (typeExcludes) arr.push(typeExcludes)
-    typeParam = arr.join(',')
-  } else {
-    typeParam = typeIncludes || ''
+  if (types) {
+    const typeAll = types.all
+      ? translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()
+      : undefined
+    const typeIncludes =
+      types.includes.length > 0
+        ? types.includes.map(type => getUrlStr(type[DEFAULT_LOCALE])).join(',')
+        : undefined
+    const typeExcludes =
+      types.excludes.length > 0
+        ? types.excludes
+            .map(type => `-${getUrlStr(type[DEFAULT_LOCALE])}`)
+            .join(',')
+        : undefined
+
+    if (types.all) {
+      let arr = [typeAll]
+      if (typeExcludes) arr.push(typeExcludes)
+      typeParam = arr.join(',')
+    } else {
+      typeParam = typeIncludes || ''
+    }
   }
 
-  if (descriptives.all) {
-    let arr = [descAll]
+  if (descriptives && descriptives !== 'popular') {
+    const descAll = descriptives.all
+      ? translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()
+      : undefined
+    const descStars =
+      descriptives.stars.length > 0
+        ? descriptives.stars
+            .map(type => `+${getUrlStr(type[DEFAULT_LOCALE])}`)
+            .join(',')
+        : undefined
+    const descIncludes =
+      descriptives.includes.length > 0
+        ? descriptives.includes
+            .map(type => getUrlStr(type[DEFAULT_LOCALE]))
+            .join(',')
+        : undefined
+    const descExcludes =
+      descriptives.excludes.length > 0
+        ? descriptives.excludes
+            .map(type => `-${getUrlStr(type[DEFAULT_LOCALE])}`)
+            .join(',')
+        : undefined
 
-    if (descStars) arr.push(descStars)
-    if (descExcludes) arr.push(descExcludes)
-    descParam = arr.join(',')
-  } else {
-    let arr = []
-    if (descStars) arr.push(descStars)
-    if (descIncludes) arr.push(descIncludes)
-    descParam = arr.join(',')
+    if (descriptives.all) {
+      let arr = [descAll]
+
+      if (descStars) arr.push(descStars)
+      if (descExcludes) arr.push(descExcludes)
+      descParam = arr.join(',')
+    } else {
+      let arr = []
+      if (descStars) arr.push(descStars)
+      if (descIncludes) arr.push(descIncludes)
+      descParam = arr.join(',')
+    }
   }
 
   let params = ['/quest']
+  if (brochure) {
+    params.push(`in/${brochure}`)
+  }
 
-  if (typeParam) {
+  if (viewportParam && typeParam) {
     params.push(viewportParam)
     params.push(typeParam)
     params.push(descParam || 'popular')
-  }
-
-  if (brochure) {
-    params.push(`info/${brochure}`)
   }
 
   const url = params.join('/')

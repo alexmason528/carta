@@ -97,8 +97,6 @@ export function* getRecommendationRequestHandler() {
   try {
     if (canSendRequest({ types })) {
       res = yield call(request, requestURL, params)
-    } else {
-      res = []
     }
     yield put(getRecommendationSuccess(res))
   } catch (err) {

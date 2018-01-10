@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import cx from 'classnames'
-import { Link, withRouter, browserHistory } from 'react-router'
+import { Link, withRouter } from 'react-router'
 import { injectIntl, intlShape } from 'react-intl'
 import { compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
@@ -21,6 +21,7 @@ class Menu extends Component {
     changeLocale: PropTypes.func,
     toggleMenu: PropTypes.func,
     params: PropTypes.object,
+    router: PropTypes.object,
     currentPage: PropTypes.string,
     authenticated: PropTypes.bool,
     menuOpened: PropTypes.bool,
@@ -47,12 +48,16 @@ class Menu extends Component {
 
   handleMap = evt => {
     evt.preventDefault()
-    const { params: { viewport, types, descriptives }, toggleMenu } = this.props
+    const {
+      params: { viewport, types, descriptives },
+      toggleMenu,
+      router,
+    } = this.props
     const url =
       viewport && types && descriptives
         ? `/quest/${viewport}/${types}/${descriptives}/`
         : '/quest'
-    browserHistory.push(url)
+    router.push(url)
     toggleMenu()
   }
 

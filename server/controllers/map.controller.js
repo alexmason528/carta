@@ -10,7 +10,7 @@ const Category = require('../models/category')
  * @param res
  * @returns void
  */
-const getQuestInfo = (req, res) => {
+exports.getQuestInfo = (req, res) => {
   let questInfo = {
     descriptives: [],
     types: [],
@@ -87,7 +87,7 @@ const getQuestInfo = (req, res) => {
  * @param res
  * @returns void
  */
-const getRecommendations = (req, res) => {
+exports.getRecommendations = (req, res) => {
   const { viewport, types, descriptives } = req.body
   let typeMatch = []
 
@@ -270,7 +270,7 @@ const getRecommendations = (req, res) => {
  * @param res
  * @returns brochure
  */
-const getBrochure = (req, res) => {
+exports.getBrochure = (req, res) => {
   const { link } = req.body
 
   Place.findOne({ link }, { _id: 0, e: 0, name: 0 }, (err, place) => {
@@ -288,7 +288,3 @@ const getBrochure = (req, res) => {
     return res.json(place)
   })
 }
-
-module.exports.getQuestInfo = getQuestInfo
-module.exports.getRecommendations = getRecommendations
-module.exports.getBrochure = getBrochure

@@ -7,7 +7,7 @@ const Suggestion = require('../models/suggestion')
  * @returns suggestion list
  */
 
-const listSuggestion = (req, res) => {
+exports.listSuggestion = (req, res) => {
   Suggestion.find({}, { _id: 0 }, (err, elements) => {
     if (err) {
       return res.status(400).send({
@@ -17,5 +17,3 @@ const listSuggestion = (req, res) => {
     return res.json(elements)
   })
 }
-
-module.exports.listSuggestion = listSuggestion

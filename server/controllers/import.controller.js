@@ -12,7 +12,7 @@ const Category = require('../models/category')
  * @returns void
  */
 
-const importElements = (req, res) => {
+exports.importElements = (req, res) => {
   Element.remove({}, err => {
     if (err) {
       return res.status(400).send({
@@ -40,7 +40,7 @@ const importElements = (req, res) => {
  * @returns void
  */
 
-const importDescriptives = (req, res) => {
+exports.importDescriptives = (req, res) => {
   Descriptive.remove({}, err => {
     if (err) {
       return res.status(400).send({
@@ -68,7 +68,7 @@ const importDescriptives = (req, res) => {
  * @returns void
  */
 
-const importTypes = (req, res) => {
+exports.importTypes = (req, res) => {
   Type.remove({}, err => {
     if (err) {
       return res.status(400).send({
@@ -96,7 +96,7 @@ const importTypes = (req, res) => {
  * @returns void
  */
 
-const importCategories = (req, res) => {
+exports.importCategories = (req, res) => {
   Category.remove({}, err => {
     if (err) {
       return res.status(400).send({
@@ -117,8 +117,3 @@ const importCategories = (req, res) => {
       })
   })
 }
-
-module.exports.importElements = importElements
-module.exports.importDescriptives = importDescriptives
-module.exports.importTypes = importTypes
-module.exports.importCategories = importCategories

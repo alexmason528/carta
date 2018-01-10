@@ -16,6 +16,7 @@ class Brochure extends Component {
     getBrochureRequest: PropTypes.func,
     clearBrochure: PropTypes.func,
     params: PropTypes.object,
+    router: PropTypes.object,
     brochure: PropTypes.object,
     link: PropTypes.string.isRequired,
   }

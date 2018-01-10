@@ -119,7 +119,7 @@ class Profile extends Component {
 
   handlePlaceInfoBtnClick = (evt, place) => {
     evt.stopPropagation()
-    browserHistory.push(`/quest/info/${place}`)
+    browserHistory.push(`/quest/in/${place}`)
   }
 
   render() {

@@ -20,7 +20,7 @@ let transporter = nodemailer.createTransport(
  * @param res
  * @returns userInfo
  */
-const signIn = (req, res) => {
+exports.signIn = (req, res) => {
   const { email, password } = req.body
 
   User.find({ email: email }, (err, element) => {
@@ -57,7 +57,7 @@ const signIn = (req, res) => {
  * @param res
  * @returns userInfo
  */
-const register = (req, res) => {
+exports.register = (req, res) => {
   const {
     fullname,
     email,
@@ -128,7 +128,7 @@ const register = (req, res) => {
  * @returns success or fail
  */
 
-const updateUser = (req, res) => {
+exports.updateUser = (req, res) => {
   const { userID } = req.params
 
   User.findOneAndUpdate(
@@ -164,7 +164,7 @@ const updateUser = (req, res) => {
  * @returns success or fail
  */
 
-const verify = (req, res) => {
+exports.verify = (req, res) => {
   const { vcode } = req.body
 
   let email
@@ -211,7 +211,7 @@ const verify = (req, res) => {
  * @returns success or fail
  */
 
-const deleteUser = (req, res) => {
+exports.deleteUser = (req, res) => {
   const { userID } = req.params
   const { password } = req.body
 
@@ -258,9 +258,3 @@ const deleteUser = (req, res) => {
     }
   )
 }
-
-module.exports.signIn = signIn
-module.exports.register = register
-module.exports.verify = verify
-module.exports.updateUser = updateUser
-module.exports.deleteUser = deleteUser

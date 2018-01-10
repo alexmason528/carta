@@ -4,7 +4,7 @@ import { isEqual } from 'lodash'
 import { connect } from 'react-redux'
 import ReactResizeDetector from 'react-resize-detector'
 import ReactMapboxGl from 'react-mapbox-gl'
-import { browserHistory, withRouter } from 'react-router'
+import { withRouter } from 'react-router'
 import { createStructuredSelector } from 'reselect'
 import { compose } from 'redux'
 import {
@@ -21,6 +21,7 @@ import {
   selectInfo,
 } from 'containers/QuestPage/selectors'
 import { selectLocale } from 'containers/LanguageProvider/selectors'
+import { urlComposer, urlParser } from 'utils/urlHelper'
 import './style.scss'
 
 const MapBox = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN })
@@ -31,6 +32,7 @@ class Map extends Component {
     recommendations: PropTypes.array,
     viewport: PropTypes.object,
     params: PropTypes.object,
+    router: PropTypes.object,
     panelState: PropTypes.string,
     className: PropTypes.string,
     locale: PropTypes.string,
@@ -76,11 +78,11 @@ class Map extends Component {
     return false
   }
 
-  handleElementClick = link => {
-    const { pathname } = browserHistory.getCurrentLocation()
-    if (pathname.indexOf('/info/') === -1) {
-      browserHistory.push(`${pathname}/info/${link}`)
-    }
+  handlePlaceClick = place => {
+    const { params, router } = this.props
+    const { viewport, types, descriptives } = urlParser({ ...params })
+    const url = urlComposer({ brochure: place, viewport, types, descriptives })
+    router.push(url)
   }
 
   handleAddShapes = () => {
@@ -136,7 +138,7 @@ class Map extends Component {
 
         this.map.on('click', shapeFill, data => {
           const link = data.features[0].properties.link
-          this.handleElementClick(link)
+          this.handlePlaceClick(link)
         })
       })
   }
@@ -180,7 +182,7 @@ class Map extends Component {
 
         this.map.on('click', shapeCaption, data => {
           const link = data.features[0].properties.link
-          this.handleElementClick(link)
+          this.handlePlaceClick(link)
         })
       })
   }
