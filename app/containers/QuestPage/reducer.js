@@ -446,12 +446,16 @@ function questReducer(state = initialState, { type, payload }) {
       setItem('viewport', JSON.stringify(newViewport))
       setItem('quests', JSON.stringify(newQuests))
 
-      return {
-        ...state,
-        viewport: newViewport,
-        status: payload.urlEntered ? SET_URL_ENTERED_QUEST : SET_QUEST,
-        quests: JSON.parse(JSON.stringify(newQuests)),
-      }
+      return Object.assign(
+        {},
+        {
+          ...state,
+          viewport: newViewport,
+          status: payload.urlEntered ? SET_URL_ENTERED_QUEST : SET_QUEST,
+          quests: JSON.parse(JSON.stringify(newQuests)),
+        },
+        !payload.brochure && { brochure: null }
+      )
 
     case GET_QUESTINFO_REQUEST:
       return {

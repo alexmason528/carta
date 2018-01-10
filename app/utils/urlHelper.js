@@ -128,7 +128,7 @@ const getDescriptives = desStr => {
   return descriptives
 }
 
-export const urlParser = ({ viewport, types, descriptives }) => {
+export const urlParser = ({ viewport, types, descriptives, brochure }) => {
   const resViewport = getViewport(viewport)
   const resTypes = getTypes(types)
   const resDescriptives =
@@ -138,6 +138,7 @@ export const urlParser = ({ viewport, types, descriptives }) => {
     viewport: resViewport,
     types: resTypes,
     descriptives: resDescriptives,
+    brochure,
   }
 }
 
