@@ -153,7 +153,6 @@ export const urlComposer = ({ brochure, viewport, types, descriptives }) => {
   let viewportParam = viewport
     ? `${viewport.center.lng},${viewport.center.lat},${viewport.zoom}`
     : undefined
-
   let typeParam
   let descParam
 
@@ -171,7 +170,6 @@ export const urlComposer = ({ brochure, viewport, types, descriptives }) => {
             .map(type => `-${getUrlStr(type[DEFAULT_LOCALE])}`)
             .join(',')
         : undefined
-
     if (types.all) {
       let arr = [typeAll]
       if (typeExcludes) arr.push(typeExcludes)
@@ -180,7 +178,6 @@ export const urlComposer = ({ brochure, viewport, types, descriptives }) => {
       typeParam = typeIncludes || ''
     }
   }
-
   if (descriptives && descriptives !== 'popular') {
     const descAll = descriptives.all
       ? translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()

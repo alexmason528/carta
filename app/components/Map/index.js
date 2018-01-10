@@ -79,9 +79,11 @@ class Map extends Component {
   }
 
   handlePlaceClick = place => {
-    const { params, router } = this.props
-    const { viewport, types, descriptives } = urlParser({ ...params })
-    const url = urlComposer({ brochure: place, viewport, types, descriptives })
+    const { params: { viewport, types, descriptives }, router } = this.props
+    const url =
+      viewport && types && descriptives
+        ? `/quest/in/${place}/${viewport}/${types}/${descriptives}`
+        : '/quest'
     router.push(url)
   }
 

@@ -122,7 +122,7 @@ function questReducer(state = initialState, { type, payload }) {
       newQuests = quests.map((quest, index) => {
         if (index === curQuestInd) {
           let { types: { includes, excludes, visibles, expanded } } = quest
-          let { type, active } = payload
+          const { type, active } = payload
 
           if (active) {
             includes.splice(findIndex(includes, type), 1)
@@ -193,6 +193,7 @@ function questReducer(state = initialState, { type, payload }) {
             descriptives: { stars, includes, excludes, visibles, expanded },
           } = quest
           const { desc, active } = payload
+
           if (active) {
             includes.splice(findIndex(includes, desc), 1)
             stars.splice(findIndex(stars, desc), 1)
