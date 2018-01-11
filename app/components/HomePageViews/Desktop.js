@@ -1,18 +1,63 @@
 import React, { Component, PropTypes } from 'react'
 import { Row, Col } from 'reactstrap'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
+import { createStructuredSelector } from 'reselect'
+import { injectIntl, intlShape } from 'react-intl'
 import Profile from 'components/Profile'
 import FixedTile from 'components/FixedTile'
 import AccountMenu from 'components/AccountMenu'
 import AuthForm from 'components/AuthForm'
 import { Post } from 'components/Post'
+import messages from 'containers/HomePage/messages'
+import {
+  selectAuthenticated,
+  selectUser,
+  selectInfo,
+} from 'containers/App/selectors'
+import { updateUserRequest } from 'containers/App/actions'
+import {
+  selectHasQuest,
+  selectEditingPost,
+  selectPosts,
+} from 'containers/HomePage/selectors'
+import { getFirstname } from 'utils/stringHelper'
 
 class Desktop extends Component {
   static propTypes = {
+    updateUserRequest: PropTypes.func,
+    profileClick: PropTypes.func,
+    profilePicClick: PropTypes.func,
     posts: PropTypes.array,
+    user: PropTypes.object,
+    info: PropTypes.object,
+    editingPost: PropTypes.object,
+    authenticated: PropTypes.bool,
+    hasQuest: PropTypes.bool,
+    showAuthForm: PropTypes.bool,
+    showCreatePostForm: PropTypes.bool,
+    showAccountMenu: PropTypes.bool,
+    profilePic: PropTypes.string,
+    intl: intlShape.isRequired,
   }
 
   render() {
-    const { posts } = this.props
+    const {
+      posts,
+      authenticated,
+      user,
+      info,
+      editingPost,
+      hasQuest,
+      showAuthForm,
+      showCreatePostForm,
+      showAccountMenu,
+      intl: { formatMessage },
+      profilePic,
+      profileClick,
+      profilePicClick,
+      updateUserRequest,
+    } = this.props
 
     const firstColPosts = posts.filter((post, index) => index % 3 === 0)
     const secondColPosts = posts.filter((post, index) => index % 3 === 1)
@@ -22,7 +67,7 @@ class Desktop extends Component {
       <Row className="homePage__row">
         <Col xs={12} sm={6} md={4} className="homePage__col">
           <Profile
-            onClick={this.handleProfileClick}
+            onClick={profileClick}
             onUpdate={updateUserRequest}
             authenticated={authenticated}
             profilePic={profilePic}
@@ -30,14 +75,11 @@ class Desktop extends Component {
             info={info}
           />
           {authenticated ? (
-            <AccountMenu
-              show={showAccountMenu}
-              onClick={this.handleProfileClick}
-            />
+            <AccountMenu show={showAccountMenu} onClick={profileClick} />
           ) : (
             <AuthForm
               show={showAuthForm}
-              onProfilePicChange={this.handleProfilePic}
+              onProfilePicChange={profilePicClick}
               profilePic={profilePic}
             />
           )}
@@ -115,4 +157,17 @@ class Desktop extends Component {
   }
 }
 
-export default Desktop
+const selectors = createStructuredSelector({
+  posts: selectPosts(),
+  editingPost: selectEditingPost(),
+  authenticated: selectAuthenticated(),
+  user: selectUser(),
+  info: selectInfo(),
+  hasQuest: selectHasQuest(),
+})
+
+const actions = {
+  updateUserRequest,
+}
+
+export default compose(injectIntl, connect(selectors, actions))(Desktop)

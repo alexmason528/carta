@@ -3,7 +3,7 @@ import Helmet from 'react-helmet'
 import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
-import { Container, Col, Row } from 'reactstrap'
+import { Container } from 'reactstrap'
 import { compose } from 'redux'
 import InfiniteScroll from 'react-infinite-scroller'
 import {
@@ -16,47 +16,28 @@ import {
   selectUser,
   selectInfo,
 } from 'containers/App/selectors'
-import {
-  signOut,
-  verifyRequest,
-  updateUserRequest,
-} from 'containers/App/actions'
-import { CreatePostButton } from 'components/Buttons'
-import AccountMenu from 'components/AccountMenu'
-import AuthForm from 'components/AuthForm'
+import { signOut, verifyRequest } from 'containers/App/actions'
 import Menu from 'components/Menu'
 import Verify from 'components/Verify'
-import { Post, PostCreate } from 'components/Post'
-import Profile from 'components/Profile'
-import FixedTile from 'components/FixedTile'
-import { getFirstname } from 'utils/stringHelper'
-import {
-  selectPosts,
-  selectHomeInfo,
-  selectEditingPost,
-  selectHasMore,
-  selectHasQuest,
-} from './selectors'
+import ResponsiveLayout from 'components/ResponsiveLayout'
+import { Desktop, Tablet, Mobile } from 'components/HomePageViews'
 import { listPostRequest } from './actions'
 import { CREATE_POST_SUCCESS, LIST_POST_REQUEST } from './constants'
-import messages from './messages'
+import { selectPosts, selectHomeInfo, selectHasMore } from './selectors'
 import './style.scss'
 
 class HomePage extends Component {
   static propTypes = {
     listPostRequest: PropTypes.func,
-    updateUserRequest: PropTypes.func,
     verifyRequest: PropTypes.func,
     signOut: PropTypes.func,
     user: PropTypes.object,
     info: PropTypes.object,
     homeInfo: PropTypes.object,
     params: PropTypes.object,
-    editingPost: PropTypes.object,
     posts: PropTypes.array,
     authenticated: PropTypes.bool,
     hasMore: PropTypes.bool,
-    hasQuest: PropTypes.bool,
     intl: intlShape.isRequired,
   }
 
@@ -155,28 +136,11 @@ class HomePage extends Component {
       profilePic,
     } = this.state
 
-    const {
-      posts,
-      authenticated,
-      user,
-      signOut,
-      updateUserRequest,
-      info,
-      intl: { locale, formatMessage },
-      editingPost,
-      hasMore,
-      hasQuest,
-    } = this.props
-    const { status } = info
-    const filteredPosts = posts.filter(post => post.title[locale] !== '')
-    const createPostButtonType =
-      filteredPosts.length > 0 && filteredPosts[0].img ? 'image' : 'text'
-
-    const firstColPosts = filteredPosts.filter((post, index) => index % 3 === 0)
-    const secondColPosts = filteredPosts.filter(
-      (post, index) => index % 3 === 1
-    )
-    const thirdColPosts = filteredPosts.filter((post, index) => index % 3 === 2)
+    // const { posts, user, signOut, info, intl: { locale }, hasMore } = this.props
+    // const filteredPosts = posts.filter(post => post.title[locale] !== '')
+    // const createPostButtonType =
+    //   filteredPosts.length > 0 && filteredPosts[0].img ? 'image' : 'text'
+    const { user, signOut, info: { status }, hasMore } = this.props
 
     return (
       <Container fluid className="homePage P-0 M-0">
@@ -187,98 +151,38 @@ class HomePage extends Component {
           hasMore={hasMore}
           threshold={500}
         >
-          <Row className="homePage__row">
-            <Col xs={12} sm={6} md={4} className="homePage__col">
-              <Profile
-                onClick={this.handleProfileClick}
-                onUpdate={updateUserRequest}
-                authenticated={authenticated}
+          <ResponsiveLayout
+            desktop={
+              <Desktop
                 profilePic={profilePic}
-                user={user}
-                info={info}
+                profileClick={this.handleProfileClick}
+                profilePicClick={this.handleProfilePic}
+                showAuthForm={showAuthForm}
+                showCreatePostForm={showCreatePostForm}
+                showAccountMenu={showAccountMenu}
               />
-              {authenticated ? (
-                <AccountMenu
-                  show={showAccountMenu}
-                  onClick={this.handleProfileClick}
-                />
-              ) : (
-                <AuthForm
-                  show={showAuthForm}
-                  onProfilePicChange={this.handleProfilePic}
-                  profilePic={profilePic}
-                />
-              )}
-              {firstColPosts &&
-                firstColPosts.map((post, key) => {
-                  const data = {
-                    ...post,
-                    key: post._id,
-                    firstname: getFirstname(post.author.fullname),
-                    editable:
-                      authenticated &&
-                      (post.author._id === user._id || user.role === 'admin') &&
-                      !editingPost &&
-                      !showCreatePostForm,
-                    first: key === 0 && authenticated,
-                  }
-                  return <Post {...data} />
-                })}
-            </Col>
-            <Col xs={12} sm={6} md={4} className="homePage__col">
-              <FixedTile
-                img="quest.jpg"
-                link="/quest"
-                title={formatMessage(
-                  hasQuest
-                    ? messages.continueYourQuest
-                    : messages.startPersonalQuest
-                ).replace(/\n/g, '<br/>')}
-                buttonText="Start a new quest"
+            }
+            tablet={
+              <Tablet
+                profilePic={profilePic}
+                profileClick={this.handleProfileClick}
+                profilePicClick={this.handleProfilePic}
+                showAuthForm={showAuthForm}
+                showCreatePostForm={showCreatePostForm}
+                showAccountMenu={showAccountMenu}
               />
-              {secondColPosts &&
-                secondColPosts.map((post, key) => {
-                  const data = {
-                    ...post,
-                    key: post._id,
-                    firstname: getFirstname(post.author.fullname),
-                    editable:
-                      authenticated &&
-                      (post.author._id === user._id || user.role === 'admin') &&
-                      !editingPost &&
-                      !showCreatePostForm,
-                    first: key === 0 && authenticated,
-                  }
-                  return <Post {...data} />
-                })}
-            </Col>
-            <Col xs={12} sm={6} md={4} className="homePage__col">
-              <FixedTile
-                img="theme.jpg"
-                link="/quest"
-                title={formatMessage(messages.themeHighlight).replace(
-                  /\n/g,
-                  '<br/>'
-                )}
-                buttonText="Browse themes"
+            }
+            mobile={
+              <Mobile
+                profilePic={profilePic}
+                profileClick={this.handleProfileClick}
+                profilePicClick={this.handleProfilePic}
+                showAuthForm={showAuthForm}
+                showCreatePostForm={showCreatePostForm}
+                showAccountMenu={showAccountMenu}
               />
-              {thirdColPosts &&
-                thirdColPosts.map((post, key) => {
-                  const data = {
-                    ...post,
-                    key: post._id,
-                    firstname: getFirstname(post.author.fullname),
-                    editable:
-                      authenticated &&
-                      (post.author._id === user._id || user.role === 'admin') &&
-                      !editingPost &&
-                      !showCreatePostForm,
-                    first: key === 0 && authenticated,
-                  }
-                  return <Post {...data} />
-                })}
-            </Col>
-          </Row>
+            }
+          />
         </InfiniteScroll>
         <Verify user={user} status={status} signOut={signOut} />
       </Container>
@@ -287,19 +191,16 @@ class HomePage extends Component {
 }
 
 const selectors = createStructuredSelector({
-  editingPost: selectEditingPost(),
   authenticated: selectAuthenticated(),
   homeInfo: selectHomeInfo(),
   posts: selectPosts(),
   user: selectUser(),
   info: selectInfo(),
   hasMore: selectHasMore(),
-  hasQuest: selectHasQuest(),
 })
 
 const actions = {
   listPostRequest,
-  updateUserRequest,
   verifyRequest,
   signOut,
 }
