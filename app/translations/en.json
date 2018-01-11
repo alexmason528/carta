@@ -1,5 +1,4 @@
 {
-  "carta.startQuest": "Start\n your\n personal\n quest",
   "carta.signIn": "Sign in",
   "carta.with": "With",
   "carta.or": "Or",
@@ -61,5 +60,11 @@
   "carta.alreadyRegistered": "You are already registered. Please sign in",
   "carta.anything": "Anything",
   "carta.map": "Map",
-  "carta.community": "Community"
+  "carta.community": "Community",
+  "carta.startPersonalQuest": "Start<br>personal<br>quest",
+  "carta.continueYourQuest": "Continue<br>your<br>quest",
+  "carta.themeHighlight": "Theme<br>Highlight",
+  "carta.browsePlaces": "Browse Places",
+  "carta.browseThemes": "Browse Themes",
+  "carta.orStartaNewOne": "Or start a new one"
 }

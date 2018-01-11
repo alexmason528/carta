@@ -1,5 +1,4 @@
 {
-  "carta.startQuest": "Start je\n persoonlijke\n zoektocht",
   "carta.signIn": "Log in",
   "carta.with": "Met",
   "carta.or": "Of",
@@ -61,5 +60,11 @@
   "carta.alreadyRegistered": "Je bent al ingeschreven. Je kunt inloggen",
   "carta.anything": "Alles",
   "carta.map": "Kaart",
-  "carta.community": "gemeenschap"
+  "carta.community": "gemeenschap",
+  "carta.startPersonalQuest": "Start je<br>Persoonlijke<br>Zoektocht",
+  "carta.continueYourQuest": "Zet je<br>zoektocht<br>voort",
+  "carta.themeHighlight": "Uitgelicht<br>thema",
+  "carta.browsePlaces": "Uitgelichte plaatsen",
+  "carta.browseThemes": "Uitgelichte thema's",
+  "carta.orStartaNewOne": "Of begin een nieuwe"
 }

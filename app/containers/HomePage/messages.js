@@ -1,10 +1,6 @@
 import { defineMessages } from 'react-intl'
 
 export default defineMessages({
-  startQuest: {
-    id: 'carta.startQuest',
-    defaultMessage: 'Start<br/>your<br/>personal<br/>quest',
-  },
   signIn: {
     id: 'carta.signIn',
     defaultMessage: 'Sign in',
@@ -164,5 +160,29 @@ export default defineMessages({
   community: {
     id: 'carta.map',
     defaultMessage: 'Community',
+  },
+  startPersonalQuest: {
+    id: 'carta.startPersonalQuest',
+    defaultMessage: 'Start<br>personal<br>quest',
+  },
+  continueYourQuest: {
+    id: 'carta.continueYourQuest',
+    defaultMessage: 'Continue<br>your<br>quest',
+  },
+  themeHighlight: {
+    id: 'carta.themeHighlight',
+    defaultMessage: 'Theme<br>Highlight',
+  },
+  browsePlaces: {
+    id: 'carta.browsePlaces',
+    defaultMessage: 'Browse Places',
+  },
+  browseThemes: {
+    id: 'carta.browseThemes',
+    defaultMessage: 'Browse Themes',
+  },
+  orStartaNewOne: {
+    id: 'carta.orStartaNewOne',
+    defaultMessage: 'Or start a new one',
   },
 })

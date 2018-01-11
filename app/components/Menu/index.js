@@ -34,8 +34,9 @@ class Menu extends Component {
     if (!evt.metaKey) {
       evt.preventDefault()
     }
-    const { changeLocale } = this.props
+    const { changeLocale, toggleMenu } = this.props
     changeLocale(evt.target.dataset.locale)
+    toggleMenu()
   }
 
   handleSignOut = evt => {

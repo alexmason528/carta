@@ -35,6 +35,7 @@ import {
   selectHomeInfo,
   selectEditingPost,
   selectHasMore,
+  selectHasQuest,
 } from './selectors'
 import { listPostRequest } from './actions'
 import { CREATE_POST_SUCCESS, LIST_POST_REQUEST } from './constants'
@@ -55,6 +56,7 @@ class HomePage extends Component {
     posts: PropTypes.array,
     authenticated: PropTypes.bool,
     hasMore: PropTypes.bool,
+    hasQuest: PropTypes.bool,
     intl: intlShape.isRequired,
   }
 
@@ -163,6 +165,7 @@ class HomePage extends Component {
       intl: { locale, formatMessage },
       editingPost,
       hasMore,
+      hasQuest,
     } = this.props
     const { status } = info
     const filteredPosts = posts.filter(post => post.title[locale] !== '')
@@ -182,7 +185,7 @@ class HomePage extends Component {
         <InfiniteScroll
           loadMore={this.handleLoadMore}
           hasMore={hasMore}
-          threshold={10}
+          threshold={500}
         >
           <Row className="homePage__row">
             <Col xs={12} sm={6} md={4} className="homePage__col">
@@ -226,12 +229,12 @@ class HomePage extends Component {
               <FixedTile
                 img="quest.jpg"
                 link="/quest"
-                title={formatMessage(messages.startQuest).replace(
-                  /\n/g,
-                  '<br/>'
-                )}
-                message="Start a new quest"
-                authenticated={authenticated}
+                title={formatMessage(
+                  hasQuest
+                    ? messages.continueYourQuest
+                    : messages.startPersonalQuest
+                ).replace(/\n/g, '<br/>')}
+                buttonText="Start a new quest"
               />
               {secondColPosts &&
                 secondColPosts.map((post, key) => {
@@ -249,13 +252,15 @@ class HomePage extends Component {
                   return <Post {...data} />
                 })}
             </Col>
-            <Col xs={12} sm={6} md={4} className="homePage__col themeTile">
+            <Col xs={12} sm={6} md={4} className="homePage__col">
               <FixedTile
                 img="theme.jpg"
                 link="/quest"
-                title={'Thema<br/>Highlight'}
-                message="Browse new themes"
-                authenticated={authenticated}
+                title={formatMessage(messages.themeHighlight).replace(
+                  /\n/g,
+                  '<br/>'
+                )}
+                buttonText="Browse themes"
               />
               {thirdColPosts &&
                 thirdColPosts.map((post, key) => {
@@ -289,6 +294,7 @@ const selectors = createStructuredSelector({
   user: selectUser(),
   info: selectInfo(),
   hasMore: selectHasMore(),
+  hasQuest: selectHasQuest(),
 })
 
 const actions = {

@@ -21,6 +21,9 @@ const selectLimit = () => createSelector(selectHome, substate => substate.limit)
 const selectHasMore = () =>
   createSelector(selectHome, substate => substate.hasMore)
 
+const selectHasQuest = () =>
+  createSelector(selectHome, substate => substate.hasQuest)
+
 const selectLastPostDate = () =>
   createSelector(selectHome, substate => substate.lastPostDate)
 
@@ -32,5 +35,6 @@ export {
   selectEditingPost,
   selectLimit,
   selectHasMore,
+  selectHasQuest,
   selectLastPostDate,
 }

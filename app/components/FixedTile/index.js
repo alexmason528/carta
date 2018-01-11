@@ -8,10 +8,9 @@ import './style.scss'
 
 class FixedTile extends Component {
   static propTypes = {
-    authenticated: PropTypes.bool,
     title: PropTypes.string,
     img: PropTypes.string,
-    message: PropTypes.string,
+    buttonText: PropTypes.string,
     link: PropTypes.string,
   }
 
@@ -40,9 +39,13 @@ class FixedTile extends Component {
     this.setState({ imageLoaded: true }, this.handleResize)
   }
 
+  handleButtonClick = evt => {
+    evt.stopPropagation()
+  }
+
   render() {
     const { imageLoaded } = this.state
-    const { authenticated, title, img, message, link } = this.props
+    const { title, img, buttonText, link } = this.props
 
     return (
       <div
@@ -54,6 +57,12 @@ class FixedTile extends Component {
         })}
         onClick={() => browserHistory.push(link)}
       >
+        <button
+          className="fixedTile__btn Tt-U Fw-B P-A Fz-14"
+          onClick={this.handleButtonClick}
+        >
+          {buttonText}
+        </button>
         <div className="fixedTile__content Cr-P Ov-H">
           <Img
             className="fixedTile__image"
@@ -64,12 +73,6 @@ class FixedTile extends Component {
             className="fixedTile__title Tt-U Mb-0 Px-30 Py-19"
             dangerouslySetInnerHTML={{ __html: title }}
           />
-          {authenticated && (
-            <h5
-              className="fixedTile__message Tt-U Fw-B P-A Fz-14"
-              dangerouslySetInnerHTML={{ __html: message }}
-            />
-          )}
         </div>
       </div>
     )

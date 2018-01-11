@@ -152,7 +152,11 @@ class Profile extends Component {
             }
           >
             {placeList[this.coverPic].name}
-          </button>|<button className="Tt-U Fw-B Fz-10">Browse</button>
+          </button>{' '}
+          |{' '}
+          <button className="Tt-U Fw-B Fz-10">
+            {formatMessage(messages.browsePlaces)}
+          </button>
         </div>
         <div className="profile__content">
           <div
@@ -168,7 +172,7 @@ class Profile extends Component {
               }.jpg`}
             />
             {authenticated ? (
-              <h2 className="Mb-0 Tt-U P-A">{user.fullname}</h2>
+              <h2 className="Mb-0 Tt-U P-A">{user.fullname.split(' ')[0]}</h2>
             ) : (
               <h2 className="Mb-0 Tt-U P-A" onClick={onClick}>
                 {formatMessage(messages.signIn)}
