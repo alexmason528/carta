@@ -5,7 +5,7 @@ import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import { Container, Col, Row } from 'reactstrap'
 import { compose } from 'redux'
-import ReactScrollPagination from 'react-scroll-pagination'
+import InfiniteScroll from 'react-infinite-scroller'
 import {
   CLOUDINARY_PROFILE_URL,
   UPDATE_USER_SUCCESS,
@@ -70,13 +70,10 @@ class HomePage extends Component {
   }
 
   componentWillMount() {
-    const { params: { vcode }, authenticated, user, hasMore } = this.props
+    const { params: { vcode }, authenticated, user } = this.props
 
     if (vcode && (!user || !user.verified)) {
       this.props.verifyRequest({ vcode })
-    }
-    if (hasMore) {
-      this.props.listPostRequest()
     }
 
     this.setState({
@@ -141,9 +138,9 @@ class HomePage extends Component {
     this.setState({ profilePic: newVal })
   }
 
-  handleFetchPost = () => {
-    const { hasMore, homeInfo: { status }, listPostRequest } = this.props
-    if (hasMore && status !== LIST_POST_REQUEST) {
+  handleLoadMore = () => {
+    const { homeInfo: { status }, listPostRequest } = this.props
+    if (status !== LIST_POST_REQUEST) {
       listPostRequest()
     }
   }
@@ -165,6 +162,7 @@ class HomePage extends Component {
       info,
       intl: { locale, formatMessage },
       editingPost,
+      hasMore,
     } = this.props
     const { status } = info
     const filteredPosts = posts.filter(post => post.title[locale] !== '')
@@ -181,95 +179,103 @@ class HomePage extends Component {
       <Container fluid className="homePage P-0 M-0">
         <Helmet meta={[{ name: 'description', content: 'Carta' }]} />
         <Menu currentPage="home" />
-        <Row className="homePage__row">
-          <Col xs={12} sm={6} md={4} className="homePage__col">
-            <Profile
-              onClick={this.handleProfileClick}
-              onUpdate={updateUserRequest}
-              authenticated={authenticated}
-              profilePic={profilePic}
-              user={user}
-              info={info}
-            />
-            {authenticated ? (
-              <AccountMenu
-                show={showAccountMenu}
+        <InfiniteScroll
+          loadMore={this.handleLoadMore}
+          hasMore={hasMore}
+          threshold={10}
+        >
+          <Row className="homePage__row">
+            <Col xs={12} sm={6} md={4} className="homePage__col">
+              <Profile
                 onClick={this.handleProfileClick}
-              />
-            ) : (
-              <AuthForm
-                show={showAuthForm}
-                onProfilePicChange={this.handleProfilePic}
+                onUpdate={updateUserRequest}
+                authenticated={authenticated}
                 profilePic={profilePic}
+                user={user}
+                info={info}
               />
-            )}
-            {firstColPosts &&
-              firstColPosts.map((post, key) => {
-                const data = {
-                  ...post,
-                  key: post._id,
-                  firstname: getFirstname(post.author.fullname),
-                  editable:
-                    authenticated &&
-                    (post.author._id === user._id || user.role === 'admin') &&
-                    !editingPost &&
-                    !showCreatePostForm,
-                  first: key === 0 && authenticated,
-                }
-                return <Post {...data} />
-              })}
-          </Col>
-          <Col xs={12} sm={6} md={4} className="homePage__col">
-            <FixedTile
-              img="quest.jpg"
-              link="/quest"
-              title={formatMessage(messages.startQuest).replace(/\n/g, '<br/>')}
-              message="Start a new quest"
-              authenticated={authenticated}
-            />
-            {secondColPosts &&
-              secondColPosts.map((post, key) => {
-                const data = {
-                  ...post,
-                  key: post._id,
-                  firstname: getFirstname(post.author.fullname),
-                  editable:
-                    authenticated &&
-                    (post.author._id === user._id || user.role === 'admin') &&
-                    !editingPost &&
-                    !showCreatePostForm,
-                  first: key === 0 && authenticated,
-                }
-                return <Post {...data} />
-              })}
-          </Col>
-          <Col xs={12} sm={6} md={4} className="homePage__col themeTile">
-            <FixedTile
-              img="theme.jpg"
-              link="/quest"
-              title={'Thema<br/>Highlight'}
-              message="Browse new themes"
-              authenticated={authenticated}
-            />
-            {thirdColPosts &&
-              thirdColPosts.map((post, key) => {
-                const data = {
-                  ...post,
-                  key: post._id,
-                  firstname: getFirstname(post.author.fullname),
-                  editable:
-                    authenticated &&
-                    (post.author._id === user._id || user.role === 'admin') &&
-                    !editingPost &&
-                    !showCreatePostForm,
-                  first: key === 0 && authenticated,
-                }
-                return <Post {...data} />
-              })}
-          </Col>
-        </Row>
+              {authenticated ? (
+                <AccountMenu
+                  show={showAccountMenu}
+                  onClick={this.handleProfileClick}
+                />
+              ) : (
+                <AuthForm
+                  show={showAuthForm}
+                  onProfilePicChange={this.handleProfilePic}
+                  profilePic={profilePic}
+                />
+              )}
+              {firstColPosts &&
+                firstColPosts.map((post, key) => {
+                  const data = {
+                    ...post,
+                    key: post._id,
+                    firstname: getFirstname(post.author.fullname),
+                    editable:
+                      authenticated &&
+                      (post.author._id === user._id || user.role === 'admin') &&
+                      !editingPost &&
+                      !showCreatePostForm,
+                    first: key === 0 && authenticated,
+                  }
+                  return <Post {...data} />
+                })}
+            </Col>
+            <Col xs={12} sm={6} md={4} className="homePage__col">
+              <FixedTile
+                img="quest.jpg"
+                link="/quest"
+                title={formatMessage(messages.startQuest).replace(
+                  /\n/g,
+                  '<br/>'
+                )}
+                message="Start a new quest"
+                authenticated={authenticated}
+              />
+              {secondColPosts &&
+                secondColPosts.map((post, key) => {
+                  const data = {
+                    ...post,
+                    key: post._id,
+                    firstname: getFirstname(post.author.fullname),
+                    editable:
+                      authenticated &&
+                      (post.author._id === user._id || user.role === 'admin') &&
+                      !editingPost &&
+                      !showCreatePostForm,
+                    first: key === 0 && authenticated,
+                  }
+                  return <Post {...data} />
+                })}
+            </Col>
+            <Col xs={12} sm={6} md={4} className="homePage__col themeTile">
+              <FixedTile
+                img="theme.jpg"
+                link="/quest"
+                title={'Thema<br/>Highlight'}
+                message="Browse new themes"
+                authenticated={authenticated}
+              />
+              {thirdColPosts &&
+                thirdColPosts.map((post, key) => {
+                  const data = {
+                    ...post,
+                    key: post._id,
+                    firstname: getFirstname(post.author.fullname),
+                    editable:
+                      authenticated &&
+                      (post.author._id === user._id || user.role === 'admin') &&
+                      !editingPost &&
+                      !showCreatePostForm,
+                    first: key === 0 && authenticated,
+                  }
+                  return <Post {...data} />
+                })}
+            </Col>
+          </Row>
+        </InfiniteScroll>
         <Verify user={user} status={status} signOut={signOut} />
-        <ReactScrollPagination fetchFunc={this.handleFetchPost} />
       </Container>
     )
   }
