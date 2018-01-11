@@ -44,7 +44,31 @@ function checkStatus(response) {
  * @return {object}           The response data
  */
 export default function request(url, options) {
-  return fetch(url, options)
+  let newUrl = url
+
+  if (!options.method || options.method === 'GET') {
+    if (options.query) {
+      const queryString = serializeParams(options.query)
+      newUrl = `${url}?${queryString}`
+    }
+  }
+
+  return fetch(newUrl, options)
     .then(checkStatus)
     .then(parseJSON)
+}
+
+export function serializeParams(obj) {
+  const str = []
+  Object.keys(obj).forEach(p => {
+    if (
+      obj.hasOwnProperty(p) && //eslint-disable-line
+      obj[p] !== undefined &&
+      obj[p] !== null
+    ) {
+      // we need to pass 0 and empty string
+      str.push(`${encodeURIComponent(p)}=${encodeURIComponent(obj[p])}`)
+    }
+  })
+  return str.join('&')
 }

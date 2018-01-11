@@ -25,7 +25,11 @@ import {
 } from 'containers/App/actions'
 
 import { selectUser } from 'containers/App/selectors'
-import { selectEditingPost } from 'containers/HomePage/selectors'
+import {
+  selectEditingPost,
+  selectLimit,
+  selectLastPostDate,
+} from 'containers/HomePage/selectors'
 
 import {
   CREATE_POST_REQUEST,
@@ -48,6 +52,10 @@ import {
   deleteUserPosts,
 } from './actions'
 
+export function* signInRequestWatcher() {
+  yield takeLatest(SIGNIN_REQUEST, signInRequest)
+}
+
 export function* signInRequest({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/auth/signIn`
 
@@ -68,6 +76,10 @@ export function* signInRequest({ payload }) {
   }
 }
 
+export function* registerRequestWatcher() {
+  yield takeLatest(REGISTER_REQUEST, registerRequest)
+}
+
 export function* registerRequest({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/auth/register`
 
@@ -86,6 +98,10 @@ export function* registerRequest({ payload }) {
   } catch (err) {
     yield put(registerFail(err.details))
   }
+}
+
+export function* deleteUserWatcher() {
+  yield takeLatest(DELETE_USER_REQUEST, deleteUserRequest)
 }
 
 export function* deleteUserRequest({ payload }) {
@@ -110,6 +126,10 @@ export function* deleteUserRequest({ payload }) {
   }
 }
 
+export function* verifyRequestWatcher() {
+  yield takeLatest(VERIFY_REQUEST, verifyRequest)
+}
+
 export function* verifyRequest({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/auth/verify`
 
@@ -128,6 +148,10 @@ export function* verifyRequest({ payload }) {
   } catch (err) {
     yield put(verifyFail(err.details))
   }
+}
+
+export function* createPostWatcher() {
+  yield takeLatest(CREATE_POST_REQUEST, createPostRequest)
 }
 
 export function* createPostRequest({ payload }) {
@@ -156,26 +180,29 @@ export function* createPostRequest({ payload }) {
   }
 }
 
+export function* listPostWatcher() {
+  yield takeLatest(LIST_POST_REQUEST, listPostRequest)
+}
+
 export function* listPostRequest() {
   const requestURL = `${API_BASE_URL}api/v1/post`
-
+  const limit = yield select(selectLimit())
+  const lastPostDate = yield select(selectLastPostDate())
   const params = {
     method: 'GET',
+    query: Object.assign({}, { limit }, lastPostDate && { lastPostDate }),
   }
 
   try {
     const res = yield call(request, requestURL, params)
-    const info = res.map(post => {
-      return {
-        ...post,
-        author: post.author[0],
-      }
-    })
-
-    yield put(listPostSuccess(info))
+    yield put(listPostSuccess(res))
   } catch (err) {
     yield put(listPostFail(err.details))
   }
+}
+
+export function* updatePostWatcher() {
+  yield takeLatest(UPDATE_POST_REQUEST, updatePostRequest)
 }
 
 export function* updatePostRequest() {
@@ -210,6 +237,10 @@ export function* updatePostRequest() {
   }
 }
 
+export function* deletePostWatcher() {
+  yield takeLatest(DELETE_POST_REQUEST, deletePostRequest)
+}
+
 export function* deletePostRequest({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/post/${payload}`
 
@@ -225,6 +256,10 @@ export function* deletePostRequest({ payload }) {
   }
 }
 
+export function* listSuggestionWatcher() {
+  yield takeLatest(LIST_SUGGESTION_REQUEST, listSuggestionRequest)
+}
+
 export function* listSuggestionRequest() {
   const requestURL = `${API_BASE_URL}api/v1/suggestion`
 
@@ -238,6 +273,10 @@ export function* listSuggestionRequest() {
   } catch (err) {
     yield put(listSuggestionFail(err.details))
   }
+}
+
+export function* updateUserWatcher() {
+  yield takeLatest(UPDATE_USER_REQUEST, updateUserRequest)
 }
 
 export function* updateUserRequest({ payload }) {
@@ -259,46 +298,6 @@ export function* updateUserRequest({ payload }) {
   } catch (err) {
     yield put(updateUserFail(err.details))
   }
-}
-
-export function* registerRequestWatcher() {
-  yield takeLatest(REGISTER_REQUEST, registerRequest)
-}
-
-export function* signInRequestWatcher() {
-  yield takeLatest(SIGNIN_REQUEST, signInRequest)
-}
-
-export function* deleteUserWatcher() {
-  yield takeLatest(DELETE_USER_REQUEST, deleteUserRequest)
-}
-
-export function* verifyRequestWatcher() {
-  yield takeLatest(VERIFY_REQUEST, verifyRequest)
-}
-
-export function* createPostWatcher() {
-  yield takeLatest(CREATE_POST_REQUEST, createPostRequest)
-}
-
-export function* listPostWatcher() {
-  yield takeLatest(LIST_POST_REQUEST, listPostRequest)
-}
-
-export function* updatePostWatcher() {
-  yield takeLatest(UPDATE_POST_REQUEST, updatePostRequest)
-}
-
-export function* deletePostWatcher() {
-  yield takeLatest(DELETE_POST_REQUEST, deletePostRequest)
-}
-
-export function* listSuggestionWatcher() {
-  yield takeLatest(LIST_SUGGESTION_REQUEST, listSuggestionRequest)
-}
-
-export function* updateUserWatcher() {
-  yield takeLatest(UPDATE_USER_REQUEST, updateUserRequest)
 }
 
 export default [

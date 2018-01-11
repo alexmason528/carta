@@ -2,6 +2,7 @@
 
 .homePage {
   background: $white;
+  overflow-x: hidden;
 
   &__row {
     margin: 0 -4px;

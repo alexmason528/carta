@@ -9,7 +9,9 @@ const Post = require('../models/post')
  */
 
 exports.listPost = (req, res) => {
-  const pipeline = [
+  const { lastPostDate, limit } = req.query
+  const DEFAULT_LIMIT = 6
+  let pipeline = [
     {
       $lookup: {
         from: 'user',
@@ -33,14 +35,27 @@ exports.listPost = (req, res) => {
     },
   ]
 
-  Post.aggregate(pipeline, (err, elements) => {
-    if (err) {
-      return res.status(400).send({
-        error: { details: err.toString() },
+  if (lastPostDate) {
+    pipeline.push({
+      $match: {
+        created_at: { $lt: new Date(lastPostDate) },
+      },
+    })
+  }
+
+  Post.aggregate(pipeline)
+    .limit(parseInt(limit, 10) || DEFAULT_LIMIT)
+    .exec((err, posts) => {
+      if (err) {
+        return res.status(400).send({
+          error: { details: err.toString() },
+        })
+      }
+      return res.json({
+        posts: posts.map(post => ({ ...post, author: post.author[0] })),
+        hasMore: posts.length === DEFAULT_LIMIT,
       })
-    }
-    return res.json(elements)
-  })
+    })
 }
 
 /**
@@ -64,14 +79,14 @@ exports.updatePost = (req, res) => {
     { _id: postID },
     { $set: data },
     { new: true },
-    (err, element) => {
+    (err, post) => {
       if (err) {
         return res.status(400).send({
           error: { details: err.toString() },
         })
       }
 
-      if (element && element._id) {
+      if (post && post._id) {
         return res.json(element)
       }
     }
@@ -117,12 +132,12 @@ exports.createPost = (req, res) => {
     author: mongoose.Types.ObjectId(author),
   }
 
-  Post.create(data, (err, element) => {
+  Post.create(data, (err, post) => {
     if (err) {
       return res.status(400).send({
         error: { details: err.toString() },
       })
     }
-    return res.json(element)
+    return res.json(post)
   })
 }

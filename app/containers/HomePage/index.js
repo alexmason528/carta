@@ -3,9 +3,9 @@ import Helmet from 'react-helmet'
 import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
-import { Container, Col } from 'reactstrap'
+import { Container, Col, Row } from 'reactstrap'
 import { compose } from 'redux'
-import Masonry from 'react-masonry-component'
+import ReactScrollPagination from 'react-scroll-pagination'
 import {
   CLOUDINARY_PROFILE_URL,
   UPDATE_USER_SUCCESS,
@@ -21,7 +21,6 @@ import {
   verifyRequest,
   updateUserRequest,
 } from 'containers/App/actions'
-import { CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
 import { CreatePostButton } from 'components/Buttons'
 import AccountMenu from 'components/AccountMenu'
 import AuthForm from 'components/AuthForm'
@@ -31,8 +30,14 @@ import { Post, PostCreate } from 'components/Post'
 import Profile from 'components/Profile'
 import FixedTile from 'components/FixedTile'
 import { getFirstname } from 'utils/stringHelper'
-import { selectPosts, selectHomeInfo, selectEditingPost } from './selectors'
+import {
+  selectPosts,
+  selectHomeInfo,
+  selectEditingPost,
+  selectHasMore,
+} from './selectors'
 import { listPostRequest } from './actions'
+import { CREATE_POST_SUCCESS, LIST_POST_REQUEST } from './constants'
 import messages from './messages'
 import './style.scss'
 
@@ -49,6 +54,7 @@ class HomePage extends Component {
     editingPost: PropTypes.object,
     posts: PropTypes.array,
     authenticated: PropTypes.bool,
+    hasMore: PropTypes.bool,
     intl: intlShape.isRequired,
   }
 
@@ -64,12 +70,14 @@ class HomePage extends Component {
   }
 
   componentWillMount() {
-    const { params: { vcode }, authenticated, user } = this.props
+    const { params: { vcode }, authenticated, user, hasMore } = this.props
 
     if (vcode && (!user || !user.verified)) {
       this.props.verifyRequest({ vcode })
     }
-    this.props.listPostRequest()
+    if (hasMore) {
+      this.props.listPostRequest()
+    }
 
     this.setState({
       profilePic: authenticated
@@ -133,6 +141,13 @@ class HomePage extends Component {
     this.setState({ profilePic: newVal })
   }
 
+  handleFetchPost = () => {
+    const { hasMore, homeInfo: { status }, listPostRequest } = this.props
+    if (hasMore && status !== LIST_POST_REQUEST) {
+      listPostRequest()
+    }
+  }
+
   render() {
     const {
       showAuthForm,
@@ -156,17 +171,17 @@ class HomePage extends Component {
     const createPostButtonType =
       filteredPosts.length > 0 && filteredPosts[0].img ? 'image' : 'text'
 
+    const firstColPosts = filteredPosts.filter((post, index) => index % 3 === 0)
+    const secondColPosts = filteredPosts.filter(
+      (post, index) => index % 3 === 1
+    )
+    const thirdColPosts = filteredPosts.filter((post, index) => index % 3 === 2)
+
     return (
-      <Container fluid className="homePage P-0 M-0 Ov-XH">
+      <Container fluid className="homePage P-0 M-0">
         <Helmet meta={[{ name: 'description', content: 'Carta' }]} />
         <Menu currentPage="home" />
-        <Masonry
-          className="homePage__row"
-          options={{
-            gutter: 0,
-          }}
-          enableResizableChildren
-        >
+        <Row className="homePage__row">
           <Col xs={12} sm={6} md={4} className="homePage__col">
             <Profile
               onClick={this.handleProfileClick}
@@ -188,6 +203,21 @@ class HomePage extends Component {
                 profilePic={profilePic}
               />
             )}
+            {firstColPosts &&
+              firstColPosts.map((post, key) => {
+                const data = {
+                  ...post,
+                  key: post._id,
+                  firstname: getFirstname(post.author.fullname),
+                  editable:
+                    authenticated &&
+                    (post.author._id === user._id || user.role === 'admin') &&
+                    !editingPost &&
+                    !showCreatePostForm,
+                  first: key === 0 && authenticated,
+                }
+                return <Post {...data} />
+              })}
           </Col>
           <Col xs={12} sm={6} md={4} className="homePage__col">
             <FixedTile
@@ -197,6 +227,21 @@ class HomePage extends Component {
               message="Start a new quest"
               authenticated={authenticated}
             />
+            {secondColPosts &&
+              secondColPosts.map((post, key) => {
+                const data = {
+                  ...post,
+                  key: post._id,
+                  firstname: getFirstname(post.author.fullname),
+                  editable:
+                    authenticated &&
+                    (post.author._id === user._id || user.role === 'admin') &&
+                    !editingPost &&
+                    !showCreatePostForm,
+                  first: key === 0 && authenticated,
+                }
+                return <Post {...data} />
+              })}
           </Col>
           <Col xs={12} sm={6} md={4} className="homePage__col themeTile">
             <FixedTile
@@ -206,27 +251,25 @@ class HomePage extends Component {
               message="Browse new themes"
               authenticated={authenticated}
             />
+            {thirdColPosts &&
+              thirdColPosts.map((post, key) => {
+                const data = {
+                  ...post,
+                  key: post._id,
+                  firstname: getFirstname(post.author.fullname),
+                  editable:
+                    authenticated &&
+                    (post.author._id === user._id || user.role === 'admin') &&
+                    !editingPost &&
+                    !showCreatePostForm,
+                  first: key === 0 && authenticated,
+                }
+                return <Post {...data} />
+              })}
           </Col>
-          {filteredPosts &&
-            filteredPosts.map((post, key) => {
-              const data = {
-                ...post,
-                firstname: getFirstname(post.author.fullname),
-                editable:
-                  authenticated &&
-                  (post.author._id === user._id || user.role === 'admin') &&
-                  !editingPost &&
-                  !showCreatePostForm,
-                first: key === 0 && authenticated,
-              }
-              return (
-                <Col key={key} xs={12} sm={6} md={4} className="homePage__col">
-                  <Post {...data} />
-                </Col>
-              )
-            })}
-        </Masonry>
+        </Row>
         <Verify user={user} status={status} signOut={signOut} />
+        <ReactScrollPagination fetchFunc={this.handleFetchPost} />
       </Container>
     )
   }
@@ -234,11 +277,12 @@ class HomePage extends Component {
 
 const selectors = createStructuredSelector({
   editingPost: selectEditingPost(),
-  posts: selectPosts(),
   authenticated: selectAuthenticated(),
+  homeInfo: selectHomeInfo(),
+  posts: selectPosts(),
   user: selectUser(),
   info: selectInfo(),
-  homeInfo: selectHomeInfo(),
+  hasMore: selectHasMore(),
 })
 
 const actions = {

@@ -1,3 +1,5 @@
+import { last } from 'lodash'
+import { DEFAULT_LIMIT } from 'containers/App/constants'
 import {
   INIT,
   CREATE_POST_REQUEST,
@@ -29,9 +31,12 @@ import {
 const initialState = {
   posts: [],
   suggestions: [],
-  editingPost: null,
   status: INIT,
+  editingPost: null,
   error: null,
+  limit: DEFAULT_LIMIT,
+  hasMore: true,
+  lastPostDate: null,
 }
 
 function homeReducer(state = initialState, action) {
@@ -68,11 +73,18 @@ function homeReducer(state = initialState, action) {
       }
 
     case LIST_POST_SUCCESS:
-      return {
-        ...state,
-        status: type,
-        posts: payload,
-      }
+      return Object.assign(
+        {},
+        {
+          ...state,
+          status: type,
+          posts: [...state.posts, ...payload.posts],
+          hasMore: payload.hasMore,
+        },
+        payload.posts.length > 0 && {
+          lastPostDate: last(payload.posts).created_at,
+        }
+      )
 
     case LIST_POST_FAIL:
       return {
