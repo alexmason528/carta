@@ -96,13 +96,15 @@ class PostCreate extends Component {
   handleResize = () => {
     const comp = ReactDOM.findDOMNode(this)
     const post = $(comp).find('.post')
-    const width = $(post).width()
+    const width = $(comp).width()
 
     if ($(post).hasClass('textPost')) {
       const fontSize = width / 76 * 3 * 1.15
       $(post)
         .find('.postTitleEdit')
-        .css({ fontSize: `${fontSize}px` })
+        .css({
+          fontSize: `${fontSize}px`,
+        })
     } else {
       const height =
         $(post)

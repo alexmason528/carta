@@ -136,11 +136,7 @@ class HomePage extends Component {
       profilePic,
     } = this.state
 
-    // const { posts, user, signOut, info, intl: { locale }, hasMore } = this.props
-    // const filteredPosts = posts.filter(post => post.title[locale] !== '')
-    // const createPostButtonType =
-    //   filteredPosts.length > 0 && filteredPosts[0].img ? 'image' : 'text'
-    const { user, signOut, info: { status }, hasMore } = this.props
+    const { user, hasMore, signOut, info: { status } } = this.props
 
     return (
       <Container fluid className="homePage P-0 M-0">
@@ -149,7 +145,7 @@ class HomePage extends Component {
         <InfiniteScroll
           loadMore={this.handleLoadMore}
           hasMore={hasMore}
-          threshold={500}
+          threshold={1000}
         >
           <ResponsiveLayout
             desktop={

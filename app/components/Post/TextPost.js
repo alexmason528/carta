@@ -85,7 +85,6 @@ class TextPost extends Component {
     const width = $(post).width()
     const fontSize = width / 76 * 3 * 1.15
     const maxHeight = fontSize * 2 * 1.2
-
     const $title = editing
       ? $(post).find('.postTitleEdit')
       : $(post).find('.postTitle')

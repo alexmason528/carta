@@ -11,17 +11,14 @@ import {
   selectInfo,
 } from 'containers/App/selectors'
 import { updateUserRequest } from 'containers/App/actions'
-import {
-  selectHasQuest,
-  selectEditingPost,
-  selectPosts,
-} from 'containers/HomePage/selectors'
+import { selectEditingPost, selectPosts } from 'containers/HomePage/selectors'
 import { CreatePostButton } from 'components/Buttons'
 import Profile from 'components/Profile'
 import FixedTile from 'components/FixedTile'
 import AccountMenu from 'components/AccountMenu'
 import AuthForm from 'components/AuthForm'
 import { Post, PostCreate } from 'components/Post'
+import { getItem } from 'utils/localStorage'
 import { getFirstname } from 'utils/stringHelper'
 
 class Tablet extends Component {
@@ -35,7 +32,6 @@ class Tablet extends Component {
     info: PropTypes.object,
     editingPost: PropTypes.object,
     authenticated: PropTypes.bool,
-    hasQuest: PropTypes.bool,
     showAuthForm: PropTypes.bool,
     showCreatePostForm: PropTypes.bool,
     showAccountMenu: PropTypes.bool,
@@ -50,11 +46,10 @@ class Tablet extends Component {
       user,
       info,
       editingPost,
-      hasQuest,
       showAuthForm,
       showCreatePostForm,
       showAccountMenu,
-      intl: { formatMessage },
+      intl: { locale, formatMessage },
       profilePic,
       profileClick,
       profilePicClick,
@@ -62,8 +57,10 @@ class Tablet extends Component {
       updateUserRequest,
     } = this.props
 
-    const firstColPosts = posts.filter((post, index) => index % 2 === 0)
-    const secondColPosts = posts.filter((post, index) => index % 2 === 1)
+    const localePosts = posts.filter(post => post.title[locale] !== '')
+    const firstColPosts = localePosts.filter((post, index) => index % 2 === 0)
+    const secondColPosts = localePosts.filter((post, index) => index % 2 === 1)
+    const hasQuest = !!getItem('quests')
 
     const createPostButtonType =
       secondColPosts.length > 0 && secondColPosts[0].img ? 'image' : 'text'
@@ -159,7 +156,6 @@ const selectors = createStructuredSelector({
   authenticated: selectAuthenticated(),
   user: selectUser(),
   info: selectInfo(),
-  hasQuest: selectHasQuest(),
 })
 
 const actions = {

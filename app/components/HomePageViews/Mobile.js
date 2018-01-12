@@ -11,17 +11,14 @@ import {
   selectInfo,
 } from 'containers/App/selectors'
 import { updateUserRequest } from 'containers/App/actions'
-import {
-  selectHasQuest,
-  selectEditingPost,
-  selectPosts,
-} from 'containers/HomePage/selectors'
+import { selectEditingPost, selectPosts } from 'containers/HomePage/selectors'
 import { CreatePostButton } from 'components/Buttons'
 import Profile from 'components/Profile'
 import FixedTile from 'components/FixedTile'
 import AccountMenu from 'components/AccountMenu'
 import AuthForm from 'components/AuthForm'
 import { Post, PostCreate } from 'components/Post'
+import { getItem } from 'utils/localStorage'
 import { getFirstname } from 'utils/stringHelper'
 
 class Mobile extends Component {
@@ -35,7 +32,6 @@ class Mobile extends Component {
     info: PropTypes.object,
     editingPost: PropTypes.object,
     authenticated: PropTypes.bool,
-    hasQuest: PropTypes.bool,
     showAuthForm: PropTypes.bool,
     showCreatePostForm: PropTypes.bool,
     showAccountMenu: PropTypes.bool,
@@ -50,11 +46,10 @@ class Mobile extends Component {
       user,
       info,
       editingPost,
-      hasQuest,
       showAuthForm,
       showCreatePostForm,
       showAccountMenu,
-      intl: { formatMessage },
+      intl: { locale, formatMessage },
       profilePic,
       profileClick,
       profilePicClick,
@@ -62,8 +57,10 @@ class Mobile extends Component {
       updateUserRequest,
     } = this.props
 
+    const localePosts = posts.filter(post => post.title[locale] !== '')
+    const hasQuest = !!getItem('quests')
     const createPostButtonType =
-      posts.length > 0 && posts[0].img ? 'image' : 'text'
+      localePosts.length > 0 && localePosts[0].img ? 'image' : 'text'
 
     return (
       <Row className="homePage__row">
@@ -93,7 +90,7 @@ class Mobile extends Component {
                 ? messages.continueYourQuest
                 : messages.startPersonalQuest
             ).replace(/\n/g, '<br/>')}
-            buttonText={formatMessage(messages.orStartaNewOne)}
+            buttonText={hasQuest ? formatMessage(messages.orStartaNewOne) : ''}
           />
           <FixedTile
             img="theme-square.jpg"
@@ -118,8 +115,8 @@ class Mobile extends Component {
               showCreatePostForm && (
                 <PostCreate onClose={toggleCreatePostForm} user={user} />
               )}
-            {posts &&
-              posts.map((post, key) => {
+            {localePosts &&
+              localePosts.map((post, key) => {
                 const data = {
                   ...post,
                   key: post._id,
@@ -146,7 +143,6 @@ const selectors = createStructuredSelector({
   authenticated: selectAuthenticated(),
   user: selectUser(),
   info: selectInfo(),
-  hasQuest: selectHasQuest(),
 })
 
 const actions = {

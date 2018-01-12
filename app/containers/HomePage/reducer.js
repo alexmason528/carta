@@ -1,6 +1,5 @@
 import { last } from 'lodash'
 import { DEFAULT_LIMIT } from 'containers/App/constants'
-import { getItem } from 'utils/localStorage'
 import {
   INIT,
   CREATE_POST_REQUEST,
@@ -38,7 +37,6 @@ const initialState = {
   limit: DEFAULT_LIMIT,
   hasMore: true,
   lastPostDate: null,
-  hasQuest: !!getItem('quests'),
 }
 
 function homeReducer(state = initialState, action) {

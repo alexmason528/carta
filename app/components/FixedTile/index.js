@@ -46,7 +46,6 @@ class FixedTile extends Component {
   render() {
     const { imageLoaded } = this.state
     const { title, img, buttonText, link } = this.props
-
     return (
       <div
         className={cx({
@@ -57,12 +56,14 @@ class FixedTile extends Component {
         })}
         onClick={() => browserHistory.push(link)}
       >
-        <button
-          className="fixedTile__btn Tt-U Fw-B P-A Fz-14"
-          onClick={this.handleButtonClick}
-        >
-          {buttonText}
-        </button>
+        {buttonText && (
+          <button
+            className="fixedTile__btn Tt-U Fw-B P-A Fz-14"
+            onClick={this.handleButtonClick}
+          >
+            {buttonText}
+          </button>
+        )}
         <div className="fixedTile__content Cr-P Ov-H">
           <Img
             className="fixedTile__image"
