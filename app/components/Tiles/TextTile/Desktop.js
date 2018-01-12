@@ -96,7 +96,7 @@ class TextTile extends Component {
         {...data}
       >
         <div className="tileContainer">
-          <div className="tile textTile Ov-H P-30">
+          <div className="tile textTile Ov-H">
             <h2 className="textTile__title Tt-U Pb-20">{title}</h2>
             <div className="textTile__content">{content}</div>
             <div

@@ -21,11 +21,13 @@ class ImageTile extends Component {
   }
 
   handleResize = () => {
+    const { type } = this.props
     const imageTile = ReactDOM.findDOMNode(this)
     const width = $(imageTile).width()
+    const fontSize = width / 44 * 3 * 1.35 * (type === 'main' ? 7 / 6 : 1)
     $(imageTile)
       .find('h2')
-      .css({ fontSize: `${width / 44 * 3 * 1.35}px` })
+      .css({ fontSize: `${fontSize}px` })
   }
 
   handleLoaded = () => {
