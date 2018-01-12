@@ -85,7 +85,7 @@ class TextTile extends Component {
   render() {
     const { title, content, type } = this.props
     const { expanded } = this.state
-    const data = type ? {} : { xs: 12, sm: 6, md: 4 }
+    const data = type ? {} : { xs: 12, sm: 12, md: 6, lg: 4 }
 
     return (
       <Col

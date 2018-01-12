@@ -4,11 +4,6 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
 import { injectIntl, intlShape } from 'react-intl'
-import Profile from 'components/Profile'
-import FixedTile from 'components/FixedTile'
-import AccountMenu from 'components/AccountMenu'
-import AuthForm from 'components/AuthForm'
-import { Post } from 'components/Post'
 import messages from 'containers/HomePage/messages'
 import {
   selectAuthenticated,
@@ -21,6 +16,12 @@ import {
   selectEditingPost,
   selectPosts,
 } from 'containers/HomePage/selectors'
+import { CreatePostButton } from 'components/Buttons'
+import Profile from 'components/Profile'
+import FixedTile from 'components/FixedTile'
+import AccountMenu from 'components/AccountMenu'
+import AuthForm from 'components/AuthForm'
+import { Post, PostCreate } from 'components/Post'
 import { getFirstname } from 'utils/stringHelper'
 
 class Desktop extends Component {
@@ -28,6 +29,7 @@ class Desktop extends Component {
     updateUserRequest: PropTypes.func,
     profileClick: PropTypes.func,
     profilePicClick: PropTypes.func,
+    toggleCreatePostForm: PropTypes.func,
     posts: PropTypes.array,
     user: PropTypes.object,
     info: PropTypes.object,
@@ -56,6 +58,7 @@ class Desktop extends Component {
       profilePic,
       profileClick,
       profilePicClick,
+      toggleCreatePostForm,
       updateUserRequest,
     } = this.props
 
@@ -63,9 +66,12 @@ class Desktop extends Component {
     const secondColPosts = posts.filter((post, index) => index % 3 === 1)
     const thirdColPosts = posts.filter((post, index) => index % 3 === 2)
 
+    const createPostButtonType =
+      secondColPosts.length > 0 && secondColPosts[0].img ? 'image' : 'text'
+
     return (
       <Row className="homePage__row">
-        <Col xs={12} sm={6} md={4} className="homePage__col">
+        <Col className="homePage__col">
           <Profile
             onClick={profileClick}
             onUpdate={updateUserRequest}
@@ -83,23 +89,25 @@ class Desktop extends Component {
               profilePic={profilePic}
             />
           )}
-          {firstColPosts &&
-            firstColPosts.map((post, key) => {
-              const data = {
-                ...post,
-                key: post._id,
-                firstname: getFirstname(post.author.fullname),
-                editable:
-                  authenticated &&
-                  (post.author._id === user._id || user.role === 'admin') &&
-                  !editingPost &&
-                  !showCreatePostForm,
-                first: key === 0 && authenticated,
-              }
-              return <Post {...data} />
-            })}
+          <div>
+            {firstColPosts &&
+              firstColPosts.map((post, key) => {
+                const data = {
+                  ...post,
+                  key: post._id,
+                  firstname: getFirstname(post.author.fullname),
+                  editable:
+                    authenticated &&
+                    (post.author._id === user._id || user.role === 'admin') &&
+                    !editingPost &&
+                    !showCreatePostForm,
+                  first: key === 0 && authenticated,
+                }
+                return <Post {...data} />
+              })}
+          </div>
         </Col>
-        <Col xs={12} sm={6} md={4} className="homePage__col">
+        <Col className="homePage__col">
           <FixedTile
             img="quest.jpg"
             link="/quest"
@@ -110,21 +118,36 @@ class Desktop extends Component {
             ).replace(/\n/g, '<br/>')}
             buttonText={formatMessage(messages.orStartaNewOne)}
           />
-          {secondColPosts &&
-            secondColPosts.map((post, key) => {
-              const data = {
-                ...post,
-                key: post._id,
-                firstname: getFirstname(post.author.fullname),
-                editable:
-                  authenticated &&
-                  (post.author._id === user._id || user.role === 'admin') &&
-                  !editingPost &&
-                  !showCreatePostForm,
-                first: key === 0 && authenticated,
-              }
-              return <Post {...data} />
-            })}
+          <div className="P-R">
+            {authenticated &&
+              !showCreatePostForm &&
+              user.verified &&
+              !editingPost && (
+                <CreatePostButton
+                  type={createPostButtonType}
+                  onClick={toggleCreatePostForm}
+                />
+              )}
+            {authenticated &&
+              showCreatePostForm && (
+                <PostCreate onClose={toggleCreatePostForm} user={user} />
+              )}
+            {secondColPosts &&
+              secondColPosts.map((post, key) => {
+                const data = {
+                  ...post,
+                  key: post._id,
+                  firstname: getFirstname(post.author.fullname),
+                  editable:
+                    authenticated &&
+                    (post.author._id === user._id || user.role === 'admin') &&
+                    !editingPost &&
+                    !showCreatePostForm,
+                  first: key === 0 && authenticated,
+                }
+                return <Post {...data} />
+              })}
+          </div>
         </Col>
         <Col xs={12} sm={6} md={4} className="homePage__col">
           <FixedTile
@@ -136,21 +159,23 @@ class Desktop extends Component {
             )}
             buttonText={formatMessage(messages.browseThemes)}
           />
-          {thirdColPosts &&
-            thirdColPosts.map((post, key) => {
-              const data = {
-                ...post,
-                key: post._id,
-                firstname: getFirstname(post.author.fullname),
-                editable:
-                  authenticated &&
-                  (post.author._id === user._id || user.role === 'admin') &&
-                  !editingPost &&
-                  !showCreatePostForm,
-                first: key === 0 && authenticated,
-              }
-              return <Post {...data} />
-            })}
+          <div>
+            {thirdColPosts &&
+              thirdColPosts.map((post, key) => {
+                const data = {
+                  ...post,
+                  key: post._id,
+                  firstname: getFirstname(post.author.fullname),
+                  editable:
+                    authenticated &&
+                    (post.author._id === user._id || user.role === 'admin') &&
+                    !editingPost &&
+                    !showCreatePostForm,
+                  first: key === 0 && authenticated,
+                }
+                return <Post {...data} />
+              })}
+          </div>
         </Col>
       </Row>
     )

@@ -11,14 +11,6 @@
   &__col {
     padding: 0 4px;
     position: relative;
-
-    &:first-child .post {
-      .postTitle,
-      .postTitleEdit,
-      .postContent {
-        padding-left: 60px;
-      }
-    }
   }
 
   img {
@@ -62,22 +54,32 @@
     font-weight: $lighterFw;
   }
 
-  @media (min-width: 576px) and (max-width: 767px) {
-    .homePage__col:nth-child(2n) {
+  @media (min-width: 768px) {
+    .homePage__col:first-child {
+      .postLinkBtn {
+        left: 60px;
+      }
+      .postLinkBar {
+        left: 50px;
+        width: calc(100% - 72px);
+      }
+      .postInfo {
+        padding-left: 60px;
+      }
+
       .postTitle,
-      .postTitleEdit,
+      .postTitleEdit {
+        left: 30px;
+      }
+      .postButtons,
       .postContent {
         padding-left: 60px;
       }
-    }
-  }
 
-  @media (min-width: 768px) {
-    .homePage__col:nth-child(3n + 1) {
-      .postTitle,
-      .postTitleEdit,
-      .postContent {
-        padding-left: 60px;
+      .textPost {
+        .postContent {
+          padding-left: 30px;
+        }
       }
     }
   }

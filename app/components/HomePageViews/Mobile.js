@@ -4,11 +4,6 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
 import { injectIntl, intlShape } from 'react-intl'
-import Profile from 'components/Profile'
-import FixedTile from 'components/FixedTile'
-import AccountMenu from 'components/AccountMenu'
-import AuthForm from 'components/AuthForm'
-import { Post } from 'components/Post'
 import messages from 'containers/HomePage/messages'
 import {
   selectAuthenticated,
@@ -21,6 +16,12 @@ import {
   selectEditingPost,
   selectPosts,
 } from 'containers/HomePage/selectors'
+import { CreatePostButton } from 'components/Buttons'
+import Profile from 'components/Profile'
+import FixedTile from 'components/FixedTile'
+import AccountMenu from 'components/AccountMenu'
+import AuthForm from 'components/AuthForm'
+import { Post, PostCreate } from 'components/Post'
 import { getFirstname } from 'utils/stringHelper'
 
 class Mobile extends Component {
@@ -28,6 +29,7 @@ class Mobile extends Component {
     updateUserRequest: PropTypes.func,
     profileClick: PropTypes.func,
     profilePicClick: PropTypes.func,
+    toggleCreatePostForm: PropTypes.func,
     posts: PropTypes.array,
     user: PropTypes.object,
     info: PropTypes.object,
@@ -56,12 +58,16 @@ class Mobile extends Component {
       profilePic,
       profileClick,
       profilePicClick,
+      toggleCreatePostForm,
       updateUserRequest,
     } = this.props
 
+    const createPostButtonType =
+      posts.length > 0 && posts[0].img ? 'image' : 'text'
+
     return (
       <Row className="homePage__row">
-        <Col xs={12} className="homePage__col">
+        <Col className="homePage__col">
           <Profile
             onClick={profileClick}
             onUpdate={updateUserRequest}
@@ -98,21 +104,36 @@ class Mobile extends Component {
             )}
             buttonText={formatMessage(messages.browseThemes)}
           />
-          {posts &&
-            posts.map((post, key) => {
-              const data = {
-                ...post,
-                key: post._id,
-                firstname: getFirstname(post.author.fullname),
-                editable:
-                  authenticated &&
-                  (post.author._id === user._id || user.role === 'admin') &&
-                  !editingPost &&
-                  !showCreatePostForm,
-                first: key === 0 && authenticated,
-              }
-              return <Post {...data} />
-            })}
+          <div className="P-R">
+            {authenticated &&
+              !showCreatePostForm &&
+              user.verified &&
+              !editingPost && (
+                <CreatePostButton
+                  type={createPostButtonType}
+                  onClick={toggleCreatePostForm}
+                />
+              )}
+            {authenticated &&
+              showCreatePostForm && (
+                <PostCreate onClose={toggleCreatePostForm} user={user} />
+              )}
+            {posts &&
+              posts.map((post, key) => {
+                const data = {
+                  ...post,
+                  key: post._id,
+                  firstname: getFirstname(post.author.fullname),
+                  editable:
+                    authenticated &&
+                    (post.author._id === user._id || user.role === 'admin') &&
+                    !editingPost &&
+                    !showCreatePostForm,
+                  first: key === 0 && authenticated,
+                }
+                return <Post {...data} />
+              })}
+          </div>
         </Col>
       </Row>
     )

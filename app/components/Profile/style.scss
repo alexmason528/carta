@@ -57,6 +57,11 @@
 
     button {
       color: $white;
+      @include textShadow($textShadowBlur, $shadowColor);
+
+      &:hover {
+        @include textShadow($textShadowBlur, $darkShadowColor);
+      }
     }
   }
 }

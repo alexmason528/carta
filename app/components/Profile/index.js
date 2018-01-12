@@ -15,6 +15,7 @@ import { QuarterSpinner } from 'components/SvgIcon'
 import { getCroppedImage } from 'utils/imageHelper'
 import messages from 'containers/HomePage/messages'
 import Img from 'components/Img'
+import { getFirstname } from 'utils/stringHelper'
 import './style.scss'
 
 class Profile extends Component {
@@ -172,7 +173,7 @@ class Profile extends Component {
               }.jpg`}
             />
             {authenticated ? (
-              <h2 className="Mb-0 Tt-U P-A">{user.fullname.split(' ')[0]}</h2>
+              <h2 className="Mb-0 Tt-U P-A">{getFirstname(user.fullname)}</h2>
             ) : (
               <h2 className="Mb-0 Tt-U P-A" onClick={onClick}>
                 {formatMessage(messages.signIn)}

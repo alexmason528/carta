@@ -11,8 +11,7 @@
 .brochure {
   z-index: 20;
   background: $white;
-  @include absoluteTopLeft();
-  @include fillViewport();
+  @include absoluteFill();
 
   &::-webkit-scrollbar {
     width: 10px;
@@ -75,7 +74,19 @@
     z-index: 1;
   }
 
-  @media (min-width: 768px) {
+  .tileContainer {
+    position: relative;
+    width: 100%;
+    padding-top: 100%;
+    margin-bottom: 8px;
+  }
+
+  .tile {
+    @include absoluteFill();
+    @include transition(all, $fastTrans);
+  }
+
+  @media (min-width: 992px) {
     .tileCol:nth-child(3n + 1) {
       .imageTile h2,
       .textTile {
@@ -84,7 +95,7 @@
     }
   }
 
-  @media (min-width: 576px) and (max-width: 767px) {
+  @media (min-width: 768px) and (max-width: 991px) {
     .tileCol:nth-child(2n + 1) {
       .imageTile h2,
       .textTile {
@@ -97,29 +108,17 @@
     }
   }
 
-  @media (max-width: 575px) {
+  @media (max-width: 767px) {
     .tileCol {
       .imageTile h2,
       .textTile {
-        padding-left: 60px;
+        padding-left: 30px;
       }
     }
 
     .descriptionText .textTile,
     .descriptionPoster .imageTile h2 {
-      padding-left: 60px;
+      padding-left: 30px;
     }
-  }
-
-  .tileContainer {
-    position: relative;
-    width: 100%;
-    padding-top: 100%;
-    margin-bottom: 8px;
-  }
-
-  .tile {
-    @include absoluteFill();
-    @include transition(all, $fastTrans);
   }
 }

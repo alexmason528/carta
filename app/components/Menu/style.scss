@@ -95,6 +95,12 @@
       height: 100%;
     }
   }
+
+  @media (max-width: 767px) {
+    &__tab {
+      display: none;
+    }
+  }
 }
 
 .logo {

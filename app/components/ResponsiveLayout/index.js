@@ -10,13 +10,13 @@ class ResponsiveLayout extends Component {
   render() {
     const { desktop, tablet, mobile } = this.props
     return (
-      <MediaQuery maxWidth={575}>
+      <MediaQuery maxWidth={767}>
         {isMobile => {
           if (isMobile) {
             return mobile
           } else {
             return (
-              <MediaQuery maxWidth={767}>
+              <MediaQuery maxWidth={991}>
                 {isTablet => (isTablet ? tablet : desktop)}
               </MediaQuery>
             )

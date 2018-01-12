@@ -7,7 +7,7 @@
     padding-top: 50%;
   }
 
-  @media (max-width: 575px) {
+  @media (max-width: 767px) {
     &:before {
       padding-top: 100%;
     }
@@ -48,9 +48,11 @@
     bottom: 5px;
     color: $white;
     z-index: 10;
+    @include textShadow($textShadowBlur, $shadowColor);
+
     &:hover {
       color: $white;
+      @include textShadow($textShadowBlur, $darkShadowColor);
     }
-    @include textShadow($textShadowBlur, $shadowColor);
   }
 }

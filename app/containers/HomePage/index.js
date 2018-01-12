@@ -113,7 +113,7 @@ class HomePage extends Component {
     }
   }
 
-  toggleCreatePostForm = () => {
+  handleToggleCreatePostForm = () => {
     this.setState({ showCreatePostForm: !this.state.showCreatePostForm })
   }
 
@@ -160,6 +160,7 @@ class HomePage extends Component {
                 showAuthForm={showAuthForm}
                 showCreatePostForm={showCreatePostForm}
                 showAccountMenu={showAccountMenu}
+                toggleCreatePostForm={this.handleToggleCreatePostForm}
               />
             }
             tablet={
@@ -170,6 +171,7 @@ class HomePage extends Component {
                 showAuthForm={showAuthForm}
                 showCreatePostForm={showCreatePostForm}
                 showAccountMenu={showAccountMenu}
+                toggleCreatePostForm={this.handleToggleCreatePostForm}
               />
             }
             mobile={
@@ -180,6 +182,7 @@ class HomePage extends Component {
                 showAuthForm={showAuthForm}
                 showCreatePostForm={showCreatePostForm}
                 showAccountMenu={showAccountMenu}
+                toggleCreatePostForm={this.handleToggleCreatePostForm}
               />
             }
           />
