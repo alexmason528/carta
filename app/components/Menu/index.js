@@ -46,8 +46,6 @@ class Menu extends Component {
     signOut()
   }
 
-  handleSettings = () => {}
-
   handleMap = evt => {
     evt.preventDefault()
     const {
@@ -131,11 +129,6 @@ class Menu extends Component {
             </li>
             {authenticated && (
               <div>
-                <li>
-                  <a href="/" onClick={this.handleSettings}>
-                    {formatMessage(messages.settings)}
-                  </a>
-                </li>
                 <li>
                   <a href="/" onClick={this.handleSignOut}>
                     {formatMessage(messages.signOut)}

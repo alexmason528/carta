@@ -1,15 +1,15 @@
 // Mixins
 
-@mixin insetBoxShadow($distance, $color) {
-  box-shadow: inset 0 0 $distance $color;
-  -moz-box-shadow: inset 0 0 $distance $color;
-  -webkit-box-shadow: inset 0 0 $distance $color;
+@mixin insetBoxShadow($blur, $color) {
+  box-shadow: inset 0 0 $blur $color;
+  -moz-box-shadow: inset 0 0 $blur $color;
+  -webkit-box-shadow: inset 0 0 $blur $color;
 }
 
-@mixin boxShadow($distance, $color) {
-  box-shadow: 0 0 $distance $color;
-  -moz-box-shadow: 0 0 $distance $color;
-  -webkit-box-shadow: 0 0 $distance $color;
+@mixin boxShadow($blur, $color) {
+  box-shadow: 0 0 $blur $color;
+  -moz-box-shadow: 0 0 $blur $color;
+  -webkit-box-shadow: 0 0 $blur $color;
 }
 
 @mixin noBoxShadow() {
@@ -18,8 +18,8 @@
   -webkit-box-shadow: none;
 }
 
-@mixin textShadow($distance, $color) {
-  text-shadow: 0 0 $distance $color;
+@mixin textShadow($blur, $color) {
+  text-shadow: 0 0 $blur $color;
 }
 
 @mixin vCenter() {

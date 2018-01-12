@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import cx from 'classnames'
 import { connect } from 'react-redux'
+import { compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
+import { withRouter } from 'react-router'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import {
   questAdd,
@@ -23,6 +25,7 @@ class SidePanel extends Component {
     questAdd: PropTypes.func,
     questSelect: PropTypes.func,
     questRemove: PropTypes.func,
+    params: PropTypes.object,
     curQuestInd: PropTypes.number,
     questCnt: PropTypes.number,
     panelState: PropTypes.string,
@@ -44,6 +47,7 @@ class SidePanel extends Component {
       onCloseClick,
       questAdd,
       questSelect,
+      params: { brochure },
     } = this.props
     const quests = Array(questCnt).fill(0)
     return (
@@ -52,7 +56,7 @@ class SidePanel extends Component {
           sidePanel: true,
           'Bs-Bb': true,
           'P-R': true,
-          sidePanel__hidden: panelState !== 'opened',
+          sidePanel__hidden: panelState !== 'opened' || brochure,
         })}
       >
         <div>
@@ -107,4 +111,4 @@ const actions = {
   questRemove,
 }
 
-export default connect(selectors, actions)(SidePanel)
+export default compose(withRouter, connect(selectors, actions))(SidePanel)

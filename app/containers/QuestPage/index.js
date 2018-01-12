@@ -70,6 +70,12 @@ class QuestPage extends Component {
     this.setState({ panelState: state })
   }
 
+  handleMapClick = () => {
+    if (window.innerWidth < 768) {
+      this.setState({ panelState: 'minimized' })
+    }
+  }
+
   render() {
     const { panelState } = this.state
     const { recommendations, params: { brochure } } = this.props
@@ -96,7 +102,7 @@ class QuestPage extends Component {
             this.handleQuestBtnClick('closed')
           }}
         />
-        <Map panelState={panelState} />
+        <Map panelState={panelState} onClick={this.handleMapClick} />
         {recommendations.length > 0 && (
           <ScoreBoard recommendations={recommendations} />
         )}

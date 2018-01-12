@@ -28,6 +28,7 @@ const MapBox = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN })
 class Map extends Component {
   static propTypes = {
     mapChange: PropTypes.func,
+    onClick: PropTypes.func,
     recommendations: PropTypes.array,
     viewport: PropTypes.object,
     params: PropTypes.object,
@@ -278,7 +279,7 @@ class Map extends Component {
   }
 
   render() {
-    const { panelState, viewport: { center, zoom } } = this.props
+    const { panelState, viewport: { center, zoom }, onClick } = this.props
 
     return (
       <div
@@ -286,6 +287,7 @@ class Map extends Component {
           map: true,
           map__withoutQuest: panelState !== 'opened',
         })}
+        onClick={onClick}
       >
         <ReactResizeDetector
           handleWidth

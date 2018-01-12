@@ -8,7 +8,8 @@ import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { getBrochureRequest, clearBrochure } from 'containers/QuestPage/actions'
 import { selectBrochure } from 'containers/QuestPage/selectors'
 import Img from 'components/Img'
-import { ImageTile, TextTile } from 'components/Tiles'
+import ResponsiveLayout from 'components/ResponsiveLayout'
+import { ImageTile, TextTile, TextTileMobile } from 'components/Tiles'
 import './style.scss'
 
 class Brochure extends Component {
@@ -69,10 +70,28 @@ class Brochure extends Component {
             <Col lg={4} md={12} sm={12} xs={12} className="brochure__col">
               <Row className="brochure__row">
                 <Col lg={12} md={6} sm={12} xs={12} className="brochure__col">
-                  <TextTile
-                    type="description"
-                    title={''}
-                    content={description.text.content}
+                  <ResponsiveLayout
+                    desktop={
+                      <TextTile
+                        type="description"
+                        title={''}
+                        content={description.text.content}
+                      />
+                    }
+                    tablet={
+                      <TextTile
+                        type="description"
+                        title={''}
+                        content={description.text.content}
+                      />
+                    }
+                    mobile={
+                      <TextTileMobile
+                        type="description"
+                        title={''}
+                        content={description.text.content}
+                      />
+                    }
                   />
                 </Col>
                 <Col lg={12} md={6} sm={12} xs={12} className="brochure__col">
@@ -91,7 +110,12 @@ class Brochure extends Component {
             tiles.map((tile, index) => {
               const { content, title, type, url } = tile
               return type === 'text' ? (
-                <TextTile title={title} content={content} key={index} />
+                <ResponsiveLayout
+                  key={index}
+                  desktop={<TextTile title={title} content={content} />}
+                  tablet={<TextTile title={title} content={content} />}
+                  mobile={<TextTileMobile title={title} content={content} />}
+                />
               ) : (
                 <ImageTile img={url} title={title} key={index} />
               )
