@@ -9,6 +9,9 @@ const importRoutes = require('../routes/import.routes')
 const mapRoutes = require('../routes/map.routes')
 const postRoutes = require('../routes/post.routes')
 const suggestionRoutes = require('../routes/suggestion.routes')
+const brochureRoutes = require('../routes/brochure.routes')
+const placeRoutes = require('../routes/place.routes')
+const themeRoutes = require('../routes/theme.routes')
 
 // Add Routes
 const addRoutes = app => {
@@ -17,6 +20,9 @@ const addRoutes = app => {
   app.use('/api/v1/map', mapRoutes)
   app.use('/api/v1/post', postRoutes)
   app.use('/api/v1/suggestion', suggestionRoutes)
+  app.use('/api/v1/brochure', brochureRoutes)
+  app.use('/api/v1/place', placeRoutes)
+  app.use('/api/v1/theme', themeRoutes)
 }
 
 // Dev middleware
@@ -65,7 +71,6 @@ const addProdMiddlewares = (app, options) => {
 
   // compression middleware compresses your server responses which makes them
   // smaller (applies also to assets). You can read more about that technique
-  // and other good practices on official Express.js docs http://mxs.is/googmy
 
   app.use(compression())
   app.use(publicPath, express.static(outputPath))

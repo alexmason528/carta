@@ -9,8 +9,5 @@ router.get('/questinfo', MapController.getQuestInfo)
 // Get recommendations
 router.post('/recommendation', MapController.getRecommendations)
 
-// Get brochure
-router.post('/brochure', MapController.getBrochure)
-
 // export default router
 module.exports = router

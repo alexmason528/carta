@@ -101,6 +101,13 @@ class Menu extends Component {
           }}
         >
           <ul>
+            {currentPage !== 'home' && (
+              <li>
+                <Link to="/" onClick={this.handlePageChange}>
+                  {formatMessage(messages.home)}
+                </Link>
+              </li>
+            )}
             {brochure && (
               <li>
                 <a href="/" onClick={this.handleMap}>
@@ -108,17 +115,24 @@ class Menu extends Component {
                 </a>
               </li>
             )}
-            {currentPage === 'home' && (
+            {currentPage !== 'quest' && (
               <li>
                 <Link to="/quest" onClick={this.handlePageChange}>
                   {formatMessage(messages.quest)}
                 </Link>
               </li>
             )}
-            {currentPage === 'quest' && (
+            {currentPage !== 'places' && (
               <li>
-                <Link to="/" onClick={this.handlePageChange}>
-                  {formatMessage(messages.home)}
+                <Link to="/places" onClick={this.handlePageChange}>
+                  {'Places'}
+                </Link>
+              </li>
+            )}
+            {currentPage !== 'themes' && (
+              <li>
+                <Link to="/themes" onClick={this.handlePageChange}>
+                  {'Themes'}
                 </Link>
               </li>
             )}

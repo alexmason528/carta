@@ -1,0 +1,33 @@
+@import '../../../styles/common';
+
+.placeTile {
+  img {
+    width: 100%;
+    transform: scale(1);
+    @include transition(all, $normalTrans);
+  }
+
+  &:hover img {
+    transform: scale($enlargeSize);
+  }
+
+  &:before {
+    content: '';
+    z-index: 3;
+    @include absoluteFill();
+    @include insetBoxShadow(8px, $darkShadowColor);
+  }
+
+  h2 {
+    z-index: 4;
+    color: $white;
+    font-weight: $heavierFw;
+    line-height: $textLH;
+    @include absoluteTopLeft();
+    @include textShadow($textShadowBlur, $shadowColor);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

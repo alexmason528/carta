@@ -155,18 +155,10 @@ export function* getQuestInfoRequestHandler({ payload }) {
 }
 
 export function* getBrochureRequestHandler({ payload }) {
-  const requestURL = `${API_BASE_URL}api/v1/map/brochure/`
-
-  const data = {
-    link: payload,
-  }
+  const requestURL = `${API_BASE_URL}api/v1/brochure/${payload}`
 
   const params = {
-    method: 'POST',
-    body: JSON.stringify(data),
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    method: 'GET',
   }
 
   try {

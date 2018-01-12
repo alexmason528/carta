@@ -8,6 +8,7 @@ import './style.scss'
 
 class FixedTile extends Component {
   static propTypes = {
+    onClick: PropTypes.func,
     title: PropTypes.string,
     img: PropTypes.string,
     buttonText: PropTypes.string,
@@ -41,6 +42,8 @@ class FixedTile extends Component {
 
   handleButtonClick = evt => {
     evt.stopPropagation()
+    const { onClick } = this.props
+    onClick()
   }
 
   render() {

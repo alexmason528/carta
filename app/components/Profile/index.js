@@ -155,7 +155,12 @@ class Profile extends Component {
             {placeList[this.coverPic].name}
           </button>{' '}
           |{' '}
-          <button className="Tt-U Fw-B Fz-10">
+          <button
+            className="Tt-U Fw-B Fz-10"
+            onClick={() => {
+              browserHistory.push('/places')
+            }}
+          >
             {formatMessage(messages.browsePlaces)}
           </button>
         </div>

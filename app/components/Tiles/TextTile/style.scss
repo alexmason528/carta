@@ -1,0 +1,33 @@
+@import '../../../styles/common';
+
+.textTile {
+  background: $white;
+
+  &__content {
+    height: calc(100% - 54px);
+  }
+
+  .arrowBtn {
+    border: 10px solid transparent;
+    border-left-color: $brochureArrowColor;
+    @include absoluteRightBottom();
+
+    &:hover {
+      border-left-color: $brochureArrowHoverColor;
+    }
+
+    &.more {
+      @include transform(45deg);
+    }
+
+    &.less {
+      right: 10px;
+      bottom: 10px;
+      @include transform(225deg);
+    }
+  }
+}
+
+.mobileTextTile {
+  padding: 30px !important;
+}

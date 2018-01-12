@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
 import { injectIntl, intlShape } from 'react-intl'
+import { browserHistory } from 'react-router'
 import messages from 'containers/HomePage/messages'
 import {
   selectAuthenticated,
@@ -91,6 +92,9 @@ class Mobile extends Component {
                 : messages.startPersonalQuest
             ).replace(/\n/g, '<br/>')}
             buttonText={hasQuest ? formatMessage(messages.orStartaNewOne) : ''}
+            onClick={() => {
+              browserHistory.push('/quest')
+            }}
           />
           <FixedTile
             img="theme-square.jpg"
@@ -100,6 +104,9 @@ class Mobile extends Component {
               '<br/>'
             )}
             buttonText={formatMessage(messages.browseThemes)}
+            onClick={() => {
+              browserHistory.push('/themes')
+            }}
           />
           <div className="P-R">
             {authenticated &&

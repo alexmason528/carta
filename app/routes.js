@@ -1,6 +1,5 @@
 // These are the pages you can go to.
 // They are all wrapped in the App component, which should contain the navbar etc
-// See http://blog.mxstbr.com/2016/01/react-apps-with-pages for more information
 // about the code splitting business
 import { getAsyncInjectors } from './utils/asyncInjectors'
 
@@ -54,6 +53,50 @@ export default function createRoutes(store) {
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('home', reducer.default)
           injectSagas('home', sagas.default)
+
+          renderRoute(component)
+        })
+
+        importModules.catch(errorLoading)
+      },
+    },
+    {
+      path: '/places',
+      name: 'placePage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          import('containers/PlacePage/reducer'),
+          import('containers/PlacePage/sagas'),
+          import('containers/PlacePage'),
+        ])
+
+        const renderRoute = loadModule(cb)
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('place', reducer.default)
+          injectSagas('place', sagas.default)
+
+          renderRoute(component)
+        })
+
+        importModules.catch(errorLoading)
+      },
+    },
+    {
+      path: '/themes',
+      name: 'themePage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          import('containers/ThemePage/reducer'),
+          import('containers/ThemePage/sagas'),
+          import('containers/ThemePage'),
+        ])
+
+        const renderRoute = loadModule(cb)
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('theme', reducer.default)
+          injectSagas('theme', sagas.default)
 
           renderRoute(component)
         })

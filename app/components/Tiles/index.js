@@ -1,5 +1,7 @@
-import ImageTile from './ImageTile'
-import TextTile from './TextTile'
-import TextTileMobile from './TextTileMobile'
+import ImageTile from './ImageTile/'
+import PlaceTile from './PlaceTile/'
+import TextTile from './TextTile/Desktop'
+import TextTileMobile from './TextTile/Mobile'
+import ThemeTile from './ThemeTile/'
 
-export { ImageTile, TextTile, TextTileMobile }
+export { ImageTile, PlaceTile, TextTile, TextTileMobile, ThemeTile }

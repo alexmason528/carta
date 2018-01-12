@@ -1,7 +1,6 @@
 const Element = require('../models/element')
 const Descriptive = require('../models/descriptive')
 const Type = require('../models/type')
-const Place = require('../models/place')
 const Category = require('../models/category')
 
 /**
@@ -261,30 +260,5 @@ exports.getRecommendations = (req, res) => {
     }
 
     return res.json(recommendations)
-  })
-}
-
-/**
- * Get brochure
- * @param req
- * @param res
- * @returns brochure
- */
-exports.getBrochure = (req, res) => {
-  const { link } = req.body
-
-  Place.findOne({ link }, { _id: 0, e: 0, name: 0 }, (err, place) => {
-    if (err) {
-      return res.status(400).send({
-        error: {
-          details: err.toString(),
-        },
-      })
-    } else if (!place) {
-      return res.status(400).send({
-        error: { details: 'Wrong place' },
-      })
-    }
-    return res.json(place)
   })
 }
