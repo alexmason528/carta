@@ -125,14 +125,14 @@ class Menu extends Component {
             {currentPage !== 'places' && (
               <li>
                 <Link to="/places" onClick={this.handlePageChange}>
-                  {'Places'}
+                  {formatMessage(messages.places)}
                 </Link>
               </li>
             )}
             {currentPage !== 'themes' && (
               <li>
                 <Link to="/themes" onClick={this.handlePageChange}>
-                  {'Themes'}
+                  {formatMessage(messages.themes)}
                 </Link>
               </li>
             )}

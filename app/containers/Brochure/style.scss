@@ -1,12 +1,12 @@
 @import '../../styles/common';
 
-@media (max-width: 767px) {
-  .brochure {
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
-}
+// @media (max-width: 767px) {
+//   .brochure {
+//     &::-webkit-scrollbar {
+//       display: none;
+//     }
+//   }
+// }
 
 .brochure {
   z-index: 20;
@@ -123,6 +123,8 @@
 
     .mainPoster h2 {
       padding: 30px 30px 25px 30px;
+      top: unset;
+      bottom: 0;
     }
   }
 

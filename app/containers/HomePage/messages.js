@@ -185,4 +185,12 @@ export default defineMessages({
     id: 'carta.orStartaNewOne',
     defaultMessage: 'Or start a new one',
   },
+  themes: {
+    id: 'carta.themes',
+    defaultMessage: 'Themes',
+  },
+  places: {
+    id: 'carta.places',
+    defaultMessage: 'Places',
+  },
 })

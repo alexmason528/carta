@@ -66,5 +66,7 @@
   "carta.themeHighlight": "Theme<br>Highlight",
   "carta.browsePlaces": "Browse Places",
   "carta.browseThemes": "Browse Themes",
-  "carta.orStartaNewOne": "Or start a new one"
+  "carta.orStartaNewOne": "Or start a new one",
+  "carta.places": "Places",
+  "carta.themes": "Themes"
 }
