@@ -23,9 +23,11 @@ class PlaceTile extends Component {
   handleResize = () => {
     const placeTile = ReactDOM.findDOMNode(this)
     const width = $(placeTile).width()
+    const fontSize =
+      width / 44 * 3 * 1.35 * (window.innerWidth < 768 ? 7 / 6 : 1)
     $(placeTile)
       .find('h2')
-      .css({ fontSize: `${width / 44 * 3 * 1.35}px` })
+      .css({ fontSize: `${fontSize}px` })
   }
 
   handleLoaded = () => {

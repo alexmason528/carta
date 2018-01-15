@@ -25,9 +25,11 @@ class ThemeTile extends Component {
   handleResize = () => {
     const themeTile = ReactDOM.findDOMNode(this)
     const width = $(themeTile).width()
+    const fontSize =
+      width / 44 * 3 * 1.35 * (window.innerWidth < 768 ? 7 / 6 : 1)
     $(themeTile)
       .find('h2')
-      .css({ fontSize: `${width / 44 * 3 * 1.35}px` })
+      .css({ fontSize: `${fontSize}px` })
   }
 
   handleLoaded = () => {

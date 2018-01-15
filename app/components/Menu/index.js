@@ -101,18 +101,18 @@ class Menu extends Component {
           }}
         >
           <ul>
-            {currentPage !== 'home' && (
-              <li>
-                <Link to="/" onClick={this.handlePageChange}>
-                  {formatMessage(messages.home)}
-                </Link>
-              </li>
-            )}
             {brochure && (
               <li>
                 <a href="/" onClick={this.handleMap}>
                   {formatMessage(messages.map)}
                 </a>
+              </li>
+            )}
+            {currentPage !== 'home' && (
+              <li>
+                <Link to="/" onClick={this.handlePageChange}>
+                  {formatMessage(messages.home)}
+                </Link>
               </li>
             )}
             {currentPage !== 'quest' && (

@@ -23,7 +23,7 @@
     color: $white;
     font-weight: $heavierFw;
     line-height: $textLH;
-    @include absoluteTopLeft();
+    @include vCenter();
     @include textShadow($textShadowBlur, $shadowColor);
   }
 

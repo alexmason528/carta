@@ -86,6 +86,19 @@
   }
 }
 
+@media (max-width: 350px) {
+  .postButtons {
+    button,
+    span,
+    .postLang select {
+      font-size: 11px;
+    }
+    button {
+      margin-top: 1px;
+    }
+  }
+}
+
 .createPostBtn {
   display: flex;
   align-items: center;
