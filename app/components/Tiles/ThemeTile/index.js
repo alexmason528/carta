@@ -14,6 +14,13 @@ class ThemeTile extends Component {
     intl: intlShape.isRequired,
   }
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      imageLoaded: false,
+    }
+  }
+
   componentDidMount() {
     window.addEventListener('resize', this.handleResize)
   }
@@ -33,7 +40,7 @@ class ThemeTile extends Component {
   }
 
   handleLoaded = () => {
-    this.handleResize()
+    this.setState({ imageLoaded: true }, this.handleResize)
   }
 
   handleTileClick = () => {
@@ -42,6 +49,7 @@ class ThemeTile extends Component {
   }
 
   render() {
+    const { imageLoaded } = this.state
     const { url, title, intl: { locale } } = this.props
 
     return (
@@ -49,10 +57,12 @@ class ThemeTile extends Component {
         <div className="tileContainer" onClick={this.handleTileClick}>
           <div className="tile themeTile Ov-H Cr-P">
             <Img onLoad={this.handleLoaded} src={url} />
-            <h2
-              className="Mb-0 Tt-U Px-30 Py-19"
-              dangerouslySetInnerHTML={{ __html: title[locale] }}
-            />
+            {imageLoaded && (
+              <h2
+                className="Mb-0 Tt-U Px-30 Py-19"
+                dangerouslySetInnerHTML={{ __html: title[locale] }}
+              />
+            )}
           </div>
         </div>
       </Col>

@@ -461,8 +461,8 @@
   height: auto;
   font-weight: lighter;
   font-size: 14.5px;
-  cursor: text;
   user-select: text;
+  cursor: text;
 
   &:focus {
     outline: none;
@@ -476,10 +476,6 @@
   align-items: center;
   position: relative;
   background: #fff;
-
-  &.postCreate {
-    padding-top: 8px;
-  }
 
   .left,
   .right {
@@ -495,6 +491,10 @@
   input[type='file'] {
     display: none;
   }
+
+  button {
+    font-weight: $lightFw;
+  }
 }
 
 .postLang {
@@ -505,9 +505,10 @@
     background: #fbfbfb;
     padding: 4px 20px 4px 8px;
     font-size: 13px;
+    font-weight: $lightFw;
     border-radius: 0;
-    cursor: pointer;
     color: rgba(0, 0, 0, 0.7);
+    cursor: pointer;
     text-transform: uppercase;
     -webkit-appearance: none;
     -moz-appearance: none;

@@ -286,11 +286,13 @@ function questReducer(state = initialState, { type, payload }) {
       newQuests = [...quests, JSON.parse(JSON.stringify(initialQuest))]
 
       setItem('quests', JSON.stringify(newQuests))
+      setItem('curQuestInd', newQuests.length - 1)
 
       return {
         ...state,
         status: type,
         quests: newQuests,
+        curQuestInd: newQuests.length - 1,
       }
 
     case QUEST_SELECT:

@@ -46,16 +46,22 @@ export default function createRoutes(store) {
           import('containers/HomePage/reducer'),
           import('containers/HomePage/sagas'),
           import('containers/HomePage'),
+          import('containers/QuestPage/reducer'),
+          import('containers/QuestPage/sagas'),
         ])
 
         const renderRoute = loadModule(cb)
 
-        importModules.then(([reducer, sagas, component]) => {
-          injectReducer('home', reducer.default)
-          injectSagas('home', sagas.default)
+        importModules.then(
+          ([reducer, sagas, component, questPageReducer, questPageSagas]) => {
+            injectReducer('home', reducer.default)
+            injectSagas('home', sagas.default)
+            injectReducer('quest', questPageReducer.default)
+            injectSagas('quest', questPageSagas.default)
 
-          renderRoute(component)
-        })
+            renderRoute(component)
+          }
+        )
 
         importModules.catch(errorLoading)
       },

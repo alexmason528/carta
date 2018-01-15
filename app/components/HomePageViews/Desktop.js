@@ -12,6 +12,7 @@ import {
   selectInfo,
 } from 'containers/App/selectors'
 import { updateUserRequest } from 'containers/App/actions'
+import { questAdd } from 'containers/QuestPage/actions'
 import { selectEditingPost, selectPosts } from 'containers/HomePage/selectors'
 import { CreatePostButton } from 'components/Buttons'
 import Profile from 'components/Profile'
@@ -19,8 +20,8 @@ import FixedTile from 'components/FixedTile'
 import AccountMenu from 'components/AccountMenu'
 import AuthForm from 'components/AuthForm'
 import { Post, PostCreate } from 'components/Post'
-import { getItem } from 'utils/localStorage'
 import { getFirstname } from 'utils/stringHelper'
+import { checkQuest } from 'utils/urlHelper'
 
 class Desktop extends Component {
   static propTypes = {
@@ -28,6 +29,7 @@ class Desktop extends Component {
     profileClick: PropTypes.func,
     profilePicClick: PropTypes.func,
     toggleCreatePostForm: PropTypes.func,
+    questAdd: PropTypes.func,
     posts: PropTypes.array,
     user: PropTypes.object,
     info: PropTypes.object,
@@ -42,8 +44,8 @@ class Desktop extends Component {
 
   render() {
     const {
-      posts,
       authenticated,
+      posts,
       user,
       info,
       editingPost,
@@ -56,13 +58,14 @@ class Desktop extends Component {
       profilePicClick,
       toggleCreatePostForm,
       updateUserRequest,
+      questAdd,
     } = this.props
 
     const localePosts = posts.filter(post => post.title[locale] !== '')
     const firstColPosts = localePosts.filter((post, index) => index % 3 === 0)
     const secondColPosts = localePosts.filter((post, index) => index % 3 === 1)
     const thirdColPosts = localePosts.filter((post, index) => index % 3 === 2)
-    const hasQuest = !!getItem('quests')
+    const continueQuest = checkQuest()
 
     const createPostButtonType =
       secondColPosts.length > 0 && secondColPosts[0].img ? 'image' : 'text'
@@ -108,14 +111,17 @@ class Desktop extends Component {
         <Col className="homePage__col">
           <FixedTile
             img="quest.jpg"
-            link="/quest"
+            link={'/quest'}
             title={formatMessage(
-              hasQuest
+              continueQuest
                 ? messages.continueYourQuest
                 : messages.startPersonalQuest
             ).replace(/\n/g, '<br/>')}
-            buttonText={hasQuest ? formatMessage(messages.orStartaNewOne) : ''}
+            buttonText={
+              continueQuest ? formatMessage(messages.orStartaNewOne) : ''
+            }
             onClick={() => {
+              questAdd()
               browserHistory.push('/quest')
             }}
           />
@@ -153,7 +159,7 @@ class Desktop extends Component {
         <Col xs={12} sm={6} md={4} className="homePage__col">
           <FixedTile
             img="theme.jpg"
-            link="/quest"
+            link="/themes"
             title={formatMessage(messages.themeHighlight).replace(
               /\n/g,
               '<br/>'
@@ -195,6 +201,7 @@ const selectors = createStructuredSelector({
 })
 
 const actions = {
+  questAdd,
   updateUserRequest,
 }
 

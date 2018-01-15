@@ -12,6 +12,14 @@ class ImageTile extends Component {
     type: PropTypes.string,
   }
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      imageLoaded: false,
+    }
+  }
+
   componentDidMount() {
     window.addEventListener('resize', this.handleResize)
   }
@@ -31,10 +39,11 @@ class ImageTile extends Component {
   }
 
   handleLoaded = () => {
-    this.handleResize()
+    this.setState({ imageLoaded: true }, this.handleResize)
   }
 
   render() {
+    const { imageLoaded } = this.state
     const { img, title, type } = this.props
     const data = type ? {} : { xs: 12, sm: 12, md: 6, lg: 4 }
 
@@ -50,10 +59,12 @@ class ImageTile extends Component {
         <div className="tileContainer">
           <div className="tile imageTile Ov-H Cr-P">
             <Img onLoad={this.handleLoaded} src={img} />
-            <h2
-              className="Mb-0 Tt-U Px-30 Py-19"
-              dangerouslySetInnerHTML={{ __html: title }}
-            />
+            {imageLoaded && (
+              <h2
+                className="Mb-0 Tt-U Px-30 Py-19"
+                dangerouslySetInnerHTML={{ __html: title }}
+              />
+            )}
           </div>
         </div>
       </Col>

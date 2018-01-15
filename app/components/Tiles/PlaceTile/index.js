@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import { browserHistory } from 'react-router'
 import { Col } from 'reactstrap'
+import cx from 'classnames'
 import Img from 'components/Img'
 import './style.scss'
 
@@ -10,6 +11,14 @@ class PlaceTile extends Component {
     title: PropTypes.string,
     url: PropTypes.string,
     link: PropTypes.string,
+  }
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      imageLoaded: false,
+    }
   }
 
   componentDidMount() {
@@ -31,7 +40,7 @@ class PlaceTile extends Component {
   }
 
   handleLoaded = () => {
-    this.handleResize()
+    this.setState({ imageLoaded: true }, this.handleResize)
   }
 
   handleTileClick = () => {
@@ -40,6 +49,7 @@ class PlaceTile extends Component {
   }
 
   render() {
+    const { imageLoaded } = this.state
     const { url, title } = this.props
 
     return (
@@ -47,10 +57,12 @@ class PlaceTile extends Component {
         <div className="tileContainer" onClick={this.handleTileClick}>
           <div className="tile placeTile Ov-H Cr-P">
             <Img onLoad={this.handleLoaded} src={url} />
-            <h2
-              className="Mb-0 Tt-U Px-30 Py-19"
-              dangerouslySetInnerHTML={{ __html: title }}
-            />
+            {imageLoaded && (
+              <h2
+                className="Mb-0 Tt-U Px-30 Py-19"
+                dangerouslySetInnerHTML={{ __html: title }}
+              />
+            )}
           </div>
         </div>
       </Col>

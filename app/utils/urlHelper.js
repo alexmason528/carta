@@ -8,6 +8,7 @@
 import { DEFAULT_LOCALE } from 'containers/LanguageProvider/constants'
 import enTranslationMessages from 'translations/en.json'
 import nlTranslationMessages from 'translations/nl.json'
+import { getItem } from './localStorage'
 
 const translations = {
   en: enTranslationMessages,
@@ -27,8 +28,6 @@ export const getObjectType = input => {
 }
 
 const getViewport = viewportStr => {
-  if (!viewportStr) return undefined
-
   const segs = viewportStr.split(',')
 
   if (segs.length !== 3) {
@@ -46,8 +45,6 @@ const getViewport = viewportStr => {
 }
 
 const getTypes = typesStr => {
-  if (!typesStr) return undefined
-
   let segs = typesStr.split(',')
 
   let types = {
@@ -80,7 +77,7 @@ const getTypes = typesStr => {
 }
 
 const getDescriptives = desStr => {
-  if (!desStr) return undefined
+  if (!desStr) return 'popular'
 
   let segs = desStr.split(',')
 
@@ -129,10 +126,62 @@ const getDescriptives = desStr => {
 }
 
 export const urlParser = ({ viewport, types, descriptives, brochure }) => {
+  if (!viewport || !types) {
+    const storageViewport = getItem('viewport')
+    const storageQuests = getItem('quests')
+    const storageInd = getItem('curQuestInd')
+
+    if (!storageViewport || !storageQuests || brochure) {
+      return {
+        viewport: undefined,
+        types: undefined,
+        descriptives: 'popular',
+        brochure,
+      }
+    }
+
+    const viewport = JSON.parse(storageViewport)
+    const ind = storageInd || 0
+    const quest = JSON.parse(storageQuests)[ind]
+    const types = {
+      ...quest.types,
+      includes: quest.types.includes.map(type =>
+        getUrlStr(type[DEFAULT_LOCALE])
+      ),
+      excludes: quest.types.excludes.map(type =>
+        getUrlStr(type[DEFAULT_LOCALE])
+      ),
+      visibles: quest.types.visibles.map(type =>
+        getUrlStr(type[DEFAULT_LOCALE])
+      ),
+    }
+
+    const descriptives = {
+      ...quest.descriptives,
+      stars: quest.descriptives.includes.map(desc =>
+        getUrlStr(desc[DEFAULT_LOCALE])
+      ),
+      includes: quest.descriptives.includes.map(desc =>
+        getUrlStr(desc[DEFAULT_LOCALE])
+      ),
+      excludes: quest.descriptives.excludes.map(desc =>
+        getUrlStr(desc[DEFAULT_LOCALE])
+      ),
+      visibles: quest.descriptives.visibles.map(desc =>
+        getUrlStr(desc[DEFAULT_LOCALE])
+      ),
+    }
+
+    return {
+      viewport,
+      types,
+      descriptives,
+      brochure,
+    }
+  }
   const resViewport = getViewport(viewport)
   const resTypes = getTypes(types)
-  const resDescriptives =
-    descriptives === 'popular' ? descriptives : getDescriptives(descriptives)
+  const resDescriptives = getDescriptives(descriptives)
 
   return {
     viewport: resViewport,
@@ -232,5 +281,25 @@ export const urlComposer = ({ brochure, viewport, types, descriptives }) => {
 }
 
 export const canSendRequest = ({ types }) => {
-  return types.includes.length > 0
+  return types.all || types.includes.length > 0
+}
+
+export const checkQuest = () => {
+  const storageViewport = getItem('viewport')
+  const storageQuests = getItem('quests')
+  const storageInd = getItem('curQuestInd')
+
+  if (!storageViewport || !storageQuests) {
+    return false
+  }
+
+  const ind = storageInd || 0
+  const quests = JSON.parse(storageQuests)
+  const { types } = quests[ind]
+
+  if (quests.length > 1) {
+    return true
+  }
+
+  return canSendRequest({ types })
 }
