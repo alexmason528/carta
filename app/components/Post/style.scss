@@ -30,6 +30,10 @@
 
   &.postCreate {
     margin-bottom: 0;
+
+    .postImage {
+      margin-bottom: 8px;
+    }
   }
 
   &--hidden {
@@ -164,9 +168,9 @@
 .postImage {
   position: relative;
   width: 100%;
-  cursor: pointer;
   overflow: hidden;
   display: block;
+  cursor: pointer;
 
   &:before {
     content: '';
