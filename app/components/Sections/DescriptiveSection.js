@@ -54,12 +54,12 @@ class DescriptiveSection extends Component {
   }
 
   handleAutoFocus() {
-    if (this.props.expanded && this.searchInput) {
-      const timer = setTimeout(() => {
+    const timer = setTimeout(() => {
+      if (this.searchInput) {
         ReactDOM.findDOMNode(this.searchInput).focus()
-        clearTimeout(timer)
-      }, 100)
-    }
+      }
+      clearTimeout(timer)
+    }, 100)
   }
 
   handleExpand = expanded => {

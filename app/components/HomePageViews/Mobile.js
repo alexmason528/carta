@@ -107,7 +107,7 @@ class Mobile extends Component {
           />
           <FixedTile
             img="brabant-square.jpg"
-            link="/themes"
+            link="/quest/5.5778,51.4161,8.4/regions/walking,relaxing,picnics,cycling"
             title={formatMessage(messages.brabantOutdoors).replace(
               /\n/g,
               '<br/>'

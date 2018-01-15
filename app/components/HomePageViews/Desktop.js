@@ -162,7 +162,7 @@ class Desktop extends Component {
         <Col xs={12} sm={6} md={4} className="homePage__col">
           <FixedTile
             img="brabant.jpg"
-            link="/themes"
+            link="/quest/5.5778,51.4161,8.4/regions/walking,relaxing,picnics,cycling"
             title={formatMessage(messages.brabantOutdoors).replace(
               /\n/g,
               '<br/>'
