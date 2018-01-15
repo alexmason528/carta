@@ -12,6 +12,7 @@ import {
   selectInfo,
 } from 'containers/App/selectors'
 import { updateUserRequest } from 'containers/App/actions'
+import { selectViewport } from 'containers/QuestPage/selectors'
 import { selectEditingPost, selectPosts } from 'containers/HomePage/selectors'
 import { CreatePostButton } from 'components/Buttons'
 import Profile from 'components/Profile'
@@ -19,8 +20,8 @@ import FixedTile from 'components/FixedTile'
 import AccountMenu from 'components/AccountMenu'
 import AuthForm from 'components/AuthForm'
 import { Post, PostCreate } from 'components/Post'
-import { getItem } from 'utils/localStorage'
 import { getFirstname } from 'utils/stringHelper'
+import { checkQuest } from 'utils/urlHelper'
 
 class Tablet extends Component {
   static propTypes = {
@@ -31,6 +32,7 @@ class Tablet extends Component {
     posts: PropTypes.array,
     user: PropTypes.object,
     info: PropTypes.object,
+    viewport: PropTypes.object,
     editingPost: PropTypes.object,
     authenticated: PropTypes.bool,
     showAuthForm: PropTypes.bool,
@@ -46,6 +48,7 @@ class Tablet extends Component {
       authenticated,
       user,
       info,
+      viewport,
       editingPost,
       showAuthForm,
       showCreatePostForm,
@@ -61,10 +64,9 @@ class Tablet extends Component {
     const localePosts = posts.filter(post => post.title[locale] !== '')
     const firstColPosts = localePosts.filter((post, index) => index % 2 === 0)
     const secondColPosts = localePosts.filter((post, index) => index % 2 === 1)
-    const hasQuest = !!getItem('quests')
-
     const createPostButtonType =
       secondColPosts.length > 0 && secondColPosts[0].img ? 'image' : 'text'
+    const { url, continueQuest } = checkQuest(viewport)
 
     return (
       <Row className="homePage__row">
@@ -107,9 +109,9 @@ class Tablet extends Component {
         <Col className="homePage__col">
           <FixedTile
             img="quest.jpg"
-            link="/quest"
+            link={url}
             title={formatMessage(
-              hasQuest
+              continueQuest
                 ? messages.continueYourQuest
                 : messages.startPersonalQuest
             ).replace(/\n/g, '<br/>')}
@@ -155,6 +157,7 @@ class Tablet extends Component {
 }
 
 const selectors = createStructuredSelector({
+  viewport: selectViewport(),
   posts: selectPosts(),
   editingPost: selectEditingPost(),
   authenticated: selectAuthenticated(),

@@ -13,6 +13,7 @@ import {
 } from 'containers/App/selectors'
 import { updateUserRequest } from 'containers/App/actions'
 import { questAdd } from 'containers/QuestPage/actions'
+import { selectViewport } from 'containers/QuestPage/selectors'
 import { selectEditingPost, selectPosts } from 'containers/HomePage/selectors'
 import { CreatePostButton } from 'components/Buttons'
 import Profile from 'components/Profile'
@@ -33,6 +34,7 @@ class Desktop extends Component {
     posts: PropTypes.array,
     user: PropTypes.object,
     info: PropTypes.object,
+    viewport: PropTypes.object,
     editingPost: PropTypes.object,
     authenticated: PropTypes.bool,
     showAuthForm: PropTypes.bool,
@@ -48,6 +50,7 @@ class Desktop extends Component {
       posts,
       user,
       info,
+      viewport,
       editingPost,
       showAuthForm,
       showCreatePostForm,
@@ -65,7 +68,7 @@ class Desktop extends Component {
     const firstColPosts = localePosts.filter((post, index) => index % 3 === 0)
     const secondColPosts = localePosts.filter((post, index) => index % 3 === 1)
     const thirdColPosts = localePosts.filter((post, index) => index % 3 === 2)
-    const continueQuest = checkQuest()
+    const { url, continueQuest } = checkQuest(viewport)
 
     const createPostButtonType =
       secondColPosts.length > 0 && secondColPosts[0].img ? 'image' : 'text'
@@ -111,7 +114,7 @@ class Desktop extends Component {
         <Col className="homePage__col">
           <FixedTile
             img="quest.jpg"
-            link={'/quest'}
+            link={url}
             title={formatMessage(
               continueQuest
                 ? messages.continueYourQuest
@@ -193,6 +196,7 @@ class Desktop extends Component {
 }
 
 const selectors = createStructuredSelector({
+  viewport: selectViewport(),
   posts: selectPosts(),
   editingPost: selectEditingPost(),
   authenticated: selectAuthenticated(),

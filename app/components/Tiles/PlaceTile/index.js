@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import { browserHistory } from 'react-router'
 import { Col } from 'reactstrap'
-import cx from 'classnames'
 import Img from 'components/Img'
 import './style.scss'
 

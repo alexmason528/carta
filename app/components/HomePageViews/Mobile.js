@@ -12,6 +12,8 @@ import {
   selectInfo,
 } from 'containers/App/selectors'
 import { updateUserRequest } from 'containers/App/actions'
+import { questAdd } from 'containers/QuestPage/actions'
+import { selectViewport } from 'containers/QuestPage/selectors'
 import { selectEditingPost, selectPosts } from 'containers/HomePage/selectors'
 import { CreatePostButton } from 'components/Buttons'
 import Profile from 'components/Profile'
@@ -21,6 +23,7 @@ import AuthForm from 'components/AuthForm'
 import { Post, PostCreate } from 'components/Post'
 import { getItem } from 'utils/localStorage'
 import { getFirstname } from 'utils/stringHelper'
+import { checkQuest } from 'utils/urlHelper'
 
 class Mobile extends Component {
   static propTypes = {
@@ -28,9 +31,11 @@ class Mobile extends Component {
     profileClick: PropTypes.func,
     profilePicClick: PropTypes.func,
     toggleCreatePostForm: PropTypes.func,
+    questAdd: PropTypes.func,
     posts: PropTypes.array,
     user: PropTypes.object,
     info: PropTypes.object,
+    viewport: PropTypes.object,
     editingPost: PropTypes.object,
     authenticated: PropTypes.bool,
     showAuthForm: PropTypes.bool,
@@ -46,6 +51,7 @@ class Mobile extends Component {
       authenticated,
       user,
       info,
+      viewport,
       editingPost,
       showAuthForm,
       showCreatePostForm,
@@ -56,12 +62,14 @@ class Mobile extends Component {
       profilePicClick,
       toggleCreatePostForm,
       updateUserRequest,
+      questAdd,
     } = this.props
 
     const localePosts = posts.filter(post => post.title[locale] !== '')
     const hasQuest = !!getItem('quests')
     const createPostButtonType =
       localePosts.length > 0 && localePosts[0].img ? 'image' : 'text'
+    const { url, continueQuest } = checkQuest(viewport)
 
     return (
       <Row className="homePage__row">
@@ -85,20 +93,21 @@ class Mobile extends Component {
           )}
           <FixedTile
             img="quest-square.jpg"
-            link="/quest"
+            link={url}
             title={formatMessage(
-              hasQuest
+              continueQuest
                 ? messages.continueYourQuest
                 : messages.startPersonalQuest
             ).replace(/\n/g, '<br/>')}
             buttonText={hasQuest ? formatMessage(messages.orStartaNewOne) : ''}
             onClick={() => {
+              questAdd()
               browserHistory.push('/quest')
             }}
           />
           <FixedTile
             img="theme-square.jpg"
-            link="/quest"
+            link="/themes"
             title={formatMessage(messages.themeHighlight).replace(
               /\n/g,
               '<br/>'
@@ -145,6 +154,7 @@ class Mobile extends Component {
 }
 
 const selectors = createStructuredSelector({
+  viewport: selectViewport(),
   posts: selectPosts(),
   editingPost: selectEditingPost(),
   authenticated: selectAuthenticated(),
@@ -153,6 +163,7 @@ const selectors = createStructuredSelector({
 })
 
 const actions = {
+  questAdd,
   updateUserRequest,
 }
 

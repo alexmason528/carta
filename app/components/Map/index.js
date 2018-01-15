@@ -276,11 +276,11 @@ class Map extends Component {
 
   handleStyleLoad = map => {
     this.map = map
+    this.handleRedrawMap(this.props)
   }
 
   render() {
     const { panelState, viewport: { center, zoom }, onClick } = this.props
-
     return (
       <div
         className={cx({
