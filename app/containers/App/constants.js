@@ -46,7 +46,7 @@ export const CLOUDINARY_POINTS_URL =
 export const CLOUDINARY_SHAPES_URL =
   'https://res.cloudinary.com/hyvpvyohj/raw/upload/v1510139627/data'
 export const CLOUDINARY_FIXED_URL =
-  'http://res.cloudinary.com/hyvpvyohj/raw/upload/v1515699387/image/fixed'
+  'http://res.cloudinary.com/hyvpvyohj/raw/upload/v1516043383/image/fixed'
 export const CLOUDINARY_PLACE_URL =
   'http://res.cloudinary.com/hyvpvyohj/raw/upload/v1514724157/image/place'
 

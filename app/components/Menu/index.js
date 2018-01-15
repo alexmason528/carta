@@ -56,7 +56,7 @@ class Menu extends Component {
     } = this.props
     const url =
       viewport && types && descriptives
-        ? `/quest/${viewport}/${types}/${descriptives}/`
+        ? `/quest/${viewport}/${types}/${descriptives}`
         : '/quest'
     router.push(url)
     clearBrochure()

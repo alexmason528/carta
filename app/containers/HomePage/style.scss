@@ -71,6 +71,7 @@
       .postTitle,
       .postTitleEdit {
         left: 30px;
+        width: calc(100% - 30px);
       }
       .postButtons,
       .postContent {

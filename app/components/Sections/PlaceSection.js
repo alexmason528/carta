@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import ReactDOM from 'react-dom'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
@@ -18,6 +19,23 @@ class PlaceSection extends Component {
   constructor(props) {
     super(props)
     this.state = { search: '' }
+  }
+
+  componentDidMount() {
+    this.handleAutoFocus()
+  }
+
+  componentDidUpdate() {
+    this.handleAutoFocus()
+  }
+
+  handleAutoFocus() {
+    if (this.searchInput) {
+      const timer = setTimeout(() => {
+        ReactDOM.findDOMNode(this.searchInput).focus()
+        clearTimeout(timer)
+      }, 100)
+    }
   }
 
   handlePlaceClick = place => {
@@ -48,6 +66,7 @@ class PlaceSection extends Component {
         <input
           className="section__searchInput"
           value={search}
+          ref={ref => (this.searchInput = ref)}
           onChange={this.handleInputChange}
         />
         <div className="section__filteredList">

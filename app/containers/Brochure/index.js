@@ -43,12 +43,12 @@ class Brochure extends Component {
     return (
       <Container fluid className="brochure P-0 M-0">
         <div className="brochure__menu">
-          <button
+          {/* <button
             className="P-5 Ml-2 Lh-100P Cr-P"
             onClick={this.handleBrochureResize}
           >
             <Img className="Sq-15" src={`${CLOUDINARY_ICON_URL}/narrow.png`} />
-          </button>
+          </button> */}
           <button
             className="P-5 Ml-2 Lh-100P Cr-P"
             onClick={this.handleBrochureClose}

@@ -161,9 +161,9 @@ class Desktop extends Component {
         </Col>
         <Col xs={12} sm={6} md={4} className="homePage__col">
           <FixedTile
-            img="theme.jpg"
+            img="brabant.jpg"
             link="/themes"
-            title={formatMessage(messages.themeHighlight).replace(
+            title={formatMessage(messages.brabantOutdoors).replace(
               /\n/g,
               '<br/>'
             )}

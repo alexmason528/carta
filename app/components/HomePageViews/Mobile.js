@@ -5,7 +5,6 @@ import { compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
 import { injectIntl, intlShape } from 'react-intl'
 import { browserHistory } from 'react-router'
-import messages from 'containers/HomePage/messages'
 import {
   selectAuthenticated,
   selectUser,
@@ -15,6 +14,7 @@ import { updateUserRequest } from 'containers/App/actions'
 import { questAdd } from 'containers/QuestPage/actions'
 import { selectViewport } from 'containers/QuestPage/selectors'
 import { selectEditingPost, selectPosts } from 'containers/HomePage/selectors'
+import messages from 'containers/HomePage/messages'
 import { CreatePostButton } from 'components/Buttons'
 import Profile from 'components/Profile'
 import FixedTile from 'components/FixedTile'
@@ -106,9 +106,9 @@ class Mobile extends Component {
             }}
           />
           <FixedTile
-            img="theme-square.jpg"
+            img="brabant-square.jpg"
             link="/themes"
-            title={formatMessage(messages.themeHighlight).replace(
+            title={formatMessage(messages.brabantOutdoors).replace(
               /\n/g,
               '<br/>'
             )}

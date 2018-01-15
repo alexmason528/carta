@@ -19,12 +19,13 @@
     @include transition(all, $normalTrans);
   }
 
-  &:hover &__image {
-    transform: scale($enlargeSize);
-  }
-
   &__content {
     @include absoluteFill();
+    &:hover {
+      .fixedTile__image {
+        transform: scale($enlargeSize);
+      }
+    }
 
     &:before {
       content: '';

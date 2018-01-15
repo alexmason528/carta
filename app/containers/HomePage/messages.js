@@ -193,4 +193,8 @@ export default defineMessages({
     id: 'carta.places',
     defaultMessage: 'Places',
   },
+  brabantOutdoors: {
+    id: 'carta.brabantOutdoors',
+    defaultMessage: 'Brabant Outdoors',
+  },
 })

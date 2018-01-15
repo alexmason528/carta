@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import ReactDOM from 'react-dom'
 import cx from 'classnames'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
@@ -39,6 +40,23 @@ class TypeSection extends Component {
 
     this.state = {
       search: '',
+    }
+  }
+
+  componentDidMount() {
+    this.handleAutoFocus()
+  }
+
+  componentDidUpdate() {
+    this.handleAutoFocus()
+  }
+
+  handleAutoFocus() {
+    if (this.props.expanded && this.searchInput) {
+      const timer = setTimeout(() => {
+        ReactDOM.findDOMNode(this.searchInput).focus()
+        clearTimeout(timer)
+      }, 100)
     }
   }
 
@@ -106,6 +124,7 @@ class TypeSection extends Component {
         <input
           className={cx({ section__searchInput: true, invisible: !expanded })}
           value={search}
+          ref={ref => (this.searchInput = ref)}
           onChange={this.handleInputChange}
         />
         <div className="section__filteredList">
