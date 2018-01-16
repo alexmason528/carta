@@ -42,6 +42,7 @@ class Menu extends Component {
     }
     const { signOut } = this.props
     signOut()
+    toggleMenu()
   }
 
   handleMap = evt => {

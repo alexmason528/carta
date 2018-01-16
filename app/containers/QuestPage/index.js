@@ -14,16 +14,7 @@ import SidePanel from 'components/SidePanel'
 import ScoreBoard from 'components/ScoreBoard'
 import { urlParser } from 'utils/urlHelper'
 import { getQuestInfoRequest, setQuest } from './actions'
-import {
-  PLACE_CLICK,
-  QUEST_SELECT,
-  TYPE_CLICK,
-  TYPE_ANYTHING_CLICK,
-  DESCRIPTIVE_CLICK,
-  DESCRIPTIVE_STAR_CLICK,
-  DESCRIPTIVE_ANYTHING_CLICK,
-  SET_QUEST,
-} from './constants'
+import { SET_QUEST } from './constants'
 import {
   selectRecommendations,
   selectViewport,
@@ -90,18 +81,7 @@ class QuestPage extends Component {
   render() {
     const { panelState } = this.state
     const { recommendations, brochureLink, info: { status } } = this.props
-    const updateActions = [
-      SET_QUEST,
-      PLACE_CLICK,
-      QUEST_SELECT,
-      TYPE_CLICK,
-      TYPE_ANYTHING_CLICK,
-      DESCRIPTIVE_CLICK,
-      DESCRIPTIVE_STAR_CLICK,
-      DESCRIPTIVE_ANYTHING_CLICK,
-    ]
-
-    const isFetching = updateActions.indexOf(status) !== -1
+    const isFetching = status === SET_QUEST
 
     return (
       <Container fluid className="questPage">

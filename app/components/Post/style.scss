@@ -29,6 +29,14 @@
     .postImage {
       margin-bottom: 8px;
     }
+
+    .postInfo {
+      bottom: 16px;
+    }
+
+    .postInfoBtn {
+      bottom: 18px;
+    }
   }
 
   &--hidden {
@@ -47,6 +55,7 @@
   .postTitleEdit {
     top: 50%;
     transform: translate(0, -50%);
+    width: 100%;
   }
 
   .postTitle {
@@ -411,7 +420,6 @@
 
 .postTitleEdit {
   cursor: text;
-  width: auto;
 }
 
 .postContent {
