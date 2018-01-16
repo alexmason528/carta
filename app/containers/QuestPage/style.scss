@@ -5,14 +5,15 @@
 
   .mapLoader {
     position: absolute;
-    top: 17px;
     z-index: 2;
 
     &.panelOpened {
+      top: 16px;
       left: 270px;
     }
 
     &.panelClosed {
+      top: 17px;
       left: 50px;
     }
   }
