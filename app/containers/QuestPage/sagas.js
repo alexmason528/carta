@@ -1,5 +1,5 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects'
-import { findIndex, map } from 'lodash'
+import { findIndex, map, uniq } from 'lodash'
 import { browserHistory } from 'react-router'
 import { API_BASE_URL, RECOMMENDATION_COUNT } from 'containers/App/constants'
 import {
@@ -24,7 +24,6 @@ import {
   DESCRIPTIVE_ANYTHING_CLICK,
   QUEST_SELECT,
   SET_QUEST,
-  CLEAR_BROCHURE,
 } from './constants'
 import {
   getRecommendationSuccess,
@@ -83,12 +82,19 @@ export function* getRecommendationRequestHandler() {
     }
   }
 
+  types.includes = uniq(types.includes)
+  types.excludes = uniq(types.excludes)
+
   let descriptives = {
     all: curDescriptives.all,
     stars: map(curDescriptives.stars, 'c'),
     includes: map(curDescriptives.includes, 'c'),
     excludes: map(curDescriptives.excludes, 'c'),
   }
+
+  descriptives.stars = uniq(descriptives.stars)
+  descriptives.includes = uniq(descriptives.includes)
+  descriptives.excludes = uniq(descriptives.excludes)
 
   const data = { count: RECOMMENDATION_COUNT, viewport, types, descriptives }
 
@@ -188,7 +194,6 @@ export function* composeUrlWatcher() {
   yield takeLatest(
     [
       MAP_CHANGE,
-      CLEAR_BROCHURE,
       PLACE_CLICK,
       QUEST_SELECT,
       TYPE_CLICK,
