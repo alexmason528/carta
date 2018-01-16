@@ -280,12 +280,17 @@ class Map extends Component {
   }
 
   render() {
-    const { panelState, viewport: { center, zoom }, onClick } = this.props
+    const {
+      panelState,
+      viewport: { center, zoom },
+      params: { brochure },
+      onClick,
+    } = this.props
     return (
       <div
         className={cx({
           map: true,
-          map__withoutQuest: panelState !== 'opened',
+          map__withoutQuest: panelState !== 'opened' || brochure,
         })}
         onClick={onClick}
       >
