@@ -115,16 +115,6 @@ class QuestPage extends Component {
               })}
             />
           )}
-        {isFetching &&
-          panelState !== 'closed' && (
-            <div
-              className={cx({
-                backLayer: true,
-                panelOpened: panelState === 'opened',
-                panelClosed: panelState === 'minimized',
-              })}
-            />
-          )}
         <Menu currentPage="quest" />
         <QuestButton
           panelState={panelState}
