@@ -38,8 +38,11 @@ const selectCurrentDescriptives = () =>
     substate => substate.quests[substate.curQuestInd].descriptives
   )
 
-const selectBrochure = () =>
-  createSelector(selectQuest, substate => get(substate, 'brochure'))
+const selectBrochureLink = () =>
+  createSelector(selectQuest, substate => get(substate, 'brochureLink'))
+
+const selectBrochureInfo = () =>
+  createSelector(selectQuest, substate => get(substate, 'brochureInfo'))
 
 const selectInfo = () =>
   createSelector(selectQuest, substate => ({
@@ -76,7 +79,8 @@ export {
   selectCurrentTypes,
   selectDescriptives,
   selectCurrentDescriptives,
-  selectBrochure,
+  selectBrochureLink,
+  selectBrochureInfo,
   selectInfo,
   selectCurrentQuest,
   selectTypeSearchExpanded,

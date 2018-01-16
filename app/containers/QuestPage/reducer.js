@@ -26,10 +26,9 @@ import {
   GET_RECOMMENDATION_REQUEST,
   GET_RECOMMENDATION_SUCCESS,
   GET_RECOMMENDATION_FAIL,
-  GET_BROCHURE_REQUEST,
-  GET_BROCHURE_SUCCESS,
-  GET_BROCHURE_FAIL,
-  CLEAR_BROCHURE,
+  GET_BROCHURE_INFO_REQUEST,
+  GET_BROCHURE_INFO_SUCCESS,
+  GET_BROCHURE_INFO_FAIL,
 } from './constants'
 
 export const initialQuest = {
@@ -77,9 +76,10 @@ const initialState = {
   ],
   curQuestInd: JSON.parse(getItem('curQuestInd')) || 0,
   recommendations: [],
-  brochure: null,
-  error: null,
+  brochureLink: null,
+  brochureInfo: null,
   status: INIT,
+  error: null,
 }
 
 function questReducer(state = initialState, { type, payload }) {
@@ -455,8 +455,8 @@ function questReducer(state = initialState, { type, payload }) {
           viewport: newViewport,
           status: payload.urlEntered ? SET_URL_ENTERED_QUEST : SET_QUEST,
           quests: JSON.parse(JSON.stringify(newQuests)),
-        },
-        !payload.brochure && { brochure: null }
+          brochureLink: payload.quest.brochure,
+        }
       )
 
     case GET_QUESTINFO_REQUEST:
@@ -503,34 +503,27 @@ function questReducer(state = initialState, { type, payload }) {
         error: payload,
       }
 
-    case GET_BROCHURE_REQUEST:
+    case GET_BROCHURE_INFO_REQUEST:
       return {
         ...state,
         status: type,
-        brochure: null,
+        brochureInfo: null,
         error: null,
       }
 
-    case GET_BROCHURE_SUCCESS:
+    case GET_BROCHURE_INFO_SUCCESS:
       return {
         ...state,
         status: type,
-        brochure: payload,
+        brochureInfo: payload,
       }
 
-    case GET_BROCHURE_FAIL:
+    case GET_BROCHURE_INFO_FAIL:
       return {
         ...state,
         status: type,
         error: payload,
-        brochure: null,
-      }
-
-    case CLEAR_BROCHURE:
-      return {
-        ...state,
-        status: type,
-        brochure: null,
+        brochureInfo: null,
       }
 
     case TYPE_SEARCH_EXP_CHANGE:

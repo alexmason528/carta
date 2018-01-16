@@ -22,6 +22,7 @@ import {
   selectCurrentDescriptives,
   selectCurrentQuest,
   selectInfo,
+  selectBrochureLink,
 } from './selectors'
 import './style.scss'
 
@@ -31,17 +32,13 @@ class QuestPage extends Component {
     setQuest: React.PropTypes.func,
     viewport: PropTypes.object,
     descriptives: PropTypes.object,
-    quest: PropTypes.object,
     types: PropTypes.object,
+    quest: PropTypes.object,
     location: PropTypes.object,
     info: PropTypes.object,
+    params: PropTypes.object,
     recommendations: PropTypes.array,
-    params: PropTypes.shape({
-      brochure: PropTypes.string,
-      viewport: PropTypes.string,
-      types: PropTypes.string,
-      descriptives: PropTypes.string,
-    }),
+    brochureLink: PropTypes.string,
   }
 
   constructor(props) {
@@ -51,7 +48,6 @@ class QuestPage extends Component {
 
   componentWillMount() {
     const { params, getQuestInfoRequest } = this.props
-
     getQuestInfoRequest({
       quest: urlParser({ ...params }),
       urlEntered: true,
@@ -81,11 +77,7 @@ class QuestPage extends Component {
 
   render() {
     const { panelState } = this.state
-    const {
-      recommendations,
-      params: { brochure },
-      info: { status },
-    } = this.props
+    const { recommendations, brochureLink, info: { status } } = this.props
 
     return (
       <Container fluid className="questPage">
@@ -132,7 +124,7 @@ class QuestPage extends Component {
         {recommendations.length > 0 && (
           <ScoreBoard recommendations={recommendations} />
         )}
-        {brochure && <Brochure link={brochure} />}
+        {brochureLink && <Brochure brochureLink={brochureLink} />}
       </Container>
     )
   }
@@ -144,6 +136,7 @@ const selectors = createStructuredSelector({
   types: selectCurrentTypes(),
   descriptives: selectCurrentDescriptives(),
   quest: selectCurrentQuest(),
+  brochureLink: selectBrochureLink(),
   info: selectInfo(),
 })
 

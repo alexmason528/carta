@@ -3,7 +3,7 @@ import { findIndex, map } from 'lodash'
 import { browserHistory } from 'react-router'
 import { API_BASE_URL, RECOMMENDATION_COUNT } from 'containers/App/constants'
 import {
-  selectBrochure,
+  selectBrochureLink,
   selectCurrentTypes,
   selectCurrentDescriptives,
   selectViewport,
@@ -12,7 +12,7 @@ import {
 import request from 'utils/request'
 import { canSendRequest, urlComposer } from 'utils/urlHelper'
 import {
-  GET_BROCHURE_REQUEST,
+  GET_BROCHURE_INFO_REQUEST,
   GET_RECOMMENDATION_REQUEST,
   GET_QUESTINFO_REQUEST,
   MAP_CHANGE,
@@ -31,11 +31,18 @@ import {
   getRecommendationFail,
   getQuestInfoSuccess,
   getQuestInfoFail,
-  getBrochureSuccess,
-  getBrochureFail,
+  getBrochureInfoSuccess,
+  getBrochureInfoFail,
   setQuest,
   updateExpand,
 } from './actions'
+
+export function* getRecommendationWatcher() {
+  yield takeLatest(
+    [GET_RECOMMENDATION_REQUEST, SET_QUEST],
+    getRecommendationRequestHandler
+  )
+}
 
 export function* getRecommendationRequestHandler() {
   const viewport = yield select(selectViewport())
@@ -104,6 +111,10 @@ export function* getRecommendationRequestHandler() {
   }
 }
 
+export function* getQuestInfoWatcher() {
+  yield takeLatest(GET_QUESTINFO_REQUEST, getQuestInfoRequestHandler)
+}
+
 export function* getQuestInfoRequestHandler({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/map/questinfo/`
 
@@ -154,7 +165,11 @@ export function* getQuestInfoRequestHandler({ payload }) {
   }
 }
 
-export function* getBrochureRequestHandler({ payload }) {
+export function* getBrochureInfoWatcher() {
+  yield takeLatest(GET_BROCHURE_INFO_REQUEST, getBrochureInfoRequestHandler)
+}
+
+export function* getBrochureInfoRequestHandler({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/brochure/${payload}`
 
   const params = {
@@ -163,42 +178,10 @@ export function* getBrochureRequestHandler({ payload }) {
 
   try {
     const res = yield call(request, requestURL, params)
-    yield put(getBrochureSuccess(res))
+    yield put(getBrochureInfoSuccess(res))
   } catch (err) {
-    yield put(getBrochureFail(err))
+    yield put(getBrochureInfoFail(err))
   }
-}
-
-export function* composeUrl() {
-  const viewport = yield select(selectViewport())
-  const types = yield select(selectCurrentTypes())
-  const descriptives = yield select(selectCurrentDescriptives())
-  const brochure = yield select(selectBrochure())
-  const url = urlComposer(
-    Object.assign(
-      {},
-      { viewport, types, descriptives },
-      brochure && { brochure: brochure.link }
-    )
-  )
-  if (browserHistory.getCurrentLocation().pathname !== url) {
-    yield call(browserHistory.push, url)
-  }
-}
-
-export function* getRecommendationWatcher() {
-  yield takeLatest(
-    [GET_RECOMMENDATION_REQUEST, SET_QUEST],
-    getRecommendationRequestHandler
-  )
-}
-
-export function* getQuestInfoWatcher() {
-  yield takeLatest(GET_QUESTINFO_REQUEST, getQuestInfoRequestHandler)
-}
-
-export function* getBrochureWatcher() {
-  yield takeLatest(GET_BROCHURE_REQUEST, getBrochureRequestHandler)
 }
 
 export function* composeUrlWatcher() {
@@ -218,9 +201,26 @@ export function* composeUrlWatcher() {
   )
 }
 
+export function* composeUrl() {
+  const viewport = yield select(selectViewport())
+  const types = yield select(selectCurrentTypes())
+  const descriptives = yield select(selectCurrentDescriptives())
+  const brochureLink = yield select(selectBrochureLink())
+  const url = urlComposer(
+    Object.assign(
+      {},
+      { viewport, types, descriptives },
+      brochureLink && { brochure: brochureLink }
+    )
+  )
+  if (browserHistory.getCurrentLocation().pathname !== url) {
+    yield call(browserHistory.push, url)
+  }
+}
+
 export default [
   getRecommendationWatcher,
   getQuestInfoWatcher,
-  getBrochureWatcher,
+  getBrochureInfoWatcher,
   composeUrlWatcher,
 ]

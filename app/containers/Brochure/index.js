@@ -5,40 +5,44 @@ import { Container, Row, Col } from 'reactstrap'
 import { createStructuredSelector } from 'reselect'
 import { withRouter } from 'react-router'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
-import { getBrochureRequest, clearBrochure } from 'containers/QuestPage/actions'
-import { selectBrochure } from 'containers/QuestPage/selectors'
+import { getBrochureInfoRequest, setQuest } from 'containers/QuestPage/actions'
+import { selectBrochureInfo } from 'containers/QuestPage/selectors'
 import Img from 'components/Img'
 import ResponsiveLayout from 'components/ResponsiveLayout'
 import { ImageTile, TextTile, TextTileMobile } from 'components/Tiles'
+import { urlParser } from 'utils/urlHelper'
 import './style.scss'
 
 class Brochure extends Component {
   static propTypes = {
-    getBrochureRequest: PropTypes.func,
-    clearBrochure: PropTypes.func,
+    getBrochureInfoRequest: PropTypes.func,
+    setQuest: PropTypes.func,
     params: PropTypes.object,
     router: PropTypes.object,
-    brochure: PropTypes.object,
-    link: PropTypes.string.isRequired,
+    brochureInfo: PropTypes.object,
+    brochureLink: PropTypes.string,
   }
 
   componentDidMount() {
-    const { getBrochureRequest, link } = this.props
-    getBrochureRequest(link)
+    const { getBrochureInfoRequest, brochureLink } = this.props
+    getBrochureInfoRequest(brochureLink)
   }
 
   handleBrochureClose = () => {
-    const { clearBrochure } = this.props
-    clearBrochure()
+    const { params, setQuest } = this.props
+    setQuest({
+      quest: urlParser({ ...params, brochure: undefined }),
+      urlEntered: true,
+    })
   }
 
   handleBrochureResize = () => {}
 
   render() {
-    const { brochure } = this.props
-    if (!brochure) return null
+    const { brochureInfo } = this.props
+    if (!brochureInfo) return null
 
-    const { info: { mainPoster, description, tiles } } = brochure
+    const { info: { mainPoster, description, tiles } } = brochureInfo
 
     return (
       <Container fluid className="brochure P-0 M-0">
@@ -127,12 +131,12 @@ class Brochure extends Component {
 }
 
 const selectors = createStructuredSelector({
-  brochure: selectBrochure(),
+  brochureInfo: selectBrochureInfo(),
 })
 
 const actions = {
-  getBrochureRequest,
-  clearBrochure,
+  getBrochureInfoRequest,
+  setQuest,
 }
 
 export default compose(withRouter, connect(selectors, actions))(Brochure)

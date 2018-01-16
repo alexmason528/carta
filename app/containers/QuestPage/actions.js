@@ -19,10 +19,9 @@ import {
   GET_RECOMMENDATION_REQUEST,
   GET_RECOMMENDATION_SUCCESS,
   GET_RECOMMENDATION_FAIL,
-  GET_BROCHURE_REQUEST,
-  GET_BROCHURE_SUCCESS,
-  GET_BROCHURE_FAIL,
-  CLEAR_BROCHURE,
+  GET_BROCHURE_INFO_REQUEST,
+  GET_BROCHURE_INFO_SUCCESS,
+  GET_BROCHURE_INFO_FAIL,
 } from './constants'
 
 export function mapChange(payload) {
@@ -135,30 +134,24 @@ export function getRecommendationFail(payload) {
   }
 }
 
-export function getBrochureRequest(payload) {
+export function getBrochureInfoRequest(payload) {
   return {
-    type: GET_BROCHURE_REQUEST,
+    type: GET_BROCHURE_INFO_REQUEST,
     payload,
   }
 }
 
-export function getBrochureSuccess(payload) {
+export function getBrochureInfoSuccess(payload) {
   return {
-    type: GET_BROCHURE_SUCCESS,
+    type: GET_BROCHURE_INFO_SUCCESS,
     payload,
   }
 }
 
-export function getBrochureFail(payload) {
+export function getBrochureInfoFail(payload) {
   return {
-    type: GET_BROCHURE_FAIL,
+    type: GET_BROCHURE_INFO_FAIL,
     payload,
-  }
-}
-
-export function clearBrochure() {
-  return {
-    type: CLEAR_BROCHURE,
   }
 }
 
