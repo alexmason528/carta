@@ -15,7 +15,7 @@
     content: '';
     z-index: 3;
     @include absoluteFill();
-    @include insetBoxShadow($boxShadowBlur, $darkShadowColor);
+    @include insetBoxShadow($boxShadowBlur, $normalShadow);
   }
 
   h2 {
@@ -24,7 +24,7 @@
     z-index: 4;
     color: $white;
     @include absoluteTopLeft();
-    @include textShadow($textShadowBlur, $shadowColor);
+    @include textShadow($textShadowBlur, $lightShadow);
   }
 
   &:last-child {

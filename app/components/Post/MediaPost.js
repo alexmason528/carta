@@ -268,7 +268,7 @@ class MediaPost extends Component {
     const linkBarProps = { link, showLinkBar, postShowLinkBar, postLinkChange }
 
     return (
-      <div className="postContainer">
+      <div className="postContainer Cr-D">
         {(showLinkBar || showInfo || showDeleteConfirm) && (
           <div className="backLayer" onClick={this.handleBackLayerClick} />
         )}

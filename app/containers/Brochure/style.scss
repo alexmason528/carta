@@ -131,10 +131,10 @@
   @media (max-width: 991px) {
     &__menu {
       button {
-        @include boxShadow($boxShadowBlur, $shadowColor);
+        @include boxShadow($boxShadowBlur, $lightShadow);
         @include transition(all, $fastTrans);
         &:hover {
-          @include boxShadow($boxShadowBlur, $darkShadowColor);
+          @include boxShadow($boxShadowBlur, $normalShadow);
         }
       }
     }

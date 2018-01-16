@@ -45,6 +45,16 @@
   cursor: text;
 }
 
+// User Select
+
+.Us-N {
+  user-select: none;
+}
+
+.Us-T {
+  user-select: text;
+}
+
 // Overflow
 
 .Ov-H {

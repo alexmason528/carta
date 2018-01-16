@@ -128,6 +128,17 @@
   text-align: center;
 }
 
+@mixin flexAlignCenter() {
+  display: flex;
+  align-items: center;
+}
+
+@mixin flexAlignJustifyCenter() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 @mixin transition($effect, $duration) {
   transition: $effect $duration;
   -moz-transition: $effect $duration;

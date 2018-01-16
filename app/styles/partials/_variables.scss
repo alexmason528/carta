@@ -4,6 +4,7 @@ $enlargeSize: 1.04;
 
 $textShadowBlur: 7px;
 $boxShadowBlur: 7px;
+$farBoxShadowBlur: 15px;
 
 $textLH: 1.2;
 $noLH: 0;
@@ -19,9 +20,6 @@ $lightFw: 400;
 $lighterFw: 300;
 
 // Opacity
-$darkOpacity: 0.7;
-$darkerOpacity: 1;
-
 $lighterOpacity: 0;
 $lightOpacity: 0.3;
 $normalOpacity: 0.5;
@@ -44,9 +42,10 @@ $thirdBlack: #333;
 $brochureArrowColor: #ddd;
 $brochureArrowHoverColor: #006bca;
 
-$darkerShadowColor: rgba(0, 0, 0, $darkOpacity);
-$darkShadowColor: rgba(0, 0, 0, $normalOpacity);
-$shadowColor: rgba(0, 0, 0, $lightOpacity);
+$darkerShadow: rgba(0, 0, 0, $darkerOpacity);
+$darkShadow: rgba(0, 0, 0, $darkOpacity);
+$normalShadow: rgba(0, 0, 0, $normalOpacity);
+$lightShadow: rgba(0, 0, 0, $lightOpacity);
 
 $errorColor: #e80303;
 

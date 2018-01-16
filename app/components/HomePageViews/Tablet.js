@@ -5,6 +5,7 @@ import { compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
 import { injectIntl, intlShape } from 'react-intl'
 import { browserHistory } from 'react-router'
+import { pullAt, findIndex } from 'lodash'
 import messages from 'containers/HomePage/messages'
 import {
   selectAuthenticated,
@@ -61,12 +62,23 @@ class Tablet extends Component {
       updateUserRequest,
     } = this.props
 
-    const localePosts = posts.filter(post => post.title[locale] !== '')
-    const firstColPosts = localePosts.filter((post, index) => index % 2 === 0)
-    const secondColPosts = localePosts.filter((post, index) => index % 2 === 1)
+    let localePosts = posts.filter(post => post.title[locale] !== '')
+    let secondColPosts = localePosts.length > 0 ? pullAt(localePosts, [0]) : []
+    let firstColPosts =
+      localePosts.length > 0
+        ? pullAt(localePosts, findIndex(localePosts, post => !!post.img))
+        : []
+    const { url, continueQuest } = checkQuest(viewport)
     const createPostButtonType =
       secondColPosts.length > 0 && secondColPosts[0].img ? 'image' : 'text'
-    const { url, continueQuest } = checkQuest(viewport)
+
+    localePosts.map((post, index) => {
+      if (index % 2 === 0) {
+        firstColPosts.push(post)
+      } else {
+        secondColPosts.push(post)
+      }
+    })
 
     return (
       <Row className="homePage__row">

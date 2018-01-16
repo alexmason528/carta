@@ -367,7 +367,7 @@ class PostCreate extends Component {
     )
 
     return (
-      <div className="postContainer">
+      <div className="postContainer Cr-D">
         {(showLinkBar || showInfo || showDeleteConfirm) && (
           <div className="backLayer" onClick={this.handlePostClick} />
         )}

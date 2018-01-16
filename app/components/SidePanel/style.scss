@@ -8,7 +8,7 @@
   left: 0;
   background: $white;
   color: $secondaryBlack;
-  @include boxShadow($boxShadowBlur, $shadowColor);
+  @include boxShadow($boxShadowBlur, $lightShadow);
   @include transition(all, $fastTrans);
 
   &__hidden {
@@ -110,7 +110,7 @@
     border-width: 0.5px;
     border-style: solid;
     background: $white;
-    @include boxShadow($boxShadowBlur, $shadowColor);
+    @include boxShadow($boxShadowBlur, $lightShadow);
 
     &:hover {
       cursor: pointer;
@@ -157,7 +157,7 @@
     cursor: pointer;
     font-weight: $lightFw;
     opacity: $darkerOpacity;
-    @include boxShadow($boxShadowBlur, $shadowColor);
+    @include boxShadow($boxShadowBlur, $lightShadow);
     @include borderRadiusDetail(0, 20px, 20px, 0);
     @include transition(all, $fastTrans);
 

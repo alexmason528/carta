@@ -97,12 +97,12 @@ class TextTile extends Component {
       >
         <div className="tileContainer">
           <div className="tile textTile Ov-H">
-            <h2 className="textTile__title Tt-U Pb-20">{title}</h2>
-            <div className="textTile__content">{content}</div>
+            <h2 className="textTile__title Tt-U Pb-20 Cr-T Us-T">{title}</h2>
+            <div className="textTile__content Cr-T Us-T">{content}</div>
             <div
               className={cx({
                 arrowBtn: true,
-                'Cr-P': true,
+                'Cr-D': true,
                 more: !expanded,
                 less: expanded,
               })}

@@ -241,7 +241,7 @@ class TextPost extends Component {
     )
 
     return (
-      <div className="postContainer">
+      <div className="postContainer Cr-D">
         {showDeleteConfirm && (
           <div className="backLayer" onClick={this.handlePostClick} />
         )}

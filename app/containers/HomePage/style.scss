@@ -134,7 +134,7 @@
     .btnImage {
       background: $white;
       padding: 5px;
-      @include boxShadow($boxShadowBlur, $shadowColor);
+      @include boxShadow($boxShadowBlur, $lightShadow);
       @include transition(all, $fastTrans);
     }
 
@@ -142,16 +142,16 @@
       color: $white;
       font-weight: $heavyFw;
       font-size: 15px;
-      @include textShadow($textShadowBlur, $shadowColor);
+      @include textShadow($textShadowBlur, $lightShadow);
       @include transition(all, $fastTrans);
     }
 
     &:hover {
       .btnImage {
-        @include boxShadow($boxShadowBlur, $darkShadowColor);
+        @include boxShadow($boxShadowBlur, $normalShadow);
       }
       .btnText {
-        @include textShadow($boxShadowBlur, $darkShadowColor);
+        @include textShadow($boxShadowBlur, $normalShadow);
       }
     }
   }
@@ -162,7 +162,7 @@
     margin: 9px 0 8px 14px;
 
     .btnText {
-      color: $darkerShadowColor;
+      color: $darkShadow;
       font-size: 13px;
     }
 

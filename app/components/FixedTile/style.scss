@@ -31,7 +31,7 @@
       content: '';
       z-index: 1;
       @include absoluteFill();
-      @include insetBoxShadow($boxShadowBlur, $darkShadowColor);
+      @include insetBoxShadow($boxShadowBlur, $normalShadow);
     }
   }
 
@@ -40,7 +40,7 @@
     font-weight: $heavierFw;
     line-height: $textLH;
     @include vCenter();
-    @include textShadow($textShadowBlur, $shadowColor);
+    @include textShadow($textShadowBlur, $lightShadow);
   }
 
   &__btn {
@@ -49,11 +49,11 @@
     bottom: 5px;
     color: $white;
     z-index: 10;
-    @include textShadow($textShadowBlur, $shadowColor);
+    @include textShadow($textShadowBlur, $lightShadow);
 
     &:hover {
       color: $white;
-      @include textShadow($textShadowBlur, $darkShadowColor);
+      @include textShadow($textShadowBlur, $normalShadow);
     }
   }
 }
