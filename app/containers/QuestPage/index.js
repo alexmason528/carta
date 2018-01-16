@@ -7,7 +7,7 @@ import cx from 'classnames'
 import { isEqual } from 'lodash'
 import Brochure from 'containers/Brochure'
 import { QuestButton } from 'components/Buttons'
-import Loader from 'components/Loader'
+import MapLoader from 'components/MapLoader'
 import Map from 'components/Map'
 import Menu from 'components/Menu'
 import SidePanel from 'components/SidePanel'
@@ -92,7 +92,7 @@ class QuestPage extends Component {
         <Helmet meta={[{ name: 'Quest', content: 'Carta' }]} />
         {status === SET_QUEST &&
           panelState !== 'closed' && (
-            <Loader
+            <MapLoader
               className={cx({
                 panelOpened: panelState === 'opened',
                 panelClosed: panelState === 'minimized',
