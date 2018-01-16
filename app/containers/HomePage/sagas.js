@@ -227,7 +227,6 @@ export function* updatePostRequest() {
 
   try {
     const res = yield call(request, requestURL, params)
-
     const { _id, title, img, content, link, created_at } = res
     const info = { _id, title, img, content, link, created_at }
 

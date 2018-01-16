@@ -26,11 +26,9 @@ class Resizable extends Component {
   }
 
   resizeTextArea = () => {
-    setTimeout(() => {
-      const comp = ReactDOM.findDOMNode(this)
-      comp.style.height = 'auto'
-      comp.style.height = `${comp.scrollHeight}px`
-    }, 0)
+    const comp = ReactDOM.findDOMNode(this)
+    comp.style.height = 'auto'
+    comp.style.height = `${comp.scrollHeight}px`
   }
 
   render() {

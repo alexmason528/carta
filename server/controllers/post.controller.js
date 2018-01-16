@@ -87,7 +87,7 @@ exports.updatePost = (req, res) => {
       }
 
       if (post && post._id) {
-        return res.json(element)
+        return res.json(post)
       }
     }
   )
