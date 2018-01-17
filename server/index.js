@@ -14,10 +14,7 @@ const resolve = require('path').resolve
 const app = express()
 const bodyParser = require('body-parser')
 
-let mongoUri = isDev(
-  /* ? 'mongodb://localhost:27017/carta'
-  : ;*/ 'mongodb://heroku_mhwps3cx:585m6idt8moae9v55h3oh504dh@ds149934.mlab.com:49934/heroku_mhwps3cx'
-)
+let mongoUri = 'mongodb://localhost:27017/carta'
 
 mongoose.connect(mongoUri, {
   useMongoClient: true,
