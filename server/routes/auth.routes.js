@@ -3,19 +3,19 @@ const router = new express.Router()
 
 const AuthController = require('../controllers/auth.controller')
 
-// SignIn
+// SignIn user
 router.post('/signIn', AuthController.signIn)
 
-// Register
+// Register user
 router.post('/register', AuthController.register)
 
-// Verify
+// Verify user
 router.post('/verify', AuthController.verify)
 
-// Update
+// Update user
 router.patch('/:userID', AuthController.updateUser)
 
-// Delete User
+// Delete user
 router.delete('/:userID', AuthController.deleteUser)
 
 // export default router

@@ -2,13 +2,10 @@ const mongoose = require('mongoose')
 const Post = require('../models/post')
 
 /**
- * list post
- * @param req
- * @param res
- * @returns post list
+ * List posts
  */
 
-exports.listPost = (req, res) => {
+exports.listPosts = (req, res) => {
   const { lastPostDate, limit } = req.query
   const DEFAULT_LIMIT = 6
   let pipeline = [
@@ -59,10 +56,7 @@ exports.listPost = (req, res) => {
 }
 
 /**
- * update post
- * @param req
- * @param res
- * @returns updated post
+ * Update post
  */
 exports.updatePost = (req, res) => {
   const { postID } = req.params
@@ -94,10 +88,7 @@ exports.updatePost = (req, res) => {
 }
 
 /**
- * delete post
- * @param req
- * @param res
- * @returns void
+ * Delete post
  */
 
 exports.deletePost = (req, res) => {
@@ -115,10 +106,7 @@ exports.deletePost = (req, res) => {
 }
 
 /**
- * create post
- * @param req
- * @param res
- * @returns created post
+ * Create post
  */
 
 exports.createPost = (req, res) => {

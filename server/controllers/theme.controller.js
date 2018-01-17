@@ -1,10 +1,7 @@
 const Theme = require('../models/theme')
 
 /**
- * Get brochure
- * @param req
- * @param res
- * @returns brochure
+ * Get themes
  */
 exports.getThemes = (req, res) => {
   Theme.find({}, { _id: 0 }, (err, themes) => {

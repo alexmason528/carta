@@ -2,9 +2,6 @@ const Brochure = require('../models/brochure')
 
 /**
  * Get brochure
- * @param req
- * @param res
- * @returns brochure
  */
 exports.getBrochure = (req, res) => {
   const { link } = req.params

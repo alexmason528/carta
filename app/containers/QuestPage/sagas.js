@@ -49,7 +49,7 @@ export function* getRecommendationRequestHandler() {
   const curTypes = yield select(selectCurrentTypes())
   const curDescriptives = yield select(selectCurrentDescriptives())
 
-  const requestURL = `${API_BASE_URL}api/v1/map/recommendation/`
+  const requestURL = `${API_BASE_URL}api/v1/map/recommendations/`
 
   let types = {
     all: curTypes.all,
@@ -60,25 +60,25 @@ export function* getRecommendationRequestHandler() {
   if (curTypes.all) {
     for (let type of questTypes) {
       if (findIndex(curTypes.excludes, type) === -1) {
-        types.includes.push(type.c)
+        types.includes.push(type.t)
       } else {
-        types.excludes.push(type.c)
+        types.excludes.push(type.t)
       }
     }
   } else {
     for (let type of questTypes) {
       if (findIndex(curTypes.includes, type) === -1) {
-        types.excludes.push(type.c)
+        types.excludes.push(type.t)
       } else {
-        types.includes.push(type.c)
+        types.includes.push(type.t)
       }
     }
   }
 
   if (types.includes.length !== 0) {
-    types.excludes.pop('c129')
-    if (findIndex(types.includes, 'c129') === -1) {
-      types.includes.push('c129')
+    types.excludes.pop('t1')
+    if (findIndex(types.includes, 't1') === -1) {
+      types.includes.push('t1')
     }
   }
 
@@ -87,9 +87,9 @@ export function* getRecommendationRequestHandler() {
 
   let descriptives = {
     all: curDescriptives.all,
-    stars: map(curDescriptives.stars, 'c'),
-    includes: map(curDescriptives.includes, 'c'),
-    excludes: map(curDescriptives.excludes, 'c'),
+    stars: map(curDescriptives.stars, 'd'),
+    includes: map(curDescriptives.includes, 'd'),
+    excludes: map(curDescriptives.excludes, 'd'),
   }
 
   descriptives.stars = uniq(descriptives.stars)

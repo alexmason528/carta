@@ -3,13 +3,14 @@ const csv = require('fast-csv')
 const path = require('path')
 
 const Element = require('../models/element')
-const Descriptive = require('../models/descriptive')
-const Type = require('../models/type')
-const Category = require('../models/category')
+const TypeCategory = require('../models/typeCategory')
+const DescriptiveCategory = require('../models/descriptiveCategory')
+const TypeDescriptiveRelation = require('../models/typeDescriptiveRelation')
+const ElementTypeRelation = require('../models/elementTypeRelation')
+const ElementDescriptiveRelation = require('../models/elementDescriptiveRelation')
+
 /**
  * Import elements
- * @param null
- * @returns void
  */
 
 exports.importElements = (req, res) => {
@@ -35,85 +36,137 @@ exports.importElements = (req, res) => {
 }
 
 /**
- * Import descriptive characteristics
- * @param null
- * @returns void
+ * Import type categories
  */
 
-exports.importDescriptives = (req, res) => {
-  Descriptive.remove({}, err => {
+exports.importTypeCategories = (req, res) => {
+  TypeCategory.remove({}, err => {
     if (err) {
       return res.status(400).send({
         error: { details: err.toString() },
       })
     }
 
-    const csvPath = path.join(__dirname, '../csv/descriptives.csv')
+    const csvPath = path.join(__dirname, '../csv/type_categories.csv')
     const stream = fs.createReadStream(csvPath)
     csv
       .fromStream(stream, { headers: true })
       .on('data', data => {
-        let descriptive = new Descriptive(data)
-        descriptive.save()
+        let typeCategory = new TypeCategory(data)
+        typeCategory.save()
       })
       .on('end', () => {
-        return res.send('Importing descriptives finished')
+        return res.send('Importing type categories finished')
       })
   })
 }
 
 /**
- * Import type characteristics
- * @param null
- * @returns void
+ * Import descriptive categories
  */
 
-exports.importTypes = (req, res) => {
-  Type.remove({}, err => {
+exports.importDescriptiveCategories = (req, res) => {
+  DescriptiveCategory.remove({}, err => {
     if (err) {
       return res.status(400).send({
         error: { details: err.toString() },
       })
     }
 
-    const csvPath = path.join(__dirname, '../csv/types.csv')
+    const csvPath = path.join(__dirname, '../csv/descriptive_categories.csv')
     const stream = fs.createReadStream(csvPath)
     csv
       .fromStream(stream, { headers: true })
       .on('data', data => {
-        let type = new Type(data)
-        type.save()
+        let descriptiveCategory = new DescriptiveCategory(data)
+        descriptiveCategory.save()
       })
       .on('end', () => {
-        return res.send('Importing types finished')
+        return res.send('Importing descriptive categories finished')
       })
   })
 }
 
 /**
- * Import categories
- * @param null
- * @returns void
+ * Import type descriptive relations
  */
 
-exports.importCategories = (req, res) => {
-  Category.remove({}, err => {
+exports.importTypeDescriptiveRelations = (req, res) => {
+  TypeDescriptiveRelation.remove({}, err => {
     if (err) {
       return res.status(400).send({
         error: { details: err.toString() },
       })
     }
 
-    const csvPath = path.join(__dirname, '../csv/categories.csv')
+    const csvPath = path.join(
+      __dirname,
+      '../csv/type_descriptive_relations.csv'
+    )
     const stream = fs.createReadStream(csvPath)
     csv
       .fromStream(stream, { headers: true })
       .on('data', data => {
-        let category = new Category(data)
-        category.save()
+        let typeDescriptiveRelation = new TypeDescriptiveRelation(data)
+        typeDescriptiveRelation.save()
       })
       .on('end', () => {
-        return res.send('Importing categories finished')
+        return res.send('Importing type descriptive relations finished')
+      })
+  })
+}
+
+/**
+ * Import element type relations
+ */
+
+exports.importElementTypeRelations = (req, res) => {
+  ElementTypeRelation.remove({}, err => {
+    if (err) {
+      return res.status(400).send({
+        error: { details: err.toString() },
+      })
+    }
+
+    const csvPath = path.join(__dirname, '../csv/element_type_relations.csv')
+    const stream = fs.createReadStream(csvPath)
+    csv
+      .fromStream(stream, { headers: true })
+      .on('data', data => {
+        let elementTypeRelation = new ElementTypeRelation(data)
+        elementTypeRelation.save()
+      })
+      .on('end', () => {
+        return res.send('Importing element type relations finished')
+      })
+  })
+}
+
+/**
+ * Import element descriptive relations
+ */
+
+exports.importElementDescriptiveRelations = (req, res) => {
+  ElementDescriptiveRelation.remove({}, err => {
+    if (err) {
+      return res.status(400).send({
+        error: { details: err.toString() },
+      })
+    }
+
+    const csvPath = path.join(
+      __dirname,
+      '../csv/element_descriptive_relations.csv'
+    )
+    const stream = fs.createReadStream(csvPath)
+    csv
+      .fromStream(stream, { headers: true })
+      .on('data', data => {
+        let elementDescriptiveRelation = new ElementDescriptiveRelation(data)
+        elementDescriptiveRelation.save()
+      })
+      .on('end', () => {
+        return res.send('Importing element descriptive relations finished')
       })
   })
 }

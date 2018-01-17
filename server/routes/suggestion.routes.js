@@ -3,7 +3,7 @@ const router = new express.Router()
 
 const SuggestionController = require('../controllers/suggestion.controller')
 
-router.get('/', SuggestionController.listSuggestion)
+router.get('/', SuggestionController.listSuggestions)
 
 // export default router
 module.exports = router

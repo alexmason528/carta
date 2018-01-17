@@ -1,90 +1,52 @@
+const TypeCategory = require('../models/typeCategory')
+const DescriptiveCategory = require('../models/descriptiveCategory')
 const Element = require('../models/element')
-const Descriptive = require('../models/descriptive')
-const Type = require('../models/type')
-const Category = require('../models/category')
 
 /**
- * Get all categories
- * @param req
- * @param res
- * @returns void
+ * Get quest info
  */
 exports.getQuestInfo = (req, res) => {
   let questInfo = {
-    descriptives: [],
     types: [],
+    descriptives: [],
   }
 
   let getQuest = {
-    descriptives: false,
     types: false,
+    descriptives: false,
   }
 
-  Descriptive.findOne(
-    {},
-    { _id: 0, name: 0, e: 0, sum: 0 },
-    (descriptiveError, element) => {
-      if (descriptiveError) {
-        return res.status(400).send({
-          error: { details: descriptiveError.toString() },
-        })
-      }
-      const descriptives = Object.keys(element._doc)
-
-      Category.find(
-        { c: { $in: descriptives } },
-        { _id: 0 },
-        (categoryError, elements) => {
-          if (categoryError) {
-            return res.status(400).send({
-              error: { details: categoryError.toString() },
-            })
-          }
-
-          questInfo.descriptives = elements
-          getQuest.descriptives = true
-
-          if (getQuest.descriptives && getQuest.types) {
-            return res.json(questInfo)
-          }
-        }
-      )
-    }
-  )
-
-  Type.findOne({}, { _id: 0, name: 0, e: 0, sum: 0 }, (typeError, element) => {
-    if (typeError) {
+  TypeCategory.find({}, { _id: 0, name: 0, e: 0, sum: 0 }, (err, types) => {
+    if (err) {
       return res.status(400).send({
-        error: { details: typeError.toString() },
+        error: { details: err.toString() },
       })
     }
-    const types = Object.keys(element._doc)
-
-    Category.find(
-      { c: { $in: types } },
-      { _id: 0 },
-      (categoryError, elements) => {
-        if (categoryError) {
-          return res.status(400).send({
-            error: { details: categoryError.toString() },
-          })
-        }
-        questInfo.types = elements
-        getQuest.types = true
-
-        if (getQuest.descriptives && getQuest.types) {
-          return res.json(questInfo)
-        }
-      }
-    )
+    questInfo.types = types
+    getQuest.types = true
   })
+
+  DescriptiveCategory.find(
+    {},
+    { _id: 0, name: 0, e: 0, sum: 0 },
+    (err, descriptives) => {
+      if (err) {
+        return res.status(400).send({
+          error: { details: err.toString() },
+        })
+      }
+      questInfo.descriptives = descriptives
+      getQuest.descriptives = true
+
+      if (getQuest.descriptives && getQuest.types) {
+        return res.json(questInfo)
+      }
+    }
+  )
 }
 
 /**
  * Get recommendations
- * @param req
- * @param res
- * @returns void
  */
 exports.getRecommendations = (req, res) => {
   const { viewport, types, descriptives } = req.body
@@ -133,7 +95,7 @@ exports.getRecommendations = (req, res) => {
     },
     {
       $lookup: {
-        from: 'type',
+        from: 'elementTypeRelation',
         localField: 'e',
         foreignField: 'e',
         as: 'type',
@@ -141,7 +103,7 @@ exports.getRecommendations = (req, res) => {
     },
     {
       $lookup: {
-        from: 'descriptive',
+        from: 'elementDescriptiveRelation',
         localField: 'e',
         foreignField: 'e',
         as: 'descriptive',
@@ -180,8 +142,26 @@ exports.getRecommendations = (req, res) => {
     }
 
     let scoreElements = elements.map(element => {
-      let dScore = 0
       let tScore = 0
+      let dScore = 0
+
+      if (!types.all) {
+        types.includes.map(type => {
+          if (element.type[type] !== '') {
+            tScore += parseFloat(element.type[type])
+          }
+        })
+      } else {
+        if (element.type.sum !== '') {
+          tScore += parseFloat(element.type.sum)
+        }
+
+        types.excludes.map(type => {
+          if (element.type[type] !== '') {
+            tScore -= parseFloat(element.type[type])
+          }
+        })
+      }
 
       if (!descriptives.all) {
         descriptives.stars.map(star => {
@@ -209,24 +189,6 @@ exports.getRecommendations = (req, res) => {
         descriptives.excludes.map(desc => {
           if (element.descriptive[desc] !== '') {
             dScore += parseFloat(element.descriptive[desc]) * -0.3
-          }
-        })
-      }
-
-      if (!types.all) {
-        types.includes.map(type => {
-          if (element.type[type] !== '') {
-            tScore += parseFloat(element.type[type])
-          }
-        })
-      } else {
-        if (element.type.sum !== '') {
-          tScore += parseFloat(element.type.sum)
-        }
-
-        types.excludes.map(type => {
-          if (element.type[type] !== '') {
-            tScore -= parseFloat(element.type[type])
           }
         })
       }
@@ -261,4 +223,12 @@ exports.getRecommendations = (req, res) => {
 
     return res.json(recommendations)
   })
+}
+
+/**
+ * Get descriptive categories based on type category selection
+ */
+
+exports.getDescriptiveCategories = (req, res) => {
+  return res.json([])
 }

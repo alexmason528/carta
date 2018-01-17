@@ -15,10 +15,7 @@ let transporter = nodemailer.createTransport(
 )
 
 /**
- * SignIn
- * @param req
- * @param res
- * @returns userInfo
+ * SignIn user
  */
 exports.signIn = (req, res) => {
   const { email, password } = req.body
@@ -52,10 +49,7 @@ exports.signIn = (req, res) => {
 }
 
 /**
- * Register
- * @param req
- * @param res
- * @returns userInfo
+ * Register user
  */
 exports.register = (req, res) => {
   const {
@@ -102,8 +96,8 @@ exports.register = (req, res) => {
     } else {
       const verifyUrl =
         process.env.NODE_ENV === 'development'
-          ? 'http://localhost:3000/verify'
-          : 'https://cartamap.herokuapp.com/verify'
+          ? `${process.env.LOCAL_API_URL}verify`
+          : `${process.env.SERVER_API_URL}verify`
       let mailOptions = {
         from: '<Carta@carta.guide>',
         to: data.email,
@@ -122,10 +116,7 @@ exports.register = (req, res) => {
 }
 
 /**
- * update
- * @param req
- * @param res
- * @returns success or fail
+ * Update user
  */
 
 exports.updateUser = (req, res) => {
@@ -158,10 +149,7 @@ exports.updateUser = (req, res) => {
 }
 
 /**
- * verify
- * @param req
- * @param res
- * @returns success or fail
+ * Verify user
  */
 
 exports.verify = (req, res) => {
@@ -205,10 +193,7 @@ exports.verify = (req, res) => {
 }
 
 /**
- * delete
- * @param req
- * @param res
- * @returns success or fail
+ * Delete user
  */
 
 exports.deleteUser = (req, res) => {
