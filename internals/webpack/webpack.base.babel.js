@@ -92,11 +92,10 @@ module.exports = options => ({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
         MAP_ACCESS_TOKEN: JSON.stringify(process.env.MAP_ACCESS_TOKEN),
-        API_BASE_URL: JSON.stringify(
+        API_BASE_URL:
           process.env.NODE_ENV === 'production'
-            ? process.env.SERVER_API_URL
-            : process.env.LOCAL_API_URL
-        ),
+            ? JSON.stringify(process.env.SERVER_API_URL)
+            : JSON.stringify(process.env.LOCAL_API_URL),
       },
     }),
 
