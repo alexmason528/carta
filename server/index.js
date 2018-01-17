@@ -13,9 +13,6 @@ const path = require('path')
 const resolve = require('path').resolve
 const app = express()
 const bodyParser = require('body-parser')
-const dotenv = require('dotenv')
-
-dotenv.load({ path: '.env' })
 
 const mongoUri = isDev ? process.env.MONGODB_LOCAL_URI : process.env.MONGODB_URI
 

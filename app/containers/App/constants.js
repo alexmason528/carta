@@ -24,10 +24,7 @@ export const CHANGE_AUTH_METHOD = 'carta/App/CHANGE_AUTH_METHOD'
 
 export const TOGGLE_MENU = 'carta/App/TOGGLE_MENU'
 
-export const API_BASE_URL =
-  process.env.NODE_ENV === 'production'
-    ? 'https://cartamap.herokuapp.com/'
-    : 'http://localhost:3000/'
+export const API_BASE_URL = process.env.API_BASE_URL
 
 export const MAP_ACCESS_TOKEN = process.env.MAP_ACCESS_TOKEN
 
