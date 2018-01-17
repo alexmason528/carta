@@ -13,15 +13,16 @@ const path = require('path')
 const resolve = require('path').resolve
 const app = express()
 const bodyParser = require('body-parser')
+const dotenv = require('dotenv')
 
-let mongoUri = 'mongodb://localhost:27017/carta'
+dotenv.load({ path: '.env' })
+
+const mongoUri = isDev ? process.env.MONGODB_LOCAL_URI : process.env.MONGODB_URI
 
 mongoose.connect(mongoUri, {
   useMongoClient: true,
   /* other options */
 })
-
-require('dotenv').config()
 
 // If you need a backend, e.g. an API, add your custom backend-specific middleware here
 // app.use('/api', myApi)

@@ -28,8 +28,8 @@ export const API_BASE_URL =
   process.env.NODE_ENV === 'production'
     ? 'https://cartamap.herokuapp.com/'
     : 'http://localhost:3000/'
-export const MAP_ACCESS_TOKEN =
-  'pk.eyJ1IjoiY2FydGFndWlkZSIsImEiOiJjajMzNG5rcjAwMDFmMnFud3hpNW8wenJpIn0.uQaLvmopUNSmyGSI1WKynw'
+
+export const MAP_ACCESS_TOKEN = process.env.MAP_ACCESS_TOKEN
 
 export const CLOUDINARY_UPLOAD_URL =
   'https://api.cloudinary.com/v1_1/hyvpvyohj/upload'
