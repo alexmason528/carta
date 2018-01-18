@@ -233,27 +233,39 @@ export function* getDescriptivesRequestHandler() {
   const curTypes = yield select(selectCurrentTypes())
   const questTypes = yield select(selectTypes())
 
-  let types = []
+  let types = {
+    all: curTypes.all,
+    includes: [],
+    excludes: [],
+  }
 
   if (curTypes.all) {
     for (let type of questTypes) {
       if (findIndex(curTypes.excludes, type) === -1) {
-        types.push(type.t)
+        types.includes.push(type.t)
+      } else {
+        types.excludes.push(type.t)
       }
     }
   } else {
     for (let type of questTypes) {
-      if (findIndex(curTypes.includes, type) !== -1) {
-        types.push(type.t)
+      if (findIndex(curTypes.includes, type) === -1) {
+        types.excludes.push(type.t)
+      } else {
+        types.includes.push(type.t)
       }
     }
   }
 
-  types = uniq(types)
-
-  if (types.length === 0) {
-    types = map(questTypes, 't')
+  if (types.includes.length !== 0) {
+    types.excludes.pop('t1')
+    if (findIndex(types.includes, 't1') === -1) {
+      types.includes.push('t1')
+    }
   }
+
+  types.includes = uniq(types.includes)
+  types.excludes = uniq(types.excludes)
 
   const data = { types }
 

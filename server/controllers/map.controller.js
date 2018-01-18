@@ -227,11 +227,48 @@ exports.getRecommendations = (req, res) => {
  * Get descriptive categories based on type category selection
  */
 
-const getDescs = (types, handler) => {
-  let descsList = []
+exports.getDescriptiveCategories = (req, res) => {
+  const { types: { all, includes, excludes } } = req.body
 
-  if (types.length > 0) {
-    for (let type of types) {
+  if (all && excludes.length === 0) {
+    const pipeline = [
+      {
+        $lookup: {
+          from: 'typeDescriptiveRelation',
+          localField: 'd',
+          foreignField: 'd',
+          as: 'relation',
+        },
+      },
+      {
+        $unwind: '$relation',
+      },
+      {
+        $sort: {
+          'relation.sum': -1,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          d: 1,
+          nl: 1,
+          en: 1,
+        },
+      },
+    ]
+    DescriptiveCategory.aggregate(pipeline, (err, descriptives) => {
+      if (err) {
+        return res.status(400).send({
+          error: { details: err.toString() },
+        })
+      }
+      return res.json(descriptives)
+    })
+  } else if (includes.length > 0) {
+    let descsList = []
+
+    for (let type of includes) {
       const pipeline = [
         {
           $lookup: {
@@ -265,7 +302,7 @@ const getDescs = (types, handler) => {
           })
         }
         descsList.push({ index: type.substring(1), lists: elements })
-        if (descsList.length === types.length) {
+        if (descsList.length === includes.length) {
           descsList = _.map(_.orderBy(descsList, ['index'], ['asc']), 'lists')
           let descriptives = []
           const len = descsList.length
@@ -281,16 +318,11 @@ const getDescs = (types, handler) => {
               break
             }
           }
-          handler(descriptives)
+          return res.json(descriptives)
         }
       })
     }
+  } else {
+    return res.json([])
   }
-}
-
-exports.getDescriptiveCategories = (req, res) => {
-  const { types } = req.body
-  getDescs(types, descriptives => {
-    return res.json(descriptives)
-  })
 }
