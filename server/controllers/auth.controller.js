@@ -1,16 +1,19 @@
 const mongoose = require('mongoose')
 const nodemailer = require('nodemailer')
 const Cryptr = require('cryptr')
-const cryptr = new Cryptr('carta', 'aes256')
+const cryptr = new Cryptr(
+  process.env.CRYPTR_SECRET_KEY,
+  process.env.CRYPTR_ALGORITHM
+)
 const ses = require('nodemailer-ses-transport')
 const Post = require('../models/post')
 const User = require('../models/user')
 
 let transporter = nodemailer.createTransport(
   ses({
-    accessKeyId: 'AKIAILWMKMTWHAJBH5HQ',
-    secretAccessKey: '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',
-    region: 'eu-west-1',
+    accessKeyId: process.env.NODEMAILER_ACCESS_KEY_ID,
+    secretAccessKey: process.env.NODEMAILER_SECRET_ACCESS_KEY,
+    region: process.env.NODEMAILER_REGION,
   })
 )
 

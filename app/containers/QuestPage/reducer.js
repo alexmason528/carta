@@ -29,6 +29,9 @@ import {
   GET_BROCHURE_INFO_REQUEST,
   GET_BROCHURE_INFO_SUCCESS,
   GET_BROCHURE_INFO_FAIL,
+  GET_DESCRIPTIVES_REQUEST,
+  GET_DESCRIPTIVES_SUCCESS,
+  GET_DESCRIPTIVES_FAIL,
 } from './constants'
 
 export const initialQuest = {
@@ -592,6 +595,29 @@ function questReducer(state = initialState, { type, payload }) {
         ...state,
         status: type,
         quests: JSON.parse(JSON.stringify(newQuests)),
+      }
+
+    case GET_DESCRIPTIVES_REQUEST:
+      return {
+        ...state,
+        status: type,
+      }
+
+    case GET_DESCRIPTIVES_SUCCESS:
+      return {
+        ...state,
+        status: type,
+        categories: {
+          ...state.categories,
+          descriptives: payload,
+        },
+      }
+
+    case GET_DESCRIPTIVES_FAIL:
+      return {
+        ...state,
+        status: type,
+        error: payload,
       }
 
     default:

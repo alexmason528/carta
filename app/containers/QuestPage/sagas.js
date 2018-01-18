@@ -13,6 +13,7 @@ import request from 'utils/request'
 import { canSendRequest, urlComposer } from 'utils/urlHelper'
 import {
   GET_BROCHURE_INFO_REQUEST,
+  GET_DESCRIPTIVES_REQUEST,
   GET_RECOMMENDATION_REQUEST,
   GET_QUESTINFO_REQUEST,
   MAP_CHANGE,
@@ -34,6 +35,9 @@ import {
   getBrochureInfoFail,
   setQuest,
   updateExpand,
+  getDescriptivesRequest,
+  getDescriptivesSuccess,
+  getDescriptivesFail,
 } from './actions'
 
 export function* getRecommendationWatcher() {
@@ -112,6 +116,7 @@ export function* getRecommendationRequestHandler() {
       res = yield call(request, requestURL, params)
     }
     yield put(getRecommendationSuccess(res))
+    yield put(getDescriptivesRequest())
   } catch (err) {
     yield put(getRecommendationFail(err.toString()))
   }
@@ -122,7 +127,7 @@ export function* getQuestInfoWatcher() {
 }
 
 export function* getQuestInfoRequestHandler({ payload }) {
-  const requestURL = `${API_BASE_URL}api/v1/map/questinfo/`
+  const requestURL = `${API_BASE_URL}api/v1/map/questinfo`
 
   const params = {
     method: 'GET',
@@ -223,9 +228,62 @@ export function* composeUrl() {
   }
 }
 
+export function* getDescriptivesRequestHandler() {
+  const requestURL = `${API_BASE_URL}api/v1/map/descriptives`
+  const curTypes = yield select(selectCurrentTypes())
+  const questTypes = yield select(selectTypes())
+
+  let types = []
+
+  if (curTypes.all) {
+    for (let type of questTypes) {
+      if (findIndex(curTypes.excludes, type) === -1) {
+        types.push(type.t)
+      }
+    }
+  } else {
+    for (let type of questTypes) {
+      if (findIndex(curTypes.includes, type) !== -1) {
+        types.push(type.t)
+      }
+    }
+  }
+
+  types = uniq(types)
+
+  if (types.length === 0) {
+    types = map(questTypes, 't')
+  }
+
+  const data = { types }
+
+  const params = {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }
+
+  try {
+    const res = yield call(request, requestURL, params)
+    yield put(getDescriptivesSuccess(res))
+  } catch (err) {
+    yield put(getDescriptivesFail(err.toString()))
+  }
+}
+
+export function* getDescriptivesRequestWatcher() {
+  yield takeLatest(
+    [GET_DESCRIPTIVES_REQUEST, TYPE_CLICK, TYPE_ANYTHING_CLICK],
+    getDescriptivesRequestHandler
+  )
+}
+
 export default [
   getRecommendationWatcher,
   getQuestInfoWatcher,
   getBrochureInfoWatcher,
   composeUrlWatcher,
+  getDescriptivesRequestWatcher,
 ]

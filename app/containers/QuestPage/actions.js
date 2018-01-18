@@ -22,6 +22,9 @@ import {
   GET_BROCHURE_INFO_REQUEST,
   GET_BROCHURE_INFO_SUCCESS,
   GET_BROCHURE_INFO_FAIL,
+  GET_DESCRIPTIVES_REQUEST,
+  GET_DESCRIPTIVES_SUCCESS,
+  GET_DESCRIPTIVES_FAIL,
 } from './constants'
 
 export function mapChange(payload) {
@@ -179,5 +182,25 @@ export function descriptiveSearchExpChange(payload) {
 export function updateExpand() {
   return {
     type: UPDATE_EXPAND,
+  }
+}
+
+export function getDescriptivesRequest() {
+  return {
+    type: GET_DESCRIPTIVES_REQUEST,
+  }
+}
+
+export function getDescriptivesSuccess(payload) {
+  return {
+    type: GET_DESCRIPTIVES_SUCCESS,
+    payload,
+  }
+}
+
+export function getDescriptivesFail(payload) {
+  return {
+    type: GET_DESCRIPTIVES_FAIL,
+    payload,
   }
 }

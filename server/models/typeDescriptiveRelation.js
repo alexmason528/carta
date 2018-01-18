@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 
 const typeDescriptiveRelationSchema = new Schema(
   {
-    d: Number,
+    d: String,
     name: String,
     sum: Number,
   },

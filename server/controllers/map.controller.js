@@ -1,6 +1,7 @@
 const TypeCategory = require('../models/typeCategory')
 const DescriptiveCategory = require('../models/descriptiveCategory')
 const Element = require('../models/element')
+const _ = require('lodash')
 
 /**
  * Get quest info
@@ -11,11 +12,6 @@ exports.getQuestInfo = (req, res) => {
     descriptives: [],
   }
 
-  let getQuest = {
-    types: false,
-    descriptives: false,
-  }
-
   TypeCategory.find({}, { _id: 0, name: 0, e: 0, sum: 0 }, (err, types) => {
     if (err) {
       return res.status(400).send({
@@ -23,7 +19,10 @@ exports.getQuestInfo = (req, res) => {
       })
     }
     questInfo.types = types
-    getQuest.types = true
+
+    if (questInfo.descriptives.length > 0 && questInfo.types.length > 0) {
+      return res.json(questInfo)
+    }
   })
 
   DescriptiveCategory.find(
@@ -36,9 +35,8 @@ exports.getQuestInfo = (req, res) => {
         })
       }
       questInfo.descriptives = descriptives
-      getQuest.descriptives = true
 
-      if (getQuest.descriptives && getQuest.types) {
+      if (questInfo.descriptives.length > 0 && questInfo.types.length > 0) {
         return res.json(questInfo)
       }
     }
@@ -229,6 +227,70 @@ exports.getRecommendations = (req, res) => {
  * Get descriptive categories based on type category selection
  */
 
+const getDescs = (types, handler) => {
+  let descsList = []
+
+  if (types.length > 0) {
+    for (let type of types) {
+      const pipeline = [
+        {
+          $lookup: {
+            from: 'typeDescriptiveRelation',
+            localField: 'd',
+            foreignField: 'd',
+            as: 'relation',
+          },
+        },
+        {
+          $unwind: '$relation',
+        },
+        {
+          $sort: {
+            [`relation.${type}`]: -1,
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            d: 1,
+            nl: 1,
+            en: 1,
+          },
+        },
+      ]
+      DescriptiveCategory.aggregate(pipeline, (err, elements) => {
+        if (err) {
+          return res.status(400).send({
+            error: { details: err.toString() },
+          })
+        }
+        descsList.push({ index: type.substring(1), lists: elements })
+        if (descsList.length === types.length) {
+          descsList = _.map(_.orderBy(descsList, ['index'], ['asc']), 'lists')
+          let descriptives = []
+          const len = descsList.length
+          while (true) {
+            for (let i = 0; i < len; i += 1) {
+              const desc = _.pullAt(descsList[i], [0])
+
+              if (_.findIndex(descriptives, desc[0]) === -1) {
+                descriptives.push(desc[0])
+              }
+            }
+            if (descsList[len - 1].length === 0) {
+              break
+            }
+          }
+          handler(descriptives)
+        }
+      })
+    }
+  }
+}
+
 exports.getDescriptiveCategories = (req, res) => {
-  return res.json([])
+  const { types } = req.body
+  getDescs(types, descriptives => {
+    return res.json(descriptives)
+  })
 }
