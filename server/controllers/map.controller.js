@@ -1,3 +1,4 @@
+const PlaceCategory = require('../models/placeCategory')
 const TypeCategory = require('../models/typeCategory')
 const DescriptiveCategory = require('../models/descriptiveCategory')
 const Element = require('../models/element')
@@ -8,9 +9,27 @@ const _ = require('lodash')
  */
 exports.getQuestInfo = (req, res) => {
   let questInfo = {
+    places: [],
     types: [],
     descriptives: [],
   }
+
+  PlaceCategory.find({}, { _id: 0 }, (err, places) => {
+    if (err) {
+      return res.status(400).send({
+        error: { details: err.toString() },
+      })
+    }
+    questInfo.places = places
+
+    if (
+      questInfo.places.length > 0 &&
+      questInfo.descriptives.length > 0 &&
+      questInfo.types.length > 0
+    ) {
+      return res.json(questInfo)
+    }
+  })
 
   TypeCategory.find({}, { _id: 0, name: 0, e: 0, sum: 0 }, (err, types) => {
     if (err) {
@@ -20,7 +39,11 @@ exports.getQuestInfo = (req, res) => {
     }
     questInfo.types = types
 
-    if (questInfo.descriptives.length > 0 && questInfo.types.length > 0) {
+    if (
+      questInfo.places.length > 0 &&
+      questInfo.descriptives.length > 0 &&
+      questInfo.types.length > 0
+    ) {
       return res.json(questInfo)
     }
   })
@@ -36,7 +59,11 @@ exports.getQuestInfo = (req, res) => {
       }
       questInfo.descriptives = descriptives
 
-      if (questInfo.descriptives.length > 0 && questInfo.types.length > 0) {
+      if (
+        questInfo.places.length > 0 &&
+        questInfo.descriptives.length > 0 &&
+        questInfo.types.length > 0
+      ) {
         return res.json(questInfo)
       }
     }

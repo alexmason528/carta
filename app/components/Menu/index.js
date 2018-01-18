@@ -7,7 +7,11 @@ import { compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
 import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { signOut, toggleMenu } from 'containers/App/actions'
-import { selectAuthenticated, selectMenuState } from 'containers/App/selectors'
+import {
+  selectAuthenticated,
+  selectMenuState,
+  selectUsername,
+} from 'containers/App/selectors'
 import { LANGUAGES } from 'containers/LanguageProvider/constants'
 import { changeLocale } from 'containers/LanguageProvider/actions'
 import messages from 'containers/HomePage/messages'
@@ -22,6 +26,7 @@ class Menu extends Component {
     params: PropTypes.object,
     router: PropTypes.object,
     currentPage: PropTypes.string,
+    username: PropTypes.string,
     authenticated: PropTypes.bool,
     menuOpened: PropTypes.bool,
     intl: intlShape.isRequired,
@@ -66,18 +71,15 @@ class Menu extends Component {
     toggleMenu()
   }
 
-  handlePageChange = () => {
-    const { toggleMenu } = this.props
-    toggleMenu()
-  }
-
   render() {
     const {
       authenticated,
       currentPage,
+      username,
       intl: { formatMessage, locale },
       params: { brochure },
       menuOpened,
+      toggleMenu,
     } = this.props
 
     return (
@@ -107,28 +109,52 @@ class Menu extends Component {
             )}
             {currentPage !== 'home' && (
               <li>
-                <Link to="/" onClick={this.handlePageChange}>
+                <Link to="/" onClick={toggleMenu}>
                   {formatMessage(messages.home)}
                 </Link>
               </li>
             )}
+            {authenticated &&
+              currentPage !== 'profile' && (
+                <li>
+                  <Link to={`/user/${username}/profile`} onClick={toggleMenu}>
+                    {formatMessage(messages.profile)}
+                  </Link>
+                </li>
+              )}
+            {authenticated &&
+              currentPage !== 'starlist' && (
+                <li>
+                  <Link to={`/user/${username}/starlist`} onClick={toggleMenu}>
+                    {formatMessage(messages.starlist)}
+                  </Link>
+                </li>
+              )}
+            {authenticated &&
+              currentPage !== 'friends' && (
+                <li>
+                  <Link to={`/user/${username}/friends`} onClick={toggleMenu}>
+                    {formatMessage(messages.friends)}
+                  </Link>
+                </li>
+              )}
             {currentPage !== 'quest' && (
               <li>
-                <Link to="/quest" onClick={this.handlePageChange}>
+                <Link to="/quest" onClick={toggleMenu}>
                   {formatMessage(messages.quest)}
                 </Link>
               </li>
             )}
             {currentPage !== 'places' && (
               <li>
-                <Link to="/places" onClick={this.handlePageChange}>
+                <Link to="/places" onClick={toggleMenu}>
                   {formatMessage(messages.places)}
                 </Link>
               </li>
             )}
             {currentPage !== 'themes' && (
               <li>
-                <Link to="/themes" onClick={this.handlePageChange}>
+                <Link to="/themes" onClick={toggleMenu}>
                   {formatMessage(messages.themes)}
                 </Link>
               </li>
@@ -182,6 +208,7 @@ class Menu extends Component {
 }
 
 const selectors = createStructuredSelector({
+  username: selectUsername(),
   authenticated: selectAuthenticated(),
   menuOpened: selectMenuState(),
 })

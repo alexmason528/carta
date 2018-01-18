@@ -111,6 +111,72 @@ export default function createRoutes(store) {
       },
     },
     {
+      path: '/user/:username/profile',
+      name: 'profilePage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          import('containers/ProfilePage/reducer'),
+          import('containers/ProfilePage/sagas'),
+          import('containers/ProfilePage'),
+        ])
+
+        const renderRoute = loadModule(cb)
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('profile', reducer.default)
+          injectSagas('profile', sagas.default)
+
+          renderRoute(component)
+        })
+
+        importModules.catch(errorLoading)
+      },
+    },
+    {
+      path: '/user/:username/starlist',
+      name: 'starlistPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          import('containers/StarlistPage/reducer'),
+          import('containers/StarlistPage/sagas'),
+          import('containers/StarlistPage'),
+        ])
+
+        const renderRoute = loadModule(cb)
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('starlist', reducer.default)
+          injectSagas('starlist', sagas.default)
+
+          renderRoute(component)
+        })
+
+        importModules.catch(errorLoading)
+      },
+    },
+    {
+      path: '/user/:username/friends',
+      name: 'friendsPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          import('containers/FriendsPage/reducer'),
+          import('containers/FriendsPage/sagas'),
+          import('containers/FriendsPage'),
+        ])
+
+        const renderRoute = loadModule(cb)
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('friends', reducer.default)
+          injectSagas('friends', sagas.default)
+
+          renderRoute(component)
+        })
+
+        importModules.catch(errorLoading)
+      },
+    },
+    {
       path: '*',
       name: 'notfound',
       getComponent(nextState, cb) {

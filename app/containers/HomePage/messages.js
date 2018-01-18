@@ -197,4 +197,20 @@ export default defineMessages({
     id: 'carta.brabantOutdoors',
     defaultMessage: 'Brabant Outdoors',
   },
+  profile: {
+    id: 'carta.profile',
+    defaultMessage: 'Profile',
+  },
+  starlist: {
+    id: 'carta.starlist',
+    defaultMessage: 'Starlist',
+  },
+  friends: {
+    id: 'carta.friends',
+    defaultMessage: 'Friends',
+  },
+  addToStarlist: {
+    id: 'carta.addedToStarlist',
+    defaultMessage: 'Added to starlist',
+  },
 })

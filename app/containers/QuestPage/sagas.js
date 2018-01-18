@@ -133,42 +133,9 @@ export function* getQuestInfoRequestHandler({ payload }) {
     method: 'GET',
   }
 
-  const places = [
-    { name: 'Netherlands', center: { lng: 5.2912, lat: 52.1326 }, zoom: 6.3 },
-    { name: 'Amsterdam', center: { lng: 4.8951, lat: 52.3702 }, zoom: 13 },
-    { name: 'Rotterdam', center: { lng: 4.4777, lat: 51.9244 }, zoom: 13 },
-    { name: 'Den Haag', center: { lng: 4.3007, lat: 52.0704 }, zoom: 13 },
-    { name: 'Haarlem', center: { lng: 4.6462, lat: 52.3873 }, zoom: 15 },
-    { name: 'Delft', center: { lng: 4.357, lat: 52.0115 }, zoom: 15 },
-    { name: 'Leiden', center: { lng: 4.497, lat: 52.1601 }, zoom: 15 },
-    { name: 'Maastricht', center: { lng: 5.6909, lat: 50.8513 }, zoom: 15 },
-    { name: 'Brabant', center: { lng: 5.2321, lat: 51.4826 }, zoom: 9 },
-    { name: 'Utrecht (city)', center: { lng: 5.1214, lat: 52.0907 }, zoom: 15 },
-    {
-      name: 'Groningen (city)',
-      center: { lng: 6.572, lat: 53.2217 },
-      zoom: 15,
-    },
-    { name: 'Friesland', center: { lng: 5.8486, lat: 53.1103 }, zoom: 9 },
-    { name: 'Drenthe', center: { lng: 6.6251, lat: 52.8631 }, zoom: 9 },
-    { name: 'Noord-Holland', center: { lng: 4.8729, lat: 52.5824 }, zoom: 9 },
-    { name: 'Flevoland', center: { lng: 5.601, lat: 52.527 }, zoom: 9 },
-    { name: 'Overijssel', center: { lng: 6.4513, lat: 52.4448 }, zoom: 9 },
-    { name: 'Zeeland', center: { lng: 3.8354, lat: 51.4519 }, zoom: 9 },
-    { name: 'Limburg', center: { lng: 5.9382, lat: 51.2112 }, zoom: 9 },
-  ]
-
   try {
     const res = yield call(request, requestURL, params)
-    const { types, descriptives } = res
-
-    const questData = {
-      places,
-      types,
-      descriptives,
-    }
-
-    yield put(getQuestInfoSuccess(questData))
+    yield put(getQuestInfoSuccess(res))
     yield put(setQuest(payload))
     yield put(updateExpand())
   } catch (err) {

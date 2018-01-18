@@ -6,6 +6,7 @@ const cryptr = new Cryptr(
   process.env.CRYPTR_ALGORITHM
 )
 const ses = require('nodemailer-ses-transport')
+const _ = require('lodash')
 const Post = require('../models/post')
 const User = require('../models/user')
 
@@ -26,15 +27,15 @@ exports.signIn = (req, res) => {
   User.find({ email: email }, (err, element) => {
     if (element.length > 0) {
       if (element[0].password === cryptr.encrypt(password)) {
-        const { _id, fullname, email, role, profilePic, verified } = element[0]
-        const data = {
-          _id,
-          fullname,
-          email,
-          role,
-          profilePic,
-          verified,
-        }
+        const data = _.pick(element[0], [
+          '_id',
+          'fullname',
+          'username',
+          'email',
+          'role',
+          'profilePic',
+          'verified',
+        ])
         return res.json(data)
       } else {
         return res.status(400).send({
@@ -131,14 +132,15 @@ exports.updateUser = (req, res) => {
     { new: true },
     (err, element) => {
       if (element && element.fullname) {
-        let response = {
-          _id: element._id,
-          fullname: element.fullname,
-          email: element.email,
-          role: element.role,
-          profilePic: element.profilePic,
-          verified: element.verified,
-        }
+        const response = _.pick(element, [
+          '_id',
+          'fullname',
+          'username',
+          'email',
+          'role',
+          'profilePic',
+          'verified',
+        ])
         return res.json(response)
       }
 
@@ -175,14 +177,16 @@ exports.verify = (req, res) => {
     { new: true },
     (err, element) => {
       if (element && element.fullname) {
-        let response = {
-          _id: element._id,
-          fullname: element.fullname,
-          email: element.email,
-          role: element.role,
-          profilePic: element.profilePic,
-          verified: true,
-        }
+        let response = _.pick(element, [
+          '_id',
+          'fullname',
+          'username',
+          'email',
+          'role',
+          'profilePic',
+        ])
+
+        response.verified = true
         return res.json(response)
       }
 

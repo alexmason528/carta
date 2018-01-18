@@ -1,0 +1,78 @@
+@import '../../styles/common';
+
+@media (max-width: 767px) {
+  .themePage {
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+.themePage {
+  z-index: 20;
+  background: $white;
+  @include absoluteFill();
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $scrollbarThumbColor !important;
+  }
+
+  &__row {
+    margin: 0 -4px;
+    position: relative;
+  }
+
+  .tileCol {
+    position: relative;
+    padding-left: 4px;
+    padding-right: 4px;
+    z-index: 1;
+
+    &:last-child {
+      .tileContainer {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .tileContainer {
+    position: relative;
+    width: 100%;
+    padding-top: 100%;
+    margin-bottom: 8px;
+  }
+
+  .tile {
+    @include absoluteFill();
+    @include transition(all, $fastTrans);
+  }
+
+  @media (min-width: 992px) {
+    .tileCol:nth-child(3n + 1) {
+      .themeTile h2 {
+        padding-left: 60px;
+      }
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 991px) {
+    .tileCol:nth-child(2n + 1) {
+      .themeTile h2 {
+        padding-left: 60px;
+      }
+    }
+  }
+
+  @media (max-width: 767px) {
+    .tileCol {
+      .themeTile h2 {
+        padding-left: 30px;
+      }
+    }
+  }
+}
