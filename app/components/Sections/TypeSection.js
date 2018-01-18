@@ -52,12 +52,14 @@ class TypeSection extends Component {
   }
 
   handleAutoFocus() {
-    const timer = setTimeout(() => {
-      if (this.searchInput) {
-        ReactDOM.findDOMNode(this.searchInput).focus()
-      }
-      clearTimeout(timer)
-    }, 100)
+    if (window.innerWidth >= 768) {
+      const timer = setTimeout(() => {
+        if (this.searchInput) {
+          ReactDOM.findDOMNode(this.searchInput).focus()
+        }
+        clearTimeout(timer)
+      }, 0)
+    }
   }
 
   handleExpand = expanded => {
@@ -81,6 +83,7 @@ class TypeSection extends Component {
       typeClick,
       typeAnythingClick,
     } = this.props
+    const isDesktop = window.innerWidth >= 768
 
     const searchedTypes =
       search === ''
@@ -124,6 +127,7 @@ class TypeSection extends Component {
         <input
           className={cx({ section__searchInput: true, invisible: !expanded })}
           value={search}
+          placeholder={isDesktop ? '' : 'Search'}
           ref={ref => (this.searchInput = ref)}
           onChange={this.handleInputChange}
         />

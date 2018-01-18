@@ -569,7 +569,7 @@
   @include absoluteTopLeft();
   @include transition(all, $fastTrans);
   @include borderRadius(2px);
-  @include boxShadow($farBoxShadowBlur, $lightShadow);
+  @include boxShadow($farBoxShadowBlur, $lightShadowColor);
 
   img {
     width: 10px;

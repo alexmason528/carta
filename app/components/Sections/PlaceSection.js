@@ -30,12 +30,14 @@ class PlaceSection extends Component {
   }
 
   handleAutoFocus() {
-    const timer = setTimeout(() => {
-      if (this.searchInput) {
-        ReactDOM.findDOMNode(this.searchInput).focus()
-      }
-      clearTimeout(timer)
-    }, 100)
+    if (window.innerWidth >= 768) {
+      const timer = setTimeout(() => {
+        if (this.searchInput) {
+          ReactDOM.findDOMNode(this.searchInput).focus()
+        }
+        clearTimeout(timer)
+      }, 0)
+    }
   }
 
   handlePlaceClick = place => {
@@ -50,6 +52,7 @@ class PlaceSection extends Component {
   render() {
     const { intl: { formatMessage }, places } = this.props
     const { search } = this.state
+    const isDesktop = window.innerWidth >= 768
 
     let filteredPlaces =
       search === ''
@@ -66,6 +69,7 @@ class PlaceSection extends Component {
         <input
           className="section__searchInput"
           value={search}
+          placeholder={isDesktop ? '' : 'Search'}
           ref={ref => (this.searchInput = ref)}
           onChange={this.handleInputChange}
         />

@@ -54,12 +54,14 @@ class DescriptiveSection extends Component {
   }
 
   handleAutoFocus() {
-    const timer = setTimeout(() => {
-      if (this.searchInput) {
-        ReactDOM.findDOMNode(this.searchInput).focus()
-      }
-      clearTimeout(timer)
-    }, 100)
+    if (window.innerWidth >= 768) {
+      const timer = setTimeout(() => {
+        if (this.searchInput) {
+          ReactDOM.findDOMNode(this.searchInput).focus()
+        }
+        clearTimeout(timer)
+      }, 0)
+    }
   }
 
   handleExpand = expanded => {
@@ -84,6 +86,7 @@ class DescriptiveSection extends Component {
       descriptiveStarClick,
       descriptiveAnythingClick,
     } = this.props
+    const isDesktop = window.innerWidth >= 768
 
     let searchedDesc =
       search === ''
@@ -131,6 +134,7 @@ class DescriptiveSection extends Component {
         <input
           className={cx({ section__searchInput: true, invisible: !expanded })}
           value={search}
+          placeholder={isDesktop ? '' : 'Search'}
           ref={ref => (this.searchInput = ref)}
           onChange={this.handleInputChange}
         />

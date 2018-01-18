@@ -2,7 +2,7 @@
 
 .verifyCtrl {
   z-index: 1000;
-  background: $normalShadow;
+  background: $normalShadowColor;
   @include fillViewport();
   @include fixedTopLeft();
 
@@ -14,7 +14,7 @@
     @include borderRadius(50%);
     @include vhCenter();
     @include contentCenter();
-    @include boxShadow(15px, $normalShadow);
+    @include boxShadow(15px, $normalShadowColor);
   }
 
   &__signOutForm {

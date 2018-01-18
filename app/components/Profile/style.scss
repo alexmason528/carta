@@ -14,7 +14,7 @@
       content: '';
       z-index: 1;
       @include absoluteFill();
-      @include insetBoxShadow($boxShadowBlur, $normalShadow);
+      @include insetBoxShadow($boxShadowBlur, $normalShadowColor);
     }
   }
 
@@ -57,10 +57,10 @@
 
     button {
       color: $white;
-      @include textShadow($textShadowBlur, $lightShadow);
+      @include textShadow($textShadowBlur, $lightShadowColor);
 
       &:hover {
-        @include textShadow($textShadowBlur, $normalShadow);
+        @include textShadow($textShadowBlur, $normalShadowColor);
       }
     }
   }
@@ -79,7 +79,7 @@
   &:before {
     content: '';
     z-index: 3;
-    @include insetBoxShadow($boxShadowBlur, $normalShadow);
+    @include insetBoxShadow($boxShadowBlur, $normalShadowColor);
     @include absoluteFill();
   }
 
@@ -95,7 +95,7 @@
     left: 30%;
     bottom: 0;
     z-index: 4;
-    @include textShadow($textShadowBlur, $lightShadow);
+    @include textShadow($textShadowBlur, $lightShadowColor);
   }
 }
 
@@ -109,7 +109,7 @@
   border: 8px solid $white;
   z-index: 80;
   transform: translate(0, calc(50% + 4px));
-  @include boxShadow($boxShadowBlur, $lightShadow);
+  @include boxShadow($boxShadowBlur, $lightShadowColor);
   @include borderRadius(100%);
 
   img {
