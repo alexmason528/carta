@@ -267,6 +267,10 @@ export function* getDescriptivesRequestHandler() {
   types.includes = uniq(types.includes)
   types.excludes = uniq(types.excludes)
 
+  if (!types.all && types.includes.length === 0) {
+    types.includes = types.excludes
+  }
+
   const data = { types }
 
   const params = {

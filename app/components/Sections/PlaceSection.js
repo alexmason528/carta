@@ -58,7 +58,8 @@ class PlaceSection extends Component {
       search === ''
         ? places
         : places.filter(
-            place => place.name.toLowerCase().indexOf(search) !== -1
+            place =>
+              place.name.toLowerCase().indexOf(search.toLowerCase()) !== -1
           )
 
     return (
