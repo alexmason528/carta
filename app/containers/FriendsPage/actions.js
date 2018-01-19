@@ -4,9 +4,10 @@ import {
   GET_FRIENDS_FAIL,
 } from './constants'
 
-export function getFriendsRequest() {
+export function getFriendsRequest(payload) {
   return {
     type: GET_FRIENDS_REQUEST,
+    payload,
   }
 }
 

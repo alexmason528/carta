@@ -1,14 +1,14 @@
 @import '../../styles/common';
 
 @media (max-width: 767px) {
-  .themePage {
+  .friendsPage {
     &::-webkit-scrollbar {
       display: none;
     }
   }
 }
 
-.themePage {
+.friendsPage {
   z-index: 20;
   background: $white;
   @include absoluteFill();

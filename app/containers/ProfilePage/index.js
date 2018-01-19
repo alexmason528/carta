@@ -13,10 +13,11 @@ class ProfilePage extends Component {
   static propTypes = {
     getProfileRequest: PropTypes.func,
     profile: PropTypes.array,
+    params: PropTypes.object,
   }
   componentWillMount() {
-    const { getProfileRequest } = this.props
-    getProfileRequest()
+    const { getProfileRequest, params: { username } } = this.props
+    getProfileRequest(username)
   }
   render() {
     const { profile } = this.props

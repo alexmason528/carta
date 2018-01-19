@@ -8,8 +8,8 @@ export function* getProfileRequestWatcher() {
   yield takeLatest(GET_PROFILE_REQUEST, getProfileRequestHandler)
 }
 
-export function* getProfileRequestHandler() {
-  const requestURL = `${API_BASE_URL}api/v1/theme/`
+export function* getProfileRequestHandler({ payload }) {
+  const requestURL = `${API_BASE_URL}api/v1/theme?name=${payload}`
 
   const params = {
     method: 'GET',

@@ -9,6 +9,7 @@ const ses = require('nodemailer-ses-transport')
 const _ = require('lodash')
 const Post = require('../models/post')
 const User = require('../models/user')
+const Friend = require('../models/friend')
 
 let transporter = nodemailer.createTransport(
   ses({
@@ -82,40 +83,46 @@ exports.register = (req, res) => {
     verified: false,
   }
 
-  User.create(data, err => {
-    if (err) {
-      if (err.name === 'MongoError' && err.code === 11000) {
-        res.status(400).send({
-          error: {
-            details: 'carta.alreadyRegistered',
-          },
-        })
-      } else {
-        return res.status(400).send({
-          error: {
-            details: err.toString(),
-          },
-        })
-      }
-    } else {
-      const verifyUrl =
-        process.env.NODE_ENV === 'development'
-          ? `${process.env.LOCAL_API_URL}verify`
-          : `${process.env.SERVER_API_URL}verify`
-      let mailOptions = {
-        from: '<Carta@carta.guide>',
-        to: data.email,
-        subject: 'Verify your email',
-        text: `Hi, ${data.fullname}`,
-        html: `Please verify your email by clicking <a href="${verifyUrl}/${cryptr.encrypt(
-          data.email
-        )}">this link</a>`,
-      }
+  const username = fullname.toLowerCase().replace(/ /g, '-')
 
-      transporter.sendMail(mailOptions, () => {
-        return res.send(data)
-      })
-    }
+  User.find({ username: RegExp(username) }, (err, elements) => {
+    data.username =
+      elements.length === 0 ? username : `${username}-${elements.length}`
+
+    User.create(data, err => {
+      if (err) {
+        if (err.name === 'MongoError' && err.code === 11000) {
+          res.status(400).send({
+            error: {
+              details: 'carta.alreadyRegistered',
+            },
+          })
+        } else {
+          return res.status(400).send({
+            error: {
+              details: err.toString(),
+            },
+          })
+        }
+      } else {
+        const verifyUrl =
+          process.env.NODE_ENV === 'development'
+            ? `${process.env.LOCAL_API_URL}verify`
+            : `${process.env.SERVER_API_URL}verify`
+        const mailOptions = {
+          from: '<Carta@carta.guide>',
+          to: data.email,
+          subject: 'Verify your email',
+          text: `Hi, ${data.fullname}`,
+          html: `Please verify your email by clicking <a href="${verifyUrl}/${cryptr.encrypt(
+            data.email
+          )}">this link</a>`,
+        }
+        transporter.sendMail(mailOptions, () => {
+          return res.send(data)
+        })
+      }
+    })
   })
 }
 
@@ -233,19 +240,31 @@ exports.deleteUser = (req, res) => {
               details: err.toString(),
             },
           })
-        } else {
-          Post.remove({ author: mongoose.Types.ObjectId(userID) }, err => {
-            if (err) {
-              return res.status(400).send({
-                error: {
-                  details: err.toString(),
-                },
-              })
-            } else {
+        }
+        Post.remove({ author: mongoose.Types.ObjectId(userID) }, err => {
+          if (err) {
+            return res.status(400).send({
+              error: {
+                details: err.toString(),
+              },
+            })
+          }
+          Friend.remove(
+            {
+              $or: [{ firstUser: userID }, { secondUser: userID }],
+            },
+            err => {
+              if (err) {
+                return res.status(400).send({
+                  error: {
+                    details: err.toString(),
+                  },
+                })
+              }
               return res.json({})
             }
-          })
-        }
+          )
+        })
       })
     }
   )

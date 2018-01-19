@@ -4,9 +4,10 @@ import {
   GET_PROFILE_FAIL,
 } from './constants'
 
-export function getProfileRequest() {
+export function getProfileRequest(payload) {
   return {
     type: GET_PROFILE_REQUEST,
+    payload,
   }
 }
 
