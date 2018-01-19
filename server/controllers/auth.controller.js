@@ -6,7 +6,7 @@ const ses = require('nodemailer-ses-transport')
 const _ = require('lodash')
 const Post = require('../models/post')
 const User = require('../models/user')
-const Friend = require('../models/friend')
+const Follow = require('../models/follow')
 
 let transporter = nodemailer.createTransport(
   ses({
@@ -25,7 +25,7 @@ exports.signIn = (req, res) => {
   User.find({ email: email }, (err, element) => {
     if (element.length > 0) {
       if (element[0].password === cryptr.encrypt(password)) {
-        const data = _.pick(element[0], ['_id', 'fullname', 'username', 'email', 'role', 'profilePic', 'verified'])
+        const data = _.pick(element[0], ['_id', 'fullname', 'username', 'email', 'role', 'profilePic', 'holidayPic', 'verified'])
         return res.json(data)
       } else {
         return res.status(400).send({ error: { details: 'carta.incorrectPassword' } })
@@ -40,7 +40,7 @@ exports.signIn = (req, res) => {
  * Register user
  */
 exports.register = (req, res) => {
-  const { fullname, email, role, profilePic, password, confirmPassword } = req.body
+  const { fullname, email, role, profilePic, holidayPic, password, confirmPassword } = req.body
 
   if (password !== confirmPassword) {
     return res.status(400).send({ error: { details: 'carta.passwordNotEqual' } })
@@ -49,10 +49,11 @@ exports.register = (req, res) => {
   let data = {
     fullname,
     email,
-    password: cryptr.encrypt(password),
     role,
     profilePic,
+    holidayPic,
     verified: false,
+    password: cryptr.encrypt(password),
   }
 
   const username = fullname.toLowerCase().replace(/ /g, '-')
@@ -93,7 +94,7 @@ exports.updateUser = (req, res) => {
 
   User.findOneAndUpdate({ _id: userID }, { $set: req.body }, { new: true }, (err, element) => {
     if (element && element.fullname) {
-      const response = _.pick(element, ['_id', 'fullname', 'username', 'email', 'role', 'profilePic', 'verified'])
+      const response = _.pick(element, ['_id', 'fullname', 'username', 'email', 'role', 'profilePic', 'holidayPic', 'verified'])
       return res.json(response)
     }
 
@@ -117,8 +118,7 @@ exports.verify = (req, res) => {
 
   User.findOneAndUpdate({ email: email }, { $set: { verified: true } }, { new: true }, (err, element) => {
     if (element && element.fullname) {
-      let response = _.pick(element, ['_id', 'fullname', 'username', 'email', 'role', 'profilePic'])
-
+      let response = _.pick(element, ['_id', 'fullname', 'username', 'email', 'role', 'profilePic', 'holidayPic'])
       response.verified = true
       return res.json(response)
     }
@@ -148,9 +148,9 @@ exports.deleteUser = (req, res) => {
         if (err) {
           return res.status(400).send({ error: { details: err.toString() } })
         }
-        Friend.remove(
+        Follow.remove(
           {
-            $or: [{ firstUser: userID }, { secondUser: userID }],
+            $or: [{ follower: userID }, { followed: userID }],
           },
           err => {
             if (err) {

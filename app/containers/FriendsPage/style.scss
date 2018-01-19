@@ -48,6 +48,10 @@
   }
 
   .tile {
+    h2 {
+      max-width: 300px;
+    }
+
     @include absoluteFill();
     @include transition(all, $fastTrans);
   }

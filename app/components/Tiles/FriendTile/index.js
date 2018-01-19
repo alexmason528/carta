@@ -2,20 +2,23 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import { Col } from 'reactstrap'
 import Img from 'components/Img'
+import { S3_COVER_URL } from 'utils/globalConstants'
 import './style.scss'
 
 class ImageTile extends Component {
   static propTypes = {
     fullname: PropTypes.string,
-    profilePic: PropTypes.string,
+    holidayPic: PropTypes.string,
   }
 
   constructor(props) {
     super(props)
 
-    this.state = {
-      imageLoaded: false,
-    }
+    this.state = { imageLoaded: false }
+
+    const rand = Math.floor(Math.random() * 77)
+    const filename = rand < 10 ? `000${rand}` : `00${rand}`
+    this.holidayPic = `${S3_COVER_URL}/square/${filename}.jpg`
   }
 
   componentDidMount() {
@@ -41,13 +44,13 @@ class ImageTile extends Component {
 
   render() {
     const { imageLoaded } = this.state
-    const { fullname, profilePic } = this.props
+    const { fullname, holidayPic } = this.props
 
     return (
       <Col className="tileCol" xs={12} sm={12} md={6} lg={4}>
         <div className="tileContainer">
           <div className="tile friendTile Ov-H Cr-P">
-            <Img onLoad={this.handleLoaded} src={profilePic} />
+            <Img onLoad={this.handleLoaded} src={holidayPic || this.holidayPic} />
             {imageLoaded && <h2 className="Mb-0 Tt-U Px-30 Py-19" dangerouslySetInnerHTML={{ __html: fullname }} />}
           </div>
         </div>

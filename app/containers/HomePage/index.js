@@ -41,6 +41,7 @@ class HomePage extends Component {
       showCreatePostForm: false,
       showAccountMenu: false,
       profilePic: null,
+      holidayPic: null,
       timer: 0,
     }
   }
@@ -108,6 +109,10 @@ class HomePage extends Component {
     this.setState({ profilePic: newVal })
   }
 
+  handleHolidayPic = (evt, newVal) => {
+    this.setState({ holidayPic: newVal })
+  }
+
   handleLoadMore = () => {
     const { homeInfo: { status }, listPostRequest } = this.props
     if (status !== LIST_POST_REQUEST) {
@@ -116,7 +121,7 @@ class HomePage extends Component {
   }
 
   render() {
-    const { showAuthForm, showCreatePostForm, showAccountMenu, profilePic } = this.state
+    const { showAuthForm, showCreatePostForm, showAccountMenu, profilePic, holidayPic } = this.state
 
     const { user, hasMore, signOut, info: { status } } = this.props
 
@@ -129,8 +134,10 @@ class HomePage extends Component {
             desktop={
               <Desktop
                 profilePic={profilePic}
+                holidayPic={holidayPic}
                 profileClick={this.handleProfileClick}
                 profilePicClick={this.handleProfilePic}
+                holidayPicClick={this.handleHolidayPic}
                 showAuthForm={showAuthForm}
                 showCreatePostForm={showCreatePostForm}
                 showAccountMenu={showAccountMenu}
@@ -140,8 +147,10 @@ class HomePage extends Component {
             tablet={
               <Tablet
                 profilePic={profilePic}
+                holidayPic={holidayPic}
                 profileClick={this.handleProfileClick}
                 profilePicClick={this.handleProfilePic}
+                holidayPicClick={this.handleHolidayPic}
                 showAuthForm={showAuthForm}
                 showCreatePostForm={showCreatePostForm}
                 showAccountMenu={showAccountMenu}
@@ -151,8 +160,10 @@ class HomePage extends Component {
             mobile={
               <Mobile
                 profilePic={profilePic}
+                holidayPic={holidayPic}
                 profileClick={this.handleProfileClick}
                 profilePicClick={this.handleProfilePic}
+                holidayPicClick={this.handleHolidayPic}
                 showAuthForm={showAuthForm}
                 showCreatePostForm={showCreatePostForm}
                 showAccountMenu={showAccountMenu}

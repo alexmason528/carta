@@ -9,6 +9,7 @@ const userSchema = new Schema(
     password: { type: String, required: true },
     role: { type: String, default: 'user' },
     profilePic: String,
+    holidayPic: String,
     verified: Boolean,
   },
   { strict: false, versionKey: false }

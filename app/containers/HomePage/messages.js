@@ -37,9 +37,9 @@ export default defineMessages({
     id: 'carta.profilePic',
     defaultMessage: 'Profile Pic',
   },
-  coverPic: {
-    id: 'carta.coverPic',
-    defaultMessage: 'Cover Pic',
+  holidayPic: {
+    id: 'carta.holidayPic',
+    defaultMessage: 'Holiday Pic',
   },
   post: {
     id: 'carta.post',

@@ -41,7 +41,7 @@ class Menu extends Component {
     if (!evt.metaKey) {
       evt.preventDefault()
     }
-    const { signOut } = this.props
+    const { signOut, toggleMenu } = this.props
     signOut()
     toggleMenu()
   }

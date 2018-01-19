@@ -8,7 +8,7 @@
   "carta.repeatPassword": "Herhaal wachtwoord",
   "carta.fullname": "Volledige naam",
   "carta.profilePic": "Profielfoto",
-  "carta.coverPic": "Omslagfoto",
+  "carta.holidayPic": "Vakantiefoto",
   "carta.post": "Bericht",
   "carta.picture": "Foto",
   "carta.text": "Tekst",
@@ -21,23 +21,18 @@
   "carta.home": "Startpagina",
   "carta.settings": "Instellingen",
   "carta.deleteAccount": "Verwijder account",
-  "carta.deleteConfirm":
-    "Deze actie verwijdert al je berichten en inhoud van Carta. Weet je zeker dat je door wil gaan?",
+  "carta.deleteConfirm": "Deze actie verwijdert al je berichten en inhoud van Carta. Weet je zeker dat je door wil gaan?",
   "carta.confirm": "Bevestig",
   "carta.sure": "Zeker?",
   "carta.link": "Link",
   "carta.linkMessage": "Paste or write link hier",
   "carta.requireDefaultTitle": "Voeg een titel toe",
   "carta.requireDefaultContent": "Voeg een tekst toe aan je bericht",
-  "carta.requireTitle":
-    "Voeg een titel toe aan de {lang} versie van je bericht",
-  "carta.requireContent":
-    "Voeg een tekst toe aan de {lang} versie van je bericht",
+  "carta.requireTitle": "Voeg een titel toe aan de {lang} versie van je bericht",
+  "carta.requireContent": "Voeg een tekst toe aan de {lang} versie van je bericht",
   "carta.limitExceeded": "Een inhoud kan maximaal 1000 tekens bevatten",
-  "carta.verificationEmail":
-    "Hey {name}, Je hebt een email van ons ontvangen. Open het en klik op de link om je account te verifiëren",
-  "carta.verificationSuccess":
-    "Verificatie gelukt! Dit bericht verdwijnt over {timer} seconden",
+  "carta.verificationEmail": "Hey {name}, Je hebt een email van ons ontvangen. Open het en klik op de link om je account te verifiëren",
+  "carta.verificationSuccess": "Verificatie gelukt! Dit bericht verdwijnt over {timer} seconden",
   "carta.verificationFail": "Verificatie mislukt. Onjuiste verificatiecode.",
   "carta.verificationRequired": "Verifiëer je registratie eerst of",
   "carta.now": "Nu",

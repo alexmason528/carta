@@ -77,7 +77,25 @@
     }
   }
 
-  &__profileButton {
+  &__uploadButtons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 400;
+
+    & > div {
+      color: rgba(0, 0, 0, 0.7);
+      width: calc(50% - 4px);
+    }
+
+    & > div:hover {
+      color: rgba(0, 0, 0, 1);
+    }
+  }
+
+  &__uploadButton {
     position: relative;
     overflow: hidden;
     padding: 8px;

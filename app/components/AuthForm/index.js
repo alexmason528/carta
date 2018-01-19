@@ -16,7 +16,7 @@ import messages from 'containers/HomePage/messages'
 import LoadingSpinner from 'components/LoadingSpinner'
 import Img from 'components/Img'
 import { QuarterSpinner } from 'components/SvgIcon'
-import { S3_ICON_URL, S3_USER_PROFILE_IMAGE_URL } from 'utils/globalConstants'
+import { S3_ICON_URL, S3_USER_PROFILE_IMAGE_URL, S3_USER_HOLIDAY_IMAGE_URL } from 'utils/globalConstants'
 import { imageUploader } from 'utils/imageHelper'
 import authFormValidator from './validate'
 import './style.scss'
@@ -26,8 +26,10 @@ class AuthForm extends Component {
     signInRequest: PropTypes.func,
     registerRequest: PropTypes.func,
     onProfilePicChange: PropTypes.func,
+    onHolidayPicChange: PropTypes.func,
     changeAuthMethod: PropTypes.func,
     handleSubmit: PropTypes.func,
+    holidayPic: PropTypes.string,
     profilePic: PropTypes.string,
     info: PropTypes.object,
     show: PropTypes.bool,
@@ -74,7 +76,7 @@ class AuthForm extends Component {
 
   handleRegister = values => {
     const { registerRequest } = this.props
-    const { email, password, confirmPassword, fullname, profilePic } = values
+    const { email, password, confirmPassword, fullname, profilePic, holidayPic } = values
 
     let data = {
       email,
@@ -82,23 +84,53 @@ class AuthForm extends Component {
       confirmPassword,
       fullname,
       profilePic: profilePic ? '' : this.props.profilePic,
+      holidayPic: holidayPic ? '' : this.props.holidayPic,
     }
 
-    if (!profilePic) {
+    if (!profilePic && !holidayPic) {
       registerRequest(data)
     } else {
       this.setState({ imageUpload: { uploading: true, error: false } })
-      imageUploader(S3_USER_PROFILE_IMAGE_URL, profilePic, (err, url) => {
-        if (err) {
-          this.setState({
-            imageUpload: { uploading: false, error: err.toString() },
-          })
-        } else {
-          data.profilePic = url
-          registerRequest(data)
-          this.setState({ imageUpload: { uploading: false, error: null } })
-        }
-      })
+
+      let cnt = 0
+      if (profilePic) cnt += 1
+      if (holidayPic) cnt += 1
+
+      if (profilePic) {
+        imageUploader(S3_USER_PROFILE_IMAGE_URL, profilePic, (err, url) => {
+          if (err) {
+            this.setState({
+              imageUpload: { uploading: false, error: err.toString() },
+            })
+          } else {
+            cnt -= 1
+            data.profilePic = url
+
+            if (cnt === 0) {
+              registerRequest(data)
+              this.setState({ imageUpload: { uploading: false, error: null } })
+            }
+          }
+        })
+      }
+
+      if (holidayPic) {
+        imageUploader(S3_USER_HOLIDAY_IMAGE_URL, holidayPic, (err, url) => {
+          if (err) {
+            this.setState({
+              imageUpload: { uploading: false, error: err.toString() },
+            })
+          } else {
+            cnt -= 1
+            data.holidayPic = url
+
+            if (cnt === 0) {
+              registerRequest(data)
+              this.setState({ imageUpload: { uploading: false, error: null } })
+            }
+          }
+        })
+      }
     }
   }
 
@@ -123,7 +155,7 @@ class AuthForm extends Component {
   handleFacebookLogin = () => {}
 
   render() {
-    const { info: { status, error, authMethod }, show, onProfilePicChange, handleSubmit, intl: { formatMessage } } = this.props
+    const { info: { status, error, authMethod }, show, onProfilePicChange, onHolidayPicChange, handleSubmit, intl: { formatMessage } } = this.props
 
     const { formChanged, imageUpload } = this.state
     const spinnerShow = status === SIGNIN_REQUEST || status === REGISTER_REQUEST || imageUpload.uploading
@@ -166,14 +198,24 @@ class AuthForm extends Component {
             <div>
               <Field name="confirmPassword" type="password" component={RenderField} label={formatMessage(messages.repeatPassword)} order={2} />
               <Field name="fullname" type="text" component={RenderField} label={formatMessage(messages.fullname)} order={3} />
-              <Field
-                className="authForm__profileButton"
-                name="profilePic"
-                label={formatMessage(messages.profilePic)}
-                onChange={onProfilePicChange}
-                component={RenderDropzone}
-                crop="portrait"
-              />
+              <div className="authForm__uploadButtons">
+                <Field
+                  className="authForm__uploadButton Tt-U"
+                  name="profilePic"
+                  label={formatMessage(messages.profilePic)}
+                  onChange={onProfilePicChange}
+                  component={RenderDropzone}
+                  crop="portrait"
+                />
+                <Field
+                  className="authForm__uploadButton Tt-U"
+                  name="holidayPic"
+                  label={formatMessage(messages.holidayPic)}
+                  onChange={onHolidayPicChange}
+                  component={RenderDropzone}
+                  crop="landscape"
+                />
+              </div>
             </div>
           )}
           <div className="authForm__authButtons">
