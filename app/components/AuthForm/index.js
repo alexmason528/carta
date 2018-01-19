@@ -4,31 +4,20 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { reduxForm, Field } from 'redux-form'
 import { createStructuredSelector } from 'reselect'
-import axios from 'axios'
 import cx from 'classnames'
 import GoogleLogin from 'react-google-login'
 import FacebookLogin from 'react-facebook-login'
 import RenderField from 'components/RenderField'
 import RenderDropzone from 'components/RenderDropzone'
-import {
-  SIGNIN_REQUEST,
-  SIGNIN_FAIL,
-  REGISTER_REQUEST,
-  REGISTER_FAIL,
-  CLOUDINARY_UPLOAD_URL,
-  CLOUDINARY_UPLOAD_PRESET,
-  CLOUDINARY_ICON_URL,
-} from 'containers/App/constants'
-import {
-  changeAuthMethod,
-  signInRequest,
-  registerRequest,
-} from 'containers/App/actions'
+import { SIGNIN_REQUEST, SIGNIN_FAIL, REGISTER_REQUEST, REGISTER_FAIL } from 'containers/App/constants'
+import { changeAuthMethod, signInRequest, registerRequest } from 'containers/App/actions'
 import { selectInfo } from 'containers/App/selectors'
 import messages from 'containers/HomePage/messages'
 import LoadingSpinner from 'components/LoadingSpinner'
 import Img from 'components/Img'
 import { QuarterSpinner } from 'components/SvgIcon'
+import { S3_ICON_URL, S3_USER_PROFILE_IMAGE_URL } from 'utils/globalConstants'
+import { imageUploader } from 'utils/imageHelper'
 import authFormValidator from './validate'
 import './style.scss'
 
@@ -61,10 +50,7 @@ class AuthForm extends Component {
     const { info: { status } } = this.props
     const { info } = nextProps
 
-    if (
-      status !== info.status &&
-      (info.status === SIGNIN_FAIL || info.status === REGISTER_FAIL)
-    ) {
+    if (status !== info.status && (info.status === SIGNIN_FAIL || info.status === REGISTER_FAIL)) {
       this.setState({ formChanged: false })
     }
   }
@@ -102,24 +88,17 @@ class AuthForm extends Component {
       registerRequest(data)
     } else {
       this.setState({ imageUpload: { uploading: true, error: false } })
-      let formData = new FormData()
-      formData.append('file', profilePic)
-      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
-      axios
-        .post(CLOUDINARY_UPLOAD_URL, formData, {
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        })
-        .then(res => {
-          const { data: { url } } = res
-          data.profilePic = url
-          registerRequest(data)
-          this.setState({ imageUpload: { uploading: false, error: null } })
-        })
-        .catch(err => {
+      imageUploader(S3_USER_PROFILE_IMAGE_URL, profilePic, (err, url) => {
+        if (err) {
           this.setState({
             imageUpload: { uploading: false, error: err.toString() },
           })
-        })
+        } else {
+          data.profilePic = url
+          registerRequest(data)
+          this.setState({ imageUpload: { uploading: false, error: null } })
+        }
+      })
     }
   }
 
@@ -144,25 +123,13 @@ class AuthForm extends Component {
   handleFacebookLogin = () => {}
 
   render() {
-    const {
-      info: { status, error, authMethod },
-      show,
-      onProfilePicChange,
-      handleSubmit,
-      intl: { formatMessage },
-    } = this.props
+    const { info: { status, error, authMethod }, show, onProfilePicChange, handleSubmit, intl: { formatMessage } } = this.props
 
     const { formChanged, imageUpload } = this.state
-    const spinnerShow =
-      status === SIGNIN_REQUEST ||
-      status === REGISTER_REQUEST ||
-      imageUpload.uploading
+    const spinnerShow = status === SIGNIN_REQUEST || status === REGISTER_REQUEST || imageUpload.uploading
 
     return (
-      <div
-        className={cx({ authForm: true, 'authForm--hidden': !show })}
-        onClick={evt => evt.stopPropagation()}
-      >
+      <div className={cx({ authForm: true, 'authForm--hidden': !show })} onClick={evt => evt.stopPropagation()}>
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
@@ -171,15 +138,13 @@ class AuthForm extends Component {
         </div>
         <div className="authForm__socialButtons">
           <GoogleLogin
-            clientId={
-              '658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com'
-            }
+            clientId={'658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com'}
             onSuccess={this.handleGoogleLoginSuccess}
             onFailure={this.handleGoogleLoginFail}
             className="button"
             style={{}}
           >
-            <Img src={`${CLOUDINARY_ICON_URL}/google.png`} />
+            <Img src={`${S3_ICON_URL}/google.png`} />
             <span>Google</span>
           </GoogleLogin>
           <FacebookLogin
@@ -187,47 +152,20 @@ class AuthForm extends Component {
             fields="name,email,picture"
             callback={this.handleFacebookLogin}
             textButton="Facebook"
-            icon={<Img src={`${CLOUDINARY_ICON_URL}/facebook.png`} />}
+            icon={<Img src={`${S3_ICON_URL}/facebook.png`} />}
             autoLoad
           />
         </div>
         <div className="authForm__divider">
           <span>{formatMessage(messages.or)}</span>
         </div>
-        <form
-          onSubmit={handleSubmit(this.handleSubmit)}
-          onChange={this.handleFormChange}
-        >
-          <Field
-            name="email"
-            type="email"
-            component={RenderField}
-            label={formatMessage(messages.email)}
-            order={1}
-          />
-          <Field
-            name="password"
-            type="password"
-            component={RenderField}
-            label={formatMessage(messages.password)}
-            order={2}
-          />
+        <form onSubmit={handleSubmit(this.handleSubmit)} onChange={this.handleFormChange}>
+          <Field name="email" type="email" component={RenderField} label={formatMessage(messages.email)} order={1} />
+          <Field name="password" type="password" component={RenderField} label={formatMessage(messages.password)} order={2} />
           {authMethod === 'register' && (
             <div>
-              <Field
-                name="confirmPassword"
-                type="password"
-                component={RenderField}
-                label={formatMessage(messages.repeatPassword)}
-                order={2}
-              />
-              <Field
-                name="fullname"
-                type="text"
-                component={RenderField}
-                label={formatMessage(messages.fullname)}
-                order={3}
-              />
+              <Field name="confirmPassword" type="password" component={RenderField} label={formatMessage(messages.repeatPassword)} order={2} />
+              <Field name="fullname" type="text" component={RenderField} label={formatMessage(messages.fullname)} order={3} />
               <Field
                 className="authForm__profileButton"
                 name="profilePic"
@@ -240,25 +178,15 @@ class AuthForm extends Component {
           )}
           <div className="authForm__authButtons">
             <button className="authForm__authButton authForm__authButton--active">
-              {authMethod === 'signIn'
-                ? formatMessage(messages.signIn)
-                : formatMessage(messages.register)}
+              {authMethod === 'signIn' ? formatMessage(messages.signIn) : formatMessage(messages.register)}
             </button>
-            <button
-              className="authForm__authButton authForm__authButton--inactive"
-              type="button"
-              onClick={this.handleChangeAuthMethod}
-            >
-              {authMethod !== 'signIn'
-                ? formatMessage(messages.signIn)
-                : formatMessage(messages.register)}
+            <button className="authForm__authButton authForm__authButton--inactive" type="button" onClick={this.handleChangeAuthMethod}>
+              {authMethod !== 'signIn' ? formatMessage(messages.signIn) : formatMessage(messages.register)}
             </button>
           </div>
           {!formChanged &&
             error &&
-            (status === SIGNIN_FAIL || status === REGISTER_FAIL) && (
-              <div className="error">{formatMessage({ id: error })}</div>
-            )}
+            (status === SIGNIN_FAIL || status === REGISTER_FAIL) && <div className="error">{formatMessage({ id: error })}</div>}
         </form>
       </div>
     )

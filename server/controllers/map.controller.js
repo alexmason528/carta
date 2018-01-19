@@ -22,11 +22,7 @@ exports.getQuestInfo = (req, res) => {
     }
     questInfo.places = places
 
-    if (
-      questInfo.places.length > 0 &&
-      questInfo.descriptives.length > 0 &&
-      questInfo.types.length > 0
-    ) {
+    if (questInfo.places.length > 0 && questInfo.descriptives.length > 0 && questInfo.types.length > 0) {
       return res.json(questInfo)
     }
   })
@@ -39,35 +35,23 @@ exports.getQuestInfo = (req, res) => {
     }
     questInfo.types = types
 
-    if (
-      questInfo.places.length > 0 &&
-      questInfo.descriptives.length > 0 &&
-      questInfo.types.length > 0
-    ) {
+    if (questInfo.places.length > 0 && questInfo.descriptives.length > 0 && questInfo.types.length > 0) {
       return res.json(questInfo)
     }
   })
 
-  DescriptiveCategory.find(
-    {},
-    { _id: 0, name: 0, e: 0, sum: 0 },
-    (err, descriptives) => {
-      if (err) {
-        return res.status(400).send({
-          error: { details: err.toString() },
-        })
-      }
-      questInfo.descriptives = descriptives
-
-      if (
-        questInfo.places.length > 0 &&
-        questInfo.descriptives.length > 0 &&
-        questInfo.types.length > 0
-      ) {
-        return res.json(questInfo)
-      }
+  DescriptiveCategory.find({}, { _id: 0, name: 0, e: 0, sum: 0 }, (err, descriptives) => {
+    if (err) {
+      return res.status(400).send({
+        error: { details: err.toString() },
+      })
     }
-  )
+    questInfo.descriptives = descriptives
+
+    if (questInfo.places.length > 0 && questInfo.descriptives.length > 0 && questInfo.types.length > 0) {
+      return res.json(questInfo)
+    }
+  })
 }
 
 /**
@@ -218,8 +202,7 @@ exports.getRecommendations = (req, res) => {
         })
       }
 
-      element.score =
-        tScore * parseFloat(element.descriptive.rep) * (1 + dScore)
+      element.score = tScore * parseFloat(element.descriptive.rep) * (1 + dScore)
 
       return element
     })

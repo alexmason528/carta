@@ -7,20 +7,10 @@ import ReactMapboxGl from 'react-mapbox-gl'
 import { withRouter } from 'react-router'
 import { createStructuredSelector } from 'reselect'
 import { compose } from 'redux'
-import {
-  COLORS,
-  CLOUDINARY_POINTS_URL,
-  CLOUDINARY_SHAPES_URL,
-  MAP_ACCESS_TOKEN,
-  RECOMMENDATION_COUNT,
-} from 'containers/App/constants'
 import { mapChange } from 'containers/QuestPage/actions'
-import {
-  selectRecommendations,
-  selectViewport,
-  selectInfo,
-} from 'containers/QuestPage/selectors'
+import { selectRecommendations, selectViewport, selectInfo } from 'containers/QuestPage/selectors'
 import { selectLocale } from 'containers/LanguageProvider/selectors'
+import { COLORS, S3_DATA_URL, MAP_ACCESS_TOKEN, RECOMMENDATION_COUNT } from 'utils/globalConstants'
 import './style.scss'
 
 const MapBox = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN })
@@ -80,17 +70,14 @@ class Map extends Component {
 
   handlePlaceClick = place => {
     const { params: { viewport, types, descriptives }, router } = this.props
-    const url =
-      viewport && types && descriptives
-        ? `/quest/in/${place}/${viewport}/${types}/${descriptives}`
-        : '/quest'
+    const url = viewport && types && descriptives ? `/quest/in/${place}/${viewport}/${types}/${descriptives}` : '/quest'
     router.push(url)
   }
 
   handleAddShapes = () => {
     this.map.addSource('shapes', {
       type: 'geojson',
-      data: `${CLOUDINARY_SHAPES_URL}/shapes.geojson`,
+      data: `${S3_DATA_URL}/shapes.geojson`,
     })
 
     COLORS.slice()
@@ -148,7 +135,7 @@ class Map extends Component {
   handleAddCaption = () => {
     this.map.addSource('points', {
       type: 'geojson',
-      data: `${CLOUDINARY_POINTS_URL}/points.geojson`,
+      data: `${S3_DATA_URL}/points.geojson`,
     })
 
     COLORS.slice()
@@ -219,31 +206,13 @@ class Map extends Component {
           const { display, e } = recommendation
           const filter = ['==', 'e', e]
           if (display === 'shape') {
-            this.map.setFilter(
-              `shape-border-offset-${RECOMMENDATION_COUNT - index - 1}`,
-              filter
-            )
-            this.map.setFilter(
-              `shape-border-${RECOMMENDATION_COUNT - index - 1}`,
-              filter
-            )
-            this.map.setFilter(
-              `shape-fill-${RECOMMENDATION_COUNT - index - 1}`,
-              filter
-            )
-            this.map.setFilter(
-              `shape-caption-${RECOMMENDATION_COUNT - index - 1}`,
-              filter
-            )
+            this.map.setFilter(`shape-border-offset-${RECOMMENDATION_COUNT - index - 1}`, filter)
+            this.map.setFilter(`shape-border-${RECOMMENDATION_COUNT - index - 1}`, filter)
+            this.map.setFilter(`shape-fill-${RECOMMENDATION_COUNT - index - 1}`, filter)
+            this.map.setFilter(`shape-caption-${RECOMMENDATION_COUNT - index - 1}`, filter)
           } else if (display === 'icon') {
-            this.map.setFilter(
-              `shape-border-offset-${RECOMMENDATION_COUNT - index - 1}`,
-              ['==', 'e', '']
-            )
-            this.map.setFilter(
-              `shape-border-${RECOMMENDATION_COUNT - index - 1}`,
-              ['==', 'e', '']
-            )
+            this.map.setFilter(`shape-border-offset-${RECOMMENDATION_COUNT - index - 1}`, ['==', 'e', ''])
+            this.map.setFilter(`shape-border-${RECOMMENDATION_COUNT - index - 1}`, ['==', 'e', ''])
             this.map.setFilter(`shape-caption-${4 - index}`, filter)
           }
         })
@@ -280,12 +249,7 @@ class Map extends Component {
   }
 
   render() {
-    const {
-      panelState,
-      viewport: { center, zoom },
-      params: { brochure },
-      onClick,
-    } = this.props
+    const { panelState, viewport: { center, zoom }, params: { brochure }, onClick } = this.props
     return (
       <div
         className={cx({
@@ -294,11 +258,7 @@ class Map extends Component {
         })}
         onClick={onClick}
       >
-        <ReactResizeDetector
-          handleWidth
-          handleHeight
-          onResize={this.handleResize}
-        />
+        <ReactResizeDetector handleWidth handleHeight onResize={this.handleResize} />
         <MapBox
           style={this.mapStyle}
           containerStyle={{ width: '100%', height: '100%' }}

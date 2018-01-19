@@ -1,9 +1,4 @@
-import {
-  INIT,
-  GET_THEMES_REQUEST,
-  GET_THEMES_SUCCESS,
-  GET_THEMES_FAIL,
-} from './constants'
+import { INIT, GET_THEMES_REQUEST, GET_THEMES_SUCCESS, GET_THEMES_FAIL } from './constants'
 
 const initialState = {
   themes: [],

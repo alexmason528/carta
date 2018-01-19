@@ -1,8 +1,4 @@
-import {
-  GET_PROFILE_REQUEST,
-  GET_PROFILE_SUCCESS,
-  GET_PROFILE_FAIL,
-} from './constants'
+import { GET_PROFILE_REQUEST, GET_PROFILE_SUCCESS, GET_PROFILE_FAIL } from './constants'
 
 export function getProfileRequest(payload) {
   return {

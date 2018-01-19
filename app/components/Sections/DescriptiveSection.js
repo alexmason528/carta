@@ -6,22 +6,12 @@ import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
-import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
-import {
-  descriptiveClick,
-  descriptiveStarClick,
-  descriptiveAnythingClick,
-  descriptiveSearchExpChange,
-} from 'containers/QuestPage/actions'
+import { descriptiveClick, descriptiveStarClick, descriptiveAnythingClick, descriptiveSearchExpChange } from 'containers/QuestPage/actions'
 import messages from 'containers/QuestPage/messages'
-import {
-  selectInfo,
-  selectDescriptives,
-  selectCurrentDescriptives,
-  selectDescriptiveSearchExpanded,
-} from 'containers/QuestPage/selectors'
+import { selectInfo, selectDescriptives, selectCurrentDescriptives, selectDescriptiveSearchExpanded } from 'containers/QuestPage/selectors'
 import { Button, StarButton } from 'components/Buttons'
 import Img from 'components/Img'
+import { S3_ICON_URL } from 'utils/globalConstants'
 
 class DescriptiveSection extends Component {
   static propTypes = {
@@ -89,20 +79,11 @@ class DescriptiveSection extends Component {
     const isDesktop = window.innerWidth >= 768
 
     let searchedDesc =
-      search === ''
-        ? descriptives
-        : descriptives.filter(
-            descriptive =>
-              descriptive[locale]
-                .toLowerCase()
-                .indexOf(search.toLowerCase()) !== -1
-          )
+      search === '' ? descriptives : descriptives.filter(descriptive => descriptive[locale].toLowerCase().indexOf(search.toLowerCase()) !== -1)
 
     return (
       <div className="section section--descriptive">
-        <h1 className="section__title Tt-U Cr-D">
-          {formatMessage(messages.knownFor)}
-        </h1>
+        <h1 className="section__title Tt-U Cr-D">{formatMessage(messages.knownFor)}</h1>
         <Img
           className={cx({
             section__searchOpenBtn: true,
@@ -111,7 +92,7 @@ class DescriptiveSection extends Component {
             'Bs-Cb': true,
             'P-A': true,
           })}
-          src={`${CLOUDINARY_ICON_URL}/search.png`}
+          src={`${S3_ICON_URL}/search.png`}
           onClick={() => {
             this.handleExpand(true)
           }}
@@ -119,14 +100,12 @@ class DescriptiveSection extends Component {
         <Img
           className={cx({
             section__searchCloseBtn: true,
-            invisible:
-              !expanded ||
-              (!all && stars.length === 0 && includes.length === 0),
+            invisible: !expanded || (!all && stars.length === 0 && includes.length === 0),
             'Cr-P': true,
             'Bs-Cb': true,
             'P-A': true,
           })}
-          src={`${CLOUDINARY_ICON_URL}/back.png`}
+          src={`${S3_ICON_URL}/back.png`}
           onClick={() => {
             this.handleExpand(false)
           }}
@@ -163,11 +142,7 @@ class DescriptiveSection extends Component {
             {searchedDesc.map((desc, index) => {
               const show = findIndex(visibles, desc) !== -1
               const star = findIndex(stars, desc) !== -1
-              const active =
-                star ||
-                (all
-                  ? findIndex(excludes, desc) === -1
-                  : findIndex(includes, desc) !== -1)
+              const active = star || (all ? findIndex(excludes, desc) === -1 : findIndex(includes, desc) !== -1)
 
               return expanded || star || show ? (
                 <StarButton
@@ -208,11 +183,7 @@ class DescriptiveSection extends Component {
           <div
             className={cx({
               excluded: true,
-              show:
-                all &&
-                !expanded &&
-                excludes.length > 0 &&
-                excludes.length !== descriptives.length,
+              show: all && !expanded && excludes.length > 0 && excludes.length !== descriptives.length,
             })}
           >
             <div className="except">{formatMessage(messages.onlyIgnoring)}</div>
@@ -252,6 +223,4 @@ const actions = {
   descriptiveSearchExpChange,
 }
 
-export default compose(injectIntl, connect(selectors, actions))(
-  DescriptiveSection
-)
+export default compose(injectIntl, connect(selectors, actions))(DescriptiveSection)

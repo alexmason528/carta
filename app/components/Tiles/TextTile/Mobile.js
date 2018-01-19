@@ -42,9 +42,7 @@ class TextTile extends Component {
         {...data}
       >
         <div className="tileContainer mobileTextTile">
-          {title && (
-            <h2 className="textTile__title Tt-U Pb-20 Cr-T">{title}</h2>
-          )}
+          {title && <h2 className="textTile__title Tt-U Pb-20 Cr-T">{title}</h2>}
           <div className="textTile__content Cr-T">{content}</div>
         </div>
       </Col>

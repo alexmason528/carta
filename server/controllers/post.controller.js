@@ -69,22 +69,17 @@ exports.updatePost = (req, res) => {
     img,
   }
 
-  Post.findOneAndUpdate(
-    { _id: postID },
-    { $set: data },
-    { new: true },
-    (err, post) => {
-      if (err) {
-        return res.status(400).send({
-          error: { details: err.toString() },
-        })
-      }
-
-      if (post && post._id) {
-        return res.json(post)
-      }
+  Post.findOneAndUpdate({ _id: postID }, { $set: data }, { new: true }, (err, post) => {
+    if (err) {
+      return res.status(400).send({
+        error: { details: err.toString() },
+      })
     }
-  )
+
+    if (post && post._id) {
+      return res.json(post)
+    }
+  })
 }
 
 /**

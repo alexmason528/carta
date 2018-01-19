@@ -24,10 +24,7 @@ class ThemePage extends Component {
       <Container fluid className="themePage P-0 M-0">
         <Helmet meta={[{ name: 'Theme', content: 'Carta' }]} />
         <Menu currentPage="themes" />
-        <Row className="themePage__row">
-          {themes &&
-            themes.map((theme, index) => <ThemeTile key={index} {...theme} />)}
-        </Row>
+        <Row className="themePage__row">{themes && themes.map((theme, index) => <ThemeTile key={index} {...theme} />)}</Row>
       </Container>
     )
   }

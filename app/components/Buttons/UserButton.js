@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import cx from 'classnames'
-import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import Img from 'components/Img'
+import { S3_ICON_URL } from 'utils/globalConstants'
 
 export default class UserButton extends Component {
   static propTypes = {
@@ -18,15 +18,9 @@ export default class UserButton extends Component {
   render() {
     const { className } = this.props
     return (
-      <button
-        className={cx({ profile__userButton: true, [className]: className })}
-        onClick={this.handleClick}
-      >
-        <Img src={`${CLOUDINARY_ICON_URL}/user-white-shadow.png`} />
-        <Img
-          className="hover"
-          src={`${CLOUDINARY_ICON_URL}/user-white-shadow.png`}
-        />
+      <button className={cx({ profile__userButton: true, [className]: className })} onClick={this.handleClick}>
+        <Img src={`${S3_ICON_URL}/user-white-shadow.png`} />
+        <Img className="hover" src={`${S3_ICON_URL}/user-white-shadow.png`} />
       </button>
     )
   }

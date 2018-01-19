@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import cx from 'classnames'
-import { COLORS } from 'containers/App/constants'
+import { COLORS } from 'utils/globalConstants'
 import './style.scss'
 
 class ScoreBoard extends Component {

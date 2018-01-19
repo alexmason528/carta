@@ -10,8 +10,4 @@ const descriptiveCategorySchema = new Schema(
   { strict: false, versionKey: false }
 )
 
-module.exports = mongoose.model(
-  'DescriptiveCategory',
-  descriptiveCategorySchema,
-  'descriptiveCategory'
-)
+module.exports = mongoose.model('DescriptiveCategory', descriptiveCategorySchema, 'descriptiveCategory')

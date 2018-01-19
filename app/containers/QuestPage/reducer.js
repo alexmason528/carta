@@ -1,6 +1,6 @@
 import { findIndex, find } from 'lodash'
-import { DEFAULT_ZOOM, CENTER_COORDS } from 'containers/App/constants'
 import { DEFAULT_LOCALE } from 'containers/LanguageProvider/constants'
+import { DEFAULT_ZOOM, CENTER_COORDS } from 'utils/globalConstants'
 import { getQuestStr } from 'utils/urlHelper'
 import { getItem, setItem } from 'utils/localStorage'
 import {
@@ -74,9 +74,7 @@ const initialState = {
     descriptives: [],
   },
   viewport: JSON.parse(getItem('viewport')) || initialViewport,
-  quests: JSON.parse(getItem('quests')) || [
-    JSON.parse(JSON.stringify(initialQuest)),
-  ],
+  quests: JSON.parse(getItem('quests')) || [JSON.parse(JSON.stringify(initialQuest))],
   curQuestInd: JSON.parse(getItem('curQuestInd')) || 0,
   recommendations: [],
   brochureLink: null,
@@ -192,9 +190,7 @@ function questReducer(state = initialState, { type, payload }) {
     case DESCRIPTIVE_CLICK:
       newQuests = quests.map((quest, index) => {
         if (index === curQuestInd) {
-          let {
-            descriptives: { stars, includes, excludes, visibles, expanded },
-          } = quest
+          let { descriptives: { stars, includes, excludes, visibles, expanded } } = quest
           const { desc, active } = payload
 
           if (active) {
@@ -311,11 +307,7 @@ function questReducer(state = initialState, { type, payload }) {
             quest.descriptives.expanded = false
           }
 
-          if (
-            quest.types.all ||
-            quest.types.includes.length > 0 ||
-            quest.types.visibles.length > 0
-          ) {
+          if (quest.types.all || quest.types.includes.length > 0 || quest.types.visibles.length > 0) {
             quest.types.expanded = false
           }
         }
@@ -337,11 +329,7 @@ function questReducer(state = initialState, { type, payload }) {
         setItem('curQuestInd', curQuestInd - 1)
       }
 
-      return Object.assign(
-        {},
-        { ...state, status: type, quests },
-        payload < curQuestInd && { curQuestInd: curQuestInd - 1 }
-      )
+      return Object.assign({}, { ...state, status: type, quests }, payload < curQuestInd && { curQuestInd: curQuestInd - 1 })
 
     case SET_QUEST:
       newQuests = quests.map((quest, index) => {
@@ -387,10 +375,7 @@ function questReducer(state = initialState, { type, payload }) {
             quest.types.expanded = true
           }
 
-          if (
-            !payload.quest.descriptives ||
-            payload.quest.descriptives === 'popular'
-          ) {
+          if (!payload.quest.descriptives || payload.quest.descriptives === 'popular') {
             quest.descriptives.all = false
             quest.descriptives.visibles = []
             quest.descriptives.expanded = true
@@ -407,10 +392,7 @@ function questReducer(state = initialState, { type, payload }) {
               })
               if (descObj && !find(quest.descriptives.stars, descObj)) {
                 quest.descriptives.stars.push(descObj)
-                if (
-                  payload.urlEntered &&
-                  !find(quest.descriptives.visibles, descObj)
-                ) {
+                if (payload.urlEntered && !find(quest.descriptives.visibles, descObj)) {
                   quest.descriptives.visibles.push(descObj)
                 }
               }
@@ -421,10 +403,7 @@ function questReducer(state = initialState, { type, payload }) {
               })
               if (descObj && !find(quest.descriptives.includes, descObj)) {
                 quest.descriptives.includes.push(descObj)
-                if (
-                  payload.urlEntered &&
-                  !find(quest.descriptives.visibles, descObj)
-                ) {
+                if (payload.urlEntered && !find(quest.descriptives.visibles, descObj)) {
                   quest.descriptives.visibles.push(descObj)
                 }
               }
@@ -442,11 +421,7 @@ function questReducer(state = initialState, { type, payload }) {
         return quest
       })
 
-      newViewport = Object.assign(
-        {},
-        { ...state.viewport },
-        payload.quest.viewport && { ...payload.quest.viewport }
-      )
+      newViewport = Object.assign({}, { ...state.viewport }, payload.quest.viewport && { ...payload.quest.viewport })
 
       setItem('viewport', JSON.stringify(newViewport))
       setItem('quests', JSON.stringify(newQuests))
@@ -534,9 +509,7 @@ function questReducer(state = initialState, { type, payload }) {
         if (index === curQuestInd) {
           quest.types.expanded = !quest.types.expanded
           if (quest.types.expanded) {
-            quest.types.visibles = JSON.parse(
-              JSON.stringify(quest.types.includes)
-            )
+            quest.types.visibles = JSON.parse(JSON.stringify(quest.types.includes))
           }
         }
         return quest
@@ -555,9 +528,7 @@ function questReducer(state = initialState, { type, payload }) {
         if (index === curQuestInd) {
           quest.descriptives.expanded = !quest.descriptives.expanded
           if (quest.descriptives.expanded) {
-            quest.descriptives.visibles = JSON.parse(
-              JSON.stringify(quest.descriptives.includes)
-            )
+            quest.descriptives.visibles = JSON.parse(JSON.stringify(quest.descriptives.includes))
           }
         }
         return quest
@@ -581,11 +552,7 @@ function questReducer(state = initialState, { type, payload }) {
         ) {
           quest.descriptives.expanded = false
         }
-        if (
-          quest.types.all ||
-          quest.types.includes.length > 0 ||
-          quest.types.visibles.length > 0
-        ) {
+        if (quest.types.all || quest.types.includes.length > 0 || quest.types.visibles.length > 0) {
           quest.types.expanded = false
         }
         return quest

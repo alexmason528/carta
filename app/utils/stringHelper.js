@@ -26,10 +26,7 @@ export const getPostLink = (editing, link, img) => {
   if (editing) {
     postLink = '#'
   } else if (link) {
-    postLink =
-      link.indexOf('http:') !== -1 || link.indexOf('https:') !== -1
-        ? link
-        : `http://${link}`
+    postLink = link.indexOf('http:') !== -1 || link.indexOf('https:') !== -1 ? link : `http://${link}`
   } else {
     postLink = img
   }
@@ -71,11 +68,7 @@ export const isLanguageSelectable = (title, img, content, defaultLocale) => {
 
   for (let lang of LANGUAGES) {
     const { countryCode } = lang
-    if (
-      countryCode !== defaultLocale &&
-      ((title && title[countryCode].length > 0) ||
-        (content && content[countryCode].length > 0))
-    ) {
+    if (countryCode !== defaultLocale && ((title && title[countryCode].length > 0) || (content && content[countryCode].length > 0))) {
       return true
     }
   }
@@ -105,14 +98,7 @@ export const getDefaultTexts = (locale = 'en', defaultLocale) => {
   return { title, content }
 }
 
-export const getSubmitInfo = (
-  title,
-  img,
-  content,
-  defaultLocale,
-  curLocale,
-  formatMessage
-) => {
+export const getSubmitInfo = (title, img, content, defaultLocale, curLocale, formatMessage) => {
   let submitError
   const postType = getPostType(img, content)
   const remainCharCnts = !content ? 1000 : 1000 - content[curLocale].length
@@ -129,9 +115,7 @@ export const getSubmitInfo = (
 
     if (title[defaultLocale] === '') {
       submitError = hasOtherTitle
-        ? formatMessage(messages.requireTitle, {
-          lang: defaultLocale.toUpperCase(),
-        })
+        ? formatMessage(messages.requireTitle, { lang: defaultLocale.toUpperCase() })
         : formatMessage(messages.requireDefaultTitle)
     }
   } else if (postType === 'textPost' || postType === 'mixedPost') {
@@ -156,15 +140,11 @@ export const getSubmitInfo = (
 
     if (title[defaultLocale] === '') {
       submitError = hasOtherTitle
-        ? formatMessage(messages.requireTitle, {
-          lang: defaultLocale.toUpperCase(),
-        })
+        ? formatMessage(messages.requireTitle, { lang: defaultLocale.toUpperCase() })
         : formatMessage(messages.requireDefaultTitle)
     } else if (content[defaultLocale] === '') {
       submitError = hasOtherContent
-        ? formatMessage(messages.requireContent, {
-          lang: defaultLocale.toUpperCase(),
-        })
+        ? formatMessage(messages.requireContent, { lang: defaultLocale.toUpperCase() })
         : formatMessage(messages.requireDefaultContent)
     } else {
       for (let lang of LANGUAGES) {

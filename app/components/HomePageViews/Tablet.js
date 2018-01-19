@@ -7,11 +7,7 @@ import { injectIntl, intlShape } from 'react-intl'
 import { browserHistory } from 'react-router'
 import { pullAt, findIndex } from 'lodash'
 import messages from 'containers/HomePage/messages'
-import {
-  selectAuthenticated,
-  selectUser,
-  selectInfo,
-} from 'containers/App/selectors'
+import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
 import { updateUserRequest } from 'containers/App/actions'
 import { selectViewport } from 'containers/QuestPage/selectors'
 import { selectEditingPost, selectPosts } from 'containers/HomePage/selectors'
@@ -64,13 +60,9 @@ class Tablet extends Component {
 
     let localePosts = posts.filter(post => post.title[locale] !== '')
     let secondColPosts = localePosts.length > 0 ? pullAt(localePosts, [0]) : []
-    let firstColPosts =
-      localePosts.length > 0
-        ? pullAt(localePosts, findIndex(localePosts, post => !!post.img))
-        : []
+    let firstColPosts = localePosts.length > 0 ? pullAt(localePosts, findIndex(localePosts, post => !!post.img)) : []
     const { url, continueQuest } = checkQuest(viewport)
-    const createPostButtonType =
-      secondColPosts.length > 0 && secondColPosts[0].img ? 'image' : 'text'
+    const createPostButtonType = secondColPosts.length > 0 && secondColPosts[0].img ? 'image' : 'text'
 
     localePosts.map((post, index) => {
       if (index % 2 === 0) {
@@ -94,11 +86,7 @@ class Tablet extends Component {
           {authenticated ? (
             <AccountMenu show={showAccountMenu} onClick={profileClick} />
           ) : (
-            <AuthForm
-              show={showAuthForm}
-              onProfilePicChange={profilePicClick}
-              profilePic={profilePic}
-            />
+            <AuthForm show={showAuthForm} onProfilePicChange={profilePicClick} profilePic={profilePic} />
           )}
           <div>
             {firstColPosts &&
@@ -107,11 +95,7 @@ class Tablet extends Component {
                   ...post,
                   key: post._id,
                   firstname: getFirstname(post.author.fullname),
-                  editable:
-                    authenticated &&
-                    (post.author._id === user._id || user.role === 'admin') &&
-                    !editingPost &&
-                    !showCreatePostForm,
+                  editable: authenticated && (post.author._id === user._id || user.role === 'admin') && !editingPost && !showCreatePostForm,
                   first: key === 0 && authenticated,
                 }
                 return <Post {...data} />
@@ -120,13 +104,9 @@ class Tablet extends Component {
         </Col>
         <Col className="homePage__col">
           <FixedTile
-            img="quest.jpg"
+            img="wide/quest.jpg"
             link={url}
-            title={formatMessage(
-              continueQuest
-                ? messages.continueYourQuest
-                : messages.startPersonalQuest
-            ).replace(/\n/g, '<br/>')}
+            title={formatMessage(continueQuest ? messages.continueYourQuest : messages.startPersonalQuest).replace(/\n/g, '<br/>')}
             buttonText={formatMessage(messages.browseThemes)}
             onClick={() => {
               browserHistory.push('/themes')
@@ -136,27 +116,15 @@ class Tablet extends Component {
             {authenticated &&
               !showCreatePostForm &&
               user.verified &&
-              !editingPost && (
-                <CreatePostButton
-                  type={createPostButtonType}
-                  onClick={toggleCreatePostForm}
-                />
-              )}
-            {authenticated &&
-              showCreatePostForm && (
-                <PostCreate onClose={toggleCreatePostForm} user={user} />
-              )}
+              !editingPost && <CreatePostButton type={createPostButtonType} onClick={toggleCreatePostForm} />}
+            {authenticated && showCreatePostForm && <PostCreate onClose={toggleCreatePostForm} user={user} />}
             {secondColPosts &&
               secondColPosts.map((post, key) => {
                 const data = {
                   ...post,
                   key: post._id,
                   firstname: getFirstname(post.author.fullname),
-                  editable:
-                    authenticated &&
-                    (post.author._id === user._id || user.role === 'admin') &&
-                    !editingPost &&
-                    !showCreatePostForm,
+                  editable: authenticated && (post.author._id === user._id || user.role === 'admin') && !editingPost && !showCreatePostForm,
                   first: key === 0 && authenticated,
                 }
                 return <Post {...data} />

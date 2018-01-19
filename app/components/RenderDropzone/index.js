@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import Dropzone from 'react-dropzone'
-import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import Img from 'components/Img'
+import { S3_ICON_URL } from 'utils/globalConstants'
 import { getCroppedImage } from 'utils/imageHelper'
 
 class RenderDropZone extends Component {
@@ -38,17 +38,9 @@ class RenderDropZone extends Component {
 
     return (
       <div>
-        <Dropzone
-          className={className}
-          name={name}
-          onDrop={this.handleDrop}
-          accept="image/*"
-          multiple={false}
-        >
+        <Dropzone className={className} name={name} onDrop={this.handleDrop} accept="image/*" multiple={false}>
           <div>{label}</div>
-          {files.length > 0 && (
-            <Img src={`${CLOUDINARY_ICON_URL}/check-green.png`} />
-          )}
+          {files.length > 0 && <Img src={`${S3_ICON_URL}/check-green.png`} />}
         </Dropzone>
         {touched && error && <span className="error">{error}</span>}
       </div>

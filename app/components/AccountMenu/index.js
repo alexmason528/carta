@@ -67,13 +67,7 @@ class AccountMenu extends Component {
   }
 
   render() {
-    const {
-      handleSubmit,
-      signOut,
-      show,
-      info: { error, status },
-      intl: { formatMessage },
-    } = this.props
+    const { handleSubmit, signOut, show, info: { error, status }, intl: { formatMessage } } = this.props
     const { showContent, showForm } = this.state
 
     return (
@@ -111,26 +105,15 @@ class AccountMenu extends Component {
             })}
             onSubmit={handleSubmit(this.handleDeleteUser)}
           >
-            <Field
-              name="password"
-              type="password"
-              component={RenderField}
-              label={formatMessage(messages.password)}
-              order={1}
-            />
-            <div className="accountMenu__warning Cr-T">
-              {formatMessage(messages.deleteConfirm)}
-            </div>
+            <Field name="password" type="password" component={RenderField} label={formatMessage(messages.password)} order={1} />
+            <div className="accountMenu__warning Cr-T">{formatMessage(messages.deleteConfirm)}</div>
             <div className="accountMenu__deleteFormButtons">
               <button type="button" onClick={this.handleCancelClick}>
                 {formatMessage(messages.cancel)}
               </button>
-              <button className="active">
-                {formatMessage(messages.confirm)}
-              </button>
+              <button className="active">{formatMessage(messages.confirm)}</button>
             </div>
-            {status === DELETE_USER_FAIL &&
-              error && <div className="error M-8 P-0">{error}</div>}
+            {status === DELETE_USER_FAIL && error && <div className="error M-8 P-0">{error}</div>}
           </Form>
         </div>
       </div>

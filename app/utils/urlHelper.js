@@ -18,10 +18,7 @@ const translations = {
 export const getObjectType = input => {
   if (input[0] === '.') return -1
   if (isNaN(input)) return -1
-  if (
-    parseFloat(input) === parseInt(input, 10) &&
-    input === parseInt(input, 10).toString()
-  ) {
+  if (parseFloat(input) === parseInt(input, 10) && input === parseInt(input, 10).toString()) {
     return 1
   }
   return 0
@@ -55,10 +52,7 @@ const getTypes = typesStr => {
     excludes: [],
   }
 
-  if (
-    segs[0].toLowerCase() ===
-    translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()
-  ) {
+  if (segs[0].toLowerCase() === translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()) {
     types.all = true
     segs.splice(0, 1)
   }
@@ -90,10 +84,7 @@ const getDescriptives = desStr => {
     excludes: [],
   }
 
-  if (
-    segs[0].toLowerCase() ===
-    translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()
-  ) {
+  if (segs[0].toLowerCase() === translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()) {
     descriptives.all = true
     segs.splice(0, 1)
   }
@@ -149,26 +140,14 @@ export const getUrlStr = str => {
 }
 
 export const urlComposer = ({ brochure, viewport, types, descriptives }) => {
-  let viewportParam = viewport
-    ? `${viewport.center.lng},${viewport.center.lat},${viewport.zoom}`
-    : undefined
+  let viewportParam = viewport ? `${viewport.center.lng},${viewport.center.lat},${viewport.zoom}` : undefined
   let typeParam
   let descParam
 
   if (types) {
-    const typeAll = types.all
-      ? translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()
-      : undefined
-    const typeIncludes =
-      types.includes.length > 0
-        ? types.includes.map(type => getUrlStr(type[DEFAULT_LOCALE])).join(',')
-        : undefined
-    const typeExcludes =
-      types.excludes.length > 0
-        ? types.excludes
-            .map(type => `-${getUrlStr(type[DEFAULT_LOCALE])}`)
-            .join(',')
-        : undefined
+    const typeAll = types.all ? translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase() : undefined
+    const typeIncludes = types.includes.length > 0 ? types.includes.map(type => getUrlStr(type[DEFAULT_LOCALE])).join(',') : undefined
+    const typeExcludes = types.excludes.length > 0 ? types.excludes.map(type => `-${getUrlStr(type[DEFAULT_LOCALE])}`).join(',') : undefined
     if (types.all) {
       let arr = [typeAll]
       if (typeExcludes) arr.push(typeExcludes)
@@ -178,27 +157,11 @@ export const urlComposer = ({ brochure, viewport, types, descriptives }) => {
     }
   }
   if (descriptives && descriptives !== 'popular') {
-    const descAll = descriptives.all
-      ? translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()
-      : undefined
-    const descStars =
-      descriptives.stars.length > 0
-        ? descriptives.stars
-            .map(type => `+${getUrlStr(type[DEFAULT_LOCALE])}`)
-            .join(',')
-        : undefined
-    const descIncludes =
-      descriptives.includes.length > 0
-        ? descriptives.includes
-            .map(type => getUrlStr(type[DEFAULT_LOCALE]))
-            .join(',')
-        : undefined
+    const descAll = descriptives.all ? translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase() : undefined
+    const descStars = descriptives.stars.length > 0 ? descriptives.stars.map(type => `+${getUrlStr(type[DEFAULT_LOCALE])}`).join(',') : undefined
+    const descIncludes = descriptives.includes.length > 0 ? descriptives.includes.map(type => getUrlStr(type[DEFAULT_LOCALE])).join(',') : undefined
     const descExcludes =
-      descriptives.excludes.length > 0
-        ? descriptives.excludes
-            .map(type => `-${getUrlStr(type[DEFAULT_LOCALE])}`)
-            .join(',')
-        : undefined
+      descriptives.excludes.length > 0 ? descriptives.excludes.map(type => `-${getUrlStr(type[DEFAULT_LOCALE])}`).join(',') : undefined
 
     if (descriptives.all) {
       let arr = [descAll]

@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import { injectIntl, intlShape } from 'react-intl'
 import cx from 'classnames'
-import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import messages from 'containers/HomePage/messages'
 import Img from 'components/Img'
+import { S3_ICON_URL } from 'utils/globalConstants'
 
 class LinkBar extends Component {
   static propTypes = {
@@ -15,13 +15,7 @@ class LinkBar extends Component {
   }
 
   render() {
-    const {
-      link,
-      showLinkBar,
-      postShowLinkBar,
-      postLinkChange,
-      intl: { formatMessage },
-    } = this.props
+    const { link, showLinkBar, postShowLinkBar, postLinkChange, intl: { formatMessage } } = this.props
 
     return (
       <div
@@ -37,7 +31,7 @@ class LinkBar extends Component {
           onClick={() => {
             postShowLinkBar(!showLinkBar)
           }}
-          src={`${CLOUDINARY_ICON_URL}/link.png`}
+          src={`${S3_ICON_URL}/link.png`}
         />
         <input
           type="text"

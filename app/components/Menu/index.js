@@ -5,17 +5,13 @@ import { Link, withRouter } from 'react-router'
 import { injectIntl, intlShape } from 'react-intl'
 import { compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
-import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { signOut, toggleMenu } from 'containers/App/actions'
-import {
-  selectAuthenticated,
-  selectMenuState,
-  selectUsername,
-} from 'containers/App/selectors'
+import { selectAuthenticated, selectMenuState, selectUsername } from 'containers/App/selectors'
 import { LANGUAGES } from 'containers/LanguageProvider/constants'
 import { changeLocale } from 'containers/LanguageProvider/actions'
 import messages from 'containers/HomePage/messages'
 import Img from 'components/Img'
+import { S3_ICON_URL } from 'utils/globalConstants'
 import './style.scss'
 
 class Menu extends Component {
@@ -52,15 +48,8 @@ class Menu extends Component {
 
   handleMap = evt => {
     evt.preventDefault()
-    const {
-      params: { viewport, types, descriptives },
-      toggleMenu,
-      router,
-    } = this.props
-    const url =
-      viewport && types && descriptives
-        ? `/quest/${viewport}/${types}/${descriptives}`
-        : '/quest'
+    const { params: { viewport, types, descriptives }, toggleMenu, router } = this.props
+    const url = viewport && types && descriptives ? `/quest/${viewport}/${types}/${descriptives}` : '/quest'
     router.push(url)
     toggleMenu()
   }
@@ -72,23 +61,12 @@ class Menu extends Component {
   }
 
   render() {
-    const {
-      authenticated,
-      currentPage,
-      username,
-      intl: { formatMessage, locale },
-      params: { brochure },
-      menuOpened,
-      toggleMenu,
-    } = this.props
+    const { authenticated, currentPage, username, intl: { formatMessage, locale }, params: { brochure }, menuOpened, toggleMenu } = this.props
 
     return (
-      <div
-        className={cx({ menu: true, menu__opened: menuOpened })}
-        onClick={this.handleToggleMenu}
-      >
+      <div className={cx({ menu: true, menu__opened: menuOpened })} onClick={this.handleToggleMenu}>
         <div className="logo Cr-P" onClick={this.handleToggleMenu}>
-          <Img src={`${CLOUDINARY_ICON_URL}/logo-100.png`} />
+          <Img src={`${S3_ICON_URL}/logo-100.png`} />
         </div>
         <div
           className={cx({
@@ -160,9 +138,7 @@ class Menu extends Component {
               </li>
             )}
             <li>
-              <a href={`http://carta.guide/${locale === 'en' ? '' : locale}`}>
-                {formatMessage(messages.about)}
-              </a>
+              <a href={`http://carta.guide/${locale === 'en' ? '' : locale}`}>{formatMessage(messages.about)}</a>
             </li>
             {authenticated && (
               <div>
@@ -184,22 +160,15 @@ class Menu extends Component {
                     'menu__language--active': locale === countryCode,
                   })}
                 >
-                  <a
-                    href="/"
-                    onClick={this.handleLanguageClick}
-                    data-locale={countryCode}
-                  >
+                  <a href="/" onClick={this.handleLanguageClick} data-locale={countryCode}>
                     {name}
                   </a>
                 </li>
               )
             })}
           </ul>
-          <div
-            className="menu__tab Cr-P P-7 Bs-Cb P-A"
-            onClick={this.handleToggleMenu}
-          >
-            <Img src={`${CLOUDINARY_ICON_URL}/name-vertical.png`} />
+          <div className="menu__tab Cr-P P-7 Bs-Cb P-A" onClick={this.handleToggleMenu}>
+            <Img src={`${S3_ICON_URL}/name-vertical.png`} />
           </div>
         </div>
       </div>
@@ -219,6 +188,4 @@ const actions = {
   toggleMenu,
 }
 
-export default compose(injectIntl, withRouter, connect(selectors, actions))(
-  Menu
-)
+export default compose(injectIntl, withRouter, connect(selectors, actions))(Menu)

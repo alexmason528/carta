@@ -115,9 +115,7 @@ class QuestPage extends Component {
           }}
         />
         <Map panelState={panelState} onClick={this.handleMapClick} />
-        {recommendations.length > 0 && (
-          <ScoreBoard recommendations={recommendations} />
-        )}
+        {recommendations.length > 0 && <ScoreBoard recommendations={recommendations} />}
         {brochureLink && <Brochure brochureLink={brochureLink} />}
       </Container>
     )

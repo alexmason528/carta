@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import cx from 'classnames'
-import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import Img from 'components/Img'
+import { S3_ICON_URL } from 'utils/globalConstants'
 
 const QuestButton = ({ panelState, onClick, onCloseClick }) => (
   <div
@@ -12,11 +12,11 @@ const QuestButton = ({ panelState, onClick, onCloseClick }) => (
     })}
   >
     <div onClick={onClick}>
-      <Img src={`${CLOUDINARY_ICON_URL}/search.png`} className="inactive" />
-      <Img src={`${CLOUDINARY_ICON_URL}/search-blue.png`} className="active" />
+      <Img src={`${S3_ICON_URL}/search.png`} className="inactive" />
+      <Img src={`${S3_ICON_URL}/search-blue.png`} className="active" />
     </div>
     <span onClick={onCloseClick}>
-      <Img src={`${CLOUDINARY_ICON_URL}/close.png`} />
+      <Img src={`${S3_ICON_URL}/close.png`} />
     </span>
   </div>
 )

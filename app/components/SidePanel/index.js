@@ -4,17 +4,10 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
 import { withRouter } from 'react-router'
-import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
-import {
-  questAdd,
-  questSelect,
-  questRemove,
-} from 'containers/QuestPage/actions'
-import {
-  selectQuestCnt,
-  selectCurQuestInd,
-} from 'containers/QuestPage/selectors'
+import { questAdd, questSelect, questRemove } from 'containers/QuestPage/actions'
+import { selectQuestCnt, selectCurQuestInd } from 'containers/QuestPage/selectors'
 import Img from 'components/Img'
+import { S3_ICON_URL } from 'utils/globalConstants'
 import Quest from '../Quest'
 import './style.scss'
 
@@ -39,16 +32,7 @@ class SidePanel extends Component {
   }
 
   render() {
-    const {
-      curQuestInd,
-      panelState,
-      onMinimizeClick,
-      questCnt,
-      onCloseClick,
-      questAdd,
-      questSelect,
-      params: { brochure },
-    } = this.props
+    const { curQuestInd, panelState, onMinimizeClick, questCnt, onCloseClick, questAdd, questSelect, params: { brochure } } = this.props
     const quests = Array(questCnt).fill(0)
     return (
       <div
@@ -61,10 +45,10 @@ class SidePanel extends Component {
       >
         <div>
           <button className="sidePanel__minimizeBtn" onClick={onMinimizeClick}>
-            <Img src={`${CLOUDINARY_ICON_URL}/min.png`} />
+            <Img src={`${S3_ICON_URL}/min.png`} />
           </button>
           <button className="sidePanel__closeBtn" onClick={onCloseClick}>
-            <Img src={`${CLOUDINARY_ICON_URL}/close.png`} />
+            <Img src={`${S3_ICON_URL}/close.png`} />
           </button>
         </div>
         <div className="sidePanel__questIndexBtnList">

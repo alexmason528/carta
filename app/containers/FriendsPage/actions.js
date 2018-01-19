@@ -1,8 +1,4 @@
-import {
-  GET_FRIENDS_REQUEST,
-  GET_FRIENDS_SUCCESS,
-  GET_FRIENDS_FAIL,
-} from './constants'
+import { GET_FRIENDS_REQUEST, GET_FRIENDS_SUCCESS, GET_FRIENDS_FAIL } from './constants'
 
 export function getFriendsRequest(payload) {
   return {

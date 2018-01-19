@@ -21,10 +21,7 @@ export function checkStore(store) {
     runSaga: isFunction,
     asyncReducers: isObject,
   }
-  invariant(
-    conformsTo(store, shape),
-    '(app/utils...) asyncInjectors: Expected a valid redux store'
-  )
+  invariant(conformsTo(store, shape), '(app/utils...) asyncInjectors: Expected a valid redux store')
 }
 
 /**
@@ -55,15 +52,9 @@ export function injectAsyncSagas(store, isValid) {
   return function injectSagas(name, sagas) {
     if (!isValid) checkStore(store)
 
-    invariant(
-      Array.isArray(sagas),
-      '(app/utils...) injectAsyncSagas: Expected `sagas` to be an array of generator functions'
-    )
+    invariant(Array.isArray(sagas), '(app/utils...) injectAsyncSagas: Expected `sagas` to be an array of generator functions')
 
-    warning(
-      !isEmpty(sagas),
-      '(app/utils...) injectAsyncSagas: Received an empty `sagas` array'
-    )
+    warning(!isEmpty(sagas), '(app/utils...) injectAsyncSagas: Received an empty `sagas` array')
 
     if (Reflect.has(asyncSagas, name)) return
 

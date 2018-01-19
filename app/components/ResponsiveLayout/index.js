@@ -15,11 +15,7 @@ class ResponsiveLayout extends Component {
           if (isMobile) {
             return mobile
           } else {
-            return (
-              <MediaQuery maxWidth={991}>
-                {isTablet => (isTablet ? tablet : desktop)}
-              </MediaQuery>
-            )
+            return <MediaQuery maxWidth={991}>{isTablet => (isTablet ? tablet : desktop)}</MediaQuery>
           }
         }}
       </MediaQuery>

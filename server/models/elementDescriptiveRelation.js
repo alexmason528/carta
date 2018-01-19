@@ -11,8 +11,4 @@ const elementDescriptiveRelationSchema = new Schema(
   { strict: false, versionKey: false }
 )
 
-module.exports = mongoose.model(
-  'ElementDescriptiveRelation',
-  elementDescriptiveRelationSchema,
-  'elementDescriptiveRelation'
-)
+module.exports = mongoose.model('ElementDescriptiveRelation', elementDescriptiveRelationSchema, 'elementDescriptiveRelation')

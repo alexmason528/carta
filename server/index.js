@@ -7,8 +7,7 @@ const argv = require('minimist')(process.argv.slice(2))
 const setup = require('./middlewares/frontendMiddleware')
 const mongoose = require('mongoose')
 const isDev = process.env.NODE_ENV !== 'production'
-const ngrok =
-  (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel ? require('ngrok') : false
+const ngrok = (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel ? require('ngrok') : false
 const path = require('path')
 const resolve = require('path').resolve
 const app = express()

@@ -32,8 +32,7 @@ class ThemeTile extends Component {
   handleResize = () => {
     const themeTile = ReactDOM.findDOMNode(this)
     const width = $(themeTile).width()
-    const fontSize =
-      width / 44 * 3 * 1.35 * (window.innerWidth < 768 ? 7 / 6 : 1)
+    const fontSize = width / 44 * 3 * 1.35 * (window.innerWidth < 768 ? 7 / 6 : 1)
     $(themeTile)
       .find('h2')
       .css({ fontSize: `${fontSize}px` })
@@ -57,12 +56,7 @@ class ThemeTile extends Component {
         <div className="tileContainer" onClick={this.handleTileClick}>
           <div className="tile themeTile Ov-H Cr-P">
             <Img onLoad={this.handleLoaded} src={url} />
-            {imageLoaded && (
-              <h2
-                className="Mb-0 Tt-U Px-30 Py-19"
-                dangerouslySetInnerHTML={{ __html: title[locale] }}
-              />
-            )}
+            {imageLoaded && <h2 className="Mb-0 Tt-U Px-30 Py-19" dangerouslySetInnerHTML={{ __html: title[locale] }} />}
           </div>
         </div>
       </Col>

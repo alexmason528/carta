@@ -29,11 +29,7 @@ exports.getFriends = (req, res) => {
         let friendList = []
 
         for (let friend of friends) {
-          friendList.push(
-            friend.firstUser.toString() === user._id.toString()
-              ? friend.secondUser
-              : friend.firstUser
-          )
+          friendList.push(friend.firstUser.toString() === user._id.toString() ? friend.secondUser : friend.firstUser)
         }
 
         friendList = uniq(friendList)

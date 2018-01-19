@@ -10,8 +10,4 @@ const placeCategorySchema = new Schema(
   { strict: false, versionKey: false }
 )
 
-module.exports = mongoose.model(
-  'PlaceCategory',
-  placeCategorySchema,
-  'placeCategory'
-)
+module.exports = mongoose.model('PlaceCategory', placeCategorySchema, 'placeCategory')

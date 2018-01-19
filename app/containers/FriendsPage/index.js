@@ -26,12 +26,7 @@ class FriendsPage extends Component {
       <Container fluid className="friendsPage P-0 M-0">
         <Helmet meta={[{ name: 'Friends', content: 'Carta' }]} />
         <Menu currentPage="friends" />
-        <Row className="friendsPage__row">
-          {friends &&
-            friends.map((entry, index) => (
-              <FriendTile key={index} {...entry} />
-            ))}
-        </Row>
+        <Row className="friendsPage__row">{friends && friends.map((entry, index) => <FriendTile key={index} {...entry} />)}</Row>
       </Container>
     )
   }

@@ -29,8 +29,7 @@ class ImageTile extends Component {
   handleResize = () => {
     const friendTile = ReactDOM.findDOMNode(this)
     const width = $(friendTile).width()
-    const fontSize =
-      width / 44 * 3 * 1.35 * (window.innerWidth < 768 ? 7 / 6 : 1)
+    const fontSize = width / 44 * 3 * 1.35 * (window.innerWidth < 768 ? 7 / 6 : 1)
     $(friendTile)
       .find('h2')
       .css({ fontSize: `${fontSize}px` })
@@ -49,12 +48,7 @@ class ImageTile extends Component {
         <div className="tileContainer">
           <div className="tile friendTile Ov-H Cr-P">
             <Img onLoad={this.handleLoaded} src={profilePic} />
-            {imageLoaded && (
-              <h2
-                className="Mb-0 Tt-U Px-30 Py-19"
-                dangerouslySetInnerHTML={{ __html: fullname }}
-              />
-            )}
+            {imageLoaded && <h2 className="Mb-0 Tt-U Px-30 Py-19" dangerouslySetInnerHTML={{ __html: fullname }} />}
           </div>
         </div>
       </Col>

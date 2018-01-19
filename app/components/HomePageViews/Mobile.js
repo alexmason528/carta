@@ -5,11 +5,7 @@ import { compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
 import { injectIntl, intlShape } from 'react-intl'
 import { browserHistory } from 'react-router'
-import {
-  selectAuthenticated,
-  selectUser,
-  selectInfo,
-} from 'containers/App/selectors'
+import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
 import { updateUserRequest } from 'containers/App/actions'
 import { questAdd } from 'containers/QuestPage/actions'
 import { selectViewport } from 'containers/QuestPage/selectors'
@@ -67,8 +63,7 @@ class Mobile extends Component {
 
     const localePosts = posts.filter(post => post.title[locale] !== '')
     const hasQuest = !!getItem('quests')
-    const createPostButtonType =
-      localePosts.length > 0 && localePosts[0].img ? 'image' : 'text'
+    const createPostButtonType = localePosts.length > 0 && localePosts[0].img ? 'image' : 'text'
     const { url, continueQuest } = checkQuest(viewport)
 
     return (
@@ -85,20 +80,12 @@ class Mobile extends Component {
           {authenticated ? (
             <AccountMenu show={showAccountMenu} onClick={profileClick} />
           ) : (
-            <AuthForm
-              show={showAuthForm}
-              onProfilePicChange={profilePicClick}
-              profilePic={profilePic}
-            />
+            <AuthForm show={showAuthForm} onProfilePicChange={profilePicClick} profilePic={profilePic} />
           )}
           <FixedTile
-            img="quest-square.jpg"
+            img="square/quest.jpg"
             link={url}
-            title={formatMessage(
-              continueQuest
-                ? messages.continueYourQuest
-                : messages.startPersonalQuest
-            ).replace(/\n/g, '<br/>')}
+            title={formatMessage(continueQuest ? messages.continueYourQuest : messages.startPersonalQuest).replace(/\n/g, '<br/>')}
             buttonText={hasQuest ? formatMessage(messages.orStartaNewOne) : ''}
             onClick={() => {
               questAdd()
@@ -106,12 +93,9 @@ class Mobile extends Component {
             }}
           />
           <FixedTile
-            img="brabant-square.jpg"
+            img="square/brabant.jpg"
             link="/quest/5.5778,51.4161,8.4/regions/walking,relaxing,picnics,cycling"
-            title={formatMessage(messages.brabantOutdoors).replace(
-              /\n/g,
-              '<br/>'
-            )}
+            title={formatMessage(messages.brabantOutdoors).replace(/\n/g, '<br/>')}
             buttonText={formatMessage(messages.browseThemes)}
             onClick={() => {
               browserHistory.push('/themes')
@@ -121,27 +105,15 @@ class Mobile extends Component {
             {authenticated &&
               !showCreatePostForm &&
               user.verified &&
-              !editingPost && (
-                <CreatePostButton
-                  type={createPostButtonType}
-                  onClick={toggleCreatePostForm}
-                />
-              )}
-            {authenticated &&
-              showCreatePostForm && (
-                <PostCreate onClose={toggleCreatePostForm} user={user} />
-              )}
+              !editingPost && <CreatePostButton type={createPostButtonType} onClick={toggleCreatePostForm} />}
+            {authenticated && showCreatePostForm && <PostCreate onClose={toggleCreatePostForm} user={user} />}
             {localePosts &&
               localePosts.map((post, key) => {
                 const data = {
                   ...post,
                   key: post._id,
                   firstname: getFirstname(post.author.fullname),
-                  editable:
-                    authenticated &&
-                    (post.author._id === user._id || user.role === 'admin') &&
-                    !editingPost &&
-                    !showCreatePostForm,
+                  editable: authenticated && (post.author._id === user._id || user.role === 'admin') && !editingPost && !showCreatePostForm,
                   first: key === 0 && authenticated,
                 }
                 return <Post {...data} />

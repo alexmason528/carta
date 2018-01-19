@@ -6,21 +6,14 @@ import { createStructuredSelector } from 'reselect'
 import { Container } from 'reactstrap'
 import { compose } from 'redux'
 import InfiniteScroll from 'react-infinite-scroller'
-import {
-  CLOUDINARY_PROFILE_URL,
-  UPDATE_USER_SUCCESS,
-  SIGNOUT,
-} from 'containers/App/constants'
-import {
-  selectAuthenticated,
-  selectUser,
-  selectInfo,
-} from 'containers/App/selectors'
+import { UPDATE_USER_SUCCESS, SIGNOUT } from 'containers/App/constants'
+import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
 import { signOut, verifyRequest } from 'containers/App/actions'
 import Menu from 'components/Menu'
 import Verify from 'components/Verify'
 import ResponsiveLayout from 'components/ResponsiveLayout'
 import { Desktop, Tablet, Mobile } from 'components/HomePageViews'
+import { S3_PROFILE_URL } from 'utils/globalConstants'
 import { listPostRequest } from './actions'
 import { CREATE_POST_SUCCESS, LIST_POST_REQUEST } from './constants'
 import { selectPosts, selectHomeInfo, selectHasMore } from './selectors'
@@ -60,9 +53,7 @@ class HomePage extends Component {
     }
 
     this.setState({
-      profilePic: authenticated
-        ? user.profilePic
-        : `${CLOUDINARY_PROFILE_URL}/${Math.floor(Math.random()) * 4}.jpg`,
+      profilePic: authenticated ? user.profilePic : `${S3_PROFILE_URL}/${Math.floor(Math.random()) * 4}.jpg`,
     })
   }
 
@@ -78,16 +69,12 @@ class HomePage extends Component {
       this.setState({ showCreatePostForm: false })
     }
 
-    if (
-      (!authenticated && nextProps.authenticated) ||
-      status === UPDATE_USER_SUCCESS
-    ) {
+    if ((!authenticated && nextProps.authenticated) || status === UPDATE_USER_SUCCESS) {
       const { profilePic } = nextProps.user
       this.setState({ profilePic })
     } else if (status === SIGNOUT) {
       this.setState({
-        profilePic: `${CLOUDINARY_PROFILE_URL}/${Math.floor(Math.random()) *
-          4}.jpg`,
+        profilePic: `${S3_PROFILE_URL}/${Math.floor(Math.random()) * 4}.jpg`,
       })
     }
   }
@@ -129,12 +116,7 @@ class HomePage extends Component {
   }
 
   render() {
-    const {
-      showAuthForm,
-      showCreatePostForm,
-      showAccountMenu,
-      profilePic,
-    } = this.state
+    const { showAuthForm, showCreatePostForm, showAccountMenu, profilePic } = this.state
 
     const { user, hasMore, signOut, info: { status } } = this.props
 
@@ -142,11 +124,7 @@ class HomePage extends Component {
       <Container fluid className="homePage P-0 M-0">
         <Helmet meta={[{ name: 'description', content: 'Carta' }]} />
         <Menu currentPage="home" />
-        <InfiniteScroll
-          loadMore={this.handleLoadMore}
-          hasMore={hasMore}
-          threshold={1000}
-        >
+        <InfiniteScroll loadMore={this.handleLoadMore} hasMore={hasMore} threshold={1000}>
           <ResponsiveLayout
             desktop={
               <Desktop

@@ -91,8 +91,7 @@ export default defineMessages({
   },
   deleteConfirm: {
     id: 'carta.deleteConfirm',
-    defaultMessage:
-      'This action deletes all your posts and content from Carta. Are you sure you want to continue?',
+    defaultMessage: 'This action deletes all your posts and content from Carta. Are you sure you want to continue?',
   },
   confirm: {
     id: 'carta.confirm',
@@ -132,18 +131,15 @@ export default defineMessages({
   },
   verificationEmail: {
     id: 'carta.verificationEmail',
-    defaultMessage:
-      "Hey {name}, you've received an email from us. Please open it and click on the link to verify your account",
+    defaultMessage: "Hey {name}, you've received an email from us. Please open it and click on the link to verify your account",
   },
   verificationSuccess: {
     id: 'carta.verificationSuccess',
-    defaultMessage:
-      'Verification success! You will be redirected in {timer} seconds',
+    defaultMessage: 'Verification success! You will be redirected in {timer} seconds',
   },
   verificationFail: {
     id: 'carta.verificationFail',
-    defaultMessage:
-      'Verification failed. Your verification code is not correct.',
+    defaultMessage: 'Verification failed. Your verification code is not correct.',
   },
   verificationRequired: {
     id: 'carta.verificationRequired',

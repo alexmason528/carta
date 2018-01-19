@@ -10,8 +10,4 @@ const typeCategorySchema = new Schema(
   { strict: false, versionKey: false }
 )
 
-module.exports = mongoose.model(
-  'TypeCategory',
-  typeCategorySchema,
-  'typeCategory'
-)
+module.exports = mongoose.model('TypeCategory', typeCategorySchema, 'typeCategory')

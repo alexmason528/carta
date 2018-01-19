@@ -63,12 +63,7 @@ class TextTile extends Component {
         .trigger('update.dot')
       $(tile)
         .find('.arrowBtn')
-        .css(
-          'display',
-          $(tile).find('.is-truncated').length > 0 || expanded
-            ? 'block'
-            : 'none'
-        )
+        .css('display', $(tile).find('.is-truncated').length > 0 || expanded ? 'block' : 'none')
     }, 200)
 
     if (!expanded) {

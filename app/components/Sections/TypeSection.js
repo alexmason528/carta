@@ -6,20 +6,11 @@ import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { createStructuredSelector } from 'reselect'
 import { findIndex } from 'lodash'
-import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
-import {
-  typeClick,
-  typeAnythingClick,
-  typeSearchExpChange,
-} from 'containers/QuestPage/actions'
+import { typeClick, typeAnythingClick, typeSearchExpChange } from 'containers/QuestPage/actions'
 import messages from 'containers/QuestPage/messages'
-import {
-  selectInfo,
-  selectTypes,
-  selectCurrentTypes,
-  selectTypeSearchExpanded,
-} from 'containers/QuestPage/selectors'
+import { selectInfo, selectTypes, selectCurrentTypes, selectTypeSearchExpanded } from 'containers/QuestPage/selectors'
 import { Button } from 'components/Buttons'
+import { S3_ICON_URL } from 'utils/globalConstants'
 import Img from 'components/Img'
 
 class TypeSection extends Component {
@@ -85,19 +76,11 @@ class TypeSection extends Component {
     } = this.props
     const isDesktop = window.innerWidth >= 768
 
-    const searchedTypes =
-      search === ''
-        ? types
-        : types.filter(
-            type =>
-              type[locale].toLowerCase().indexOf(search.toLowerCase()) !== -1
-          )
+    const searchedTypes = search === '' ? types : types.filter(type => type[locale].toLowerCase().indexOf(search.toLowerCase()) !== -1)
 
     return (
       <div className="section section--type">
-        <h1 className="section__title Tt-U Cr-D">
-          {formatMessage(messages.showMe)}
-        </h1>
+        <h1 className="section__title Tt-U Cr-D">{formatMessage(messages.showMe)}</h1>
         <Img
           className={cx({
             section__searchOpenBtn: true,
@@ -106,7 +89,7 @@ class TypeSection extends Component {
             'Bs-Cb': true,
             'P-A': true,
           })}
-          src={`${CLOUDINARY_ICON_URL}/search.png`}
+          src={`${S3_ICON_URL}/search.png`}
           onClick={() => {
             this.handleExpand(true)
           }}
@@ -119,7 +102,7 @@ class TypeSection extends Component {
             'Bs-Cb': true,
             'P-A': true,
           })}
-          src={`${CLOUDINARY_ICON_URL}/back.png`}
+          src={`${S3_ICON_URL}/back.png`}
           onClick={() => {
             this.handleExpand(false)
           }}
@@ -154,9 +137,7 @@ class TypeSection extends Component {
             })}
           >
             {searchedTypes.map((type, index) => {
-              const active = all
-                ? findIndex(excludes, type) === -1
-                : findIndex(includes, type) !== -1
+              const active = all ? findIndex(excludes, type) === -1 : findIndex(includes, type) !== -1
               const show = findIndex(visibles, type) !== -1
               return expanded || show ? (
                 <Button
@@ -174,11 +155,7 @@ class TypeSection extends Component {
           <div
             className={cx({
               excluded: true,
-              show:
-                all &&
-                !expanded &&
-                excludes.length > 0 &&
-                excludes.length !== types.length,
+              show: all && !expanded && excludes.length > 0 && excludes.length !== types.length,
             })}
           >
             <div className="except">{formatMessage(messages.onlyIgnoring)}</div>

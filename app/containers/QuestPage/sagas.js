@@ -1,14 +1,8 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects'
 import { findIndex, map, uniq } from 'lodash'
 import { browserHistory } from 'react-router'
-import { API_BASE_URL, RECOMMENDATION_COUNT } from 'containers/App/constants'
-import {
-  selectBrochureLink,
-  selectCurrentTypes,
-  selectCurrentDescriptives,
-  selectViewport,
-  selectTypes,
-} from 'containers/QuestPage/selectors'
+import { selectBrochureLink, selectCurrentTypes, selectCurrentDescriptives, selectViewport, selectTypes } from 'containers/QuestPage/selectors'
+import { API_BASE_URL, RECOMMENDATION_COUNT } from 'utils/globalConstants'
 import request from 'utils/request'
 import { canSendRequest, urlComposer } from 'utils/urlHelper'
 import {
@@ -41,10 +35,7 @@ import {
 } from './actions'
 
 export function* getRecommendationWatcher() {
-  yield takeLatest(
-    [GET_RECOMMENDATION_REQUEST, SET_QUEST],
-    getRecommendationRequestHandler
-  )
+  yield takeLatest([GET_RECOMMENDATION_REQUEST, SET_QUEST], getRecommendationRequestHandler)
 }
 
 export function* getRecommendationRequestHandler() {
@@ -164,16 +155,7 @@ export function* getBrochureInfoRequestHandler({ payload }) {
 
 export function* composeUrlWatcher() {
   yield takeLatest(
-    [
-      MAP_CHANGE,
-      PLACE_CLICK,
-      QUEST_SELECT,
-      TYPE_CLICK,
-      TYPE_ANYTHING_CLICK,
-      DESCRIPTIVE_CLICK,
-      DESCRIPTIVE_STAR_CLICK,
-      DESCRIPTIVE_ANYTHING_CLICK,
-    ],
+    [MAP_CHANGE, PLACE_CLICK, QUEST_SELECT, TYPE_CLICK, TYPE_ANYTHING_CLICK, DESCRIPTIVE_CLICK, DESCRIPTIVE_STAR_CLICK, DESCRIPTIVE_ANYTHING_CLICK],
     composeUrl
   )
 }
@@ -183,13 +165,7 @@ export function* composeUrl() {
   const types = yield select(selectCurrentTypes())
   const descriptives = yield select(selectCurrentDescriptives())
   const brochureLink = yield select(selectBrochureLink())
-  const url = urlComposer(
-    Object.assign(
-      {},
-      { viewport, types, descriptives },
-      brochureLink && { brochure: brochureLink }
-    )
-  )
+  const url = urlComposer(Object.assign({}, { viewport, types, descriptives }, brochureLink && { brochure: brochureLink }))
   if (browserHistory.getCurrentLocation().pathname !== url) {
     yield call(browserHistory.push, url)
   }
@@ -257,16 +233,7 @@ export function* getDescriptivesRequestHandler() {
 }
 
 export function* getDescriptivesRequestWatcher() {
-  yield takeLatest(
-    [GET_DESCRIPTIVES_REQUEST, TYPE_CLICK, TYPE_ANYTHING_CLICK],
-    getDescriptivesRequestHandler
-  )
+  yield takeLatest([GET_DESCRIPTIVES_REQUEST, TYPE_CLICK, TYPE_ANYTHING_CLICK], getDescriptivesRequestHandler)
 }
 
-export default [
-  getRecommendationWatcher,
-  getQuestInfoWatcher,
-  getBrochureInfoWatcher,
-  composeUrlWatcher,
-  getDescriptivesRequestWatcher,
-]
+export default [getRecommendationWatcher, getQuestInfoWatcher, getBrochureInfoWatcher, composeUrlWatcher, getDescriptivesRequestWatcher]

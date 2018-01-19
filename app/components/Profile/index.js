@@ -2,19 +2,14 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import { injectIntl, intlShape } from 'react-intl'
 import { browserHistory } from 'react-router'
-import axios from 'axios'
-import {
-  CLOUDINARY_UPLOAD_URL,
-  CLOUDINARY_UPLOAD_PRESET,
-  CLOUDINARY_PLACE_URL,
-  UPDATE_USER_REQUEST,
-} from 'containers/App/constants'
+import { UPDATE_USER_REQUEST } from 'containers/App/constants'
+import messages from 'containers/HomePage/messages'
 import { UserButton } from 'components/Buttons'
 import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
-import { getCroppedImage } from 'utils/imageHelper'
-import messages from 'containers/HomePage/messages'
 import Img from 'components/Img'
+import { S3_PLACE_URL, S3_USER_PROFILE_IMAGE_URL } from 'utils/globalConstants'
+import { getCroppedImage, imageUploader } from 'utils/imageHelper'
 import { getFirstname } from 'utils/stringHelper'
 import './style.scss'
 
@@ -98,24 +93,16 @@ class Profile extends Component {
 
     this.setState({ imageUpload: { uploading: true, error: null } })
 
-    let formData = new FormData()
-    formData.append('file', img)
-    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
-
-    axios
-      .post(CLOUDINARY_UPLOAD_URL, formData, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      })
-      .then(res => {
-        const { data: { url } } = res
-        this.setState({ imageUpload: { uploading: false, error: null } })
-        onUpdate({ profilePic: url })
-      })
-      .catch(err => {
+    imageUploader(S3_USER_PROFILE_IMAGE_URL, img, (err, url) => {
+      if (err) {
         this.setState({
           imageUpload: { uploading: false, error: err.toString() },
         })
-      })
+      } else {
+        onUpdate({ profilePic: url })
+        this.setState({ imageUpload: { uploading: false, error: null } })
+      }
+    })
   }
 
   handlePlaceInfoBtnClick = (evt, place) => {
@@ -124,17 +111,9 @@ class Profile extends Component {
   }
 
   render() {
-    const {
-      authenticated,
-      user,
-      onClick,
-      info: { status },
-      intl: { formatMessage },
-    } = this.props
+    const { authenticated, user, onClick, info: { status }, intl: { formatMessage } } = this.props
     const { profilePic, imageUpload, imageType } = this.state
-    const profilePicSpinner =
-      imageType === 'profilePic' &&
-      (imageUpload.uploading || status === UPDATE_USER_REQUEST)
+    const profilePicSpinner = imageType === 'profilePic' && (imageUpload.uploading || status === UPDATE_USER_REQUEST)
 
     const placeList = [
       { name: 'amsterdam', link: 'amsterdam' },
@@ -146,12 +125,7 @@ class Profile extends Component {
     return (
       <div className="profile Mb-8 P-R">
         <div className="profile__menu">
-          <button
-            className="profile__placeInfoBtn Tt-U Fw-B Fz-10"
-            onClick={evt =>
-              this.handlePlaceInfoBtnClick(evt, placeList[this.coverPic].link)
-            }
-          >
+          <button className="profile__placeInfoBtn Tt-U Fw-B Fz-10" onClick={evt => this.handlePlaceInfoBtnClick(evt, placeList[this.coverPic].link)}>
             {placeList[this.coverPic].name}
           </button>{' '}
           |{' '}
@@ -165,18 +139,8 @@ class Profile extends Component {
           </button>
         </div>
         <div className="profile__content">
-          <div
-            className="coverPic Cr-P Ov-H P-R"
-            onClick={evt =>
-              this.handlePlaceInfoBtnClick(evt, placeList[this.coverPic].link)
-            }
-          >
-            <Img
-              onLoad={this.handleLoaded}
-              src={`${CLOUDINARY_PLACE_URL}/${
-                placeList[this.coverPic].name
-              }.jpg`}
-            />
+          <div className="coverPic Cr-P Ov-H P-R" onClick={evt => this.handlePlaceInfoBtnClick(evt, placeList[this.coverPic].link)}>
+            <Img onLoad={this.handleLoaded} src={`${S3_PLACE_URL}/wide/${placeList[this.coverPic].name}.jpg`} />
             {authenticated ? (
               <h2 className="Mb-0 Tt-U P-A">{getFirstname(user.fullname)}</h2>
             ) : (
@@ -188,10 +152,7 @@ class Profile extends Component {
           </div>
         </div>
         {profilePic && (
-          <div
-            className="profilePic Ov-H"
-            onClick={authenticated ? this.handleProfilePic : onClick}
-          >
+          <div className="profilePic Ov-H" onClick={authenticated ? this.handleProfilePic : onClick}>
             <LoadingSpinner show={profilePicSpinner}>
               <QuarterSpinner width={30} height={30} />
             </LoadingSpinner>

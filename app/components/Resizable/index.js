@@ -34,15 +34,7 @@ class Resizable extends Component {
   render() {
     const { className, tabIndex, placeholder, value, disabled } = this.props
     const data = { className, tabIndex, placeholder, value, disabled }
-    return (
-      <textarea
-        rows={1}
-        onChange={this.handleChange}
-        onBlur={this.resizeTextArea}
-        onFocus={this.resizeTextArea}
-        {...data}
-      />
-    )
+    return <textarea rows={1} onChange={this.handleChange} onBlur={this.resizeTextArea} onFocus={this.resizeTextArea} {...data} />
   }
 }
 

@@ -31,8 +31,7 @@ class PlaceTile extends Component {
   handleResize = () => {
     const placeTile = ReactDOM.findDOMNode(this)
     const width = $(placeTile).width()
-    const fontSize =
-      width / 44 * 3 * 1.35 * (window.innerWidth < 768 ? 7 / 6 : 1)
+    const fontSize = width / 44 * 3 * 1.35 * (window.innerWidth < 768 ? 7 / 6 : 1)
     $(placeTile)
       .find('h2')
       .css({ fontSize: `${fontSize}px` })
@@ -56,12 +55,7 @@ class PlaceTile extends Component {
         <div className="tileContainer" onClick={this.handleTileClick}>
           <div className="tile placeTile Ov-H Cr-P">
             <Img onLoad={this.handleLoaded} src={url} />
-            {imageLoaded && (
-              <h2
-                className="Mb-0 Tt-U Px-30 Py-19"
-                dangerouslySetInnerHTML={{ __html: title }}
-              />
-            )}
+            {imageLoaded && <h2 className="Mb-0 Tt-U Px-30 Py-19" dangerouslySetInnerHTML={{ __html: title }} />}
           </div>
         </div>
       </Col>

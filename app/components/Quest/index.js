@@ -4,16 +4,12 @@ import { compose } from 'redux'
 import { connect } from 'react-redux'
 import cx from 'classnames'
 import { createStructuredSelector } from 'reselect'
-import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import { SET_URL_ENTERED_QUEST } from 'containers/QuestPage/constants'
 import { updateExpand } from 'containers/QuestPage/actions'
-import {
-  selectInfo,
-  selectCurrentTypes,
-  selectCurrentDescriptives,
-} from 'containers/QuestPage/selectors'
+import { selectInfo, selectCurrentTypes, selectCurrentDescriptives } from 'containers/QuestPage/selectors'
 import messages from 'containers/QuestPage/messages'
 import Img from 'components/Img'
+import { S3_ICON_URL } from 'utils/globalConstants'
 import { DescriptiveSection, PlaceSection, TypeSection } from '../Sections'
 import './style.scss'
 
@@ -54,17 +50,13 @@ class Quest extends Component {
     if (status === SET_URL_ENTERED_QUEST) {
       if (
         (currentTypes.all || currentTypes.includes.length > 0) &&
-        (currentDescriptives.all ||
-          currentDescriptives.includes.length > 0 ||
-          currentDescriptives.stars.length > 0)
+        (currentDescriptives.all || currentDescriptives.includes.length > 0 || currentDescriptives.stars.length > 0)
       ) {
         this.setState({ currentTab: 2 })
       } else if (
         currentTypes.all ||
         currentTypes.includes.length > 0 ||
-        (currentDescriptives.all ||
-          currentDescriptives.includes.length > 0 ||
-          currentDescriptives.stars.length > 0)
+        (currentDescriptives.all || currentDescriptives.includes.length > 0 || currentDescriptives.stars.length > 0)
       ) {
         this.setState({ currentTab: 1 })
       } else {
@@ -113,7 +105,7 @@ class Quest extends Component {
           <div className="quest__divider" />
           <button className="quest__nextBtn" onClick={this.handleNextBtnClick}>
             {formatMessage(messages.next)}
-            <Img src={`${CLOUDINARY_ICON_URL}/next.png`} />
+            <Img src={`${S3_ICON_URL}/next.png`} />
           </button>
           <div
             className={cx({
@@ -133,7 +125,7 @@ class Quest extends Component {
                 'Bs-Cb': true,
                 'quest__tabBtn--active': currentTab === index,
               })}
-              src={`${CLOUDINARY_ICON_URL}/${tabIcon}.png`}
+              src={`${S3_ICON_URL}/${tabIcon}.png`}
               onClick={() => {
                 this.handleTabClick(index)
               }}

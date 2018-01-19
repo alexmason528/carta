@@ -1,9 +1,4 @@
-import {
-  INIT,
-  GET_PROFILE_REQUEST,
-  GET_PROFILE_SUCCESS,
-  GET_PROFILE_FAIL,
-} from './constants'
+import { INIT, GET_PROFILE_REQUEST, GET_PROFILE_SUCCESS, GET_PROFILE_FAIL } from './constants'
 
 const initialState = {
   profile: [],

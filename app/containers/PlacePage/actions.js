@@ -1,8 +1,4 @@
-import {
-  GET_PLACES_REQUEST,
-  GET_PLACES_SUCCESS,
-  GET_PLACES_FAIL,
-} from './constants'
+import { GET_PLACES_REQUEST, GET_PLACES_SUCCESS, GET_PLACES_FAIL } from './constants'
 
 export function getPlacesRequest() {
   return {

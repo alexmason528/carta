@@ -1,9 +1,4 @@
-import {
-  INIT,
-  GET_PLACES_REQUEST,
-  GET_PLACES_SUCCESS,
-  GET_PLACES_FAIL,
-} from './constants'
+import { INIT, GET_PLACES_REQUEST, GET_PLACES_SUCCESS, GET_PLACES_FAIL } from './constants'
 
 const initialState = {
   places: [],

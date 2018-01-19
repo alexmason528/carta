@@ -9,15 +9,4 @@ import RemoveButton from './RemoveButton'
 import StarButton from './StarButton'
 import UserButton from './UserButton'
 
-export {
-  Button,
-  CreatePostButton,
-  DeleteButton,
-  EditButton,
-  InfoButton,
-  LinkButton,
-  QuestButton,
-  RemoveButton,
-  StarButton,
-  UserButton,
-}
+export { Button, CreatePostButton, DeleteButton, EditButton, InfoButton, LinkButton, QuestButton, RemoveButton, StarButton, UserButton }

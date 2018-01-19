@@ -54,19 +54,11 @@ class PlaceSection extends Component {
     const { search } = this.state
     const isDesktop = window.innerWidth >= 768
 
-    let filteredPlaces =
-      search === ''
-        ? places
-        : places.filter(
-            place =>
-              place.name.toLowerCase().indexOf(search.toLowerCase()) !== -1
-          )
+    let filteredPlaces = search === '' ? places : places.filter(place => place.name.toLowerCase().indexOf(search.toLowerCase()) !== -1)
 
     return (
       <div className="section section--place">
-        <h1 className="section__title Tt-U Cr-D">
-          {formatMessage(messages.inAround)}
-        </h1>
+        <h1 className="section__title Tt-U Cr-D">{formatMessage(messages.inAround)}</h1>
         <input
           className="section__searchInput"
           value={search}

@@ -3,8 +3,7 @@ import { createSelector } from 'reselect'
 const selectGlobal = state => state.global
 const selectLocationState = () => state => state.route
 
-const selectAuthenticated = () =>
-  createSelector(selectGlobal, substate => substate.authenticated)
+const selectAuthenticated = () => createSelector(selectGlobal, substate => substate.authenticated)
 
 const selectInfo = () =>
   createSelector(selectGlobal, substate => {
@@ -14,21 +13,8 @@ const selectInfo = () =>
 
 const selectUser = () => createSelector(selectGlobal, substate => substate.user)
 
-const selectUsername = () =>
-  createSelector(
-    selectGlobal,
-    substate => (substate.user ? substate.user.username : '')
-  )
+const selectUsername = () => createSelector(selectGlobal, substate => (substate.user ? substate.user.username : ''))
 
-const selectMenuState = () =>
-  createSelector(selectGlobal, substate => substate.menuOpened)
+const selectMenuState = () => createSelector(selectGlobal, substate => substate.menuOpened)
 
-export {
-  selectGlobal,
-  selectLocationState,
-  selectAuthenticated,
-  selectInfo,
-  selectUser,
-  selectUsername,
-  selectMenuState,
-}
+export { selectGlobal, selectLocationState, selectAuthenticated, selectInfo, selectUser, selectUsername, selectMenuState }

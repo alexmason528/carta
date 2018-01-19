@@ -27,11 +27,7 @@ function withProgressBar(WrappedComponent) {
       const { loadedRoutes, progress } = this.state
       const { pathname } = newProps.location
 
-      if (
-        loadedRoutes.indexOf(pathname) === -1 &&
-        progress !== -1 &&
-        newState.progress < 100
-      ) {
+      if (loadedRoutes.indexOf(pathname) === -1 && progress !== -1 && newState.progress < 100) {
         this.updateProgress(100)
         this.setState({ loadedRoutes: loadedRoutes.concat([pathname]) })
       }
@@ -48,10 +44,7 @@ function withProgressBar(WrappedComponent) {
     render() {
       return (
         <div>
-          <ProgressBar
-            percent={this.state.progress}
-            updateProgress={this.updateProgress}
-          />
+          <ProgressBar percent={this.state.progress} updateProgress={this.updateProgress} />
           <WrappedComponent {...this.props} />
         </div>
       )

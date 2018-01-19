@@ -99,10 +99,7 @@ exports.importTypeDescriptiveRelations = (req, res) => {
       })
     }
 
-    const csvPath = path.join(
-      __dirname,
-      '../csv/type_descriptive_relations.csv'
-    )
+    const csvPath = path.join(__dirname, '../csv/type_descriptive_relations.csv')
     const stream = fs.createReadStream(csvPath)
     csv
       .fromStream(stream, { headers: true })
@@ -154,10 +151,7 @@ exports.importElementDescriptiveRelations = (req, res) => {
       })
     }
 
-    const csvPath = path.join(
-      __dirname,
-      '../csv/element_descriptive_relations.csv'
-    )
+    const csvPath = path.join(__dirname, '../csv/element_descriptive_relations.csv')
     const stream = fs.createReadStream(csvPath)
     csv
       .fromStream(stream, { headers: true })

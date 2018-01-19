@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import cx from 'classnames'
-import { CLOUDINARY_ICON_URL } from 'containers/App/constants'
 import Img from 'components/Img'
+import { S3_ICON_URL } from 'utils/globalConstants'
 
 const RemoveButton = ({ className, type, children, onClick }) => {
   const btnClass = cx({
@@ -24,10 +24,8 @@ const RemoveButton = ({ className, type, children, onClick }) => {
 
   return (
     <button type="button" className={btnClass} onClick={onClick}>
-      <Img src={`${CLOUDINARY_ICON_URL}/${image}.png`} />
-      {hover && (
-        <Img className="hover" src={`${CLOUDINARY_ICON_URL}/${image}.png`} />
-      )}
+      <Img src={`${S3_ICON_URL}/${image}.png`} />
+      {hover && <Img className="hover" src={`${S3_ICON_URL}/${image}.png`} />}
       {children}
     </button>
   )

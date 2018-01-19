@@ -2,41 +2,21 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import { injectIntl, intlShape } from 'react-intl'
 import { connect } from 'react-redux'
-import axios from 'axios'
 import cx from 'classnames'
 import { createStructuredSelector } from 'reselect'
-import {
-  CLOUDINARY_UPLOAD_URL,
-  CLOUDINARY_UPLOAD_PRESET,
-  CLOUDINARY_ICON_URL,
-} from 'containers/App/constants'
-import {
-  LANGUAGES,
-  LANGUAGE_CONST,
-} from 'containers/LanguageProvider/constants'
+import { LANGUAGES, LANGUAGE_CONST } from 'containers/LanguageProvider/constants'
 import { createPostRequest } from 'containers/HomePage/actions'
-import {
-  CREATE_POST_REQUEST,
-  CREATE_POST_SUCCESS,
-} from 'containers/HomePage/constants'
+import { CREATE_POST_REQUEST, CREATE_POST_SUCCESS } from 'containers/HomePage/constants'
 import messages from 'containers/HomePage/messages'
 import { selectHomeInfo } from 'containers/HomePage/selectors'
-import {
-  DeleteButton,
-  InfoButton,
-  LinkButton,
-  RemoveButton,
-} from 'components/Buttons'
+import { DeleteButton, InfoButton, LinkButton, RemoveButton } from 'components/Buttons'
 import Img from 'components/Img'
 import LoadingSpinner from 'components/LoadingSpinner'
 import Resizable from 'components/Resizable'
 import { QuarterSpinner } from 'components/SvgIcon'
-import { getCroppedImage } from 'utils/imageHelper'
-import {
-  getDefaultTexts,
-  getSubmitInfo,
-  isLanguageSelectable,
-} from 'utils/stringHelper'
+import { S3_ICON_URL, S3_POST_IMAGE_URL } from 'utils/globalConstants'
+import { getCroppedImage, imageUploader } from 'utils/imageHelper'
+import { getDefaultTexts, getSubmitInfo, isLanguageSelectable } from 'utils/stringHelper'
 import './style.scss'
 
 class PostCreate extends Component {
@@ -245,26 +225,17 @@ class PostCreate extends Component {
 
     if (img) {
       this.setState({ imageUpload: { uploading: true, error: null } })
-
-      let formData = new FormData()
-      formData.append('file', img)
-      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
-
-      axios
-        .post(CLOUDINARY_UPLOAD_URL, formData, {
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        })
-        .then(res => {
-          const { data: { url } } = res
-          this.setState({ imageUpload: { uploading: false, error: null } })
-          data.img = url
-          createPostRequest(data)
-        })
-        .catch(err => {
+      imageUploader(S3_POST_IMAGE_URL, img, (err, url) => {
+        if (err) {
           this.setState({
             imageUpload: { uploading: false, error: err.toString() },
           })
-        })
+        } else {
+          data.img = url
+          createPostRequest(data)
+          this.setState({ imageUpload: { uploading: false, error: null } })
+        }
+      })
     } else {
       createPostRequest(data)
     }
@@ -327,58 +298,24 @@ class PostCreate extends Component {
   }
 
   render() {
-    const {
-      onClose,
-      user: { fullname },
-      info: { status },
-      intl: { formatMessage },
-      intl,
-    } = this.props
-    const {
-      img,
-      title,
-      content,
-      link,
-      showInfo,
-      showLinkBar,
-      showDeleteConfirm,
-      imageUpload,
-      locale,
-      showError,
-    } = this.state
+    const { onClose, user: { fullname }, info: { status }, intl: { formatMessage }, intl } = this.props
+    const { img, title, content, link, showInfo, showLinkBar, showDeleteConfirm, imageUpload, locale, showError } = this.state
 
     const defaultTexts = getDefaultTexts(locale, intl.locale)
     const showPostLinkButton = !showLinkBar
     const showImage = status !== CREATE_POST_REQUEST
     const spinnerShow = status === CREATE_POST_REQUEST || imageUpload.uploading
-    const dropdownDisabled = !isLanguageSelectable(
-      title,
-      img,
-      content,
-      intl.locale
-    )
-    const { postType, remainCharCnts, submitError } = getSubmitInfo(
-      title,
-      img,
-      content,
-      intl.locale,
-      locale,
-      formatMessage
-    )
+    const dropdownDisabled = !isLanguageSelectable(title, img, content, intl.locale)
+    const { postType, remainCharCnts, submitError } = getSubmitInfo(title, img, content, intl.locale, locale, formatMessage)
 
     return (
       <div className="postContainer Cr-D">
-        {(showLinkBar || showInfo || showDeleteConfirm) && (
-          <div className="backLayer" onClick={this.handlePostClick} />
-        )}
+        {(showLinkBar || showInfo || showDeleteConfirm) && <div className="backLayer" onClick={this.handlePostClick} />}
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
         {postType === 'mixedPost' && (
-          <div
-            className={cx({ post: true, postCreate: true, [postType]: true })}
-            onClick={this.handlePostClick}
-          >
+          <div className={cx({ post: true, postCreate: true, [postType]: true })} onClick={this.handlePostClick}>
             <div className="postImage">
               {showImage && <Img src={img} />}
               <div
@@ -388,10 +325,7 @@ class PostCreate extends Component {
                 })}
                 onClick={this.handlePostLinkBarClick}
               >
-                <Img
-                  onClick={this.handlePostLinkBtn}
-                  src={`${CLOUDINARY_ICON_URL}/link.png`}
-                />
+                <Img onClick={this.handlePostLinkBtn} src={`${S3_ICON_URL}/link.png`} />
                 <input
                   type="text"
                   value={link}
@@ -409,10 +343,7 @@ class PostCreate extends Component {
               />
             </div>
             <div className="postContent">
-              <RemoveButton
-                type="content"
-                onClick={this.handlePostContentRemove}
-              />
+              <RemoveButton type="content" onClick={this.handlePostContentRemove} />
               <div className="postMeta">
                 {fullname} - CARTA | {formatMessage(messages.now)}
               </div>
@@ -425,23 +356,16 @@ class PostCreate extends Component {
               />
             </div>
             <RemoveButton type="image" onClick={this.handlePostImageRemove} />
-            {showPostLinkButton && (
-              <LinkButton onClick={this.handlePostLinkBtn} />
-            )}
+            {showPostLinkButton && <LinkButton onClick={this.handlePostLinkBtn} />}
           </div>
         )}
 
         {postType === 'mediaPost' && (
-          <div
-            className={cx({ post: true, postCreate: true, [postType]: true })}
-            onClick={this.handlePostClick}
-          >
+          <div className={cx({ post: true, postCreate: true, [postType]: true })} onClick={this.handlePostClick}>
             <div className="postImage">
               {showImage && <Img src={img} />}
               <RemoveButton type="image" onClick={this.handlePostImageRemove} />
-              {showPostLinkButton && (
-                <LinkButton onClick={this.handlePostLinkBtn} />
-              )}
+              {showPostLinkButton && <LinkButton onClick={this.handlePostLinkBtn} />}
               <div
                 className={cx({
                   postLinkBar: true,
@@ -449,10 +373,7 @@ class PostCreate extends Component {
                 })}
                 onClick={this.handlePostLinkBarClick}
               >
-                <Img
-                  onClick={this.handlePostLinkBtn}
-                  src={`${CLOUDINARY_ICON_URL}/link.png`}
-                />
+                <Img onClick={this.handlePostLinkBtn} src={`${S3_ICON_URL}/link.png`} />
                 <input
                   type="text"
                   value={link}
@@ -462,15 +383,8 @@ class PostCreate extends Component {
                 />
               </div>
             </div>
-            <Resizable
-              className="postTitleEdit"
-              placeholder={defaultTexts.title}
-              onChange={this.handlePostTitle}
-              value={title[locale]}
-            />
-            <div
-              className={cx({ postInfo: true, 'postInfo--hidden': !showInfo })}
-            >
+            <Resizable className="postTitleEdit" placeholder={defaultTexts.title} onChange={this.handlePostTitle} value={title[locale]} />
+            <div className={cx({ postInfo: true, 'postInfo--hidden': !showInfo })}>
               {fullname} - Carta | {formatMessage(messages.now)}
             </div>
             <InfoButton active={showInfo} onClick={this.handlePostInfoToggle} />
@@ -478,10 +392,7 @@ class PostCreate extends Component {
         )}
 
         {postType === 'textPost' && (
-          <div
-            className={cx({ post: true, postCreate: true, [postType]: true })}
-            onClick={this.handlePostClick}
-          >
+          <div className={cx({ post: true, postCreate: true, [postType]: true })} onClick={this.handlePostClick}>
             <Resizable
               className="postTitleEdit"
               tabIndex={1}
@@ -490,10 +401,7 @@ class PostCreate extends Component {
               value={title[locale]}
             />
             <div className="postContent">
-              <RemoveButton
-                type="content"
-                onClick={this.handlePostContentRemove}
-              />
+              <RemoveButton type="content" onClick={this.handlePostContentRemove} />
               <div className="postMeta">
                 {fullname} - CARTA | {formatMessage(messages.now)}
               </div>
@@ -519,39 +427,23 @@ class PostCreate extends Component {
               onChange={this.handleFiles}
             />
             {(postType === 'textPost' || postType === 'mixedPost') && (
-              <span style={{ marginRight: '4px' }}>
-                {remainCharCnts >= 0 ? remainCharCnts : 0}
-              </span>
+              <span style={{ marginRight: '4px' }}>{remainCharCnts >= 0 ? remainCharCnts : 0}</span>
             )}
             {postType !== 'mediaPost' &&
               postType !== 'mixedPost' && (
-                <button
-                  type="button"
-                  className="postBorderBtn"
-                  onClick={this.handleAddMedia}
-                >
+                <button type="button" className="postBorderBtn" onClick={this.handleAddMedia}>
                   + {formatMessage(messages.picture)}
                 </button>
               )}
             {postType !== 'textPost' &&
               postType !== 'mixedPost' && (
-                <button
-                  type="button"
-                  className="postBorderBtn"
-                  onClick={this.handleAddText}
-                >
+                <button type="button" className="postBorderBtn" onClick={this.handleAddText}>
                   + {formatMessage(messages.text)}
                 </button>
               )}
             {postType && (
-              <div
-                className={cx({ postLang: true, disabled: dropdownDisabled })}
-              >
-                <select
-                  onChange={this.handlePostLanguageChange}
-                  disabled={dropdownDisabled}
-                  value={locale}
-                >
+              <div className={cx({ postLang: true, disabled: dropdownDisabled })}>
+                <select onChange={this.handlePostLanguageChange} disabled={dropdownDisabled} value={locale}>
                   {LANGUAGES.map(lang => (
                     <option key={lang.countryCode} value={lang.countryCode}>
                       {lang.countryCode}
@@ -563,18 +455,10 @@ class PostCreate extends Component {
           </div>
           {postType && (
             <div className="right">
-              <button
-                type="button"
-                className="postCancelBtn"
-                onClick={this.handleCancel}
-              >
+              <button type="button" className="postCancelBtn" onClick={this.handleCancel}>
                 {formatMessage(messages.cancel)}
               </button>
-              <DeleteButton
-                onClick={this.handleDelete}
-                onConfirm={this.handleDeleteConfirm}
-                showConfirm={showDeleteConfirm}
-              />
+              <DeleteButton onClick={this.handleDelete} onConfirm={this.handleDeleteConfirm} showConfirm={showDeleteConfirm} />
               <button
                 type="button"
                 className={cx({ postBorderBtn: true, disabled: submitError })}
@@ -595,7 +479,7 @@ class PostCreate extends Component {
             })}
             onClick={onClose}
           >
-            <Img src={`${CLOUDINARY_ICON_URL}/close.png`} />
+            <Img src={`${S3_ICON_URL}/close.png`} />
           </button>
         </div>
         {showError && submitError && <div className="error">{submitError}</div>}

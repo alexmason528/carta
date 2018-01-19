@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import cx from 'classnames'
 import { browserHistory } from 'react-router'
-import { CLOUDINARY_FIXED_URL } from 'containers/App/constants'
+import cx from 'classnames'
 import Img from 'components/Img'
+import { S3_FIXED_URL } from 'utils/globalConstants'
 import './style.scss'
 
 class FixedTile extends Component {
@@ -60,23 +60,13 @@ class FixedTile extends Component {
         onClick={() => browserHistory.push(link)}
       >
         {buttonText && (
-          <button
-            className="fixedTile__btn Tt-U Fw-B P-A Fz-14"
-            onClick={this.handleButtonClick}
-          >
+          <button className="fixedTile__btn Tt-U Fw-B P-A Fz-14" onClick={this.handleButtonClick}>
             {buttonText}
           </button>
         )}
         <div className="fixedTile__content Cr-P Ov-H">
-          <Img
-            className="fixedTile__image"
-            onLoad={this.handleLoaded}
-            src={`${CLOUDINARY_FIXED_URL}/${img}`}
-          />
-          <h2
-            className="fixedTile__title Tt-U Mb-0 Px-30 Py-19"
-            dangerouslySetInnerHTML={{ __html: title }}
-          />
+          <Img className="fixedTile__image" onLoad={this.handleLoaded} src={`${S3_FIXED_URL}/${img}`} />
+          <h2 className="fixedTile__title Tt-U Mb-0 Px-30 Py-19" dangerouslySetInnerHTML={{ __html: title }} />
         </div>
       </div>
     )

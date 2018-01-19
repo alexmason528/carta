@@ -13,10 +13,7 @@ import {
   postShowLinkBar,
   postShowDeleteConfirm,
 } from 'containers/HomePage/actions'
-import {
-  selectEditingPost,
-  selectHomeInfo,
-} from 'containers/HomePage/selectors'
+import { selectEditingPost, selectHomeInfo } from 'containers/HomePage/selectors'
 import MixedPost from './MixedPost'
 import MediaPost from './MediaPost'
 import TextPost from './TextPost'

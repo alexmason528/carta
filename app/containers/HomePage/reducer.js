@@ -1,5 +1,5 @@
 import { last } from 'lodash'
-import { DEFAULT_LIMIT } from 'containers/App/constants'
+import { DEFAULT_LIMIT } from 'utils/globalConstants'
 import {
   INIT,
   CREATE_POST_REQUEST,

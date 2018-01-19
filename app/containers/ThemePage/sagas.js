@@ -1,5 +1,5 @@
 import { call, put, takeLatest } from 'redux-saga/effects'
-import { API_BASE_URL } from 'containers/App/constants'
+import { API_BASE_URL } from 'utils/globalConstants'
 import request from 'utils/request'
 import { GET_THEMES_REQUEST } from './constants'
 import { getThemesSuccess, getThemesFail } from './actions'

@@ -92,10 +92,12 @@ module.exports = options => ({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
         MAP_ACCESS_TOKEN: JSON.stringify(process.env.MAP_ACCESS_TOKEN),
-        API_BASE_URL:
-          process.env.NODE_ENV === 'production'
-            ? JSON.stringify(process.env.SERVER_API_URL)
-            : JSON.stringify(process.env.LOCAL_API_URL),
+        S3_BUCKET_URL: JSON.stringify(process.env.S3_BUCKET_URL),
+        S3_BUCKET_NAME: JSON.stringify(process.env.S3_BUCKET_NAME),
+        AWS_ACCESS_KEY_ID: JSON.stringify(process.env.AWS_ACCESS_KEY_ID),
+        AWS_SECRET_KEY: JSON.stringify(process.env.AWS_SECRET_KEY),
+        AWS_REGION: JSON.stringify(process.env.AWS_REGION),
+        API_BASE_URL: process.env.NODE_ENV === 'production' ? JSON.stringify(process.env.SERVER_API_URL) : JSON.stringify(process.env.LOCAL_API_URL),
       },
     }),
 

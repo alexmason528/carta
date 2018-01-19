@@ -1,8 +1,4 @@
-import {
-  GET_THEMES_REQUEST,
-  GET_THEMES_SUCCESS,
-  GET_THEMES_FAIL,
-} from './constants'
+import { GET_THEMES_REQUEST, GET_THEMES_SUCCESS, GET_THEMES_FAIL } from './constants'
 
 export function getThemesRequest() {
   return {

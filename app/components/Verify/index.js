@@ -62,8 +62,7 @@ class Verify extends Component {
         <div className="verifyCtrl__message Wb-Bw P-30">{verifyMessage}</div>
         {((user && !user.verified) || status === VERIFY_FAIL) && (
           <div className="verifyCtrl__signOutForm Px-25 Py-15">
-            {formatMessage(messages.verificationRequired)}{' '}
-            <button onClick={signOut}>{formatMessage(messages.signOut)}</button>
+            {formatMessage(messages.verificationRequired)} <button onClick={signOut}>{formatMessage(messages.signOut)}</button>
           </div>
         )}
       </div>

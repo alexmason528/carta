@@ -78,9 +78,7 @@ const addProdMiddlewares = (app, options) => {
   app.use(publicPath, express.static(outputPath))
   addRoutes(app)
 
-  app.get('*', (req, res) =>
-    res.sendFile(path.resolve(outputPath, 'index.html'))
-  )
+  app.get('*', (req, res) => res.sendFile(path.resolve(outputPath, 'index.html')))
 }
 
 /**

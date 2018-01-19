@@ -24,10 +24,7 @@ class PlacePage extends Component {
       <Container fluid className="placePage P-0 M-0">
         <Helmet meta={[{ name: 'Place', content: 'Carta' }]} />
         <Menu currentPage="places" />
-        <Row className="placePage__row">
-          {places &&
-            places.map((place, index) => <PlaceTile key={index} {...place} />)}
-        </Row>
+        <Row className="placePage__row">{places && places.map((place, index) => <PlaceTile key={index} {...place} />)}</Row>
       </Container>
     )
   }

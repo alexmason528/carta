@@ -10,8 +10,4 @@ const typeDescriptiveRelationSchema = new Schema(
   { strict: false, versionKey: false }
 )
 
-module.exports = mongoose.model(
-  'TypeDescriptiveRelation',
-  typeDescriptiveRelationSchema,
-  'typeDescriptiveRelation'
-)
+module.exports = mongoose.model('TypeDescriptiveRelation', typeDescriptiveRelationSchema, 'typeDescriptiveRelation')

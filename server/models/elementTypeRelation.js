@@ -10,8 +10,4 @@ const elementTypeRelationSchema = new Schema(
   { strict: false, versionKey: false }
 )
 
-module.exports = mongoose.model(
-  'ElementTypeRelation',
-  elementTypeRelationSchema,
-  'elementTypeRelation'
-)
+module.exports = mongoose.model('ElementTypeRelation', elementTypeRelationSchema, 'elementTypeRelation')

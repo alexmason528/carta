@@ -25,10 +25,7 @@ class ProfilePage extends Component {
       <Container fluid className="profilePage P-0 M-0">
         <Helmet meta={[{ name: 'Profile', content: 'Carta' }]} />
         <Menu currentPage="profile" />
-        <Row className="profilePage__row">
-          {profile &&
-            profile.map((entry, index) => <ThemeTile key={index} {...entry} />)}
-        </Row>
+        <Row className="profilePage__row">{profile && profile.map((entry, index) => <ThemeTile key={index} {...entry} />)}</Row>
       </Container>
     )
   }
