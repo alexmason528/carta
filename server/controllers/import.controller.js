@@ -16,9 +16,7 @@ const ElementDescriptiveRelation = require('../models/elementDescriptiveRelation
 exports.importElements = (req, res) => {
   Element.remove({}, err => {
     if (err) {
-      return res.status(400).send({
-        error: { details: err.toString() },
-      })
+      return res.status(400).send({ error: { details: err.toString() } })
     }
 
     const csvPath = path.join(__dirname, '../csv/elements.csv')
@@ -42,9 +40,7 @@ exports.importElements = (req, res) => {
 exports.importTypeCategories = (req, res) => {
   TypeCategory.remove({}, err => {
     if (err) {
-      return res.status(400).send({
-        error: { details: err.toString() },
-      })
+      return res.status(400).send({ error: { details: err.toString() } })
     }
 
     const csvPath = path.join(__dirname, '../csv/type_categories.csv')
@@ -68,9 +64,7 @@ exports.importTypeCategories = (req, res) => {
 exports.importDescriptiveCategories = (req, res) => {
   DescriptiveCategory.remove({}, err => {
     if (err) {
-      return res.status(400).send({
-        error: { details: err.toString() },
-      })
+      return res.status(400).send({ error: { details: err.toString() } })
     }
 
     const csvPath = path.join(__dirname, '../csv/descriptive_categories.csv')
@@ -94,9 +88,7 @@ exports.importDescriptiveCategories = (req, res) => {
 exports.importTypeDescriptiveRelations = (req, res) => {
   TypeDescriptiveRelation.remove({}, err => {
     if (err) {
-      return res.status(400).send({
-        error: { details: err.toString() },
-      })
+      return res.status(400).send({ error: { details: err.toString() } })
     }
 
     const csvPath = path.join(__dirname, '../csv/type_descriptive_relations.csv')
@@ -120,9 +112,7 @@ exports.importTypeDescriptiveRelations = (req, res) => {
 exports.importElementTypeRelations = (req, res) => {
   ElementTypeRelation.remove({}, err => {
     if (err) {
-      return res.status(400).send({
-        error: { details: err.toString() },
-      })
+      return res.status(400).send({ error: { details: err.toString() } })
     }
 
     const csvPath = path.join(__dirname, '../csv/element_type_relations.csv')
@@ -146,9 +136,7 @@ exports.importElementTypeRelations = (req, res) => {
 exports.importElementDescriptiveRelations = (req, res) => {
   ElementDescriptiveRelation.remove({}, err => {
     if (err) {
-      return res.status(400).send({
-        error: { details: err.toString() },
-      })
+      return res.status(400).send({ error: { details: err.toString() } })
     }
 
     const csvPath = path.join(__dirname, '../csv/element_descriptive_relations.csv')

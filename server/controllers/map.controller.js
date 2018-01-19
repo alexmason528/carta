@@ -16,9 +16,7 @@ exports.getQuestInfo = (req, res) => {
 
   PlaceCategory.find({}, { _id: 0 }, (err, places) => {
     if (err) {
-      return res.status(400).send({
-        error: { details: err.toString() },
-      })
+      return res.status(400).send({ error: { details: err.toString() } })
     }
     questInfo.places = places
 
@@ -29,9 +27,7 @@ exports.getQuestInfo = (req, res) => {
 
   TypeCategory.find({}, { _id: 0, name: 0, e: 0, sum: 0 }, (err, types) => {
     if (err) {
-      return res.status(400).send({
-        error: { details: err.toString() },
-      })
+      return res.status(400).send({ error: { details: err.toString() } })
     }
     questInfo.types = types
 
@@ -42,9 +38,7 @@ exports.getQuestInfo = (req, res) => {
 
   DescriptiveCategory.find({}, { _id: 0, name: 0, e: 0, sum: 0 }, (err, descriptives) => {
     if (err) {
-      return res.status(400).send({
-        error: { details: err.toString() },
-      })
+      return res.status(400).send({ error: { details: err.toString() } })
     }
     questInfo.descriptives = descriptives
 
@@ -145,9 +139,7 @@ exports.getRecommendations = (req, res) => {
 
   Element.aggregate(pipeline, (err, elements) => {
     if (err) {
-      return res.status(400).send({
-        error: { details: err.toString() },
-      })
+      return res.status(400).send({ error: { details: err.toString() } })
     }
 
     let scoreElements = elements.map(element => {
@@ -269,9 +261,7 @@ exports.getDescriptiveCategories = (req, res) => {
     ]
     DescriptiveCategory.aggregate(pipeline, (err, descriptives) => {
       if (err) {
-        return res.status(400).send({
-          error: { details: err.toString() },
-        })
+        return res.status(400).send({ error: { details: err.toString() } })
       }
       return res.json(descriptives)
     })
@@ -307,9 +297,7 @@ exports.getDescriptiveCategories = (req, res) => {
       ]
       DescriptiveCategory.aggregate(pipeline, (err, elements) => {
         if (err) {
-          return res.status(400).send({
-            error: { details: err.toString() },
-          })
+          return res.status(400).send({ error: { details: err.toString() } })
         }
         descsList.push({ index: type.substring(1), lists: elements })
         if (descsList.length === includes.length) {

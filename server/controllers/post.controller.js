@@ -44,9 +44,7 @@ exports.listPosts = (req, res) => {
     .limit(parseInt(limit, 10) || DEFAULT_LIMIT)
     .exec((err, posts) => {
       if (err) {
-        return res.status(400).send({
-          error: { details: err.toString() },
-        })
+        return res.status(400).send({ error: { details: err.toString() } })
       }
       return res.json({
         posts: posts.map(post => ({ ...post, author: post.author[0] })),
@@ -62,18 +60,11 @@ exports.updatePost = (req, res) => {
   const { postID } = req.params
   const { content, title, link, img } = req.body
 
-  let data = {
-    content,
-    title,
-    link,
-    img,
-  }
+  const data = { content, title, link, img }
 
   Post.findOneAndUpdate({ _id: postID }, { $set: data }, { new: true }, (err, post) => {
     if (err) {
-      return res.status(400).send({
-        error: { details: err.toString() },
-      })
+      return res.status(400).send({ error: { details: err.toString() } })
     }
 
     if (post && post._id) {
@@ -90,11 +81,7 @@ exports.deletePost = (req, res) => {
   const { postID } = req.params
   Post.remove({ _id: postID }, err => {
     if (err) {
-      return res.status(400).send({
-        error: {
-          details: err.toString(),
-        },
-      })
+      return res.status(400).send({ error: { details: err.toString() } })
     }
     return res.json({})
   })
@@ -117,9 +104,7 @@ exports.createPost = (req, res) => {
 
   Post.create(data, (err, post) => {
     if (err) {
-      return res.status(400).send({
-        error: { details: err.toString() },
-      })
+      return res.status(400).send({ error: { details: err.toString() } })
     }
     return res.json(post)
   })

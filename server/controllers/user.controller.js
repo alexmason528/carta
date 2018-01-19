@@ -9,9 +9,9 @@ exports.getFriends = (req, res) => {
   const { username } = req.params
 
   User.findOne({ username }, (err, user) => {
-    if (err) {
+    if (err || !user) {
       return res.status(400).send({
-        error: { details: err.toString() },
+        error: { details: err ? err.toString() : 'Invalid user' },
       })
     }
 

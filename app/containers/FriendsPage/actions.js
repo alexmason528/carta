@@ -14,7 +14,7 @@ export function getFriendsSuccess(payload) {
   }
 }
 
-export function getFriendsFail() {
+export function getFriendsFail(payload) {
   return {
     type: GET_FRIENDS_FAIL,
     payload,

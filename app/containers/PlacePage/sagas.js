@@ -19,7 +19,7 @@ export function* getPlacesRequestHandler() {
     const res = yield call(request, requestURL, params)
     yield put(getPlacesSuccess(res))
   } catch (err) {
-    yield put(getPlacesFail(err.toString()))
+    yield put(getPlacesFail(err.details))
   }
 }
 

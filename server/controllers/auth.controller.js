@@ -28,16 +28,10 @@ exports.signIn = (req, res) => {
         const data = _.pick(element[0], ['_id', 'fullname', 'username', 'email', 'role', 'profilePic', 'verified'])
         return res.json(data)
       } else {
-        return res.status(400).send({
-          error: {
-            details: 'carta.incorrectPassword',
-          },
-        })
+        return res.status(400).send({ error: { details: 'carta.incorrectPassword' } })
       }
     } else {
-      return res.status(400).send({
-        error: { details: 'carta.incorrectEmail' },
-      })
+      return res.status(400).send({ error: { details: 'carta.incorrectEmail' } })
     }
   })
 }
@@ -49,11 +43,7 @@ exports.register = (req, res) => {
   const { fullname, email, role, profilePic, password, confirmPassword } = req.body
 
   if (password !== confirmPassword) {
-    return res.status(400).send({
-      error: {
-        details: 'carta.passwordNotEqual',
-      },
-    })
+    return res.status(400).send({ error: { details: 'carta.passwordNotEqual' } })
   }
 
   let data = {
@@ -73,17 +63,9 @@ exports.register = (req, res) => {
     User.create(data, err => {
       if (err) {
         if (err.name === 'MongoError' && err.code === 11000) {
-          res.status(400).send({
-            error: {
-              details: 'carta.alreadyRegistered',
-            },
-          })
+          res.status(400).send({ error: { details: 'carta.alreadyRegistered' } })
         } else {
-          return res.status(400).send({
-            error: {
-              details: err.toString(),
-            },
-          })
+          return res.status(400).send({ error: { details: err.toString() } })
         }
       } else {
         const verifyUrl = process.env.NODE_ENV === 'development' ? `${process.env.LOCAL_API_URL}verify` : `${process.env.SERVER_API_URL}verify`
@@ -115,11 +97,7 @@ exports.updateUser = (req, res) => {
       return res.json(response)
     }
 
-    return res.status(400).send({
-      error: {
-        details: 'Failed to update',
-      },
-    })
+    return res.status(400).send({ error: { details: 'Failed to update' } })
   })
 }
 
@@ -134,11 +112,7 @@ exports.verify = (req, res) => {
   try {
     email = cryptr.decrypt(vcode)
   } catch (e) {
-    return res.status(400).send({
-      error: {
-        details: 'Failed to verify',
-      },
-    })
+    return res.status(400).send({ error: { details: 'Failed to verify' } })
   }
 
   User.findOneAndUpdate({ email: email }, { $set: { verified: true } }, { new: true }, (err, element) => {
@@ -149,11 +123,7 @@ exports.verify = (req, res) => {
       return res.json(response)
     }
 
-    return res.status(400).send({
-      error: {
-        details: 'Failed to verify',
-      },
-    })
+    return res.status(400).send({ error: { details: 'Failed to verify' } })
   })
 }
 
@@ -166,37 +136,17 @@ exports.deleteUser = (req, res) => {
   const { password } = req.body
 
   User.findOne({ _id: userID, password: cryptr.encrypt(password) }, (err, element) => {
-    if (err) {
-      return res.status(400).send({
-        error: {
-          details: err.toString(),
-        },
-      })
-    }
-
-    if (!element) {
-      return res.status(400).send({
-        error: {
-          details: 'Password is not correct',
-        },
-      })
+    if (err || !element) {
+      return res.status(400).send({ error: { details: err ? err.toString() : 'Password is not correct' } })
     }
 
     User.remove({ _id: userID }, err => {
       if (err) {
-        return res.status(400).send({
-          error: {
-            details: err.toString(),
-          },
-        })
+        return res.status(400).send({ error: { details: err.toString() } })
       }
       Post.remove({ author: mongoose.Types.ObjectId(userID) }, err => {
         if (err) {
-          return res.status(400).send({
-            error: {
-              details: err.toString(),
-            },
-          })
+          return res.status(400).send({ error: { details: err.toString() } })
         }
         Friend.remove(
           {
@@ -204,11 +154,7 @@ exports.deleteUser = (req, res) => {
           },
           err => {
             if (err) {
-              return res.status(400).send({
-                error: {
-                  details: err.toString(),
-                },
-              })
+              return res.status(400).send({ error: { details: err.toString() } })
             }
             return res.json({})
           }

@@ -9,7 +9,7 @@ export function* getProfileRequestWatcher() {
 }
 
 export function* getProfileRequestHandler({ payload }) {
-  const requestURL = `${API_BASE_URL}api/v1/theme?name=${payload}`
+  const requestURL = `${API_BASE_URL}api/v1/place?name=${payload}`
 
   const params = {
     method: 'GET',
@@ -19,7 +19,7 @@ export function* getProfileRequestHandler({ payload }) {
     const res = yield call(request, requestURL, params)
     yield put(getProfileSuccess(res))
   } catch (err) {
-    yield put(getProfileFail(err.toString()))
+    yield put(getProfileFail(err.details))
   }
 }
 

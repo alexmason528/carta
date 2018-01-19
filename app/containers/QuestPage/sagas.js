@@ -109,7 +109,7 @@ export function* getRecommendationRequestHandler() {
     yield put(getRecommendationSuccess(res))
     yield put(getDescriptivesRequest())
   } catch (err) {
-    yield put(getRecommendationFail(err.toString()))
+    yield put(getRecommendationFail(err.details))
   }
 }
 
@@ -130,7 +130,7 @@ export function* getQuestInfoRequestHandler({ payload }) {
     yield put(setQuest(payload))
     yield put(updateExpand())
   } catch (err) {
-    yield put(getQuestInfoFail(err.toString()))
+    yield put(getQuestInfoFail(err.details))
   }
 }
 
@@ -149,7 +149,7 @@ export function* getBrochureInfoRequestHandler({ payload }) {
     const res = yield call(request, requestURL, params)
     yield put(getBrochureInfoSuccess(res))
   } catch (err) {
-    yield put(getBrochureInfoFail(err))
+    yield put(getBrochureInfoFail(err.details))
   }
 }
 
@@ -228,7 +228,7 @@ export function* getDescriptivesRequestHandler() {
     const res = yield call(request, requestURL, params)
     yield put(getDescriptivesSuccess(res))
   } catch (err) {
-    yield put(getDescriptivesFail(err.toString()))
+    yield put(getDescriptivesFail(err.details))
   }
 }
 

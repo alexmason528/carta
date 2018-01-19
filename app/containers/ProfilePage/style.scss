@@ -54,7 +54,7 @@
 
   @media (min-width: 992px) {
     .tileCol:nth-child(3n + 1) {
-      .themeTile h2 {
+      .placeTile h2 {
         padding-left: 60px;
       }
     }
@@ -62,7 +62,7 @@
 
   @media (min-width: 768px) and (max-width: 991px) {
     .tileCol:nth-child(2n + 1) {
-      .themeTile h2 {
+      .placeTile h2 {
         padding-left: 60px;
       }
     }
@@ -70,7 +70,7 @@
 
   @media (max-width: 767px) {
     .tileCol {
-      .themeTile h2 {
+      .placeTile h2 {
         padding-left: 30px;
       }
     }

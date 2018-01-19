@@ -16,7 +16,7 @@ export function* getFriendsRequestHandler({ payload }) {
     const res = yield call(request, requestURL, params)
     yield put(getFriendsSuccess(res))
   } catch (err) {
-    yield put(getFriendsFail(err.toString()))
+    yield put(getFriendsFail(err.details))
   }
 }
 

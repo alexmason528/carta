@@ -19,7 +19,7 @@ export function* getThemesRequestHandler() {
     const res = yield call(request, requestURL, params)
     yield put(getThemesSuccess(res))
   } catch (err) {
-    yield put(getThemesFail(err.toString()))
+    yield put(getThemesFail(err.details))
   }
 }
 
