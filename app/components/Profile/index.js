@@ -38,6 +38,12 @@ class Profile extends Component {
     }
 
     this.coverPic = Math.floor(Math.random() * 4)
+    this.placeList = [
+      { name: 'amsterdam', link: 'amsterdam' },
+      { name: 'rotterdam', link: 'rotterdam' },
+      { name: 'utrecht', link: 'utrecht-province' },
+      { name: 'gelderland', link: 'gelderland' },
+    ]
   }
   componentWillMount() {
     const { profilePic } = this.props
@@ -110,23 +116,28 @@ class Profile extends Component {
     browserHistory.push(`/quest/in/${place}`)
   }
 
+  handleCoverPicClick = evt => {
+    const { authenticated, onClick } = this.props
+    if (authenticated) {
+      this.handlePlaceInfoBtnClick(evt, this.placeList[this.coverPic].link)
+    } else {
+      onClick(evt)
+    }
+  }
+
   render() {
     const { authenticated, user, onClick, info: { status }, intl: { formatMessage } } = this.props
     const { profilePic, imageUpload, imageType } = this.state
     const profilePicSpinner = imageType === 'profilePic' && (imageUpload.uploading || status === UPDATE_USER_REQUEST)
 
-    const placeList = [
-      { name: 'amsterdam', link: 'amsterdam' },
-      { name: 'rotterdam', link: 'rotterdam' },
-      { name: 'utrecht', link: 'utrecht-province' },
-      { name: 'gelderland', link: 'gelderland' },
-    ]
-
     return (
       <div className="profile Mb-8 P-R">
         <div className="profile__menu">
-          <button className="profile__placeInfoBtn Tt-U Fw-B Fz-10" onClick={evt => this.handlePlaceInfoBtnClick(evt, placeList[this.coverPic].link)}>
-            {placeList[this.coverPic].name}
+          <button
+            className="profile__placeInfoBtn Tt-U Fw-B Fz-10"
+            onClick={evt => this.handlePlaceInfoBtnClick(evt, this.placeList[this.coverPic].link)}
+          >
+            {this.placeList[this.coverPic].name}
           </button>{' '}
           |{' '}
           <button
@@ -139,8 +150,8 @@ class Profile extends Component {
           </button>
         </div>
         <div className="profile__content">
-          <div className="coverPic Cr-P Ov-H P-R" onClick={evt => this.handlePlaceInfoBtnClick(evt, placeList[this.coverPic].link)}>
-            <Img onLoad={this.handleLoaded} src={`${S3_PLACE_URL}/wide/${placeList[this.coverPic].name}.jpg`} />
+          <div className="coverPic Cr-P Ov-H P-R" onClick={this.handleCoverPicClick}>
+            <Img onLoad={this.handleLoaded} src={`${S3_PLACE_URL}/wide/${this.placeList[this.coverPic].name}.jpg`} />
             {authenticated ? (
               <h2 className="Mb-0 Tt-U P-A">{getFirstname(user.fullname)}</h2>
             ) : (
