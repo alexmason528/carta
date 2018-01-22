@@ -34,18 +34,30 @@
   input {
     display: none;
   }
-}
 
-.updateBtn {
-  right: 15px;
-  bottom: 5px;
-  color: $white;
-  z-index: 10;
-  @include transition(all, $fastTrans);
-  @include textShadow($textShadowBlur, $lightShadowColor);
+  .updateBtn {
+    position: absolute;
+    line-height: $noLH;
+    bottom: 4px;
+    right: 4px;
+    z-index: 5;
 
-  &:hover {
-    color: $white;
-    @include textShadow($textShadowBlur, $normalShadowColor);
+    img {
+      width: 30px;
+      height: 30px;
+    }
+
+    .hover {
+      position: absolute;
+      right: 0;
+      opacity: 0;
+      transition: all 0.1s;
+    }
+
+    &:hover {
+      .hover {
+        opacity: 1;
+      }
+    }
   }
 }
