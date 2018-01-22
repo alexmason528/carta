@@ -1,4 +1,5 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects'
+import { delay } from 'redux-saga'
 import { findIndex, map, uniq } from 'lodash'
 import { browserHistory } from 'react-router'
 import { selectBrochureLink, selectCurrentTypes, selectCurrentDescriptives, selectViewport, selectTypes } from 'containers/QuestPage/selectors'
@@ -38,7 +39,10 @@ export function* getRecommendationWatcher() {
   yield takeLatest([GET_RECOMMENDATION_REQUEST, SET_QUEST], getRecommendationRequestHandler)
 }
 
-export function* getRecommendationRequestHandler() {
+export function* getRecommendationRequestHandler({ payload }) {
+  if (payload.urlEntered) {
+    yield call(delay, 500)
+  }
   const viewport = yield select(selectViewport())
   const questTypes = yield select(selectTypes())
   const curTypes = yield select(selectCurrentTypes())
@@ -82,14 +86,10 @@ export function* getRecommendationRequestHandler() {
 
   let descriptives = {
     all: curDescriptives.all,
-    stars: map(curDescriptives.stars, 'd'),
-    includes: map(curDescriptives.includes, 'd'),
-    excludes: map(curDescriptives.excludes, 'd'),
+    stars: uniq(map(curDescriptives.stars, 'd')),
+    includes: uniq(map(curDescriptives.includes, 'd')),
+    excludes: uniq(map(curDescriptives.excludes, 'd')),
   }
-
-  descriptives.stars = uniq(descriptives.stars)
-  descriptives.includes = uniq(descriptives.includes)
-  descriptives.excludes = uniq(descriptives.excludes)
 
   const data = { count: RECOMMENDATION_COUNT, viewport, types, descriptives }
 

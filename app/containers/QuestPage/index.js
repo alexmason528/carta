@@ -57,13 +57,12 @@ class QuestPage extends Component {
   componentWillReceiveProps(nextProps) {
     const { params } = this.props
     if (!isEqual(params, nextProps.params)) {
-      const timer = setTimeout(() => {
+      setTimeout(() => {
         const { setQuest } = nextProps
         setQuest({
           quest: urlParser({ ...nextProps.params }),
           urlEntered: false,
         })
-        clearTimeout(timer)
       }, 0)
     }
   }

@@ -28,6 +28,14 @@ class Map extends Component {
     locale: PropTypes.string,
   }
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      show: false,
+    }
+  }
+
   componentWillMount() {
     this.mapStyle = {
       version: 8,
@@ -52,10 +60,14 @@ class Map extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { viewport } = this.props
+    if (!isEqual(viewport, nextProps.viewport) && this.map) {
+      this.map.jumpTo({ center: nextProps.viewport.center, zoom: nextProps.viewport.zoom })
+    }
     this.handleRedrawMap(nextProps)
   }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps, nextState) {
     if (this.props.panelState !== nextProps.panelState) {
       return true
     }
@@ -63,6 +75,9 @@ class Map extends Component {
       return true
     }
     if (!isEqual(this.props.recommendations, nextProps.recommendations)) {
+      return true
+    }
+    if (!isEqual(this.state.show, nextState.show)) {
       return true
     }
     return false
@@ -232,7 +247,6 @@ class Map extends Component {
 
     const zoom = parseFloat(this.map.getZoom().toFixed(2))
     const { lng, lat } = this.map.getCenter()
-
     mapChange({
       zoom,
       center: {
@@ -244,31 +258,34 @@ class Map extends Component {
   }
 
   handleStyleLoad = map => {
+    const { viewport: { center, zoom } } = this.props
     this.map = map
-    this.handleRedrawMap(this.props)
+    this.setState({ show: true })
+    this.map.jumpTo({ center, zoom })
   }
 
   render() {
-    const { panelState, viewport: { center, zoom }, params: { brochure }, onClick } = this.props
+    const { show } = this.state
+    const { panelState, params: { brochure }, onClick } = this.props
+    const mapboxData = {
+      style: this.mapStyle,
+      containerStyle: { width: '100%', height: '100%' },
+      onStyleLoad: this.handleStyleLoad,
+      onMoveEnd: this.handleMapChange,
+      onZoomEnd: this.handleMapChange,
+    }
+
     return (
       <div
         className={cx({
           map: true,
           map__withoutQuest: panelState !== 'opened' || brochure,
+          map__hidden: !show,
         })}
         onClick={onClick}
       >
         <ReactResizeDetector handleWidth handleHeight onResize={this.handleResize} />
-        <MapBox
-          style={this.mapStyle}
-          containerStyle={{ width: '100%', height: '100%' }}
-          center={center}
-          zoom={[zoom]}
-          onStyleLoad={this.handleStyleLoad}
-          onMoveEnd={this.handleMapChange}
-          onZoomEnd={this.handleMapChange}
-          movingMethod="jumpTo"
-        />
+        <MapBox {...mapboxData} />
       </div>
     )
   }
