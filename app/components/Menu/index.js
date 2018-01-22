@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import cx from 'classnames'
-import { Link, withRouter } from 'react-router'
+import { Link, withRouter, browserHistory } from 'react-router'
 import { injectIntl, intlShape } from 'react-intl'
 import { compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
@@ -44,6 +44,7 @@ class Menu extends Component {
     const { signOut, toggleMenu } = this.props
     signOut()
     toggleMenu()
+    browserHistory.push('/')
   }
 
   handleMap = evt => {
@@ -101,10 +102,10 @@ class Menu extends Component {
                 </li>
               )}
             {authenticated &&
-              currentPage !== 'starlist' && (
+              currentPage !== 'wishlist' && (
                 <li>
-                  <Link to={`/user/${username}/starlist`} onClick={toggleMenu}>
-                    {formatMessage(messages.starlist)}
+                  <Link to={`/user/${username}/wishlist`} onClick={toggleMenu}>
+                    {formatMessage(messages.wishlist)}
                   </Link>
                 </li>
               )}

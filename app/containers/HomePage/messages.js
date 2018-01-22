@@ -197,16 +197,16 @@ export default defineMessages({
     id: 'carta.profile',
     defaultMessage: 'Profile',
   },
-  starlist: {
-    id: 'carta.starlist',
-    defaultMessage: 'Starlist',
+  wishlist: {
+    id: 'carta.wishlist',
+    defaultMessage: 'Wishlist',
   },
   friends: {
     id: 'carta.friends',
     defaultMessage: 'Friends',
   },
-  addToStarlist: {
-    id: 'carta.addedToStarlist',
-    defaultMessage: 'Added to starlist',
+  addToWishlist: {
+    id: 'carta.addedToWishlist',
+    defaultMessage: 'Added to wishlist',
   },
 })

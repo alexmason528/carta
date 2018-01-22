@@ -16,7 +16,7 @@ class ImageTile extends Component {
 
     this.state = { imageLoaded: false }
 
-    const rand = Math.floor(Math.random() * 77)
+    const rand = Math.floor(Math.random() * 77) + 1
     const filename = rand < 10 ? `000${rand}` : `00${rand}`
     this.holidayPic = `${S3_COVER_URL}/square/${filename}.jpg`
   }

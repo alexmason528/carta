@@ -28,7 +28,7 @@ class HolidayTile extends Component {
       },
     }
 
-    const rand = Math.floor(Math.random() * 77)
+    const rand = Math.floor(Math.random() * 77) + 1
     const filename = rand < 10 ? `000${rand}` : `00${rand}`
 
     this.holidayPic = `${S3_COVER_URL}/square/${filename}.jpg`
@@ -90,7 +90,7 @@ class HolidayTile extends Component {
     return (
       <Col className="tileCol" xs={12} sm={12} md={6} lg={4}>
         <div className="tileContainer" onClick={canUpdate ? this.handleTileClick : undefined}>
-          <div className="tile friendTile Ov-H Cr-P">
+          <div className="tile friendTile Ov-H Cr-P P-R">
             <LoadingSpinner show={spinnerShow}>
               <QuarterSpinner width={30} height={30} />
             </LoadingSpinner>
@@ -104,6 +104,7 @@ class HolidayTile extends Component {
               accept="image/*"
               onChange={this.handleFiles}
             />
+            <button className="updateBtn Tt-U Fw-B P-A Fz-14">Update holiday pic</button>
           </div>
         </div>
       </Col>

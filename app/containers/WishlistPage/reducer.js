@@ -6,7 +6,7 @@ const initialState = {
   status: INIT,
 }
 
-function starlistReducer(state = initialState, { type, payload }) {
+function wishlistReducer(state = initialState, { type, payload }) {
   switch (type) {
     case GET_THEMES_REQUEST:
       return {
@@ -36,4 +36,4 @@ function starlistReducer(state = initialState, { type, payload }) {
   }
 }
 
-export default starlistReducer
+export default wishlistReducer

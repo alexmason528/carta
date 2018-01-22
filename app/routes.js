@@ -131,20 +131,20 @@ export default function createRoutes(store) {
       },
     },
     {
-      path: '/user/:username/starlist',
-      name: 'starlistPage',
+      path: '/user/:username/wishlist',
+      name: 'wishlistPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          import('containers/StarlistPage/reducer'),
-          import('containers/StarlistPage/sagas'),
-          import('containers/StarlistPage'),
+          import('containers/WishlistPage/reducer'),
+          import('containers/WishlistPage/sagas'),
+          import('containers/WishlistPage'),
         ])
 
         const renderRoute = loadModule(cb)
 
         importModules.then(([reducer, sagas, component]) => {
-          injectReducer('starlist', reducer.default)
-          injectSagas('starlist', sagas.default)
+          injectReducer('wishlist', reducer.default)
+          injectSagas('wishlist', sagas.default)
 
           renderRoute(component)
         })

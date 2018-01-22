@@ -35,3 +35,17 @@
     display: none;
   }
 }
+
+.updateBtn {
+  right: 15px;
+  bottom: 5px;
+  color: $white;
+  z-index: 10;
+  @include transition(all, $fastTrans);
+  @include textShadow($textShadowBlur, $lightShadowColor);
+
+  &:hover {
+    color: $white;
+    @include textShadow($textShadowBlur, $normalShadowColor);
+  }
+}
