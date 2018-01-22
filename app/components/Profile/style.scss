@@ -64,6 +64,18 @@
       }
     }
   }
+
+  h2 {
+    padding: 20px 34px;
+    color: $white;
+    font-weight: $heavierFw;
+    line-height: $textLH;
+    left: 30%;
+    bottom: 0;
+    z-index: 4;
+    cursor: pointer;
+    @include textShadow($textShadowBlur, $lightShadowColor);
+  }
 }
 
 .coverPic {
@@ -85,17 +97,6 @@
 
   &:hover img {
     transform: scale($enlargeSize);
-  }
-
-  h2 {
-    padding: 20px 34px;
-    color: $white;
-    font-weight: $heavierFw;
-    line-height: $textLH;
-    left: 30%;
-    bottom: 0;
-    z-index: 4;
-    @include textShadow($textShadowBlur, $lightShadowColor);
   }
 }
 

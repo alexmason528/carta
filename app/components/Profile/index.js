@@ -152,16 +152,16 @@ class Profile extends Component {
         <div className="profile__content">
           <div className="coverPic Cr-P Ov-H P-R" onClick={this.handleCoverPicClick}>
             <Img onLoad={this.handleLoaded} src={`${S3_PLACE_URL}/wide/${this.placeList[this.coverPic].name}.jpg`} />
-            {authenticated ? (
-              <h2 className="Mb-0 Tt-U P-A">{getFirstname(user.fullname)}</h2>
-            ) : (
-              <h2 className="Mb-0 Tt-U P-A" onClick={onClick}>
-                {formatMessage(messages.signIn)}
-              </h2>
-            )}
-            {authenticated && <UserButton className="P-A" onClick={onClick} />}
           </div>
         </div>
+        {authenticated ? (
+          <h2 className="Mb-0 Tt-U P-A">{getFirstname(user.fullname)}</h2>
+        ) : (
+          <h2 className="Mb-0 Tt-U P-A" onClick={onClick}>
+            {formatMessage(messages.signIn)}
+          </h2>
+        )}
+        {authenticated && <UserButton className="P-A" onClick={onClick} />}
         {profilePic && (
           <div className="profilePic Ov-H" onClick={authenticated ? this.handleProfilePic : onClick}>
             <LoadingSpinner show={profilePicSpinner}>
