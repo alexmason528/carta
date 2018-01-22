@@ -15,22 +15,22 @@ exports.getFriends = (req, res) => {
       })
     }
 
-    Follow.find({ followed: user._id }, (ferr, follow) => {
+    Follow.find({ follower: user._id }, (ferr, follow) => {
       if (ferr) {
         return res.status(400).send({
           error: { details: ferr.toString() },
         })
       }
 
-      let followerList = []
+      let followedList = []
 
       for (let entry of follow) {
-        followerList.push(entry.follower)
+        followedList.push(entry.followed)
       }
 
-      followerList = uniq(followerList)
+      followedList = uniq(followedList)
 
-      User.find({ _id: { $in: followerList } }, (uerr, results) => {
+      User.find({ _id: { $in: followedList } }, (uerr, results) => {
         if (uerr) {
           return res.status(400).send({
             error: { details: uerr.toString() },
