@@ -2,6 +2,16 @@ import { call, put, select, takeLatest } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import { findIndex, map, uniq } from 'lodash'
 import { browserHistory } from 'react-router'
+import { GET_WISHLIST_REQUEST, CREATE_WISHLIST_REQUEST, DELETE_WISHLIST_REQUEST } from 'containers/App/constants'
+import {
+  getWishlistSuccess,
+  getWishlistFail,
+  createWishlistSuccess,
+  createWishlistFail,
+  deleteWishlistSuccess,
+  deleteWishlistFail,
+} from 'containers/App/actions'
+import { selectUser } from 'containers/App/selectors'
 import { selectBrochureLink, selectCurrentTypes, selectCurrentDescriptives, selectViewport, selectTypes } from 'containers/QuestPage/selectors'
 import { API_BASE_URL, RECOMMENDATION_COUNT } from 'utils/globalConstants'
 import request from 'utils/request'
@@ -171,6 +181,10 @@ export function* composeUrl() {
   }
 }
 
+export function* getDescriptivesWatcher() {
+  yield takeLatest([GET_DESCRIPTIVES_REQUEST, TYPE_CLICK, TYPE_ANYTHING_CLICK], getDescriptivesRequestHandler)
+}
+
 export function* getDescriptivesRequestHandler() {
   const requestURL = `${API_BASE_URL}api/v1/map/descriptives`
   const curTypes = yield select(selectCurrentTypes())
@@ -232,8 +246,78 @@ export function* getDescriptivesRequestHandler() {
   }
 }
 
-export function* getDescriptivesRequestWatcher() {
-  yield takeLatest([GET_DESCRIPTIVES_REQUEST, TYPE_CLICK, TYPE_ANYTHING_CLICK], getDescriptivesRequestHandler)
+export function* getWishlistWatcher() {
+  yield takeLatest(GET_WISHLIST_REQUEST, getWishlistRequestHandler)
 }
 
-export default [getRecommendationWatcher, getQuestInfoWatcher, getBrochureInfoWatcher, composeUrlWatcher, getDescriptivesRequestWatcher]
+export function* getWishlistRequestHandler() {
+  const user = yield select(selectUser())
+  const requestURL = `${API_BASE_URL}api/v1/user/${user._id}/wishlist`
+  const params = { method: 'GET ' }
+
+  try {
+    const res = yield call(request, requestURL, params)
+    yield put(getWishlistSuccess(res))
+  } catch (err) {
+    yield put(getWishlistFail(err.details))
+  }
+}
+
+export function* createWishlistWatcher() {
+  yield takeLatest(CREATE_WISHLIST_REQUEST, createWishlistRequestHandler)
+}
+
+export function* createWishlistRequestHandler({ payload }) {
+  const { userID, brochureID, quest } = payload
+  const requestURL = `${API_BASE_URL}api/v1/user/${userID}/wishlist`
+
+  const data = {
+    brochureID,
+    quest,
+  }
+  const params = {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }
+
+  try {
+    const res = yield call(request, requestURL, params)
+    yield put(createWishlistSuccess(res))
+  } catch (err) {
+    yield put(createWishlistFail(err.details))
+  }
+}
+
+export function* deleteWishlistWatcher() {
+  yield takeLatest(DELETE_WISHLIST_REQUEST, deleteWishlistRequestHandler)
+}
+
+export function* deleteWishlistRequestHandler({ payload }) {
+  const { brochureID, userID } = payload
+  const requestURL = `${API_BASE_URL}api/v1/user/${userID}/wishlist/${brochureID}`
+
+  const params = {
+    method: 'DELETE',
+  }
+
+  try {
+    const res = yield call(request, requestURL, params)
+    yield put(deleteWishlistSuccess(res))
+  } catch (err) {
+    yield put(deleteWishlistFail(err.details))
+  }
+}
+
+export default [
+  getRecommendationWatcher,
+  getQuestInfoWatcher,
+  getBrochureInfoWatcher,
+  composeUrlWatcher,
+  getDescriptivesWatcher,
+  getWishlistWatcher,
+  createWishlistWatcher,
+  deleteWishlistWatcher,
+]

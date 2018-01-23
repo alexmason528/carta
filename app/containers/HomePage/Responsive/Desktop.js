@@ -1,31 +1,38 @@
 import React, { Component, PropTypes } from 'react'
-import { Row, Col } from 'reactstrap'
 import { connect } from 'react-redux'
-import { compose } from 'redux'
-import { createStructuredSelector } from 'reselect'
 import { injectIntl, intlShape } from 'react-intl'
 import { browserHistory } from 'react-router'
+import { compose } from 'redux'
+import { Row, Col } from 'reactstrap'
+import { createStructuredSelector } from 'reselect'
 import { pullAt, findIndex } from 'lodash'
-import messages from 'containers/HomePage/messages'
+import { signOut, changeAuthMethod, deleteUserRequest, updateUserRequest, signInRequest, registerRequest } from 'containers/App/actions'
 import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
-import { updateUserRequest } from 'containers/App/actions'
+import { questAdd } from 'containers/QuestPage/actions'
 import { selectViewport } from 'containers/QuestPage/selectors'
 import { selectEditingPost, selectPosts } from 'containers/HomePage/selectors'
+import messages from 'containers/HomePage/messages'
 import { CreatePostButton } from 'components/Buttons'
 import Profile from 'components/Profile'
-import FixedTile from 'components/FixedTile'
+import { FixedTile } from 'components/Tiles'
 import AccountMenu from 'components/AccountMenu'
 import AuthForm from 'components/AuthForm'
 import { Post, PostCreate } from 'components/Post'
 import { getFirstname } from 'utils/stringHelper'
 import { checkQuest } from 'utils/urlHelper'
 
-class Tablet extends Component {
+class Desktop extends Component {
   static propTypes = {
-    updateUserRequest: PropTypes.func,
     profileClick: PropTypes.func,
     profilePicClick: PropTypes.func,
     toggleCreatePostForm: PropTypes.func,
+    deleteUserRequest: PropTypes.func,
+    updateUserRequest: PropTypes.func,
+    signInRequest: PropTypes.func,
+    signOut: PropTypes.func,
+    registerRequest: PropTypes.func,
+    changeAuthMethod: PropTypes.func,
+    questAdd: PropTypes.func,
     posts: PropTypes.array,
     user: PropTypes.object,
     info: PropTypes.object,
@@ -41,8 +48,8 @@ class Tablet extends Component {
 
   render() {
     const {
-      posts,
       authenticated,
+      posts,
       user,
       info,
       viewport,
@@ -55,20 +62,29 @@ class Tablet extends Component {
       profileClick,
       profilePicClick,
       toggleCreatePostForm,
+      deleteUserRequest,
       updateUserRequest,
+      signInRequest,
+      signOut,
+      registerRequest,
+      changeAuthMethod,
+      questAdd,
     } = this.props
 
     let localePosts = posts.filter(post => post.title[locale] !== '')
     let secondColPosts = localePosts.length > 0 ? pullAt(localePosts, [0]) : []
     let firstColPosts = localePosts.length > 0 ? pullAt(localePosts, findIndex(localePosts, post => !!post.img)) : []
+    let thirdColPosts = []
     const { url, continueQuest } = checkQuest(viewport)
     const createPostButtonType = secondColPosts.length > 0 && secondColPosts[0].img ? 'image' : 'text'
 
     localePosts.map((post, index) => {
-      if (index % 2 === 0) {
+      if (index % 3 === 0) {
         firstColPosts.push(post)
-      } else {
+      } else if (index % 3 === 1) {
         secondColPosts.push(post)
+      } else {
+        thirdColPosts.push(post)
       }
     })
 
@@ -84,9 +100,24 @@ class Tablet extends Component {
             info={info}
           />
           {authenticated ? (
-            <AccountMenu show={showAccountMenu} onClick={profileClick} />
+            <AccountMenu
+              show={showAccountMenu}
+              user={user}
+              info={info}
+              signOut={signOut}
+              deleteUserRequest={deleteUserRequest}
+              onClick={profileClick}
+            />
           ) : (
-            <AuthForm show={showAuthForm} onProfilePicChange={profilePicClick} profilePic={profilePic} />
+            <AuthForm
+              show={showAuthForm}
+              info={info}
+              profilePic={profilePic}
+              signInRequest={signInRequest}
+              registerRequest={registerRequest}
+              changeAuthMethod={changeAuthMethod}
+              onProfilePicChange={profilePicClick}
+            />
           )}
           <div>
             {firstColPosts &&
@@ -107,9 +138,10 @@ class Tablet extends Component {
             img="wide/quest.jpg"
             link={url}
             title={formatMessage(continueQuest ? messages.continueYourQuest : messages.startPersonalQuest).replace(/\n/g, '<br/>')}
-            buttonText={formatMessage(messages.browseThemes)}
+            buttonText={continueQuest ? formatMessage(messages.orStartaNewOne) : ''}
             onClick={() => {
-              browserHistory.push('/themes')
+              questAdd()
+              browserHistory.push('/quest')
             }}
           />
           <div className="P-R">
@@ -120,6 +152,30 @@ class Tablet extends Component {
             {authenticated && showCreatePostForm && <PostCreate onClose={toggleCreatePostForm} user={user} />}
             {secondColPosts &&
               secondColPosts.map((post, key) => {
+                const data = {
+                  ...post,
+                  key: post._id,
+                  firstname: getFirstname(post.author.fullname),
+                  editable: authenticated && (post.author._id === user._id || user.role === 'admin') && !editingPost && !showCreatePostForm,
+                  first: key === 0 && authenticated,
+                }
+                return <Post {...data} />
+              })}
+          </div>
+        </Col>
+        <Col xs={12} sm={6} md={4} className="homePage__col">
+          <FixedTile
+            img="wide/brabant.jpg"
+            link="/quest/5.5778,51.4161,8.4/regions/walking,relaxing,picnics,cycling"
+            title={formatMessage(messages.brabantOutdoors).replace(/\n/g, '<br/>')}
+            buttonText={formatMessage(messages.browseThemes)}
+            onClick={() => {
+              browserHistory.push('/themes')
+            }}
+          />
+          <div>
+            {thirdColPosts &&
+              thirdColPosts.map((post, key) => {
                 const data = {
                   ...post,
                   key: post._id,
@@ -146,7 +202,13 @@ const selectors = createStructuredSelector({
 })
 
 const actions = {
+  questAdd,
+  signOut,
+  changeAuthMethod,
+  signInRequest,
+  registerRequest,
+  deleteUserRequest,
   updateUserRequest,
 }
 
-export default compose(injectIntl, connect(selectors, actions))(Tablet)
+export default compose(injectIntl, connect(selectors, actions))(Desktop)

@@ -10,6 +10,7 @@ export const S3_BUCKET_URL = process.env.S3_BUCKET_URL
 export const S3_BUCKET_NAME = process.env.S3_BUCKET_NAME
 export const S3_USER_PROFILE_IMAGE_URL = 'user'
 export const S3_USER_HOLIDAY_IMAGE_URL = 'holiday'
+export const S3_HOLIDAY_IMAGE_URL = `${S3_BUCKET_URL}/holiday/random`
 export const S3_POST_IMAGE_URL = 'post'
 export const S3_COVER_URL = `${S3_BUCKET_URL}/cover`
 export const S3_ICON_URL = `${S3_BUCKET_URL}/icon`

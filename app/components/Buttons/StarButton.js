@@ -1,4 +1,4 @@
-import React, { PropTypes, Children } from 'react'
+import React, { Children, PropTypes } from 'react'
 import cx from 'classnames'
 import Img from 'components/Img'
 import { S3_ICON_URL } from 'utils/globalConstants'

@@ -1,15 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import cx from 'classnames'
 import { isEqual } from 'lodash'
-import { connect } from 'react-redux'
 import ReactResizeDetector from 'react-resize-detector'
 import ReactMapboxGl from 'react-mapbox-gl'
 import { withRouter } from 'react-router'
-import { createStructuredSelector } from 'reselect'
-import { compose } from 'redux'
-import { mapChange } from 'containers/QuestPage/actions'
-import { selectRecommendations, selectViewport, selectInfo } from 'containers/QuestPage/selectors'
-import { selectLocale } from 'containers/LanguageProvider/selectors'
 import { COLORS, S3_DATA_URL, MAP_ACCESS_TOKEN, RECOMMENDATION_COUNT } from 'utils/globalConstants'
 import './style.scss'
 
@@ -291,15 +285,4 @@ class Map extends Component {
   }
 }
 
-const selectors = createStructuredSelector({
-  info: selectInfo(),
-  locale: selectLocale(),
-  viewport: selectViewport(),
-  recommendations: selectRecommendations(),
-})
-
-const actions = {
-  mapChange,
-}
-
-export default compose(withRouter, connect(selectors, actions))(Map)
+export default withRouter(Map)

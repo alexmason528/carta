@@ -49,7 +49,8 @@ export function* signInRequest({ payload }) {
 
   try {
     const res = yield call(request, requestURL, params)
-    yield call(setItem, 'auth', JSON.stringify(res))
+    yield call(setItem, 'auth', JSON.stringify(res.user))
+    yield call(setItem, 'wishlist', JSON.stringify(res.wishlist))
     yield put(signInSuccess(res))
   } catch (err) {
     yield put(signInFail(err.details))

@@ -32,19 +32,43 @@
     position: relative;
   }
 
+  &__message {
+    margin-bottom: 0;
+    opacity: 1;
+    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: $lighterFw;
+    cursor: pointer;
+    @include transition(all, $fastTrans);
+
+    &--hidden {
+      opacity: 0;
+    }
+
+    &:hover {
+      color: $brochureArrowHoverColor;
+    }
+  }
+
   &__menu {
     position: absolute;
     right: 20px;
     top: 15px;
     z-index: 100;
-    display: block;
+    display: flex;
+    align-items: center;
 
     button {
       padding: 5px;
       background: $white;
+      margin-left: 2px;
+      line-height: 1;
+      cursor: pointer;
       @include borderRadius(20px);
 
       img {
+        width: 15px;
+        height: 15px;
         opacity: $darkOpacity;
       }
 

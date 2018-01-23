@@ -205,8 +205,4 @@ export default defineMessages({
     id: 'carta.friends',
     defaultMessage: 'Friends',
   },
-  addToWishlist: {
-    id: 'carta.addedToWishlist',
-    defaultMessage: 'Added to wishlist',
-  },
 })

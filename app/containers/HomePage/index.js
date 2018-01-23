@@ -9,14 +9,13 @@ import InfiniteScroll from 'react-infinite-scroller'
 import { UPDATE_USER_SUCCESS, SIGNOUT } from 'containers/App/constants'
 import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
 import { signOut, verifyRequest } from 'containers/App/actions'
-import Menu from 'components/Menu'
 import Verify from 'components/Verify'
 import ResponsiveLayout from 'components/ResponsiveLayout'
-import { Desktop, Tablet, Mobile } from 'components/HomePageViews'
 import { S3_PROFILE_URL } from 'utils/globalConstants'
 import { listPostRequest } from './actions'
 import { CREATE_POST_SUCCESS, LIST_POST_REQUEST } from './constants'
 import { selectPosts, selectHomeInfo, selectHasMore } from './selectors'
+import { Desktop, Tablet, Mobile } from './Responsive'
 import './style.scss'
 
 class HomePage extends Component {
@@ -122,55 +121,24 @@ class HomePage extends Component {
 
   render() {
     const { showAuthForm, showCreatePostForm, showAccountMenu, profilePic, holidayPic } = this.state
-
     const { user, hasMore, signOut, info: { status } } = this.props
+    const viewData = {
+      profilePic,
+      holidayPic,
+      showAuthForm,
+      showCreatePostForm,
+      showAccountMenu,
+      profileClick: this.handleProfileClick,
+      profilePicClick: this.handleProfilePic,
+      holidayPicClick: this.handleHolidayPic,
+      toggleCreatePostForm: this.handleToggleCreatePostForm,
+    }
 
     return (
       <Container fluid className="homePage P-0 M-0">
         <Helmet meta={[{ name: 'description', content: 'Carta' }]} />
-        <Menu currentPage="home" />
         <InfiniteScroll loadMore={this.handleLoadMore} hasMore={hasMore} threshold={1000}>
-          <ResponsiveLayout
-            desktop={
-              <Desktop
-                profilePic={profilePic}
-                holidayPic={holidayPic}
-                profileClick={this.handleProfileClick}
-                profilePicClick={this.handleProfilePic}
-                holidayPicClick={this.handleHolidayPic}
-                showAuthForm={showAuthForm}
-                showCreatePostForm={showCreatePostForm}
-                showAccountMenu={showAccountMenu}
-                toggleCreatePostForm={this.handleToggleCreatePostForm}
-              />
-            }
-            tablet={
-              <Tablet
-                profilePic={profilePic}
-                holidayPic={holidayPic}
-                profileClick={this.handleProfileClick}
-                profilePicClick={this.handleProfilePic}
-                holidayPicClick={this.handleHolidayPic}
-                showAuthForm={showAuthForm}
-                showCreatePostForm={showCreatePostForm}
-                showAccountMenu={showAccountMenu}
-                toggleCreatePostForm={this.handleToggleCreatePostForm}
-              />
-            }
-            mobile={
-              <Mobile
-                profilePic={profilePic}
-                holidayPic={holidayPic}
-                profileClick={this.handleProfileClick}
-                profilePicClick={this.handleProfilePic}
-                holidayPicClick={this.handleHolidayPic}
-                showAuthForm={showAuthForm}
-                showCreatePostForm={showCreatePostForm}
-                showAccountMenu={showAccountMenu}
-                toggleCreatePostForm={this.handleToggleCreatePostForm}
-              />
-            }
-          />
+          <ResponsiveLayout desktop={<Desktop {...viewData} />} tablet={<Tablet {...viewData} />} mobile={<Mobile {...viewData} />} />
         </InfiniteScroll>
         <Verify user={user} status={status} signOut={signOut} />
       </Container>

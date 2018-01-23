@@ -3,7 +3,12 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { Container, Row, Col } from 'reactstrap'
 import { createStructuredSelector } from 'reselect'
-import { withRouter } from 'react-router'
+import { withRouter, browserHistory } from 'react-router'
+import { injectIntl, intlShape } from 'react-intl'
+import cx from 'classnames'
+import { find } from 'lodash'
+import { createWishlistRequest, deleteWishlistRequest } from 'containers/App/actions'
+import { selectAuthenticated, selectWishlist, selectUser } from 'containers/App/selectors'
 import { getBrochureInfoRequest, setQuest } from 'containers/QuestPage/actions'
 import { selectBrochureInfo } from 'containers/QuestPage/selectors'
 import Img from 'components/Img'
@@ -11,16 +16,36 @@ import ResponsiveLayout from 'components/ResponsiveLayout'
 import { ImageTile, TextTile, TextTileMobile } from 'components/Tiles'
 import { S3_ICON_URL } from 'utils/globalConstants'
 import { urlParser } from 'utils/urlHelper'
+import messages from 'containers/QuestPage/messages'
 import './style.scss'
 
 class Brochure extends Component {
   static propTypes = {
     getBrochureInfoRequest: PropTypes.func,
+    createWishlistRequest: PropTypes.func,
+    deleteWishlistRequest: PropTypes.func,
     setQuest: PropTypes.func,
     params: PropTypes.object,
     router: PropTypes.object,
+    location: PropTypes.object,
+    user: PropTypes.object,
     brochureInfo: PropTypes.object,
     brochureLink: PropTypes.string,
+    authenticated: PropTypes.bool,
+    wishlist: PropTypes.array,
+    intl: intlShape.isRequired,
+  }
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      message: null,
+      show: false,
+    }
+  }
+
+  componentWillMount() {
+    const { authenticated, user, getWishlistRequest } = this.props
   }
 
   componentDidMount() {
@@ -36,28 +61,68 @@ class Brochure extends Component {
     })
   }
 
-  handleBrochureResize = () => {}
+  handleBrochureAddtoStarlist = alreadyExist => {
+    const {
+      authenticated,
+      user,
+      brochureInfo,
+      intl: { formatMessage },
+      location: { pathname },
+      createWishlistRequest,
+      deleteWishlistRequest,
+    } = this.props
+
+    if (!authenticated) {
+      this.setState({ message: formatMessage(messages.createWishlist), show: true }, () => {
+        setTimeout(() => {
+          this.setState({ show: false })
+        }, 3000)
+      })
+    } else if (alreadyExist) {
+      deleteWishlistRequest({ userID: user._id, brochureID: brochureInfo._id })
+    } else {
+      createWishlistRequest({ userID: user._id, brochureID: brochureInfo._id, quest: pathname })
+    }
+  }
+
+  handleClickMessage = () => {
+    const { authenticated } = this.props
+
+    if (!authenticated) {
+      browserHistory.push('/')
+    }
+  }
 
   render() {
-    const { brochureInfo } = this.props
+    const { message, show } = this.state
+    const { brochureInfo, authenticated, user, wishlist } = this.props
     if (!brochureInfo) return null
 
     const { info: { mainPoster, description, tiles } } = brochureInfo
 
+    let alreadyExist = false
+
+    if (!authenticated || !find(wishlist, { userID: user._id, brochureID: brochureInfo._id })) {
+      alreadyExist = false
+    } else {
+      alreadyExist = true
+    }
+
     return (
       <Container fluid className="brochure P-0 M-0">
         <div className="brochure__menu">
-          {/* <button
-            className="P-5 Ml-2 Lh-100P Cr-P"
-            onClick={this.handleBrochureResize}
+          <h2 className={cx({ brochure__message: true, 'brochure__message--hidden': !show })} onClick={this.handleClickMessage}>
+            {message}
+          </h2>
+          <button
+            onClick={() => {
+              this.handleBrochureAddtoStarlist(alreadyExist)
+            }}
           >
-            <Img className="Sq-15" src={`${S3_ICON_URL}/narrow.png`} />
-          </button> */}
-          <button className="P-5 Ml-2 Lh-100P Cr-P" onClick={this.handleBrochureAddtoStarlist}>
-            <Img className="Sq-15" src={`${S3_ICON_URL}/narrow.png`} />
+            <Img src={alreadyExist ? `${S3_ICON_URL}/star-red.png` : `${S3_ICON_URL}/star-stroke.png`} />
           </button>
-          <button className="P-5 Ml-2 Lh-100P Cr-P" onClick={this.handleBrochureClose}>
-            <Img className="Sq-15" src={`${S3_ICON_URL}/close.png`} />
+          <button onClick={this.handleBrochureClose}>
+            <Img src={`${S3_ICON_URL}/close.png`} />
           </button>
         </div>
         <Row className="brochure__row">
@@ -105,12 +170,17 @@ class Brochure extends Component {
 }
 
 const selectors = createStructuredSelector({
+  user: selectUser(),
+  wishlist: selectWishlist(),
+  authenticated: selectAuthenticated(),
   brochureInfo: selectBrochureInfo(),
 })
 
 const actions = {
+  createWishlistRequest,
+  deleteWishlistRequest,
   getBrochureInfoRequest,
   setQuest,
 }
 
-export default compose(withRouter, connect(selectors, actions))(Brochure)
+export default compose(withRouter, injectIntl, connect(selectors, actions))(Brochure)

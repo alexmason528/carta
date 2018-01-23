@@ -1,15 +1,10 @@
 import React, { Component, PropTypes } from 'react'
-import cx from 'classnames'
-import { compose } from 'redux'
-import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
 import { reduxForm, Field, Form } from 'redux-form'
-import { createStructuredSelector } from 'reselect'
+import cx from 'classnames'
 import { RemoveButton } from 'components/Buttons'
 import RenderField from 'components/RenderField'
 import { DELETE_USER_FAIL } from 'containers/App/constants'
-import { signOut, deleteUserRequest } from 'containers/App/actions'
-import { selectUser, selectInfo } from 'containers/App/selectors'
 import messages from 'containers/HomePage/messages'
 import deleteAccountFormValidator from './validate'
 import './style.scss'
@@ -121,22 +116,9 @@ class AccountMenu extends Component {
   }
 }
 
-const selectors = createStructuredSelector({
-  user: selectUser(),
-  info: selectInfo(),
-})
-
-const actions = {
-  signOut,
-  deleteUserRequest,
-}
-
 export default injectIntl(
-  compose(
-    connect(selectors, actions),
-    reduxForm({
-      form: 'deleteAccountForm',
-      validate: deleteAccountFormValidator,
-    })
-  )(AccountMenu)
+  reduxForm({
+    form: 'deleteAccountForm',
+    validate: deleteAccountFormValidator,
+  })(AccountMenu)
 )

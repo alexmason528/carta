@@ -68,5 +68,6 @@
   "carta.profile": "Profile",
   "carta.wishlist": "Wish list",
   "carta.friends": "Friends",
-  "carta.addedToWishlist": "Added to wish list"
+  "carta.addedToWishlist": "Added to wish list",
+  "carta.createWishlist": "Sign in to create a wish list"
 }

@@ -1,4 +1,5 @@
-import { getItem, removeItem } from 'utils/localStorage'
+import { isEqual } from 'lodash'
+import { getItem, setItem, removeItem } from 'utils/localStorage'
 
 import {
   SIGNIN_REQUEST,
@@ -19,6 +20,15 @@ import {
   UPDATE_USER_FAIL,
   CHANGE_AUTH_METHOD,
   TOGGLE_MENU,
+  GET_WISHLIST_REQUEST,
+  GET_WISHLIST_SUCCESS,
+  GET_WISHLIST_FAIL,
+  CREATE_WISHLIST_REQUEST,
+  CREATE_WISHLIST_SUCCESS,
+  CREATE_WISHLIST_FAIL,
+  DELETE_WISHLIST_REQUEST,
+  DELETE_WISHLIST_SUCCESS,
+  DELETE_WISHLIST_FAIL,
 } from './constants'
 
 const initialState = {
@@ -28,25 +38,31 @@ const initialState = {
   error: null,
   authMethod: 'signIn',
   menuOpened: false,
+  wishlist: JSON.parse(getItem('wishlist')) || [],
 }
 
 function appReducer(state = initialState, { type, payload }) {
   let newState
+  let newWishlist
 
   switch (type) {
     case SIGNIN_REQUEST:
+    case REGISTER_REQUEST:
+    case VERIFY_REQUEST:
+    case DELETE_USER_REQUEST:
+    case UPDATE_USER_REQUEST:
+    case GET_WISHLIST_REQUEST:
+    case CREATE_WISHLIST_REQUEST:
+    case DELETE_WISHLIST_REQUEST:
       return {
         ...state,
-        user: null,
-        authenticated: false,
         status: type,
-        error: null,
       }
 
     case SIGNIN_SUCCESS:
       return {
         ...state,
-        user: payload,
+        ...payload,
         authenticated: true,
         status: type,
         error: null,
@@ -69,15 +85,7 @@ function appReducer(state = initialState, { type, payload }) {
 
     case SIGNOUT:
       removeItem('auth')
-      return {
-        ...state,
-        user: null,
-        authenticated: false,
-        status: type,
-        error: null,
-      }
-
-    case REGISTER_REQUEST:
+      removeItem('wishlist')
       return {
         ...state,
         user: null,
@@ -110,13 +118,6 @@ function appReducer(state = initialState, { type, payload }) {
 
       return newState
 
-    case VERIFY_REQUEST:
-      return {
-        ...state,
-        status: type,
-        error: null,
-      }
-
     case VERIFY_SUCCESS:
       return {
         ...state,
@@ -133,15 +134,9 @@ function appReducer(state = initialState, { type, payload }) {
         error: payload,
       }
 
-    case DELETE_USER_REQUEST:
-      return {
-        ...state,
-        status: type,
-        error: null,
-      }
-
     case DELETE_USER_SUCCESS:
       removeItem('auth')
+      removeItem('wishlist')
       return {
         ...state,
         user: null,
@@ -154,12 +149,6 @@ function appReducer(state = initialState, { type, payload }) {
         ...state,
         status: type,
         error: payload,
-      }
-
-    case UPDATE_USER_REQUEST:
-      return {
-        ...state,
-        status: type,
       }
 
     case UPDATE_USER_SUCCESS:
@@ -179,7 +168,7 @@ function appReducer(state = initialState, { type, payload }) {
     case CHANGE_AUTH_METHOD:
       return {
         ...state,
-        status: CHANGE_AUTH_METHOD,
+        status: type,
         authMethod: payload,
         error: null,
       }
@@ -187,7 +176,50 @@ function appReducer(state = initialState, { type, payload }) {
     case TOGGLE_MENU:
       return {
         ...state,
+        status: type,
         menuOpened: !state.menuOpened,
+      }
+
+    case GET_WISHLIST_SUCCESS:
+      setItem('wishlist', payload)
+      return {
+        ...state,
+        status: type,
+        wishlist: payload,
+      }
+
+    case CREATE_WISHLIST_SUCCESS:
+      newWishlist = [...state.wishlist, payload]
+      setItem('wishlist', newWishlist)
+
+      return {
+        ...state,
+        status: type,
+        wishlist: newWishlist,
+      }
+
+    case CREATE_WISHLIST_FAIL:
+      return {
+        ...state,
+        status: type,
+        error: payload,
+      }
+
+    case DELETE_WISHLIST_SUCCESS:
+      newWishlist = state.wishlist.filter(entry => !isEqual(entry, payload))
+      setItem('wishlist', newWishlist)
+
+      return {
+        ...state,
+        status: type,
+        wishlist: newWishlist,
+      }
+
+    case DELETE_WISHLIST_FAIL:
+      return {
+        ...state,
+        status: type,
+        error: payload,
       }
 
     default:

@@ -8,6 +8,7 @@ import LoadingSpinner from 'components/LoadingSpinner'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { S3_COVER_URL, S3_USER_HOLIDAY_IMAGE_URL } from 'utils/globalConstants'
 import { getCroppedImage, imageUploader } from 'utils/imageHelper'
+import { getFirstname } from 'utils/stringHelper'
 import './style.scss'
 
 class HolidayTile extends Component {
@@ -99,7 +100,7 @@ class HolidayTile extends Component {
               <QuarterSpinner width={30} height={30} />
             </LoadingSpinner>
             <Img onLoad={this.handleLoaded} src={holidayPic || this.holidayPic} />
-            {imageLoaded && <h2 className="Mb-0 Tt-U Px-30 Py-19" dangerouslySetInnerHTML={{ __html: fullname }} />}
+            {imageLoaded && <h2 className="Mb-0 Tt-U Px-30 Py-19" dangerouslySetInnerHTML={{ __html: getFirstname(fullname) }} />}
             <input
               type="file"
               ref={ref => {

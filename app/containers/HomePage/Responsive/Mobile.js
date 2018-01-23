@@ -5,15 +5,15 @@ import { compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
 import { injectIntl, intlShape } from 'react-intl'
 import { browserHistory } from 'react-router'
+import { signOut, changeAuthMethod, deleteUserRequest, updateUserRequest, signInRequest, registerRequest } from 'containers/App/actions'
 import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
-import { updateUserRequest } from 'containers/App/actions'
 import { questAdd } from 'containers/QuestPage/actions'
 import { selectViewport } from 'containers/QuestPage/selectors'
 import { selectEditingPost, selectPosts } from 'containers/HomePage/selectors'
 import messages from 'containers/HomePage/messages'
 import { CreatePostButton } from 'components/Buttons'
 import Profile from 'components/Profile'
-import FixedTile from 'components/FixedTile'
+import { FixedTile } from 'components/Tiles'
 import AccountMenu from 'components/AccountMenu'
 import AuthForm from 'components/AuthForm'
 import { Post, PostCreate } from 'components/Post'
@@ -23,11 +23,16 @@ import { checkQuest } from 'utils/urlHelper'
 
 class Mobile extends Component {
   static propTypes = {
-    updateUserRequest: PropTypes.func,
     profileClick: PropTypes.func,
     profilePicClick: PropTypes.func,
     toggleCreatePostForm: PropTypes.func,
+    deleteUserRequest: PropTypes.func,
+    updateUserRequest: PropTypes.func,
+    registerRequest: PropTypes.func,
+    signInRequest: PropTypes.func,
+    signOut: PropTypes.func,
     questAdd: PropTypes.func,
+    changeAuthMethod: PropTypes.func,
     posts: PropTypes.array,
     user: PropTypes.object,
     info: PropTypes.object,
@@ -57,7 +62,12 @@ class Mobile extends Component {
       profileClick,
       profilePicClick,
       toggleCreatePostForm,
+      deleteUserRequest,
       updateUserRequest,
+      signInRequest,
+      signOut,
+      registerRequest,
+      changeAuthMethod,
       questAdd,
     } = this.props
 
@@ -78,9 +88,24 @@ class Mobile extends Component {
             info={info}
           />
           {authenticated ? (
-            <AccountMenu show={showAccountMenu} onClick={profileClick} />
+            <AccountMenu
+              show={showAccountMenu}
+              user={user}
+              info={info}
+              signOut={signOut}
+              deleteUserRequest={deleteUserRequest}
+              onClick={profileClick}
+            />
           ) : (
-            <AuthForm show={showAuthForm} onProfilePicChange={profilePicClick} profilePic={profilePic} />
+            <AuthForm
+              show={showAuthForm}
+              info={info}
+              profilePic={profilePic}
+              signInRequest={signInRequest}
+              registerRequest={registerRequest}
+              changeAuthMethod={changeAuthMethod}
+              onProfilePicChange={profilePicClick}
+            />
           )}
           <FixedTile
             img="square/quest.jpg"
@@ -136,7 +161,12 @@ const selectors = createStructuredSelector({
 
 const actions = {
   questAdd,
+  signInRequest,
+  signOut,
+  registerRequest,
+  deleteUserRequest,
   updateUserRequest,
+  changeAuthMethod,
 }
 
 export default compose(injectIntl, connect(selectors, actions))(Mobile)

@@ -3,7 +3,6 @@ import Helmet from 'react-helmet'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { Container, Row } from 'reactstrap'
-import Menu from 'components/Menu'
 import { ThemeTile } from 'components/Tiles'
 import { selectThemes } from './selectors'
 import { getThemesRequest } from './actions'
@@ -23,7 +22,6 @@ class ThemePage extends Component {
     return (
       <Container fluid className="themePage P-0 M-0">
         <Helmet meta={[{ name: 'Theme', content: 'Carta' }]} />
-        <Menu currentPage="themes" />
         <Row className="themePage__row">{themes && themes.map((theme, index) => <ThemeTile key={index} {...theme} />)}</Row>
       </Container>
     )

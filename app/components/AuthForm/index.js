@@ -1,20 +1,15 @@
 import React, { Component, PropTypes } from 'react'
 import { injectIntl, intlShape } from 'react-intl'
-import { connect } from 'react-redux'
-import { compose } from 'redux'
-import { reduxForm, Field } from 'redux-form'
-import { createStructuredSelector } from 'reselect'
-import cx from 'classnames'
 import GoogleLogin from 'react-google-login'
 import FacebookLogin from 'react-facebook-login'
-import RenderField from 'components/RenderField'
-import RenderDropzone from 'components/RenderDropzone'
+import { reduxForm, Field } from 'redux-form'
+import cx from 'classnames'
 import { SIGNIN_REQUEST, SIGNIN_FAIL, REGISTER_REQUEST, REGISTER_FAIL } from 'containers/App/constants'
-import { changeAuthMethod, signInRequest, registerRequest } from 'containers/App/actions'
-import { selectInfo } from 'containers/App/selectors'
 import messages from 'containers/HomePage/messages'
-import LoadingSpinner from 'components/LoadingSpinner'
 import Img from 'components/Img'
+import LoadingSpinner from 'components/LoadingSpinner'
+import RenderDropzone from 'components/RenderDropzone'
+import RenderField from 'components/RenderField'
 import { QuarterSpinner } from 'components/SvgIcon'
 import { S3_ICON_URL, S3_USER_PROFILE_IMAGE_URL, S3_USER_HOLIDAY_IMAGE_URL } from 'utils/globalConstants'
 import { imageUploader } from 'utils/imageHelper'
@@ -235,21 +230,9 @@ class AuthForm extends Component {
   }
 }
 
-const selectors = createStructuredSelector({
-  info: selectInfo(),
-})
-
-const actions = {
-  signInRequest,
-  registerRequest,
-  changeAuthMethod,
-}
-
-export default compose(
-  injectIntl,
-  connect(selectors, actions),
+export default injectIntl(
   reduxForm({
     form: 'authForm',
     validate: authFormValidator,
-  })
-)(AuthForm)
+  })(AuthForm)
+)

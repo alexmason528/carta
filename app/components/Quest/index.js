@@ -5,8 +5,27 @@ import { connect } from 'react-redux'
 import cx from 'classnames'
 import { createStructuredSelector } from 'reselect'
 import { SET_URL_ENTERED_QUEST } from 'containers/QuestPage/constants'
-import { updateExpand } from 'containers/QuestPage/actions'
-import { selectInfo, selectCurrentTypes, selectCurrentDescriptives } from 'containers/QuestPage/selectors'
+import {
+  updateExpand,
+  placeClick,
+  typeClick,
+  typeAnythingClick,
+  typeSearchExpChange,
+  descriptiveClick,
+  descriptiveStarClick,
+  descriptiveAnythingClick,
+  descriptiveSearchExpChange,
+} from 'containers/QuestPage/actions'
+import {
+  selectInfo,
+  selectPlaces,
+  selectTypes,
+  selectCurrentTypes,
+  selectTypeSearchExpanded,
+  selectDescriptives,
+  selectCurrentDescriptives,
+  selectDescriptiveSearchExpanded,
+} from 'containers/QuestPage/selectors'
 import messages from 'containers/QuestPage/messages'
 import Img from 'components/Img'
 import { S3_ICON_URL } from 'utils/globalConstants'
@@ -15,12 +34,25 @@ import './style.scss'
 
 class Quest extends Component {
   static propTypes = {
-    className: PropTypes.string,
-    currentTypes: PropTypes.object,
-    currentDescriptives: PropTypes.object,
     updateExpand: PropTypes.func,
+    placeClick: PropTypes.func,
+    typeClick: PropTypes.func,
+    typeAnythingClick: PropTypes.func,
+    typeSearchExpChange: PropTypes.func,
+    descriptiveClick: PropTypes.func,
+    descriptiveStarClick: PropTypes.func,
+    descriptiveAnythingClick: PropTypes.func,
+    descriptiveSearchExpChange: PropTypes.func,
+    places: PropTypes.array,
+    types: PropTypes.array,
+    currentTypes: PropTypes.object,
+    descriptives: PropTypes.array,
+    currentDescriptives: PropTypes.object,
     info: PropTypes.object,
+    dExpanded: PropTypes.bool,
+    tExpanded: PropTypes.bool,
     intl: intlShape.isRequired,
+    className: PropTypes.string,
   }
 
   constructor(props) {
@@ -86,15 +118,45 @@ class Quest extends Component {
 
   render() {
     const { currentTab } = this.state
-    const { intl: { formatMessage } } = this.props
+    const {
+      intl: { formatMessage },
+      info,
+      places,
+      types,
+      currentTypes,
+      descriptives,
+      currentDescriptives,
+      dExpanded,
+      tExpanded,
+      placeClick,
+      typeClick,
+      typeAnythingClick,
+      typeSearchExpChange,
+      descriptiveClick,
+      descriptiveStarClick,
+      descriptiveAnythingClick,
+      descriptiveSearchExpChange,
+    } = this.props
 
     let section
     if (currentTab === 0) {
-      section = <PlaceSection />
+      const data = { places, placeClick }
+      section = <PlaceSection {...data} />
     } else if (currentTab === 1) {
-      section = <TypeSection />
+      const data = { info, types, expanded: tExpanded, currentTypes, typeClick, typeAnythingClick, typeSearchExpChange }
+      section = <TypeSection {...data} />
     } else {
-      section = <DescriptiveSection />
+      const data = {
+        info,
+        descriptives,
+        currentDescriptives,
+        expanded: dExpanded,
+        descriptiveClick,
+        descriptiveStarClick,
+        descriptiveAnythingClick,
+        descriptiveSearchExpChange,
+      }
+      section = <DescriptiveSection {...data} />
     }
 
     const tabs = ['marker', 'check', 'star']
@@ -140,13 +202,26 @@ class Quest extends Component {
 }
 
 const selectors = createStructuredSelector({
-  currentTypes: selectCurrentTypes(),
-  currentDescriptives: selectCurrentDescriptives(),
   info: selectInfo(),
+  places: selectPlaces(),
+  types: selectTypes(),
+  currentTypes: selectCurrentTypes(),
+  descriptives: selectDescriptives(),
+  currentDescriptives: selectCurrentDescriptives(),
+  dExpanded: selectDescriptiveSearchExpanded(),
+  tExpanded: selectTypeSearchExpanded(),
 })
 
 const actions = {
   updateExpand,
+  placeClick,
+  typeClick,
+  typeAnythingClick,
+  typeSearchExpChange,
+  descriptiveClick,
+  descriptiveStarClick,
+  descriptiveAnythingClick,
+  descriptiveSearchExpChange,
 }
 
 export default compose(injectIntl, connect(selectors, actions))(Quest)

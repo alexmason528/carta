@@ -2,13 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import cx from 'classnames'
 import { findIndex } from 'lodash'
-import { compose } from 'redux'
-import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
-import { createStructuredSelector } from 'reselect'
-import { descriptiveClick, descriptiveStarClick, descriptiveAnythingClick, descriptiveSearchExpChange } from 'containers/QuestPage/actions'
 import messages from 'containers/QuestPage/messages'
-import { selectInfo, selectDescriptives, selectCurrentDescriptives, selectDescriptiveSearchExpanded } from 'containers/QuestPage/selectors'
 import { Button, StarButton } from 'components/Buttons'
 import Img from 'components/Img'
 import { S3_ICON_URL } from 'utils/globalConstants'
@@ -209,18 +204,4 @@ class DescriptiveSection extends Component {
   }
 }
 
-const selectors = createStructuredSelector({
-  info: selectInfo(),
-  descriptives: selectDescriptives(),
-  currentDescriptives: selectCurrentDescriptives(),
-  expanded: selectDescriptiveSearchExpanded(),
-})
-
-const actions = {
-  descriptiveClick,
-  descriptiveStarClick,
-  descriptiveAnythingClick,
-  descriptiveSearchExpChange,
-}
-
-export default compose(injectIntl, connect(selectors, actions))(DescriptiveSection)
+export default injectIntl(DescriptiveSection)

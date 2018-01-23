@@ -1,11 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import cx from 'classnames'
-import { connect } from 'react-redux'
-import { compose } from 'redux'
-import { createStructuredSelector } from 'reselect'
 import { withRouter } from 'react-router'
-import { questAdd, questSelect, questRemove } from 'containers/QuestPage/actions'
-import { selectQuestCnt, selectCurQuestInd } from 'containers/QuestPage/selectors'
 import Img from 'components/Img'
 import { S3_ICON_URL } from 'utils/globalConstants'
 import Quest from '../Quest'
@@ -84,15 +79,4 @@ class SidePanel extends Component {
   }
 }
 
-const selectors = createStructuredSelector({
-  questCnt: selectQuestCnt(),
-  curQuestInd: selectCurQuestInd(),
-})
-
-const actions = {
-  questAdd,
-  questSelect,
-  questRemove,
-}
-
-export default compose(withRouter, connect(selectors, actions))(SidePanel)
+export default withRouter(SidePanel)

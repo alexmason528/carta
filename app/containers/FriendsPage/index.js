@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { Container, Row } from 'reactstrap'
 import { selectUser } from 'containers/App/selectors'
-import Menu from 'components/Menu'
 import { FriendTile, HolidayTile } from 'components/Tiles'
 import { selectFriends, selectFullname, selectHolidayPic } from './selectors'
 import { getFriendsRequest, updateHolidayPicRequest } from './actions'
@@ -39,7 +38,6 @@ class FriendsPage extends Component {
     return (
       <Container fluid className="friendsPage P-0 M-0">
         <Helmet meta={[{ name: 'Friends', content: 'Carta' }]} />
-        <Menu currentPage="friends" />
         <Row className="friendsPage__row">
           <HolidayTile fullname={fullname} holidayPic={holidayPic} canUpdate={canUpdate} updateHolidayPic={this.props.updateHolidayPicRequest} />
           {friends && friends.map((entry, index) => <FriendTile key={index} {...entry} />)}

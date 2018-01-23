@@ -1,12 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import { compose } from 'redux'
-import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
-import { createStructuredSelector } from 'reselect'
 import messages from 'containers/QuestPage/messages'
-import { placeClick } from 'containers/QuestPage/actions'
-import { selectPlaces } from 'containers/QuestPage/selectors'
 import { Button } from 'components/Buttons'
 
 class PlaceSection extends Component {
@@ -82,13 +77,4 @@ class PlaceSection extends Component {
     )
   }
 }
-
-const selectors = createStructuredSelector({
-  places: selectPlaces(),
-})
-
-const actions = {
-  placeClick,
-}
-
-export default compose(injectIntl, connect(selectors, actions))(PlaceSection)
+export default injectIntl(PlaceSection)

@@ -7,8 +7,9 @@ const _ = require('lodash')
 const Post = require('../models/post')
 const User = require('../models/user')
 const Follow = require('../models/follow')
+const Wishlist = require('../models/wishlist')
 
-let transporter = nodemailer.createTransport(
+const transporter = nodemailer.createTransport(
   ses({
     accessKeyId: process.env.NODEMAILER_ACCESS_KEY_ID,
     secretAccessKey: process.env.NODEMAILER_SECRET_ACCESS_KEY,
@@ -22,11 +23,16 @@ let transporter = nodemailer.createTransport(
 exports.signIn = (req, res) => {
   const { email, password } = req.body
 
-  User.find({ email: email }, (err, element) => {
+  User.find({ email }, (err, element) => {
     if (element.length > 0) {
       if (element[0].password === cryptr.encrypt(password)) {
-        const data = _.pick(element[0], ['_id', 'fullname', 'username', 'email', 'role', 'profilePic', 'holidayPic', 'verified'])
-        return res.json(data)
+        const user = _.pick(element[0], ['_id', 'fullname', 'username', 'email', 'role', 'profilePic', 'holidayPic', 'verified'])
+        Wishlist.find({ userID: user._id }, (err, wishlist) => {
+          if (err) {
+            return res.status(400).send({ error: { details: err.toString() } })
+          }
+          return res.json({ user, wishlist })
+        })
       } else {
         return res.status(400).send({ error: { details: 'carta.incorrectPassword' } })
       }
@@ -116,7 +122,7 @@ exports.verify = (req, res) => {
     return res.status(400).send({ error: { details: 'Failed to verify' } })
   }
 
-  User.findOneAndUpdate({ email: email }, { $set: { verified: true } }, { new: true }, (err, element) => {
+  User.findOneAndUpdate({ email }, { $set: { verified: true } }, { new: true }, (err, element) => {
     if (element && element.fullname) {
       let response = _.pick(element, ['_id', 'fullname', 'username', 'email', 'role', 'profilePic', 'holidayPic'])
       response.verified = true

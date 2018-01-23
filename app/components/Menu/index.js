@@ -1,14 +1,9 @@
 import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
 import cx from 'classnames'
 import { Link, withRouter, browserHistory } from 'react-router'
 import { injectIntl, intlShape } from 'react-intl'
 import { compose } from 'redux'
-import { createStructuredSelector } from 'reselect'
-import { signOut, toggleMenu } from 'containers/App/actions'
-import { selectAuthenticated, selectMenuState, selectUsername } from 'containers/App/selectors'
 import { LANGUAGES } from 'containers/LanguageProvider/constants'
-import { changeLocale } from 'containers/LanguageProvider/actions'
 import messages from 'containers/HomePage/messages'
 import Img from 'components/Img'
 import { S3_ICON_URL } from 'utils/globalConstants'
@@ -21,7 +16,7 @@ class Menu extends Component {
     toggleMenu: PropTypes.func,
     params: PropTypes.object,
     router: PropTypes.object,
-    currentPage: PropTypes.string,
+    location: PropTypes.object,
     username: PropTypes.string,
     authenticated: PropTypes.bool,
     menuOpened: PropTypes.bool,
@@ -61,8 +56,16 @@ class Menu extends Component {
     toggleMenu()
   }
 
+  isPage = loc => {
+    const { location: { pathname } } = this.props
+    if (loc === '/') {
+      return pathname === '/'
+    }
+    return pathname.indexOf(loc) !== -1
+  }
+
   render() {
-    const { authenticated, currentPage, username, intl: { formatMessage, locale }, params: { brochure }, menuOpened, toggleMenu } = this.props
+    const { authenticated, username, intl: { formatMessage, locale }, params: { brochure }, menuOpened, toggleMenu } = this.props
 
     return (
       <div className={cx({ menu: true, menu__opened: menuOpened })} onClick={this.handleToggleMenu}>
@@ -86,15 +89,22 @@ class Menu extends Component {
                 </a>
               </li>
             )}
-            {currentPage !== 'home' && (
+            {!this.isPage('/') && (
               <li>
                 <Link to="/" onClick={toggleMenu}>
                   {formatMessage(messages.home)}
                 </Link>
               </li>
             )}
+            {!this.isPage('/quest') && (
+              <li>
+                <Link to="/quest" onClick={toggleMenu}>
+                  {formatMessage(messages.quest)}
+                </Link>
+              </li>
+            )}
             {authenticated &&
-              currentPage !== 'profile' && (
+              !this.isPage('/profile') && (
                 <li>
                   <Link to={`/user/${username}/profile`} onClick={toggleMenu}>
                     {formatMessage(messages.profile)}
@@ -102,7 +112,7 @@ class Menu extends Component {
                 </li>
               )}
             {authenticated &&
-              currentPage !== 'wishlist' && (
+              !this.isPage('/wishlist') && (
                 <li>
                   <Link to={`/user/${username}/wishlist`} onClick={toggleMenu}>
                     {formatMessage(messages.wishlist)}
@@ -110,31 +120,25 @@ class Menu extends Component {
                 </li>
               )}
             {authenticated &&
-              currentPage !== 'friends' && (
+              !this.isPage('/friends') && (
                 <li>
                   <Link to={`/user/${username}/friends`} onClick={toggleMenu}>
                     {formatMessage(messages.friends)}
                   </Link>
                 </li>
               )}
-            {currentPage !== 'quest' && (
-              <li>
-                <Link to="/quest" onClick={toggleMenu}>
-                  {formatMessage(messages.quest)}
-                </Link>
-              </li>
-            )}
-            {currentPage !== 'places' && (
-              <li>
-                <Link to="/places" onClick={toggleMenu}>
-                  {formatMessage(messages.places)}
-                </Link>
-              </li>
-            )}
-            {currentPage !== 'themes' && (
+
+            {!this.isPage('/themes') && (
               <li>
                 <Link to="/themes" onClick={toggleMenu}>
                   {formatMessage(messages.themes)}
+                </Link>
+              </li>
+            )}
+            {!this.isPage('/places') && (
+              <li>
+                <Link to="/places" onClick={toggleMenu}>
+                  {formatMessage(messages.places)}
                 </Link>
               </li>
             )}
@@ -142,13 +146,11 @@ class Menu extends Component {
               <a href={`http://carta.guide/${locale === 'en' ? '' : locale}`}>{formatMessage(messages.about)}</a>
             </li>
             {authenticated && (
-              <div>
-                <li>
-                  <a href="/" onClick={this.handleSignOut}>
-                    {formatMessage(messages.signOut)}
-                  </a>
-                </li>
-              </div>
+              <li>
+                <a href="/" onClick={this.handleSignOut}>
+                  {formatMessage(messages.signOut)}
+                </a>
+              </li>
             )}
             <hr className="My-12" />
             {LANGUAGES.map(lang => {
@@ -177,16 +179,4 @@ class Menu extends Component {
   }
 }
 
-const selectors = createStructuredSelector({
-  username: selectUsername(),
-  authenticated: selectAuthenticated(),
-  menuOpened: selectMenuState(),
-})
-
-const actions = {
-  signOut,
-  changeLocale,
-  toggleMenu,
-}
-
-export default compose(injectIntl, withRouter, connect(selectors, actions))(Menu)
+export default compose(injectIntl, withRouter)(Menu)

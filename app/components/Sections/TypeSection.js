@@ -1,14 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import cx from 'classnames'
-import { compose } from 'redux'
-import { connect } from 'react-redux'
 import { injectIntl, intlShape } from 'react-intl'
-import { createStructuredSelector } from 'reselect'
 import { findIndex } from 'lodash'
-import { typeClick, typeAnythingClick, typeSearchExpChange } from 'containers/QuestPage/actions'
 import messages from 'containers/QuestPage/messages'
-import { selectInfo, selectTypes, selectCurrentTypes, selectTypeSearchExpanded } from 'containers/QuestPage/selectors'
 import { Button } from 'components/Buttons'
 import { S3_ICON_URL } from 'utils/globalConstants'
 import Img from 'components/Img'
@@ -177,17 +172,4 @@ class TypeSection extends Component {
   }
 }
 
-const selectors = createStructuredSelector({
-  info: selectInfo(),
-  types: selectTypes(),
-  expanded: selectTypeSearchExpanded(),
-  currentTypes: selectCurrentTypes(),
-})
-
-const actions = {
-  typeClick,
-  typeAnythingClick,
-  typeSearchExpChange,
-}
-
-export default compose(connect(selectors, actions), injectIntl)(TypeSection)
+export default injectIntl(TypeSection)

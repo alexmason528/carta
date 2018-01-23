@@ -9,11 +9,10 @@ import Brochure from 'containers/Brochure'
 import { QuestButton } from 'components/Buttons'
 import MapLoader from 'components/MapLoader'
 import Map from 'components/Map'
-import Menu from 'components/Menu'
 import SidePanel from 'components/SidePanel'
 import ScoreBoard from 'components/ScoreBoard'
 import { urlParser } from 'utils/urlHelper'
-import { getQuestInfoRequest, setQuest } from './actions'
+import { getQuestInfoRequest, setQuest, mapChange, questAdd, questSelect, questRemove } from './actions'
 import { SET_QUEST } from './constants'
 import {
   selectRecommendations,
@@ -23,13 +22,19 @@ import {
   selectCurrentQuest,
   selectInfo,
   selectBrochureLink,
+  selectQuestCnt,
+  selectCurQuestInd,
 } from './selectors'
 import './style.scss'
 
 class QuestPage extends Component {
   static propTypes = {
     getQuestInfoRequest: PropTypes.func,
-    setQuest: React.PropTypes.func,
+    setQuest: PropTypes.func,
+    mapChange: PropTypes.func,
+    questAdd: PropTypes.func,
+    questSelect: PropTypes.func,
+    questRemove: PropTypes.func,
     viewport: PropTypes.object,
     descriptives: PropTypes.object,
     types: PropTypes.object,
@@ -39,6 +44,8 @@ class QuestPage extends Component {
     params: PropTypes.object,
     recommendations: PropTypes.array,
     brochureLink: PropTypes.string,
+    curQuestInd: PropTypes.number,
+    questCnt: PropTypes.number,
   }
 
   constructor(props) {
@@ -79,8 +86,8 @@ class QuestPage extends Component {
 
   render() {
     const { panelState } = this.state
-    const { recommendations, brochureLink, info: { status } } = this.props
-    const isFetching = status === SET_QUEST
+    const { recommendations, brochureLink, info, viewport, mapChange, curQuestInd, questCnt, questAdd, questSelect, questRemove } = this.props
+    const isFetching = info.status === SET_QUEST
 
     return (
       <Container fluid className="questPage">
@@ -94,7 +101,6 @@ class QuestPage extends Component {
               })}
             />
           )}
-        <Menu currentPage="quest" />
         <QuestButton
           panelState={panelState}
           onClick={() => {
@@ -112,8 +118,20 @@ class QuestPage extends Component {
           onCloseClick={() => {
             this.handleQuestBtnClick('closed')
           }}
+          questAdd={questAdd}
+          questSelect={questSelect}
+          questRemove={questRemove}
+          curQuestInd={curQuestInd}
+          questCnt={questCnt}
         />
-        <Map panelState={panelState} onClick={this.handleMapClick} />
+        <Map
+          panelState={panelState}
+          recommendations={recommendations}
+          info={info}
+          viewport={viewport}
+          mapChange={mapChange}
+          onClick={this.handleMapClick}
+        />
         {recommendations.length > 0 && <ScoreBoard recommendations={recommendations} />}
         {brochureLink && <Brochure brochureLink={brochureLink} />}
       </Container>
@@ -129,11 +147,17 @@ const selectors = createStructuredSelector({
   quest: selectCurrentQuest(),
   brochureLink: selectBrochureLink(),
   info: selectInfo(),
+  questCnt: selectQuestCnt(),
+  curQuestInd: selectCurQuestInd(),
 })
 
 const actions = {
   setQuest,
   getQuestInfoRequest,
+  mapChange,
+  questAdd,
+  questSelect,
+  questRemove,
 }
 
 export default connect(selectors, actions)(QuestPage)

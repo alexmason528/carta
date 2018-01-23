@@ -1,6 +1,12 @@
-import React, { PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
 import Helmet from 'react-helmet'
 import styled from 'styled-components'
+import { createStructuredSelector } from 'reselect'
+import { signOut, toggleMenu } from 'containers/App/actions'
+import { selectAuthenticated, selectMenuState, selectUsername } from 'containers/App/selectors'
+import { changeLocale } from 'containers/LanguageProvider/actions'
+import Menu from 'components/Menu'
 
 const AppWrapper = styled.div`
   margin: 0 auto
@@ -9,17 +15,39 @@ const AppWrapper = styled.div`
   flex-direction: column
 `
 
-export function App(props) {
-  return (
-    <AppWrapper>
-      <Helmet titleTemplate="%s - Carta" defaultTitle="Carta" meta={[{ name: 'description', content: 'Carta' }]} />
-      {React.Children.toArray(props.children)}
-    </AppWrapper>
-  )
+class App extends Component {
+  static propTypes = {
+    changeLocale: PropTypes.func,
+    signOut: PropTypes.func,
+    toggleMenu: PropTypes.func,
+    authenticated: PropTypes.bool,
+    username: PropTypes.string,
+    menuOpened: PropTypes.bool,
+    children: PropTypes.node,
+  }
+
+  render() {
+    const menuProps = { ...this.props }
+    return (
+      <AppWrapper>
+        <Helmet titleTemplate="%s - Carta" defaultTitle="Carta" meta={[{ name: 'description', content: 'Carta' }]} />
+        <Menu {...menuProps} />
+        {React.Children.toArray(this.props.children)}
+      </AppWrapper>
+    )
+  }
 }
 
-App.propTypes = {
-  children: PropTypes.node,
+const selectors = createStructuredSelector({
+  authenticated: selectAuthenticated(),
+  username: selectUsername(),
+  menuOpened: selectMenuState(),
+})
+
+const actions = {
+  changeLocale,
+  signOut,
+  toggleMenu,
 }
 
-export default App
+export default connect(selectors, actions)(App)

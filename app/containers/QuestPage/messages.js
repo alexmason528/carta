@@ -29,4 +29,12 @@ export default defineMessages({
     id: 'carta.anything',
     defaultMessage: 'Anything',
   },
+  createWishlist: {
+    id: 'carta.createWishlist',
+    default: 'Sign in to create a wishlist',
+  },
+  addToWishlist: {
+    id: 'carta.addedToWishlist',
+    defaultMessage: 'Added to wishlist',
+  },
 })

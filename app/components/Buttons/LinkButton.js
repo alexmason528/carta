@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
-import cx from 'classnames'
 import { injectIntl, intlShape } from 'react-intl'
+import cx from 'classnames'
 import messages from 'containers/HomePage/messages'
 import Img from 'components/Img'
 import { S3_ICON_URL } from 'utils/globalConstants'
