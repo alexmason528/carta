@@ -13,6 +13,7 @@ const brochureRoutes = require('../routes/brochure.routes')
 const placeRoutes = require('../routes/place.routes')
 const themeRoutes = require('../routes/theme.routes')
 const userRoutes = require('../routes/user.routes')
+const wishlistRoutes = require('../routes/wishlist.routes')
 
 // Add Routes
 const addRoutes = app => {
@@ -25,6 +26,7 @@ const addRoutes = app => {
   app.use('/api/v1/place', placeRoutes)
   app.use('/api/v1/theme', themeRoutes)
   app.use('/api/v1/user', userRoutes)
+  app.use('/api/v1/wishlist', wishlistRoutes)
 }
 
 // Dev middleware

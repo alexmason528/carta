@@ -25,6 +25,7 @@ import {
   GET_DESCRIPTIVES_REQUEST,
   GET_DESCRIPTIVES_SUCCESS,
   GET_DESCRIPTIVES_FAIL,
+  CLEAR_BROCHURE,
 } from './constants'
 
 export function mapChange(payload) {
@@ -203,5 +204,11 @@ export function getDescriptivesFail(payload) {
   return {
     type: GET_DESCRIPTIVES_FAIL,
     payload,
+  }
+}
+
+export function clearBrochure() {
+  return {
+    type: CLEAR_BROCHURE,
   }
 }

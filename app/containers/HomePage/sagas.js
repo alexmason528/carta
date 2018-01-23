@@ -1,14 +1,14 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects'
-import { SIGNIN_REQUEST, REGISTER_REQUEST, DELETE_USER_REQUEST, VERIFY_REQUEST, UPDATE_USER_REQUEST } from 'containers/App/constants'
+import { SIGNIN_USER_REQUEST, REGISTER_USER_REQUEST, DELETE_USER_REQUEST, VERIFY_USER_REQUEST, UPDATE_USER_REQUEST } from 'containers/App/constants'
 import {
-  signInSuccess,
-  signInFail,
-  registerSuccess,
-  registerFail,
+  signInUserSuccess,
+  signInUserFail,
+  registerUserSuccess,
+  registerUserFail,
   deleteUserSuccess,
   deleteUserFail,
-  verifySuccess,
-  verifyFail,
+  verifyUserSuccess,
+  verifyUserFail,
   updateUserSuccess,
   updateUserFail,
 } from 'containers/App/actions'
@@ -32,11 +32,11 @@ import {
   deleteUserPosts,
 } from './actions'
 
-export function* signInRequestWatcher() {
-  yield takeLatest(SIGNIN_REQUEST, signInRequest)
+export function* signInUserRequestWatcher() {
+  yield takeLatest(SIGNIN_USER_REQUEST, signInUserRequestHandler)
 }
 
-export function* signInRequest({ payload }) {
+export function* signInUserRequestHandler({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/auth/signIn`
 
   const params = {
@@ -51,17 +51,17 @@ export function* signInRequest({ payload }) {
     const res = yield call(request, requestURL, params)
     yield call(setItem, 'auth', JSON.stringify(res.user))
     yield call(setItem, 'wishlist', JSON.stringify(res.wishlist))
-    yield put(signInSuccess(res))
+    yield put(signInUserSuccess(res))
   } catch (err) {
-    yield put(signInFail(err.details))
+    yield put(signInUserFail(err.details))
   }
 }
 
-export function* registerRequestWatcher() {
-  yield takeLatest(REGISTER_REQUEST, registerRequest)
+export function* registerUserRequestWatcher() {
+  yield takeLatest(REGISTER_USER_REQUEST, registerUserRequestHandler)
 }
 
-export function* registerRequest({ payload }) {
+export function* registerUserRequestHandler({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/auth/register`
 
   const params = {
@@ -75,17 +75,17 @@ export function* registerRequest({ payload }) {
   try {
     const res = yield call(request, requestURL, params)
     yield call(setItem, 'auth', JSON.stringify(res))
-    yield put(registerSuccess(res))
+    yield put(registerUserSuccess(res))
   } catch (err) {
-    yield put(registerFail(err.details))
+    yield put(registerUserFail(err.details))
   }
 }
 
 export function* deleteUserWatcher() {
-  yield takeLatest(DELETE_USER_REQUEST, deleteUserRequest)
+  yield takeLatest(DELETE_USER_REQUEST, deleteUserRequestHandler)
 }
 
-export function* deleteUserRequest({ payload }) {
+export function* deleteUserRequestHandler({ payload }) {
   const { id, password } = payload
   const requestURL = `${API_BASE_URL}api/v1/auth/${id}`
 
@@ -107,11 +107,11 @@ export function* deleteUserRequest({ payload }) {
   }
 }
 
-export function* verifyRequestWatcher() {
-  yield takeLatest(VERIFY_REQUEST, verifyRequest)
+export function* verifyUserRequestWatcher() {
+  yield takeLatest(VERIFY_USER_REQUEST, verifyUserRequestHandler)
 }
 
-export function* verifyRequest({ payload }) {
+export function* verifyUserRequestHandler({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/auth/verify`
 
   const params = {
@@ -125,9 +125,9 @@ export function* verifyRequest({ payload }) {
   try {
     const res = yield call(request, requestURL, params)
     yield call(setItem, 'auth', JSON.stringify(res))
-    yield put(verifySuccess(res))
+    yield put(verifyUserSuccess(res))
   } catch (err) {
-    yield put(verifyFail(err.details))
+    yield put(verifyUserFail(err.details))
   }
 }
 
@@ -281,10 +281,10 @@ export function* updateUserRequest({ payload }) {
 }
 
 export default [
-  signInRequestWatcher,
-  registerRequestWatcher,
+  signInUserRequestWatcher,
+  registerUserRequestWatcher,
   deleteUserWatcher,
-  verifyRequestWatcher,
+  verifyUserRequestWatcher,
   listPostWatcher,
   createPostWatcher,
   updatePostWatcher,

@@ -33,9 +33,7 @@ exports.getFriends = (req, res) => {
 
       User.find({ _id: { $in: followedList } }, (uerr, results) => {
         if (uerr) {
-          return res.status(400).send({
-            error: { details: uerr.toString() },
-          })
+          return res.status(400).send({ error: { details: uerr.toString() } })
         }
         return res.json({ fullname: user.fullname, holidayPic: user.holidayPic, friends: results })
       })
@@ -51,9 +49,7 @@ exports.getWishlist = (req, res) => {
   const { userID } = req.params
   Wishlist.find({ userID }, (err, wishlist) => {
     if (err) {
-      return res.status(400).send({
-        error: { details: err.toString() },
-      })
+      return res.status(400).send({ error: { details: err.toString() } })
     }
     return res.json(wishlist)
   })

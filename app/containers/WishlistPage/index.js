@@ -3,37 +3,71 @@ import Helmet from 'react-helmet'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { Container, Row } from 'reactstrap'
-import { ThemeTile } from 'components/Tiles'
-import { selectThemes } from './selectors'
-import { getThemesRequest } from './actions'
+import { selectUser } from 'containers/App/selectors'
+import { WishlistTile } from 'components/Tiles'
+import { selectWishlist } from './selectors'
+import { getWishlistRequest, deleteWishlistRequest } from './actions'
 import './style.scss'
 
-class ThemePage extends Component {
+class WishlistPage extends Component {
   static propTypes = {
-    getThemesRequest: PropTypes.func,
-    themes: PropTypes.array,
+    getWishlistRequest: PropTypes.func,
+    deleteWishlistRequest: PropTypes.func,
+    params: PropTypes.object,
+    user: PropTypes.object,
+    wishlist: PropTypes.array,
   }
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      deletingWishlist: null,
+    }
+  }
+
   componentWillMount() {
-    const { getThemesRequest } = this.props
-    getThemesRequest()
+    const { params: { username } } = this.props
+    this.props.getWishlistRequest(username)
   }
+
+  handleDelete = id => {
+    const { deleteWishlistRequest } = this.props
+    this.setState({ deletingWishlist: id }, () => {
+      deleteWishlistRequest(id)
+    })
+  }
+
   render() {
-    const { themes } = this.props
+    const { deletingWishlist } = this.state
+    const { wishlist, user, params } = this.props
+    let canDelete = true
+
+    if (!user || user.username !== params.username) {
+      canDelete = false
+    }
     return (
-      <Container fluid className="themePage P-0 M-0">
-        <Helmet meta={[{ name: 'Theme', content: 'Carta' }]} />
-        <Row className="themePage__row">{themes && themes.map((theme, index) => <ThemeTile key={index} {...theme} />)}</Row>
+      <Container fluid className="wishlistPage P-0 M-0">
+        <Helmet meta={[{ name: 'Wishlist', content: 'Carta' }]} />
+        <Row className="wishlistPage__row">
+          {wishlist &&
+            wishlist.map((entry, index) => (
+              <WishlistTile key={index} {...entry} canDelete={canDelete} deleting={entry.id === deletingWishlist} onDelete={this.handleDelete} />
+            ))}
+        </Row>
       </Container>
     )
   }
 }
 
 const selectors = createStructuredSelector({
-  themes: selectThemes(),
+  user: selectUser(),
+  wishlist: selectWishlist(),
 })
 
 const actions = {
-  getThemesRequest,
+  getWishlistRequest,
+  deleteWishlistRequest,
 }
 
-export default connect(selectors, actions)(ThemePage)
+export default connect(selectors, actions)(WishlistPage)

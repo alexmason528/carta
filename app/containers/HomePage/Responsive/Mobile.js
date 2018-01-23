@@ -5,7 +5,7 @@ import { compose } from 'redux'
 import { createStructuredSelector } from 'reselect'
 import { injectIntl, intlShape } from 'react-intl'
 import { browserHistory } from 'react-router'
-import { signOut, changeAuthMethod, deleteUserRequest, updateUserRequest, signInRequest, registerRequest } from 'containers/App/actions'
+import { signOutUser, changeAuthMethod, deleteUserRequest, updateUserRequest, signInUserRequest, registerUserRequest } from 'containers/App/actions'
 import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
 import { questAdd } from 'containers/QuestPage/actions'
 import { selectViewport } from 'containers/QuestPage/selectors'
@@ -28,9 +28,9 @@ class Mobile extends Component {
     toggleCreatePostForm: PropTypes.func,
     deleteUserRequest: PropTypes.func,
     updateUserRequest: PropTypes.func,
-    registerRequest: PropTypes.func,
-    signInRequest: PropTypes.func,
-    signOut: PropTypes.func,
+    registerUserRequest: PropTypes.func,
+    signInUserRequest: PropTypes.func,
+    signOutUser: PropTypes.func,
     questAdd: PropTypes.func,
     changeAuthMethod: PropTypes.func,
     posts: PropTypes.array,
@@ -64,9 +64,9 @@ class Mobile extends Component {
       toggleCreatePostForm,
       deleteUserRequest,
       updateUserRequest,
-      signInRequest,
-      signOut,
-      registerRequest,
+      signInUserRequest,
+      signOutUser,
+      registerUserRequest,
       changeAuthMethod,
       questAdd,
     } = this.props
@@ -92,7 +92,7 @@ class Mobile extends Component {
               show={showAccountMenu}
               user={user}
               info={info}
-              signOut={signOut}
+              signOutUser={signOutUser}
               deleteUserRequest={deleteUserRequest}
               onClick={profileClick}
             />
@@ -101,8 +101,8 @@ class Mobile extends Component {
               show={showAuthForm}
               info={info}
               profilePic={profilePic}
-              signInRequest={signInRequest}
-              registerRequest={registerRequest}
+              signInUserRequest={signInUserRequest}
+              registerUserRequest={registerUserRequest}
               changeAuthMethod={changeAuthMethod}
               onProfilePicChange={profilePicClick}
             />
@@ -161,9 +161,9 @@ const selectors = createStructuredSelector({
 
 const actions = {
   questAdd,
-  signInRequest,
-  signOut,
-  registerRequest,
+  signInUserRequest,
+  signOutUser,
+  registerUserRequest,
   deleteUserRequest,
   updateUserRequest,
   changeAuthMethod,

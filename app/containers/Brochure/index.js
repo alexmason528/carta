@@ -7,9 +7,10 @@ import { withRouter, browserHistory } from 'react-router'
 import { injectIntl, intlShape } from 'react-intl'
 import cx from 'classnames'
 import { find } from 'lodash'
-import { createWishlistRequest, deleteWishlistRequest } from 'containers/App/actions'
-import { selectAuthenticated, selectWishlist, selectUser } from 'containers/App/selectors'
-import { getBrochureInfoRequest, setQuest } from 'containers/QuestPage/actions'
+import { getUserWishlistRequest, createUserWishlistRequest, deleteUserWishlistRequest } from 'containers/App/actions'
+import { CREATE_USER_WISHLIST_SUCCESS, DELETE_USER_WISHLIST_SUCCESS } from 'containers/App/constants'
+import { selectAuthenticated, selectWishlist, selectUser, selectInfo } from 'containers/App/selectors'
+import { getBrochureInfoRequest, setQuest, clearBrochure } from 'containers/QuestPage/actions'
 import { selectBrochureInfo } from 'containers/QuestPage/selectors'
 import Img from 'components/Img'
 import ResponsiveLayout from 'components/ResponsiveLayout'
@@ -22,12 +23,15 @@ import './style.scss'
 class Brochure extends Component {
   static propTypes = {
     getBrochureInfoRequest: PropTypes.func,
-    createWishlistRequest: PropTypes.func,
-    deleteWishlistRequest: PropTypes.func,
+    getUserWishlistRequest: PropTypes.func,
+    createUserWishlistRequest: PropTypes.func,
+    deleteUserWishlistRequest: PropTypes.func,
     setQuest: PropTypes.func,
+    clearBrochure: PropTypes.func,
     params: PropTypes.object,
     router: PropTypes.object,
     location: PropTypes.object,
+    info: PropTypes.object,
     user: PropTypes.object,
     brochureInfo: PropTypes.object,
     brochureLink: PropTypes.string,
@@ -45,51 +49,59 @@ class Brochure extends Component {
   }
 
   componentWillMount() {
-    const { authenticated, user, getWishlistRequest } = this.props
-  }
-
-  componentDidMount() {
-    const { getBrochureInfoRequest, brochureLink } = this.props
+    const { authenticated, brochureLink, getUserWishlistRequest, getBrochureInfoRequest } = this.props
+    if (authenticated) {
+      getUserWishlistRequest()
+    }
     getBrochureInfoRequest(brochureLink)
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { info: { status } } = nextProps
+    if (status === CREATE_USER_WISHLIST_SUCCESS) {
+      this.showMessage(messages.addedToWishlist)
+    } else if (status === DELETE_USER_WISHLIST_SUCCESS) {
+      this.showMessage(messages.removedFromWishlist)
+    }
+  }
+
+  showMessage = message => {
+    const { intl: { formatMessage } } = this.props
+    this.setState({ message: formatMessage(message), show: true }, () => {
+      setTimeout(() => {
+        this.setState({ show: false })
+      }, 3000)
+    })
+  }
+
   handleBrochureClose = () => {
-    const { params, setQuest } = this.props
+    const { params, setQuest, clearBrochure } = this.props
     setQuest({
       quest: urlParser({ ...params, brochure: undefined }),
       urlEntered: true,
     })
+    clearBrochure()
   }
 
   handleBrochureAddtoStarlist = alreadyExist => {
-    const {
-      authenticated,
-      user,
-      brochureInfo,
-      intl: { formatMessage },
-      location: { pathname },
-      createWishlistRequest,
-      deleteWishlistRequest,
-    } = this.props
+    const { authenticated, user, brochureInfo, location: { pathname }, createUserWishlistRequest, deleteUserWishlistRequest } = this.props
 
     if (!authenticated) {
-      this.setState({ message: formatMessage(messages.createWishlist), show: true }, () => {
-        setTimeout(() => {
-          this.setState({ show: false })
-        }, 3000)
-      })
+      this.showMessage(messages.createWishlist)
     } else if (alreadyExist) {
-      deleteWishlistRequest({ userID: user._id, brochureID: brochureInfo._id })
+      deleteUserWishlistRequest({ userID: user._id, brochureID: brochureInfo._id })
     } else {
-      createWishlistRequest({ userID: user._id, brochureID: brochureInfo._id, quest: pathname })
+      createUserWishlistRequest({ userID: user._id, brochureID: brochureInfo._id, quest: pathname })
     }
   }
 
   handleClickMessage = () => {
-    const { authenticated } = this.props
+    const { authenticated, user } = this.props
 
     if (!authenticated) {
       browserHistory.push('/')
+    } else {
+      browserHistory.push(`/user/${user.username}/wishlist`)
     }
   }
 
@@ -170,6 +182,7 @@ class Brochure extends Component {
 }
 
 const selectors = createStructuredSelector({
+  info: selectInfo(),
   user: selectUser(),
   wishlist: selectWishlist(),
   authenticated: selectAuthenticated(),
@@ -177,10 +190,12 @@ const selectors = createStructuredSelector({
 })
 
 const actions = {
-  createWishlistRequest,
-  deleteWishlistRequest,
+  getUserWishlistRequest,
+  createUserWishlistRequest,
+  deleteUserWishlistRequest,
   getBrochureInfoRequest,
   setQuest,
+  clearBrochure,
 }
 
 export default compose(withRouter, injectIntl, connect(selectors, actions))(Brochure)

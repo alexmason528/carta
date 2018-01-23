@@ -1,14 +1,14 @@
 import React, { Component, PropTypes } from 'react'
 import { injectIntl, intlShape } from 'react-intl'
 import { browserHistory } from 'react-router'
-import { VERIFY_SUCCESS, VERIFY_FAIL } from 'containers/App/constants'
+import { VERIFY_USER_SUCCESS, VERIFY_USER_FAIL } from 'containers/App/constants'
 import { getFirstname } from 'utils/stringHelper'
 import messages from 'containers/HomePage/messages'
 import './style.scss'
 
 class Verify extends Component {
   static propTypes = {
-    signOut: PropTypes.func,
+    signOutUser: PropTypes.func,
     user: PropTypes.object,
     status: PropTypes.string,
     intl: intlShape.isRequired,
@@ -21,7 +21,7 @@ class Verify extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { status } = this.props
-    if (nextProps.status === VERIFY_SUCCESS && nextProps.status !== status) {
+    if (nextProps.status === VERIFY_USER_SUCCESS && nextProps.status !== status) {
       this.setState(
         {
           timer: 5,
@@ -42,27 +42,27 @@ class Verify extends Component {
   }
 
   render() {
-    const { user, status, intl: { formatMessage }, signOut } = this.props
+    const { user, status, intl: { formatMessage }, signOutUser } = this.props
     const { timer } = this.state
 
     let verifyMessage
 
-    if (user && !user.verified && status !== VERIFY_FAIL) {
+    if (user && !user.verified && status !== VERIFY_USER_FAIL) {
       verifyMessage = formatMessage(messages.verificationEmail, {
         name: getFirstname(user.fullname),
       })
-    } else if (user && timer !== 0 && status === VERIFY_SUCCESS) {
+    } else if (user && timer !== 0 && status === VERIFY_USER_SUCCESS) {
       verifyMessage = formatMessage(messages.verificationSuccess, { timer })
-    } else if (status === VERIFY_FAIL) {
+    } else if (status === VERIFY_USER_FAIL) {
       verifyMessage = formatMessage(messages.verificationFail)
     }
 
     return verifyMessage ? (
       <div className="verifyCtrl">
         <div className="verifyCtrl__message Wb-Bw P-30">{verifyMessage}</div>
-        {((user && !user.verified) || status === VERIFY_FAIL) && (
+        {((user && !user.verified) || status === VERIFY_USER_FAIL) && (
           <div className="verifyCtrl__signOutForm Px-25 Py-15">
-            {formatMessage(messages.verificationRequired)} <button onClick={signOut}>{formatMessage(messages.signOut)}</button>
+            {formatMessage(messages.verificationRequired)} <button onClick={signOutUser}>{formatMessage(messages.signOut)}</button>
           </div>
         )}
       </div>

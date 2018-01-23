@@ -1,17 +1,16 @@
-import { isEqual } from 'lodash'
 import { getItem, setItem, removeItem } from 'utils/localStorage'
 
 import {
-  SIGNIN_REQUEST,
-  SIGNIN_SUCCESS,
-  SIGNIN_FAIL,
-  SIGNOUT,
-  REGISTER_REQUEST,
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
-  VERIFY_REQUEST,
-  VERIFY_SUCCESS,
-  VERIFY_FAIL,
+  SIGNIN_USER_REQUEST,
+  SIGNIN_USER_SUCCESS,
+  SIGNIN_USER_FAIL,
+  SIGNOUT_USER,
+  REGISTER_USER_REQUEST,
+  REGISTER_USER_SUCCESS,
+  REGISTER_USER_FAIL,
+  VERIFY_USER_REQUEST,
+  VERIFY_USER_SUCCESS,
+  VERIFY_USER_FAIL,
   DELETE_USER_REQUEST,
   DELETE_USER_SUCCESS,
   DELETE_USER_FAIL,
@@ -20,15 +19,15 @@ import {
   UPDATE_USER_FAIL,
   CHANGE_AUTH_METHOD,
   TOGGLE_MENU,
-  GET_WISHLIST_REQUEST,
-  GET_WISHLIST_SUCCESS,
-  GET_WISHLIST_FAIL,
-  CREATE_WISHLIST_REQUEST,
-  CREATE_WISHLIST_SUCCESS,
-  CREATE_WISHLIST_FAIL,
-  DELETE_WISHLIST_REQUEST,
-  DELETE_WISHLIST_SUCCESS,
-  DELETE_WISHLIST_FAIL,
+  GET_USER_WISHLIST_REQUEST,
+  GET_USER_WISHLIST_SUCCESS,
+  GET_USER_WISHLIST_FAIL,
+  CREATE_USER_WISHLIST_REQUEST,
+  CREATE_USER_WISHLIST_SUCCESS,
+  CREATE_USER_WISHLIST_FAIL,
+  DELETE_USER_WISHLIST_REQUEST,
+  DELETE_USER_WISHLIST_SUCCESS,
+  DELETE_USER_WISHLIST_FAIL,
 } from './constants'
 
 const initialState = {
@@ -46,20 +45,20 @@ function appReducer(state = initialState, { type, payload }) {
   let newWishlist
 
   switch (type) {
-    case SIGNIN_REQUEST:
-    case REGISTER_REQUEST:
-    case VERIFY_REQUEST:
+    case SIGNIN_USER_REQUEST:
+    case REGISTER_USER_REQUEST:
+    case VERIFY_USER_REQUEST:
     case DELETE_USER_REQUEST:
     case UPDATE_USER_REQUEST:
-    case GET_WISHLIST_REQUEST:
-    case CREATE_WISHLIST_REQUEST:
-    case DELETE_WISHLIST_REQUEST:
+    case GET_USER_WISHLIST_REQUEST:
+    case CREATE_USER_WISHLIST_REQUEST:
+    case DELETE_USER_WISHLIST_REQUEST:
       return {
         ...state,
         status: type,
       }
 
-    case SIGNIN_SUCCESS:
+    case SIGNIN_USER_SUCCESS:
       return {
         ...state,
         ...payload,
@@ -68,7 +67,7 @@ function appReducer(state = initialState, { type, payload }) {
         error: null,
       }
 
-    case SIGNIN_FAIL:
+    case SIGNIN_USER_FAIL:
       newState = {
         ...state,
         user: null,
@@ -83,7 +82,7 @@ function appReducer(state = initialState, { type, payload }) {
 
       return newState
 
-    case SIGNOUT:
+    case SIGNOUT_USER:
       removeItem('auth')
       removeItem('wishlist')
       return {
@@ -94,7 +93,7 @@ function appReducer(state = initialState, { type, payload }) {
         error: null,
       }
 
-    case REGISTER_SUCCESS:
+    case REGISTER_USER_SUCCESS:
       return {
         ...state,
         user: payload,
@@ -103,7 +102,7 @@ function appReducer(state = initialState, { type, payload }) {
         error: null,
       }
 
-    case REGISTER_FAIL:
+    case REGISTER_USER_FAIL:
       newState = {
         ...state,
         user: null,
@@ -118,7 +117,7 @@ function appReducer(state = initialState, { type, payload }) {
 
       return newState
 
-    case VERIFY_SUCCESS:
+    case VERIFY_USER_SUCCESS:
       return {
         ...state,
         user: payload,
@@ -127,7 +126,7 @@ function appReducer(state = initialState, { type, payload }) {
         error: null,
       }
 
-    case VERIFY_FAIL:
+    case VERIFY_USER_FAIL:
       return {
         ...state,
         status: type,
@@ -180,34 +179,25 @@ function appReducer(state = initialState, { type, payload }) {
         menuOpened: !state.menuOpened,
       }
 
-    case GET_WISHLIST_SUCCESS:
-      setItem('wishlist', payload)
+    case GET_USER_WISHLIST_SUCCESS:
+      setItem('wishlist', JSON.stringify(payload))
+
       return {
         ...state,
         status: type,
         wishlist: payload,
       }
 
-    case CREATE_WISHLIST_SUCCESS:
-      newWishlist = [...state.wishlist, payload]
-      setItem('wishlist', newWishlist)
-
-      return {
-        ...state,
-        status: type,
-        wishlist: newWishlist,
-      }
-
-    case CREATE_WISHLIST_FAIL:
+    case GET_USER_WISHLIST_FAIL:
       return {
         ...state,
         status: type,
         error: payload,
       }
 
-    case DELETE_WISHLIST_SUCCESS:
-      newWishlist = state.wishlist.filter(entry => !isEqual(entry, payload))
-      setItem('wishlist', newWishlist)
+    case CREATE_USER_WISHLIST_SUCCESS:
+      newWishlist = [...state.wishlist, payload]
+      setItem('wishlist', JSON.stringify(newWishlist))
 
       return {
         ...state,
@@ -215,7 +205,24 @@ function appReducer(state = initialState, { type, payload }) {
         wishlist: newWishlist,
       }
 
-    case DELETE_WISHLIST_FAIL:
+    case CREATE_USER_WISHLIST_FAIL:
+      return {
+        ...state,
+        status: type,
+        error: payload,
+      }
+
+    case DELETE_USER_WISHLIST_SUCCESS:
+      newWishlist = state.wishlist.filter(entry => entry.userID !== payload.userID && entry.brochureID !== payload.brochureID)
+      setItem('wishlist', JSON.stringify(newWishlist))
+
+      return {
+        ...state,
+        status: type,
+        wishlist: newWishlist,
+      }
+
+    case DELETE_USER_WISHLIST_FAIL:
       return {
         ...state,
         status: type,

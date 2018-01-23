@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect'
 import { get } from 'lodash'
 
-const selectTheme = state => get(state, 'theme')
+const selectWishlistState = state => get(state, 'wishlist')
 
-const selectThemes = () => createSelector(selectTheme, substate => get(substate, 'themes'))
+const selectWishlist = () => createSelector(selectWishlistState, substate => get(substate, 'wishlist'))
 
-export { selectThemes }
+export { selectWishlist }

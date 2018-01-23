@@ -11,7 +11,7 @@ import './style.scss'
 
 class Menu extends Component {
   static propTypes = {
-    signOut: PropTypes.func,
+    signOutUser: PropTypes.func,
     changeLocale: PropTypes.func,
     toggleMenu: PropTypes.func,
     params: PropTypes.object,
@@ -32,12 +32,12 @@ class Menu extends Component {
     toggleMenu()
   }
 
-  handleSignOut = evt => {
+  handleSignOutUser = evt => {
     if (!evt.metaKey) {
       evt.preventDefault()
     }
-    const { signOut, toggleMenu } = this.props
-    signOut()
+    const { signOutUser, toggleMenu } = this.props
+    signOutUser()
     toggleMenu()
     browserHistory.push('/')
   }
@@ -147,7 +147,7 @@ class Menu extends Component {
             </li>
             {authenticated && (
               <li>
-                <a href="/" onClick={this.handleSignOut}>
+                <a href="/" onClick={this.handleSignOutUser}>
                   {formatMessage(messages.signOut)}
                 </a>
               </li>

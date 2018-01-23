@@ -12,7 +12,7 @@ import './style.scss'
 class AccountMenu extends Component {
   static propTypes = {
     handleSubmit: PropTypes.func,
-    signOut: PropTypes.func,
+    signOutUser: PropTypes.func,
     deleteUserRequest: PropTypes.func,
     onClick: PropTypes.func,
     user: PropTypes.object,
@@ -62,7 +62,7 @@ class AccountMenu extends Component {
   }
 
   render() {
-    const { handleSubmit, signOut, show, info: { error, status }, intl: { formatMessage } } = this.props
+    const { handleSubmit, signOutUser, show, info: { error, status }, intl: { formatMessage } } = this.props
     const { showContent, showForm } = this.state
 
     return (
@@ -76,7 +76,7 @@ class AccountMenu extends Component {
         onClick={evt => evt.stopPropagation()}
       >
         <div className="accountMenu__items">
-          <button type="button" onClick={signOut}>
+          <button type="button" onClick={signOutUser}>
             {formatMessage(messages.signOut)}
           </button>{' '}
           |{' '}

@@ -4,7 +4,7 @@ import GoogleLogin from 'react-google-login'
 import FacebookLogin from 'react-facebook-login'
 import { reduxForm, Field } from 'redux-form'
 import cx from 'classnames'
-import { SIGNIN_REQUEST, SIGNIN_FAIL, REGISTER_REQUEST, REGISTER_FAIL } from 'containers/App/constants'
+import { SIGNIN_USER_REQUEST, SIGNIN_USER_FAIL, REGISTER_USER_REQUEST, REGISTER_USER_FAIL } from 'containers/App/constants'
 import messages from 'containers/HomePage/messages'
 import Img from 'components/Img'
 import LoadingSpinner from 'components/LoadingSpinner'
@@ -18,8 +18,8 @@ import './style.scss'
 
 class AuthForm extends Component {
   static propTypes = {
-    signInRequest: PropTypes.func,
-    registerRequest: PropTypes.func,
+    signInUserRequest: PropTypes.func,
+    registerUserRequest: PropTypes.func,
     onProfilePicChange: PropTypes.func,
     onHolidayPicChange: PropTypes.func,
     changeAuthMethod: PropTypes.func,
@@ -47,7 +47,7 @@ class AuthForm extends Component {
     const { info: { status } } = this.props
     const { info } = nextProps
 
-    if (status !== info.status && (info.status === SIGNIN_FAIL || info.status === REGISTER_FAIL)) {
+    if (status !== info.status && (info.status === SIGNIN_USER_FAIL || info.status === REGISTER_USER_FAIL)) {
       this.setState({ formChanged: false })
     }
   }
@@ -62,15 +62,15 @@ class AuthForm extends Component {
   }
 
   handleSignIn = values => {
-    const { signInRequest } = this.props
+    const { signInUserRequest } = this.props
     const { email, password } = values
     this.setState({ email, password }, () => {
-      signInRequest(values)
+      signInUserRequest(values)
     })
   }
 
   handleRegister = values => {
-    const { registerRequest } = this.props
+    const { registerUserRequest } = this.props
     const { email, password, confirmPassword, fullname, profilePic, holidayPic } = values
 
     let data = {
@@ -83,7 +83,7 @@ class AuthForm extends Component {
     }
 
     if (!profilePic && !holidayPic) {
-      registerRequest(data)
+      registerUserRequest(data)
     } else {
       this.setState({ imageUpload: { uploading: true, error: false } })
 
@@ -153,7 +153,7 @@ class AuthForm extends Component {
     const { info: { status, error, authMethod }, show, onProfilePicChange, onHolidayPicChange, handleSubmit, intl: { formatMessage } } = this.props
 
     const { formChanged, imageUpload } = this.state
-    const spinnerShow = status === SIGNIN_REQUEST || status === REGISTER_REQUEST || imageUpload.uploading
+    const spinnerShow = status === SIGNIN_USER_REQUEST || status === REGISTER_USER_REQUEST || imageUpload.uploading
 
     return (
       <div className={cx({ authForm: true, 'authForm--hidden': !show })} onClick={evt => evt.stopPropagation()}>
@@ -223,7 +223,7 @@ class AuthForm extends Component {
           </div>
           {!formChanged &&
             error &&
-            (status === SIGNIN_FAIL || status === REGISTER_FAIL) && <div className="error">{formatMessage({ id: error })}</div>}
+            (status === SIGNIN_USER_FAIL || status === REGISTER_USER_FAIL) && <div className="error">{formatMessage({ id: error })}</div>}
         </form>
       </div>
     )

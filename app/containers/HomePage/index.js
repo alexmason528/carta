@@ -6,9 +6,9 @@ import { createStructuredSelector } from 'reselect'
 import { Container } from 'reactstrap'
 import { compose } from 'redux'
 import InfiniteScroll from 'react-infinite-scroller'
-import { UPDATE_USER_SUCCESS, SIGNOUT } from 'containers/App/constants'
+import { UPDATE_USER_SUCCESS, SIGNOUT_USER } from 'containers/App/constants'
 import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
-import { signOut, verifyRequest } from 'containers/App/actions'
+import { signOutUser, verifyUserRequest } from 'containers/App/actions'
 import Verify from 'components/Verify'
 import ResponsiveLayout from 'components/ResponsiveLayout'
 import { S3_PROFILE_URL } from 'utils/globalConstants'
@@ -21,8 +21,8 @@ import './style.scss'
 class HomePage extends Component {
   static propTypes = {
     listPostRequest: PropTypes.func,
-    verifyRequest: PropTypes.func,
-    signOut: PropTypes.func,
+    verifyUserRequest: PropTypes.func,
+    signOutUser: PropTypes.func,
     user: PropTypes.object,
     info: PropTypes.object,
     homeInfo: PropTypes.object,
@@ -49,7 +49,7 @@ class HomePage extends Component {
     const { params: { vcode }, authenticated, user } = this.props
 
     if (vcode && (!user || !user.verified)) {
-      this.props.verifyRequest({ vcode })
+      this.props.verifyUserRequest({ vcode })
     }
 
     this.setState({
@@ -72,7 +72,7 @@ class HomePage extends Component {
     if ((!authenticated && nextProps.authenticated) || status === UPDATE_USER_SUCCESS) {
       const { profilePic } = nextProps.user
       this.setState({ profilePic })
-    } else if (status === SIGNOUT) {
+    } else if (status === SIGNOUT_USER) {
       this.setState({
         profilePic: `${S3_PROFILE_URL}/${Math.floor(Math.random()) * 4}.jpg`,
       })
@@ -121,7 +121,7 @@ class HomePage extends Component {
 
   render() {
     const { showAuthForm, showCreatePostForm, showAccountMenu, profilePic, holidayPic } = this.state
-    const { user, hasMore, signOut, info: { status } } = this.props
+    const { user, hasMore, signOutUser, info: { status } } = this.props
     const viewData = {
       profilePic,
       holidayPic,
@@ -140,7 +140,7 @@ class HomePage extends Component {
         <InfiniteScroll loadMore={this.handleLoadMore} hasMore={hasMore} threshold={1000}>
           <ResponsiveLayout desktop={<Desktop {...viewData} />} tablet={<Tablet {...viewData} />} mobile={<Mobile {...viewData} />} />
         </InfiniteScroll>
-        <Verify user={user} status={status} signOut={signOut} />
+        <Verify user={user} status={status} signOutUser={signOutUser} />
       </Container>
     )
   }
@@ -157,8 +157,8 @@ const selectors = createStructuredSelector({
 
 const actions = {
   listPostRequest,
-  verifyRequest,
-  signOut,
+  verifyUserRequest,
+  signOutUser,
 }
 
 export default compose(injectIntl, connect(selectors, actions))(HomePage)

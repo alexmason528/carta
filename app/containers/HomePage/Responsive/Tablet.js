@@ -7,7 +7,7 @@ import { injectIntl, intlShape } from 'react-intl'
 import { browserHistory } from 'react-router'
 import { pullAt, findIndex } from 'lodash'
 import messages from 'containers/HomePage/messages'
-import { signOut, changeAuthMethod, deleteUserRequest, updateUserRequest, signInRequest, registerRequest } from 'containers/App/actions'
+import { signOutUser, changeAuthMethod, deleteUserRequest, updateUserRequest, signInUserRequest, registerUserRequest } from 'containers/App/actions'
 import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
 import { selectViewport } from 'containers/QuestPage/selectors'
 import { selectEditingPost, selectPosts } from 'containers/HomePage/selectors'
@@ -27,9 +27,9 @@ class Tablet extends Component {
     toggleCreatePostForm: PropTypes.func,
     deleteUserRequest: PropTypes.func,
     updateUserRequest: PropTypes.func,
-    signInRequest: PropTypes.func,
-    signOut: PropTypes.func,
-    registerRequest: PropTypes.func,
+    signInUserRequest: PropTypes.func,
+    signOutUser: PropTypes.func,
+    registerUserRequest: PropTypes.func,
     changeAuthMethod: PropTypes.func,
     posts: PropTypes.array,
     user: PropTypes.object,
@@ -62,9 +62,9 @@ class Tablet extends Component {
       toggleCreatePostForm,
       deleteUserRequest,
       updateUserRequest,
-      signInRequest,
-      signOut,
-      registerRequest,
+      signInUserRequest,
+      signOutUser,
+      registerUserRequest,
       changeAuthMethod,
     } = this.props
 
@@ -98,7 +98,7 @@ class Tablet extends Component {
               show={showAccountMenu}
               user={user}
               info={info}
-              signOut={signOut}
+              signOutUser={signOutUser}
               deleteUserRequest={deleteUserRequest}
               onClick={profileClick}
             />
@@ -107,8 +107,8 @@ class Tablet extends Component {
               show={showAuthForm}
               info={info}
               profilePic={profilePic}
-              signInRequest={signInRequest}
-              registerRequest={registerRequest}
+              signInUserRequest={signInUserRequest}
+              registerUserRequest={registerUserRequest}
               changeAuthMethod={changeAuthMethod}
               onProfilePicChange={profilePicClick}
             />
@@ -171,9 +171,9 @@ const selectors = createStructuredSelector({
 })
 
 const actions = {
-  signInRequest,
-  signOut,
-  registerRequest,
+  signInUserRequest,
+  signOutUser,
+  registerUserRequest,
   deleteUserRequest,
   updateUserRequest,
   changeAuthMethod,

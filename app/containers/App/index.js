@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import Helmet from 'react-helmet'
 import styled from 'styled-components'
 import { createStructuredSelector } from 'reselect'
-import { signOut, toggleMenu } from 'containers/App/actions'
+import { signOutUser, toggleMenu } from 'containers/App/actions'
 import { selectAuthenticated, selectMenuState, selectUsername } from 'containers/App/selectors'
 import { changeLocale } from 'containers/LanguageProvider/actions'
 import Menu from 'components/Menu'
@@ -18,7 +18,7 @@ const AppWrapper = styled.div`
 class App extends Component {
   static propTypes = {
     changeLocale: PropTypes.func,
-    signOut: PropTypes.func,
+    signOutUser: PropTypes.func,
     toggleMenu: PropTypes.func,
     authenticated: PropTypes.bool,
     username: PropTypes.string,
@@ -46,7 +46,7 @@ const selectors = createStructuredSelector({
 
 const actions = {
   changeLocale,
-  signOut,
+  signOutUser,
   toggleMenu,
 }
 

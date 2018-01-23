@@ -1,98 +1,98 @@
 import {
-  SIGNIN_REQUEST,
-  SIGNIN_SUCCESS,
-  SIGNIN_FAIL,
-  SIGNOUT,
-  REGISTER_REQUEST,
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
-  VERIFY_REQUEST,
-  VERIFY_SUCCESS,
-  VERIFY_FAIL,
+  SIGNIN_USER_REQUEST,
+  SIGNIN_USER_SUCCESS,
+  SIGNIN_USER_FAIL,
+  SIGNOUT_USER,
+  REGISTER_USER_REQUEST,
+  REGISTER_USER_SUCCESS,
+  REGISTER_USER_FAIL,
+  VERIFY_USER_REQUEST,
+  VERIFY_USER_SUCCESS,
+  VERIFY_USER_FAIL,
   DELETE_USER_REQUEST,
   DELETE_USER_SUCCESS,
   DELETE_USER_FAIL,
   UPDATE_USER_REQUEST,
   UPDATE_USER_SUCCESS,
   UPDATE_USER_FAIL,
+  GET_USER_WISHLIST_REQUEST,
+  GET_USER_WISHLIST_SUCCESS,
+  GET_USER_WISHLIST_FAIL,
+  CREATE_USER_WISHLIST_REQUEST,
+  CREATE_USER_WISHLIST_SUCCESS,
+  CREATE_USER_WISHLIST_FAIL,
+  DELETE_USER_WISHLIST_REQUEST,
+  DELETE_USER_WISHLIST_SUCCESS,
+  DELETE_USER_WISHLIST_FAIL,
   CHANGE_AUTH_METHOD,
   TOGGLE_MENU,
-  GET_WISHLIST_REQUEST,
-  GET_WISHLIST_SUCCESS,
-  GET_WISHLIST_FAIL,
-  CREATE_WISHLIST_REQUEST,
-  CREATE_WISHLIST_SUCCESS,
-  CREATE_WISHLIST_FAIL,
-  DELETE_WISHLIST_REQUEST,
-  DELETE_WISHLIST_SUCCESS,
-  DELETE_WISHLIST_FAIL,
 } from './constants'
 
-export function signInRequest(payload) {
+export function signInUserRequest(payload) {
   return {
-    type: SIGNIN_REQUEST,
+    type: SIGNIN_USER_REQUEST,
     payload,
   }
 }
 
-export function signInSuccess(payload) {
+export function signInUserSuccess(payload) {
   return {
-    type: SIGNIN_SUCCESS,
+    type: SIGNIN_USER_SUCCESS,
     payload,
   }
 }
 
-export function signInFail(payload) {
+export function signInUserFail(payload) {
   return {
-    type: SIGNIN_FAIL,
+    type: SIGNIN_USER_FAIL,
     payload,
   }
 }
 
-export function signOut() {
+export function signOutUser() {
   return {
-    type: SIGNOUT,
+    type: SIGNOUT_USER,
   }
 }
 
-export function registerRequest(payload) {
+export function registerUserRequest(payload) {
   return {
-    type: REGISTER_REQUEST,
+    type: REGISTER_USER_REQUEST,
     payload,
   }
 }
 
-export function registerSuccess(payload) {
+export function registerUserSuccess(payload) {
   return {
-    type: REGISTER_SUCCESS,
+    type: REGISTER_USER_SUCCESS,
     payload,
   }
 }
 
-export function registerFail(payload) {
+export function registerUserFail(payload) {
   return {
-    type: REGISTER_FAIL,
+    type: REGISTER_USER_FAIL,
     payload,
   }
 }
 
-export function verifyRequest(payload) {
+export function verifyUserRequest(payload) {
   return {
-    type: VERIFY_REQUEST,
+    type: VERIFY_USER_REQUEST,
     payload,
   }
 }
 
-export function verifySuccess(payload) {
+export function verifyUserSuccess(payload) {
   return {
-    type: VERIFY_SUCCESS,
+    type: VERIFY_USER_SUCCESS,
     payload,
   }
 }
 
-export function verifyFail(payload) {
+export function verifyUserFail(payload) {
   return {
-    type: VERIFY_FAIL,
+    type: VERIFY_USER_FAIL,
     payload,
   }
 }
@@ -151,64 +151,64 @@ export function toggleMenu() {
   }
 }
 
-export function getWishlistRequest() {
+export function getUserWishlistRequest() {
   return {
-    type: GET_WISHLIST_REQUEST,
+    type: GET_USER_WISHLIST_REQUEST,
   }
 }
 
-export function getWishlistSuccess(payload) {
+export function getUserWishlistSuccess(payload) {
   return {
-    type: GET_WISHLIST_SUCCESS,
+    type: GET_USER_WISHLIST_SUCCESS,
     payload,
   }
 }
 
-export function getWishlistFail() {
+export function getUserWishlistFail(payload) {
   return {
-    type: GET_WISHLIST_FAIL,
+    type: GET_USER_WISHLIST_FAIL,
     payload,
   }
 }
 
-export function createWishlistRequest(payload) {
+export function createUserWishlistRequest(payload) {
   return {
-    type: CREATE_WISHLIST_REQUEST,
+    type: CREATE_USER_WISHLIST_REQUEST,
     payload,
   }
 }
 
-export function createWishlistSuccess(payload) {
+export function createUserWishlistSuccess(payload) {
   return {
-    type: CREATE_WISHLIST_SUCCESS,
+    type: CREATE_USER_WISHLIST_SUCCESS,
     payload,
   }
 }
 
-export function createWishlistFail(payload) {
+export function createUserWishlistFail(payload) {
   return {
-    type: CREATE_WISHLIST_FAIL,
+    type: CREATE_USER_WISHLIST_FAIL,
     payload,
   }
 }
 
-export function deleteWishlistRequest(payload) {
+export function deleteUserWishlistRequest(payload) {
   return {
-    type: DELETE_WISHLIST_REQUEST,
+    type: DELETE_USER_WISHLIST_REQUEST,
     payload,
   }
 }
 
-export function deleteWishlistSuccess(payload) {
+export function deleteUserWishlistSuccess(payload) {
   return {
-    type: DELETE_WISHLIST_SUCCESS,
+    type: DELETE_USER_WISHLIST_SUCCESS,
     payload,
   }
 }
 
-export function deleteWishlistFail(payload) {
+export function deleteUserWishlistFail(payload) {
   return {
-    type: DELETE_WISHLIST_FAIL,
+    type: DELETE_USER_WISHLIST_FAIL,
     payload,
   }
 }

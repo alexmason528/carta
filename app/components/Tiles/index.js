@@ -6,5 +6,6 @@ import PlaceTile from './PlaceTile/'
 import TextTile from './TextTile/Desktop'
 import TextTileMobile from './TextTile/Mobile'
 import ThemeTile from './ThemeTile/'
+import WishlistTile from './WishlistTile'
 
-export { FriendTile, FixedTile, HolidayTile, ImageTile, PlaceTile, TextTile, TextTileMobile, ThemeTile }
+export { FriendTile, FixedTile, HolidayTile, ImageTile, PlaceTile, TextTile, TextTileMobile, ThemeTile, WishlistTile }

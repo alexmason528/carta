@@ -2,14 +2,14 @@ import { call, put, select, takeLatest } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import { findIndex, map, uniq } from 'lodash'
 import { browserHistory } from 'react-router'
-import { GET_WISHLIST_REQUEST, CREATE_WISHLIST_REQUEST, DELETE_WISHLIST_REQUEST } from 'containers/App/constants'
+import { GET_USER_WISHLIST_REQUEST, CREATE_USER_WISHLIST_REQUEST, DELETE_USER_WISHLIST_REQUEST } from 'containers/App/constants'
 import {
-  getWishlistSuccess,
-  getWishlistFail,
-  createWishlistSuccess,
-  createWishlistFail,
-  deleteWishlistSuccess,
-  deleteWishlistFail,
+  getUserWishlistSuccess,
+  getUserWishlistFail,
+  createUserWishlistSuccess,
+  createUserWishlistFail,
+  deleteUserWishlistSuccess,
+  deleteUserWishlistFail,
 } from 'containers/App/actions'
 import { selectUser } from 'containers/App/selectors'
 import { selectBrochureLink, selectCurrentTypes, selectCurrentDescriptives, selectViewport, selectTypes } from 'containers/QuestPage/selectors'
@@ -43,6 +43,7 @@ import {
   getDescriptivesRequest,
   getDescriptivesSuccess,
   getDescriptivesFail,
+  clearBrochure,
 } from './actions'
 
 export function* getRecommendationWatcher() {
@@ -137,6 +138,7 @@ export function* getQuestInfoRequestHandler({ payload }) {
   try {
     const res = yield call(request, requestURL, params)
     yield put(getQuestInfoSuccess(res))
+    yield put(clearBrochure())
     yield put(setQuest(payload))
     yield put(updateExpand())
   } catch (err) {
@@ -246,28 +248,28 @@ export function* getDescriptivesRequestHandler() {
   }
 }
 
-export function* getWishlistWatcher() {
-  yield takeLatest(GET_WISHLIST_REQUEST, getWishlistRequestHandler)
+export function* getUserWishlistWatcher() {
+  yield takeLatest(GET_USER_WISHLIST_REQUEST, getUserWishlistRequestHandler)
 }
 
-export function* getWishlistRequestHandler() {
+export function* getUserWishlistRequestHandler() {
   const user = yield select(selectUser())
   const requestURL = `${API_BASE_URL}api/v1/user/${user._id}/wishlist`
-  const params = { method: 'GET ' }
+  const params = { method: 'GET' }
 
   try {
     const res = yield call(request, requestURL, params)
-    yield put(getWishlistSuccess(res))
+    yield put(getUserWishlistSuccess(res))
   } catch (err) {
-    yield put(getWishlistFail(err.details))
+    yield put(getUserWishlistFail(err.details))
   }
 }
 
-export function* createWishlistWatcher() {
-  yield takeLatest(CREATE_WISHLIST_REQUEST, createWishlistRequestHandler)
+export function* createUserWishlistWatcher() {
+  yield takeLatest(CREATE_USER_WISHLIST_REQUEST, createUserWishlistRequestHandler)
 }
 
-export function* createWishlistRequestHandler({ payload }) {
+export function* createUserWishlistRequestHandler({ payload }) {
   const { userID, brochureID, quest } = payload
   const requestURL = `${API_BASE_URL}api/v1/user/${userID}/wishlist`
 
@@ -285,17 +287,17 @@ export function* createWishlistRequestHandler({ payload }) {
 
   try {
     const res = yield call(request, requestURL, params)
-    yield put(createWishlistSuccess(res))
+    yield put(createUserWishlistSuccess(res))
   } catch (err) {
-    yield put(createWishlistFail(err.details))
+    yield put(createUserWishlistFail(err.details))
   }
 }
 
-export function* deleteWishlistWatcher() {
-  yield takeLatest(DELETE_WISHLIST_REQUEST, deleteWishlistRequestHandler)
+export function* deleteUserWishlistWatcher() {
+  yield takeLatest(DELETE_USER_WISHLIST_REQUEST, deleteUserWishlistRequestHandler)
 }
 
-export function* deleteWishlistRequestHandler({ payload }) {
+export function* deleteUserWishlistRequestHandler({ payload }) {
   const { brochureID, userID } = payload
   const requestURL = `${API_BASE_URL}api/v1/user/${userID}/wishlist/${brochureID}`
 
@@ -305,9 +307,9 @@ export function* deleteWishlistRequestHandler({ payload }) {
 
   try {
     const res = yield call(request, requestURL, params)
-    yield put(deleteWishlistSuccess(res))
+    yield put(deleteUserWishlistSuccess(res))
   } catch (err) {
-    yield put(deleteWishlistFail(err.details))
+    yield put(deleteUserWishlistFail(err.details))
   }
 }
 
@@ -317,7 +319,7 @@ export default [
   getBrochureInfoWatcher,
   composeUrlWatcher,
   getDescriptivesWatcher,
-  getWishlistWatcher,
-  createWishlistWatcher,
-  deleteWishlistWatcher,
+  getUserWishlistWatcher,
+  createUserWishlistWatcher,
+  deleteUserWishlistWatcher,
 ]

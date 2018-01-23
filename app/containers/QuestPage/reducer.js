@@ -32,6 +32,7 @@ import {
   GET_DESCRIPTIVES_REQUEST,
   GET_DESCRIPTIVES_SUCCESS,
   GET_DESCRIPTIVES_FAIL,
+  CLEAR_BROCHURE,
 } from './constants'
 
 export const initialQuest = {
@@ -585,6 +586,14 @@ function questReducer(state = initialState, { type, payload }) {
         ...state,
         status: type,
         error: payload,
+      }
+
+    case CLEAR_BROCHURE:
+      return {
+        ...state,
+        status: type,
+        brochureInfo: null,
+        brochureLink: null,
       }
 
     default:

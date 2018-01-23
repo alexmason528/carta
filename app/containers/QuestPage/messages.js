@@ -31,10 +31,14 @@ export default defineMessages({
   },
   createWishlist: {
     id: 'carta.createWishlist',
-    default: 'Sign in to create a wishlist',
+    default: 'Sign in to create a wish list',
   },
-  addToWishlist: {
+  addedToWishlist: {
     id: 'carta.addedToWishlist',
-    defaultMessage: 'Added to wishlist',
+    defaultMessage: 'Added to wish list',
+  },
+  removedFromWishlist: {
+    id: 'carta.removedFromWishlist',
+    defaultMessage: 'Removed from wish list',
   },
 })
