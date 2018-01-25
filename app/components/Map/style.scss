@@ -5,12 +5,12 @@
   top: 0;
   bottom: 0;
   left: 256px;
-  width: calc(100% - 266px);
+  width: calc(100% - 256px);
   @include transition(all, $fastTrans);
 
   &__withoutQuest {
     left: 0;
-    width: calc(100% - 10px);
+    width: 100% !important;
     @include transition(all, $fastTrans);
   }
 
