@@ -132,7 +132,7 @@ class QuestPage extends Component {
           mapChange={mapChange}
           onClick={this.handleMapClick}
         />
-        {recommendations.length > 0 && <ScoreBoard recommendations={recommendations} show />}
+        {recommendations.length > 0 && <ScoreBoard recommendations={recommendations} />}
         {brochureLink && <Brochure brochureLink={brochureLink} />}
       </Container>
     )
