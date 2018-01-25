@@ -36,6 +36,19 @@
       background: $white;
       height: 100%;
       padding: 12px 25px 12px 30px;
+
+      overflow-x: hidden;
+      overflow-y: overlay;
+
+      &::-webkit-scrollbar {
+        width: 10px;
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: rgba(200, 200, 200, 0.7) !important;
+      }
+
       @include boxShadow(15px, $lightShadowColor);
 
       li {

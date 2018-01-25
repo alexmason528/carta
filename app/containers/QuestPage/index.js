@@ -65,10 +65,12 @@ class QuestPage extends Component {
     const { params } = this.props
     if (!isEqual(params, nextProps.params)) {
       const { setQuest } = nextProps
-      setQuest({
-        quest: urlParser({ ...nextProps.params }),
-        urlEntered: false,
-      })
+      setTimeout(() => {
+        setQuest({
+          quest: urlParser({ ...nextProps.params }),
+          urlEntered: false,
+        })
+      }, 0)
     }
   }
 
@@ -130,7 +132,7 @@ class QuestPage extends Component {
           mapChange={mapChange}
           onClick={this.handleMapClick}
         />
-        {recommendations.length > 0 && <ScoreBoard recommendations={recommendations} />}
+        {recommendations.length > 0 && <ScoreBoard recommendations={recommendations} show />}
         {brochureLink && <Brochure brochureLink={brochureLink} />}
       </Container>
     )
