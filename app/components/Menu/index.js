@@ -16,11 +16,17 @@ class Menu extends Component {
     toggleMenu: PropTypes.func,
     params: PropTypes.object,
     router: PropTypes.object,
+    routes: PropTypes.array,
     location: PropTypes.object,
     username: PropTypes.string,
     authenticated: PropTypes.bool,
     menuOpened: PropTypes.bool,
     intl: intlShape.isRequired,
+  }
+
+  getCurrentPage = () => {
+    const { routes } = this.props
+    return routes[1].name
   }
 
   handleLanguageClick = evt => {
@@ -66,6 +72,7 @@ class Menu extends Component {
 
   render() {
     const { authenticated, username, intl: { formatMessage, locale }, params: { brochure }, menuOpened, toggleMenu } = this.props
+    const curPage = this.getCurrentPage()
 
     return (
       <div className={cx({ menu: true, menu__opened: menuOpened })} onClick={this.handleToggleMenu}>
@@ -73,75 +80,60 @@ class Menu extends Component {
           <Img src={`${S3_ICON_URL}/logo-100.png`} />
         </div>
         <div
-          className={cx({
-            menu__content: true,
-            'menu__content--hidden': !menuOpened,
-          })}
+          className={cx({ menu__content: true, 'menu__content--hidden': !menuOpened })}
           onClick={evt => {
             evt.stopPropagation()
           }}
         >
           <ul>
             {brochure && (
-              <li>
+              <li className={curPage === 'brochure' ? 'menu--active' : ''}>
                 <a href="/" onClick={this.handleMap}>
                   {formatMessage(messages.map)}
                 </a>
               </li>
             )}
-            {!this.isPage('/') && (
-              <li>
-                <Link to="/" onClick={toggleMenu}>
-                  {formatMessage(messages.home)}
+            <li className={curPage === 'home' ? 'menu--active' : ''}>
+              <Link to="/" onClick={toggleMenu}>
+                {formatMessage(messages.home)}
+              </Link>
+            </li>
+            <li className={curPage === 'quest' ? 'menu--active' : ''}>
+              <Link to="/quest" onClick={toggleMenu}>
+                {formatMessage(messages.quest)}
+              </Link>
+            </li>
+            {authenticated && (
+              <li className={curPage === 'profile' ? 'menu--active' : ''}>
+                <Link to={`/user/${username}/profile`} onClick={toggleMenu}>
+                  {formatMessage(messages.profile)}
                 </Link>
               </li>
             )}
-            {!this.isPage('/quest') && (
-              <li>
-                <Link to="/quest" onClick={toggleMenu}>
-                  {formatMessage(messages.quest)}
+            {authenticated && (
+              <li className={curPage === 'wishlist' ? 'menu--active' : ''}>
+                <Link to={`/user/${username}/wishlist`} onClick={toggleMenu}>
+                  {formatMessage(messages.wishlist)}
                 </Link>
               </li>
             )}
-            {authenticated &&
-              !this.isPage('/profile') && (
-                <li>
-                  <Link to={`/user/${username}/profile`} onClick={toggleMenu}>
-                    {formatMessage(messages.profile)}
-                  </Link>
-                </li>
-              )}
-            {authenticated &&
-              !this.isPage('/wishlist') && (
-                <li>
-                  <Link to={`/user/${username}/wishlist`} onClick={toggleMenu}>
-                    {formatMessage(messages.wishlist)}
-                  </Link>
-                </li>
-              )}
-            {authenticated &&
-              !this.isPage('/friends') && (
-                <li>
-                  <Link to={`/user/${username}/friends`} onClick={toggleMenu}>
-                    {formatMessage(messages.friends)}
-                  </Link>
-                </li>
-              )}
-
-            {!this.isPage('/themes') && (
-              <li>
-                <Link to="/themes" onClick={toggleMenu}>
-                  {formatMessage(messages.themes)}
+            {authenticated && (
+              <li className={curPage === 'friends' ? 'menu--active' : ''}>
+                <Link to={`/user/${username}/friends`} onClick={toggleMenu}>
+                  {formatMessage(messages.friends)}
                 </Link>
               </li>
             )}
-            {!this.isPage('/places') && (
-              <li>
-                <Link to="/places" onClick={toggleMenu}>
-                  {formatMessage(messages.places)}
-                </Link>
-              </li>
-            )}
+            <li className={curPage === 'theme' ? 'menu--active' : ''}>
+              <Link to="/themes" onClick={toggleMenu}>
+                {formatMessage(messages.themes)}
+              </Link>
+            </li>
+            <li className={curPage === 'place' ? 'menu--active' : ''}>
+              <Link to="/places" onClick={toggleMenu}>
+                {formatMessage(messages.places)}
+              </Link>
+            </li>
             <li>
               <a href={`http://carta.guide/${locale === 'en' ? '' : locale}`}>{formatMessage(messages.about)}</a>
             </li>
@@ -160,7 +152,7 @@ class Menu extends Component {
                   key={countryCode}
                   className={cx({
                     menu__language: true,
-                    'menu__language--active': locale === countryCode,
+                    'menu--active': locale === countryCode,
                   })}
                 >
                   <a href="/" onClick={this.handleLanguageClick} data-locale={countryCode}>

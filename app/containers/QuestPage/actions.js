@@ -118,10 +118,9 @@ export function getQuestInfoFail(payload) {
   }
 }
 
-export function getRecommendationRequest(payload) {
+export function getRecommendationRequest() {
   return {
     type: GET_RECOMMENDATION_REQUEST,
-    payload,
   }
 }
 

@@ -1,5 +1,4 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects'
-import { delay } from 'redux-saga'
 import { findIndex, map, uniq } from 'lodash'
 import { browserHistory } from 'react-router'
 import { GET_USER_WISHLIST_REQUEST, CREATE_USER_WISHLIST_REQUEST, DELETE_USER_WISHLIST_REQUEST } from 'containers/App/constants'
@@ -50,10 +49,7 @@ export function* getRecommendationWatcher() {
   yield takeLatest([GET_RECOMMENDATION_REQUEST, SET_QUEST], getRecommendationRequestHandler)
 }
 
-export function* getRecommendationRequestHandler({ payload }) {
-  if (payload.urlEntered) {
-    yield call(delay, 500)
-  }
+export function* getRecommendationRequestHandler() {
   const viewport = yield select(selectViewport())
   const questTypes = yield select(selectTypes())
   const curTypes = yield select(selectCurrentTypes())
@@ -112,11 +108,8 @@ export function* getRecommendationRequestHandler({ payload }) {
     },
   }
 
-  let res = []
   try {
-    if (canSendRequest({ types })) {
-      res = yield call(request, requestURL, params)
-    }
+    const res = canSendRequest({ types }) ? yield call(request, requestURL, params) : []
     yield put(getRecommendationSuccess(res))
     yield put(getDescriptivesRequest())
   } catch (err) {

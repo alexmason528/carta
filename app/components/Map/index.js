@@ -1,13 +1,12 @@
 import React, { Component, PropTypes } from 'react'
 import cx from 'classnames'
 import { isEqual } from 'lodash'
-import ReactResizeDetector from 'react-resize-detector'
-import ReactMapboxGl from 'react-mapbox-gl'
 import { withRouter } from 'react-router'
 import { COLORS, S3_DATA_URL, MAP_ACCESS_TOKEN, RECOMMENDATION_COUNT } from 'utils/globalConstants'
+import MapBox from 'mapbox-gl'
 import './style.scss'
 
-const MapBox = ReactMapboxGl({ accessToken: MAP_ACCESS_TOKEN })
+MapBox.accessToken = MAP_ACCESS_TOKEN
 
 class Map extends Component {
   static propTypes = {
@@ -22,17 +21,13 @@ class Map extends Component {
     locale: PropTypes.string,
   }
 
-  constructor(props) {
-    super(props)
+  componentDidMount() {
+    const { center, zoom } = this.props.viewport
 
-    this.state = {
-      show: false,
-    }
-  }
-
-  componentWillMount() {
     this.mapStyle = {
       version: 8,
+      center: [center.lng, center.lat],
+      zoom,
       sources: {
         cartaSource: {
           type: 'raster',
@@ -51,6 +46,15 @@ class Map extends Component {
       ],
       glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
     }
+
+    this.map = new MapBox.Map({
+      container: 'map',
+      style: this.mapStyle,
+      attributionControl: false,
+    })
+
+    this.map.on('moveend', this.handleMapChange)
+    this.map.on('zoomend', this.handleMapChange)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -58,10 +62,12 @@ class Map extends Component {
     if (!isEqual(viewport, nextProps.viewport) && this.map) {
       this.map.jumpTo({ center: nextProps.viewport.center, zoom: nextProps.viewport.zoom })
     }
-    this.handleRedrawMap(nextProps)
+    if (this.map) {
+      this.handleRedrawMap(nextProps)
+    }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     if (this.props.panelState !== nextProps.panelState) {
       return true
     }
@@ -69,9 +75,6 @@ class Map extends Component {
       return true
     }
     if (!isEqual(this.props.recommendations, nextProps.recommendations)) {
-      return true
-    }
-    if (!isEqual(this.state.show, nextState.show)) {
       return true
     }
     return false
@@ -186,59 +189,47 @@ class Map extends Component {
   }
 
   handleClearMap = () => {
-    if (this.map) {
-      if (!this.map.getSource('shapes')) {
-        this.handleAddShapes()
-      }
-
-      if (!this.map.getSource('points')) {
-        this.handleAddCaption()
-      }
-
-      const sources = Array(COLORS.length).fill(0)
-      sources.map((source, index) => {
-        const filter = ['==', 'e', '']
-        this.map.setFilter(`shape-border-offset-${index}`, filter)
-        this.map.setFilter(`shape-border-${index}`, filter)
-        this.map.setFilter(`shape-fill-${index}`, filter)
-        this.map.setFilter(`shape-caption-${index}`, filter)
-      })
+    if (!this.map.getSource('shapes')) {
+      this.handleAddShapes()
     }
+
+    if (!this.map.getSource('points')) {
+      this.handleAddCaption()
+    }
+
+    const sources = Array(COLORS.length).fill(0)
+    sources.map((source, index) => {
+      const filter = ['==', 'e', '']
+      this.map.setFilter(`shape-border-offset-${index}`, filter)
+      this.map.setFilter(`shape-border-${index}`, filter)
+      this.map.setFilter(`shape-fill-${index}`, filter)
+      this.map.setFilter(`shape-caption-${index}`, filter)
+    })
   }
 
   handleRedrawMap = props => {
     const { panelState, recommendations } = props
     this.handleClearMap()
-    if (this.map) {
-      if (panelState !== 'closed') {
-        recommendations.map((recommendation, index) => {
-          const { display, e } = recommendation
-          const filter = ['==', 'e', e]
-          if (display === 'shape') {
-            this.map.setFilter(`shape-border-offset-${RECOMMENDATION_COUNT - index - 1}`, filter)
-            this.map.setFilter(`shape-border-${RECOMMENDATION_COUNT - index - 1}`, filter)
-            this.map.setFilter(`shape-fill-${RECOMMENDATION_COUNT - index - 1}`, filter)
-            this.map.setFilter(`shape-caption-${RECOMMENDATION_COUNT - index - 1}`, filter)
-          } else if (display === 'icon') {
-            this.map.setFilter(`shape-border-offset-${RECOMMENDATION_COUNT - index - 1}`, ['==', 'e', ''])
-            this.map.setFilter(`shape-border-${RECOMMENDATION_COUNT - index - 1}`, ['==', 'e', ''])
-            this.map.setFilter(`shape-caption-${4 - index}`, filter)
-          }
-        })
-      }
+    if (panelState !== 'closed') {
+      recommendations.map((recommendation, index) => {
+        const { display, e } = recommendation
+        const filter = ['==', 'e', e]
+        if (display === 'shape') {
+          this.map.setFilter(`shape-border-offset-${RECOMMENDATION_COUNT - index - 1}`, filter)
+          this.map.setFilter(`shape-border-${RECOMMENDATION_COUNT - index - 1}`, filter)
+          this.map.setFilter(`shape-fill-${RECOMMENDATION_COUNT - index - 1}`, filter)
+          this.map.setFilter(`shape-caption-${RECOMMENDATION_COUNT - index - 1}`, filter)
+        } else if (display === 'icon') {
+          this.map.setFilter(`shape-border-offset-${RECOMMENDATION_COUNT - index - 1}`, ['==', 'e', ''])
+          this.map.setFilter(`shape-border-${RECOMMENDATION_COUNT - index - 1}`, ['==', 'e', ''])
+          this.map.setFilter(`shape-caption-${4 - index}`, filter)
+        }
+      })
     }
   }
 
-  handleResize = () => {
-    if (this.map) {
-      this.map.resize()
-    }
-  }
-
-  handleMapChange = map => {
-    this.map = map
+  handleMapChange = () => {
     const { mapChange } = this.props
-
     const zoom = parseFloat(this.map.getZoom().toFixed(2))
     const { lng, lat } = this.map.getCenter()
     mapChange({
@@ -251,36 +242,18 @@ class Map extends Component {
     })
   }
 
-  handleStyleLoad = map => {
-    const { viewport: { center, zoom } } = this.props
-    this.map = map
-    this.setState({ show: true })
-    this.map.jumpTo({ center, zoom })
-  }
-
   render() {
-    const { show } = this.state
     const { panelState, params: { brochure }, onClick } = this.props
-    const mapboxData = {
-      style: this.mapStyle,
-      containerStyle: { width: '100%', height: '100%' },
-      onStyleLoad: this.handleStyleLoad,
-      onMoveEnd: this.handleMapChange,
-      onZoomEnd: this.handleMapChange,
-    }
 
     return (
       <div
+        id="map"
         className={cx({
           map: true,
           map__withoutQuest: panelState !== 'opened' || brochure,
-          map__hidden: !show,
         })}
         onClick={onClick}
-      >
-        <ReactResizeDetector handleWidth handleHeight onResize={this.handleResize} />
-        <MapBox {...mapboxData} />
-      </div>
+      />
     )
   }
 }

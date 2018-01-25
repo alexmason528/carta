@@ -18,7 +18,7 @@ export default function createRoutes(store) {
   return [
     {
       path: '/quest(/in/:brochure)(/:viewport/:types/:descriptives)',
-      name: 'questPage',
+      name: 'quest',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
           import('containers/QuestPage/reducer'),
@@ -40,7 +40,7 @@ export default function createRoutes(store) {
     },
     {
       path: '/(verify/:vcode)',
-      name: 'homePage',
+      name: 'home',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
           import('containers/HomePage/reducer'),
@@ -66,7 +66,7 @@ export default function createRoutes(store) {
     },
     {
       path: '/places',
-      name: 'placePage',
+      name: 'place',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
           import('containers/PlacePage/reducer'),
@@ -88,7 +88,7 @@ export default function createRoutes(store) {
     },
     {
       path: '/themes',
-      name: 'themePage',
+      name: 'theme',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
           import('containers/ThemePage/reducer'),
@@ -110,7 +110,7 @@ export default function createRoutes(store) {
     },
     {
       path: '/user/:username/profile',
-      name: 'profilePage',
+      name: 'profile',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
           import('containers/ProfilePage/reducer'),
@@ -132,7 +132,7 @@ export default function createRoutes(store) {
     },
     {
       path: '/user/:username/wishlist',
-      name: 'wishlistPage',
+      name: 'wishlist',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
           import('containers/WishlistPage/reducer'),
@@ -154,7 +154,7 @@ export default function createRoutes(store) {
     },
     {
       path: '/user/:username/friends',
-      name: 'friendsPage',
+      name: 'friends',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
           import('containers/FriendsPage/reducer'),

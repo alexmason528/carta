@@ -36,6 +36,10 @@ class TextTile extends Component {
     window.removeEventListener('resize', this.handleResize)
   }
 
+  handleClick = () => {
+    this.setState({ expanded: false }, this.handleResize)
+  }
+
   handleResize = () => {
     const tile = ReactDOM.findDOMNode(this)
     const width = $(tile).width()
@@ -77,6 +81,10 @@ class TextTile extends Component {
     this.setState({ expanded: !this.state.expanded }, this.handleResize)
   }
 
+  handleBackClick = () => {
+    this.setState({ expanded: false }, this.handleResize)
+  }
+
   render() {
     const { title, content, type } = this.props
     const { expanded } = this.state
@@ -90,7 +98,13 @@ class TextTile extends Component {
         })}
         {...data}
       >
-        <div className="tileContainer">
+        {expanded && <div className="tileBackLayer" onClick={this.handleBackClick} />}
+        <div
+          className="tileContainer"
+          onClick={evt => {
+            evt.stopPropagation()
+          }}
+        >
           <div className="tile textTile Ov-H">
             <h2 className="textTile__title Tt-U Pb-20 Cr-T Us-T">{title}</h2>
             <div className="textTile__content Cr-T Us-T">{content}</div>
