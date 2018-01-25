@@ -5,16 +5,22 @@
   top: 0;
   bottom: 0;
   left: 256px;
-  width: calc(100% - 256px);
+  width: calc(100% - 266px);
   @include transition(all, $fastTrans);
 
   &__withoutQuest {
     left: 0;
-    width: 100% !important;
+    width: calc(100% - 10px) !important;
     @include transition(all, $fastTrans);
   }
 
   &__hidden {
     visibility: hidden;
+  }
+}
+
+@media (max-width: 767px) {
+  .map {
+    width: calc(100%) !important;
   }
 }
