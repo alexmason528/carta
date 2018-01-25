@@ -148,49 +148,33 @@ exports.getRecommendations = (req, res) => {
 
       if (!types.all) {
         types.includes.map(type => {
-          if (element.type[type] !== '') {
-            tScore += parseFloat(element.type[type])
-          }
+          tScore += parseFloat(element.type[type])
         })
       } else {
-        if (element.type.sum !== '') {
-          tScore += parseFloat(element.type.sum)
-        }
+        tScore += parseFloat(element.type.sum)
 
         types.excludes.map(type => {
-          if (element.type[type] !== '') {
-            tScore -= parseFloat(element.type[type])
-          }
+          tScore -= parseFloat(element.type[type])
         })
       }
 
       if (!descriptives.all) {
         descriptives.stars.map(star => {
-          if (element.descriptive[star] !== '') {
-            dScore += parseFloat(element.descriptive[star]) * 1
-          }
+          dScore += parseFloat(element.descriptive[star]) * 1
         })
 
         descriptives.includes.map(desc => {
-          if (element.descriptive[desc] !== '') {
-            dScore += parseFloat(element.descriptive[desc]) * 0.3
-          }
+          dScore += parseFloat(element.descriptive[desc]) * 0.3
         })
       } else {
-        if (element.descriptive.sum !== '') {
-          dScore += parseFloat(element.descriptive.sum) * 0.3
-        }
+        dScore += parseFloat(element.descriptive.sum) * 0.3
 
         descriptives.stars.map(star => {
-          if (element.descriptive[star] !== '') {
-            dScore += parseFloat(element.descriptive[star]) * 0.7
-          }
+          dScore += parseFloat(element.descriptive[star]) * 0.7
         })
 
         descriptives.excludes.map(desc => {
-          if (element.descriptive[desc] !== '') {
-            dScore += parseFloat(element.descriptive[desc]) * -0.3
-          }
+          dScore += parseFloat(element.descriptive[desc]) * -0.3
         })
       }
 
