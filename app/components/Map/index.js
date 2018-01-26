@@ -42,7 +42,7 @@ class Map extends Component {
           type: 'raster',
           source: 'cartaSource',
           minzoom: 0,
-          maxzoom: 22,
+          maxzoom: 18,
         },
       ],
       glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
@@ -355,8 +355,8 @@ class Map extends Component {
     mapChange({
       zoom: parseFloat(zoom.toFixed(2)),
       center: {
-        lng: parseFloat(lng.toFixed(4)),
-        lat: parseFloat(lat.toFixed(4)),
+        lng: parseFloat(lng.toFixed(5)),
+        lat: parseFloat(lat.toFixed(5)),
       },
       bounds: this.map.getBounds(),
     })
