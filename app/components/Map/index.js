@@ -4,7 +4,7 @@ import ReactResizeDetector from 'react-resize-detector'
 import cx from 'classnames'
 import { isEqual } from 'lodash'
 import MapBox from 'mapbox-gl'
-import { COLORS, S3_DATA_URL, S3_ICON_URL, MAP_ACCESS_TOKEN, RECOMMENDATION_COUNT } from 'utils/globalConstants'
+import { COLORS, S3_DATA_URL, S3_ICON_URL, MAP_ACCESS_TOKEN, RECOMMENDATION_COUNT, MIN_ZOOM, MAX_ZOOM } from 'utils/globalConstants'
 import './style.scss'
 
 MapBox.accessToken = MAP_ACCESS_TOKEN
@@ -41,8 +41,6 @@ class Map extends Component {
           id: 'cartaSourceTiles',
           type: 'raster',
           source: 'cartaSource',
-          minzoom: 0,
-          maxzoom: 18,
         },
       ],
       glyphs: 'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',
@@ -51,6 +49,8 @@ class Map extends Component {
     this.map = new MapBox.Map({
       container: 'map',
       style: this.mapStyle,
+      minZoom: MIN_ZOOM,
+      maxZoom: MAX_ZOOM,
       attributionControl: false,
     })
 
@@ -98,9 +98,15 @@ class Map extends Component {
       data: `${S3_DATA_URL}/points.geojson`,
     })
 
-    this.map.loadImage(`${S3_ICON_URL}/marker-red.png`, (err, img) => {
+    this.map.loadImage(`${S3_ICON_URL}/marker-red-15.png`, (err, img) => {
       if (!err) {
         this.map.addImage('marker', img)
+      }
+    })
+
+    this.map.loadImage(`${S3_ICON_URL}/star-red.png`, (err, img) => {
+      if (!err) {
+        this.map.addImage('star', img)
       }
     })
 
@@ -108,51 +114,61 @@ class Map extends Component {
       this.map.getCanvas().style.cursor = 'pointer'
     })
 
+    const zoom = this.map.getZoom()
     const dark = '#444'
     const grey = '#888'
     const light = '#ddd'
-    const zoom = this.map.getZoom()
 
-    this.handleLoadLabel('road-name', 'mapbox', 'road_label', '!=', 'name', '', 0, 22, grey, 10, 0, 'line')
-    this.handleLoadLabel('road-ref', 'mapbox', 'road_label', '!=', 'ref', '', 0, 22, grey, 11, 0, 'line')
+    this.handleLoadLayer('road-name', 'mapbox', 'road_label', '!=', 'name', '', 0, 18, grey, 10, 0, 'line', 0, 'center', '')
+    this.handleLoadLayer('road-ref', 'mapbox', 'road_label', '!=', 'name', '', 0, 18, grey, 11, 0, 'line', 0, 'center', '')
     this.map.setLayoutProperty('road-ref', 'text-field', '{ref}')
-    this.handleLoadLabel('waterway', 'mapbox', 'waterway_label', '!=', 'name', '', 0, 22, light, 15, 0, 'line')
-    this.handleLoadLabel('water', 'mapbox', 'water_label', '!=', 'name', '', 0, 22, light, 15, 0, 'point')
-    this.handleLoadSymbol('poi', 'mapbox', 'poi_label', '!=', 'name', '', 0, 22, dark, 10, 0, -0.8, 'marker', 0.5, -12)
-    this.handleLoadSymbol('railstations', 'mapbox', 'rail_station_label', '!=', 'name', '', 0, 22, dark, 10, 0, -0.8, 'marker', 0.5, -12)
-    this.handleLoadSymbol('peaks', 'mapbox', 'mountain_peak_label', '!=', 'name', '', 0, 22, dark, 10, 0, -0.8, 'marker', 0.5, -12)
+    this.handleLoadLayer('waterway', 'mapbox', 'waterway_label', '!=', 'name', '', 0, 18, light, 15, 0, 'line', 0, 'center', '')
+    this.handleLoadLayer('water', 'mapbox', 'water_label', '!=', 'name', '', 0, 18, light, 15, 0, 'point', 0, 'center', '')
+    this.handleLoadLayer('poi', 'mapbox', 'poi_label', '!=', 'name', '', 0, 18, dark, 10, 0, 'point', -1.5, 'bottom', 'marker')
+    this.handleLoadLayer('railstations', 'mapbox', 'rail_station_label', '!=', 'name', '', 0, 18, dark, 10, 0, 'point', -1.5, 'bottom', 'marker')
+    this.handleLoadLayer('peaks', 'mapbox', 'mountain_peak_label', '!=', 'name', '', 0, 18, dark, 10, 0, 'point', -1.5, 'bottom', 'marker')
     this.map.setLayoutProperty('peaks', 'text-field', '{name_en} \n ({elevation_m}m)')
-    this.handleLoadLabel('seas', 'mapbox', 'marine_label', '==', 'placement', 'point', 0, 22, light, 7 + zoom * 3, 0, 'point')
-    this.handleLoadLabel('curved-seas', 'mapbox', 'marine_label', '==', 'placement', 'line', 0, 22, light, 7 + zoom * 3, 0, 'line')
-    this.handleLoadLabel('oceans', 'mapbox', 'marine_label', '==', 'labelrank', 1, 0, 22, light, 10 + zoom * 3, 0, 'point')
-    this.handleLoadLabel('villages', 'mapbox', 'place_label', '==', 'type', 'village', 0, 22, dark, -6 + zoom * 1.5, 30, 'point')
-    this.handleLoadLabel('residentials', 'mapbox', 'place_label', '==', 'type', 'residential', 0, 22, dark, -6 + zoom * 1.5, 30, 'point')
-    this.handleLoadLabel('suburbs', 'mapbox', 'place_label', '==', 'type', 'suburb', 0, 22, dark, -10 + zoom * 2, 30, 'point')
-    this.handleLoadLabel('towns', 'mapbox', 'place_label', '==', 'type', 'town', 8, 22, dark, -8 + zoom * 2, 30, 'point')
-    this.handleLoadSymbol('airports', 'mapbox', 'airport_label', '==', 'scalerank', 1, 0, 22, dark, 12, 0, -0.8, 'marker', 0.5, -12)
-    this.handleLoadLabel('cities', 'mapbox', 'place_label', '==', 'type', 'city', 6, 22, dark, -4 + zoom * 2, 0, 'point')
-    this.handleLoadLabel('places-6', 'mapbox', 'place_label', '>=', 'scalerank', 5, 6, 10, dark, -3 + zoom * 2, 0, 'point')
-    this.handleLoadLabel('places-4', 'mapbox', 'place_label', '<=', 'scalerank', 4, 5, 10, dark, 2 + zoom * 2, 0, 'point')
-    this.handleLoadLabel('states', 'mapbox', 'state_label', '!=', 'name', '', 0, 22, '#bbb', 6 + zoom * 2, 10, 'point')
-    this.handleLoadLabel('places-1', 'mapbox', 'place_label', '<=', 'scalerank', 1, 0, 22, dark, 5 + zoom * 2, 0, 'point')
-    this.handleLoadLabel('countries-6', 'mapbox', 'country_label', '==', 'scalerank', 6, 0, 22, dark, -2 + zoom * 2, 10, 'point')
-    this.handleLoadLabel('countries-5', 'mapbox', 'country_label', '==', 'scalerank', 5, 0, 22, dark, 3 + zoom * 2, 10, 'point')
-    this.handleLoadLabel('countries-4', 'mapbox', 'country_label', '==', 'scalerank', 4, 0, 22, dark, 5 + zoom * 2, 10, 'point')
-    this.handleLoadLabel('countries-3', 'mapbox', 'country_label', '==', 'scalerank', 3, 0, 22, dark, 6 + zoom * 2, 10, 'point')
-    this.handleLoadLabel('countries-2', 'mapbox', 'country_label', '==', 'scalerank', 2, 0, 22, dark, 9 + zoom * 2, 10, 'point')
-    this.handleLoadLabel('countries-1', 'mapbox', 'country_label', '==', 'scalerank', 1, 0, 22, dark, 12 + zoom * 2, 10, 'point')
+    this.handleLoadLayer('seas', 'mapbox', 'marine_label', '==', 'placement', 'point', 0, 18, light, 7 + zoom * 3, 0, 'point', 0, 'center', '')
+    this.handleLoadLayer('curved-seas', 'mapbox', 'marine_label', '==', 'placement', 'line', 0, 18, light, 7 + zoom * 3, 0, 'line', 0, 'center', '')
+    this.handleLoadLayer('oceans', 'mapbox', 'marine_label', '==', 'labelrank', 1, 0, 18, light, 10 + zoom * 3, 0, 'point', 0, 'center', '')
+    this.handleLoadLayer('villages', 'mapbox', 'place_label', '==', 'type', 'village', 0, 18, dark, -6 + zoom * 1.5, 30, 'point', 0, 'center', '')
+    this.handleLoadLayer('residentials', 'mapbox', 'place_label', '==', 'type', 'residential', 0, 18, dark, -6 + zoom * 1.5, 30, 'point', 0, 'center', '')
+    this.handleLoadLayer('suburbs', 'mapbox', 'place_label', '==', 'type', 'suburb', 0, 18, dark, -10 + zoom * 2, 30, 'point', 0, 'center', '')
+    this.handleLoadLayer('towns', 'mapbox', 'place_label', '==', 'type', 'town', 8, 18, dark, -8 + zoom * 2, 30, 'point', 0, 'center', '')
+    this.handleLoadLayer('airports', 'mapbox', 'airport_label', '==', 'scalerank', 1, 0, 18, dark, 12, 0, 'point', -1.3, 'bottom', 'marker')
+    this.handleLoadLayer('cities', 'mapbox', 'place_label', '==', 'type', 'city', 6, 18, dark, -4 + zoom * 2, 0, 'point', 0, 'center', '')
+    this.handleLoadLayer('places-6', 'mapbox', 'place_label', '>=', 'scalerank', 5, 6, 10, dark, -3 + zoom * 2, 0, 'point', 0, 'center', '')
+    this.handleLoadLayer('places-4', 'mapbox', 'place_label', '<=', 'scalerank', 4, 5, 10, dark, 2 + zoom * 2, 0, 'point', 0, 'center', '')
+    this.handleLoadLayer('states', 'mapbox', 'state_label', '!=', 'name', '', 0, 18, '#bbb', 6 + zoom * 2, 10, 'point', 0, 'center', '')
+    this.handleLoadLayer('places-1', 'mapbox', 'place_label', '<=', 'scalerank', 1, 0, 18, dark, 5 + zoom * 2, 0, 'point', 0, 'center', '')
+    this.handleLoadLayer('countries-6', 'mapbox', 'country_label', '==', 'scalerank', 6, 0, 18, dark, -2 + zoom * 2, 10, 'point', 0, 'center', '')
+    this.handleLoadLayer('countries-5', 'mapbox', 'country_label', '==', 'scalerank', 5, 0, 18, dark, 3 + zoom * 2, 10, 'point', 0, 'center', '')
+    this.handleLoadLayer('countries-4', 'mapbox', 'country_label', '==', 'scalerank', 4, 0, 18, dark, 5 + zoom * 2, 10, 'point', 0, 'center', '')
+    this.handleLoadLayer('countries-3', 'mapbox', 'country_label', '==', 'scalerank', 3, 0, 18, dark, 6 + zoom * 2, 10, 'point', 0, 'center', '')
+    this.handleLoadLayer('countries-2', 'mapbox', 'country_label', '==', 'scalerank', 2, 0, 18, dark, 9 + zoom * 2, 10, 'point', 0, 'center', '')
+    this.handleLoadLayer('countries-1', 'mapbox', 'country_label', '==', 'scalerank', 1, 0, 18, dark, 12 + zoom * 2, 10, 'point', 0, 'center', '')
+
+    this.handleLoadStar(1562)
+    this.handleLoadStar(451)
+    this.handleLoadStar(340)
+    this.handleLoadStar(248)
+
+    this.handleLoadStarAndLabel(1562)
+    this.handleLoadStarAndLabel(451)
+    this.handleLoadStarAndLabel(340)
+    this.handleLoadStarAndLabel(248)
 
     this.handleLoadShape()
     this.handleLoadCaption()
   }
 
-  handleLoadLabel = (id, source, layer, filterType, filterField, filterValue, minzoom, maxzoom, color, size, padding, placement) => {
+  handleLoadLayer = (id, source, layer, filterType, filterField, filterVal, minzoom, maxzoom, color, size, padding, placement, offset, anchor, image) => {
     const lang = '_en'
     this.map.addLayer({
       id,
       source,
       'source-layer': layer,
-      filter: [filterType, filterField, filterValue],
+      filter: [filterType, filterField, filterVal],
       minzoom,
       maxzoom,
       type: 'symbol',
@@ -162,60 +178,62 @@ class Map extends Component {
         'text-halo-color': '#fff',
       },
       layout: {
-        'text-size': size,
+        'text-size': size > 0 ? size : 0,
         'text-padding': padding,
         'text-field': `{name${lang}}`,
         'text-font': ['Open Sans Regular', 'Arial Unicode MS Bold'],
         'text-transform': 'uppercase',
         'symbol-placement': placement,
         'symbol-spacing': 1000,
+        'text-offset': [0, offset],
+        'text-anchor': anchor,
+        'icon-image': image,
+        'icon-offset': [0, -13.5],
+        'icon-anchor': 'top',
       },
     })
   }
 
-  handleLoadSymbol = (
-    id,
-    source,
-    layer,
-    filterType,
-    filterField,
-    filterValue,
-    minzoom,
-    maxzoom,
-    color,
-    size,
-    padding,
-    textOffset,
-    image,
-    iconSize,
-    iconOffset
-  ) => {
-    const lang = '_en'
+  handleLoadStar = e => {
+    const img = 'star'
     this.map.addLayer({
-      id,
-      source,
-      'source-layer': layer,
-      filter: [filterType, filterField, filterValue],
-      minzoom,
-      maxzoom,
+      id: `pin-${e}`,
+      source: 'points',
+      filter: ['==', 'e', e],
       type: 'symbol',
-      paint: {
-        'text-color': color,
-        'text-halo-width': 3,
-        'text-halo-color': '#fff',
-      },
       layout: {
-        'text-size': size,
-        'text-padding': padding,
-        'text-field': `{name${lang}}`,
+        'icon-image': img,
+        'icon-size': 0.3,
+        'icon-offset': [0, -45],
+        'icon-anchor': 'bottom',
+      },
+    })
+  }
+
+  handleLoadStarAndLabel = e => {
+    const img = 'star'
+    const black = '#000'
+    this.map.addLayer({
+      id: `pin-and-label-${e}`,
+      source: 'points',
+      filter: ['==', 'e', e],
+      type: 'symbol',
+      layout: {
+        'text-size': 13,
+        'text-field': '{name}',
         'text-font': ['Open Sans Regular', 'Arial Unicode MS Bold'],
         'text-transform': 'uppercase',
-        'text-offset': [0, textOffset],
-        'text-anchor': 'bottom',
-        'icon-image': image,
-        'icon-size': iconSize,
-        'icon-offset': [0, iconOffset],
-        'icon-anchor': 'top',
+        'text-offset': [0, -0.7],
+        'text-anchor': 'top',
+        'icon-image': img,
+        'icon-size': 0.3,
+        'icon-offset': [0, -45],
+        'icon-anchor': 'bottom',
+      },
+      paint: {
+        'text-color': black,
+        'text-halo-color': 'rgba(255, 255, 255, 1)',
+        'text-halo-width': 3,
       },
     })
   }
@@ -355,30 +373,70 @@ class Map extends Component {
     mapChange({
       zoom: parseFloat(zoom.toFixed(2)),
       center: {
-        lng: parseFloat(lng.toFixed(5)),
-        lat: parseFloat(lat.toFixed(5)),
+        lng: parseFloat(lng.toFixed(6)),
+        lat: parseFloat(lat.toFixed(6)),
       },
       bounds: this.map.getBounds(),
     })
 
+    this.handleChangeTextSize()
+  }
+
+  handleChangeTextSize = () => {
+    const zoom = this.map.getZoom()
+
     if (this.map.getLayer('seas')) {
       this.map.setLayoutProperty('seas', 'text-size', 9 + zoom * 2)
+    }
+    if (this.map.getLayer('curved-seas')) {
       this.map.setLayoutProperty('curved-seas', 'text-size', 9 + zoom * 2)
+    }
+    if (this.map.getLayer('oceans')) {
       this.map.setLayoutProperty('oceans', 'text-size', 10 + zoom * 3)
-      this.map.setLayoutProperty('villages', 'text-size', -6 + zoom * 1.5)
-      this.map.setLayoutProperty('residentials', 'text-size', -6 + zoom * 1.5)
-      this.map.setLayoutProperty('suburbs', 'text-size', -10 + zoom * 2)
-      this.map.setLayoutProperty('towns', 'text-size', -8 + zoom * 2)
-      this.map.setLayoutProperty('cities', 'text-size', -4 + zoom * 2)
-      this.map.setLayoutProperty('places-6', 'text-size', -3 + zoom * 2)
+    }
+    if (this.map.getLayer('villages')) {
+      this.map.setLayoutProperty('villages', 'text-size', zoom >= 4 ? -6 + zoom * 1.5 : 0)
+    }
+    if (this.map.getLayer('residentials')) {
+      this.map.setLayoutProperty('residentials', 'text-size', zoom >= 4 ? -6 + zoom * 1.5 : 0)
+    }
+    if (this.map.getLayer('suburbs')) {
+      this.map.setLayoutProperty('suburbs', 'text-size', zoom >= 5 ? -10 + zoom * 2 : 0)
+    }
+    if (this.map.getLayer('towns')) {
+      this.map.setLayoutProperty('towns', 'text-size', zoom >= 4 ? -8 + zoom * 2 : 0)
+    }
+    if (this.map.getLayer('cities')) {
+      this.map.setLayoutProperty('cities', 'text-size', zoom >= 2 ? -4 + zoom * 2 : 0)
+    }
+    if (this.map.getLayer('places-6')) {
+      this.map.setLayoutProperty('places-6', 'text-size', zoom >= 1.5 ? -3 + zoom * 2 : 0)
+    }
+    if (this.map.getLayer('places-4')) {
       this.map.setLayoutProperty('places-4', 'text-size', 2 + zoom * 2)
+    }
+    if (this.map.getLayer('places-1')) {
       this.map.setLayoutProperty('places-1', 'text-size', 5 + zoom * 2)
+    }
+    if (this.map.getLayer('states')) {
       this.map.setLayoutProperty('states', 'text-size', 6 + zoom * 2)
-      this.map.setLayoutProperty('countries-6', 'text-size', -2 + zoom * 2)
+    }
+    if (this.map.getLayer('countries-6')) {
+      this.map.setLayoutProperty('countries-6', 'text-size', zoom >= 1 ? -2 + zoom * 2 : 0)
+    }
+    if (this.map.getLayer('countries-5')) {
       this.map.setLayoutProperty('countries-5', 'text-size', 3 + zoom * 2)
+    }
+    if (this.map.getLayer('countries-4')) {
       this.map.setLayoutProperty('countries-4', 'text-size', 5 + zoom * 2)
+    }
+    if (this.map.getLayer('countries-3')) {
       this.map.setLayoutProperty('countries-3', 'text-size', 6 + zoom * 2)
+    }
+    if (this.map.getLayer('countries-2')) {
       this.map.setLayoutProperty('countries-2', 'text-size', 9 + zoom * 2)
+    }
+    if (this.map.getLayer('countries-1')) {
       this.map.setLayoutProperty('countries-1', 'text-size', 12 + zoom * 2)
     }
   }

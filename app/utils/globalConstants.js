@@ -24,3 +24,5 @@ export const RECOMMENDATION_COUNT = 5
 export const CENTER_COORDS = { lng: 5.8224, lat: 52.1424 }
 export const DEFAULT_ZOOM = 6
 export const DEFAULT_LIMIT = 6
+export const MIN_ZOOM = 0
+export const MAX_ZOOM = 18

@@ -9,6 +9,7 @@ import { DEFAULT_LOCALE } from 'containers/LanguageProvider/constants'
 import enTranslationMessages from 'translations/en.json'
 import nlTranslationMessages from 'translations/nl.json'
 import { getItem } from './localStorage'
+import { MAX_ZOOM } from './globalConstants'
 
 const translations = {
   en: enTranslationMessages,
@@ -38,7 +39,7 @@ const getViewport = viewportStr => {
 
   return {
     center: { lng: parseFloat(segs[0]), lat: parseFloat(segs[1]) },
-    zoom: parseFloat(segs[2]),
+    zoom: parseFloat(segs[2] > MAX_ZOOM ? MAX_ZOOM : segs[2]),
   }
 }
 
@@ -160,8 +161,7 @@ export const urlComposer = ({ brochure, viewport, types, descriptives }) => {
     const descAll = descriptives.all ? translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase() : undefined
     const descStars = descriptives.stars.length > 0 ? descriptives.stars.map(type => `+${getUrlStr(type[DEFAULT_LOCALE])}`).join(',') : undefined
     const descIncludes = descriptives.includes.length > 0 ? descriptives.includes.map(type => getUrlStr(type[DEFAULT_LOCALE])).join(',') : undefined
-    const descExcludes =
-      descriptives.excludes.length > 0 ? descriptives.excludes.map(type => `-${getUrlStr(type[DEFAULT_LOCALE])}`).join(',') : undefined
+    const descExcludes = descriptives.excludes.length > 0 ? descriptives.excludes.map(type => `-${getUrlStr(type[DEFAULT_LOCALE])}`).join(',') : undefined
 
     if (descriptives.all) {
       let arr = [descAll]
