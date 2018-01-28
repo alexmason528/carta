@@ -299,12 +299,7 @@ function questReducer(state = initialState, { type, payload }) {
       setItem('curQuestInd', payload)
       newQuests = quests.map((quest, index) => {
         if (index === curQuestInd) {
-          if (
-            quest.descriptives.all ||
-            quest.descriptives.includes.length > 0 ||
-            quest.descriptives.stars.length > 0 ||
-            quest.descriptives.visibles.length > 0
-          ) {
+          if (quest.descriptives.all || quest.descriptives.includes.length > 0 || quest.descriptives.stars.length > 0 || quest.descriptives.visibles.length > 0) {
             quest.descriptives.expanded = false
           }
 
@@ -545,12 +540,7 @@ function questReducer(state = initialState, { type, payload }) {
 
     case UPDATE_EXPAND:
       newQuests = quests.map(quest => {
-        if (
-          quest.descriptives.all ||
-          quest.descriptives.includes.length > 0 ||
-          quest.descriptives.stars.length > 0 ||
-          quest.descriptives.visibles.length > 0
-        ) {
+        if (quest.descriptives.all || quest.descriptives.includes.length > 0 || quest.descriptives.stars.length > 0 || quest.descriptives.visibles.length > 0) {
           quest.descriptives.expanded = false
         }
         if (quest.types.all || quest.types.includes.length > 0 || quest.types.visibles.length > 0) {

@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { withRouter } from 'react-router'
 import ReactResizeDetector from 'react-resize-detector'
-import cx from 'classnames'
 import { isEqual } from 'lodash'
 import MapBox from 'mapbox-gl'
 import { COLORS, S3_DATA_URL, S3_ICON_URL, MAP_ACCESS_TOKEN, RECOMMENDATION_COUNT, MIN_ZOOM, MAX_ZOOM } from 'utils/globalConstants'
@@ -17,6 +16,7 @@ class Map extends Component {
     viewport: PropTypes.object,
     params: PropTypes.object,
     router: PropTypes.object,
+    info: PropTypes.object,
     panelState: PropTypes.string,
     className: PropTypes.string,
     locale: PropTypes.string,
@@ -55,7 +55,8 @@ class Map extends Component {
     })
 
     this.map.on('load', this.handleLoad)
-    this.map.on('moveend', this.handleMapChange)
+    this.map.on('dragend', this.handleMapChange)
+    this.map.on('touchend', this.handleMapChange)
     this.map.on('zoomend', this.handleMapChange)
   }
 
@@ -64,6 +65,7 @@ class Map extends Component {
     if (!isEqual(viewport, nextProps.viewport) && this.map) {
       this.map.jumpTo({ center: nextProps.viewport.center, zoom: nextProps.viewport.zoom })
     }
+
     if (this.map) {
       this.handleRedrawMap(nextProps)
     }
@@ -83,29 +85,35 @@ class Map extends Component {
   }
 
   handleLoad = () => {
-    this.map.addSource('mapbox', {
-      type: 'vector',
-      url: 'mapbox://mapbox.mapbox-streets-v7',
-    })
+    if (!this.map.getSource('mapbox')) {
+      this.map.addSource('mapbox', {
+        type: 'vector',
+        url: 'mapbox://mapbox.mapbox-streets-v7',
+      })
+    }
 
-    this.map.addSource('shapes', {
-      type: 'geojson',
-      data: `${S3_DATA_URL}/shapes.geojson`,
-    })
+    if (!this.map.getSource('shapes')) {
+      this.map.addSource('shapes', {
+        type: 'geojson',
+        data: `${S3_DATA_URL}/shapes.geojson`,
+      })
+    }
 
-    this.map.addSource('points', {
-      type: 'geojson',
-      data: `${S3_DATA_URL}/points.geojson`,
-    })
+    if (!this.map.getSource('points')) {
+      this.map.addSource('points', {
+        type: 'geojson',
+        data: `${S3_DATA_URL}/points.geojson`,
+      })
+    }
 
     this.map.loadImage(`${S3_ICON_URL}/marker-red-15.png`, (err, img) => {
-      if (!err) {
+      if (!err && !this.map.hasImage('marker')) {
         this.map.addImage('marker', img)
       }
     })
 
     this.map.loadImage(`${S3_ICON_URL}/star-red.png`, (err, img) => {
-      if (!err) {
+      if (!err && !this.map.hasImage('star')) {
         this.map.addImage('star', img)
       }
     })
@@ -164,6 +172,7 @@ class Map extends Component {
 
   handleLoadLayer = (id, source, layer, filterType, filterField, filterVal, minzoom, maxzoom, color, size, padding, placement, offset, anchor, image) => {
     const lang = '_en'
+    if (this.map.getLayer(id)) return
     this.map.addLayer({
       id,
       source,
@@ -196,8 +205,10 @@ class Map extends Component {
 
   handleLoadStar = e => {
     const img = 'star'
+    const id = `pin-${e}`
+    if (this.map.getLayer(id)) return
     this.map.addLayer({
-      id: `pin-${e}`,
+      id,
       source: 'points',
       filter: ['==', 'e', e],
       type: 'symbol',
@@ -213,6 +224,9 @@ class Map extends Component {
   handleLoadStarAndLabel = e => {
     const img = 'star'
     const black = '#000'
+    const id = `pin-and-label-${e}`
+    if (this.map.getLayer(id)) return
+
     this.map.addLayer({
       id: `pin-and-label-${e}`,
       source: 'points',
@@ -242,8 +256,11 @@ class Map extends Component {
     COLORS.slice()
       .reverse()
       .forEach((color, index) => {
+        const id = `shape-fill-${index}`
+        if (this.map.getLayer(id)) return
+
         this.map.addLayer({
-          id: `shape-fill-${index}`,
+          id,
           type: 'fill',
           source: 'shapes',
           layout: {},
@@ -295,6 +312,8 @@ class Map extends Component {
     COLORS.slice()
       .reverse()
       .forEach((color, index) => {
+        const id = `shape-caption-${index}`
+        if (this.map.getLayer(id)) return
         this.map.addLayer({
           id: `shape-caption-${index}`,
           type: 'symbol',
@@ -331,6 +350,8 @@ class Map extends Component {
   }
 
   handleClearMap = () => {
+    this.handleLoad()
+
     const sources = Array(COLORS.length).fill(0)
     sources.map((source, index) => {
       const filter = ['==', 'e', '']
@@ -341,11 +362,7 @@ class Map extends Component {
     })
   }
 
-  handleRedrawMap = props => {
-    const { panelState, recommendations } = props
-    if (!this.map.getSource('shapes') || !this.map.getSource('points')) {
-      return
-    }
+  handleRedrawMap = ({ panelState, recommendations }) => {
     this.handleClearMap()
     if (panelState !== 'closed') {
       recommendations.map((recommendation, index) => {
@@ -365,8 +382,11 @@ class Map extends Component {
     }
   }
 
-  handleMapChange = () => {
+  handleMapChange = evt => {
+    if (evt.type === 'zoomend' && evt.originalEvent && evt.originalEvent.type !== 'wheel') return
+
     const { mapChange, panelState } = this.props
+
     const zoom = this.map.getZoom()
     const { lng, lat } = this.map.getCenter()
     const bounds = this.map.getBounds()

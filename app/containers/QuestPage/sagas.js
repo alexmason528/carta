@@ -11,7 +11,6 @@ import {
   deleteUserWishlistFail,
 } from 'containers/App/actions'
 import { selectUser } from 'containers/App/selectors'
-import { selectBrochureLink, selectCurrentTypes, selectCurrentDescriptives, selectViewport, selectTypes } from 'containers/QuestPage/selectors'
 import { API_BASE_URL, RECOMMENDATION_COUNT } from 'utils/globalConstants'
 import request from 'utils/request'
 import { canSendRequest, urlComposer } from 'utils/urlHelper'
@@ -44,6 +43,7 @@ import {
   getDescriptivesFail,
   clearBrochure,
 } from './actions'
+import { selectBrochureLink, selectCurrentTypes, selectCurrentDescriptives, selectViewport, selectTypes } from './selectors'
 
 export function* getRecommendationWatcher() {
   yield takeLatest([GET_RECOMMENDATION_REQUEST, SET_QUEST], getRecommendationRequestHandler)
@@ -159,10 +159,7 @@ export function* getBrochureInfoRequestHandler({ payload }) {
 }
 
 export function* composeUrlWatcher() {
-  yield takeLatest(
-    [MAP_CHANGE, PLACE_CLICK, QUEST_SELECT, TYPE_CLICK, TYPE_ANYTHING_CLICK, DESCRIPTIVE_CLICK, DESCRIPTIVE_STAR_CLICK, DESCRIPTIVE_ANYTHING_CLICK],
-    composeUrl
-  )
+  yield takeLatest([MAP_CHANGE, PLACE_CLICK, QUEST_SELECT, TYPE_CLICK, TYPE_ANYTHING_CLICK, DESCRIPTIVE_CLICK, DESCRIPTIVE_STAR_CLICK, DESCRIPTIVE_ANYTHING_CLICK], composeUrl)
 }
 
 export function* composeUrl() {
@@ -171,6 +168,7 @@ export function* composeUrl() {
   const descriptives = yield select(selectCurrentDescriptives())
   const brochureLink = yield select(selectBrochureLink())
   const url = urlComposer(Object.assign({}, { viewport, types, descriptives }, brochureLink && { brochure: brochureLink }))
+
   if (browserHistory.getCurrentLocation().pathname !== url) {
     yield call(browserHistory.push, url)
   }

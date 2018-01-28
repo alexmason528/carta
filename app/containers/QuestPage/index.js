@@ -55,10 +55,12 @@ class QuestPage extends Component {
 
   componentWillMount() {
     const { params, getQuestInfoRequest } = this.props
-    getQuestInfoRequest({
-      quest: urlParser({ ...params }),
-      urlEntered: true,
-    })
+    setTimeout(() => {
+      getQuestInfoRequest({
+        quest: urlParser({ ...params }),
+        urlEntered: true,
+      })
+    }, 0)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -124,14 +126,7 @@ class QuestPage extends Component {
           curQuestInd={curQuestInd}
           questCnt={questCnt}
         />
-        <Map
-          panelState={panelState}
-          recommendations={recommendations}
-          info={info}
-          viewport={viewport}
-          mapChange={mapChange}
-          onClick={this.handleMapClick}
-        />
+        <Map panelState={panelState} recommendations={recommendations} info={info} viewport={viewport} mapChange={mapChange} onClick={this.handleMapClick} />
         {recommendations.length > 0 && <ScoreBoard recommendations={recommendations} />}
         {brochureLink && <Brochure brochureLink={brochureLink} />}
       </Container>
