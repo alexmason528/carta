@@ -366,18 +366,31 @@ class Map extends Component {
   }
 
   handleMapChange = () => {
-    const { mapChange } = this.props
+    const { mapChange, panelState } = this.props
     const zoom = this.map.getZoom()
     const { lng, lat } = this.map.getCenter()
-
-    mapChange({
+    const bounds = this.map.getBounds()
+    let param = {
       zoom: parseFloat(zoom.toFixed(2)),
       center: {
         lng: parseFloat(lng.toFixed(6)),
         lat: parseFloat(lat.toFixed(6)),
       },
-      bounds: this.map.getBounds(),
-    })
+    }
+
+    if (panelState === 'minimized') {
+      param.bounds = bounds
+    } else {
+      const { _ne, _sw } = bounds
+      const ratio = window.innerWidth / 256
+
+      param.bounds = {
+        _ne,
+        _sw: { lng: _sw.lng + (_ne.lng - _sw.lng) / ratio, lat: _sw.lat },
+      }
+    }
+
+    mapChange(param)
 
     this.handleChangeTextSize()
   }
@@ -454,17 +467,10 @@ class Map extends Component {
   }
 
   render() {
-    const { panelState, params: { brochure }, onClick } = this.props
+    const { onClick } = this.props
 
     return (
-      <div
-        id="map"
-        className={cx({
-          map: true,
-          map__withoutQuest: panelState !== 'opened' || brochure,
-        })}
-        onClick={onClick}
-      >
+      <div id="map" className="map" onClick={onClick}>
         <ReactResizeDetector handleWidth handleHeight onResize={this.handleResize} />
       </div>
     )
