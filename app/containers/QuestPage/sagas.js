@@ -1,23 +1,22 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects'
 import { findIndex, map, uniq } from 'lodash'
-import { browserHistory } from 'react-router'
 import { API_BASE_URL, RECOMMENDATION_COUNT } from 'utils/globalConstants'
 import request from 'utils/request'
-import { canSendRequest, urlComposer } from 'utils/urlHelper'
+import { canSendRequest } from 'utils/urlHelper'
 import {
   GET_BROCHURE_INFO_REQUEST,
   GET_DESCRIPTIVES_REQUEST,
   GET_RECOMMENDATION_REQUEST,
   GET_QUESTINFO_REQUEST,
-  MAP_CHANGE,
   PLACE_CLICK,
   TYPE_CLICK,
   TYPE_ANYTHING_CLICK,
+  SET_QUEST,
+  QUEST_SELECT,
+  MAP_CHANGE,
+  DESCRIPTIVE_ANYTHING_CLICK,
   DESCRIPTIVE_CLICK,
   DESCRIPTIVE_STAR_CLICK,
-  DESCRIPTIVE_ANYTHING_CLICK,
-  QUEST_SELECT,
-  SET_QUEST,
 } from './constants'
 import {
   getRecommendationSuccess,
@@ -33,10 +32,24 @@ import {
   getDescriptivesFail,
   clearBrochure,
 } from './actions'
-import { selectBrochureLink, selectCurrentTypes, selectCurrentDescriptives, selectViewport, selectTypes } from './selectors'
+import { selectCurrentTypes, selectCurrentDescriptives, selectViewport, selectTypes } from './selectors'
 
 export function* getRecommendationWatcher() {
-  yield takeLatest([GET_RECOMMENDATION_REQUEST, SET_QUEST], getRecommendationRequestHandler)
+  yield takeLatest(
+    [
+      GET_RECOMMENDATION_REQUEST,
+      SET_QUEST,
+      QUEST_SELECT,
+      MAP_CHANGE,
+      PLACE_CLICK,
+      TYPE_CLICK,
+      TYPE_ANYTHING_CLICK,
+      DESCRIPTIVE_ANYTHING_CLICK,
+      DESCRIPTIVE_CLICK,
+      DESCRIPTIVE_STAR_CLICK,
+    ],
+    getRecommendationRequestHandler
+  )
 }
 
 export function* getRecommendationRequestHandler() {
@@ -99,7 +112,10 @@ export function* getRecommendationRequestHandler() {
   }
 
   try {
-    const res = canSendRequest({ types }) ? yield call(request, requestURL, params) : []
+    let res = []
+    if (canSendRequest({ types })) {
+      res = yield call(request, requestURL, params)
+    }
     yield put(getRecommendationSuccess(res))
     yield put(getDescriptivesRequest())
   } catch (err) {
@@ -135,32 +151,13 @@ export function* getBrochureInfoWatcher() {
 
 export function* getBrochureInfoRequestHandler({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/brochure/${payload}`
-
-  const params = {
-    method: 'GET',
-  }
+  const params = { method: 'GET' }
 
   try {
     const res = yield call(request, requestURL, params)
     yield put(getBrochureInfoSuccess(res))
   } catch (err) {
     yield put(getBrochureInfoFail(err.details))
-  }
-}
-
-export function* composeUrlWatcher() {
-  yield takeLatest([MAP_CHANGE, PLACE_CLICK, QUEST_SELECT, TYPE_CLICK, TYPE_ANYTHING_CLICK, DESCRIPTIVE_CLICK, DESCRIPTIVE_STAR_CLICK, DESCRIPTIVE_ANYTHING_CLICK], composeUrl)
-}
-
-export function* composeUrl() {
-  const viewport = yield select(selectViewport())
-  const types = yield select(selectCurrentTypes())
-  const descriptives = yield select(selectCurrentDescriptives())
-  const brochureLink = yield select(selectBrochureLink())
-  const url = urlComposer(Object.assign({}, { viewport, types, descriptives }, brochureLink && { brochure: brochureLink }))
-
-  if (browserHistory.getCurrentLocation().pathname !== url) {
-    yield call(browserHistory.push, url)
   }
 }
 
@@ -229,4 +226,4 @@ export function* getDescriptivesRequestHandler() {
   }
 }
 
-export default [getRecommendationWatcher, getQuestInfoWatcher, getBrochureInfoWatcher, composeUrlWatcher, getDescriptivesWatcher]
+export default [getRecommendationWatcher, getQuestInfoWatcher, getBrochureInfoWatcher, getDescriptivesWatcher]

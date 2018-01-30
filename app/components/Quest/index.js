@@ -4,7 +4,7 @@ import { compose } from 'redux'
 import { connect } from 'react-redux'
 import cx from 'classnames'
 import { createStructuredSelector } from 'reselect'
-import { SET_URL_ENTERED_QUEST } from 'containers/QuestPage/constants'
+import { SET_QUEST } from 'containers/QuestPage/constants'
 import {
   updateExpand,
   placeClick,
@@ -79,11 +79,8 @@ class Quest extends Component {
   initializeProps = props => {
     const { currentTypes, currentDescriptives, info: { status } } = props
 
-    if (status === SET_URL_ENTERED_QUEST) {
-      if (
-        (currentTypes.all || currentTypes.includes.length > 0) &&
-        (currentDescriptives.all || currentDescriptives.includes.length > 0 || currentDescriptives.stars.length > 0)
-      ) {
+    if (status === SET_QUEST) {
+      if ((currentTypes.all || currentTypes.includes.length > 0) && (currentDescriptives.all || currentDescriptives.includes.length > 0 || currentDescriptives.stars.length > 0)) {
         this.setState({ currentTab: 2 })
       } else if (
         currentTypes.all ||

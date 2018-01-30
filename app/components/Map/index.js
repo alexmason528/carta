@@ -4,6 +4,7 @@ import ReactResizeDetector from 'react-resize-detector'
 import { isEqual, differenceWith } from 'lodash'
 import MapBox from 'mapbox-gl'
 import { COLORS, S3_DATA_URL, S3_ICON_URL, MAP_ACCESS_TOKEN, RECOMMENDATION_COUNT, MIN_ZOOM, MAX_ZOOM } from 'utils/globalConstants'
+import { isMobile } from 'utils/mobileDetector'
 import './style.scss'
 
 MapBox.accessToken = MAP_ACCESS_TOKEN
@@ -12,6 +13,7 @@ class Map extends Component {
   static propTypes = {
     mapChange: PropTypes.func,
     onClick: PropTypes.func,
+    updateBrochureLink: PropTypes.func,
     recommendations: PropTypes.array,
     viewport: PropTypes.object,
     params: PropTypes.object,
@@ -56,14 +58,18 @@ class Map extends Component {
 
     this.map.on('load', this.handleLoad)
     this.map.on('dragend', this.handleMapChange)
-    this.map.on('touchend', this.handleMapChange)
+    if (isMobile()) {
+      this.map.on('touchend', this.handleMapChange)
+    }
     this.map.on('zoomend', this.handleMapChange)
   }
 
   componentWillReceiveProps(nextProps) {
     const { viewport, wishlist } = this.props
+
     if (!isEqual(viewport, nextProps.viewport) && this.map) {
-      this.map.jumpTo({ center: nextProps.viewport.center, zoom: nextProps.viewport.zoom })
+      const { viewport: { center, zoom } } = nextProps
+      this.map.jumpTo({ center, zoom })
     }
 
     if (this.map) {
@@ -514,10 +520,10 @@ class Map extends Component {
   }
 
   handlePlaceClick = place => {
-    const { params: { viewport, types, descriptives }, router } = this.props
+    const { params: { viewport, types, descriptives }, router, updateBrochureLink } = this.props
     const url = viewport && types && descriptives ? `/quest/in/${place}/${viewport}/${types}/${descriptives}` : `/quest/in/${place}`
-
     router.push(url)
+    updateBrochureLink(place)
   }
 
   handleResize = () => {

@@ -16,7 +16,6 @@ export const DESCRIPTIVE_STAR_CLICK = 'carta/Quest/DESCRIPTIVE_STAR_CLICK'
 export const DESCRIPTIVE_ANYTHING_CLICK = 'carta/Quest/DESCRIPTIVE_ANYTHING_CLICK'
 
 export const SET_QUEST = 'carta/Quest/SET_QUEST'
-export const SET_URL_ENTERED_QUEST = 'carta/Quest/SET_URL_ENTERED_QUEST'
 
 export const QUEST_ADD = 'carta/Quest/QUEST_ADD'
 export const QUEST_SELECT = 'cara/Quest/QUEST_SELECT'
@@ -38,4 +37,5 @@ export const GET_DESCRIPTIVES_REQUEST = 'carta/Quest/GET_DESCRIPTIVES_REQUEST'
 export const GET_DESCRIPTIVES_SUCCESS = 'carta/Quest/GET_DESCRIPTIVES_SUCCESS'
 export const GET_DESCRIPTIVES_FAIL = 'carta/Quest/GET_DESCRIPTIVES_FAIL'
 
+export const UPDATE_BROCHURE_LINK = 'carta/Quest/UPDATE_BROCHURE_LINK'
 export const CLEAR_BROCHURE = 'carta/Quest/CLEAR_BROCHURE'

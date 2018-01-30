@@ -21,9 +21,9 @@ const selectDescriptives = () => createSelector(selectQuest, substate => get(sub
 
 const selectCurrentDescriptives = () => createSelector(selectQuest, substate => substate.quests[substate.curQuestInd].descriptives)
 
-const selectBrochureLink = () => createSelector(selectQuest, substate => get(substate, 'brochureLink'))
+const selectBrochureLink = () => createSelector(selectQuest, substate => get(substate, 'brochure.link'))
 
-const selectBrochureInfo = () => createSelector(selectQuest, substate => get(substate, 'brochureInfo'))
+const selectBrochureInfo = () => createSelector(selectQuest, substate => get(substate, 'brochure.info'))
 
 const selectInfo = () =>
   createSelector(selectQuest, substate => ({

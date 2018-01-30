@@ -193,7 +193,7 @@ export const urlComposer = ({ brochure, viewport, types, descriptives }) => {
 }
 
 export const canSendRequest = ({ types }) => {
-  return types.all || types.includes.length > 0
+  return types.includes.length > 0
 }
 
 export const checkQuest = viewport => {

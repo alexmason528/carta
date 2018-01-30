@@ -3,14 +3,14 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { Container, Row, Col } from 'reactstrap'
 import { createStructuredSelector } from 'reselect'
-import { withRouter, browserHistory } from 'react-router'
+import { withRouter } from 'react-router'
 import { injectIntl, intlShape } from 'react-intl'
 import cx from 'classnames'
 import { find } from 'lodash'
 import { getUserWishlistRequest, createUserWishlistRequest, deleteUserWishlistRequest } from 'containers/App/actions'
 import { CREATE_USER_WISHLIST_SUCCESS, DELETE_USER_WISHLIST_SUCCESS } from 'containers/App/constants'
 import { selectAuthenticated, selectUserWishlist, selectUser, selectInfo } from 'containers/App/selectors'
-import { getBrochureInfoRequest, setQuest, clearBrochure } from 'containers/QuestPage/actions'
+import { getBrochureInfoRequest, setQuest, updateBrochureLink, clearBrochure } from 'containers/QuestPage/actions'
 import { selectBrochureInfo } from 'containers/QuestPage/selectors'
 import Img from 'components/Img'
 import ResponsiveLayout from 'components/ResponsiveLayout'
@@ -26,6 +26,7 @@ class Brochure extends Component {
     createUserWishlistRequest: PropTypes.func,
     deleteUserWishlistRequest: PropTypes.func,
     setQuest: PropTypes.func,
+    updateBrochureLink: PropTypes.func,
     clearBrochure: PropTypes.func,
     params: PropTypes.object,
     router: PropTypes.object,
@@ -56,11 +57,15 @@ class Brochure extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { brochureLink, getBrochureInfoRequest } = this.props
     const { info: { status } } = nextProps
     if (status === CREATE_USER_WISHLIST_SUCCESS) {
       this.showMessage(messages.addedToWishlist)
     } else if (status === DELETE_USER_WISHLIST_SUCCESS) {
       this.showMessage(messages.removedFromWishlist)
+    }
+    if (brochureLink !== nextProps.brochureLink) {
+      getBrochureInfoRequest(brochureLink)
     }
   }
 
@@ -74,8 +79,17 @@ class Brochure extends Component {
   }
 
   handleBrochureClose = () => {
-    const { clearBrochure } = this.props
+    const { clearBrochure, params: { viewport, types, descriptives }, router } = this.props
     clearBrochure()
+    if (viewport && types) {
+      if (descriptives) {
+        router.push(`/quest/${viewport}/${types}/${descriptives}`)
+      } else {
+        router.push(`/quest/${viewport}/${types}/popular`)
+      }
+    } else {
+      router.push('/quest')
+    }
   }
 
   handleBrochureAddtoStarlist = alreadyExist => {
@@ -90,13 +104,14 @@ class Brochure extends Component {
   }
 
   handleClickMessage = () => {
-    const { authenticated, user } = this.props
+    const { authenticated, user, router, clearBrochure } = this.props
 
     if (!authenticated) {
-      browserHistory.push('/')
+      router.push('/')
     } else {
-      browserHistory.push(`/user/${user.username}/wishlist`)
+      router.push(`/user/${user.username}/wishlist`)
     }
+    clearBrochure()
   }
 
   render() {
@@ -104,11 +119,11 @@ class Brochure extends Component {
     const { brochureInfo, authenticated, user, wishlist } = this.props
     if (!brochureInfo) return null
 
-    const { info: { mainPoster, description, tiles } } = brochureInfo
+    const { mainPoster, description, tiles, _id } = brochureInfo
 
     let alreadyExist = false
 
-    if (!authenticated || !find(wishlist, { userID: user._id, brochureID: brochureInfo._id })) {
+    if (!authenticated || !find(wishlist, { userID: user._id, brochureID: _id })) {
       alreadyExist = false
     } else {
       alreadyExist = true
@@ -188,6 +203,7 @@ const actions = {
   createUserWishlistRequest,
   deleteUserWishlistRequest,
   getBrochureInfoRequest,
+  updateBrochureLink,
   setQuest,
   clearBrochure,
 }

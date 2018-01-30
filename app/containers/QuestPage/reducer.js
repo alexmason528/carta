@@ -16,7 +16,6 @@ import {
   DESCRIPTIVE_STAR_CLICK,
   DESCRIPTIVE_ANYTHING_CLICK,
   SET_QUEST,
-  SET_URL_ENTERED_QUEST,
   QUEST_ADD,
   QUEST_SELECT,
   QUEST_REMOVE,
@@ -32,6 +31,7 @@ import {
   GET_DESCRIPTIVES_REQUEST,
   GET_DESCRIPTIVES_SUCCESS,
   GET_DESCRIPTIVES_FAIL,
+  UPDATE_BROCHURE_LINK,
   CLEAR_BROCHURE,
 } from './constants'
 
@@ -78,8 +78,10 @@ const initialState = {
   quests: JSON.parse(getItem('quests')) || [JSON.parse(JSON.stringify(initialQuest))],
   curQuestInd: JSON.parse(getItem('curQuestInd')) || 0,
   recommendations: [],
-  brochureLink: null,
-  brochureInfo: null,
+  brochure: {
+    link: null,
+    info: null,
+  },
   status: INIT,
   error: null,
 }
@@ -337,24 +339,20 @@ function questReducer(state = initialState, { type, payload }) {
           quest.descriptives.includes = []
           quest.descriptives.excludes = []
 
-          if (payload.quest.types) {
-            quest.types.all = payload.quest.types.all
-            if (payload.urlEntered) {
-              quest.types.visibles = []
-            }
+          if (payload.types) {
+            quest.types.all = payload.types.all
+            quest.types.visibles = []
 
-            for (let type of payload.quest.types.includes) {
+            for (let type of payload.types.includes) {
               const typeObj = find(categories.types, {
                 [DEFAULT_LOCALE]: getQuestStr(type),
               })
               if (typeObj && !find(quest.types.includes, typeObj)) {
                 quest.types.includes.push(typeObj)
-                if (payload.urlEntered) {
-                  quest.types.visibles.push(typeObj)
-                }
+                quest.types.visibles.push(typeObj)
               }
             }
-            for (let type of payload.quest.types.excludes) {
+            for (let type of payload.types.excludes) {
               const typeObj = find(categories.types, {
                 [DEFAULT_LOCALE]: getQuestStr(type),
               })
@@ -371,40 +369,37 @@ function questReducer(state = initialState, { type, payload }) {
             quest.types.expanded = true
           }
 
-          if (!payload.quest.descriptives || payload.quest.descriptives === 'popular') {
+          if (!payload.descriptives || payload.descriptives === 'popular') {
             quest.descriptives.all = false
             quest.descriptives.visibles = []
             quest.descriptives.expanded = true
           } else {
-            quest.descriptives.all = payload.quest.descriptives.all
+            quest.descriptives.all = payload.descriptives.all
+            quest.descriptives.visibles = []
 
-            if (payload.urlEntered) {
-              quest.descriptives.visibles = []
-            }
-
-            for (let desc of payload.quest.descriptives.stars) {
+            for (let desc of payload.descriptives.stars) {
               const descObj = find(categories.descriptives, {
                 [DEFAULT_LOCALE]: getQuestStr(desc),
               })
               if (descObj && !find(quest.descriptives.stars, descObj)) {
                 quest.descriptives.stars.push(descObj)
-                if (payload.urlEntered && !find(quest.descriptives.visibles, descObj)) {
+                if (!find(quest.descriptives.visibles, descObj)) {
                   quest.descriptives.visibles.push(descObj)
                 }
               }
             }
-            for (let desc of payload.quest.descriptives.includes) {
+            for (let desc of payload.descriptives.includes) {
               const descObj = find(categories.descriptives, {
                 [DEFAULT_LOCALE]: getQuestStr(desc),
               })
               if (descObj && !find(quest.descriptives.includes, descObj)) {
                 quest.descriptives.includes.push(descObj)
-                if (payload.urlEntered && !find(quest.descriptives.visibles, descObj)) {
+                if (!find(quest.descriptives.visibles, descObj)) {
                   quest.descriptives.visibles.push(descObj)
                 }
               }
             }
-            for (let desc of payload.quest.descriptives.excludes) {
+            for (let desc of payload.descriptives.excludes) {
               const descObj = find(categories.descriptives, {
                 [DEFAULT_LOCALE]: getQuestStr(desc),
               })
@@ -417,7 +412,7 @@ function questReducer(state = initialState, { type, payload }) {
         return quest
       })
 
-      newViewport = Object.assign({}, { ...state.viewport }, payload.quest.viewport && { ...payload.quest.viewport })
+      newViewport = Object.assign({}, { ...state.viewport }, payload.viewport && { ...payload.viewport })
 
       setItem('viewport', JSON.stringify(newViewport))
       setItem('quests', JSON.stringify(newQuests))
@@ -427,9 +422,9 @@ function questReducer(state = initialState, { type, payload }) {
         {
           ...state,
           viewport: newViewport,
-          status: payload.urlEntered ? SET_URL_ENTERED_QUEST : SET_QUEST,
+          status: type,
           quests: JSON.parse(JSON.stringify(newQuests)),
-          brochureLink: payload.quest.brochure,
+          brochure: { link: payload.brochure, info: null },
         }
       )
 
@@ -481,7 +476,10 @@ function questReducer(state = initialState, { type, payload }) {
       return {
         ...state,
         status: type,
-        brochureInfo: null,
+        brochure: {
+          link: payload,
+          info: null,
+        },
         error: null,
       }
 
@@ -489,7 +487,14 @@ function questReducer(state = initialState, { type, payload }) {
       return {
         ...state,
         status: type,
-        brochureInfo: payload,
+        brochure: {
+          link: payload.link,
+          info: {
+            _id: payload._id,
+            e: payload.e,
+            ...payload.info,
+          },
+        },
       }
 
     case GET_BROCHURE_INFO_FAIL:
@@ -497,7 +502,10 @@ function questReducer(state = initialState, { type, payload }) {
         ...state,
         status: type,
         error: payload,
-        brochureInfo: null,
+        brochure: {
+          link: null,
+          info: null,
+        },
       }
 
     case TYPE_SEARCH_EXP_CHANGE:
@@ -578,12 +586,24 @@ function questReducer(state = initialState, { type, payload }) {
         error: payload,
       }
 
+    case UPDATE_BROCHURE_LINK:
+      return {
+        ...state,
+        status: type,
+        brochure: {
+          link: payload,
+          info: null,
+        },
+      }
+
     case CLEAR_BROCHURE:
       return {
         ...state,
         status: type,
-        brochureInfo: null,
-        brochureLink: null,
+        brochure: {
+          link: null,
+          info: null,
+        },
       }
 
     default:

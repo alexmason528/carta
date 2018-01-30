@@ -25,6 +25,7 @@ import {
   GET_DESCRIPTIVES_REQUEST,
   GET_DESCRIPTIVES_SUCCESS,
   GET_DESCRIPTIVES_FAIL,
+  UPDATE_BROCHURE_LINK,
   CLEAR_BROCHURE,
 } from './constants'
 
@@ -202,6 +203,13 @@ export function getDescriptivesSuccess(payload) {
 export function getDescriptivesFail(payload) {
   return {
     type: GET_DESCRIPTIVES_FAIL,
+    payload,
+  }
+}
+
+export function updateBrochureLink(payload) {
+  return {
+    type: UPDATE_BROCHURE_LINK,
     payload,
   }
 }
