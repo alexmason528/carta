@@ -1,16 +1,6 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects'
 import { findIndex, map, uniq } from 'lodash'
 import { browserHistory } from 'react-router'
-import { GET_USER_WISHLIST_REQUEST, CREATE_USER_WISHLIST_REQUEST, DELETE_USER_WISHLIST_REQUEST } from 'containers/App/constants'
-import {
-  getUserWishlistSuccess,
-  getUserWishlistFail,
-  createUserWishlistSuccess,
-  createUserWishlistFail,
-  deleteUserWishlistSuccess,
-  deleteUserWishlistFail,
-} from 'containers/App/actions'
-import { selectUser } from 'containers/App/selectors'
 import { API_BASE_URL, RECOMMENDATION_COUNT } from 'utils/globalConstants'
 import request from 'utils/request'
 import { canSendRequest, urlComposer } from 'utils/urlHelper'
@@ -239,78 +229,4 @@ export function* getDescriptivesRequestHandler() {
   }
 }
 
-export function* getUserWishlistWatcher() {
-  yield takeLatest(GET_USER_WISHLIST_REQUEST, getUserWishlistRequestHandler)
-}
-
-export function* getUserWishlistRequestHandler() {
-  const user = yield select(selectUser())
-  const requestURL = `${API_BASE_URL}api/v1/user/${user._id}/wishlist`
-  const params = { method: 'GET' }
-
-  try {
-    const res = yield call(request, requestURL, params)
-    yield put(getUserWishlistSuccess(res))
-  } catch (err) {
-    yield put(getUserWishlistFail(err.details))
-  }
-}
-
-export function* createUserWishlistWatcher() {
-  yield takeLatest(CREATE_USER_WISHLIST_REQUEST, createUserWishlistRequestHandler)
-}
-
-export function* createUserWishlistRequestHandler({ payload }) {
-  const { userID, brochureID, quest } = payload
-  const requestURL = `${API_BASE_URL}api/v1/user/${userID}/wishlist`
-
-  const data = {
-    brochureID,
-    quest,
-  }
-  const params = {
-    method: 'POST',
-    body: JSON.stringify(data),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }
-
-  try {
-    const res = yield call(request, requestURL, params)
-    yield put(createUserWishlistSuccess(res))
-  } catch (err) {
-    yield put(createUserWishlistFail(err.details))
-  }
-}
-
-export function* deleteUserWishlistWatcher() {
-  yield takeLatest(DELETE_USER_WISHLIST_REQUEST, deleteUserWishlistRequestHandler)
-}
-
-export function* deleteUserWishlistRequestHandler({ payload }) {
-  const { brochureID, userID } = payload
-  const requestURL = `${API_BASE_URL}api/v1/user/${userID}/wishlist/${brochureID}`
-
-  const params = {
-    method: 'DELETE',
-  }
-
-  try {
-    const res = yield call(request, requestURL, params)
-    yield put(deleteUserWishlistSuccess(res))
-  } catch (err) {
-    yield put(deleteUserWishlistFail(err.details))
-  }
-}
-
-export default [
-  getRecommendationWatcher,
-  getQuestInfoWatcher,
-  getBrochureInfoWatcher,
-  composeUrlWatcher,
-  getDescriptivesWatcher,
-  getUserWishlistWatcher,
-  createUserWishlistWatcher,
-  deleteUserWishlistWatcher,
-]
+export default [getRecommendationWatcher, getQuestInfoWatcher, getBrochureInfoWatcher, composeUrlWatcher, getDescriptivesWatcher]

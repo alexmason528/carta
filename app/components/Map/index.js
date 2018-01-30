@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { withRouter } from 'react-router'
 import ReactResizeDetector from 'react-resize-detector'
-import { isEqual } from 'lodash'
+import { isEqual, differenceWith } from 'lodash'
 import MapBox from 'mapbox-gl'
 import { COLORS, S3_DATA_URL, S3_ICON_URL, MAP_ACCESS_TOKEN, RECOMMENDATION_COUNT, MIN_ZOOM, MAX_ZOOM } from 'utils/globalConstants'
 import './style.scss'
@@ -16,7 +16,7 @@ class Map extends Component {
     viewport: PropTypes.object,
     params: PropTypes.object,
     router: PropTypes.object,
-    info: PropTypes.object,
+    wishlist: PropTypes.array,
     panelState: PropTypes.string,
     className: PropTypes.string,
     locale: PropTypes.string,
@@ -61,13 +61,17 @@ class Map extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { viewport } = this.props
+    const { viewport, wishlist } = this.props
     if (!isEqual(viewport, nextProps.viewport) && this.map) {
       this.map.jumpTo({ center: nextProps.viewport.center, zoom: nextProps.viewport.zoom })
     }
 
     if (this.map) {
       this.handleRedrawMap(nextProps)
+    }
+
+    if (wishlist.length - nextProps.wishlist.length > 0) {
+      this.handleDeleteWishlistLayers(wishlist, nextProps.wishlist)
     }
   }
 
@@ -81,10 +85,24 @@ class Map extends Component {
     if (!isEqual(this.props.recommendations, nextProps.recommendations)) {
       return true
     }
+    if (!isEqual(this.props.wishlist, nextProps.wishlist)) {
+      return true
+    }
     return false
   }
 
+  handleDeleteWishlistLayers = (curList, nextList) => {
+    const diff = differenceWith(curList, nextList, isEqual)
+
+    diff.forEach(entry => {
+      this.map.removeLayer(`pin-${entry.e}`)
+      this.map.removeLayer(`pin-and-label-${entry.e}`)
+    })
+  }
+
   handleLoad = () => {
+    const { wishlist } = this.props
+
     if (!this.map.getSource('mapbox')) {
       this.map.addSource('mapbox', {
         type: 'vector',
@@ -156,15 +174,10 @@ class Map extends Component {
     this.handleLoadLayer('countries-2', 'mapbox', 'country_label', '==', 'scalerank', 2, 0, 18, dark, 9 + zoom * 2, 10, 'point', 0, 'center', '')
     this.handleLoadLayer('countries-1', 'mapbox', 'country_label', '==', 'scalerank', 1, 0, 18, dark, 12 + zoom * 2, 10, 'point', 0, 'center', '')
 
-    this.handleLoadStar(1562)
-    this.handleLoadStar(451)
-    this.handleLoadStar(340)
-    this.handleLoadStar(248)
-
-    this.handleLoadStarAndLabel(1562)
-    this.handleLoadStarAndLabel(451)
-    this.handleLoadStarAndLabel(340)
-    this.handleLoadStarAndLabel(248)
+    wishlist.forEach(entry => {
+      this.handleLoadStar(entry.e)
+      this.handleLoadStarAndLabel(entry.e)
+    })
 
     this.handleLoadShape()
     this.handleLoadCaption()
@@ -219,6 +232,19 @@ class Map extends Component {
         'icon-anchor': 'bottom',
       },
     })
+
+    this.map.on('mousemove', id, () => {
+      this.map.getCanvas().style.cursor = 'pointer'
+    })
+
+    this.map.on('mouseleave', id, () => {
+      this.map.getCanvas().style.cursor = ''
+    })
+
+    this.map.on('click', id, data => {
+      const link = data.features[0].properties.link
+      this.handlePlaceClick(link)
+    })
   }
 
   handleLoadStarAndLabel = e => {
@@ -228,7 +254,7 @@ class Map extends Component {
     if (this.map.getLayer(id)) return
 
     this.map.addLayer({
-      id: `pin-and-label-${e}`,
+      id,
       source: 'points',
       filter: ['==', 'e', e],
       type: 'symbol',
@@ -249,6 +275,19 @@ class Map extends Component {
         'text-halo-color': 'rgba(255, 255, 255, 1)',
         'text-halo-width': 3,
       },
+    })
+
+    this.map.on('mousemove', id, () => {
+      this.map.getCanvas().style.cursor = 'pointer'
+    })
+
+    this.map.on('mouseleave', id, () => {
+      this.map.getCanvas().style.cursor = ''
+    })
+
+    this.map.on('click', id, data => {
+      const link = data.features[0].properties.link
+      this.handlePlaceClick(link)
     })
   }
 
@@ -476,7 +515,8 @@ class Map extends Component {
 
   handlePlaceClick = place => {
     const { params: { viewport, types, descriptives }, router } = this.props
-    const url = viewport && types && descriptives ? `/quest/in/${place}/${viewport}/${types}/${descriptives}` : '/quest'
+    const url = viewport && types && descriptives ? `/quest/in/${place}/${viewport}/${types}/${descriptives}` : `/quest/in/${place}`
+
     router.push(url)
   }
 

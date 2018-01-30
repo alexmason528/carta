@@ -20,9 +20,6 @@ import HttpsRedirect from 'react-https-redirect'
 import 'sanitize.css/sanitize.css'
 import 'bootstrap/dist/css/bootstrap.css'
 
-// Import root app
-import App from 'containers/App'
-
 // Import selector for `syncHistoryWithStore`
 import { selectLocationState } from 'containers/App/selectors'
 
@@ -45,7 +42,7 @@ import { translationMessages } from './i18n'
 import './global-styles'
 
 // Import routes
-import createRoutes from './routes'
+import createRootComponent from './routes'
 
 // Observe loading of Open Sans (to remove open sans, remove the <link> tag in
 // the index.html file and this observer)
@@ -76,10 +73,7 @@ const history = syncHistoryWithStore(browserHistory, store, {
 })
 
 // Set up the router, wrapping all Routes in the App component
-const rootRoute = {
-  component: App,
-  childRoutes: createRoutes(store),
-}
+const rootRoute = createRootComponent(store)
 
 const render = messages => {
   ReactDOM.render(

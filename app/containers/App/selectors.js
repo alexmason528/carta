@@ -5,7 +5,7 @@ const selectLocationState = () => state => state.route
 
 const selectAuthenticated = () => createSelector(selectGlobal, substate => substate.authenticated)
 
-const selectWishlist = () => createSelector(selectGlobal, substate => substate.wishlist)
+const selectUserWishlist = () => createSelector(selectGlobal, substate => substate.wishlist)
 
 const selectInfo = () =>
   createSelector(selectGlobal, substate => {
@@ -19,4 +19,4 @@ const selectUsername = () => createSelector(selectGlobal, substate => (substate.
 
 const selectMenuState = () => createSelector(selectGlobal, substate => substate.menuOpened)
 
-export { selectGlobal, selectLocationState, selectAuthenticated, selectWishlist, selectInfo, selectUser, selectUsername, selectMenuState }
+export { selectGlobal, selectLocationState, selectAuthenticated, selectUserWishlist, selectInfo, selectUser, selectUsername, selectMenuState }

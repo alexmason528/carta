@@ -3,19 +3,22 @@ import Helmet from 'react-helmet'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { Container, Row } from 'reactstrap'
-import { selectUser } from 'containers/App/selectors'
+import { getUserWishlistRequest, deleteUserWishlistRequest } from 'containers/App/actions'
+import { selectUser, selectUserWishlist } from 'containers/App/selectors'
 import { WishlistTile } from 'components/Tiles'
 import { selectWishlist } from './selectors'
-import { getWishlistRequest, deleteWishlistRequest } from './actions'
+import { getWishlistRequest } from './actions'
 import './style.scss'
 
 class WishlistPage extends Component {
   static propTypes = {
     getWishlistRequest: PropTypes.func,
-    deleteWishlistRequest: PropTypes.func,
+    getUserWishlistRequest: PropTypes.func,
+    deleteUserWishlistRequest: PropTypes.func,
     params: PropTypes.object,
     user: PropTypes.object,
     wishlist: PropTypes.array,
+    userWishlist: PropTypes.array,
   }
 
   constructor(props) {
@@ -27,32 +30,43 @@ class WishlistPage extends Component {
   }
 
   componentWillMount() {
-    const { params: { username } } = this.props
-    this.props.getWishlistRequest(username)
+    const { params: { username }, user } = this.props
+    if (!user || username !== user.username) {
+      this.props.getWishlistRequest(username)
+    } else {
+      this.props.getUserWishlistRequest(username)
+    }
   }
 
-  handleDelete = id => {
-    const { deleteWishlistRequest } = this.props
-    this.setState({ deletingWishlist: id }, () => {
-      deleteWishlistRequest(id)
+  handleDelete = brochureID => {
+    const { deleteUserWishlistRequest, user } = this.props
+    this.setState({ deletingWishlist: brochureID }, () => {
+      deleteUserWishlistRequest({ userID: user._id, brochureID })
     })
   }
 
   render() {
     const { deletingWishlist } = this.state
-    const { wishlist, user, params } = this.props
-    let canDelete = true
+    const { wishlist, userWishlist, user, params: { username } } = this.props
 
-    if (!user || user.username !== params.username) {
+    let showList
+    let canDelete
+
+    if (!user || username !== user.username) {
+      showList = wishlist
       canDelete = false
+    } else {
+      showList = userWishlist
+      canDelete = true
     }
+
     return (
       <Container fluid className="wishlistPage P-0 M-0">
         <Helmet meta={[{ name: 'Wishlist', content: 'Carta' }]} />
         <Row className="wishlistPage__row">
-          {wishlist &&
-            wishlist.map((entry, index) => (
-              <WishlistTile key={index} {...entry} canDelete={canDelete} deleting={entry.id === deletingWishlist} onDelete={this.handleDelete} />
+          {showList &&
+            showList.map((entry, index) => (
+              <WishlistTile key={index} {...entry} canDelete={canDelete} deleting={entry.brochureID === deletingWishlist} onDelete={this.handleDelete} />
             ))}
         </Row>
       </Container>
@@ -62,12 +76,14 @@ class WishlistPage extends Component {
 
 const selectors = createStructuredSelector({
   user: selectUser(),
+  userWishlist: selectUserWishlist(),
   wishlist: selectWishlist(),
 })
 
 const actions = {
   getWishlistRequest,
-  deleteWishlistRequest,
+  getUserWishlistRequest,
+  deleteUserWishlistRequest,
 }
 
 export default connect(selectors, actions)(WishlistPage)

@@ -11,7 +11,26 @@ const loadModule = cb => componentModule => {
   cb(null, componentModule.default)
 }
 
-export default function createRoutes(store) {
+export default function createRootComponent(store) {
+  const { injectSagas } = getAsyncInjectors(store) // eslint-disable-line no-unused-vars
+  return {
+    getComponent(nextState, cb) {
+      const importModules = Promise.all([import('containers/App/sagas'), import('containers/App')])
+
+      const renderRoute = loadModule(cb)
+
+      importModules.then(([sagas, component]) => {
+        injectSagas('global', sagas.default)
+        renderRoute(component)
+      })
+
+      importModules.catch(errorLoading)
+    },
+    childRoutes: createRoutes(store),
+  }
+}
+
+function createRoutes(store) {
   // create reusable async injectors using getAsyncInjectors factory
   const { injectReducer, injectSagas } = getAsyncInjectors(store)
 
@@ -20,11 +39,7 @@ export default function createRoutes(store) {
       path: '/quest(/in/:brochure)(/:viewport/:types/:descriptives)',
       name: 'quest',
       getComponent(nextState, cb) {
-        const importModules = Promise.all([
-          import('containers/QuestPage/reducer'),
-          import('containers/QuestPage/sagas'),
-          import('containers/QuestPage'),
-        ])
+        const importModules = Promise.all([import('containers/QuestPage/reducer'), import('containers/QuestPage/sagas'), import('containers/QuestPage')])
 
         const renderRoute = loadModule(cb)
 
@@ -68,11 +83,7 @@ export default function createRoutes(store) {
       path: '/places',
       name: 'place',
       getComponent(nextState, cb) {
-        const importModules = Promise.all([
-          import('containers/PlacePage/reducer'),
-          import('containers/PlacePage/sagas'),
-          import('containers/PlacePage'),
-        ])
+        const importModules = Promise.all([import('containers/PlacePage/reducer'), import('containers/PlacePage/sagas'), import('containers/PlacePage')])
 
         const renderRoute = loadModule(cb)
 
@@ -90,11 +101,7 @@ export default function createRoutes(store) {
       path: '/themes',
       name: 'theme',
       getComponent(nextState, cb) {
-        const importModules = Promise.all([
-          import('containers/ThemePage/reducer'),
-          import('containers/ThemePage/sagas'),
-          import('containers/ThemePage'),
-        ])
+        const importModules = Promise.all([import('containers/ThemePage/reducer'), import('containers/ThemePage/sagas'), import('containers/ThemePage')])
 
         const renderRoute = loadModule(cb)
 
@@ -112,11 +119,7 @@ export default function createRoutes(store) {
       path: '/user/:username/profile',
       name: 'profile',
       getComponent(nextState, cb) {
-        const importModules = Promise.all([
-          import('containers/ProfilePage/reducer'),
-          import('containers/ProfilePage/sagas'),
-          import('containers/ProfilePage'),
-        ])
+        const importModules = Promise.all([import('containers/ProfilePage/reducer'), import('containers/ProfilePage/sagas'), import('containers/ProfilePage')])
 
         const renderRoute = loadModule(cb)
 
@@ -134,11 +137,7 @@ export default function createRoutes(store) {
       path: '/user/:username/wishlist',
       name: 'wishlist',
       getComponent(nextState, cb) {
-        const importModules = Promise.all([
-          import('containers/WishlistPage/reducer'),
-          import('containers/WishlistPage/sagas'),
-          import('containers/WishlistPage'),
-        ])
+        const importModules = Promise.all([import('containers/WishlistPage/reducer'), import('containers/WishlistPage/sagas'), import('containers/WishlistPage')])
 
         const renderRoute = loadModule(cb)
 
@@ -156,11 +155,7 @@ export default function createRoutes(store) {
       path: '/user/:username/friends',
       name: 'friends',
       getComponent(nextState, cb) {
-        const importModules = Promise.all([
-          import('containers/FriendsPage/reducer'),
-          import('containers/FriendsPage/sagas'),
-          import('containers/FriendsPage'),
-        ])
+        const importModules = Promise.all([import('containers/FriendsPage/reducer'), import('containers/FriendsPage/sagas'), import('containers/FriendsPage')])
 
         const renderRoute = loadModule(cb)
 

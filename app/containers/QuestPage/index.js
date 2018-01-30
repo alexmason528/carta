@@ -3,8 +3,9 @@ import Helmet from 'react-helmet'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { Container } from 'reactstrap'
-import cx from 'classnames'
 import { isEqual } from 'lodash'
+import cx from 'classnames'
+import { selectUserWishlist } from 'containers/App/selectors'
 import Brochure from 'containers/Brochure'
 import { QuestButton } from 'components/Buttons'
 import MapLoader from 'components/MapLoader'
@@ -42,6 +43,7 @@ class QuestPage extends Component {
     location: PropTypes.object,
     info: PropTypes.object,
     params: PropTypes.object,
+    wishlist: PropTypes.array,
     recommendations: PropTypes.array,
     brochureLink: PropTypes.string,
     curQuestInd: PropTypes.number,
@@ -55,12 +57,10 @@ class QuestPage extends Component {
 
   componentWillMount() {
     const { params, getQuestInfoRequest } = this.props
-    setTimeout(() => {
-      getQuestInfoRequest({
-        quest: urlParser({ ...params }),
-        urlEntered: true,
-      })
-    }, 0)
+    getQuestInfoRequest({
+      quest: urlParser({ ...params }),
+      urlEntered: true,
+    })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -88,7 +88,7 @@ class QuestPage extends Component {
 
   render() {
     const { panelState } = this.state
-    const { recommendations, brochureLink, info, viewport, mapChange, curQuestInd, questCnt, questAdd, questSelect, questRemove } = this.props
+    const { recommendations, brochureLink, info, viewport, wishlist, mapChange, curQuestInd, questCnt, questAdd, questSelect, questRemove } = this.props
     const isFetching = info.status === SET_QUEST
 
     return (
@@ -126,7 +126,7 @@ class QuestPage extends Component {
           curQuestInd={curQuestInd}
           questCnt={questCnt}
         />
-        <Map panelState={panelState} recommendations={recommendations} info={info} viewport={viewport} mapChange={mapChange} onClick={this.handleMapClick} />
+        <Map panelState={panelState} recommendations={recommendations} wishlist={wishlist} viewport={viewport} mapChange={mapChange} onClick={this.handleMapClick} />
         {recommendations.length > 0 && <ScoreBoard recommendations={recommendations} />}
         {brochureLink && <Brochure brochureLink={brochureLink} />}
       </Container>
@@ -144,6 +144,7 @@ const selectors = createStructuredSelector({
   info: selectInfo(),
   questCnt: selectQuestCnt(),
   curQuestInd: selectCurQuestInd(),
+  wishlist: selectUserWishlist(),
 })
 
 const actions = {

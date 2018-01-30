@@ -6,7 +6,7 @@ const Brochure = require('../models/brochure')
 exports.getBrochure = (req, res) => {
   const { link } = req.params
 
-  Brochure.findOne({ link }, { e: 0, name: 0 }, (err, brochure) => {
+  Brochure.findOne({ link }, { name: 0 }, (err, brochure) => {
     if (err || !brochure) {
       return res.status(400).send({ error: { details: err ? err.toString() : 'Wrong place' } })
     }

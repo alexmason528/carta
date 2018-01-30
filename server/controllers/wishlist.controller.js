@@ -32,8 +32,10 @@ exports.getWishlist = (req, res) => {
       {
         $project: {
           _id: 1,
+          userID: 1,
           brochureID: 1,
           quest: 1,
+          e: 1,
           brochure: {
             name: 1,
             info: { mainPoster: { url: 1 } },
@@ -48,7 +50,9 @@ exports.getWishlist = (req, res) => {
       }
       const wishlist = result.map(entry => ({
         id: entry._id,
+        userID: entry.userID,
         brochureID: entry.brochureID,
+        e: entry.e,
         quest: entry.quest,
         title: entry.brochure.name,
         url: entry.brochure.info.mainPoster.url,
@@ -59,16 +63,36 @@ exports.getWishlist = (req, res) => {
 }
 
 /**
+ * Create wishlist
+ */
+exports.createWishlist = (req, res) => {
+  const { userID, brochureID, quest, e } = req.body
+
+  Wishlist.findOne({ userID, brochureID }, (err, wishlist) => {
+    if (err || wishlist) {
+      return res.status(400).send({
+        error: { details: err ? err.toString() : 'Already exist' },
+      })
+    }
+    Wishlist.create({ userID, brochureID, quest, e }, err => {
+      if (err) {
+        return res.status(400).send({ error: { details: err.toString() } })
+      }
+      return res.json({ userID, brochureID, quest, e })
+    })
+  })
+}
+
+/**
  * Delete wishlist
  */
-
 exports.deleteWishlist = (req, res) => {
-  const { wishlistID } = req.params
+  const { userID, brochureID } = req.params
 
-  Wishlist.remove({ _id: wishlistID }, err => {
+  Wishlist.remove({ userID, brochureID }, err => {
     if (err) {
       return res.status(400).send({ error: { details: err.toString() } })
     }
-    return res.json(wishlistID)
+    return res.json({ userID, brochureID })
   })
 }

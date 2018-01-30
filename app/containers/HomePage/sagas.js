@@ -1,21 +1,7 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects'
-import { SIGNIN_USER_REQUEST, REGISTER_USER_REQUEST, DELETE_USER_REQUEST, VERIFY_USER_REQUEST, UPDATE_USER_REQUEST } from 'containers/App/constants'
-import {
-  signInUserSuccess,
-  signInUserFail,
-  registerUserSuccess,
-  registerUserFail,
-  deleteUserSuccess,
-  deleteUserFail,
-  verifyUserSuccess,
-  verifyUserFail,
-  updateUserSuccess,
-  updateUserFail,
-} from 'containers/App/actions'
 import { selectUser } from 'containers/App/selectors'
 import { selectEditingPost, selectLimit, selectLastPostDate } from 'containers/HomePage/selectors'
 import request from 'utils/request'
-import { setItem, removeItem } from 'utils/localStorage'
 import { API_BASE_URL } from 'utils/globalConstants'
 import { CREATE_POST_REQUEST, LIST_POST_REQUEST, UPDATE_POST_REQUEST, DELETE_POST_REQUEST, LIST_SUGGESTION_REQUEST } from './constants'
 import {
@@ -29,107 +15,7 @@ import {
   deletePostFail,
   listSuggestionSuccess,
   listSuggestionFail,
-  deleteUserPosts,
 } from './actions'
-
-export function* signInUserRequestWatcher() {
-  yield takeLatest(SIGNIN_USER_REQUEST, signInUserRequestHandler)
-}
-
-export function* signInUserRequestHandler({ payload }) {
-  const requestURL = `${API_BASE_URL}api/v1/auth/signIn`
-
-  const params = {
-    method: 'POST',
-    body: JSON.stringify(payload),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }
-
-  try {
-    const res = yield call(request, requestURL, params)
-    yield call(setItem, 'auth', JSON.stringify(res.user))
-    yield call(setItem, 'wishlist', JSON.stringify(res.wishlist))
-    yield put(signInUserSuccess(res))
-  } catch (err) {
-    yield put(signInUserFail(err.details))
-  }
-}
-
-export function* registerUserRequestWatcher() {
-  yield takeLatest(REGISTER_USER_REQUEST, registerUserRequestHandler)
-}
-
-export function* registerUserRequestHandler({ payload }) {
-  const requestURL = `${API_BASE_URL}api/v1/auth/register`
-
-  const params = {
-    method: 'POST',
-    body: JSON.stringify(payload),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }
-
-  try {
-    const res = yield call(request, requestURL, params)
-    yield call(setItem, 'auth', JSON.stringify(res))
-    yield put(registerUserSuccess(res))
-  } catch (err) {
-    yield put(registerUserFail(err.details))
-  }
-}
-
-export function* deleteUserWatcher() {
-  yield takeLatest(DELETE_USER_REQUEST, deleteUserRequestHandler)
-}
-
-export function* deleteUserRequestHandler({ payload }) {
-  const { id, password } = payload
-  const requestURL = `${API_BASE_URL}api/v1/auth/${id}`
-
-  const params = {
-    method: 'DELETE',
-    body: JSON.stringify({ password }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }
-
-  try {
-    yield call(request, requestURL, params)
-    yield call(removeItem, 'auth')
-    yield put(deleteUserSuccess())
-    yield put(deleteUserPosts(id))
-  } catch (err) {
-    yield put(deleteUserFail(err.details))
-  }
-}
-
-export function* verifyUserRequestWatcher() {
-  yield takeLatest(VERIFY_USER_REQUEST, verifyUserRequestHandler)
-}
-
-export function* verifyUserRequestHandler({ payload }) {
-  const requestURL = `${API_BASE_URL}api/v1/auth/verify`
-
-  const params = {
-    method: 'POST',
-    body: JSON.stringify(payload),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }
-
-  try {
-    const res = yield call(request, requestURL, params)
-    yield call(setItem, 'auth', JSON.stringify(res))
-    yield put(verifyUserSuccess(res))
-  } catch (err) {
-    yield put(verifyUserFail(err.details))
-  }
-}
 
 export function* createPostWatcher() {
   yield takeLatest(CREATE_POST_REQUEST, createPostRequest)
@@ -255,40 +141,4 @@ export function* listSuggestionRequest() {
   }
 }
 
-export function* updateUserWatcher() {
-  yield takeLatest(UPDATE_USER_REQUEST, updateUserRequest)
-}
-
-export function* updateUserRequest({ payload }) {
-  const user = yield select(selectUser())
-  const requestURL = `${API_BASE_URL}api/v1/auth/${user._id}`
-
-  const params = {
-    method: 'PATCH',
-    body: JSON.stringify(payload),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }
-
-  try {
-    const res = yield call(request, requestURL, params)
-    yield call(setItem, 'auth', JSON.stringify(res))
-    yield put(updateUserSuccess(res))
-  } catch (err) {
-    yield put(updateUserFail(err.details))
-  }
-}
-
-export default [
-  signInUserRequestWatcher,
-  registerUserRequestWatcher,
-  deleteUserWatcher,
-  verifyUserRequestWatcher,
-  listPostWatcher,
-  createPostWatcher,
-  updatePostWatcher,
-  deletePostWatcher,
-  listSuggestionWatcher,
-  updateUserWatcher,
-]
+export default [listPostWatcher, createPostWatcher, updatePostWatcher, deletePostWatcher, listSuggestionWatcher]

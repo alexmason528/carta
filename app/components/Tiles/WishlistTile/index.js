@@ -12,7 +12,7 @@ class WishlistTile extends Component {
   static propTypes = {
     onDelete: PropTypes.func,
     title: PropTypes.string,
-    id: PropTypes.string,
+    brochureID: PropTypes.string,
     url: PropTypes.string,
     quest: PropTypes.string,
     canDelete: PropTypes.bool,
@@ -54,8 +54,8 @@ class WishlistTile extends Component {
 
   handleRemoveWishlist = evt => {
     evt.stopPropagation()
-    const { id, onDelete } = this.props
-    onDelete(id)
+    const { brochureID, onDelete } = this.props
+    onDelete(brochureID)
   }
 
   render() {

@@ -9,14 +9,13 @@ import cx from 'classnames'
 import { find } from 'lodash'
 import { getUserWishlistRequest, createUserWishlistRequest, deleteUserWishlistRequest } from 'containers/App/actions'
 import { CREATE_USER_WISHLIST_SUCCESS, DELETE_USER_WISHLIST_SUCCESS } from 'containers/App/constants'
-import { selectAuthenticated, selectWishlist, selectUser, selectInfo } from 'containers/App/selectors'
+import { selectAuthenticated, selectUserWishlist, selectUser, selectInfo } from 'containers/App/selectors'
 import { getBrochureInfoRequest, setQuest, clearBrochure } from 'containers/QuestPage/actions'
 import { selectBrochureInfo } from 'containers/QuestPage/selectors'
 import Img from 'components/Img'
 import ResponsiveLayout from 'components/ResponsiveLayout'
 import { ImageTile, TextTile, TextTileMobile } from 'components/Tiles'
 import { S3_ICON_URL } from 'utils/globalConstants'
-import { urlParser } from 'utils/urlHelper'
 import messages from 'containers/QuestPage/messages'
 import './style.scss'
 
@@ -75,23 +74,18 @@ class Brochure extends Component {
   }
 
   handleBrochureClose = () => {
-    const { params, setQuest, clearBrochure } = this.props
-    setQuest({
-      quest: urlParser({ ...params, brochure: undefined }),
-      urlEntered: true,
-    })
+    const { clearBrochure } = this.props
     clearBrochure()
   }
 
   handleBrochureAddtoStarlist = alreadyExist => {
     const { authenticated, user, brochureInfo, location: { pathname }, createUserWishlistRequest, deleteUserWishlistRequest } = this.props
-
     if (!authenticated) {
       this.showMessage(messages.createWishlist)
     } else if (alreadyExist) {
       deleteUserWishlistRequest({ userID: user._id, brochureID: brochureInfo._id })
     } else {
-      createUserWishlistRequest({ userID: user._id, brochureID: brochureInfo._id, quest: pathname })
+      createUserWishlistRequest({ userID: user._id, brochureID: brochureInfo._id, quest: pathname, e: brochureInfo.e })
     }
   }
 
@@ -184,7 +178,7 @@ class Brochure extends Component {
 const selectors = createStructuredSelector({
   info: selectInfo(),
   user: selectUser(),
-  wishlist: selectWishlist(),
+  wishlist: selectUserWishlist(),
   authenticated: selectAuthenticated(),
   brochureInfo: selectBrochureInfo(),
 })

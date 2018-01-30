@@ -27,10 +27,51 @@ exports.signIn = (req, res) => {
     if (element.length > 0) {
       if (element[0].password === cryptr.encrypt(password)) {
         const user = _.pick(element[0], ['_id', 'fullname', 'username', 'email', 'role', 'profilePic', 'holidayPic', 'verified'])
-        Wishlist.find({ userID: user._id }, (err, wishlist) => {
+        const pipeline = [
+          {
+            $lookup: {
+              from: 'brochure',
+              localField: 'brochureID',
+              foreignField: '_id',
+              as: 'brochure',
+            },
+          },
+          {
+            $unwind: '$brochure',
+          },
+          {
+            $match: {
+              userID: user._id,
+            },
+          },
+          {
+            $project: {
+              _id: 1,
+              userID: 1,
+              brochureID: 1,
+              quest: 1,
+              e: 1,
+              brochure: {
+                name: 1,
+                info: { mainPoster: { url: 1 } },
+              },
+            },
+          },
+        ]
+
+        Wishlist.aggregate(pipeline, (err, result) => {
           if (err) {
             return res.status(400).send({ error: { details: err.toString() } })
           }
+          const wishlist = result.map(entry => ({
+            id: entry._id,
+            userID: entry.userID,
+            brochureID: entry.brochureID,
+            quest: entry.quest,
+            e: entry.e,
+            title: entry.brochure.name,
+            url: entry.brochure.info.mainPoster.url,
+          }))
           return res.json({ user, wishlist })
         })
       } else {

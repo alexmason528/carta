@@ -1,3 +1,4 @@
+import { difference } from 'lodash'
 import { getItem, setItem, removeItem } from 'utils/localStorage'
 
 import {
@@ -213,7 +214,9 @@ function appReducer(state = initialState, { type, payload }) {
       }
 
     case DELETE_USER_WISHLIST_SUCCESS:
-      newWishlist = state.wishlist.filter(entry => entry.userID !== payload.userID && entry.brochureID !== payload.brochureID)
+      const { userID, brochureID } = payload
+      const deleteList = state.wishlist.filter(entry => entry.userID === userID && entry.brochureID === brochureID)
+      newWishlist = difference(state.wishlist, deleteList)
       setItem('wishlist', JSON.stringify(newWishlist))
 
       return {
