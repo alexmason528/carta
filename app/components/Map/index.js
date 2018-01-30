@@ -3,6 +3,7 @@ import { withRouter } from 'react-router'
 import ReactResizeDetector from 'react-resize-detector'
 import { isEqual, differenceWith } from 'lodash'
 import MapBox from 'mapbox-gl'
+import { PLACE_CLICK, SET_QUEST } from 'containers/QuestPage/constants'
 import { COLORS, S3_DATA_URL, S3_ICON_URL, MAP_ACCESS_TOKEN, RECOMMENDATION_COUNT, MIN_ZOOM, MAX_ZOOM } from 'utils/globalConstants'
 import { isMobile } from 'utils/mobileDetector'
 import './style.scss'
@@ -65,11 +66,12 @@ class Map extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { viewport, wishlist } = this.props
+    const { wishlist } = this.props
+    const { info: { status } } = nextProps
 
-    if (!isEqual(viewport, nextProps.viewport) && this.map) {
+    if ((status === PLACE_CLICK || status === SET_QUEST) && this.map) {
       const { viewport: { center, zoom } } = nextProps
-      this.map.jumpTo({ center, zoom })
+      this.map.flyTo({ center, zoom })
     }
 
     if (this.map) {

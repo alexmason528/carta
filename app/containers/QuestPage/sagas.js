@@ -8,7 +8,6 @@ import {
   GET_DESCRIPTIVES_REQUEST,
   GET_RECOMMENDATION_REQUEST,
   GET_QUESTINFO_REQUEST,
-  PLACE_CLICK,
   TYPE_CLICK,
   TYPE_ANYTHING_CLICK,
   SET_QUEST,
@@ -36,18 +35,7 @@ import { selectCurrentTypes, selectCurrentDescriptives, selectViewport, selectTy
 
 export function* getRecommendationWatcher() {
   yield takeLatest(
-    [
-      GET_RECOMMENDATION_REQUEST,
-      SET_QUEST,
-      QUEST_SELECT,
-      MAP_CHANGE,
-      PLACE_CLICK,
-      TYPE_CLICK,
-      TYPE_ANYTHING_CLICK,
-      DESCRIPTIVE_ANYTHING_CLICK,
-      DESCRIPTIVE_CLICK,
-      DESCRIPTIVE_STAR_CLICK,
-    ],
+    [GET_RECOMMENDATION_REQUEST, SET_QUEST, QUEST_SELECT, MAP_CHANGE, TYPE_CLICK, TYPE_ANYTHING_CLICK, DESCRIPTIVE_ANYTHING_CLICK, DESCRIPTIVE_CLICK, DESCRIPTIVE_STAR_CLICK],
     getRecommendationRequestHandler
   )
 }

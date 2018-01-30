@@ -18,6 +18,7 @@ export const S3_PROFILE_URL = `${S3_BUCKET_URL}/profile`
 export const S3_DATA_URL = `${S3_BUCKET_URL}/data`
 export const S3_FIXED_URL = `${S3_BUCKET_URL}/fixed`
 export const S3_PLACE_URL = `${S3_BUCKET_URL}/place`
+export const S3_MAKI_URL = `${S3_BUCKET_URL}/maki`
 
 export const COLORS = ['#dd0008', '#ed7000', '#009985', '#29549a', '#8f1379']
 export const RECOMMENDATION_COUNT = 5
