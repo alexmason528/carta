@@ -3,7 +3,6 @@ import { withRouter } from 'react-router'
 import ReactResizeDetector from 'react-resize-detector'
 import { isEqual, differenceWith } from 'lodash'
 import MapBox from 'mapbox-gl'
-import { PLACE_CLICK, SET_QUEST } from 'containers/QuestPage/constants'
 import { COLORS, S3_DATA_URL, S3_ICON_URL, MAP_ACCESS_TOKEN, RECOMMENDATION_COUNT, MIN_ZOOM, MAX_ZOOM } from 'utils/globalConstants'
 import { isMobile } from 'utils/mobileDetector'
 import './style.scss'
@@ -66,20 +65,19 @@ class Map extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { wishlist } = this.props
-    const { info: { status } } = nextProps
+    const { viewport, wishlist } = this.props
 
-    if ((status === PLACE_CLICK || status === SET_QUEST) && this.map) {
+    if (!isEqual(viewport, nextProps.viewport) && this.map) {
       const { viewport: { center, zoom } } = nextProps
       this.map.flyTo({ center, zoom })
-    }
+    } else {
+      if (this.map) {
+        this.handleRedrawMap(nextProps)
+      }
 
-    if (this.map) {
-      this.handleRedrawMap(nextProps)
-    }
-
-    if (wishlist.length - nextProps.wishlist.length > 0) {
-      this.handleDeleteWishlistLayers(wishlist, nextProps.wishlist)
+      if (wishlist.length - nextProps.wishlist.length > 0) {
+        this.handleDeleteWishlistLayers(wishlist, nextProps.wishlist)
+      }
     }
   }
 
