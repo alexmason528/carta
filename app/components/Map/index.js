@@ -69,14 +69,14 @@ class Map extends Component {
 
     if (!isEqual(viewport, nextProps.viewport) && this.map) {
       const { viewport: { center, zoom } } = nextProps
-      this.map.flyTo({ center, zoom })
+      this.map.jumpTo({ center, zoom })
     } else {
       if (this.map) {
-        this.handleRedrawMap(nextProps)
+        this.redrawMap(nextProps)
       }
 
       if (wishlist.length - nextProps.wishlist.length > 0) {
-        this.handleDeleteWishlistLayers(wishlist, nextProps.wishlist)
+        this.deleteWishlistLayers(wishlist, nextProps.wishlist)
       }
     }
   }
@@ -97,7 +97,7 @@ class Map extends Component {
     return false
   }
 
-  handleDeleteWishlistLayers = (curList, nextList) => {
+  deleteWishlistLayers = (curList, nextList) => {
     const diff = differenceWith(curList, nextList, isEqual)
 
     diff.forEach(entry => {
@@ -106,99 +106,12 @@ class Map extends Component {
     })
   }
 
-  handleLoad = () => {
-    const { wishlist } = this.props
-
-    if (!this.map.getSource('mapbox')) {
-      this.map.addSource('mapbox', {
-        type: 'vector',
-        url: 'mapbox://mapbox.mapbox-streets-v7',
-      })
-    }
-
-    if (!this.map.getSource('shapes')) {
-      this.map.addSource('shapes', {
-        type: 'geojson',
-        data: `${S3_DATA_URL}/shapes.geojson`,
-      })
-    }
-
-    if (!this.map.getSource('points')) {
-      this.map.addSource('points', {
-        type: 'geojson',
-        data: `${S3_DATA_URL}/points.geojson`,
-      })
-    }
-
-    this.map.loadImage(`${S3_ICON_URL}/marker-red-15.png`, (err, img) => {
-      if (!err && !this.map.hasImage('marker')) {
-        this.map.addImage('marker', img)
-      }
-    })
-
-    this.map.loadImage(`${S3_ICON_URL}/star-red.png`, (err, img) => {
-      if (!err && !this.map.hasImage('star')) {
-        this.map.addImage('star', img)
-      }
-    })
-
-    this.map.on('mousemove', 'links', () => {
-      this.map.getCanvas().style.cursor = 'pointer'
-    })
-
-    const zoom = this.map.getZoom()
-    const dark = '#444'
-    const grey = '#888'
-    const light = '#ddd'
-
-    this.handleLoadLayer('road-name', 'mapbox', 'road_label', '!=', 'name', '', 0, 18, grey, 10, 0, 'line', 0, 'center', '')
-    this.handleLoadLayer('road-ref', 'mapbox', 'road_label', '!=', 'name', '', 0, 18, grey, 11, 0, 'line', 0, 'center', '')
-    this.map.setLayoutProperty('road-ref', 'text-field', '{ref}')
-    this.handleLoadLayer('waterway', 'mapbox', 'waterway_label', '!=', 'name', '', 0, 18, light, 15, 0, 'line', 0, 'center', '')
-    this.handleLoadLayer('water', 'mapbox', 'water_label', '!=', 'name', '', 0, 18, light, 15, 0, 'point', 0, 'center', '')
-    this.handleLoadLayer('poi', 'mapbox', 'poi_label', '!=', 'name', '', 0, 18, dark, 10, 0, 'point', -1.5, 'bottom', 'marker')
-    this.handleLoadLayer('railstations', 'mapbox', 'rail_station_label', '!=', 'name', '', 0, 18, dark, 10, 0, 'point', -1.5, 'bottom', 'marker')
-    this.handleLoadLayer('peaks', 'mapbox', 'mountain_peak_label', '!=', 'name', '', 0, 18, dark, 10, 0, 'point', -1.5, 'bottom', 'marker')
-    this.map.setLayoutProperty('peaks', 'text-field', '{name_en} \n ({elevation_m}m)')
-    this.handleLoadLayer('seas', 'mapbox', 'marine_label', '==', 'placement', 'point', 0, 18, light, 7 + zoom * 3, 0, 'point', 0, 'center', '')
-    this.handleLoadLayer('curved-seas', 'mapbox', 'marine_label', '==', 'placement', 'line', 0, 18, light, 7 + zoom * 3, 0, 'line', 0, 'center', '')
-    this.handleLoadLayer('oceans', 'mapbox', 'marine_label', '==', 'labelrank', 1, 0, 18, light, 10 + zoom * 3, 0, 'point', 0, 'center', '')
-    this.handleLoadLayer('villages', 'mapbox', 'place_label', '==', 'type', 'village', 0, 18, dark, -6 + zoom * 1.5, 30, 'point', 0, 'center', '')
-    this.handleLoadLayer('residentials', 'mapbox', 'place_label', '==', 'type', 'residential', 0, 18, dark, -6 + zoom * 1.5, 30, 'point', 0, 'center', '')
-    this.handleLoadLayer('suburbs', 'mapbox', 'place_label', '==', 'type', 'suburb', 0, 18, dark, -10 + zoom * 2, 30, 'point', 0, 'center', '')
-    this.handleLoadLayer('towns', 'mapbox', 'place_label', '==', 'type', 'town', 8, 18, dark, -8 + zoom * 2, 30, 'point', 0, 'center', '')
-    this.handleLoadLayer('airports', 'mapbox', 'airport_label', '==', 'scalerank', 1, 0, 18, dark, 12, 0, 'point', -1.3, 'bottom', 'marker')
-    this.handleLoadLayer('cities', 'mapbox', 'place_label', '==', 'type', 'city', 6, 18, dark, -4 + zoom * 2, 0, 'point', 0, 'center', '')
-    this.handleLoadLayer('places-6', 'mapbox', 'place_label', '>=', 'scalerank', 5, 6, 10, dark, -3 + zoom * 2, 0, 'point', 0, 'center', '')
-    this.handleLoadLayer('places-4', 'mapbox', 'place_label', '<=', 'scalerank', 4, 5, 10, dark, 2 + zoom * 2, 0, 'point', 0, 'center', '')
-    this.handleLoadLayer('states', 'mapbox', 'state_label', '!=', 'name', '', 0, 18, '#bbb', 6 + zoom * 2, 10, 'point', 0, 'center', '')
-    this.handleLoadLayer('places-1', 'mapbox', 'place_label', '<=', 'scalerank', 1, 0, 18, dark, 5 + zoom * 2, 0, 'point', 0, 'center', '')
-    this.handleLoadLayer('countries-6', 'mapbox', 'country_label', '==', 'scalerank', 6, 0, 18, dark, -2 + zoom * 2, 10, 'point', 0, 'center', '')
-    this.handleLoadLayer('countries-5', 'mapbox', 'country_label', '==', 'scalerank', 5, 0, 18, dark, 3 + zoom * 2, 10, 'point', 0, 'center', '')
-    this.handleLoadLayer('countries-4', 'mapbox', 'country_label', '==', 'scalerank', 4, 0, 18, dark, 5 + zoom * 2, 10, 'point', 0, 'center', '')
-    this.handleLoadLayer('countries-3', 'mapbox', 'country_label', '==', 'scalerank', 3, 0, 18, dark, 6 + zoom * 2, 10, 'point', 0, 'center', '')
-    this.handleLoadLayer('countries-2', 'mapbox', 'country_label', '==', 'scalerank', 2, 0, 18, dark, 9 + zoom * 2, 10, 'point', 0, 'center', '')
-    this.handleLoadLayer('countries-1', 'mapbox', 'country_label', '==', 'scalerank', 1, 0, 18, dark, 12 + zoom * 2, 10, 'point', 0, 'center', '')
-
-    wishlist.forEach(entry => {
-      this.handleLoadStar(entry.e)
-      this.handleLoadStarAndLabel(entry.e)
-    })
-
-    this.handleLoadShape()
-    this.handleLoadCaption()
-  }
-
-  handleLoadLayer = (id, source, layer, filterType, filterField, filterVal, minzoom, maxzoom, color, size, padding, placement, offset, anchor, image) => {
-    const lang = '_en'
-    if (this.map.getLayer(id)) return
+  Icons = ({ id, source, layer, filter, color, textsize, textfield }) => {
     this.map.addLayer({
       id,
       source,
       'source-layer': layer,
-      filter: [filterType, filterField, filterVal],
-      minzoom,
-      maxzoom,
+      filter,
       type: 'symbol',
       paint: {
         'text-color': color,
@@ -206,61 +119,362 @@ class Map extends Component {
         'text-halo-color': '#fff',
       },
       layout: {
-        'text-size': size > 0 ? size : 0,
-        'text-padding': padding,
-        'text-field': `{name${lang}}`,
-        'text-font': ['Open Sans Regular', 'Arial Unicode MS Bold'],
+        'text-size': textsize || 10,
+        'text-field': textfield || `{name${this.lang}}`,
+        'text-font': ['Open Sans Light', 'Arial Unicode MS Bold'],
         'text-transform': 'uppercase',
-        'symbol-placement': placement,
-        'symbol-spacing': 1000,
-        'text-offset': [0, offset],
-        'text-anchor': anchor,
-        'icon-image': image,
-        'icon-offset': [0, -13.5],
+        'text-offset': [0, -0.2],
+        'text-anchor': 'bottom',
+        'icon-image': 'pin',
         'icon-anchor': 'top',
+        'icon-allow-overlap': true,
       },
     })
   }
 
-  handleLoadStar = e => {
-    const img = 'star'
-    const id = `pin-${e}`
+  Roads = (source, layer, filter) => {
+    const id = '-road'
     if (this.map.getLayer(id)) return
+
     this.map.addLayer({
       id,
-      source: 'points',
-      filter: ['==', 'e', e],
+      source: 'mapbox',
+      'source-layer': 'road_label',
+      filter,
+      minzoom: 12.5,
       type: 'symbol',
-      layout: {
-        'icon-image': img,
-        'icon-size': 0.3,
-        'icon-offset': [0, -45],
-        'icon-anchor': 'bottom',
+      paint: {
+        'text-color': '#888',
+        'text-halo-width': 3,
+        'text-halo-color': '#fff',
       },
-    })
-
-    this.map.on('mousemove', id, () => {
-      this.map.getCanvas().style.cursor = 'pointer'
-    })
-
-    this.map.on('mouseleave', id, () => {
-      this.map.getCanvas().style.cursor = ''
-    })
-
-    this.map.on('click', id, data => {
-      const link = data.features[0].properties.link
-      this.handlePlaceClick(link)
+      layout: {
+        'text-size': 10,
+        'text-padding': 10,
+        'text-field': `{name${this.lang}}`,
+        'text-font': ['Open Sans Light', 'Arial Unicode MS Bold'],
+        'text-transform': 'uppercase',
+        'symbol-placement': 'line',
+        'symbol-spacing': 500,
+      },
     })
   }
 
-  handleLoadStarAndLabel = e => {
-    const img = 'star'
-    const black = '#000'
-    const id = `pin-and-label-${e}`
+  Waterways = (source, layer, filter, color) => {
+    const id = `${source}-waterway`
     if (this.map.getLayer(id)) return
 
     this.map.addLayer({
       id,
+      source,
+      'source-layer': layer,
+      filter,
+      type: 'symbol',
+      paint: {
+        'text-color': color,
+        'text-halo-width': 3,
+        'text-halo-color': '#fff',
+      },
+      layout: {
+        'text-size': 15,
+        'text-padding': 10,
+        'text-field': `{name${this.lang}}`,
+        'text-font': ['Open Sans Light', 'Arial Unicode MS Bold'],
+        'text-transform': 'uppercase',
+        'symbol-placement': 'line',
+        'symbol-spacing': 500,
+      },
+    })
+  }
+
+  Water = (source, layer, filter, color) => {
+    const id = `${source}-water`
+    if (this.map.getLayer(id)) return
+
+    this.map.addLayer({
+      id,
+      source,
+      'source-layer': layer,
+      filter,
+      type: 'symbol',
+      paint: {
+        'text-color': color,
+        'text-halo-width': 3,
+        'text-halo-color': '#fff',
+      },
+      layout: {
+        'text-size': 15,
+        'text-padding': 10,
+        'text-field': `{name${this.lang}}`,
+        'text-font': ['Open Sans Light', 'Arial Unicode MS Bold'],
+        'text-transform': 'uppercase',
+      },
+    })
+  }
+
+  Places = (source, layer, filter, color) => {
+    const id = `${source}-places`
+    if (this.map.getLayer(id)) return
+
+    this.map.addLayer({
+      id,
+      source,
+      'source-layer': layer,
+      filter,
+      type: 'symbol',
+      paint: {
+        'text-color': color,
+        'text-halo-width': 3,
+        'text-halo-color': '#fff',
+      },
+      layout: {
+        'text-size': {
+          property: 'type',
+          type: 'categorical',
+          stops: [
+            [{ zoom: 8, value: 'city' }, 11],
+            [{ zoom: 8, value: 'town' }, 8],
+            [{ zoom: 8, value: 'suburb' }, 6],
+            [{ zoom: 8, value: 'village' }, 6],
+            [{ zoom: 8, value: 'hamlet' }, 4],
+            [{ zoom: 8, value: 'neighbourhood' }, 4],
+            [{ zoom: 8, value: 'residential' }, 4],
+            [{ zoom: 8, value: 'island' }, 13],
+            [{ zoom: 8, value: 'islet' }, 13],
+            [{ zoom: 8, value: 'archipelago' }, 13],
+            [{ zoom: 8, value: 'aboriginal_lands' }, 13],
+            [{ zoom: 18, value: 'city' }, 31],
+            [{ zoom: 18, value: 'town' }, 28],
+            [{ zoom: 18, value: 'suburb' }, 26],
+            [{ zoom: 18, value: 'village' }, 21],
+            [{ zoom: 18, value: 'hamlet' }, 19],
+            [{ zoom: 18, value: 'neighbourhood' }, 19],
+            [{ zoom: 18, value: 'residential' }, 19],
+            [{ zoom: 18, value: 'island' }, 13],
+            [{ zoom: 18, value: 'islet' }, 13],
+            [{ zoom: 18, value: 'archipelago' }, 33],
+            [{ zoom: 18, value: 'aboriginal_lands' }, 13],
+          ],
+        },
+        'text-padding': 15,
+        'text-field': `{name${this.lang}}`,
+        'text-font': ['Open Sans Light', 'Arial Unicode MS Bold'],
+        'text-transform': 'uppercase',
+      },
+    })
+  }
+
+  Seas = (source, layer, filter, color) => {
+    const id = `seas${source}`
+    if (this.map.getLayer(id)) return
+
+    this.map.addLayer({
+      id,
+      source,
+      'source-layer': layer,
+      filter,
+      type: 'symbol',
+      'symbol-placement': 'point',
+      paint: {
+        'text-color': color,
+        'text-halo-width': 3,
+        'text-halo-color': '#fff',
+      },
+      layout: {
+        'text-size': {
+          property: 'labelrank',
+          type: 'exponential',
+          stops: [
+            [{ zoom: 1, value: 1 }, 13],
+            [{ zoom: 1, value: 2 }, 10],
+            [{ zoom: 1, value: 4 }, 7],
+            [{ zoom: 1, value: 6 }, 5],
+            [{ zoom: 21, value: 1 }, 63],
+            [{ zoom: 21, value: 2 }, 60],
+            [{ zoom: 21, value: 4 }, 57],
+            [{ zoom: 21, value: 6 }, 54],
+          ],
+        },
+        'text-field': `{name${this.lang}}`,
+        'text-font': ['Open Sans Light', 'Arial Unicode MS Bold'],
+        'text-transform': 'uppercase',
+        'symbol-spacing': 500,
+      },
+    })
+  }
+
+  CurvedSeas = (source, layer, filter, color) => {
+    const id = `${source}-curved-seas`
+    if (this.map.getLayer(id)) return
+
+    this.map.addLayer({
+      id,
+      source,
+      'source-layer': layer,
+      filter,
+      type: 'symbol',
+      paint: {
+        'text-color': color,
+        'text-halo-width': 3,
+        'text-halo-color': '#fff',
+      },
+      layout: {
+        'text-size': {
+          stops: [[1, 15], [21, 40]],
+        },
+        'text-field': `{name${this.lang}}`,
+        'text-font': ['Open Sans Light', 'Arial Unicode MS Bold'],
+        'text-transform': 'uppercase',
+        'symbol-placement': 'line',
+        'symbol-spacing': 1000,
+      },
+    })
+  }
+
+  Cities = (source, layer, filter, color) => {
+    const id = `${source}-cities`
+    if (this.map.getLayer(id)) return
+
+    this.map.addLayer({
+      id,
+      source,
+      'source-layer': layer,
+      filter,
+      type: 'symbol',
+      paint: {
+        'text-color': color,
+        'text-halo-width': 3,
+        'text-halo-color': '#fff',
+      },
+      layout: {
+        'text-size': {
+          property: 'scalerank',
+          type: 'exponential',
+          stops: [
+            [{ zoom: 1, value: 2 }, 5],
+            [{ zoom: 1, value: 4 }, 3],
+            [{ zoom: 1, value: 6 }, 1],
+            [{ zoom: 1, value: 8 }, 0],
+            [{ zoom: 1, value: 10 }, 0],
+            [{ zoom: 21, value: 2 }, 45],
+            [{ zoom: 21, value: 4 }, 43],
+            [{ zoom: 21, value: 6 }, 41],
+            [{ zoom: 21, value: 8 }, 39],
+            [{ zoom: 21, value: 10 }, 37],
+          ],
+        },
+        'text-padding': 10,
+        'text-field': `{name${this.lang}}`,
+        'text-font': ['Open Sans Light', 'Arial Unicode MS Bold'],
+        'text-transform': 'uppercase',
+      },
+    })
+  }
+
+  States = (source, layer, filter, color) => {
+    const id = `${source}-states`
+    if (this.map.getLayer(id)) return
+
+    this.map.addLayer({
+      id,
+      source,
+      'source-layer': layer,
+      filter,
+      type: 'symbol',
+      paint: {
+        'text-color': color,
+        'text-halo-width': 3,
+        'text-halo-color': '#fff',
+      },
+      layout: {
+        'text-size': {
+          stops: [[1, 8], [21, 48]],
+        },
+        'text-padding': 10,
+        'text-field': `{name${this.lang}}`,
+        'text-font': ['Open Sans Light', 'Arial Unicode MS Bold'],
+        'text-transform': 'uppercase',
+      },
+    })
+  }
+
+  Metropoles = (source, layer, filter, color) => {
+    const id = `${source}-metropoles`
+    if (this.map.getLayer(id)) return
+
+    this.map.addLayer({
+      id,
+      source,
+      'source-layer': layer,
+      filter,
+      type: 'symbol',
+      paint: {
+        'text-color': color,
+        'text-halo-width': 3,
+        'text-halo-color': '#fff',
+      },
+      layout: {
+        'text-size': {
+          property: 'scalerank',
+          type: 'exponential',
+          stops: [[{ zoom: 1, value: 0 }, 7], [{ zoom: 1, value: 1 }, 5], [{ zoom: 21, value: 0 }, 47], [{ zoom: 21, value: 1 }, 45]],
+        },
+        'text-padding': 10,
+        'text-field': `{name${this.lang}}`,
+        'text-font': ['Open Sans Light', 'Arial Unicode MS Bold'],
+        'text-transform': 'uppercase',
+      },
+    })
+  }
+
+  Countries = (source, layer, filter, color) => {
+    const id = `${source}-countries`
+    if (this.map.getLayer(id)) return
+
+    this.map.addLayer({
+      id: `${source}-countries`,
+      source,
+      'source-layer': layer,
+      filter,
+      type: 'symbol',
+      paint: {
+        'text-color': color,
+        'text-halo-width': 3,
+        'text-halo-color': '#fff',
+      },
+      layout: {
+        'text-size': {
+          property: 'scalerank',
+          type: 'exponential',
+          stops: [
+            [{ zoom: 1, value: 1 }, 14],
+            [{ zoom: 1, value: 2 }, 11],
+            [{ zoom: 1, value: 3 }, 8],
+            [{ zoom: 1, value: 4 }, 7],
+            [{ zoom: 1, value: 5 }, 5],
+            [{ zoom: 1, value: 6 }, 0],
+            [{ zoom: 21, value: 1 }, 54],
+            [{ zoom: 21, value: 2 }, 51],
+            [{ zoom: 21, value: 3 }, 48],
+            [{ zoom: 21, value: 4 }, 47],
+            [{ zoom: 21, value: 5 }, 45],
+            [{ zoom: 21, value: 6 }, 40],
+          ],
+        },
+        'text-padding': 10,
+        'text-field': `{name${this.lang}}`,
+        'text-font': ['Open Sans Light', 'Arial Unicode MS Bold'],
+        'text-transform': 'uppercase',
+      },
+    })
+  }
+
+  Star = e => {
+    const id = `star-${e}`
+    if (this.map.getLayer(id)) return
+
+    this.map.addLayer({
+      id: `star-${e}`,
       source: 'points',
       filter: ['==', 'e', e],
       type: 'symbol',
@@ -269,35 +483,31 @@ class Map extends Component {
         'text-field': '{name}',
         'text-font': ['Open Sans Regular', 'Arial Unicode MS Bold'],
         'text-transform': 'uppercase',
-        'text-offset': [0, -0.7],
         'text-anchor': 'top',
-        'icon-image': img,
-        'icon-size': 0.3,
-        'icon-offset': [0, -45],
+        'icon-image': 'star-15',
+        'icon-size': 0.9,
+        'icon-offset': [0, -2],
         'icon-anchor': 'bottom',
       },
       paint: {
-        'text-color': black,
+        'text-color': this.black,
         'text-halo-color': 'rgba(255, 255, 255, 1)',
         'text-halo-width': 3,
+        'icon-opacity': 0.5,
       },
-    })
-
-    this.map.on('mousemove', id, () => {
-      this.map.getCanvas().style.cursor = 'pointer'
-    })
-
-    this.map.on('mouseleave', id, () => {
-      this.map.getCanvas().style.cursor = ''
-    })
-
-    this.map.on('click', id, data => {
-      const link = data.features[0].properties.link
-      this.handlePlaceClick(link)
     })
   }
 
-  handleLoadShape = () => {
+  Pointer = id => {
+    this.map.on('mouseenter', `links-${id}`, () => {
+      this.map.getCanvas().style.cursor = 'pointer'
+    })
+    this.map.on('mouseleave', `links-${id}`, () => {
+      this.map.getCanvas().style.cursor = ''
+    })
+  }
+
+  Shape = () => {
     COLORS.slice()
       .reverse()
       .forEach((color, index) => {
@@ -353,7 +563,7 @@ class Map extends Component {
       })
   }
 
-  handleLoadCaption = () => {
+  Caption = () => {
     COLORS.slice()
       .reverse()
       .forEach((color, index) => {
@@ -394,7 +604,7 @@ class Map extends Component {
       })
   }
 
-  handleClearMap = () => {
+  clearMap = () => {
     this.handleLoad()
 
     const sources = Array(COLORS.length).fill(0)
@@ -407,8 +617,8 @@ class Map extends Component {
     })
   }
 
-  handleRedrawMap = ({ panelState, recommendations }) => {
-    this.handleClearMap()
+  redrawMap = ({ panelState, recommendations }) => {
+    this.clearMap()
     if (panelState !== 'closed') {
       recommendations.map((recommendation, index) => {
         const { display, e } = recommendation
@@ -425,6 +635,91 @@ class Map extends Component {
         }
       })
     }
+  }
+
+  handleLoad = () => {
+    const { wishlist } = this.props
+
+    if (!this.map.getSource('mapbox')) {
+      this.map.addSource('mapbox', {
+        type: 'vector',
+        url: 'mapbox://mapbox.mapbox-streets-v7',
+      })
+    }
+
+    if (!this.map.getSource('shapes')) {
+      this.map.addSource('shapes', {
+        type: 'geojson',
+        data: `${S3_DATA_URL}/shapes.geojson`,
+      })
+    }
+
+    if (!this.map.getSource('points')) {
+      this.map.addSource('points', {
+        type: 'geojson',
+        data: `${S3_DATA_URL}/points.geojson`,
+      })
+    }
+
+    if (!this.map.getSource('links')) {
+      this.map.addSource('links', {
+        type: 'vector',
+        url: 'mapbox://cartaguide.80tjqhr1',
+      })
+    }
+
+    this.map.loadImage(`${S3_ICON_URL}/star-15.png`, (err, img) => {
+      if (!err && !this.map.hasImage('star-15')) {
+        this.map.addImage('star-15', img)
+      }
+    })
+
+    this.map.loadImage(`${S3_ICON_URL}/marker-grey-15.png`, (err, img) => {
+      if (!err && !this.map.hasImage('pin')) {
+        this.map.addImage('pin', img)
+      }
+    })
+
+    this.map.on('mousemove', 'links', () => {
+      this.map.getCanvas().style.cursor = 'pointer'
+    })
+
+    this.black = '#333'
+    this.grey = '#999'
+    this.light = '#bbb'
+    this.lighter = '#ddd'
+    this.lang = '_en'
+    this.everything = ['!=', 'name', '']
+
+    // id, source, layer, filter, color
+    this.Icons({ id: 'poi', source: 'mapbox', layer: 'poi_label', filter: this.everything, color: '#888' })
+    this.Roads('mapbox', 'road_label', this.everything, '#ccc')
+    this.Waterways('mapbox', 'waterway_label', this.everything, '#ccc')
+    this.Water('mapbox', 'water_label', this.everything, '#ccc')
+    this.Places('mapbox', 'place_label', this.everything, { stops: [[7, '#aaa'], [8, '#888']] })
+    this.Icons({ id: 'railstations', source: 'mapbox', layer: 'rail_station_label', filter: this.everything, color: '#888' })
+    this.Icons({ id: 'peaks', source: 'mapbox', layer: 'mountain_peak_label', filter: this.everything, color: '#888', textfield: `{name${this.lang}} \n ({elevation_m}m)` })
+    // this.map.setLayoutProperty('peaks', 'text-field', `{name${this.lang}} \n ({elevation_m}m)`)
+    this.Icons({ id: 'airports', source: 'mapbox', layer: 'airport_label', filter: this.everything, color: '#888', textsize: { stops: [[10, 10], [20, 30]] } })
+    // this.map.setLayoutProperty('airports', 'text-size')
+    this.Seas('mapbox', 'marine_label', ['==', 'placement', 'point'], '#ddd')
+    this.CurvedSeas('mapbox', 'marine_label', ['==', 'placement', 'line'], '#ddd')
+    this.Cities('mapbox', 'place_label', ['all', ['==', 'type', 'city'], ['>=', 'scalerank', 2]], { stops: [[7, '#aaa'], [8, '#888']] })
+    this.Cities('links', 'place_link-abgtyj', this.everything, '#000')
+    this.States('mapbox', 'state_label', this.everything, { stops: [[7, '#ccc'], [8, '#aaa']] })
+    this.Metropoles('mapbox', 'place_label', ['all', ['==', 'type', 'city'], ['<=', 'scalerank', 1]], { stops: [[7, '#aaa'], [8, '#888']] })
+    this.Metropoles('links', 'place_link-abgtyj', this.everything, '#000')
+    this.Countries('mapbox', 'country_label', this.everything, { stops: [[7, '#aaa'], [8, '#888']] })
+
+    wishlist.forEach(entry => {
+      this.Star(entry.e)
+    })
+
+    this.Pointer('cities')
+    this.Pointer('metropoles')
+
+    this.Shape()
+    this.Caption()
   }
 
   handleMapChange = evt => {
@@ -456,67 +751,6 @@ class Map extends Component {
     }
 
     mapChange(param)
-
-    this.handleChangeTextSize()
-  }
-
-  handleChangeTextSize = () => {
-    const zoom = this.map.getZoom()
-
-    if (this.map.getLayer('seas')) {
-      this.map.setLayoutProperty('seas', 'text-size', 9 + zoom * 2)
-    }
-    if (this.map.getLayer('curved-seas')) {
-      this.map.setLayoutProperty('curved-seas', 'text-size', 9 + zoom * 2)
-    }
-    if (this.map.getLayer('oceans')) {
-      this.map.setLayoutProperty('oceans', 'text-size', 10 + zoom * 3)
-    }
-    if (this.map.getLayer('villages')) {
-      this.map.setLayoutProperty('villages', 'text-size', zoom >= 4 ? -6 + zoom * 1.5 : 0)
-    }
-    if (this.map.getLayer('residentials')) {
-      this.map.setLayoutProperty('residentials', 'text-size', zoom >= 4 ? -6 + zoom * 1.5 : 0)
-    }
-    if (this.map.getLayer('suburbs')) {
-      this.map.setLayoutProperty('suburbs', 'text-size', zoom >= 5 ? -10 + zoom * 2 : 0)
-    }
-    if (this.map.getLayer('towns')) {
-      this.map.setLayoutProperty('towns', 'text-size', zoom >= 4 ? -8 + zoom * 2 : 0)
-    }
-    if (this.map.getLayer('cities')) {
-      this.map.setLayoutProperty('cities', 'text-size', zoom >= 2 ? -4 + zoom * 2 : 0)
-    }
-    if (this.map.getLayer('places-6')) {
-      this.map.setLayoutProperty('places-6', 'text-size', zoom >= 1.5 ? -3 + zoom * 2 : 0)
-    }
-    if (this.map.getLayer('places-4')) {
-      this.map.setLayoutProperty('places-4', 'text-size', 2 + zoom * 2)
-    }
-    if (this.map.getLayer('places-1')) {
-      this.map.setLayoutProperty('places-1', 'text-size', 5 + zoom * 2)
-    }
-    if (this.map.getLayer('states')) {
-      this.map.setLayoutProperty('states', 'text-size', 6 + zoom * 2)
-    }
-    if (this.map.getLayer('countries-6')) {
-      this.map.setLayoutProperty('countries-6', 'text-size', zoom >= 1 ? -2 + zoom * 2 : 0)
-    }
-    if (this.map.getLayer('countries-5')) {
-      this.map.setLayoutProperty('countries-5', 'text-size', 3 + zoom * 2)
-    }
-    if (this.map.getLayer('countries-4')) {
-      this.map.setLayoutProperty('countries-4', 'text-size', 5 + zoom * 2)
-    }
-    if (this.map.getLayer('countries-3')) {
-      this.map.setLayoutProperty('countries-3', 'text-size', 6 + zoom * 2)
-    }
-    if (this.map.getLayer('countries-2')) {
-      this.map.setLayoutProperty('countries-2', 'text-size', 9 + zoom * 2)
-    }
-    if (this.map.getLayer('countries-1')) {
-      this.map.setLayoutProperty('countries-1', 'text-size', 12 + zoom * 2)
-    }
   }
 
   handlePlaceClick = place => {
