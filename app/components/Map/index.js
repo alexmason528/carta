@@ -650,11 +650,9 @@ class Map extends Component {
   }
 
   redrawMap = ({ panelState, recommendations }) => {
-    if (recommendations.length === 0) {
+    if (recommendations.length === 0 || panelState === 'closed') {
       this.clearMap()
-    }
-
-    if (panelState !== 'closed') {
+    } else {
       recommendations.map((recommendation, index) => {
         const { display, e } = recommendation
         const filter = ['==', 'e', e]
