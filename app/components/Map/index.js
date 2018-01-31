@@ -65,20 +65,20 @@ class Map extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { viewport, wishlist } = this.props
+    const { viewport } = this.props
 
     if (!isEqual(viewport, nextProps.viewport) && this.map) {
       const { viewport: { center, zoom } } = nextProps
       this.map.jumpTo({ center, zoom })
-    } else {
-      if (this.map) {
-        this.redrawMap(nextProps)
-      }
-
-      if (wishlist.length - nextProps.wishlist.length > 0) {
-        this.deleteWishlistLayers(wishlist, nextProps.wishlist)
-      }
     }
+
+    // if (this.map) {
+    //   this.redrawMap(nextProps)
+    // }
+
+    // if (wishlist.length - nextProps.wishlist.length > 0) {
+    //   this.deleteWishlistLayers(wishlist, nextProps.wishlist)
+    // }
   }
 
   shouldComponentUpdate(nextProps) {
@@ -510,13 +510,21 @@ class Map extends Component {
     })
   }
 
-  Pointer = id => {
-    this.map.on('mouseenter', `links-${id}`, () => {
+  Pointer = name => {
+    const id = `links-${name}`
+    this.map.on('mouseenter', id, () => {
       this.map.getCanvas().style.cursor = 'pointer'
     })
-    this.map.on('mouseleave', `links-${id}`, () => {
+    this.map.on('mouseleave', id, () => {
       this.map.getCanvas().style.cursor = ''
     })
+
+    if (name === 'metropoles') {
+      this.map.on('click', id, data => {
+        const link = data.features[0].properties.link
+        this.handlePlaceClick(link)
+      })
+    }
   }
 
   Shape = () => {
@@ -617,8 +625,6 @@ class Map extends Component {
   }
 
   clearMap = () => {
-    this.handleLoad()
-
     const sources = Array(COLORS.length).fill(0)
     sources.map((source, index) => {
       const filter = ['==', 'e', '']
@@ -630,7 +636,10 @@ class Map extends Component {
   }
 
   redrawMap = ({ panelState, recommendations }) => {
-    this.clearMap()
+    if (recommendations.length === 0) {
+      this.clearMap()
+    }
+
     if (panelState !== 'closed') {
       recommendations.map((recommendation, index) => {
         const { display, e } = recommendation
