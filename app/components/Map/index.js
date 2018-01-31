@@ -63,7 +63,7 @@ class Map extends Component {
       attributionControl: false,
     })
     this.map.on('load', this.handleLoad)
-    this.map.on('dragend', this.handleMapChange)
+    this.map.on('moveend', this.handleMapChange)
     this.map.on('zoomend', this.handleMapChange)
     this.map.on('touchend', this.handleMapChange)
   }
