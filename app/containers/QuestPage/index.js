@@ -115,7 +115,7 @@ class QuestPage extends Component {
     return (
       <Container fluid className="questPage">
         <Helmet meta={[{ name: 'Quest', content: 'Carta' }]} />
-        {/* {this.isFetching() &&
+        {this.isFetching() &&
           panelState !== 'closed' && (
             <MapLoader
               className={cx({
@@ -123,7 +123,7 @@ class QuestPage extends Component {
                 panelClosed: panelState === 'minimized',
               })}
             />
-          )} */}
+          )}
         <QuestButton
           panelState={panelState}
           onClick={() => {

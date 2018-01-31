@@ -1,10 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import { withRouter } from 'react-router'
 import ReactResizeDetector from 'react-resize-detector'
-import { isEqual, differenceWith } from 'lodash'
+import { isEqual } from 'lodash'
 import MapBox from 'mapbox-gl'
 import { COLORS, S3_DATA_URL, S3_ICON_URL, MAP_ACCESS_TOKEN, RECOMMENDATION_COUNT, MIN_ZOOM, MAX_ZOOM } from 'utils/globalConstants'
-import { isMobile } from 'utils/mobileDetector'
 import './style.scss'
 
 MapBox.accessToken = MAP_ACCESS_TOKEN
@@ -22,6 +21,14 @@ class Map extends Component {
     panelState: PropTypes.string,
     className: PropTypes.string,
     locale: PropTypes.string,
+  }
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      shapeLoaded: false,
+      pointLoaded: false,
+    }
   }
 
   componentDidMount() {
@@ -55,13 +62,10 @@ class Map extends Component {
       maxZoom: MAX_ZOOM,
       attributionControl: false,
     })
-
     this.map.on('load', this.handleLoad)
     this.map.on('dragend', this.handleMapChange)
-    if (isMobile()) {
-      this.map.on('touchend', this.handleMapChange)
-    }
     this.map.on('zoomend', this.handleMapChange)
+    this.map.on('touchend', this.handleMapChange)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -71,17 +75,9 @@ class Map extends Component {
       const { viewport: { center, zoom } } = nextProps
       this.map.jumpTo({ center, zoom })
     }
-
-    // if (this.map) {
-    //   this.redrawMap(nextProps)
-    // }
-
-    // if (wishlist.length - nextProps.wishlist.length > 0) {
-    //   this.deleteWishlistLayers(wishlist, nextProps.wishlist)
-    // }
   }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps, nextState) {
     if (this.props.panelState !== nextProps.panelState) {
       return true
     }
@@ -94,15 +90,29 @@ class Map extends Component {
     if (!isEqual(this.props.wishlist, nextProps.wishlist)) {
       return true
     }
+    if (!isEqual(this.state, nextState)) {
+      return true
+    }
     return false
   }
 
-  deleteWishlistLayers = (curList, nextList) => {
-    const diff = differenceWith(curList, nextList, isEqual)
+  componentWillUpdate(nextProps, nextState) {
+    if (nextState.pointLoaded && nextState.shapeLoaded) {
+      this.redrawMap(nextProps)
+      this.addWishlists(this.props.wishlist, nextProps.wishlist)
+    }
+  }
 
-    diff.forEach(entry => {
-      this.map.removeLayer(`pin-${entry.e}`)
-      this.map.removeLayer(`pin-and-label-${entry.e}`)
+  addWishlists = (curList, nextList) => {
+    curList.forEach(entry => {
+      const id = `star-${entry.e}`
+      if (this.map.getLayer(id)) {
+        this.map.removeLayer(id)
+      }
+    })
+
+    nextList.forEach(entry => {
+      this.Star(entry.e)
     })
   }
 
@@ -581,6 +591,8 @@ class Map extends Component {
           this.handlePlaceClick(link)
         })
       })
+
+    this.setState({ shapeLoaded: true })
   }
 
   Caption = () => {
@@ -622,6 +634,8 @@ class Map extends Component {
           this.handlePlaceClick(link)
         })
       })
+
+    this.setState({ pointLoaded: true })
   }
 
   clearMap = () => {
@@ -659,8 +673,6 @@ class Map extends Component {
   }
 
   handleLoad = () => {
-    const { wishlist } = this.props
-
     if (!this.map.getSource('mapbox')) {
       this.map.addSource('mapbox', {
         type: 'vector',
@@ -728,10 +740,6 @@ class Map extends Component {
     this.Metropoles('mapbox', 'place_label', ['all', ['==', 'type', 'city'], ['<=', 'scalerank', 1]], { stops: [[7, '#aaa'], [8, '#888']] })
     this.Metropoles('links', 'place_link-abgtyj', this.everything, '#000')
     this.Countries('mapbox', 'country_label', this.everything, { stops: [[7, '#aaa'], [8, '#888']] })
-
-    wishlist.forEach(entry => {
-      this.Star(entry.e)
-    })
 
     this.Pointer('cities')
     this.Pointer('metropoles')

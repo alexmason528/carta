@@ -10,12 +10,12 @@ import {
   GET_QUESTINFO_REQUEST,
   TYPE_CLICK,
   TYPE_ANYTHING_CLICK,
-  // SET_QUEST,
-  // QUEST_SELECT,
-  // MAP_CHANGE,
-  // DESCRIPTIVE_ANYTHING_CLICK,
-  // DESCRIPTIVE_CLICK,
-  // DESCRIPTIVE_STAR_CLICK,
+  SET_QUEST,
+  QUEST_SELECT,
+  MAP_CHANGE,
+  DESCRIPTIVE_ANYTHING_CLICK,
+  DESCRIPTIVE_CLICK,
+  DESCRIPTIVE_STAR_CLICK,
 } from './constants'
 import {
   getRecommendationSuccess,
@@ -34,7 +34,10 @@ import {
 import { selectCurrentTypes, selectCurrentDescriptives, selectViewport, selectTypes } from './selectors'
 
 export function* getRecommendationWatcher() {
-  yield takeLatest([GET_RECOMMENDATION_REQUEST], getRecommendationRequestHandler)
+  yield takeLatest(
+    [GET_RECOMMENDATION_REQUEST, SET_QUEST, QUEST_SELECT, MAP_CHANGE, TYPE_CLICK, TYPE_ANYTHING_CLICK, DESCRIPTIVE_ANYTHING_CLICK, DESCRIPTIVE_CLICK, DESCRIPTIVE_STAR_CLICK],
+    getRecommendationRequestHandler
+  )
 }
 
 export function* getRecommendationRequestHandler() {
