@@ -496,6 +496,18 @@ class Map extends Component {
         'icon-opacity': 0.5,
       },
     })
+
+    this.map.on('mouseenter', id, () => {
+      this.map.getCanvas().style.cursor = 'pointer'
+    })
+    this.map.on('mouseleave', id, () => {
+      this.map.getCanvas().style.cursor = ''
+    })
+
+    this.map.on('click', id, data => {
+      const link = data.features[0].properties.link
+      this.handlePlaceClick(link)
+    })
   }
 
   Pointer = id => {
@@ -691,7 +703,6 @@ class Map extends Component {
     this.lang = '_en'
     this.everything = ['!=', 'name', '']
 
-    // id, source, layer, filter, color
     this.Icons({ id: 'poi', source: 'mapbox', layer: 'poi_label', filter: this.everything, color: '#888' })
     this.Roads('mapbox', 'road_label', this.everything, '#ccc')
     this.Waterways('mapbox', 'waterway_label', this.everything, '#ccc')
@@ -699,9 +710,7 @@ class Map extends Component {
     this.Places('mapbox', 'place_label', this.everything, { stops: [[7, '#aaa'], [8, '#888']] })
     this.Icons({ id: 'railstations', source: 'mapbox', layer: 'rail_station_label', filter: this.everything, color: '#888' })
     this.Icons({ id: 'peaks', source: 'mapbox', layer: 'mountain_peak_label', filter: this.everything, color: '#888', textfield: `{name${this.lang}} \n ({elevation_m}m)` })
-    // this.map.setLayoutProperty('peaks', 'text-field', `{name${this.lang}} \n ({elevation_m}m)`)
     this.Icons({ id: 'airports', source: 'mapbox', layer: 'airport_label', filter: this.everything, color: '#888', textsize: { stops: [[10, 10], [20, 30]] } })
-    // this.map.setLayoutProperty('airports', 'text-size')
     this.Seas('mapbox', 'marine_label', ['==', 'placement', 'point'], '#ddd')
     this.CurvedSeas('mapbox', 'marine_label', ['==', 'placement', 'line'], '#ddd')
     this.Cities('mapbox', 'place_label', ['all', ['==', 'type', 'city'], ['>=', 'scalerank', 2]], { stops: [[7, '#aaa'], [8, '#888']] })
