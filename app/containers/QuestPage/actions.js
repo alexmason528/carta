@@ -19,14 +19,9 @@ import {
   GET_RECOMMENDATION_REQUEST,
   GET_RECOMMENDATION_SUCCESS,
   GET_RECOMMENDATION_FAIL,
-  GET_BROCHURE_INFO_REQUEST,
-  GET_BROCHURE_INFO_SUCCESS,
-  GET_BROCHURE_INFO_FAIL,
   GET_DESCRIPTIVES_REQUEST,
   GET_DESCRIPTIVES_SUCCESS,
   GET_DESCRIPTIVES_FAIL,
-  UPDATE_BROCHURE_LINK,
-  CLEAR_BROCHURE,
 } from './constants'
 
 export function mapChange(payload) {
@@ -139,27 +134,6 @@ export function getRecommendationFail(payload) {
   }
 }
 
-export function getBrochureInfoRequest(payload) {
-  return {
-    type: GET_BROCHURE_INFO_REQUEST,
-    payload,
-  }
-}
-
-export function getBrochureInfoSuccess(payload) {
-  return {
-    type: GET_BROCHURE_INFO_SUCCESS,
-    payload,
-  }
-}
-
-export function getBrochureInfoFail(payload) {
-  return {
-    type: GET_BROCHURE_INFO_FAIL,
-    payload,
-  }
-}
-
 export function setQuest(payload) {
   return {
     type: SET_QUEST,
@@ -204,18 +178,5 @@ export function getDescriptivesFail(payload) {
   return {
     type: GET_DESCRIPTIVES_FAIL,
     payload,
-  }
-}
-
-export function updateBrochureLink(payload) {
-  return {
-    type: UPDATE_BROCHURE_LINK,
-    payload,
-  }
-}
-
-export function clearBrochure() {
-  return {
-    type: CLEAR_BROCHURE,
   }
 }

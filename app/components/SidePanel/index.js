@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import cx from 'classnames'
-import { withRouter } from 'react-router'
 import Img from 'components/Img'
 import { S3_ICON_URL } from 'utils/globalConstants'
 import Quest from '../Quest'
@@ -13,7 +12,6 @@ class SidePanel extends Component {
     questAdd: PropTypes.func,
     questSelect: PropTypes.func,
     questRemove: PropTypes.func,
-    params: PropTypes.object,
     curQuestInd: PropTypes.number,
     questCnt: PropTypes.number,
     panelState: PropTypes.string,
@@ -27,7 +25,7 @@ class SidePanel extends Component {
   }
 
   render() {
-    const { curQuestInd, panelState, onMinimizeClick, questCnt, onCloseClick, questAdd, questSelect, params: { brochure } } = this.props
+    const { curQuestInd, panelState, onMinimizeClick, questCnt, onCloseClick, questAdd, questSelect } = this.props
     const quests = Array(questCnt).fill(0)
     return (
       <div
@@ -35,7 +33,7 @@ class SidePanel extends Component {
           sidePanel: true,
           'Bs-Bb': true,
           'P-R': true,
-          sidePanel__hidden: panelState !== 'opened' || brochure,
+          sidePanel__hidden: panelState !== 'opened',
         })}
       >
         <div>
@@ -79,4 +77,4 @@ class SidePanel extends Component {
   }
 }
 
-export default withRouter(SidePanel)
+export default SidePanel

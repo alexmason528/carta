@@ -119,7 +119,7 @@ const getDescriptives = desStr => {
   return descriptives
 }
 
-export const urlParser = ({ viewport, types, descriptives, brochure }) => {
+export const urlParser = ({ viewport, types, descriptives }) => {
   const resViewport = getViewport(viewport)
   const resTypes = getTypes(types)
   const resDescriptives = getDescriptives(descriptives)
@@ -128,7 +128,6 @@ export const urlParser = ({ viewport, types, descriptives, brochure }) => {
     viewport: resViewport,
     types: resTypes,
     descriptives: resDescriptives,
-    brochure,
   }
 }
 
@@ -140,7 +139,7 @@ export const getUrlStr = str => {
   return (str.charAt(0).toLowerCase() + str.slice(1)).replace(/ /g, '-')
 }
 
-export const urlComposer = ({ brochure, viewport, types, descriptives }) => {
+export const urlComposer = ({ viewport, types, descriptives }) => {
   let viewportParam = viewport ? `${viewport.center.lng},${viewport.center.lat},${viewport.zoom}` : undefined
   let typeParam
   let descParam
@@ -178,9 +177,6 @@ export const urlComposer = ({ brochure, viewport, types, descriptives }) => {
   }
 
   let params = ['/quest']
-  if (brochure) {
-    params.push(`in/${brochure}`)
-  }
 
   if (viewportParam && typeParam) {
     params.push(viewportParam)

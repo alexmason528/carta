@@ -36,7 +36,7 @@ function createRoutes(store) {
 
   return [
     {
-      path: '/quest(/in/:brochure)(/:viewport/:types/:descriptives)',
+      path: '/quest(/:viewport/:types/:descriptives)',
       name: 'quest',
       getComponent(nextState, cb) {
         const importModules = Promise.all([import('containers/QuestPage/reducer'), import('containers/QuestPage/sagas'), import('containers/QuestPage')])
@@ -46,6 +46,24 @@ function createRoutes(store) {
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('quest', reducer.default)
           injectSagas('quest', sagas.default)
+
+          renderRoute(component)
+        })
+
+        importModules.catch(errorLoading)
+      },
+    },
+    {
+      path: '/in/(:link)',
+      name: 'brochure',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([import('containers/BrochurePage/reducer'), import('containers/BrochurePage/sagas'), import('containers/BrochurePage')])
+
+        const renderRoute = loadModule(cb)
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('brochure', reducer.default)
+          injectSagas('brochure', sagas.default)
 
           renderRoute(component)
         })

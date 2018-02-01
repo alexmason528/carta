@@ -1,10 +1,11 @@
 @import '../../styles/common';
 
 .menu {
+  text-transform: uppercase;
+
   a {
     font-size: 13px;
     color: $darkShadowColor;
-    text-transform: uppercase;
     font-weight: $lightFw;
     cursor: pointer;
     @include borderRadius(0);

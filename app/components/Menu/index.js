@@ -14,7 +14,6 @@ class Menu extends Component {
     signOutUser: PropTypes.func,
     changeLocale: PropTypes.func,
     toggleMenu: PropTypes.func,
-    params: PropTypes.object,
     router: PropTypes.object,
     routes: PropTypes.array,
     location: PropTypes.object,
@@ -48,14 +47,6 @@ class Menu extends Component {
     browserHistory.push('/')
   }
 
-  handleMap = evt => {
-    evt.preventDefault()
-    const { params: { viewport, types, descriptives }, toggleMenu, router } = this.props
-    const url = viewport && types && descriptives ? `/quest/${viewport}/${types}/${descriptives}` : '/quest'
-    router.push(url)
-    toggleMenu()
-  }
-
   handleToggleMenu = evt => {
     evt.stopPropagation()
     const { toggleMenu } = this.props
@@ -71,7 +62,7 @@ class Menu extends Component {
   }
 
   render() {
-    const { authenticated, username, intl: { formatMessage, locale }, params: { brochure }, menuOpened, toggleMenu } = this.props
+    const { authenticated, username, intl: { formatMessage, locale }, menuOpened, toggleMenu } = this.props
     const curPage = this.getCurrentPage()
 
     return (
@@ -86,13 +77,7 @@ class Menu extends Component {
           }}
         >
           <ul>
-            {brochure && (
-              <li className={curPage === 'brochure' ? 'menu--active' : ''}>
-                <a href="/" onClick={this.handleMap}>
-                  {formatMessage(messages.map)}
-                </a>
-              </li>
-            )}
+            {curPage === 'brochure' && <li className="menu--active">{formatMessage(messages.map)}</li>}
             <li className={curPage === 'home' ? 'menu--active' : ''}>
               <Link to="/" onClick={toggleMenu}>
                 {formatMessage(messages.home)}

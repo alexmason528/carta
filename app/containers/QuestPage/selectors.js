@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { get } from 'lodash'
+import { get, pick } from 'lodash'
 
 const selectQuest = state => get(state, 'quest')
 
@@ -21,15 +21,7 @@ const selectDescriptives = () => createSelector(selectQuest, substate => get(sub
 
 const selectCurrentDescriptives = () => createSelector(selectQuest, substate => substate.quests[substate.curQuestInd].descriptives)
 
-const selectBrochureLink = () => createSelector(selectQuest, substate => get(substate, 'brochure.link'))
-
-const selectBrochureInfo = () => createSelector(selectQuest, substate => get(substate, 'brochure.info'))
-
-const selectInfo = () =>
-  createSelector(selectQuest, substate => ({
-    status: substate.status,
-    error: substate.error,
-  }))
+const selectInfo = () => createSelector(selectQuest, substate => pick(substate, ['status', 'error']))
 
 const selectCurrentQuest = () => createSelector(selectQuest, substate => substate.quests[substate.curQuestInd])
 
@@ -38,7 +30,6 @@ const selectTypeSearchExpanded = () => createSelector(selectQuest, substate => s
 const selectDescriptiveSearchExpanded = () => createSelector(selectQuest, substate => substate.quests[substate.curQuestInd].descriptives.expanded)
 
 export {
-  selectQuest,
   selectRecommendations,
   selectViewport,
   selectCategories,
@@ -51,8 +42,6 @@ export {
   selectCurrentTypes,
   selectDescriptives,
   selectCurrentDescriptives,
-  selectBrochureLink,
-  selectBrochureInfo,
   selectInfo,
   selectCurrentQuest,
   selectTypeSearchExpanded,

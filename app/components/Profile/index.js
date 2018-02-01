@@ -113,7 +113,7 @@ class Profile extends Component {
 
   handlePlaceInfoBtnClick = (evt, place) => {
     evt.stopPropagation()
-    browserHistory.push(`/quest/in/${place}`)
+    browserHistory.push(`/in/${place}`)
   }
 
   handleCoverPicClick = evt => {
@@ -133,10 +133,7 @@ class Profile extends Component {
     return (
       <div className="profile Mb-8 P-R">
         <div className="profile__menu">
-          <button
-            className="profile__placeInfoBtn Tt-U Fw-B Fz-10"
-            onClick={evt => this.handlePlaceInfoBtnClick(evt, this.placeList[this.coverPic].link)}
-          >
+          <button className="profile__placeInfoBtn Tt-U Fw-B Fz-10" onClick={evt => this.handlePlaceInfoBtnClick(evt, this.placeList[this.coverPic].link)}>
             {this.placeList[this.coverPic].name}
           </button>{' '}
           |{' '}

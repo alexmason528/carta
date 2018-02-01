@@ -12,7 +12,6 @@ class Map extends Component {
   static propTypes = {
     mapChange: PropTypes.func,
     onClick: PropTypes.func,
-    updateBrochureLink: PropTypes.func,
     recommendations: PropTypes.array,
     viewport: PropTypes.object,
     params: PropTypes.object,
@@ -778,10 +777,8 @@ class Map extends Component {
   }
 
   handlePlaceClick = place => {
-    const { params: { viewport, types, descriptives }, router, updateBrochureLink } = this.props
-    const url = viewport && types && descriptives ? `/quest/in/${place}/${viewport}/${types}/${descriptives}` : `/quest/in/${place}`
-    router.push(url)
-    updateBrochureLink(place)
+    const { router } = this.props
+    router.push(`/in/${place}`)
   }
 
   handleResize = () => {

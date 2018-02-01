@@ -1,35 +1,22 @@
 import { createSelector } from 'reselect'
+import { get, pick } from 'lodash'
 
-const selectHome = state => state.home
+const selectHomeState = state => get(state, 'home')
 
-const selectPosts = () => createSelector(selectHome, substate => substate.posts)
+const selectPosts = () => createSelector(selectHomeState, substate => get(substate, 'posts'))
 
-const selectSuggestions = () => createSelector(selectHome, substate => substate.suggestions)
+const selectSuggestions = () => createSelector(selectHomeState, substate => get(substate, 'suggestions'))
 
-const selectHomeInfo = () =>
-  createSelector(selectHome, substate => ({
-    status: substate.status,
-    error: substate.error,
-  }))
+const selectHomeInfo = () => createSelector(selectHomeState, substate => pick(substate, ['status', 'error']))
 
-const selectEditingPost = () => createSelector(selectHome, substate => substate.editingPost)
+const selectEditingPost = () => createSelector(selectHomeState, substate => get(substate, 'editingPost'))
 
-const selectLimit = () => createSelector(selectHome, substate => substate.limit)
+const selectLimit = () => createSelector(selectHomeState, substate => get(substate, 'limit'))
 
-const selectHasMore = () => createSelector(selectHome, substate => substate.hasMore)
+const selectHasMore = () => createSelector(selectHomeState, substate => get(substate, 'hasMore'))
 
-const selectHasQuest = () => createSelector(selectHome, substate => substate.hasQuest)
+const selectHasQuest = () => createSelector(selectHomeState, substate => get(substate, 'hasQuest'))
 
-const selectLastPostDate = () => createSelector(selectHome, substate => substate.lastPostDate)
+const selectLastPostDate = () => createSelector(selectHomeState, substate => get(substate, 'lastPostDate'))
 
-export {
-  selectHome,
-  selectPosts,
-  selectSuggestions,
-  selectHomeInfo,
-  selectEditingPost,
-  selectLimit,
-  selectHasMore,
-  selectHasQuest,
-  selectLastPostDate,
-}
+export { selectPosts, selectSuggestions, selectHomeInfo, selectEditingPost, selectLimit, selectHasMore, selectHasQuest, selectLastPostDate }

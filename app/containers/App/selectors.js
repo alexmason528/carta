@@ -1,22 +1,20 @@
 import { createSelector } from 'reselect'
+import { get, pick } from 'lodash'
 
-const selectGlobal = state => state.global
-const selectLocationState = () => state => state.route
+const selectGlobalState = state => get(state, 'global')
 
-const selectAuthenticated = () => createSelector(selectGlobal, substate => substate.authenticated)
+const selectLocationState = () => state => get(state, 'route')
 
-const selectUserWishlist = () => createSelector(selectGlobal, substate => substate.wishlist)
+const selectAuthenticated = () => createSelector(selectGlobalState, substate => get(substate, 'authenticated'))
 
-const selectInfo = () =>
-  createSelector(selectGlobal, substate => {
-    const { status, error, authMethod } = substate
-    return { status, error, authMethod }
-  })
+const selectUserWishlist = () => createSelector(selectGlobalState, substate => get(substate, 'wishlist'))
 
-const selectUser = () => createSelector(selectGlobal, substate => substate.user)
+const selectInfo = () => createSelector(selectGlobalState, substate => pick(substate, 'status', 'error', 'authMethod'))
 
-const selectUsername = () => createSelector(selectGlobal, substate => (substate.user ? substate.user.username : ''))
+const selectUser = () => createSelector(selectGlobalState, substate => get(substate, 'user'))
 
-const selectMenuState = () => createSelector(selectGlobal, substate => substate.menuOpened)
+const selectUsername = () => createSelector(selectGlobalState, substate => get(substate, 'user.username', ''))
 
-export { selectGlobal, selectLocationState, selectAuthenticated, selectUserWishlist, selectInfo, selectUser, selectUsername, selectMenuState }
+const selectMenuState = () => createSelector(selectGlobalState, substate => get(substate, 'menuOpened'))
+
+export { selectLocationState, selectAuthenticated, selectUserWishlist, selectInfo, selectUser, selectUsername, selectMenuState }

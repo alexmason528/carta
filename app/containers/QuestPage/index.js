@@ -6,7 +6,6 @@ import { createStructuredSelector } from 'reselect'
 import { Container } from 'reactstrap'
 import cx from 'classnames'
 import { selectUserWishlist } from 'containers/App/selectors'
-import Brochure from 'containers/Brochure'
 import { QuestButton } from 'components/Buttons'
 import MapLoader from 'components/MapLoader'
 import Map from 'components/Map'
@@ -14,7 +13,7 @@ import SidePanel from 'components/SidePanel'
 import ScoreBoard from 'components/ScoreBoard'
 import { urlParser, urlComposer } from 'utils/urlHelper'
 import { paramsChanged } from 'utils/propsHelper'
-import { getQuestInfoRequest, updateBrochureLink, setQuest, mapChange, questAdd, questSelect, questRemove } from './actions'
+import { getQuestInfoRequest, setQuest, mapChange, questAdd, questSelect, questRemove } from './actions'
 import {
   GET_RECOMMENDATION_REQUEST,
   SET_QUEST,
@@ -33,7 +32,6 @@ import {
   selectCurrentDescriptives,
   selectCurrentQuest,
   selectInfo,
-  selectBrochureLink,
   selectQuestCnt,
   selectCurQuestInd,
 } from './selectors'
@@ -42,7 +40,6 @@ import './style.scss'
 class QuestPage extends Component {
   static propTypes = {
     getQuestInfoRequest: PropTypes.func,
-    updateBrochureLink: PropTypes.func,
     setQuest: PropTypes.func,
     mapChange: PropTypes.func,
     questAdd: PropTypes.func,
@@ -57,7 +54,6 @@ class QuestPage extends Component {
     params: PropTypes.object,
     wishlist: PropTypes.array,
     recommendations: PropTypes.array,
-    brochureLink: PropTypes.string,
     curQuestInd: PropTypes.number,
     questCnt: PropTypes.number,
   }
@@ -74,8 +70,8 @@ class QuestPage extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (paramsChanged(this.props, nextProps)) {
-      const { viewport, types, descriptives, brochure } = nextProps
-      const url = urlComposer({ viewport, types, descriptives, brochure })
+      const { viewport, types, descriptives } = nextProps
+      const url = urlComposer({ viewport, types, descriptives })
       browserHistory.push(url)
     }
   }
@@ -108,8 +104,8 @@ class QuestPage extends Component {
 
   render() {
     const { panelState } = this.state
-    const { recommendations, brochureLink, info, viewport, wishlist, mapChange, updateBrochureLink, curQuestInd, questCnt, questAdd, questSelect, questRemove } = this.props
-    const mapData = { panelState, recommendations, info, wishlist, viewport, mapChange, updateBrochureLink }
+    const { recommendations, info, viewport, wishlist, mapChange, curQuestInd, questCnt, questAdd, questSelect, questRemove } = this.props
+    const mapData = { panelState, recommendations, info, wishlist, viewport, mapChange }
     const sidePanelData = { panelState, questAdd, questSelect, questRemove, curQuestInd, questCnt }
 
     return (
@@ -144,7 +140,6 @@ class QuestPage extends Component {
         />
         <Map {...mapData} onCLick={this.handleMapClick} />
         {recommendations.length > 0 && <ScoreBoard recommendations={recommendations} />}
-        {brochureLink && <Brochure brochureLink={brochureLink} />}
       </Container>
     )
   }
@@ -156,7 +151,6 @@ const selectors = createStructuredSelector({
   types: selectCurrentTypes(),
   descriptives: selectCurrentDescriptives(),
   quest: selectCurrentQuest(),
-  brochureLink: selectBrochureLink(),
   info: selectInfo(),
   questCnt: selectQuestCnt(),
   curQuestInd: selectCurQuestInd(),
@@ -166,7 +160,6 @@ const selectors = createStructuredSelector({
 const actions = {
   setQuest,
   getQuestInfoRequest,
-  updateBrochureLink,
   mapChange,
   questAdd,
   questSelect,

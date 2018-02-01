@@ -25,14 +25,9 @@ import {
   GET_RECOMMENDATION_REQUEST,
   GET_RECOMMENDATION_SUCCESS,
   GET_RECOMMENDATION_FAIL,
-  GET_BROCHURE_INFO_REQUEST,
-  GET_BROCHURE_INFO_SUCCESS,
-  GET_BROCHURE_INFO_FAIL,
   GET_DESCRIPTIVES_REQUEST,
   GET_DESCRIPTIVES_SUCCESS,
   GET_DESCRIPTIVES_FAIL,
-  UPDATE_BROCHURE_LINK,
-  CLEAR_BROCHURE,
 } from './constants'
 
 export const initialQuest = {
@@ -78,10 +73,6 @@ const initialState = {
   quests: JSON.parse(getItem('quests')) || [JSON.parse(JSON.stringify(initialQuest))],
   curQuestInd: JSON.parse(getItem('curQuestInd')) || 0,
   recommendations: [],
-  brochure: {
-    link: null,
-    info: null,
-  },
   status: INIT,
   error: null,
 }
@@ -424,7 +415,6 @@ function questReducer(state = initialState, { type, payload }) {
           viewport: newViewport,
           status: type,
           quests: JSON.parse(JSON.stringify(newQuests)),
-          brochure: { link: payload.brochure, info: null },
         }
       )
 
@@ -470,42 +460,6 @@ function questReducer(state = initialState, { type, payload }) {
         ...state,
         status: type,
         error: payload,
-      }
-
-    case GET_BROCHURE_INFO_REQUEST:
-      return {
-        ...state,
-        status: type,
-        brochure: {
-          link: payload,
-          info: null,
-        },
-        error: null,
-      }
-
-    case GET_BROCHURE_INFO_SUCCESS:
-      return {
-        ...state,
-        status: type,
-        brochure: {
-          link: payload.link,
-          info: {
-            _id: payload._id,
-            e: payload.e,
-            ...payload.info,
-          },
-        },
-      }
-
-    case GET_BROCHURE_INFO_FAIL:
-      return {
-        ...state,
-        status: type,
-        error: payload,
-        brochure: {
-          link: null,
-          info: null,
-        },
       }
 
     case TYPE_SEARCH_EXP_CHANGE:
@@ -584,26 +538,6 @@ function questReducer(state = initialState, { type, payload }) {
         ...state,
         status: type,
         error: payload,
-      }
-
-    case UPDATE_BROCHURE_LINK:
-      return {
-        ...state,
-        status: type,
-        brochure: {
-          link: payload,
-          info: null,
-        },
-      }
-
-    case CLEAR_BROCHURE:
-      return {
-        ...state,
-        status: type,
-        brochure: {
-          link: null,
-          info: null,
-        },
       }
 
     default:

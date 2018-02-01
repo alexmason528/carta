@@ -1,7 +1,8 @@
 import { createSelector } from 'reselect'
+import { get } from 'lodash'
 
-const selectLanguage = state => state.language
+const selectLanguageState = state => get(state, 'language')
 
-const selectLocale = () => createSelector(selectLanguage, substate => substate.locale)
+const selectLocale = () => createSelector(selectLanguageState, substate => get(substate, 'locale'))
 
-export { selectLanguage, selectLocale }
+export { selectLocale }

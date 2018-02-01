@@ -43,7 +43,7 @@ class PlaceTile extends Component {
 
   handleTileClick = () => {
     const { link } = this.props
-    browserHistory.push(`/quest/in/${link}`)
+    browserHistory.push(`/in/${link}`)
   }
 
   render() {

@@ -4,7 +4,6 @@ import { API_BASE_URL, RECOMMENDATION_COUNT } from 'utils/globalConstants'
 import request from 'utils/request'
 import { canSendRequest } from 'utils/urlHelper'
 import {
-  GET_BROCHURE_INFO_REQUEST,
   GET_DESCRIPTIVES_REQUEST,
   GET_RECOMMENDATION_REQUEST,
   GET_QUESTINFO_REQUEST,
@@ -22,14 +21,11 @@ import {
   getRecommendationFail,
   getQuestInfoSuccess,
   getQuestInfoFail,
-  getBrochureInfoSuccess,
-  getBrochureInfoFail,
   setQuest,
   updateExpand,
   getDescriptivesRequest,
   getDescriptivesSuccess,
   getDescriptivesFail,
-  clearBrochure,
 } from './actions'
 import { selectCurrentTypes, selectCurrentDescriptives, selectViewport, selectTypes } from './selectors'
 
@@ -125,27 +121,10 @@ export function* getQuestInfoRequestHandler({ payload }) {
   try {
     const res = yield call(request, requestURL, params)
     yield put(getQuestInfoSuccess(res))
-    yield put(clearBrochure())
     yield put(setQuest(payload))
     yield put(updateExpand())
   } catch (err) {
     yield put(getQuestInfoFail(err.details))
-  }
-}
-
-export function* getBrochureInfoWatcher() {
-  yield takeLatest(GET_BROCHURE_INFO_REQUEST, getBrochureInfoRequestHandler)
-}
-
-export function* getBrochureInfoRequestHandler({ payload }) {
-  const requestURL = `${API_BASE_URL}api/v1/brochure/${payload}`
-  const params = { method: 'GET' }
-
-  try {
-    const res = yield call(request, requestURL, params)
-    yield put(getBrochureInfoSuccess(res))
-  } catch (err) {
-    yield put(getBrochureInfoFail(err.details))
   }
 }
 
@@ -214,4 +193,4 @@ export function* getDescriptivesRequestHandler() {
   }
 }
 
-export default [getRecommendationWatcher, getQuestInfoWatcher, getBrochureInfoWatcher, getDescriptivesWatcher]
+export default [getRecommendationWatcher, getQuestInfoWatcher, getDescriptivesWatcher]
