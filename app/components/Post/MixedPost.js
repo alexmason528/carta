@@ -259,7 +259,7 @@ class MixedPost extends Component {
     const linkBarProps = { link, showLinkBar, postShowLinkBar, postLinkChange }
 
     return (
-      <div className="postContainer Cr-D">
+      <div className="postContainer">
         {(showLinkBar || showInfo || showDeleteConfirm) && <div className="backLayer" onClick={this.handleBackLayerClick} />}
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
@@ -268,20 +268,9 @@ class MixedPost extends Component {
           <a className={cx({ postImage: true, noLink: !link })} href={postLink} onClick={this.handlePostImageClick}>
             <Img onLoad={this.handleResize} src={img} />
             {editing ? (
-              <Resizable
-                className="postTitleEdit"
-                tabIndex={1}
-                placeholder={defaultTexts.title}
-                onChange={this.handlePostTitleChange}
-                value={title[locale]}
-              />
+              <Resizable className="postTitleEdit" tabIndex={1} placeholder={defaultTexts.title} onChange={this.handlePostTitleChange} value={title[locale]} />
             ) : (
-              <div
-                className="postTitle"
-                onClick={this.handleOpenLink}
-                title={title[locale]}
-                dangerouslySetInnerHTML={{ __html: textToElem(title[locale]) }}
-              />
+              <div className="postTitle" onClick={this.handleOpenLink} title={title[locale]} dangerouslySetInnerHTML={{ __html: textToElem(title[locale]) }} />
             )}
           </a>
           <div className="postContent">
@@ -291,13 +280,7 @@ class MixedPost extends Component {
               {editable && !editing && <EditButton onClick={this.handleEditStart} />}
             </div>
             {editing ? (
-              <Resizable
-                className="postText"
-                tabIndex={2}
-                placeholder={defaultTexts.content}
-                onChange={this.handlePostContentChange}
-                value={content[locale]}
-              />
+              <Resizable className="postText" tabIndex={2} placeholder={defaultTexts.content} onChange={this.handlePostContentChange} value={content[locale]} />
             ) : (
               <div className="postText" dangerouslySetInnerHTML={{ __html: content[locale] }} />
             )}

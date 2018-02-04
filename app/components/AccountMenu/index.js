@@ -23,7 +23,10 @@ class AccountMenu extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { showContent: false, showForm: false }
+    this.state = {
+      showContent: false,
+      showForm: false,
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -66,15 +69,7 @@ class AccountMenu extends Component {
     const { showContent, showForm } = this.state
 
     return (
-      <div
-        className={cx({
-          accountMenu: true,
-          'P-R': true,
-          'Cr-D': true,
-          'accountMenu--hidden': !show,
-        })}
-        onClick={evt => evt.stopPropagation()}
-      >
+      <div className={cx({ accountMenu: true, 'accountMenu--hidden': !show })} onClick={evt => evt.stopPropagation()}>
         <div className="accountMenu__items">
           <button type="button" onClick={signOutUser}>
             {formatMessage(messages.signOut)}
@@ -84,31 +79,20 @@ class AccountMenu extends Component {
             {formatMessage(messages.settings)}
           </button>
         </div>
-        <div
-          className={cx({
-            accountMenu__content: true,
-            'accountMenu__content--hidden': !showContent,
-          })}
-        >
+        <div className={cx({ accountMenu__content: true, 'accountMenu__content--hidden': !showContent })}>
           <RemoveButton type="user" onClick={this.handleDeleteAccountClick}>
             <span>{formatMessage(messages.deleteAccount)}</span>
           </RemoveButton>
-          <Form
-            className={cx({
-              accountMenu__deleteForm: true,
-              'accountMenu__deleteForm--hidden': !showForm,
-            })}
-            onSubmit={handleSubmit(this.handleDeleteUser)}
-          >
+          <Form className={cx({ accountMenu__deleteForm: true, 'accountMenu__deleteForm--hidden': !showForm })} onSubmit={handleSubmit(this.handleDeleteUser)}>
             <Field name="password" type="password" component={RenderField} label={formatMessage(messages.password)} order={1} />
-            <div className="accountMenu__warning Cr-T">{formatMessage(messages.deleteConfirm)}</div>
+            <div className="accountMenu__warning">{formatMessage(messages.deleteConfirm)}</div>
             <div className="accountMenu__deleteFormButtons">
               <button type="button" onClick={this.handleCancelClick}>
                 {formatMessage(messages.cancel)}
               </button>
               <button className="active">{formatMessage(messages.confirm)}</button>
             </div>
-            {status === DELETE_USER_FAIL && error && <div className="error M-8 P-0">{error}</div>}
+            {status === DELETE_USER_FAIL && error && <div className="error">{error}</div>}
           </Form>
         </div>
       </div>

@@ -309,7 +309,7 @@ class PostCreate extends Component {
     const { postType, remainCharCnts, submitError } = getSubmitInfo(title, img, content, intl.locale, locale, formatMessage)
 
     return (
-      <div className="postContainer Cr-D">
+      <div className="postContainer">
         {(showLinkBar || showInfo || showDeleteConfirm) && <div className="backLayer" onClick={this.handlePostClick} />}
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
@@ -326,34 +326,16 @@ class PostCreate extends Component {
                 onClick={this.handlePostLinkBarClick}
               >
                 <Img onClick={this.handlePostLinkBtn} src={`${S3_ICON_URL}/link.png`} />
-                <input
-                  type="text"
-                  value={link}
-                  placeholder={formatMessage(messages.linkMessage)}
-                  onKeyDown={this.handleEnterKey}
-                  onChange={this.handlePostLinkBarChange}
-                />
+                <input type="text" value={link} placeholder={formatMessage(messages.linkMessage)} onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
               </div>
-              <Resizable
-                className="postTitleEdit"
-                tabIndex={1}
-                placeholder={defaultTexts.title}
-                onChange={this.handlePostTitle}
-                value={title[locale]}
-              />
+              <Resizable className="postTitleEdit" tabIndex={1} placeholder={defaultTexts.title} onChange={this.handlePostTitle} value={title[locale]} />
             </div>
             <div className="postContent">
               <RemoveButton type="content" onClick={this.handlePostContentRemove} />
               <div className="postMeta">
                 {fullname} - CARTA | {formatMessage(messages.now)}
               </div>
-              <Resizable
-                className="postText"
-                tabIndex={2}
-                placeholder={defaultTexts.content}
-                onChange={this.handlePostContent}
-                value={content[locale]}
-              />
+              <Resizable className="postText" tabIndex={2} placeholder={defaultTexts.content} onChange={this.handlePostContent} value={content[locale]} />
             </div>
             <RemoveButton type="image" onClick={this.handlePostImageRemove} />
             {showPostLinkButton && <LinkButton onClick={this.handlePostLinkBtn} />}
@@ -374,13 +356,7 @@ class PostCreate extends Component {
                 onClick={this.handlePostLinkBarClick}
               >
                 <Img onClick={this.handlePostLinkBtn} src={`${S3_ICON_URL}/link.png`} />
-                <input
-                  type="text"
-                  value={link}
-                  placeholder={formatMessage(messages.linkMessage)}
-                  onKeyDown={this.handleEnterKey}
-                  onChange={this.handlePostLinkBarChange}
-                />
+                <input type="text" value={link} placeholder={formatMessage(messages.linkMessage)} onKeyDown={this.handleEnterKey} onChange={this.handlePostLinkBarChange} />
               </div>
             </div>
             <Resizable className="postTitleEdit" placeholder={defaultTexts.title} onChange={this.handlePostTitle} value={title[locale]} />
@@ -393,25 +369,13 @@ class PostCreate extends Component {
 
         {postType === 'textPost' && (
           <div className={cx({ post: true, postCreate: true, [postType]: true })} onClick={this.handlePostClick}>
-            <Resizable
-              className="postTitleEdit"
-              tabIndex={1}
-              placeholder={defaultTexts.title}
-              onChange={this.handlePostTitle}
-              value={title[locale]}
-            />
+            <Resizable className="postTitleEdit" tabIndex={1} placeholder={defaultTexts.title} onChange={this.handlePostTitle} value={title[locale]} />
             <div className="postContent">
               <RemoveButton type="content" onClick={this.handlePostContentRemove} />
               <div className="postMeta">
                 {fullname} - CARTA | {formatMessage(messages.now)}
               </div>
-              <Resizable
-                className="postText"
-                tabIndex={2}
-                placeholder={defaultTexts.content}
-                onChange={this.handlePostContent}
-                value={content[locale]}
-              />
+              <Resizable className="postText" tabIndex={2} placeholder={defaultTexts.content} onChange={this.handlePostContent} value={content[locale]} />
             </div>
           </div>
         )}
@@ -426,9 +390,7 @@ class PostCreate extends Component {
               accept="image/*"
               onChange={this.handleFiles}
             />
-            {(postType === 'textPost' || postType === 'mixedPost') && (
-              <span style={{ marginRight: '4px' }}>{remainCharCnts >= 0 ? remainCharCnts : 0}</span>
-            )}
+            {(postType === 'textPost' || postType === 'mixedPost') && <span style={{ marginRight: '4px' }}>{remainCharCnts >= 0 ? remainCharCnts : 0}</span>}
             {postType !== 'mediaPost' &&
               postType !== 'mixedPost' && (
                 <button type="button" className="postBorderBtn" onClick={this.handleAddMedia}>

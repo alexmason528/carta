@@ -135,7 +135,7 @@ class HomePage extends Component {
     }
 
     return (
-      <Container fluid className="homePage P-0 M-0">
+      <Container fluid className="homePage">
         <Helmet meta={[{ name: 'description', content: 'Carta' }]} />
         <InfiniteScroll loadMore={this.handleLoadMore} hasMore={hasMore} threshold={1000}>
           <ResponsiveLayout desktop={<Desktop {...viewData} />} tablet={<Tablet {...viewData} />} mobile={<Mobile {...viewData} />} />

@@ -16,15 +16,7 @@ class ScoreBoard extends Component {
   render() {
     const { recommendations, show } = this.props
     return (
-      <div
-        className={cx({
-          scoreBoard: true,
-          'Ta-R': true,
-          'Tt-u': true,
-          'P-A': true,
-          hidden: !show,
-        })}
-      >
+      <div className={cx({ scoreBoard: true, hidden: !show })}>
         {recommendations.map((recommendation, index) => {
           const { name, score } = recommendation
           return (

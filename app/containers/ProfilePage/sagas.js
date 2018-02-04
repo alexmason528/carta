@@ -10,10 +10,7 @@ export function* getProfileRequestWatcher() {
 
 export function* getProfileRequestHandler({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/place?name=${payload}`
-
-  const params = {
-    method: 'GET',
-  }
+  const params = { method: 'GET' }
 
   try {
     const res = yield call(request, requestURL, params)

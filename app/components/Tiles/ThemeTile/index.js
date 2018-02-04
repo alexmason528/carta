@@ -16,9 +16,7 @@ class ThemeTile extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      imageLoaded: false,
-    }
+    this.state = { imageLoaded: false }
   }
 
   componentDidMount() {
@@ -54,9 +52,9 @@ class ThemeTile extends Component {
     return (
       <Col className="tileCol" xs={12} sm={12} md={6} lg={4}>
         <div className="tileContainer" onClick={this.handleTileClick}>
-          <div className="tile themeTile Ov-H Cr-P">
+          <div className="tile themeTile">
             <Img onLoad={this.handleLoaded} src={url} />
-            {imageLoaded && <h2 className="Mb-0 Tt-U Px-30 Py-19" dangerouslySetInnerHTML={{ __html: title[locale] }} />}
+            {imageLoaded && <h2 dangerouslySetInnerHTML={{ __html: title[locale] }} />}
           </div>
         </div>
       </Col>

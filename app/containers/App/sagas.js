@@ -42,9 +42,7 @@ export function* signInUserRequestHandler({ payload }) {
   const params = {
     method: 'POST',
     body: JSON.stringify(payload),
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
   }
 
   try {
@@ -67,9 +65,7 @@ export function* registerUserRequestHandler({ payload }) {
   const params = {
     method: 'POST',
     body: JSON.stringify(payload),
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
   }
 
   try {
@@ -92,9 +88,7 @@ export function* deleteUserRequestHandler({ payload }) {
   const params = {
     method: 'DELETE',
     body: JSON.stringify({ password }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
   }
 
   try {
@@ -117,9 +111,7 @@ export function* verifyUserRequestHandler({ payload }) {
   const params = {
     method: 'POST',
     body: JSON.stringify(payload),
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
   }
 
   try {
@@ -142,9 +134,7 @@ export function* updateUserRequest({ payload }) {
   const params = {
     method: 'PATCH',
     body: JSON.stringify(payload),
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
   }
 
   try {
@@ -183,9 +173,7 @@ export function* createUserWishlistRequestHandler({ payload }) {
   const params = {
     method: 'POST',
     body: JSON.stringify(payload),
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
   }
 
   try {
@@ -203,8 +191,8 @@ export function* deleteUserWishlistWatcher() {
 export function* deleteUserWishlistRequestHandler({ payload }) {
   const { userID, brochureID } = payload
   const requestURL = `${API_BASE_URL}api/v1/wishlist/${brochureID}/user/${userID}`
-
   const params = { method: 'DELETE' }
+
   try {
     const res = yield call(request, requestURL, params)
     yield put(deleteUserWishlistSuccess(res))

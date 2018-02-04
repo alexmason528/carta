@@ -10,7 +10,6 @@ export function* getBrochureRequestWatcher() {
 
 export function* getBrochureHandler({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/brochure/${payload}`
-
   const params = { method: 'GET' }
 
   try {

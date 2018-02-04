@@ -1,3 +1,5 @@
+export const INIT = 'carta/App/INIT'
+
 export const SIGNIN_USER_REQUEST = 'carta/App/SIGNIN_USER_REQUEST'
 export const SIGNIN_USER_SUCCESS = 'carta/App/SIGNIN_USER_SUCCESS'
 export const SIGNIN_USER_FAIL = 'carta/App/SIGNIN_USER_FAIL'

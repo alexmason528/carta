@@ -7,7 +7,6 @@ import { injectIntl, intlShape } from 'react-intl'
 import { browserHistory } from 'react-router'
 import { signOutUser, changeAuthMethod, deleteUserRequest, updateUserRequest, signInUserRequest, registerUserRequest } from 'containers/App/actions'
 import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
-import { questAdd } from 'containers/QuestPage/actions'
 import { selectViewport } from 'containers/QuestPage/selectors'
 import { selectEditingPost, selectPosts } from 'containers/HomePage/selectors'
 import messages from 'containers/HomePage/messages'
@@ -17,7 +16,7 @@ import { FixedTile } from 'components/Tiles'
 import AccountMenu from 'components/AccountMenu'
 import AuthForm from 'components/AuthForm'
 import { Post, PostCreate } from 'components/Post'
-import { getItem } from 'utils/localStorage'
+import { setItem, getItem } from 'utils/localStorage'
 import { getFirstname } from 'utils/stringHelper'
 import { checkQuest } from 'utils/urlHelper'
 
@@ -31,7 +30,6 @@ class Mobile extends Component {
     registerUserRequest: PropTypes.func,
     signInUserRequest: PropTypes.func,
     signOutUser: PropTypes.func,
-    questAdd: PropTypes.func,
     changeAuthMethod: PropTypes.func,
     posts: PropTypes.array,
     user: PropTypes.object,
@@ -44,6 +42,14 @@ class Mobile extends Component {
     showAccountMenu: PropTypes.bool,
     profilePic: PropTypes.string,
     intl: intlShape.isRequired,
+  }
+
+  handleQuestTileClick = () => {
+    let quests = JSON.parse(getItem('quests'))
+    quests.push({})
+    setItem('quests', JSON.stringify(quests))
+    setItem('curQuestInd', JSON.stringify(quests.length - 1))
+    browserHistory.push(getQuestUrl())
   }
 
   render() {
@@ -68,7 +74,6 @@ class Mobile extends Component {
       signOutUser,
       registerUserRequest,
       changeAuthMethod,
-      questAdd,
     } = this.props
 
     const localePosts = posts.filter(post => post.title[locale] !== '')
@@ -76,46 +81,21 @@ class Mobile extends Component {
     const createPostButtonType = localePosts.length > 0 && localePosts[0].img ? 'image' : 'text'
     const { url, continueQuest } = checkQuest(viewport)
 
+    const profileProps = { authenticated, profilePic, user, info, onClick: profileClick, onUpdate: updateUserRequest }
+    const accountMenuProps = { user, info, show: showAccountMenu, signOutUser, deleteUserRequest, onClick: profileClick }
+    const authFormProps = { info, profilePic, show: showAuthForm, signInUserRequest, registerUserRequest, changeAuthMethod, onProfilePicChange: profilePicClick }
+
     return (
       <Row className="homePage__row">
         <Col className="homePage__col">
-          <Profile
-            onClick={profileClick}
-            onUpdate={updateUserRequest}
-            authenticated={authenticated}
-            profilePic={profilePic}
-            user={user}
-            info={info}
-          />
-          {authenticated ? (
-            <AccountMenu
-              show={showAccountMenu}
-              user={user}
-              info={info}
-              signOutUser={signOutUser}
-              deleteUserRequest={deleteUserRequest}
-              onClick={profileClick}
-            />
-          ) : (
-            <AuthForm
-              show={showAuthForm}
-              info={info}
-              profilePic={profilePic}
-              signInUserRequest={signInUserRequest}
-              registerUserRequest={registerUserRequest}
-              changeAuthMethod={changeAuthMethod}
-              onProfilePicChange={profilePicClick}
-            />
-          )}
+          <Profile {...profileProps} />
+          {authenticated ? <AccountMenu {...accountMenuProps} /> : <AuthForm {...authFormProps} />}
           <FixedTile
             img="square/quest.jpg"
             link={url}
             title={formatMessage(continueQuest ? messages.continueYourQuest : messages.startPersonalQuest).replace(/\n/g, '<br/>')}
             buttonText={hasQuest ? formatMessage(messages.orStartaNewOne) : ''}
-            onClick={() => {
-              questAdd()
-              browserHistory.push('/quest')
-            }}
+            onClick={this.handleQuestTileClick}
           />
           <FixedTile
             img="square/brabant.jpg"
@@ -127,21 +107,18 @@ class Mobile extends Component {
             }}
           />
           <div className="P-R">
-            {authenticated &&
-              !showCreatePostForm &&
-              user.verified &&
-              !editingPost && <CreatePostButton type={createPostButtonType} onClick={toggleCreatePostForm} />}
+            {authenticated && !showCreatePostForm && user.verified && !editingPost && <CreatePostButton type={createPostButtonType} onClick={toggleCreatePostForm} />}
             {authenticated && showCreatePostForm && <PostCreate onClose={toggleCreatePostForm} user={user} />}
             {localePosts &&
               localePosts.map((post, key) => {
-                const data = {
+                const props = {
                   ...post,
                   key: post._id,
                   firstname: getFirstname(post.author.fullname),
                   editable: authenticated && (post.author._id === user._id || user.role === 'admin') && !editingPost && !showCreatePostForm,
                   first: key === 0 && authenticated,
                 }
-                return <Post {...data} />
+                return <Post {...props} />
               })}
           </div>
         </Col>
@@ -160,7 +137,6 @@ const selectors = createStructuredSelector({
 })
 
 const actions = {
-  questAdd,
   signInUserRequest,
   signOutUser,
   registerUserRequest,

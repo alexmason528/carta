@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
+import { pick } from 'lodash'
 
 class Resizable extends Component {
   static propTypes = {
@@ -32,9 +33,8 @@ class Resizable extends Component {
   }
 
   render() {
-    const { className, tabIndex, placeholder, value, disabled } = this.props
-    const data = { className, tabIndex, placeholder, value, disabled }
-    return <textarea rows={1} onChange={this.handleChange} onBlur={this.resizeTextArea} onFocus={this.resizeTextArea} {...data} />
+    const props = pick(this.props, ['className', 'tabIndex', 'placeholder', 'value', 'disabled'])
+    return <textarea rows={1} onChange={this.handleChange} onBlur={this.resizeTextArea} onFocus={this.resizeTextArea} {...props} />
   }
 }
 

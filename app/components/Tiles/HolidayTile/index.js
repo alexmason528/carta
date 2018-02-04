@@ -95,12 +95,12 @@ class HolidayTile extends Component {
     return (
       <Col className="tileCol" xs={12} sm={12} md={6} lg={4}>
         <div className="tileContainer" onClick={this.handleTileClick}>
-          <div className="tile friendTile Ov-H Cr-P P-R">
+          <div className="tile friendTile">
             <LoadingSpinner show={spinnerShow}>
               <QuarterSpinner width={30} height={30} />
             </LoadingSpinner>
             <Img onLoad={this.handleLoaded} src={holidayPic || this.holidayPic} />
-            {imageLoaded && <h2 className="Mb-0 Tt-U Px-30 Py-19" dangerouslySetInnerHTML={{ __html: getFirstname(fullname) }} />}
+            {imageLoaded && <h2 dangerouslySetInnerHTML={{ __html: getFirstname(fullname) }} />}
             <input
               type="file"
               ref={ref => {

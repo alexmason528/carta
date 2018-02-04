@@ -1,30 +1,21 @@
 import React, { Component, PropTypes } from 'react'
 import Helmet from 'react-helmet'
-import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { Container } from 'reactstrap'
 import cx from 'classnames'
+import { isEqual } from 'lodash'
 import { selectUserWishlist } from 'containers/App/selectors'
 import { QuestButton } from 'components/Buttons'
 import MapLoader from 'components/MapLoader'
 import Map from 'components/Map'
 import SidePanel from 'components/SidePanel'
 import ScoreBoard from 'components/ScoreBoard'
-import { urlParser, urlComposer } from 'utils/urlHelper'
-import { paramsChanged } from 'utils/propsHelper'
-import { getQuestInfoRequest, setQuest, mapChange, questAdd, questSelect, questRemove } from './actions'
-import {
-  GET_RECOMMENDATION_REQUEST,
-  SET_QUEST,
-  QUEST_SELECT,
-  MAP_CHANGE,
-  TYPE_CLICK,
-  TYPE_ANYTHING_CLICK,
-  DESCRIPTIVE_ANYTHING_CLICK,
-  DESCRIPTIVE_CLICK,
-  DESCRIPTIVE_STAR_CLICK,
-} from './constants'
+import { initialViewport } from 'utils/globalConstants'
+import { getItem } from 'utils/localStorage'
+import { getQuestInfoRequest, setQuest, setPanelState } from './actions'
+import { SET_QUEST, SET_URL_ENTERED_QUEST } from './constants'
 import {
   selectRecommendations,
   selectViewport,
@@ -32,8 +23,8 @@ import {
   selectCurrentDescriptives,
   selectCurrentQuest,
   selectInfo,
-  selectQuestCnt,
   selectCurQuestInd,
+  selectPanelState,
 } from './selectors'
 import './style.scss'
 
@@ -41,10 +32,7 @@ class QuestPage extends Component {
   static propTypes = {
     getQuestInfoRequest: PropTypes.func,
     setQuest: PropTypes.func,
-    mapChange: PropTypes.func,
-    questAdd: PropTypes.func,
-    questSelect: PropTypes.func,
-    questRemove: PropTypes.func,
+    setPanelState: PropTypes.func,
     viewport: PropTypes.object,
     descriptives: PropTypes.object,
     types: PropTypes.object,
@@ -54,72 +42,54 @@ class QuestPage extends Component {
     params: PropTypes.object,
     wishlist: PropTypes.array,
     recommendations: PropTypes.array,
+    panelState: PropTypes.string,
     curQuestInd: PropTypes.number,
-    questCnt: PropTypes.number,
-  }
-
-  constructor(props) {
-    super(props)
-    this.state = { panelState: 'opened' }
   }
 
   componentWillMount() {
     const { params, getQuestInfoRequest } = this.props
-    getQuestInfoRequest(urlParser({ ...params }))
+    if (!params.viewport) {
+      browserHistory.push(`/quest/${initialViewport}`)
+      getQuestInfoRequest({ params: { viewport: initialViewport, types: undefined, descriptives: undefined }, urlEntered: true })
+    } else {
+      getQuestInfoRequest({ params, urlEntered: true })
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (paramsChanged(this.props, nextProps)) {
-      const { viewport, types, descriptives } = nextProps
-      const url = urlComposer({ viewport, types, descriptives })
-      browserHistory.push(url)
+    if (!isEqual(this.props.params, nextProps.params)) {
+      const { params, setQuest } = nextProps
+      setQuest({ params, urlEntered: false })
     }
   }
 
   handleQuestBtnClick = state => {
-    this.setState({ panelState: state })
+    const { setPanelState } = this.props
+    setPanelState(state)
   }
 
   handleMapClick = () => {
     if (window.innerWidth < 768) {
-      this.setState({ panelState: 'minimized' })
+      const { setPanelState } = this.props
+      setPanelState('minimized')
     }
   }
 
   isFetching = () => {
     const { info: { status } } = this.props
-    const fetchingList = [
-      GET_RECOMMENDATION_REQUEST,
-      SET_QUEST,
-      QUEST_SELECT,
-      MAP_CHANGE,
-      TYPE_CLICK,
-      TYPE_ANYTHING_CLICK,
-      DESCRIPTIVE_ANYTHING_CLICK,
-      DESCRIPTIVE_CLICK,
-      DESCRIPTIVE_STAR_CLICK,
-    ]
-    return fetchingList.indexOf(status) !== -1
+    return status === (SET_QUEST || SET_URL_ENTERED_QUEST)
   }
 
   render() {
-    const { panelState } = this.state
-    const { recommendations, info, viewport, wishlist, mapChange, curQuestInd, questCnt, questAdd, questSelect, questRemove } = this.props
-    const mapData = { panelState, recommendations, info, wishlist, viewport, mapChange }
-    const sidePanelData = { panelState, questAdd, questSelect, questRemove, curQuestInd, questCnt }
+    const { recommendations, info, viewport, wishlist, curQuestInd, panelState } = this.props
+    const mapData = { panelState, recommendations, info, wishlist, viewport }
+    const questCnt = JSON.parse(getItem('quests')).length
+    const sidePanelData = { panelState, curQuestInd, questCnt }
 
     return (
       <Container fluid className="questPage">
         <Helmet meta={[{ name: 'Quest', content: 'Carta' }]} />
-        {this.isFetching() &&
-          panelState !== 'closed' && (
-            <MapLoader
-              className={cx({
-                panelOpened: panelState === 'opened',
-                panelClosed: panelState === 'minimized',
-              })}
-            />
-          )}
+        {this.isFetching() && panelState !== 'closed' && <MapLoader className={cx({ panelOpened: panelState === 'opened', panelClosed: panelState === 'minimized' })} />}
         <QuestButton
           panelState={panelState}
           onClick={() => {
@@ -152,18 +122,15 @@ const selectors = createStructuredSelector({
   descriptives: selectCurrentDescriptives(),
   quest: selectCurrentQuest(),
   info: selectInfo(),
-  questCnt: selectQuestCnt(),
   curQuestInd: selectCurQuestInd(),
   wishlist: selectUserWishlist(),
+  panelState: selectPanelState(),
 })
 
 const actions = {
   setQuest,
+  setPanelState,
   getQuestInfoRequest,
-  mapChange,
-  questAdd,
-  questSelect,
-  questRemove,
 }
 
 export default connect(selectors, actions)(QuestPage)

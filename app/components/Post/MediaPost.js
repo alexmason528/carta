@@ -229,7 +229,7 @@ class MediaPost extends Component {
     const linkBarProps = { link, showLinkBar, postShowLinkBar, postLinkChange }
 
     return (
-      <div className="postContainer Cr-D">
+      <div className="postContainer">
         {(showLinkBar || showInfo || showDeleteConfirm) && <div className="backLayer" onClick={this.handleBackLayerClick} />}
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
@@ -240,12 +240,7 @@ class MediaPost extends Component {
             {editing ? (
               <Resizable className="postTitleEdit" placeholder={defaultTexts.title} onChange={this.handleTitleChange} value={title[locale]} />
             ) : (
-              <div
-                className="postTitle"
-                title={title[locale]}
-                onClick={this.handleOpenLink}
-                dangerouslySetInnerHTML={{ __html: textToElem(title[locale]) }}
-              />
+              <div className="postTitle" title={title[locale]} onClick={this.handleOpenLink} dangerouslySetInnerHTML={{ __html: textToElem(title[locale]) }} />
             )}
           </a>
           <div className={cx({ postInfo: true, 'postInfo--hidden': !showInfo })}>

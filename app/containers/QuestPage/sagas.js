@@ -1,21 +1,10 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects'
 import { findIndex, map, uniq } from 'lodash'
-import { API_BASE_URL, RECOMMENDATION_COUNT } from 'utils/globalConstants'
+import geoViewport from 'scripts/geo-viewport'
+import { API_BASE_URL, RECOMMENDATION_COUNT, TILE_SIZE } from 'utils/globalConstants'
 import request from 'utils/request'
 import { canSendRequest } from 'utils/urlHelper'
-import {
-  GET_DESCRIPTIVES_REQUEST,
-  GET_RECOMMENDATION_REQUEST,
-  GET_QUESTINFO_REQUEST,
-  TYPE_CLICK,
-  TYPE_ANYTHING_CLICK,
-  SET_QUEST,
-  QUEST_SELECT,
-  MAP_CHANGE,
-  DESCRIPTIVE_ANYTHING_CLICK,
-  DESCRIPTIVE_CLICK,
-  DESCRIPTIVE_STAR_CLICK,
-} from './constants'
+import { GET_DESCRIPTIVES_REQUEST, GET_RECOMMENDATION_REQUEST, GET_QUESTINFO_REQUEST, SET_QUEST } from './constants'
 import {
   getRecommendationSuccess,
   getRecommendationFail,
@@ -27,22 +16,20 @@ import {
   getDescriptivesSuccess,
   getDescriptivesFail,
 } from './actions'
-import { selectCurrentTypes, selectCurrentDescriptives, selectViewport, selectTypes } from './selectors'
+import { selectCurrentTypes, selectCurrentDescriptives, selectViewport, selectTypes, selectPanelState } from './selectors'
 
 export function* getRecommendationWatcher() {
-  yield takeLatest(
-    [GET_RECOMMENDATION_REQUEST, SET_QUEST, QUEST_SELECT, MAP_CHANGE, TYPE_CLICK, TYPE_ANYTHING_CLICK, DESCRIPTIVE_ANYTHING_CLICK, DESCRIPTIVE_CLICK, DESCRIPTIVE_STAR_CLICK],
-    getRecommendationRequestHandler
-  )
+  yield takeLatest([GET_RECOMMENDATION_REQUEST, SET_QUEST], getRecommendationRequestHandler)
 }
 
 export function* getRecommendationRequestHandler() {
-  const viewport = yield select(selectViewport())
+  const { center, zoom } = yield select(selectViewport())
   const questTypes = yield select(selectTypes())
   const curTypes = yield select(selectCurrentTypes())
   const curDescriptives = yield select(selectCurrentDescriptives())
+  const panelState = yield select(selectPanelState())
 
-  const requestURL = `${API_BASE_URL}api/v1/map/recommendations/`
+  const requestURL = `${API_BASE_URL}api/v1/map/recommendations`
 
   let types = {
     all: curTypes.all,
@@ -78,21 +65,31 @@ export function* getRecommendationRequestHandler() {
   types.includes = uniq(types.includes)
   types.excludes = uniq(types.excludes)
 
-  let descriptives = {
+  const descriptives = {
     all: curDescriptives.all,
     stars: uniq(map(curDescriptives.stars, 'd')),
     includes: uniq(map(curDescriptives.includes, 'd')),
     excludes: uniq(map(curDescriptives.excludes, 'd')),
   }
 
-  const data = { count: RECOMMENDATION_COUNT, viewport, types, descriptives }
+  const width = window.innerWidth
+  const height = window.innerHeight
+
+  const bounds = geoViewport.bounds({ lon: center.lng, lat: center.lat }, parseInt(zoom + 2, 10), [width, height], TILE_SIZE)
+
+  const swLng = bounds[0] + 260 / width * (bounds[2] - bounds[0])
+
+  const data = {
+    count: RECOMMENDATION_COUNT,
+    viewport: { bounds: { _sw: { lng: panelState === 'opened' ? swLng : bounds[0], lat: bounds[1] }, _ne: { lng: bounds[2], lat: bounds[3] } }, zoom },
+    types,
+    descriptives,
+  }
 
   const params = {
     method: 'POST',
     body: JSON.stringify(data),
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
   }
 
   try {
@@ -113,10 +110,7 @@ export function* getQuestInfoWatcher() {
 
 export function* getQuestInfoRequestHandler({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/map/questinfo`
-
-  const params = {
-    method: 'GET',
-  }
+  const params = { method: 'GET' }
 
   try {
     const res = yield call(request, requestURL, params)
@@ -129,7 +123,7 @@ export function* getQuestInfoRequestHandler({ payload }) {
 }
 
 export function* getDescriptivesWatcher() {
-  yield takeLatest([GET_DESCRIPTIVES_REQUEST, TYPE_CLICK, TYPE_ANYTHING_CLICK], getDescriptivesRequestHandler)
+  yield takeLatest(GET_DESCRIPTIVES_REQUEST, getDescriptivesRequestHandler)
 }
 
 export function* getDescriptivesRequestHandler() {
@@ -180,9 +174,7 @@ export function* getDescriptivesRequestHandler() {
   const params = {
     method: 'POST',
     body: JSON.stringify(data),
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
   }
 
   try {

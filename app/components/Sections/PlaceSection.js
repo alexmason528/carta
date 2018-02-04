@@ -1,13 +1,15 @@
 import React, { Component, PropTypes } from 'react'
-import ReactDOM from 'react-dom'
+import { compose } from 'redux'
 import { injectIntl, intlShape } from 'react-intl'
+import { withRouter, browserHistory } from 'react-router'
 import messages from 'containers/QuestPage/messages'
 import { Button } from 'components/Buttons'
+import { urlComposer } from 'utils/urlHelper'
 
 class PlaceSection extends Component {
   static propTypes = {
-    placeClick: PropTypes.func,
     places: PropTypes.array,
+    params: PropTypes.object,
     intl: intlShape.isRequired,
   }
 
@@ -26,18 +28,19 @@ class PlaceSection extends Component {
 
   handleAutoFocus() {
     if (window.innerWidth >= 768) {
-      const timer = setTimeout(() => {
-        if (this.searchInput) {
-          ReactDOM.findDOMNode(this.searchInput).focus()
+      setTimeout(() => {
+        if (this.refs.searchInput) {
+          this.refs.searchInput.focus()
         }
-        clearTimeout(timer)
       }, 0)
     }
   }
 
   handlePlaceClick = place => {
-    const { placeClick } = this.props
-    placeClick(place)
+    const { params } = this.props
+    const { center: { lng, lat }, zoom } = place
+    const url = urlComposer({ params: JSON.parse(JSON.stringify(params)), change: 'viewport', value: `${lng},${lat},${zoom}` })
+    browserHistory.push(url)
   }
 
   handleInputChange = evt => {
@@ -53,14 +56,8 @@ class PlaceSection extends Component {
 
     return (
       <div className="section section--place">
-        <h1 className="section__title Tt-U Cr-D">{formatMessage(messages.inAround)}</h1>
-        <input
-          className="section__searchInput"
-          value={search}
-          placeholder={isDesktop ? '' : 'Search'}
-          ref={ref => (this.searchInput = ref)}
-          onChange={this.handleInputChange}
-        />
+        <h1 className="section__title">{formatMessage(messages.inAround)}</h1>
+        <input className="section__searchInput" value={search} placeholder={isDesktop ? '' : 'Search'} ref="searchInput" onChange={this.handleInputChange} />
         <div className="section__filteredList">
           {filteredPlaces.map((place, index) => (
             <Button
@@ -77,4 +74,4 @@ class PlaceSection extends Component {
     )
   }
 }
-export default injectIntl(PlaceSection)
+export default compose(injectIntl, withRouter)(PlaceSection)

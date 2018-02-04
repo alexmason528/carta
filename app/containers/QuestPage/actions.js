@@ -1,18 +1,9 @@
 import {
-  MAP_CHANGE,
   TYPE_SEARCH_EXP_CHANGE,
   DESCRIPTIVE_SEARCH_EXP_CHANGE,
   UPDATE_EXPAND,
-  PLACE_CLICK,
-  TYPE_CLICK,
-  TYPE_ANYTHING_CLICK,
-  DESCRIPTIVE_CLICK,
-  DESCRIPTIVE_STAR_CLICK,
-  DESCRIPTIVE_ANYTHING_CLICK,
   SET_QUEST,
-  QUEST_ADD,
-  QUEST_SELECT,
-  QUEST_REMOVE,
+  SET_PANEL_STATE,
   GET_QUESTINFO_REQUEST,
   GET_QUESTINFO_SUCCESS,
   GET_QUESTINFO_FAIL,
@@ -23,75 +14,6 @@ import {
   GET_DESCRIPTIVES_SUCCESS,
   GET_DESCRIPTIVES_FAIL,
 } from './constants'
-
-export function mapChange(payload) {
-  return {
-    type: MAP_CHANGE,
-    payload,
-  }
-}
-
-export function placeClick(payload) {
-  return {
-    type: PLACE_CLICK,
-    payload,
-  }
-}
-
-export function typeClick(payload) {
-  return {
-    type: TYPE_CLICK,
-    payload,
-  }
-}
-
-export function typeAnythingClick(payload) {
-  return {
-    type: TYPE_ANYTHING_CLICK,
-    payload,
-  }
-}
-
-export function descriptiveClick(payload) {
-  return {
-    type: DESCRIPTIVE_CLICK,
-    payload,
-  }
-}
-
-export function descriptiveStarClick(payload) {
-  return {
-    type: DESCRIPTIVE_STAR_CLICK,
-    payload,
-  }
-}
-
-export function descriptiveAnythingClick(payload) {
-  return {
-    type: DESCRIPTIVE_ANYTHING_CLICK,
-    payload,
-  }
-}
-
-export function questAdd() {
-  return {
-    type: QUEST_ADD,
-  }
-}
-
-export function questSelect(payload) {
-  return {
-    type: QUEST_SELECT,
-    payload,
-  }
-}
-
-export function questRemove(payload) {
-  return {
-    type: QUEST_REMOVE,
-    payload,
-  }
-}
 
 export function getQuestInfoRequest(payload) {
   return {
@@ -137,6 +59,13 @@ export function getRecommendationFail(payload) {
 export function setQuest(payload) {
   return {
     type: SET_QUEST,
+    payload,
+  }
+}
+
+export function setPanelState(payload) {
+  return {
+    type: SET_PANEL_STATE,
     payload,
   }
 }

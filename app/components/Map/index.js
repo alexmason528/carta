@@ -1,21 +1,20 @@
 import React, { Component, PropTypes } from 'react'
-import { withRouter } from 'react-router'
+import { browserHistory, withRouter } from 'react-router'
 import ReactResizeDetector from 'react-resize-detector'
 import { isEqual } from 'lodash'
 import MapBox from 'mapbox-gl'
-import { COLORS, S3_DATA_URL, S3_ICON_URL, MAP_ACCESS_TOKEN, RECOMMENDATION_COUNT, MIN_ZOOM, MAX_ZOOM } from 'utils/globalConstants'
+import { COLORS, S3_DATA_URL, S3_ICON_URL, MAP_ACCESS_TOKEN, RECOMMENDATION_COUNT, MIN_ZOOM, MAX_ZOOM, TILE_SIZE } from 'utils/globalConstants'
+import { urlComposer } from 'utils/urlHelper'
 import './style.scss'
 
 MapBox.accessToken = MAP_ACCESS_TOKEN
 
 class Map extends Component {
   static propTypes = {
-    mapChange: PropTypes.func,
     onClick: PropTypes.func,
     recommendations: PropTypes.array,
     viewport: PropTypes.object,
     params: PropTypes.object,
-    router: PropTypes.object,
     wishlist: PropTypes.array,
     panelState: PropTypes.string,
     className: PropTypes.string,
@@ -41,7 +40,7 @@ class Map extends Component {
         cartaSource: {
           type: 'raster',
           url: 'mapbox://cartaguide.white',
-          tileSize: 128,
+          tileSize: TILE_SIZE,
         },
       },
       layers: [
@@ -69,30 +68,10 @@ class Map extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { viewport } = this.props
-
     if (!isEqual(viewport, nextProps.viewport) && this.map) {
       const { viewport: { center, zoom } } = nextProps
       this.map.jumpTo({ center, zoom })
     }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.props.panelState !== nextProps.panelState) {
-      return true
-    }
-    if (!isEqual(this.props.viewport, nextProps.viewport)) {
-      return true
-    }
-    if (!isEqual(this.props.recommendations, nextProps.recommendations)) {
-      return true
-    }
-    if (!isEqual(this.props.wishlist, nextProps.wishlist)) {
-      return true
-    }
-    if (!isEqual(this.state, nextState)) {
-      return true
-    }
-    return false
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -100,6 +79,10 @@ class Map extends Component {
       this.redrawMap(nextProps)
       this.addWishlists(this.props.wishlist, nextProps.wishlist)
     }
+  }
+
+  componentWillUnmount() {
+    this.map.remove()
   }
 
   addWishlists = (curList, nextList) => {
@@ -748,37 +731,20 @@ class Map extends Component {
   handleMapChange = evt => {
     if (evt.type === 'zoomend' && evt.originalEvent && evt.originalEvent.type !== 'wheel') return
 
-    const { mapChange, panelState } = this.props
-
+    const { params } = this.props
     const zoom = this.map.getZoom()
     const { lng, lat } = this.map.getCenter()
-    const bounds = this.map.getBounds()
-    let param = {
-      zoom: parseFloat(zoom.toFixed(2)),
-      center: {
-        lng: parseFloat(lng.toFixed(6)),
-        lat: parseFloat(lat.toFixed(6)),
-      },
-    }
 
-    if (panelState === 'minimized') {
-      param.bounds = bounds
-    } else {
-      const { _ne, _sw } = bounds
-      const ratio = window.innerWidth / 256
-
-      param.bounds = {
-        _ne,
-        _sw: { lng: _sw.lng + (_ne.lng - _sw.lng) / ratio, lat: _sw.lat },
-      }
-    }
-
-    mapChange(param)
+    const url = urlComposer({
+      params: JSON.parse(JSON.stringify(params)),
+      change: 'viewport',
+      value: `${parseFloat(lng.toFixed(6))},${parseFloat(lat.toFixed(6))},${parseFloat(zoom.toFixed(2))}`,
+    })
+    browserHistory.push(url)
   }
 
   handlePlaceClick = place => {
-    const { router } = this.props
-    router.push(`/in/${place}`)
+    browserHistory.push(`/in/${place}`)
   }
 
   handleResize = () => {

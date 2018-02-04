@@ -30,21 +30,16 @@ class Post extends Component {
   render() {
     const { editingPost, _id } = this.props
 
-    let data
-    if (editingPost && editingPost._id === _id) {
-      data = { ...this.props, ...editingPost, editing: true }
-    } else {
-      data = { ...this.props, editing: false }
-    }
+    const props = editingPost && editingPost._id === _id ? { ...this.props, ...editingPost, editing: true } : { ...this.props, editing: false }
 
-    const { img, content, title } = data
+    const { img, content, title } = props
     let component
     if (img && content !== null) {
-      component = <MixedPost {...data} />
+      component = <MixedPost {...props} />
     } else if (img && content === null) {
-      component = <MediaPost {...data} />
+      component = <MediaPost {...props} />
     } else if ((!img && content !== null) || title !== null) {
-      component = <TextPost {...data} />
+      component = <TextPost {...props} />
     }
 
     return component

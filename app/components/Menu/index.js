@@ -7,6 +7,7 @@ import { LANGUAGES } from 'containers/LanguageProvider/constants'
 import messages from 'containers/HomePage/messages'
 import Img from 'components/Img'
 import { S3_ICON_URL } from 'utils/globalConstants'
+import { getQuestUrl } from 'utils/urlHelper'
 import './style.scss'
 
 class Menu extends Component {
@@ -67,7 +68,7 @@ class Menu extends Component {
 
     return (
       <div className={cx({ menu: true, menu__opened: menuOpened })} onClick={this.handleToggleMenu}>
-        <div className="logo Cr-P" onClick={this.handleToggleMenu}>
+        <div className="logo" onClick={this.handleToggleMenu}>
           <Img src={`${S3_ICON_URL}/logo-100.png`} />
         </div>
         <div
@@ -84,7 +85,7 @@ class Menu extends Component {
               </Link>
             </li>
             <li className={curPage === 'quest' ? 'menu--active' : ''}>
-              <Link to="/quest" onClick={toggleMenu}>
+              <Link to={getQuestUrl()} onClick={toggleMenu}>
                 {formatMessage(messages.quest)}
               </Link>
             </li>
@@ -133,13 +134,7 @@ class Menu extends Component {
             {LANGUAGES.map(lang => {
               const { countryCode, name } = lang
               return (
-                <li
-                  key={countryCode}
-                  className={cx({
-                    menu__language: true,
-                    'menu--active': locale === countryCode,
-                  })}
-                >
+                <li key={countryCode} className={cx({ menu__language: true, 'menu--active': locale === countryCode })}>
                   <a href="/" onClick={this.handleLanguageClick} data-locale={countryCode}>
                     {name}
                   </a>
@@ -147,7 +142,7 @@ class Menu extends Component {
               )
             })}
           </ul>
-          <div className="menu__tab Cr-P P-7 Bs-Cb P-A" onClick={this.handleToggleMenu}>
+          <div className="menu__tab" onClick={this.handleToggleMenu}>
             <Img src={`${S3_ICON_URL}/name-vertical.png`} />
           </div>
         </div>

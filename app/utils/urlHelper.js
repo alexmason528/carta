@@ -5,6 +5,7 @@
   -1: String
 **/
 
+import { pullAt } from 'lodash'
 import { DEFAULT_LOCALE } from 'containers/LanguageProvider/constants'
 import enTranslationMessages from 'translations/en.json'
 import nlTranslationMessages from 'translations/nl.json'
@@ -44,14 +45,16 @@ const getViewport = viewportStr => {
 }
 
 const getTypes = typesStr => {
-  if (!typesStr) return undefined
-  let segs = typesStr.split(',')
-
   let types = {
     all: false,
+    expanded: false,
     includes: [],
     excludes: [],
+    visibles: [],
   }
+
+  if (!typesStr) return types
+  let segs = typesStr.split(',')
 
   if (segs[0].toLowerCase() === translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()) {
     types.all = true
@@ -74,16 +77,18 @@ const getTypes = typesStr => {
 }
 
 const getDescriptives = desStr => {
-  if (!desStr) return 'popular'
-
-  let segs = desStr.split(',')
-
   let descriptives = {
     all: false,
+    expanded: false,
     stars: [],
     includes: [],
     excludes: [],
+    visibles: [],
   }
+
+  if (!desStr) return descriptives
+
+  let segs = desStr.split(',')
 
   if (segs[0].toLowerCase() === translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase()) {
     descriptives.all = true
@@ -139,52 +144,129 @@ export const getUrlStr = str => {
   return (str.charAt(0).toLowerCase() + str.slice(1)).replace(/ /g, '-')
 }
 
-export const urlComposer = ({ viewport, types, descriptives }) => {
-  let viewportParam = viewport ? `${viewport.center.lng},${viewport.center.lat},${viewport.zoom}` : undefined
-  let typeParam
-  let descParam
+const viewportChanged = (params, value) => {
+  params.viewport = value
+  return params
+}
 
-  if (types) {
-    const typeAll = types.all ? translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase() : undefined
-    const typeIncludes = types.includes.length > 0 ? types.includes.map(type => getUrlStr(type[DEFAULT_LOCALE])).join(',') : undefined
-    const typeExcludes = types.excludes.length > 0 ? types.excludes.map(type => `-${getUrlStr(type[DEFAULT_LOCALE])}`).join(',') : undefined
-    if (types.all) {
-      let arr = [typeAll]
-      if (typeExcludes) arr.push(typeExcludes)
-      typeParam = arr.join(',')
-    } else {
-      typeParam = typeIncludes || ''
-    }
+const typeChanged = (params, value) => {
+  let types = params.types ? params.types.split(',') : []
+  const isAnything = types.length && types[0] === 'anything'
+
+  if (value === 'anything') {
+    params.types = isAnything ? '' : 'anything'
+    return params
   }
-  if (descriptives && descriptives !== 'popular') {
-    const descAll = descriptives.all ? translations[DEFAULT_LOCALE]['carta.anything'].toLowerCase() : undefined
-    const descStars = descriptives.stars.length > 0 ? descriptives.stars.map(type => `+${getUrlStr(type[DEFAULT_LOCALE])}`).join(',') : undefined
-    const descIncludes = descriptives.includes.length > 0 ? descriptives.includes.map(type => getUrlStr(type[DEFAULT_LOCALE])).join(',') : undefined
-    const descExcludes = descriptives.excludes.length > 0 ? descriptives.excludes.map(type => `-${getUrlStr(type[DEFAULT_LOCALE])}`).join(',') : undefined
 
-    if (descriptives.all) {
-      let arr = [descAll]
-
-      if (descStars) arr.push(descStars)
-      if (descExcludes) arr.push(descExcludes)
-      descParam = arr.join(',')
+  if (isAnything) {
+    const ind = types.indexOf(`-${value}`)
+    if (ind === -1) {
+      types.push(`-${value}`)
     } else {
-      let arr = []
-      if (descStars) arr.push(descStars)
-      if (descIncludes) arr.push(descIncludes)
-      descParam = arr.join(',')
+      pullAt(types, ind)
+    }
+  } else {
+    const ind = types.indexOf(value)
+    if (ind === -1) {
+      types.push(value)
+    } else {
+      pullAt(types, ind)
     }
   }
 
-  let params = ['/quest']
+  params.types = types.join(',')
+  return params
+}
 
-  if (viewportParam && typeParam) {
-    params.push(viewportParam)
-    params.push(typeParam)
-    params.push(descParam || 'popular')
+const descChanged = (params, value, star) => {
+  let descriptives = params.descriptives && params.descriptives !== 'popular' ? params.descriptives.split(',') : []
+  const isAnything = descriptives.length && descriptives[0] === 'anything'
+
+  if (value === 'anything') {
+    if (isAnything) {
+      params.descriptives = ''
+    } else {
+      descriptives = descriptives.filter(desc => desc[0] === '+')
+      params.descriptives = ['anything', ...descriptives].join(',')
+    }
+    return params
   }
 
-  const url = params.join('/')
+  if (isAnything) {
+    if (star) {
+      const starInd = descriptives.indexOf(`+${value}`)
+      if (starInd === -1) {
+        descriptives.push(`+${value}`)
+      } else {
+        pullAt(descriptives, starInd)
+      }
+    } else {
+      const starInd = descriptives.indexOf(`+${value}`)
+      const excludeInd = descriptives.indexOf(`-${value}`)
+      const ind = descriptives.indexOf(value)
+
+      if (excludeInd !== -1) {
+        pullAt(descriptives, excludeInd)
+      } else {
+        pullAt(descriptives, starInd)
+        pullAt(descriptives, ind)
+        descriptives.push(`-${value}`)
+      }
+    }
+  } else if (star) {
+    const starInd = descriptives.indexOf(`+${value}`)
+    if (starInd === -1) {
+      const ind = descriptives.indexOf(value)
+      descriptives[ind] = `+${value}`
+    } else {
+      descriptives[starInd] = value
+    }
+  } else {
+    const starInd = descriptives.indexOf(`+${value}`)
+
+    if (starInd === -1) {
+      const ind = descriptives.indexOf(value)
+      if (ind === -1) {
+        descriptives.push(value)
+      } else {
+        pullAt(descriptives, ind)
+      }
+    } else {
+      pullAt(descriptives, starInd)
+    }
+  }
+
+  params.descriptives = descriptives.join(',')
+  return params
+}
+
+const buildUrl = params => {
+  if (!params.types) {
+    return `/quest/${params.viewport}`
+  }
+
+  return `/quest/${params.viewport}/${params.types}/${params.descriptives || 'popular'}`
+}
+
+export const urlComposer = ({ params, change, value, star }) => {
+  let url
+
+  switch (change) {
+    case 'viewport':
+      url = buildUrl(viewportChanged(params, value))
+      break
+
+    case 'types':
+      url = buildUrl(typeChanged(params, value))
+      break
+
+    case 'descriptives':
+      url = buildUrl(descChanged(params, value, star))
+      break
+
+    default:
+      url = buildUrl(params)
+  }
   return url
 }
 
@@ -192,22 +274,24 @@ export const canSendRequest = ({ types }) => {
   return types.includes.length > 0
 }
 
-export const checkQuest = viewport => {
-  const storageQuests = getItem('quests')
-  const storageInd = getItem('curQuestInd')
+export const getQuestUrl = () => {
+  const quests = JSON.parse(getItem('quests'))
+  const ind = JSON.parse(getItem('curQuestInd'))
+  const viewport = JSON.parse(getItem('viewport'))
+  const quest = quests[ind]
 
-  if (!storageQuests) {
-    return { url: '/quest', continueQuest: false }
-  }
+  let params = ['/quest', viewport]
 
-  const ind = storageInd || 0
-  const quests = JSON.parse(storageQuests)
-  const { types, descriptives } = quests[ind]
-  const url = urlComposer({ viewport, types, descriptives })
+  if (quest.types) params.push(quest.types)
+  if (quest.descriptives) params.push(quest.descriptives)
 
-  if (quests.length > 1) {
-    return { url, continueQuest: true }
-  }
+  return params.join('/')
+}
 
-  return { url, continueQuest: canSendRequest({ types: quests[ind].types }) }
+export const checkQuest = () => {
+  const quests = JSON.parse(getItem('quests'))
+  const ind = JSON.parse(getItem('curQuestInd'))
+  const quest = quests[ind]
+
+  return { url: getQuestUrl(), continueQuest: quests.length > 1 || !!quest.types }
 }

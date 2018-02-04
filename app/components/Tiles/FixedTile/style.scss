@@ -1,6 +1,8 @@
 @import '../../../styles/common';
 
 .fixedTile {
+  position: relative;
+  margin-bottom: 8px;
   &:before {
     content: '';
     display: block;
@@ -20,6 +22,8 @@
   }
 
   &__content {
+    overflow: hidden;
+    cursor: pointer;
     @include absoluteFill();
     &:hover {
       .fixedTile__image {
@@ -36,6 +40,9 @@
   }
 
   &__title {
+    margin-bottom: 0px;
+    padding: 19px 30px;
+    text-transform: uppercase;
     color: $white;
     font-weight: $heavierFw;
     line-height: $textLH;
@@ -45,6 +52,9 @@
 
   &__btn {
     position: absolute;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 14px;
     right: 15px;
     bottom: 5px;
     color: $white;

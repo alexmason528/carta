@@ -20,7 +20,7 @@ class PlacePage extends Component {
   render() {
     const { places } = this.props
     return (
-      <Container fluid className="placePage P-0 M-0">
+      <Container fluid className="placePage">
         <Helmet meta={[{ name: 'Place', content: 'Carta' }]} />
         <Row className="placePage__row">{places && places.map((place, index) => <PlaceTile key={index} {...place} />)}</Row>
       </Container>

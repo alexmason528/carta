@@ -74,10 +74,14 @@
   }
 
   &__tab {
+    position: absolute;
     height: 85px;
     left: 100%;
     bottom: 20%;
+    padding: 7px;
     background: $white;
+    box-sizing: content-box;
+    cursor: pointer;
     @include borderRadiusDetail(0, 5px, 5px, 0);
     @include transition(all, $fastTrans);
 
@@ -120,6 +124,7 @@
 
 .logo {
   z-index: 100;
+  cursor: pointer;
   @include fixedTopLeft();
 
   img {

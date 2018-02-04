@@ -4,14 +4,9 @@ import Img from 'components/Img'
 import { S3_ICON_URL } from 'utils/globalConstants'
 
 const RemoveButton = ({ className, type, children, onClick }) => {
-  const btnClass = cx({
-    postRemoveImageBtn: type === 'image',
-    postRemoveContentBtn: type === 'content',
-    accountMenu__deleteButton: type === 'user',
-    [className]: className,
-  })
+  const btnClass = cx({ postRemoveImageBtn: type === 'image', postRemoveContentBtn: type === 'content', accountMenu__deleteButton: type === 'user', [className]: className })
 
-  let hover = type === 'image'
+  const hover = type === 'image'
   let image
 
   if (type === 'image') {

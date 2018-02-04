@@ -14,9 +14,7 @@ class TextTile extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      expanded: false,
-    }
+    this.state = { expanded: false }
   }
 
   componentDidMount() {
@@ -88,7 +86,7 @@ class TextTile extends Component {
   render() {
     const { title, content, type } = this.props
     const { expanded } = this.state
-    const data = type ? {} : { xs: 12, sm: 12, md: 6, lg: 4 }
+    const props = type ? {} : { xs: 12, sm: 12, md: 6, lg: 4 }
 
     return (
       <Col
@@ -96,7 +94,7 @@ class TextTile extends Component {
           descriptionText: type === 'description',
           tileCol: !type,
         })}
-        {...data}
+        {...props}
       >
         {expanded && <div className="tileBackLayer" onClick={this.handleBackClick} />}
         <div

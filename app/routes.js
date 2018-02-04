@@ -36,7 +36,7 @@ function createRoutes(store) {
 
   return [
     {
-      path: '/quest(/:viewport/:types/:descriptives)',
+      path: '/quest(/:viewport)(/:types/:descriptives)',
       name: 'quest',
       getComponent(nextState, cb) {
         const importModules = Promise.all([import('containers/QuestPage/reducer'), import('containers/QuestPage/sagas'), import('containers/QuestPage')])

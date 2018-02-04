@@ -1,6 +1,8 @@
 @import '../../styles/common';
 
 .sidePanel {
+  position: relative;
+  box-sizing: border-box;
   width: 256px;
   height: 100vh;
   padding: 0 0 0 56px;

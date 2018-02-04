@@ -21,9 +21,7 @@ class WishlistTile extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      imageLoaded: false,
-    }
+    this.state = { imageLoaded: false }
   }
 
   componentDidMount() {
@@ -65,12 +63,12 @@ class WishlistTile extends Component {
     return (
       <Col className="tileCol" xs={12} sm={12} md={6} lg={4}>
         <div className="tileContainer" onClick={this.handleTileClick}>
-          <div className="tile wishlistTile Ov-H Cr-P">
+          <div className="tile wishlistTile">
             <LoadingSpinner show={deleting}>
               <QuarterSpinner width={30} height={30} />
             </LoadingSpinner>
             <Img onLoad={this.handleLoaded} src={url} />
-            {imageLoaded && <h2 className="Mb-0 Tt-U Px-30 Py-19" dangerouslySetInnerHTML={{ __html: title }} />}
+            {imageLoaded && <h2 dangerouslySetInnerHTML={{ __html: title }} />}
             {canDelete && <RemoveButton type="image" className="wishlistRemoveBtn" onClick={this.handleRemoveWishlist} />}
           </div>
         </div>

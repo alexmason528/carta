@@ -4,13 +4,7 @@ import Img from 'components/Img'
 import { S3_ICON_URL } from 'utils/globalConstants'
 
 const QuestButton = ({ panelState, onClick, onCloseClick }) => (
-  <div
-    className={cx({
-      questBtn: true,
-      questBtn__opened: panelState === 'minimized',
-      questBtn__closed: panelState !== 'minimized',
-    })}
-  >
+  <div className={cx({ questBtn: true, questBtn__opened: panelState === 'minimized', questBtn__closed: panelState !== 'minimized' })}>
     <div onClick={onClick}>
       <Img src={`${S3_ICON_URL}/search.png`} className="inactive" />
       <Img src={`${S3_ICON_URL}/search-blue.png`} className="active" />

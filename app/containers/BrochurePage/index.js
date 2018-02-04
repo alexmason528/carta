@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { Container, Row, Col } from 'reactstrap'
 import { createStructuredSelector } from 'reselect'
-import { withRouter } from 'react-router'
+import { browserHistory, withRouter } from 'react-router'
 import { injectIntl, intlShape } from 'react-intl'
 import cx from 'classnames'
 import { find } from 'lodash'
@@ -14,6 +14,7 @@ import Img from 'components/Img'
 import ResponsiveLayout from 'components/ResponsiveLayout'
 import { ImageTile, TextTile, TextTileMobile } from 'components/Tiles'
 import { S3_ICON_URL } from 'utils/globalConstants'
+import { getItem } from 'utils/localStorage'
 import { getBrochureRequest } from './actions'
 import { selectBrochureDetail } from './selectors'
 import messages from './messages'
@@ -26,7 +27,6 @@ class BrochurePage extends Component {
     createUserWishlistRequest: PropTypes.func,
     deleteUserWishlistRequest: PropTypes.func,
     params: PropTypes.object,
-    router: PropTypes.object,
     location: PropTypes.object,
     info: PropTypes.object,
     user: PropTypes.object,
@@ -61,18 +61,27 @@ class BrochurePage extends Component {
     }
   }
 
+  componentWillUnmount() {
+    if (this.timerID) {
+      clearTimeout(this.timerID)
+    }
+  }
+
   showMessage = message => {
     const { intl: { formatMessage } } = this.props
     this.setState({ message: formatMessage(message), show: true }, () => {
-      setTimeout(() => {
+      if (this.timerID) {
+        clearTimeout(this.timerID)
+      }
+      this.timerID = setTimeout(() => {
         this.setState({ show: false })
       }, 3000)
     })
   }
 
   handleBrochureClose = () => {
-    const { router } = this.props
-    router.push('/quest')
+    const viewport = JSON.parse(getItem('viewport'))
+    browserHistory.push(`/quest/${viewport}`)
   }
 
   handleBrochureAddtoWishlist = alreadyExist => {
@@ -87,12 +96,12 @@ class BrochurePage extends Component {
   }
 
   handleClickMessage = () => {
-    const { authenticated, user, router } = this.props
+    const { authenticated, user } = this.props
 
     if (!authenticated) {
-      router.push('/')
+      browserHistory.push('/')
     } else {
-      router.push(`/user/${user.username}/wishlist`)
+      browserHistory.push(`/user/${user.username}/wishlist`)
     }
   }
 
@@ -113,7 +122,7 @@ class BrochurePage extends Component {
     }
 
     return (
-      <Container fluid className="brochure P-0 M-0">
+      <Container fluid className="brochure">
         <div className="brochure__menu">
           <h2 className={cx({ brochure__message: true, 'brochure__message--hidden': !show })} onClick={this.handleClickMessage}>
             {message}

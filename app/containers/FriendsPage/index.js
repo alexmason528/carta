@@ -36,7 +36,7 @@ class FriendsPage extends Component {
     }
 
     return (
-      <Container fluid className="friendsPage P-0 M-0">
+      <Container fluid className="friendsPage">
         <Helmet meta={[{ name: 'Friends', content: 'Carta' }]} />
         <Row className="friendsPage__row">
           <HolidayTile fullname={fullname} holidayPic={holidayPic} canUpdate={canUpdate} updateHolidayPic={this.props.updateHolidayPicRequest} />

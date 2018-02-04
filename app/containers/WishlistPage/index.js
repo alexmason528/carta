@@ -24,9 +24,7 @@ class WishlistPage extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      deletingWishlist: null,
-    }
+    this.state = { deletingWishlist: null }
   }
 
   componentWillMount() {
@@ -61,7 +59,7 @@ class WishlistPage extends Component {
     }
 
     return (
-      <Container fluid className="wishlistPage P-0 M-0">
+      <Container fluid className="wishlistPage">
         <Helmet meta={[{ name: 'Wishlist', content: 'Carta' }]} />
         <Row className="wishlistPage__row">
           {showList &&

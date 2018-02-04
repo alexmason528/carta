@@ -41,7 +41,7 @@ class Profile extends Component {
     this.placeList = [
       { name: 'amsterdam', link: 'amsterdam' },
       { name: 'rotterdam', link: 'rotterdam' },
-      { name: 'utrecht', link: 'utrecht-province' },
+      { name: 'utrecht', link: 'utrecht-municipality' },
       { name: 'gelderland', link: 'gelderland' },
     ]
   }
@@ -131,14 +131,13 @@ class Profile extends Component {
     const profilePicSpinner = imageType === 'profilePic' && (imageUpload.uploading || status === UPDATE_USER_REQUEST)
 
     return (
-      <div className="profile Mb-8 P-R">
+      <div className="profile">
         <div className="profile__menu">
-          <button className="profile__placeInfoBtn Tt-U Fw-B Fz-10" onClick={evt => this.handlePlaceInfoBtnClick(evt, this.placeList[this.coverPic].link)}>
+          <button className="profile__placeInfoBtn" onClick={evt => this.handlePlaceInfoBtnClick(evt, this.placeList[this.coverPic].link)}>
             {this.placeList[this.coverPic].name}
           </button>{' '}
           |{' '}
           <button
-            className="Tt-U Fw-B Fz-10"
             onClick={() => {
               browserHistory.push('/places')
             }}
@@ -147,20 +146,14 @@ class Profile extends Component {
           </button>
         </div>
         <div className="profile__content">
-          <div className="coverPic Cr-P Ov-H P-R" onClick={this.handleCoverPicClick}>
+          <div className="coverPic" onClick={this.handleCoverPicClick}>
             <Img onLoad={this.handleLoaded} src={`${S3_PLACE_URL}/wide/${this.placeList[this.coverPic].name}.jpg`} />
           </div>
         </div>
-        {authenticated ? (
-          <h2 className="Mb-0 Tt-U P-A">{getFirstname(user.fullname)}</h2>
-        ) : (
-          <h2 className="Mb-0 Tt-U P-A" onClick={onClick}>
-            {formatMessage(messages.signIn)}
-          </h2>
-        )}
+        {authenticated ? <h2>{getFirstname(user.fullname)}</h2> : <h2 onClick={onClick}>{formatMessage(messages.signIn)}</h2>}
         {authenticated && <UserButton className="P-A" onClick={onClick} />}
         {profilePic && (
-          <div className="profilePic Ov-H" onClick={authenticated ? this.handleProfilePic : onClick}>
+          <div className="profilePic" onClick={authenticated ? this.handleProfilePic : onClick}>
             <LoadingSpinner show={profilePicSpinner}>
               <QuarterSpinner width={30} height={30} />
             </LoadingSpinner>

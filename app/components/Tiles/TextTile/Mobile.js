@@ -31,16 +31,10 @@ class TextTile extends Component {
 
   render() {
     const { title, content, type } = this.props
-    const data = type ? {} : { xs: 12, sm: 12, md: 6, lg: 4 }
+    const props = type ? {} : { xs: 12, sm: 12, md: 6, lg: 4 }
 
     return (
-      <Col
-        className={cx({
-          descriptionText: type === 'description',
-          tileCol: !type,
-        })}
-        {...data}
-      >
+      <Col className={cx({ descriptionText: type === 'description', tileCol: !type })} {...props}>
         <div className="tileContainer mobileTextTile">
           {title && <h2 className="textTile__title Tt-U Pb-20 Cr-T">{title}</h2>}
           <div className="textTile__content Cr-T">{content}</div>

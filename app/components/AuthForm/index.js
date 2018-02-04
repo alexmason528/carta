@@ -195,7 +195,7 @@ class AuthForm extends Component {
               <Field name="fullname" type="text" component={RenderField} label={formatMessage(messages.fullname)} order={3} />
               <div className="authForm__uploadButtons">
                 <Field
-                  className="authForm__uploadButton Tt-U"
+                  className="authForm__uploadButton"
                   name="profilePic"
                   label={formatMessage(messages.profilePic)}
                   onChange={onProfilePicChange}
@@ -203,7 +203,7 @@ class AuthForm extends Component {
                   crop="portrait"
                 />
                 <Field
-                  className="authForm__uploadButton Tt-U"
+                  className="authForm__uploadButton"
                   name="holidayPic"
                   label={formatMessage(messages.holidayPic)}
                   onChange={onHolidayPicChange}
@@ -221,9 +221,7 @@ class AuthForm extends Component {
               {authMethod !== 'signIn' ? formatMessage(messages.signIn) : formatMessage(messages.register)}
             </button>
           </div>
-          {!formChanged &&
-            error &&
-            (status === SIGNIN_USER_FAIL || status === REGISTER_USER_FAIL) && <div className="error">{formatMessage({ id: error })}</div>}
+          {!formChanged && error && (status === SIGNIN_USER_FAIL || status === REGISTER_USER_FAIL) && <div className="error">{formatMessage({ id: error })}</div>}
         </form>
       </div>
     )

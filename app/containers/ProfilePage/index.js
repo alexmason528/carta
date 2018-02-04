@@ -21,7 +21,7 @@ class ProfilePage extends Component {
   render() {
     const { profile } = this.props
     return (
-      <Container fluid className="profilePage P-0 M-0">
+      <Container fluid className="profilePage">
         <Helmet meta={[{ name: 'Profile', content: 'Carta' }]} />
 
         <Row className="profilePage__row">{profile && profile.map((entry, index) => <PlaceTile key={index} {...entry} />)}</Row>

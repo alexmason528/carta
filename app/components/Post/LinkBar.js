@@ -19,10 +19,7 @@ class LinkBar extends Component {
 
     return (
       <div
-        className={cx({
-          postLinkBar: true,
-          'postLinkBar--hidden': !showLinkBar,
-        })}
+        className={cx({ postLinkBar: true, 'postLinkBar--hidden': !showLinkBar })}
         onClick={evt => {
           evt.preventDefault()
         }}

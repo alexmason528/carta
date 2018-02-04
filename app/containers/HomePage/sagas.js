@@ -27,9 +27,7 @@ export function* createPostRequest({ payload }) {
   const params = {
     method: 'POST',
     body: JSON.stringify(payload),
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
   }
 
   try {
@@ -87,9 +85,7 @@ export function* updatePostRequest() {
   const params = {
     method: 'PUT',
     body: JSON.stringify(payload),
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
   }
 
   try {
@@ -109,10 +105,7 @@ export function* deletePostWatcher() {
 
 export function* deletePostRequest({ payload }) {
   const requestURL = `${API_BASE_URL}api/v1/post/${payload}`
-
-  const params = {
-    method: 'DELETE',
-  }
+  const params = { method: 'DELETE' }
 
   try {
     yield call(request, requestURL, params)
@@ -128,10 +121,7 @@ export function* listSuggestionWatcher() {
 
 export function* listSuggestionRequest() {
   const requestURL = `${API_BASE_URL}api/v1/suggestion`
-
-  const params = {
-    method: 'GET',
-  }
+  const params = { method: 'GET' }
 
   try {
     const res = yield call(request, requestURL, params)

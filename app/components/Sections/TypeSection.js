@@ -1,20 +1,22 @@
 import React, { Component, PropTypes } from 'react'
-import ReactDOM from 'react-dom'
-import cx from 'classnames'
+import { compose } from 'redux'
+import { browserHistory, withRouter } from 'react-router'
 import { injectIntl, intlShape } from 'react-intl'
+import cx from 'classnames'
 import { findIndex } from 'lodash'
+import { DEFAULT_LOCALE } from 'containers/LanguageProvider/constants'
 import messages from 'containers/QuestPage/messages'
 import { Button } from 'components/Buttons'
 import { S3_ICON_URL } from 'utils/globalConstants'
+import { getUrlStr, urlComposer } from 'utils/urlHelper'
 import Img from 'components/Img'
 
 class TypeSection extends Component {
   static propTypes = {
-    typeClick: PropTypes.func,
-    typeAnythingClick: PropTypes.func,
     typeSearchExpChange: PropTypes.func,
     types: PropTypes.array,
     currentTypes: PropTypes.object,
+    params: PropTypes.object,
     info: PropTypes.object,
     className: PropTypes.string,
     expanded: PropTypes.bool,
@@ -24,9 +26,7 @@ class TypeSection extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      search: '',
-    }
+    this.state = { search: '' }
   }
 
   componentDidMount() {
@@ -39,11 +39,10 @@ class TypeSection extends Component {
 
   handleAutoFocus() {
     if (window.innerWidth >= 768) {
-      const timer = setTimeout(() => {
-        if (this.searchInput) {
-          ReactDOM.findDOMNode(this.searchInput).focus()
+      setTimeout(() => {
+        if (this.refs.searchInput) {
+          this.refs.searchInput.focus()
         }
-        clearTimeout(timer)
       }, 0)
     }
   }
@@ -59,44 +58,31 @@ class TypeSection extends Component {
     this.setState({ search: evt.target.value })
   }
 
+  handleTypeClick = value => {
+    const { params } = this.props
+    const url = urlComposer({ params: JSON.parse(JSON.stringify(params)), change: 'types', value: getUrlStr(value) })
+    browserHistory.push(url)
+  }
+
   render() {
     const { search } = this.state
-    const {
-      types,
-      expanded,
-      intl: { formatMessage, locale },
-      currentTypes: { all, includes, excludes, visibles },
-      typeClick,
-      typeAnythingClick,
-    } = this.props
+    const { types, expanded, intl: { formatMessage, locale }, currentTypes: { all, includes, excludes, visibles } } = this.props
     const isDesktop = window.innerWidth >= 768
 
     const searchedTypes = search === '' ? types : types.filter(type => type[locale].toLowerCase().indexOf(search.toLowerCase()) !== -1)
 
     return (
       <div className="section section--type">
-        <h1 className="section__title Tt-U Cr-D">{formatMessage(messages.showMe)}</h1>
+        <h1 className="section__title">{formatMessage(messages.showMe)}</h1>
         <Img
-          className={cx({
-            section__searchOpenBtn: true,
-            invisible: expanded,
-            'Cr-P': true,
-            'Bs-Cb': true,
-            'P-A': true,
-          })}
+          className={cx({ section__searchOpenBtn: true, invisible: expanded })}
           src={`${S3_ICON_URL}/search.png`}
           onClick={() => {
             this.handleExpand(true)
           }}
         />
         <Img
-          className={cx({
-            section__searchCloseBtn: true,
-            invisible: !expanded || (!all && includes.length === 0),
-            'Cr-P': true,
-            'Bs-Cb': true,
-            'P-A': true,
-          })}
+          className={cx({ section__searchCloseBtn: true, invisible: !expanded || (!all && includes.length === 0) })}
           src={`${S3_ICON_URL}/back.png`}
           onClick={() => {
             this.handleExpand(false)
@@ -106,7 +92,7 @@ class TypeSection extends Component {
           className={cx({ section__searchInput: true, invisible: !expanded })}
           value={search}
           placeholder={isDesktop ? '' : 'Search'}
-          ref={ref => (this.searchInput = ref)}
+          ref="searchInput"
           onChange={this.handleInputChange}
         />
         <div className="section__filteredList">
@@ -120,17 +106,12 @@ class TypeSection extends Component {
             })}
             active={all}
             onClick={() => {
-              typeAnythingClick()
+              this.handleTypeClick('anything')
             }}
           >
             {formatMessage(messages.anything)}
           </Button>
-          <div
-            className={cx({
-              filtered: true,
-              show: expanded || (!expanded && !all),
-            })}
-          >
+          <div className={cx({ filtered: true, show: expanded || (!expanded && !all) })}>
             {searchedTypes.map((type, index) => {
               const active = all ? findIndex(excludes, type) === -1 : findIndex(includes, type) !== -1
               const show = findIndex(visibles, type) !== -1
@@ -138,7 +119,7 @@ class TypeSection extends Component {
                 <Button
                   active={active}
                   onClick={() => {
-                    typeClick({ type, active })
+                    this.handleTypeClick(type[DEFAULT_LOCALE])
                   }}
                   key={index}
                 >
@@ -147,19 +128,14 @@ class TypeSection extends Component {
               ) : null
             })}
           </div>
-          <div
-            className={cx({
-              excluded: true,
-              show: all && !expanded && excludes.length > 0 && excludes.length !== types.length,
-            })}
-          >
+          <div className={cx({ excluded: true, show: all && !expanded && excludes.length > 0 && excludes.length !== types.length })}>
             <div className="except">{formatMessage(messages.onlyIgnoring)}</div>
             {excludes.map((type, index) => (
               <Button
                 key={index}
                 active={false}
                 onClick={() => {
-                  typeClick({ type, active: false })
+                  this.handleTypeClick(type[DEFAULT_LOCALE])
                 }}
               >
                 {type[locale]}
@@ -172,4 +148,4 @@ class TypeSection extends Component {
   }
 }
 
-export default injectIntl(TypeSection)
+export default compose(injectIntl, withRouter)(TypeSection)

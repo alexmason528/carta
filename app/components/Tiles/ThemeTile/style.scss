@@ -1,6 +1,9 @@
 @import '../../../styles/common';
 
 .themeTile {
+  overflow: hidden;
+  cursor: pointer;
+
   img {
     width: 100%;
     transform: scale(1);
@@ -19,6 +22,9 @@
   }
 
   h2 {
+    padding: 19px 30px;
+    margin-bottom: 0px;
+    text-transform: uppercase;
     z-index: 4;
     color: $white;
     font-weight: $heavierFw;

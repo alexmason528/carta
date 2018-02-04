@@ -49,9 +49,9 @@ class ImageTile extends Component {
     return (
       <Col className="tileCol" xs={12} sm={12} md={6} lg={4}>
         <div className="tileContainer">
-          <div className="tile friendTile Ov-H Cr-P">
+          <div className="tile friendTile">
             <Img onLoad={this.handleLoaded} src={holidayPic || this.holidayPic} />
-            {imageLoaded && <h2 className="Mb-0 Tt-U Px-30 Py-19" dangerouslySetInnerHTML={{ __html: getFirstname(fullname) }} />}
+            {imageLoaded && <h2 dangerouslySetInnerHTML={{ __html: getFirstname(fullname) }} />}
           </div>
         </div>
       </Col>

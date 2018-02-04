@@ -59,9 +59,9 @@ class Verify extends Component {
 
     return verifyMessage ? (
       <div className="verifyCtrl">
-        <div className="verifyCtrl__message Wb-Bw P-30">{verifyMessage}</div>
+        <div className="verifyCtrl__message">{verifyMessage}</div>
         {((user && !user.verified) || status === VERIFY_USER_FAIL) && (
-          <div className="verifyCtrl__signOutForm Px-25 Py-15">
+          <div className="verifyCtrl__signOutForm">
             {formatMessage(messages.verificationRequired)} <button onClick={signOutUser}>{formatMessage(messages.signOut)}</button>
           </div>
         )}

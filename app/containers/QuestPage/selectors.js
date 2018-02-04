@@ -1,40 +1,39 @@
 import { createSelector } from 'reselect'
 import { get, pick } from 'lodash'
 
-const selectQuest = state => get(state, 'quest')
+const selectQuestState = state => get(state, 'quest')
 
-const selectRecommendations = () => createSelector(selectQuest, substate => get(substate, 'recommendations'))
+const selectRecommendations = () => createSelector(selectQuestState, substate => get(substate, 'recommendations'))
 
-const selectViewport = () => createSelector(selectQuest, substate => get(substate, 'viewport'))
+const selectViewport = () => createSelector(selectQuestState, substate => get(substate, 'viewport'))
 
-const selectQuestCnt = () => createSelector(selectQuest, substate => substate.quests.length)
+const selectCurQuestInd = () => createSelector(selectQuestState, substate => get(substate, 'curQuestInd'))
 
-const selectCurQuestInd = () => createSelector(selectQuest, substate => get(substate, 'curQuestInd'))
+const selectPlaces = () => createSelector(selectQuestState, substate => get(substate, 'categories.places'))
 
-const selectPlaces = () => createSelector(selectQuest, substate => get(substate, 'categories.places'))
+const selectTypes = () => createSelector(selectQuestState, substate => get(substate, 'categories.types'))
 
-const selectTypes = () => createSelector(selectQuest, substate => get(substate, 'categories.types'))
+const selectCurrentTypes = () => createSelector(selectQuestState, substate => get(substate, 'quest.types'))
 
-const selectCurrentTypes = () => createSelector(selectQuest, substate => substate.quests[substate.curQuestInd].types)
+const selectDescriptives = () => createSelector(selectQuestState, substate => get(substate, 'categories.descriptives'))
 
-const selectDescriptives = () => createSelector(selectQuest, substate => get(substate, 'categories.descriptives'))
+const selectCurrentDescriptives = () => createSelector(selectQuestState, substate => get(substate, 'quest.descriptives'))
 
-const selectCurrentDescriptives = () => createSelector(selectQuest, substate => substate.quests[substate.curQuestInd].descriptives)
+const selectInfo = () => createSelector(selectQuestState, substate => pick(substate, ['status', 'error']))
 
-const selectInfo = () => createSelector(selectQuest, substate => pick(substate, ['status', 'error']))
+const selectCurrentQuest = () => createSelector(selectQuestState, substate => get(substate, 'quest'))
 
-const selectCurrentQuest = () => createSelector(selectQuest, substate => substate.quests[substate.curQuestInd])
+const selectTypeSearchExpanded = () => createSelector(selectQuestState, substate => get(substate, 'quest.types.expanded'))
 
-const selectTypeSearchExpanded = () => createSelector(selectQuest, substate => substate.quests[substate.curQuestInd].types.expanded)
+const selectDescriptiveSearchExpanded = () => createSelector(selectQuestState, substate => get(substate, 'quest.descriptives.expanded'))
 
-const selectDescriptiveSearchExpanded = () => createSelector(selectQuest, substate => substate.quests[substate.curQuestInd].descriptives.expanded)
+const selectPanelState = () => createSelector(selectQuestState, substate => get(substate, 'panelState'))
 
 export {
   selectRecommendations,
   selectViewport,
   selectCategories,
-  selectQuests,
-  selectQuestCnt,
+  selectPanelState,
   selectCurQuest,
   selectCurQuestInd,
   selectPlaces,

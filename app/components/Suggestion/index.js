@@ -41,18 +41,9 @@ class Suggestion extends Component {
     const { imageLoaded } = this.state
 
     return (
-      <div
-        className={cx({
-          suggestion: true,
-          'P-R': true,
-          'Mb-8': true,
-          'Cr-P': true,
-          'Ov-H': true,
-          hidden: !imageLoaded,
-        })}
-      >
+      <div className={cx({ suggestion: true, hidden: !imageLoaded })}>
         <Img onLoad={this.handleLoaded} src={img} />
-        <h2 className="Px-30 Py-19 Tt-U Mb-0">{title}</h2>
+        <h2>{title}</h2>
       </div>
     )
   }

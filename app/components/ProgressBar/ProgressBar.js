@@ -12,9 +12,7 @@ class ProgressBar extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      percent: props.percent,
-    }
+    this.state = { percent: props.percent }
   }
 
   componentDidMount() {

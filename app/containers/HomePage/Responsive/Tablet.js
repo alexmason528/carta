@@ -82,48 +82,26 @@ class Tablet extends Component {
       }
     })
 
+    const profileProps = { authenticated, profilePic, user, info, onClick: profileClick, onUpdate: updateUserRequest }
+    const accountMenuProps = { user, info, show: showAccountMenu, signOutUser, deleteUserRequest, onClick: profileClick }
+    const authFormProps = { info, profilePic, show: showAuthForm, signInUserRequest, registerUserRequest, changeAuthMethod, onProfilePicChange: profilePicClick }
+
     return (
       <Row className="homePage__row">
         <Col className="homePage__col">
-          <Profile
-            onClick={profileClick}
-            onUpdate={updateUserRequest}
-            authenticated={authenticated}
-            profilePic={profilePic}
-            user={user}
-            info={info}
-          />
-          {authenticated ? (
-            <AccountMenu
-              show={showAccountMenu}
-              user={user}
-              info={info}
-              signOutUser={signOutUser}
-              deleteUserRequest={deleteUserRequest}
-              onClick={profileClick}
-            />
-          ) : (
-            <AuthForm
-              show={showAuthForm}
-              info={info}
-              profilePic={profilePic}
-              signInUserRequest={signInUserRequest}
-              registerUserRequest={registerUserRequest}
-              changeAuthMethod={changeAuthMethod}
-              onProfilePicChange={profilePicClick}
-            />
-          )}
+          <Profile {...profileProps} />
+          {authenticated ? <AccountMenu {...accountMenuProps} /> : <AuthForm {...authFormProps} />}
           <div>
             {firstColPosts &&
               firstColPosts.map((post, key) => {
-                const data = {
+                const props = {
                   ...post,
                   key: post._id,
                   firstname: getFirstname(post.author.fullname),
                   editable: authenticated && (post.author._id === user._id || user.role === 'admin') && !editingPost && !showCreatePostForm,
                   first: key === 0 && authenticated,
                 }
-                return <Post {...data} />
+                return <Post {...props} />
               })}
           </div>
         </Col>
@@ -138,21 +116,18 @@ class Tablet extends Component {
             }}
           />
           <div className="P-R">
-            {authenticated &&
-              !showCreatePostForm &&
-              user.verified &&
-              !editingPost && <CreatePostButton type={createPostButtonType} onClick={toggleCreatePostForm} />}
+            {authenticated && !showCreatePostForm && user.verified && !editingPost && <CreatePostButton type={createPostButtonType} onClick={toggleCreatePostForm} />}
             {authenticated && showCreatePostForm && <PostCreate onClose={toggleCreatePostForm} user={user} />}
             {secondColPosts &&
               secondColPosts.map((post, key) => {
-                const data = {
+                const props = {
                   ...post,
                   key: post._id,
                   firstname: getFirstname(post.author.fullname),
                   editable: authenticated && (post.author._id === user._id || user.role === 'admin') && !editingPost && !showCreatePostForm,
                   first: key === 0 && authenticated,
                 }
-                return <Post {...data} />
+                return <Post {...props} />
               })}
           </div>
         </Col>

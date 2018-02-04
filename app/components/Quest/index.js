@@ -4,18 +4,8 @@ import { compose } from 'redux'
 import { connect } from 'react-redux'
 import cx from 'classnames'
 import { createStructuredSelector } from 'reselect'
-import { SET_QUEST } from 'containers/QuestPage/constants'
-import {
-  updateExpand,
-  placeClick,
-  typeClick,
-  typeAnythingClick,
-  typeSearchExpChange,
-  descriptiveClick,
-  descriptiveStarClick,
-  descriptiveAnythingClick,
-  descriptiveSearchExpChange,
-} from 'containers/QuestPage/actions'
+import { SET_URL_ENTERED_QUEST } from 'containers/QuestPage/constants'
+import { updateExpand, typeSearchExpChange, descriptiveSearchExpChange } from 'containers/QuestPage/actions'
 import {
   selectInfo,
   selectPlaces,
@@ -35,13 +25,7 @@ import './style.scss'
 class Quest extends Component {
   static propTypes = {
     updateExpand: PropTypes.func,
-    placeClick: PropTypes.func,
-    typeClick: PropTypes.func,
-    typeAnythingClick: PropTypes.func,
     typeSearchExpChange: PropTypes.func,
-    descriptiveClick: PropTypes.func,
-    descriptiveStarClick: PropTypes.func,
-    descriptiveAnythingClick: PropTypes.func,
     descriptiveSearchExpChange: PropTypes.func,
     places: PropTypes.array,
     types: PropTypes.array,
@@ -78,8 +62,7 @@ class Quest extends Component {
 
   initializeProps = props => {
     const { currentTypes, currentDescriptives, info: { status } } = props
-
-    if (status === SET_QUEST) {
+    if (status === SET_URL_ENTERED_QUEST) {
       if ((currentTypes.all || currentTypes.includes.length > 0) && (currentDescriptives.all || currentDescriptives.includes.length > 0 || currentDescriptives.stars.length > 0)) {
         this.setState({ currentTab: 2 })
       } else if (
@@ -125,35 +108,25 @@ class Quest extends Component {
       currentDescriptives,
       dExpanded,
       tExpanded,
-      placeClick,
-      typeClick,
-      typeAnythingClick,
       typeSearchExpChange,
-      descriptiveClick,
-      descriptiveStarClick,
-      descriptiveAnythingClick,
       descriptiveSearchExpChange,
     } = this.props
 
     let section
     if (currentTab === 0) {
-      const data = { places, placeClick }
-      section = <PlaceSection {...data} />
+      section = <PlaceSection places={places} />
     } else if (currentTab === 1) {
-      const data = { info, types, expanded: tExpanded, currentTypes, typeClick, typeAnythingClick, typeSearchExpChange }
-      section = <TypeSection {...data} />
+      const props = { info, types, expanded: tExpanded, currentTypes, typeSearchExpChange }
+      section = <TypeSection {...props} />
     } else {
-      const data = {
+      const props = {
         info,
         descriptives,
         currentDescriptives,
         expanded: dExpanded,
-        descriptiveClick,
-        descriptiveStarClick,
-        descriptiveAnythingClick,
         descriptiveSearchExpChange,
       }
-      section = <DescriptiveSection {...data} />
+      section = <DescriptiveSection {...props} />
     }
 
     const tabs = ['marker', 'check', 'star']
@@ -177,13 +150,7 @@ class Quest extends Component {
           {tabs.map((tabIcon, index) => (
             <Img
               key={index}
-              className={cx({
-                quest__tabBtn: true,
-                'P-R': true,
-                'Cr-P': true,
-                'Bs-Cb': true,
-                'quest__tabBtn--active': currentTab === index,
-              })}
+              className={cx({ quest__tabBtn: true, 'quest__tabBtn--active': currentTab === index })}
               src={`${S3_ICON_URL}/${tabIcon}.png`}
               onClick={() => {
                 this.handleTabClick(index)
@@ -211,13 +178,7 @@ const selectors = createStructuredSelector({
 
 const actions = {
   updateExpand,
-  placeClick,
-  typeClick,
-  typeAnythingClick,
   typeSearchExpChange,
-  descriptiveClick,
-  descriptiveStarClick,
-  descriptiveAnythingClick,
   descriptiveSearchExpChange,
 }
 

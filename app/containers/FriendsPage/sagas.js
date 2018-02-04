@@ -33,9 +33,7 @@ export function* updateHolidayPicRequestHandler({ payload }) {
   const params = {
     method: 'PATCH',
     body: JSON.stringify(payload),
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
   }
 
   try {

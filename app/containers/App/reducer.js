@@ -1,5 +1,6 @@
 import { difference } from 'lodash'
 import { getItem, setItem, removeItem } from 'utils/localStorage'
+import { initialParam, initialViewport } from 'utils/globalConstants'
 
 import {
   SIGNIN_USER_REQUEST,
@@ -30,6 +31,15 @@ import {
   DELETE_USER_WISHLIST_SUCCESS,
   DELETE_USER_WISHLIST_FAIL,
 } from './constants'
+
+if (!getItem('viewport')) {
+  setItem('viewport', JSON.stringify(initialViewport))
+}
+
+if (!getItem('quests')) {
+  setItem('quests', JSON.stringify([initialParam]))
+  setItem('curQuestInd', 0)
+}
 
 const initialState = {
   user: JSON.parse(getItem('auth')) || null,

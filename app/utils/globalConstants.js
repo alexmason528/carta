@@ -27,3 +27,8 @@ export const DEFAULT_ZOOM = 6
 export const DEFAULT_LIMIT = 6
 export const MIN_ZOOM = 0
 export const MAX_ZOOM = 18
+export const TILE_SIZE = 128
+
+export const initialParam = {}
+
+export const initialViewport = `${CENTER_COORDS.lng},${CENTER_COORDS.lat},${DEFAULT_ZOOM}`

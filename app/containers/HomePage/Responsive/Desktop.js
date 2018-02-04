@@ -8,18 +8,18 @@ import { createStructuredSelector } from 'reselect'
 import { pullAt, findIndex } from 'lodash'
 import { signOutUser, changeAuthMethod, deleteUserRequest, updateUserRequest, signInUserRequest, registerUserRequest } from 'containers/App/actions'
 import { selectAuthenticated, selectUser, selectInfo } from 'containers/App/selectors'
-import { questAdd } from 'containers/QuestPage/actions'
-import { selectViewport } from 'containers/QuestPage/selectors'
 import { selectEditingPost, selectPosts } from 'containers/HomePage/selectors'
 import messages from 'containers/HomePage/messages'
-import { CreatePostButton } from 'components/Buttons'
-import Profile from 'components/Profile'
-import { FixedTile } from 'components/Tiles'
+import { selectViewport } from 'containers/QuestPage/selectors'
 import AccountMenu from 'components/AccountMenu'
 import AuthForm from 'components/AuthForm'
+import { CreatePostButton } from 'components/Buttons'
 import { Post, PostCreate } from 'components/Post'
+import Profile from 'components/Profile'
+import { FixedTile } from 'components/Tiles'
+import { setItem, getItem } from 'utils/localStorage'
 import { getFirstname } from 'utils/stringHelper'
-import { checkQuest } from 'utils/urlHelper'
+import { checkQuest, getQuestUrl } from 'utils/urlHelper'
 
 class Desktop extends Component {
   static propTypes = {
@@ -32,7 +32,6 @@ class Desktop extends Component {
     signInUserRequest: PropTypes.func,
     signOutUser: PropTypes.func,
     changeAuthMethod: PropTypes.func,
-    questAdd: PropTypes.func,
     posts: PropTypes.array,
     user: PropTypes.object,
     info: PropTypes.object,
@@ -44,6 +43,14 @@ class Desktop extends Component {
     showAccountMenu: PropTypes.bool,
     profilePic: PropTypes.string,
     intl: intlShape.isRequired,
+  }
+
+  handleQuestTileClick = () => {
+    let quests = JSON.parse(getItem('quests'))
+    quests.push({})
+    setItem('quests', JSON.stringify(quests))
+    setItem('curQuestInd', JSON.stringify(quests.length - 1))
+    browserHistory.push(getQuestUrl())
   }
 
   render() {
@@ -68,7 +75,6 @@ class Desktop extends Component {
       signOutUser,
       registerUserRequest,
       changeAuthMethod,
-      questAdd,
     } = this.props
 
     let localePosts = posts.filter(post => post.title[locale] !== '')
@@ -88,48 +94,26 @@ class Desktop extends Component {
       }
     })
 
+    const profileProps = { authenticated, profilePic, user, info, onClick: profileClick, onUpdate: updateUserRequest }
+    const accountMenuProps = { user, info, show: showAccountMenu, signOutUser, deleteUserRequest, onClick: profileClick }
+    const authFormProps = { info, profilePic, show: showAuthForm, signInUserRequest, registerUserRequest, changeAuthMethod, onProfilePicChange: profilePicClick }
+
     return (
       <Row className="homePage__row">
         <Col className="homePage__col">
-          <Profile
-            onClick={profileClick}
-            onUpdate={updateUserRequest}
-            authenticated={authenticated}
-            profilePic={profilePic}
-            user={user}
-            info={info}
-          />
-          {authenticated ? (
-            <AccountMenu
-              show={showAccountMenu}
-              user={user}
-              info={info}
-              signOutUser={signOutUser}
-              deleteUserRequest={deleteUserRequest}
-              onClick={profileClick}
-            />
-          ) : (
-            <AuthForm
-              show={showAuthForm}
-              info={info}
-              profilePic={profilePic}
-              signInUserRequest={signInUserRequest}
-              registerUserRequest={registerUserRequest}
-              changeAuthMethod={changeAuthMethod}
-              onProfilePicChange={profilePicClick}
-            />
-          )}
+          <Profile {...profileProps} />
+          {authenticated ? <AccountMenu {...accountMenuProps} /> : <AuthForm {...authFormProps} />}
           <div>
             {firstColPosts &&
               firstColPosts.map((post, key) => {
-                const data = {
+                const props = {
                   ...post,
                   key: post._id,
                   firstname: getFirstname(post.author.fullname),
                   editable: authenticated && (post.author._id === user._id || user.role === 'admin') && !editingPost && !showCreatePostForm,
                   first: key === 0 && authenticated,
                 }
-                return <Post {...data} />
+                return <Post {...props} />
               })}
           </div>
         </Col>
@@ -139,27 +123,21 @@ class Desktop extends Component {
             link={url}
             title={formatMessage(continueQuest ? messages.continueYourQuest : messages.startPersonalQuest).replace(/\n/g, '<br/>')}
             buttonText={continueQuest ? formatMessage(messages.orStartaNewOne) : ''}
-            onClick={() => {
-              questAdd()
-              browserHistory.push('/quest')
-            }}
+            onClick={this.handleQuestTileClick}
           />
           <div className="P-R">
-            {authenticated &&
-              !showCreatePostForm &&
-              user.verified &&
-              !editingPost && <CreatePostButton type={createPostButtonType} onClick={toggleCreatePostForm} />}
+            {authenticated && !showCreatePostForm && user.verified && !editingPost && <CreatePostButton type={createPostButtonType} onClick={toggleCreatePostForm} />}
             {authenticated && showCreatePostForm && <PostCreate onClose={toggleCreatePostForm} user={user} />}
             {secondColPosts &&
               secondColPosts.map((post, key) => {
-                const data = {
+                const props = {
                   ...post,
                   key: post._id,
                   firstname: getFirstname(post.author.fullname),
                   editable: authenticated && (post.author._id === user._id || user.role === 'admin') && !editingPost && !showCreatePostForm,
                   first: key === 0 && authenticated,
                 }
-                return <Post {...data} />
+                return <Post {...props} />
               })}
           </div>
         </Col>
@@ -176,14 +154,14 @@ class Desktop extends Component {
           <div>
             {thirdColPosts &&
               thirdColPosts.map((post, key) => {
-                const data = {
+                const props = {
                   ...post,
                   key: post._id,
                   firstname: getFirstname(post.author.fullname),
                   editable: authenticated && (post.author._id === user._id || user.role === 'admin') && !editingPost && !showCreatePostForm,
                   first: key === 0 && authenticated,
                 }
-                return <Post {...data} />
+                return <Post {...props} />
               })}
           </div>
         </Col>
@@ -202,7 +180,6 @@ const selectors = createStructuredSelector({
 })
 
 const actions = {
-  questAdd,
   signOutUser,
   changeAuthMethod,
   signInUserRequest,

@@ -15,9 +15,7 @@ class ImageTile extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      imageLoaded: false,
-    }
+    this.state = { imageLoaded: false }
   }
 
   componentDidMount() {
@@ -44,21 +42,14 @@ class ImageTile extends Component {
   render() {
     const { imageLoaded } = this.state
     const { img, title, type } = this.props
-    const data = type ? {} : { xs: 12, sm: 12, md: 6, lg: 4 }
+    const props = type ? {} : { xs: 12, sm: 12, md: 6, lg: 4 }
 
     return (
-      <Col
-        className={cx({
-          mainPoster: type === 'main',
-          descriptionPoster: type === 'description',
-          tileCol: !type,
-        })}
-        {...data}
-      >
+      <Col className={cx({ mainPoster: type === 'main', descriptionPoster: type === 'description', tileCol: !type })} {...props}>
         <div className="tileContainer">
-          <div className="tile imageTile Ov-H Cr-P">
+          <div className="tile imageTile">
             <Img onLoad={this.handleLoaded} src={img} />
-            {imageLoaded && <h2 className="Mb-0 Tt-U Px-30 Py-19" dangerouslySetInnerHTML={{ __html: title }} />}
+            {imageLoaded && <h2 dangerouslySetInnerHTML={{ __html: title }} />}
           </div>
         </div>
       </Col>

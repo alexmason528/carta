@@ -20,7 +20,7 @@ class ThemePage extends Component {
   render() {
     const { themes } = this.props
     return (
-      <Container fluid className="themePage P-0 M-0">
+      <Container fluid className="themePage">
         <Helmet meta={[{ name: 'Theme', content: 'Carta' }]} />
         <Row className="themePage__row">{themes && themes.map((theme, index) => <ThemeTile key={index} {...theme} />)}</Row>
       </Container>

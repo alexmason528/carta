@@ -50,23 +50,15 @@ class FixedTile extends Component {
     const { imageLoaded } = this.state
     const { title, img, buttonText, link } = this.props
     return (
-      <div
-        className={cx({
-          fixedTile: true,
-          hidden: !imageLoaded,
-          'Mb-8': true,
-          'P-R': true,
-        })}
-        onClick={() => browserHistory.push(link)}
-      >
+      <div className={cx({ fixedTile: true, hidden: !imageLoaded })} onClick={() => browserHistory.push(link)}>
         {buttonText && (
-          <button className="fixedTile__btn Tt-U Fw-B P-A Fz-14" onClick={this.handleButtonClick}>
+          <button className="fixedTile__btn" onClick={this.handleButtonClick}>
             {buttonText}
           </button>
         )}
-        <div className="fixedTile__content Cr-P Ov-H">
+        <div className="fixedTile__content">
           <Img className="fixedTile__image" onLoad={this.handleLoaded} src={`${S3_FIXED_URL}/${img}`} />
-          <h2 className="fixedTile__title Tt-U Mb-0 Px-30 Py-19" dangerouslySetInnerHTML={{ __html: title }} />
+          <h2 className="fixedTile__title" dangerouslySetInnerHTML={{ __html: title }} />
         </div>
       </div>
     )
