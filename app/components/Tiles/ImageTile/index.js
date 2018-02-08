@@ -45,7 +45,7 @@ class ImageTile extends Component {
     const props = type ? {} : { xs: 12, sm: 12, md: 6, lg: 4 }
 
     return (
-      <Col className={cx({ mainPoster: type === 'main', descriptionPoster: type === 'description', tileCol: !type })} {...props}>
+      <Col className={cx({ descriptionPoster: type === 'description', tileCol: !type })} {...props}>
         <div className="tileContainer">
           <div className="tile imageTile">
             <Img onLoad={this.handleLoaded} src={img} />

@@ -200,7 +200,7 @@ class TextPost extends Component {
     const { remainCharCnts, submitError } = getSubmitInfo(title, img, content, this.props.intl.locale, locale, formatMessage)
 
     return (
-      <div className="postContainer Cr-D">
+      <div className="postContainer">
         {showDeleteConfirm && <div className="backLayer" onClick={this.handlePostClick} />}
         <LoadingSpinner show={spinnerShow}>
           <QuarterSpinner width={30} height={30} />
@@ -208,13 +208,7 @@ class TextPost extends Component {
 
         <div className="post textPost" onClick={this.handlePostClick}>
           {editing ? (
-            <Resizable
-              className="postTitleEdit"
-              tabIndex={1}
-              placeholder={defaultTexts.title}
-              onChange={this.handlePostTitleChange}
-              value={title[locale]}
-            />
+            <Resizable className="postTitleEdit" tabIndex={1} placeholder={defaultTexts.title} onChange={this.handlePostTitleChange} value={title[locale]} />
           ) : (
             <div className="postTitle" title={title[locale]} dangerouslySetInnerHTML={{ __html: textToElem(title[locale]) }} />
           )}
@@ -225,13 +219,7 @@ class TextPost extends Component {
               {editable && !editing && <EditButton onClick={this.handleEditStart} />}
             </div>
             {editing ? (
-              <Resizable
-                className="postText"
-                tabIndex={2}
-                placeholder={defaultTexts.content}
-                onChange={this.handlePostContentChange}
-                value={content[locale]}
-              />
+              <Resizable className="postText" tabIndex={2} placeholder={defaultTexts.content} onChange={this.handlePostContentChange} value={content[locale]} />
             ) : (
               <div className="postText" dangerouslySetInnerHTML={{ __html: content[locale] }} />
             )}

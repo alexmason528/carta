@@ -161,7 +161,7 @@ class AuthForm extends Component {
           <QuarterSpinner width={30} height={30} />
         </LoadingSpinner>
         <div className="authForm__divider">
-          <span className="Tt-U">{formatMessage(messages.with)}</span>
+          <span>{formatMessage(messages.with)}</span>
         </div>
         <div className="authForm__socialButtons">
           <GoogleLogin

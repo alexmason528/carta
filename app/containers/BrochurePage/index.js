@@ -6,13 +6,14 @@ import { createStructuredSelector } from 'reselect'
 import { browserHistory, withRouter } from 'react-router'
 import { injectIntl, intlShape } from 'react-intl'
 import cx from 'classnames'
-import { find } from 'lodash'
+import { find, head } from 'lodash'
 import { getUserWishlistRequest, createUserWishlistRequest, deleteUserWishlistRequest } from 'containers/App/actions'
 import { CREATE_USER_WISHLIST_SUCCESS, DELETE_USER_WISHLIST_SUCCESS } from 'containers/App/constants'
 import { selectAuthenticated, selectUserWishlist, selectUser, selectInfo } from 'containers/App/selectors'
 import Img from 'components/Img'
 import ResponsiveLayout from 'components/ResponsiveLayout'
-import { ImageTile, TextTile, TextTileMobile } from 'components/Tiles'
+import { ImageTile, MainPosterTile, TextTile, TextTileMobile } from 'components/Tiles'
+import Carousel from 'components/Carousel'
 import { S3_ICON_URL } from 'utils/globalConstants'
 import { getItem } from 'utils/localStorage'
 import { getBrochureRequest } from './actions'
@@ -105,6 +106,8 @@ class BrochurePage extends Component {
     }
   }
 
+  handleMainPosterClick = () => {}
+
   render() {
     const { message, show } = this.state
     const { brochureDetail, authenticated, user, wishlist } = this.props
@@ -120,6 +123,8 @@ class BrochurePage extends Component {
     } else {
       alreadyExist = true
     }
+
+    const firstSlide = head(mainPoster.slides)
 
     return (
       <Container fluid className="brochure">
@@ -141,7 +146,7 @@ class BrochurePage extends Component {
         <Row className="brochure__row">
           {mainPoster && (
             <Col lg={8} md={12} sm={12} xs={12} className="brochure__col">
-              <ImageTile type="main" img={mainPoster.url} title={mainPoster.title} />
+              <MainPosterTile title={mainPoster.title} onClick={this.handleMainPosterClick} {...firstSlide} />
             </Col>
           )}
           {description && (
@@ -177,6 +182,7 @@ class BrochurePage extends Component {
               )
             })}
         </Row>
+        <Carousel />
       </Container>
     )
   }

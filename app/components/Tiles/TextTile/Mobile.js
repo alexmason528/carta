@@ -36,8 +36,8 @@ class TextTile extends Component {
     return (
       <Col className={cx({ descriptionText: type === 'description', tileCol: !type })} {...props}>
         <div className="tileContainer mobileTextTile">
-          {title && <h2 className="textTile__title Tt-U Pb-20 Cr-T">{title}</h2>}
-          <div className="textTile__content Cr-T">{content}</div>
+          {title && <h2 className="textTile__title">{title}</h2>}
+          <div className="textTile__content">{content}</div>
         </div>
       </Col>
     )

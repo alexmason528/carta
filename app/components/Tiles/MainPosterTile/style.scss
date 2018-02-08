@@ -1,0 +1,57 @@
+@import '../../../styles/common';
+
+.mainPosterTile {
+  position: relative;
+  overflow: hidden;
+
+  &__img {
+    width: 100%;
+    transform: scale(1);
+    @include transition(all, $normalTrans);
+  }
+
+  &:hover .mainPosterTile__img {
+    transform: scale($enlargeSize);
+  }
+
+  &:before {
+    content: '';
+    z-index: 3;
+    @include absoluteFill();
+    @include insetBoxShadow(8px, $normalShadowColor);
+  }
+
+  &__title {
+    margin-bottom: 0px;
+    text-transform: uppercase;
+    padding: 19px 30px;
+    z-index: 4;
+    color: $white;
+    font-weight: $heavierFw;
+    line-height: $textLH;
+    @include absoluteTopLeft();
+    @include textShadow($textShadowBlur, $lightShadowColor);
+  }
+
+  &__playButton {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 150px;
+    height: 150px;
+    transform: translate(-50%, -50%) !important;
+  }
+
+  &__panorama {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

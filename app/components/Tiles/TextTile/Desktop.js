@@ -103,18 +103,10 @@ class TextTile extends Component {
             evt.stopPropagation()
           }}
         >
-          <div className="tile textTile Ov-H">
-            <h2 className="textTile__title Tt-U Pb-20 Cr-T Us-T">{title}</h2>
-            <div className="textTile__content Cr-T Us-T">{content}</div>
-            <div
-              className={cx({
-                arrowBtn: true,
-                'Cr-D': true,
-                more: !expanded,
-                less: expanded,
-              })}
-              onClick={this.handleToggleExpand}
-            />
+          <div className="tile textTile">
+            <h2 className="textTile__title">{title}</h2>
+            <div className="textTile__content">{content}</div>
+            <div className={cx({ arrowBtn: true, more: !expanded, less: expanded })} onClick={this.handleToggleExpand} />
           </div>
         </div>
       </Col>

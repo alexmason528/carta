@@ -73,7 +73,7 @@ class DescriptiveSection extends Component {
 
     return (
       <div className="section section--descriptive">
-        <h1 className="section__title Tt-U Cr-D">{formatMessage(messages.knownFor)}</h1>
+        <h1 className="section__title">{formatMessage(messages.knownFor)}</h1>
         <Img
           className={cx({ section__searchOpenBtn: true, invisible: expanded })}
           src={`${S3_ICON_URL}/search.png`}

@@ -130,7 +130,7 @@ class Menu extends Component {
                 </a>
               </li>
             )}
-            <hr className="My-12" />
+            <hr />
             {LANGUAGES.map(lang => {
               const { countryCode, name } = lang
               return (
