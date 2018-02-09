@@ -40,12 +40,25 @@ class MainPosterTile extends Component {
   }
 
   handleResize = () => {
-    const MainPosterTile = ReactDOM.findDOMNode(this)
-    const width = $(MainPosterTile).width()
-    const fontSize = width / 44 * 3 * 1.35 * (window.innerWidth < 768 ? 7 / 6 : 1)
-    $(MainPosterTile)
+    const { type } = this.props
+    const isMobile = window.innerWidth < 768
+    const isLandscape = window.innerWidth > window.innerWidth
+    const mainPosterTile = ReactDOM.findDOMNode(this)
+    const width = $(mainPosterTile).width()
+    const height = $(mainPosterTile).height()
+    const fontSize = width / 44 * 3 * 1.35 * (isMobile ? 7 / 6 : 1)
+    $(mainPosterTile)
       .find('h2')
       .css({ fontSize: `${fontSize}px` })
+
+    if (type === 'video') {
+      const playButton = $(mainPosterTile).find('.mainPosterTile__playButton')
+      if (!isMobile || isLandscape) {
+        playButton.css({ top: `${window.innerHeight / 2}px`, left: `${width / 2}px` })
+      } else {
+        playButton.css({ top: `${height / 2}px`, left: `${width / 2}px` })
+      }
+    }
   }
 
   handleLoaded = () => {

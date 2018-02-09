@@ -51,7 +51,7 @@ class PlaceTile extends Component {
     return (
       <Col className="tileCol" xs={12} sm={12} md={6} lg={4}>
         <div className="tileContainer" onClick={this.handleTileClick}>
-          <div className="tile">
+          <div className="tile placeTile">
             <Img onLoad={this.handleLoaded} src={url} />
             {imageLoaded && <h2 dangerouslySetInnerHTML={{ __html: title }} />}
           </div>

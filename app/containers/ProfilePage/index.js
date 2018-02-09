@@ -23,7 +23,6 @@ class ProfilePage extends Component {
     return (
       <Container fluid className="profilePage">
         <Helmet meta={[{ name: 'Profile', content: 'Carta' }]} />
-
         <Row className="profilePage__row">{profile && profile.map((entry, index) => <PlaceTile key={index} {...entry} />)}</Row>
       </Container>
     )
