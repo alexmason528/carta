@@ -252,7 +252,7 @@
     "invariant": "2.2.2",
     "ip": "1.1.4",
     "jquery": "^3.2.1",
-    "lodash": "4.17.2",
+    "lodash": "4.17.21",
     "mapbox-gl": "^0.43.0",
     "mapbox.js": "^3.1.1",
     "minimist": "1.2.0",
